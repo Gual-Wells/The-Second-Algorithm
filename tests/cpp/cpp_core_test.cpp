@@ -3,6 +3,7 @@
 #include <cassert>
 #include <climits>
 #include <cstring>
+#include <filesystem>
 #include <iostream>
 #include <typeinfo>
 
@@ -239,13 +240,16 @@ void test_owners() {
     auto text = o::acquire_c_text(c_success);
     assert(std::strcmp(text.get(), "yes") == 0);
     expect_throw<std::runtime_error>([] { (void)o::acquire_c_text(c_partial_failure); });
-    const char* path = ".local/cpp-core-probes/close-check.txt";
-    auto file = o::open_file(path, "wb");
+    const auto directory = std::filesystem::current_path() / ".local/cpp-core-test-owned";
+    std::filesystem::create_directories(directory);
+    const auto path = (directory / "close-check.txt").string();
+    auto file = o::open_file(path.c_str(), "wb");
     assert(std::fputs("data", file.get()) >= 0);
     o::checked_close(file);
     assert(!file);
     o::checked_close(file); // 已空时无操作
-    assert(std::remove(path) == 0);
+    assert(std::remove(path.c_str()) == 0);
+    std::filesystem::remove(directory);
 
     auto doc = std::make_shared<o::Document>(o::Document{"title", 6});
     std::weak_ptr<o::Document> watch_doc = doc;
