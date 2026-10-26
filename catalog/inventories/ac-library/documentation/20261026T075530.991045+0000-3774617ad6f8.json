@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "source_id": "ac-library",
+  "entry_id": "documentation",
+  "captured_at": "2026-10-26T07:55:30.991045+00:00",
+  "request_url": "https://atcoder.github.io/ac-library/production/document_en/",
+  "final_url": "https://atcoder.github.io/ac-library/production/document_en/",
+  "adapter": "link_index",
+  "parser_version": 1,
+  "page_title": "",
+  "entry_configuration": {
+    "url": "https://atcoder.github.io/ac-library/production/document_en/",
+    "adapter": "link_index",
+    "include_url_regex": "^https://atcoder\\.github\\.io/ac-library/production/document_en/[a-z0-9_]+\\.html$"
+  },
+  "entry_configuration_sha256": "996f2df66d56cd2e4774cbf058a3d1d64a034cf836694359f22961d8297463df",
+  "input_sha256": "3774617ad6f8d40f0f5fc26c4150a5c87c95c761f1828a31374f2efa25a2de96",
+  "input_bytes": 4194,
+  "records_sha256": "2aa43d6f3c762f226d7f66f62973775988f365e6949367c26b0bddb13ad84b75",
+  "boundary": "matching metadata links on this registered page; not site-wide content",
+  "filter": "^https://atcoder\\.github\\.io/ac-library/production/document_en/[a-z0-9_]+\\.html$",
+  "pagination_next": [],
+  "state": "captured",
+  "records": [
+    {
+      "id": "url:0798f454acb6d95284ad",
+      "title": "#include <atcoder/modint>",
+      "url": "https://atcoder.github.io/ac-library/production/document_en/modint.html",
+      "kind": "reference_link",
+      "section": "AC(AtCoder) Library Document (production) / List / Math"
+    },
+    {
+      "id": "url:1df309df71f786711d98",
+      "title": "#include <atcoder/scc>",
+      "url": "https://atcoder.github.io/ac-library/production/document_en/scc.html",
+      "kind": "reference_link",
+      "section": "AC(AtCoder) Library Document (production) / List / Graphs"
+    },
+    {
+      "id": "url:21bc685d7546506fa047",
+      "title": "#include <atcoder/string>",
+      "url": "https://atcoder.github.io/ac-library/production/document_en/string.html",
+      "kind": "reference_link",
+      "section": "AC(AtCoder) Library Document (production) / List / Data Structures"
+    },
+    {
+      "id": "url:405b475c9503f9a6665b",
+      "title": "#include <atcoder/dsu>",
+      "url": "https://atcoder.github.io/ac-library/production/document_en/dsu.html",
+      "kind": "reference_link",
+      "section": "AC(AtCoder) Library Document (production) / List / Graphs"
+    },
+    {
+      "id": "url:46a1f20e192ce2754645",
+      "title": "#include <atcoder/mincostflow>",
+      "url": "https://atcoder.github.io/ac-library/production/document_en/mincostflow.html",
+      "kind": "reference_link",
+      "section": "AC(AtCoder) Library Document (production) / List / Graphs"
+    },
+    {
+      "id": "url:6c99b21bd65dbe85c99b",
+      "title": "#include <atcoder/lazysegtree>",
+      "url": "https://atcoder.github.io/ac-library/production/document_en/lazysegtree.html",
+      "kind": "reference_link",
+      "section": "AC(AtCoder) Library Document (production) / List / Data Structures"
+    },
+    {
+      "id": "url:88f37cd443ff2b136d92",
+      "title": "#include <atcoder/maxflow>",
+      "url": "https://atcoder.github.io/ac-library/production/document_en/maxflow.html",
+      "kind": "reference_link",
+      "section": "AC(AtCoder) Library Document (production) / List / Graphs"
+    },
+    {
+      "id": "url:8c0846baad32a2aa365b",
+      "title": "#include <atcoder/twosat>",
+      "url": "https://atcoder.github.io/ac-library/production/document_en/twosat.html",
+      "kind": "reference_link",
+      "section": "AC(AtCoder) Library Document (production) / List / Graphs"
+    },
+    {
+      "id": "url:934aa5470b9a705274f2",
+      "title": "AC Library",
+      "url": "https://atcoder.github.io/ac-library/production/document_en/index.html",
+      "kind": "reference_link",
+      "section": ""
+    },
+    {
+      "id": "url:943f4e3aa15a2451fa46",
+      "title": "Appendix",
+      "url": "https://atcoder.github.io/ac-library/production/document_en/appendix.html",
+      "kind": "reference_link",
+      "section": "AC(AtCoder) Library Document (production) / How to Install"
+    },
+    {
+      "id": "url:974eafa1c0b93042b691",
+      "title": "#include <atcoder/convolution>",
+      "url": "https://atcoder.github.io/ac-library/production/document_en/convolution.html",
+      "kind": "reference_link",
+      "section": "AC(AtCoder) Library Document (production) / List / Math"
+    },
+    {
+      "id": "url:9dd94bba1a2a519db254",
+      "title": "#include <atcoder/segtree>",
+      "url": "https://atcoder.github.io/ac-library/production/document_en/segtree.html",
+      "kind": "reference_link",
+      "section": "AC(AtCoder) Library Document (production) / List / Data Structures"
+    },
+    {
+      "id": "url:c3642d166e8656475e0b",
+      "title": "#include <atcoder/fenwicktree>",
+      "url": "https://atcoder.github.io/ac-library/production/document_en/fenwicktree.html",
+      "kind": "reference_link",
+      "section": "AC(AtCoder) Library Document (production) / List / Data Structures"
+    },
+    {
+      "id": "url:f9f7d66172b1e4a73ea1",
+      "title": "#include <atcoder/math>",
+      "url": "https://atcoder.github.io/ac-library/production/document_en/math.html",
+      "kind": "reference_link",
+      "section": "AC(AtCoder) Library Document (production) / List / Math"
+    }
+  ]
+}

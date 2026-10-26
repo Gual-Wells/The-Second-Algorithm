@@ -1,0 +1,9 @@
+[project]
+name = "the-second-algorithm"
+version = "0.1.0"
+description = "第二算法：来源发现、题型归并与 C++ 求职算法参考"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+second-algorithm = "second_algorithm.cli:main"

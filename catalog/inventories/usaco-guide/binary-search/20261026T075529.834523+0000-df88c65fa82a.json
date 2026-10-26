@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "source_id": "usaco-guide",
+  "entry_id": "binary-search",
+  "captured_at": "2026-10-26T07:55:29.834523+00:00",
+  "request_url": "https://usaco.guide/silver/binary-search",
+  "final_url": "https://usaco.guide/silver/binary-search",
+  "adapter": "link_index",
+  "parser_version": 1,
+  "page_title": "Binary Search · USACO Guide",
+  "entry_configuration": {
+    "url": "https://usaco.guide/silver/binary-search",
+    "adapter": "link_index",
+    "include_url_regex": "^https://(?:usaco\\.org|cses\\.fi|codeforces\\.com|atcoder\\.jp|leetcode\\.com|www\\.luogu\\.com\\.cn)/"
+  },
+  "entry_configuration_sha256": "81579a60f1732c6bafaae4cf03726db329b7fcff610e6cfba853276e0043c014",
+  "input_sha256": "df88c65fa82aebe2d9f608d68e155b61f8eae2ceacac25468fbba0744e6b0c7d",
+  "input_bytes": 506730,
+  "records_sha256": "cc4a88c78c2e3d466f9771e9f0dd5c9c43e1e506b53576e9a7fb3f2a073cb821",
+  "boundary": "matching metadata links on this registered page; not site-wide content",
+  "filter": "^https://(?:usaco\\.org|cses\\.fi|codeforces\\.com|atcoder\\.jp|leetcode\\.com|www\\.luogu\\.com\\.cn)/",
+  "pagination_next": [
+    "https://usaco.guide/silver/sorting-custom"
+  ],
+  "state": "pagination_pending",
+  "records": [
+    {
+      "id": "atcoder:abc149:abc149_e",
+      "title": "Handshake",
+      "url": "https://atcoder.jp/contests/abc149/tasks/abc149_e",
+      "kind": "problem",
+      "section": "Problems / General"
+    },
+    {
+      "id": "codeforces:1117:c",
+      "title": "Edu C: Magic Ship",
+      "url": "https://codeforces.com/problemset/problem/1117/C",
+      "kind": "problem",
+      "section": "Problems / General"
+    },
+    {
+      "id": "codeforces:1201:c",
+      "title": "Div 2 C - Maximum MedianCF - Easy",
+      "url": "https://codeforces.com/contest/1201/problem/C",
+      "kind": "problem",
+      "section": "Binary Search on Monotonic Functions / Example - Maximum Median"
+    },
+    {
+      "id": "codeforces:1486:d",
+      "title": "Max Median",
+      "url": "https://codeforces.com/contest/1486/problem/D",
+      "kind": "problem",
+      "section": "Problems / General"
+    },
+    {
+      "id": "codeforces:1520:f1",
+      "title": "Guess the K-th Zero (Easy)",
+      "url": "https://codeforces.com/contest/1520/problem/F1",
+      "kind": "problem",
+      "section": "Problems / General"
+    },
+    {
+      "id": "codeforces:1866:g",
+      "title": "Grouped Carriages",
+      "url": "https://codeforces.com/contest/1866/problem/G",
+      "kind": "problem",
+      "section": "Problems / General"
+    },
+    {
+      "id": "codeforces:782:b",
+      "title": "The Meeting Place Cannot Be Changed",
+      "url": "https://codeforces.com/contest/782/problem/B",
+      "kind": "problem",
+      "section": "Problems / General"
+    },
+    {
+      "id": "codeforces:818:f",
+      "title": "Level Generation",
+      "url": "https://codeforces.com/problemset/problem/818/F",
+      "kind": "problem",
+      "section": "Problems / General"
+    },
+    {
+      "id": "codeforces:847:e",
+      "title": "Packmen",
+      "url": "https://codeforces.com/contest/847/problem/E",
+      "kind": "problem",
+      "section": "Problems / General"
+    },
+    {
+      "id": "cses:1085",
+      "title": "Array Division",
+      "url": "https://cses.fi/problemset/task/1085",
+      "kind": "problem",
+      "section": "Problems / General"
+    },
+    {
+      "id": "cses:1620",
+      "title": "Factory Machines",
+      "url": "https://cses.fi/problemset/task/1620",
+      "kind": "problem",
+      "section": "Problems / General"
+    },
+    {
+      "id": "cses:2422",
+      "title": "Multiplication Table",
+      "url": "https://cses.fi/problemset/task/2422",
+      "kind": "problem",
+      "section": "Problems / General"
+    },
+    {
+      "id": "url:837b70d269da42ee88a2",
+      "title": "Python Ultimate Binary Search Template",
+      "url": "https://leetcode.com/discuss/general-discussion/786126/python-powerful-ultimate-binary-search-template-solved-many-problems",
+      "kind": "reference_link",
+      "section": "Resources"
+    },
+    {
+      "id": "url:f5ae40afb47b342ed498",
+      "title": "Binary Search - Steps 1, 2",
+      "url": "https://codeforces.com/edu/course/2/lesson/6/1/practice",
+      "kind": "reference_link",
+      "section": "Resources"
+    }
+  ]
+}

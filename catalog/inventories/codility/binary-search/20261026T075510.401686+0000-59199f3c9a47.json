@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "source_id": "codility",
+  "entry_id": "binary-search",
+  "captured_at": "2026-10-26T07:55:10.401686+00:00",
+  "request_url": "https://app.codility.com/programmers/lessons/14-binary_search_algorithm/",
+  "final_url": "https://app.codility.com/programmers/lessons/14-binary_search_algorithm/",
+  "adapter": "codility_html",
+  "parser_version": 1,
+  "page_title": "14. Binary search algorithm lesson - Learn to Code - Codility",
+  "entry_configuration": {
+    "url": "https://app.codility.com/programmers/lessons/14-binary_search_algorithm/",
+    "adapter": "codility_html",
+    "include_url_regex": null
+  },
+  "entry_configuration_sha256": "20146c21409b623ee443a7c3552c3ed57e091d5448f0c33b288b89d83ed47a6e",
+  "input_sha256": "59199f3c9a47dbfdfbd2a2879b38f16910d09292157d3474216e3b59aaf1f7a3",
+  "input_bytes": 25865,
+  "records_sha256": "9d18afa1bbf903768556336123e1ae63576affe8cc4d141e5eb76e36d8f45955",
+  "boundary": "matching metadata links on this registered page; not site-wide content",
+  "filter": null,
+  "pagination_next": [],
+  "state": "captured",
+  "records": [
+    {
+      "id": "codility:min-max-division",
+      "title": "MinMaxDivision",
+      "url": "https://app.codility.com/programmers/lessons/14-binary_search_algorithm/min_max_division/",
+      "kind": "problem",
+      "section": "Binary search algorithm / Tasks:"
+    },
+    {
+      "id": "codility:nailing-planks",
+      "title": "NailingPlanks",
+      "url": "https://app.codility.com/programmers/lessons/14-binary_search_algorithm/nailing_planks/",
+      "kind": "problem",
+      "section": "Binary search algorithm / MinMaxDivision"
+    }
+  ]
+}

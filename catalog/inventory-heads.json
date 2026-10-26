@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "heads": {
+    "cses/problemset": "catalog/inventories/cses/problemset/20261026T075505.516368+0000-42c1963578a2.json",
+    "codility/lessons": "catalog/inventories/codility/lessons/20261026T075508.749875+0000-1b19c4053cd5.json",
+    "codility/binary-search": "catalog/inventories/codility/binary-search/20261026T075510.401686+0000-59199f3c9a47.json",
+    "atcoder/educational-dp": "catalog/inventories/atcoder/educational-dp/20261026T075511.764801+0000-ed41712e60fa.json",
+    "cp-algorithms/navigation": "catalog/inventories/cp-algorithms/navigation/20261026T075513.706063+0000-b387ea377cd4.json",
+    "cpbook/problem-classification": "catalog/inventories/cpbook/problem-classification/20261026T083207.751282+0000-c7edbd4550a4-e2f040b09e324596944c1d20ab2b7cb7.json",
+    "ac-library/documentation": "catalog/inventories/ac-library/documentation/20261026T075530.991045+0000-3774617ad6f8.json",
+    "usaco-guide/binary-search": "catalog/inventories/usaco-guide/binary-search/20261026T080141.575436+0000-df88c65fa82a.json"
+  }
+}

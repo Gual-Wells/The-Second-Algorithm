@@ -1,0 +1,13 @@
+.local/
+__pycache__/
+*.py[cod]
+*.o
+*.obj
+*.exe
+.venv/
+*.pdf
+*.epub
+*.mobi
+*.azw*
+.DS_Store
+Thumbs.db

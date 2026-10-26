@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "source_id": "codility",
+  "entry_id": "lessons",
+  "captured_at": "2026-10-26T07:55:08.749875+00:00",
+  "request_url": "https://app.codility.com/programmers/lessons/",
+  "final_url": "https://app.codility.com/programmers/lessons/1-iterations/",
+  "adapter": "codility_html",
+  "parser_version": 1,
+  "page_title": "1. Iterations lesson - Learn to Code - Codility",
+  "entry_configuration": {
+    "url": "https://app.codility.com/programmers/lessons/",
+    "adapter": "codility_html",
+    "include_url_regex": null
+  },
+  "entry_configuration_sha256": "f6f02d9bb7ca840928537032f92a2e98179f612601a9aa446189b1f96638411e",
+  "input_sha256": "1b19c4053cd5f4f8458818ecc6607d1b38faba798040b74a116a24422b873537",
+  "input_bytes": 24220,
+  "records_sha256": "d05094b958516dc7e8c92ba3eb81766a0ed2c600f1a4e37c899dbee6546f7a17",
+  "boundary": "matching metadata links on this registered page; not site-wide content",
+  "filter": null,
+  "pagination_next": [],
+  "state": "captured",
+  "records": [
+    {
+      "id": "codility-lesson:1",
+      "title": "Lesson 1 Iterations",
+      "url": "https://app.codility.com/programmers/lessons/1-iterations/",
+      "kind": "topic",
+      "section": ""
+    },
+    {
+      "id": "codility-lesson:10",
+      "title": "Lesson 10 Prime and composite numbers",
+      "url": "https://app.codility.com/programmers/lessons/10-prime_and_composite_numbers/",
+      "kind": "topic",
+      "section": ""
+    },
+    {
+      "id": "codility-lesson:11",
+      "title": "Lesson 11 Sieve of Eratosthenes",
+      "url": "https://app.codility.com/programmers/lessons/11-sieve_of_eratosthenes/",
+      "kind": "topic",
+      "section": ""
+    },
+    {
+      "id": "codility-lesson:12",
+      "title": "Lesson 12 Euclidean algorithm",
+      "url": "https://app.codility.com/programmers/lessons/12-euclidean_algorithm/",
+      "kind": "topic",
+      "section": ""
+    },
+    {
+      "id": "codility-lesson:13",
+      "title": "Lesson 13 Fibonacci numbers",
+      "url": "https://app.codility.com/programmers/lessons/13-fibonacci_numbers/",
+      "kind": "topic",
+      "section": ""
+    },
+    {
+      "id": "codility-lesson:14",
+      "title": "Lesson 14 Binary search algorithm",
+      "url": "https://app.codility.com/programmers/lessons/14-binary_search_algorithm/",
+      "kind": "topic",
+      "section": ""
+    },
+    {
+      "id": "codility-lesson:15",
+      "title": "Lesson 15 Caterpillar method",
+      "url": "https://app.codility.com/programmers/lessons/15-caterpillar_method/",
+      "kind": "topic",
+      "section": ""
+    },
+    {
+      "id": "codility-lesson:16",
+      "title": "Lesson 16 Greedy algorithms",
+      "url": "https://app.codility.com/programmers/lessons/16-greedy_algorithms/",
+      "kind": "topic",
+      "section": ""
+    },
+    {
+      "id": "codility-lesson:17",
+      "title": "Lesson 17 Dynamic programming",
+      "url": "https://app.codility.com/programmers/lessons/17-dynamic_programming/",
+      "kind": "topic",
+      "section": ""
+    },
+    {
+      "id": "codility-lesson:2",
+      "title": "Lesson 2 Arrays",
+      "url": "https://app.codility.com/programmers/lessons/2-arrays/",
+      "kind": "topic",
+      "section": ""
+    },
+    {
+      "id": "codility-lesson:3",
+      "title": "Lesson 3 Time Complexity",
+      "url": "https://app.codility.com/programmers/lessons/3-time_complexity/",
+      "kind": "topic",
+      "section": ""
+    },
+    {
+      "id": "codility-lesson:4",
+      "title": "Lesson 4 Counting Elements",
+      "url": "https://app.codility.com/programmers/lessons/4-counting_elements/",
+      "kind": "topic",
+      "section": ""
+    },
+    {
+      "id": "codility-lesson:5",
+      "title": "Lesson 5 Prefix Sums",
+      "url": "https://app.codility.com/programmers/lessons/5-prefix_sums/",
+      "kind": "topic",
+      "section": ""
+    },
+    {
+      "id": "codility-lesson:6",
+      "title": "Lesson 6 Sorting",
+      "url": "https://app.codility.com/programmers/lessons/6-sorting/",
+      "kind": "topic",
+      "section": ""
+    },
+    {
+      "id": "codility-lesson:7",
+      "title": "Lesson 7 Stacks and Queues",
+      "url": "https://app.codility.com/programmers/lessons/7-stacks_and_queues/",
+      "kind": "topic",
+      "section": ""
+    },
+    {
+      "id": "codility-lesson:8",
+      "title": "Lesson 8 Leader",
+      "url": "https://app.codility.com/programmers/lessons/8-leader/",
+      "kind": "topic",
+      "section": ""
+    },
+    {
+      "id": "codility-lesson:9",
+      "title": "Lesson 9 Maximum slice problem",
+      "url": "https://app.codility.com/programmers/lessons/9-maximum_slice_problem/",
+      "kind": "topic",
+      "section": ""
+    }
+  ]
+}

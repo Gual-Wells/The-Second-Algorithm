@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "topics": [
+    {
+      "id": "binary-search",
+      "name": "二分与答案二分",
+      "aliases": [
+        "binary search",
+        "parametric search",
+        "partition point",
+        "first true",
+        "last true",
+        "lower_bound",
+        "upper_bound",
+        "二分",
+        "答案二分",
+        "折半查找"
+      ],
+      "source_entries": [
+        "codility/binary-search",
+        "cses/problemset",
+        "cp-algorithms/navigation",
+        "cpbook/problem-classification",
+        "usaco-guide/binary-search"
+      ],
+      "queries": [
+        {
+          "axis": "method",
+          "query": "binary search monotonic predicate partition point"
+        },
+        {
+          "axis": "constraint",
+          "query": "split array negative numbers greedy binary search"
+        },
+        {
+          "axis": "composition",
+          "query": "maximum average subarray prefix sum binary search"
+        },
+        {
+          "axis": "composition",
+          "query": "阈值 可达性 二分 BFS"
+        },
+        {
+          "axis": "objective",
+          "query": "minimum operations prefix feasibility intervals"
+        },
+        {
+          "axis": "variant",
+          "query": "连续分段 最大段和最小 最小段和最大"
+        }
+      ],
+      "state": "planned-not-executed-as-a-batch",
+      "note": "原题枚举与关联扩展独立于这些查询；不能只用已有题型名搜索。"
+    },
+    {
+      "id": "dynamic-programming",
+      "name": "动态规划",
+      "aliases": [
+        "DP",
+        "state transition",
+        "knapsack",
+        "动态规划"
+      ],
+      "source_entries": [
+        "atcoder/educational-dp",
+        "cses/problemset",
+        "oi-wiki/navigation",
+        "cp-algorithms/navigation"
+      ],
+      "queries": [
+        {
+          "axis": "target",
+          "query": "dynamic programming feasibility counting optimization state definitions"
+        },
+        {
+          "axis": "constraint",
+          "query": "knapsack bounded unbounded exact capacity loop order"
+        },
+        {
+          "axis": "composition",
+          "query": "dynamic programming prefix sum monotone queue optimization problems"
+        }
+      ],
+      "state": "planned-not-executed"
+    },
+    {
+      "id": "graphs",
+      "name": "图与路径",
+      "aliases": [
+        "graph",
+        "BFS",
+        "DFS",
+        "DSU",
+        "图",
+        "并查集"
+      ],
+      "source_entries": [
+        "cses/problemset",
+        "hackerrank/interview-kit",
+        "cp-algorithms/navigation",
+        "oi-wiki/navigation"
+      ],
+      "queries": [
+        {
+          "axis": "target",
+          "query": "shortest path connectivity topological order algorithm variants"
+        },
+        {
+          "axis": "constraint",
+          "query": "shortest path negative weights zero one weights multiple sources"
+        },
+        {
+          "axis": "composition",
+          "query": "threshold reachability binary search disjoint set minimum bottleneck path"
+        }
+      ],
+      "state": "planned-not-executed"
+    }
+  ]
+}

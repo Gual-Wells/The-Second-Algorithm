@@ -1,0 +1,208 @@
+{
+  "schema_version": 1,
+  "source_id": "atcoder",
+  "entry_id": "educational-dp",
+  "captured_at": "2026-10-26T07:55:11.764801+00:00",
+  "request_url": "https://atcoder.jp/contests/dp/tasks",
+  "final_url": "https://atcoder.jp/contests/dp/tasks",
+  "adapter": "link_index",
+  "parser_version": 1,
+  "page_title": "Tasks - Educational DP Contest",
+  "entry_configuration": {
+    "url": "https://atcoder.jp/contests/dp/tasks",
+    "adapter": "link_index",
+    "include_url_regex": "^https://atcoder\\.jp/contests/dp/tasks/dp_[a-z]+$"
+  },
+  "entry_configuration_sha256": "d7969904d34ce57bd19ff2829f430c459681481707aeddee8ddb5912f99be5cc",
+  "input_sha256": "ed41712e60fad569341a24cb88450225eb63bc88f8d8de466d7f7bde16c1d8f6",
+  "input_bytes": 17346,
+  "records_sha256": "a3bfe7b77603287080a595a9081bee6a2e1c2abc6a992525c989ac867cce73e5",
+  "boundary": "matching metadata links on this registered page; not site-wide content",
+  "filter": "^https://atcoder\\.jp/contests/dp/tasks/dp_[a-z]+$",
+  "pagination_next": [],
+  "state": "captured",
+  "records": [
+    {
+      "id": "atcoder:dp:dp_a",
+      "title": "A",
+      "url": "https://atcoder.jp/contests/dp/tasks/dp_a",
+      "kind": "problem",
+      "section": "Tasks"
+    },
+    {
+      "id": "atcoder:dp:dp_b",
+      "title": "B",
+      "url": "https://atcoder.jp/contests/dp/tasks/dp_b",
+      "kind": "problem",
+      "section": "Tasks"
+    },
+    {
+      "id": "atcoder:dp:dp_c",
+      "title": "C",
+      "url": "https://atcoder.jp/contests/dp/tasks/dp_c",
+      "kind": "problem",
+      "section": "Tasks"
+    },
+    {
+      "id": "atcoder:dp:dp_d",
+      "title": "D",
+      "url": "https://atcoder.jp/contests/dp/tasks/dp_d",
+      "kind": "problem",
+      "section": "Tasks"
+    },
+    {
+      "id": "atcoder:dp:dp_e",
+      "title": "E",
+      "url": "https://atcoder.jp/contests/dp/tasks/dp_e",
+      "kind": "problem",
+      "section": "Tasks"
+    },
+    {
+      "id": "atcoder:dp:dp_f",
+      "title": "F",
+      "url": "https://atcoder.jp/contests/dp/tasks/dp_f",
+      "kind": "problem",
+      "section": "Tasks"
+    },
+    {
+      "id": "atcoder:dp:dp_g",
+      "title": "G",
+      "url": "https://atcoder.jp/contests/dp/tasks/dp_g",
+      "kind": "problem",
+      "section": "Tasks"
+    },
+    {
+      "id": "atcoder:dp:dp_h",
+      "title": "H",
+      "url": "https://atcoder.jp/contests/dp/tasks/dp_h",
+      "kind": "problem",
+      "section": "Tasks"
+    },
+    {
+      "id": "atcoder:dp:dp_i",
+      "title": "I",
+      "url": "https://atcoder.jp/contests/dp/tasks/dp_i",
+      "kind": "problem",
+      "section": "Tasks"
+    },
+    {
+      "id": "atcoder:dp:dp_j",
+      "title": "J",
+      "url": "https://atcoder.jp/contests/dp/tasks/dp_j",
+      "kind": "problem",
+      "section": "Tasks"
+    },
+    {
+      "id": "atcoder:dp:dp_k",
+      "title": "K",
+      "url": "https://atcoder.jp/contests/dp/tasks/dp_k",
+      "kind": "problem",
+      "section": "Tasks"
+    },
+    {
+      "id": "atcoder:dp:dp_l",
+      "title": "L",
+      "url": "https://atcoder.jp/contests/dp/tasks/dp_l",
+      "kind": "problem",
+      "section": "Tasks"
+    },
+    {
+      "id": "atcoder:dp:dp_m",
+      "title": "M",
+      "url": "https://atcoder.jp/contests/dp/tasks/dp_m",
+      "kind": "problem",
+      "section": "Tasks"
+    },
+    {
+      "id": "atcoder:dp:dp_n",
+      "title": "N",
+      "url": "https://atcoder.jp/contests/dp/tasks/dp_n",
+      "kind": "problem",
+      "section": "Tasks"
+    },
+    {
+      "id": "atcoder:dp:dp_o",
+      "title": "O",
+      "url": "https://atcoder.jp/contests/dp/tasks/dp_o",
+      "kind": "problem",
+      "section": "Tasks"
+    },
+    {
+      "id": "atcoder:dp:dp_p",
+      "title": "P",
+      "url": "https://atcoder.jp/contests/dp/tasks/dp_p",
+      "kind": "problem",
+      "section": "Tasks"
+    },
+    {
+      "id": "atcoder:dp:dp_q",
+      "title": "Q",
+      "url": "https://atcoder.jp/contests/dp/tasks/dp_q",
+      "kind": "problem",
+      "section": "Tasks"
+    },
+    {
+      "id": "atcoder:dp:dp_r",
+      "title": "R",
+      "url": "https://atcoder.jp/contests/dp/tasks/dp_r",
+      "kind": "problem",
+      "section": "Tasks"
+    },
+    {
+      "id": "atcoder:dp:dp_s",
+      "title": "S",
+      "url": "https://atcoder.jp/contests/dp/tasks/dp_s",
+      "kind": "problem",
+      "section": "Tasks"
+    },
+    {
+      "id": "atcoder:dp:dp_t",
+      "title": "T",
+      "url": "https://atcoder.jp/contests/dp/tasks/dp_t",
+      "kind": "problem",
+      "section": "Tasks"
+    },
+    {
+      "id": "atcoder:dp:dp_u",
+      "title": "U",
+      "url": "https://atcoder.jp/contests/dp/tasks/dp_u",
+      "kind": "problem",
+      "section": "Tasks"
+    },
+    {
+      "id": "atcoder:dp:dp_v",
+      "title": "V",
+      "url": "https://atcoder.jp/contests/dp/tasks/dp_v",
+      "kind": "problem",
+      "section": "Tasks"
+    },
+    {
+      "id": "atcoder:dp:dp_w",
+      "title": "W",
+      "url": "https://atcoder.jp/contests/dp/tasks/dp_w",
+      "kind": "problem",
+      "section": "Tasks"
+    },
+    {
+      "id": "atcoder:dp:dp_x",
+      "title": "X",
+      "url": "https://atcoder.jp/contests/dp/tasks/dp_x",
+      "kind": "problem",
+      "section": "Tasks"
+    },
+    {
+      "id": "atcoder:dp:dp_y",
+      "title": "Y",
+      "url": "https://atcoder.jp/contests/dp/tasks/dp_y",
+      "kind": "problem",
+      "section": "Tasks"
+    },
+    {
+      "id": "atcoder:dp:dp_z",
+      "title": "Z",
+      "url": "https://atcoder.jp/contests/dp/tasks/dp_z",
+      "kind": "problem",
+      "section": "Tasks"
+    }
+  ]
+}

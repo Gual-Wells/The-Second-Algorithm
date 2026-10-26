@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-10-26",
+  "books": [
+    {
+      "id": "epi-cpp",
+      "title": "Elements of Programming Interviews in C++: The Insiders’ Guide",
+      "authors": ["Adnan Aziz", "Tsung-Hsien Lee", "Amit Prakash"],
+      "language": "en",
+      "edition_note": "已核实本地采用的是2015、Version 2.0.0的C++／C++11版；不将旧版权页、沿用的2012致谢或作者站旧年份混同为其他版次。",
+      "publisher": null,
+      "priority": "core",
+      "roles": ["interview-problem-reference", "cpp-implementation", "variant-analysis"],
+      "official_urls": [
+        "https://elementsofprogramminginterviews.com/",
+        "https://elementsofprogramminginterviews.com/sample/"
+      ],
+      "acquisition_state": "provided_local",
+      "local_material_key": "epi",
+      "provided_edition": {
+        "title": "Elements of Programming Interviews: The Insiders’ Guide",
+        "copyright_year": 2015,
+        "version": "2.0.0",
+        "language": "en",
+        "programming_language": "C++ / C++11",
+        "physical_pdf_pages": 530,
+        "material_roles": ["visual-master", "ocr-search-companion"]
+      },
+      "quality_summary": "采用同版530页图像主件与OCR搜索伴随件，已建立页级定位及25章目录索引；图像原页为权威，OCR仅供检索，代码、公式及表格需回原页核对。两份误标C++的EPUB实际为Python样章，已排除。未声称全书语义精读或代码校正完成。",
+      "notes": "官方样章及EPI Judge继续作为配套线索；非算法面试章节不自动纳入本册。出版社与ISBN未由所采用原件可靠核实。"
+    },
+    {
+      "id": "competitive-programming-4",
+      "title": "Competitive Programming 4: The Lower Bound of Programming Contests in the 2020s",
+      "authors": ["Steven Halim", "Felix Halim", "Suhendry Effendy"],
+      "language": "en",
+      "edition_note": "采用Book 1与Book 2独立数字卷；内页明确为2020年7月19日CP4原内容，2022年PDF创建日期不代表改写版。当前Methods to Solve属于CP5草稿动态分类，须与CP4书本分开登记。",
+      "publisher": null,
+      "priority": "core",
+      "roles": ["algorithm-taxonomy", "contest-problem-reference", "cpp-implementation", "coverage-crosscheck"],
+      "official_urls": [
+        "https://cpbook.net/",
+        "https://cpbook.net/details",
+        "https://cpbook.net/errata"
+      ],
+      "acquisition_state": "provided_local",
+      "local_material_key": "cp4",
+      "provided_edition": {
+        "edition": "Competitive Programming 4",
+        "content_release": "2020-07-19",
+        "language": "en",
+        "volumes": [
+          {"volume": 1, "chapters": [1, 2, 3, 4], "physical_pdf_pages": 329},
+          {"volume": 2, "chapters": [5, 6, 7, 8, 9], "physical_pdf_pages": 352}
+        ],
+        "total_physical_pdf_pages": 681
+      },
+      "quality_summary": "采用两个原生文字卷，共681页、279项目录；合卷与较差扫描件不重复采用。已保留原始提取并按PDF字形名称修正错误ToUnicode映射，修正可审计，字形坐标与原页定位可回查。Book 2物理55、258页特殊大括号组件待核；公式二维结构及图表需结合原页，代码未完成全书编译或语义校对。",
+      "notes": "以卷号加物理页定位，跨卷印刷页号不唯一。高阶竞赛专题按求职范围筛选；作者站链接Lulu销售渠道，本记录不将渠道名称硬认定为出版社。"
+    },
+    {
+      "id": "algorithm-competition-advanced-guide",
+      "title": "算法竞赛进阶指南",
+      "authors": ["李煜东"],
+      "language": "zh-CN",
+      "edition_note": "优先作者配套仓库推荐的大象出版社重新排版修订本；以原件版权页确认印次，不随意称为正式第二版。",
+      "publisher": "大象出版社",
+      "priority": "optional",
+      "roles": ["chinese-advanced-problem-reference", "cpp-implementation", "variant-analysis"],
+      "official_urls": [
+        "https://github.com/lydrainbowcat/tedukuri"
+      ],
+      "acquisition_state": "not_provided",
+      "notes": "可选中文补充中优先考虑。作者仓库含勘误、代码、数据及题目去向；历史评测站与镜像需单独核对。"
+    },
+    {
+      "id": "aoapc-training-guide-2021",
+      "title": "算法竞赛入门经典——训练指南（升级版）",
+      "authors": ["刘汝佳", "陈锋"],
+      "language": "zh-CN",
+      "edition_note": "2021升级版，ISBN 9787302571742；不是普通入门经典第2版，也不是ISBN 9787302291077的旧训练指南。",
+      "publisher": "清华大学出版社",
+      "priority": "optional",
+      "roles": ["advanced-problem-modeling", "topic-deepening", "cpp-implementation", "variant-analysis"],
+      "official_urls": [
+        "https://www.tup.tsinghua.edu.cn/bookscenter/book_08256901.html",
+        "https://www.tup.tsinghua.edu.cn/bookscenter/bookpreface?id=08256901"
+      ],
+      "acquisition_state": "not_provided",
+      "notes": "具体专题需要进一步建模和变种材料时补充；与其他书重叠较多，不列为首批必购。"
+    },
+    {
+      "id": "competitive-programmers-handbook",
+      "title": "Competitive Programmer’s Handbook",
+      "authors": ["Antti Laaksonen"],
+      "language": "en",
+      "edition_note": "作者通过CSES提供的免费在线书；正式导入时记录实际文件摘要与版本，不与Springer的Guide to Competitive Programming混为同一本。",
+      "publisher": null,
+      "priority": "optional",
+      "roles": ["free-supplement", "algorithm-map", "cpp-reference"],
+      "official_urls": [
+        "https://cses.fi/book/index.php"
+      ],
+      "acquisition_state": "not_provided",
+      "notes": "免费结构参考，不属于高阶主书，不增加必要购买成本。官网入口已核查，完整书籍尚未导入。"
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from pathlib import Path
+
+from .catalog import report, search, validate
+from .collect import collect
+from .storage import now, read_json, read_jsonl, sources, valid_id, valid_url, write_json
+
+
+def emit(value) -> None:
+    print(json.dumps(value, ensure_ascii=False, indent=2))
+
+
+def main(argv=None) -> int:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
+    parser = argparse.ArgumentParser(description="第二算法：来源与内容研究工具。结构检查不认证语义完备。")
+    parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1], help="repository root")
+    commands = parser.add_subparsers(dest="command", required=True)
+    listing = commands.add_parser("sources", help="查看来源池，采用状态与研究进度分开")
+    listing.add_argument("--priority", choices=["core", "extension"])
+    listing.add_argument("--role")
+    listing.add_argument("--id", dest="source_id")
+    collecting = commands.add_parser("collect", help="读取一个登记入口的目录元数据，不读取题目正文")
+    collecting.add_argument("source")
+    collecting.add_argument("entry")
+    collecting.add_argument("--timeout", type=int, default=30)
+    collecting.add_argument("--accept-change", action="store_true", help="only after reviewing removed catalogue identities")
+    commands.add_parser("validate", help="检查登记、身份、摘要、引用和真实承载位置")
+    commands.add_parser("report", help="生成来源、已读与待处理情况，不生成全网覆盖率")
+    searching = commands.add_parser("search", help="在自有来源/题目/模式/书目记录内作中英文子串检索")
+    searching.add_argument("query")
+    searching.add_argument("--kind", choices=["all", "source", "case", "pattern", "book", "inventory"], default="all")
+    planning = commands.add_parser("query-plan", help="生成待执行查询计划；不会冒称已搜索")
+    planning.add_argument("topic")
+    proposal = commands.add_parser("propose-source", help="记录待核来源，不能自动提升为已采用/已读取")
+    proposal.add_argument("id")
+    proposal.add_argument("name")
+    proposal.add_argument("url")
+    proposal.add_argument("--reason", required=True)
+    args = parser.parse_args(argv)
+    root = args.root.resolve()
+    try:
+        if args.command == "sources":
+            rows = sources(root)
+            if args.priority:
+                rows = [s for s in rows if s["priority"] == args.priority]
+            if args.role:
+                rows = [s for s in rows if args.role in s["roles"]]
+            if args.source_id:
+                row = next((s for s in rows if s["id"] == args.source_id), None)
+                if row is None:
+                    raise ValueError("Unknown source: " + args.source_id)
+                emit(row)
+            else:
+                emit([{"id": s["id"], "name": s["name"], "priority": s["priority"], "admission": s["admission"]["state"], "roles": s["roles"], "entries": [e["id"] for e in s["entries"]], "actual_read_scope": s["verification"]["read_scope"]} for s in rows])
+        elif args.command == "collect":
+            if not 1 <= args.timeout <= 120:
+                raise ValueError("timeout must be between 1 and 120 seconds")
+            result = collect(root, args.source, args.entry, timeout=args.timeout, accept_change=args.accept_change)
+            emit(result)
+            return 0 if result["state"] in ("captured", "unchanged") else 2
+        elif args.command == "validate":
+            result = validate(root)
+            emit(result)
+            return 0 if result["ok"] else 1
+        elif args.command == "report":
+            emit(report(root))
+        elif args.command == "search":
+            emit(search(root, args.query, args.kind))
+        elif args.command == "query-plan":
+            plans = read_json(root / "catalog/query-plans.json", {"topics": []})
+            topic = next((p for p in plans["topics"] if p["id"] == args.topic), None)
+            if topic is None:
+                raise ValueError("Unknown topic; current plans: " + ", ".join(p["id"] for p in plans["topics"]))
+            emit({"topic": topic, "generated_at": now(), "executed": False, "note": "A query plan is not search evidence. Record actual reads and results in the research task."})
+        elif args.command == "propose-source":
+            if not valid_id(args.id) or not valid_url(args.url):
+                raise ValueError("A stable source ID and public HTTPS URL are required")
+            if args.id in {s["id"] for s in sources(root)}:
+                raise ValueError("Source already registered")
+            path = root / "catalog/source-proposals.jsonl"
+            rows = read_jsonl(path)
+            if args.id in {s["id"] for s in rows}:
+                raise ValueError("Source proposal already exists")
+            item = {"id": args.id, "name": args.name, "url": args.url, "reason": args.reason, "proposed_at": now(), "state": "unverified", "read_scope": "none"}
+            path.parent.mkdir(parents=True, exist_ok=True)
+            with path.open("a", encoding="utf-8") as stream:
+                stream.write(json.dumps(item, ensure_ascii=False) + "\n")
+            emit(item)
+    except (ValueError, KeyError, OSError, json.JSONDecodeError) as error:
+        emit({"ok": False, "error": str(error)})
+        return 1
+    return 0

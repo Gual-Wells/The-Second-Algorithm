@@ -1,0 +1,1214 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-10-26",
+  "sources": [
+    {
+      "id": "leetcode",
+      "name": "LeetCode／力扣",
+      "homepage": "https://leetcode.com/",
+      "priority": "core",
+      "roles": [
+        "problem_catalog",
+        "interview_curator"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "aliases": [
+        "LC",
+        "力扣",
+        "LeetCode CN"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "求职题意与约束的主要原始核对来源；学习计划提供有限基线，题目标签只作线索。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "Direct original-site web reading; GitHub metadata where stated",
+        "read_scope": "Interview 150入口摘要与287原题题干／约束；没有取得150题完整清单。",
+        "catalogue_state": "entry_read",
+        "statement_scope": "selected_only",
+        "limitations": [
+          "学习计划文本视图只返回摘要，不能据其声明150题已枚举。",
+          "中文与英文站存在身份／题号别名；保留slug和实际题目身份映射。",
+          "收费题解或题目不默认可读；访问失败保持未取得。"
+        ],
+        "evidence_urls": [
+          "https://leetcode.com/studyplan/top-interview-150/",
+          "https://leetcode.com/problems/find-the-duplicate-number/description/"
+        ]
+      },
+      "entries": [
+        {
+          "id": "interview150",
+          "url": "https://leetcode.com/studyplan/top-interview-150/",
+          "kind": "catalogue",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "从公开学习计划取得完整实际题目ID后逐项核对；当前入口摘要不能算清单。"
+          }
+        },
+        {
+          "id": "binary-search-topic",
+          "url": "https://leetcode.com/problem-list/binary-search/",
+          "kind": "topic",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "专题仅为候选发现，动态列表需记录实际取得范围和分页。"
+          }
+        },
+        {
+          "id": "duplicate-sample",
+          "url": "https://leetcode.com/problems/find-the-duplicate-number/description/",
+          "kind": "problem",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "题目身份与slug成对保存，回到原题核对条件。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "codility",
+      "name": "Codility Developer Training",
+      "homepage": "https://app.codility.com/programmers/",
+      "priority": "core",
+      "roles": [
+        "problem_catalog",
+        "interview_curator"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "Codility Lessons"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "与招聘测评形态接近，按lesson枚举的原题适合独立于LC查漏。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "Direct original-site web reading; GitHub metadata where stated",
+        "read_scope": "17个lesson导航、二分lesson任务列表及NailingPlanks题干／约束。",
+        "catalogue_state": "entry_read",
+        "statement_scope": "selected_only",
+        "limitations": [
+          "本轮没有阅读17课所有题目。",
+          "页面可能重复显示不同编程语言版本，必须按任务slug去重。",
+          "平台题干权威不等于每种候选解法已被官方验证。"
+        ],
+        "evidence_urls": [
+          "https://app.codility.com/programmers/lessons/",
+          "https://app.codility.com/programmers/lessons/14-binary_search_algorithm/",
+          "https://app.codility.com/programmers/lessons/14-binary_search_algorithm/nailing_planks/"
+        ]
+      },
+      "entries": [
+        {
+          "id": "lessons",
+          "url": "https://app.codility.com/programmers/lessons/",
+          "kind": "catalogue",
+          "enumeration": {
+            "adapter": "codility_html",
+            "state": "implemented",
+            "details": "先枚举lesson路径，再逐lesson收集任务slug；分开记录目录取得与题干阅读。",
+            "tested_at": "2026-10-26T07:55:08.749875+00:00"
+          }
+        },
+        {
+          "id": "binary-search",
+          "url": "https://app.codility.com/programmers/lessons/14-binary_search_algorithm/",
+          "kind": "topic",
+          "enumeration": {
+            "adapter": "codility_html",
+            "state": "implemented",
+            "details": "只取当前lesson任务链接；与导航lesson链接区分。",
+            "tested_at": "2026-10-26T07:55:10.401686+00:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "hackerrank",
+      "name": "HackerRank Interview Preparation",
+      "homepage": "https://www.hackerrank.com/",
+      "priority": "core",
+      "roles": [
+        "problem_catalog",
+        "interview_curator"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "HackerRank Kits"
+      ],
+      "lineage": {
+        "kind": "mixed",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "补充招聘平台题型、函数式与标准输入输出要求，不让范围仅依赖LeetCode生态。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "Direct original-site web reading; GitHub metadata where stated",
+        "read_scope": "准备专题导航与ctci-bubble-sort公开题干。",
+        "catalogue_state": "entry_read",
+        "statement_scope": "selected_only",
+        "limitations": [
+          "首页列出的公司比例不作为本项目目标岗位招聘频率。",
+          "专题入口不代表所有题目已枚举。",
+          "部分约束公式在文本提取中缺失；须回原页面补核而不能称已完整取得。"
+        ],
+        "evidence_urls": [
+          "https://www.hackerrank.com/interview/interview-preparation-kit",
+          "https://www.hackerrank.com/challenges/ctci-bubble-sort/problem"
+        ]
+      },
+      "entries": [
+        {
+          "id": "interview-kit",
+          "url": "https://www.hackerrank.com/interview/interview-preparation-kit",
+          "kind": "catalogue",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "专题→challenge列表→题干；处理分页、登录或公式缺失。"
+          }
+        },
+        {
+          "id": "preparation-kits",
+          "url": "https://www.hackerrank.com/interview/preparation-kits",
+          "kind": "catalogue",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "各kit是版本化有限候选集合，不采用营销数量替代实际ID清单。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cses",
+      "name": "CSES Problem Set与作者手册",
+      "homepage": "https://cses.fi/",
+      "priority": "core",
+      "roles": [
+        "problem_catalog",
+        "book_companion"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "CSES",
+        "Competitive Programmer's Handbook"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "可枚举的独立题目体系，适合在算法结构与实现规模上交叉核查LC范围。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "Direct original-site web reading; GitHub metadata where stated",
+        "read_scope": "本轮重新核对完整目录入口及分类链接；此前同日设计演练已保存400题链接清单，不继承为全文已读。",
+        "catalogue_state": "entry_read",
+        "statement_scope": "none",
+        "limitations": [
+          "题目目录完整抓取与题干逐项阅读是不同状态。",
+          "竞赛范围广于求职范围，应逐项筛查而非全盘纳入。"
+        ],
+        "evidence_urls": [
+          "https://cses.fi/problemset/",
+          "https://cses.fi/book/index.php"
+        ]
+      },
+      "entries": [
+        {
+          "id": "problemset",
+          "url": "https://cses.fi/problemset/",
+          "kind": "catalogue",
+          "enumeration": {
+            "adapter": "cses_html",
+            "state": "implemented",
+            "details": "提取/problemset/task/<id>唯一链接及所属h2分类，保存原HTML与摘要。",
+            "tested_at": "2026-10-26T07:55:05.516368+00:00"
+          }
+        },
+        {
+          "id": "book",
+          "url": "https://cses.fi/book/index.php",
+          "kind": "method_index",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "记录作者书籍入口、具体文件版本及实际读取章节，不把同站目录当全文。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "luogu",
+      "name": "洛谷",
+      "homepage": "https://www.luogu.com.cn/",
+      "priority": "core",
+      "roles": [
+        "problem_catalog",
+        "method_reference"
+      ],
+      "languages": [
+        "zh"
+      ],
+      "aliases": [
+        "Luogu"
+      ],
+      "lineage": {
+        "kind": "mixed",
+        "upstream": [
+          "codeforces",
+          "atcoder",
+          "onlinejudge"
+        ]
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "中文原题、历史竞赛和专题清单有利于补充变种与中文题型别名。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "Direct original-site web reading; GitHub metadata where stated",
+        "read_scope": "题库当前列表页与P1182题干／约束。",
+        "catalogue_state": "entry_read",
+        "statement_scope": "selected_only",
+        "limitations": [
+          "只读取了列表当前页，未验证全部分页。",
+          "转载CF、AT、UVa等题目时保留上游身份，不计为独立新题。",
+          "社区题解与原题条件分别判断，题解可见性未全量核查。"
+        ],
+        "evidence_urls": [
+          "https://www.luogu.com.cn/problem/list",
+          "https://www.luogu.com.cn/problem/P1182"
+        ]
+      },
+      "entries": [
+        {
+          "id": "problem-list",
+          "url": "https://www.luogu.com.cn/problem/list",
+          "kind": "catalogue",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "按明确过滤条件走完实际分页，稳定保存P/CF/AT等题号与原平台映射。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "atcoder",
+      "name": "AtCoder",
+      "homepage": "https://atcoder.jp/",
+      "priority": "core",
+      "roles": [
+        "problem_catalog",
+        "method_reference"
+      ],
+      "languages": [
+        "en",
+        "ja"
+      ],
+      "aliases": [
+        "AtCoder DP",
+        "Educational DP Contest"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "独立公开比赛与专题原题；DP和ABC可补充结构与条件差异。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "Direct original-site web reading; GitHub metadata where stated",
+        "read_scope": "比赛归档当前页、Educational DP Contest任务清单与editorial目录。",
+        "catalogue_state": "entry_read",
+        "statement_scope": "none",
+        "limitations": [
+          "归档存在分页，本轮未枚举全部比赛。",
+          "DP题解目录有User Editorial及空缺，不能统一称官方解答。",
+          "比赛难度和评级不能直接转换成目标岗位必要性。"
+        ],
+        "evidence_urls": [
+          "https://atcoder.jp/contests/archive",
+          "https://atcoder.jp/contests/dp/tasks",
+          "https://atcoder.jp/contests/dp/editorial"
+        ]
+      },
+      "entries": [
+        {
+          "id": "contest-archive",
+          "url": "https://atcoder.jp/contests/archive",
+          "kind": "catalogue",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "先限定比赛系列与时间，再分页枚举contest_id和各/tasks列表。"
+          }
+        },
+        {
+          "id": "educational-dp",
+          "url": "https://atcoder.jp/contests/dp/tasks",
+          "kind": "catalogue",
+          "enumeration": {
+            "adapter": "link_index",
+            "state": "implemented",
+            "details": "可枚举固定比赛任务链接；保存contest与task身份，另核题干与解答作者。",
+            "include_url_regex": "^https://atcoder\\.jp/contests/dp/tasks/dp_[a-z]+$",
+            "tested_at": "2026-10-26T07:55:11.764801+00:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "codeforces",
+      "name": "Codeforces",
+      "homepage": "https://codeforces.com/",
+      "priority": "core",
+      "roles": [
+        "problem_catalog",
+        "method_reference"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "CF",
+        "Codeforces EDU"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "官方问题元数据、标签和比赛原题提供大范围变种发现；按求职目标筛查。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "Direct original-site web reading; GitHub metadata where stated",
+        "read_scope": "公开problemset当前页与官方problemset.problems API文档；本轮未取得API结果全集。",
+        "catalogue_state": "entry_read",
+        "statement_scope": "none",
+        "limitations": [
+          "problemset.problems文档说明可按tags筛选；API实际响应与范围仍须运行时核验。",
+          "Gym、交互题与高阶竞赛题不自动纳入。",
+          "标签是搜索线索，不证明某算法适用。"
+        ],
+        "evidence_urls": [
+          "https://codeforces.com/problemset",
+          "https://codeforces.com/apiHelp/methods#problemset.problems"
+        ]
+      },
+      "entries": [
+        {
+          "id": "problemset",
+          "url": "https://codeforces.com/problemset",
+          "kind": "catalogue",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "contestId/index形成题目身份，枚举页面需处理分页。"
+          }
+        },
+        {
+          "id": "public-api-doc",
+          "url": "https://codeforces.com/apiHelp/methods#problemset.problems",
+          "kind": "method_index",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "后续可按公开官方API实现采集；当前只验证文档，不伪装API已适配。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cp-algorithms",
+      "name": "cp-algorithms",
+      "homepage": "https://cp-algorithms.com/",
+      "priority": "core",
+      "roles": [
+        "method_reference"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "Algorithms for Competitive Programming"
+      ],
+      "lineage": {
+        "kind": "mixed",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "方法目录、成立条件与技术细节的主要交叉核对来源。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "Direct original-site web reading; GitHub metadata where stated",
+        "read_scope": "完整站点导航页面入口与分类；未阅读全文集合。",
+        "catalogue_state": "entry_read",
+        "statement_scope": "none",
+        "limitations": [
+          "高阶竞赛内容不因此成为求职必需。",
+          "固定仓库commit及文章路径，不把随时变动网页充当永久版本。"
+        ],
+        "evidence_urls": [
+          "https://cp-algorithms.com/navigation.html",
+          "https://github.com/cp-algorithms/cp-algorithms"
+        ]
+      },
+      "entries": [
+        {
+          "id": "navigation",
+          "url": "https://cp-algorithms.com/navigation.html",
+          "kind": "method_index",
+          "enumeration": {
+            "adapter": "link_index",
+            "state": "implemented",
+            "details": "收集导航文章链接并保留分类；语义范围筛选后再读完整文章。",
+            "include_url_regex": "^https://cp-algorithms\\.com/[a-z_]+/[a-zA-Z0-9_-]+\\.html$",
+            "tested_at": "2026-10-26T07:55:13.706063+00:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "oi-wiki",
+      "name": "OI Wiki",
+      "homepage": "https://oi-wiki.org/",
+      "priority": "core",
+      "roles": [
+        "method_reference"
+      ],
+      "languages": [
+        "zh"
+      ],
+      "aliases": [
+        "OI-wiki"
+      ],
+      "lineage": {
+        "kind": "mixed",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "中文算法结构和别名广，适合发现既有目录没有提到的方法与组合。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "Direct original-site web reading; GitHub metadata where stated",
+        "read_scope": "主站算法与数据结构导航。",
+        "catalogue_state": "entry_read",
+        "statement_scope": "none",
+        "limitations": [
+          "覆盖面明显超出求职目标，不按全部目录生成正文。",
+          "社区文章可能有差异或错误；保留文章来源与版本，核对题目和实现。"
+        ],
+        "evidence_urls": [
+          "https://oi-wiki.org/",
+          "https://github.com/OI-wiki/OI-wiki"
+        ]
+      },
+      "entries": [
+        {
+          "id": "navigation",
+          "url": "https://oi-wiki.org/",
+          "kind": "method_index",
+          "enumeration": {
+            "adapter": "link_index",
+            "state": "planned",
+            "details": "主导航或固定commit的目录配置枚举文章；正文按相关专题读取。",
+            "include_url_regex": "^https://oi-wiki\\.org/(?:basic|ds|dp|graph|search|math|geometry|misc|string)/[^#?]+/$",
+            "last_attempt": {
+              "date": "2026-10-26",
+              "state": "failed",
+              "reason": "Python HTTPS collector: TLS unexpected EOF; original site read through web tool, automatic capture not verified"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "usaco-guide",
+      "name": "USACO Guide",
+      "homepage": "https://usaco.guide/",
+      "priority": "core",
+      "roles": [
+        "method_reference",
+        "problem_catalog"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "USACO Guide"
+      ],
+      "lineage": {
+        "kind": "mixed",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "模块连接原理、题目和外部材料，可用于跨来源扩展与反向查漏。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "Direct original-site web reading; GitHub metadata where stated",
+        "read_scope": "General模块目录；本轮未读取所有级别或题目。",
+        "catalogue_state": "entry_read",
+        "statement_scope": "none",
+        "limitations": [
+          "它是社区Guide，不把所有内容称USACO官方教材。",
+          "引用CSES、CF或其他站原题时必须保留上游身份。",
+          "铜银金等分级不等同求职频率或必要性。"
+        ],
+        "evidence_urls": [
+          "https://usaco.guide/general",
+          "https://github.com/cpinitiative/usaco-guide"
+        ]
+      },
+      "entries": [
+        {
+          "id": "modules",
+          "url": "https://usaco.guide/general",
+          "kind": "method_index",
+          "enumeration": {
+            "adapter": "link_index",
+            "state": "planned",
+            "details": "模块链接为候选入口；各模块的资源、问题链接与本地文章要分开处理。"
+          }
+        },
+        {
+          "id": "binary-search",
+          "url": "https://usaco.guide/silver/binary-search",
+          "kind": "topic",
+          "enumeration": {
+            "adapter": "link_index",
+            "state": "implemented",
+            "details": "专题资源与原题反向链接适合发现组合模式。 本入口捕获当前专题的原题链接；页面Next为下一模块导航，不是题目列表分页。",
+            "include_url_regex": "^https://(?:usaco\\.org|cses\\.fi|codeforces\\.com|atcoder\\.jp|leetcode\\.com|www\\.luogu\\.com\\.cn)/",
+            "pagination_mode": "single_page",
+            "tested_at": "2026-10-26T08:01:41.575436+00:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cpbook",
+      "name": "Competitive Programming作者配套站",
+      "homepage": "https://cpbook.net/",
+      "priority": "core",
+      "roles": [
+        "book_companion",
+        "method_reference",
+        "problem_catalog"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "CP4",
+        "CP Book",
+        "CP5 draft classification"
+      ],
+      "lineage": {
+        "kind": "mixed",
+        "upstream": [
+          "leetcode",
+          "kattis",
+          "onlinejudge"
+        ]
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "作者维护的大型方法→题目分类索引，能把教材、算法模式和多个原题生态联结起来。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "Direct original-site web reading; GitHub metadata where stated",
+        "read_scope": "methodstosolve页的版本说明与分类结构；未逐题读取其数千关联原题。",
+        "catalogue_state": "entry_read",
+        "statement_scope": "none",
+        "limitations": [
+          "当前methods页明示为CP5 draft最新分类，不得冒称冻结CP4书中原目录。",
+          "UVa/Kattis/LC链接是原题引用，不增加独立题目数量。",
+          "分类是作者判断，仍核对原题与候选算法。"
+        ],
+        "evidence_urls": [
+          "https://cpbook.net/methodstosolve",
+          "https://cpbook.net/details"
+        ]
+      },
+      "entries": [
+        {
+          "id": "problem-classification",
+          "url": "https://cpbook.net/methodstosolve",
+          "kind": "method_index",
+          "enumeration": {
+            "adapter": "cpbook_table",
+            "state": "implemented",
+            "details": "读取发布表格中的平台题号、分类和原链接；动态待解析标题/URL明确保留，不把占位文字当真标题。CP5 draft与冻结CP4书本分开。",
+            "tested_at": "2026-10-26T08:32:07.751282+00:00"
+          }
+        },
+        {
+          "id": "book-details",
+          "url": "https://cpbook.net/details",
+          "kind": "method_index",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "书籍版次与动态站点分类分开记录。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "epi",
+      "name": "Elements of Programming Interviews作者站与Judge",
+      "homepage": "https://elementsofprogramminginterviews.com/",
+      "priority": "core",
+      "roles": [
+        "book_companion",
+        "interview_curator"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "EPI",
+        "Elements of Programming Interviews in C++"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "面向编程面试的实战书及作者配套测试工程，适合C++题型与变种交叉核对。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "Direct original-site web reading; GitHub metadata where stated",
+        "read_scope": "作者主页EPI Judge介绍与作者链接指向的GitHub仓库入口。",
+        "catalogue_state": "entry_read",
+        "statement_scope": "none",
+        "limitations": [
+          "公开Judge入口不代表已取得或读完付费书全文。",
+          "函数文件名、测试集与具体版次需固定，不能将仓库练习当全书内容。"
+        ],
+        "evidence_urls": [
+          "https://elementsofprogramminginterviews.com/",
+          "https://github.com/adnanaziz/EPIJudge"
+        ]
+      },
+      "entries": [
+        {
+          "id": "author-index",
+          "url": "https://elementsofprogramminginterviews.com/",
+          "kind": "method_index",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "先确认C++版与书籍edition；公开样章和用户提供原件分别记录。"
+          }
+        },
+        {
+          "id": "judge-repository",
+          "url": "https://github.com/adnanaziz/EPIJudge",
+          "kind": "catalogue",
+          "enumeration": {
+            "adapter": "github_tree",
+            "state": "planned",
+            "details": "以实际commit的目录与练习文件为有限清单，避免和书中题目重复。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "hello-algo",
+      "name": "Hello 算法",
+      "homepage": "https://www.hello-algo.com/",
+      "priority": "extension",
+      "roles": [
+        "method_reference"
+      ],
+      "languages": [
+        "zh",
+        "en"
+      ],
+      "aliases": [
+        "Hello Algo"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "用于基础方法核对、解释组织与代码清晰度参考，不承担高阶范围权威。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "Direct original-site web reading; GitHub metadata where stated",
+        "read_scope": "书籍站完整章级导航及其作者仓库链接。",
+        "catalogue_state": "entry_read",
+        "statement_scope": "none",
+        "limitations": [
+          "定位是数据结构算法入门，不能独自作为高阶模式完备性依据。",
+          "多语言版本共用内容身份，不当独立来源。"
+        ],
+        "evidence_urls": [
+          "https://www.hello-algo.com/",
+          "https://github.com/krahets/hello-algo"
+        ]
+      },
+      "entries": [
+        {
+          "id": "book-navigation",
+          "url": "https://www.hello-algo.com/",
+          "kind": "method_index",
+          "enumeration": {
+            "adapter": "link_index",
+            "state": "planned",
+            "details": "按站点导航或固定commit书籍目录枚举，保留多语言别名关系。",
+            "include_url_regex": "^https://www\\.hello-algo\\.com/chapter_[^/]+/[^/#]+/$",
+            "last_attempt": {
+              "date": "2026-10-26",
+              "state": "failed",
+              "reason": "HTTP 429; stopped without retrying or bypassing access controls"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "programmercarl",
+      "name": "代码随想录",
+      "homepage": "https://programmercarl.com/",
+      "priority": "extension",
+      "roles": [
+        "interview_curator",
+        "method_reference"
+      ],
+      "languages": [
+        "zh"
+      ],
+      "aliases": [
+        "程序员Carl",
+        "leetcode-master"
+      ],
+      "lineage": {
+        "kind": "mixed",
+        "upstream": [
+          "leetcode"
+        ]
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "中文求职刷题分类与C++实现组织的成熟对照；只使用公开算法内容。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "Direct original-site web reading; GitHub metadata where stated",
+        "read_scope": "原站导航及youngyangyang04/leetcode-master原仓库元数据。",
+        "catalogue_state": "entry_read",
+        "statement_scope": "none",
+        "limitations": [
+          "商业训练营、代练、推广与充值链接不在内容池范围。",
+          "引用LC题号归入LC原题身份，作者分析作为另一材料记录。",
+          "首页宣传的最全或招聘数字不作为完备性证据。"
+        ],
+        "evidence_urls": [
+          "https://programmercarl.com/",
+          "https://github.com/youngyangyang04/leetcode-master"
+        ]
+      },
+      "entries": [
+        {
+          "id": "public-algorithms",
+          "url": "https://programmercarl.com/",
+          "kind": "method_index",
+          "enumeration": {
+            "adapter": "link_index",
+            "state": "planned",
+            "details": "限定公开算法目录，排除广告与非算法外链。"
+          }
+        },
+        {
+          "id": "source-repository",
+          "url": "https://github.com/youngyangyang04/leetcode-master",
+          "kind": "method_index",
+          "enumeration": {
+            "adapter": "github_tree",
+            "state": "planned",
+            "details": "固定commit读取文章目录，原题编号关联leetcode。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "labuladong",
+      "name": "labuladong的算法笔记",
+      "homepage": "https://labuladong.online/zh/algo/",
+      "priority": "extension",
+      "roles": [
+        "interview_curator",
+        "method_reference"
+      ],
+      "languages": [
+        "zh",
+        "en"
+      ],
+      "aliases": [
+        "labuladong",
+        "fucking-algorithm"
+      ],
+      "lineage": {
+        "kind": "mixed",
+        "upstream": [
+          "leetcode"
+        ]
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "框架、模式归并和习题组织的对照来源；不照搬其讲课篇幅。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "Direct original-site web reading; GitHub metadata where stated",
+        "read_scope": "具体二分框架文章与其站内目录，首页文本提取为空。",
+        "catalogue_state": "entry_read",
+        "statement_scope": "none",
+        "limitations": [
+          "首页空白只代表当前提取未得内容，不能判全站无资料。",
+          "收费或受限章节另记未取得，不绕过。",
+          "框架统一是作者观点，不能省去适用条件与替代方法。"
+        ],
+        "evidence_urls": [
+          "https://labuladong.online/zh/algo/",
+          "https://labuladong.online/zh/algo/essential-technique/binary-search-framework/"
+        ]
+      },
+      "entries": [
+        {
+          "id": "binary-framework",
+          "url": "https://labuladong.online/zh/algo/essential-technique/binary-search-framework/",
+          "kind": "topic",
+          "enumeration": {
+            "adapter": "link_index",
+            "state": "planned",
+            "details": "用可读文章目录发现公开关联条目，分开记录正文阅读与目录链接。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "doocs-leetcode",
+      "name": "LeetCode Wiki／doocs",
+      "homepage": "https://leetcode.doocs.org/",
+      "priority": "extension",
+      "roles": [
+        "method_reference",
+        "interview_curator"
+      ],
+      "languages": [
+        "zh",
+        "en"
+      ],
+      "aliases": [
+        "doocs/leetcode",
+        "LeetCode Wiki"
+      ],
+      "lineage": {
+        "kind": "aggregator",
+        "upstream": [
+          "leetcode"
+        ]
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "可检索的多语言题解与专项索引，适合候选发现、别名核对和实现比较。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "Direct original-site web reading; GitHub metadata where stated",
+        "read_scope": "站点专题导航与doocs/leetcode原仓库元数据，仓库声明CC-BY-SA-4.0。",
+        "catalogue_state": "entry_read",
+        "statement_scope": "none",
+        "limitations": [
+          "不替代原题条件权威。",
+          "同一题的多语言实现和翻译不是独立题数。",
+          "题解正确性仍要独立检查，许可证按所用文件实际版本核对。"
+        ],
+        "evidence_urls": [
+          "https://leetcode.doocs.org/",
+          "https://github.com/doocs/leetcode"
+        ]
+      },
+      "entries": [
+        {
+          "id": "wiki-index",
+          "url": "https://leetcode.doocs.org/",
+          "kind": "method_index",
+          "enumeration": {
+            "adapter": "link_index",
+            "state": "planned",
+            "details": "官方原题ID为上游，wiki的文章/语言版本形成材料关系。"
+          }
+        },
+        {
+          "id": "repository",
+          "url": "https://github.com/doocs/leetcode",
+          "kind": "method_index",
+          "enumeration": {
+            "adapter": "github_tree",
+            "state": "planned",
+            "details": "按固定commit枚举题目目录与语言实现，避免把转载清单充当独立原题来源。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "onlinejudge",
+      "name": "UVa Online Judge",
+      "homepage": "https://onlinejudge.org/",
+      "priority": "extension",
+      "roles": [
+        "problem_catalog",
+        "book_companion"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "UVa",
+        "Online Judge"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "candidate",
+        "reason": "CP书籍原题的重要上游，先按被引用的题目补查，不立即全站纳入。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "Direct original-site web reading; GitHub metadata where stated",
+        "read_scope": "主页与Browse Problems／uHunt公开入口。",
+        "catalogue_state": "entry_read",
+        "statement_scope": "none",
+        "limitations": [
+          "尚未验证题库分页、原题编号与站内content ID映射。",
+          "旧平台和外链可能变化，不能按主页访问成功宣称原题全文已取得。"
+        ],
+        "evidence_urls": [
+          "https://onlinejudge.org/"
+        ]
+      },
+      "entries": [
+        {
+          "id": "home-navigation",
+          "url": "https://onlinejudge.org/",
+          "kind": "catalogue",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "从Browse Problems核验题号、内部ID与题干文档；按实际读取保留映射。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "kattis",
+      "name": "Kattis Open",
+      "homepage": "https://open.kattis.com/",
+      "priority": "extension",
+      "roles": [
+        "problem_catalog",
+        "book_companion"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "Open Kattis"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "candidate",
+        "reason": "CP作者索引的重要独立原题上游；本轮自动读取被拒绝，保留待适配。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "Direct original-site web reading; GitHub metadata where stated",
+        "read_scope": "尝试公开/problems入口，读取工具返回403。",
+        "catalogue_state": "not_checked",
+        "statement_scope": "none",
+        "limitations": [
+          "原题目录与全文均未取得。",
+          "不以CP作者站的引用冒充已读Kattis原题。"
+        ],
+        "evidence_urls": [
+          "https://open.kattis.com/problems"
+        ]
+      },
+      "entries": [
+        {
+          "id": "problem-list",
+          "url": "https://open.kattis.com/problems",
+          "kind": "catalogue",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "后续在正常可访问方式下核验；403保持未取得，不绕过访问控制。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "neetcode",
+      "name": "NeetCode",
+      "homepage": "https://neetcode.io/",
+      "priority": "extension",
+      "roles": [
+        "interview_curator"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "NeetCode Roadmap",
+        "NeetCode 150"
+      ],
+      "lineage": {
+        "kind": "mixed",
+        "upstream": [
+          "leetcode"
+        ]
+      },
+      "admission": {
+        "state": "candidate",
+        "reason": "求职模式路线可作对照，但本轮路线路径只取得空壳，需要正常页面核验。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "Direct original-site web reading; GitHub metadata where stated",
+        "read_scope": "尝试roadmap入口；文本视图仅返回图片链接。",
+        "catalogue_state": "not_checked",
+        "statement_scope": "none",
+        "limitations": [
+          "未取得完整路线或题单，不声称已核查NeetCode150。",
+          "平台收费课程不默认读取或购买。"
+        ],
+        "evidence_urls": [
+          "https://neetcode.io/roadmap"
+        ]
+      },
+      "entries": [
+        {
+          "id": "roadmap",
+          "url": "https://neetcode.io/roadmap",
+          "kind": "catalogue",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "正常渲染后确认公开题单和原LC身份；当前不启动自动枚举。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ac-library",
+      "name": "AtCoder Library文档",
+      "homepage": "https://atcoder.github.io/ac-library/production/document_en/",
+      "priority": "extension",
+      "roles": [
+        "implementation_reference"
+      ],
+      "languages": [
+        "en",
+        "ja"
+      ],
+      "aliases": [
+        "ACL",
+        "ac-library"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "C++数据结构与算法实现接口、约束和边界的技术核对来源。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "Direct original-site web reading; GitHub metadata where stated",
+        "read_scope": "production文档入口、模块列表、C++标准说明与约束注意事项。",
+        "catalogue_state": "entry_read",
+        "statement_scope": "none",
+        "limitations": [
+          "这是实现库参考，不是求职题型覆盖表。",
+          "高阶模块按真实范围采用，不要求用户记忆整库。",
+          "遵循具体版本约束，不把库调用代替需要展示的参考实现。"
+        ],
+        "evidence_urls": [
+          "https://atcoder.github.io/ac-library/production/document_en/",
+          "https://github.com/atcoder/ac-library"
+        ]
+      },
+      "entries": [
+        {
+          "id": "documentation",
+          "url": "https://atcoder.github.io/ac-library/production/document_en/",
+          "kind": "method_index",
+          "enumeration": {
+            "adapter": "link_index",
+            "state": "implemented",
+            "details": "模块文档与源码均固定版本；只核对被实际采用的模块。",
+            "include_url_regex": "^https://atcoder\\.github\\.io/ac-library/production/document_en/[a-z0-9_]+\\.html$",
+            "tested_at": "2026-10-26T07:55:30.991045+00:00"
+          }
+        }
+      ]
+    }
+  ]
+}

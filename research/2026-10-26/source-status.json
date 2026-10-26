@@ -1,0 +1,130 @@
+{
+  "source_priority": {
+    "core": 12,
+    "extension": 8
+  },
+  "source_admission": {
+    "adopted": 17,
+    "candidate": 3
+  },
+  "inventories": [
+    {
+      "entry": "cses/problemset",
+      "snapshot": "catalog/inventories/cses/problemset/20261026T075505.516368+0000-42c1963578a2.json",
+      "boundary": "matching metadata links on this registered page; not site-wide content",
+      "record_count": 400,
+      "problem_records": 400,
+      "original_statements_recorded_read": 2,
+      "problem_records_without_disposition": 398,
+      "semantics": "metadata capture does not imply statement reading or topical completeness"
+    },
+    {
+      "entry": "codility/lessons",
+      "snapshot": "catalog/inventories/codility/lessons/20261026T075508.749875+0000-1b19c4053cd5.json",
+      "boundary": "matching metadata links on this registered page; not site-wide content",
+      "record_count": 17,
+      "problem_records": 0,
+      "original_statements_recorded_read": 0,
+      "problem_records_without_disposition": 0,
+      "semantics": "metadata capture does not imply statement reading or topical completeness"
+    },
+    {
+      "entry": "codility/binary-search",
+      "snapshot": "catalog/inventories/codility/binary-search/20261026T075510.401686+0000-59199f3c9a47.json",
+      "boundary": "matching metadata links on this registered page; not site-wide content",
+      "record_count": 2,
+      "problem_records": 2,
+      "original_statements_recorded_read": 2,
+      "problem_records_without_disposition": 0,
+      "semantics": "metadata capture does not imply statement reading or topical completeness"
+    },
+    {
+      "entry": "atcoder/educational-dp",
+      "snapshot": "catalog/inventories/atcoder/educational-dp/20261026T075511.764801+0000-ed41712e60fa.json",
+      "boundary": "matching metadata links on this registered page; not site-wide content",
+      "record_count": 26,
+      "problem_records": 26,
+      "original_statements_recorded_read": 0,
+      "problem_records_without_disposition": 26,
+      "semantics": "metadata capture does not imply statement reading or topical completeness"
+    },
+    {
+      "entry": "cp-algorithms/navigation",
+      "snapshot": "catalog/inventories/cp-algorithms/navigation/20261026T075513.706063+0000-b387ea377cd4.json",
+      "boundary": "matching metadata links on this registered page; not site-wide content",
+      "record_count": 163,
+      "problem_records": 0,
+      "original_statements_recorded_read": 0,
+      "problem_records_without_disposition": 0,
+      "semantics": "metadata capture does not imply statement reading or topical completeness"
+    },
+    {
+      "entry": "cpbook/problem-classification",
+      "snapshot": "catalog/inventories/cpbook/problem-classification/20261026T083207.751282+0000-c7edbd4550a4-e2f040b09e324596944c1d20ab2b7cb7.json",
+      "boundary": "matching metadata links on this registered page; not site-wide content",
+      "record_count": 5555,
+      "problem_records": 5555,
+      "original_statements_recorded_read": 0,
+      "problem_records_without_disposition": 5555,
+      "semantics": "metadata capture does not imply statement reading or topical completeness"
+    },
+    {
+      "entry": "ac-library/documentation",
+      "snapshot": "catalog/inventories/ac-library/documentation/20261026T075530.991045+0000-3774617ad6f8.json",
+      "boundary": "matching metadata links on this registered page; not site-wide content",
+      "record_count": 14,
+      "problem_records": 0,
+      "original_statements_recorded_read": 0,
+      "problem_records_without_disposition": 0,
+      "semantics": "metadata capture does not imply statement reading or topical completeness"
+    },
+    {
+      "entry": "usaco-guide/binary-search",
+      "snapshot": "catalog/inventories/usaco-guide/binary-search/20261026T080141.575436+0000-df88c65fa82a.json",
+      "boundary": "matching metadata links on this registered page; not site-wide content",
+      "record_count": 14,
+      "problem_records": 12,
+      "original_statements_recorded_read": 2,
+      "problem_records_without_disposition": 10,
+      "semantics": "metadata capture does not imply statement reading or topical completeness"
+    }
+  ],
+  "case_dispositions": {
+    "mapped-existing": 2,
+    "variant-needed": 1,
+    "gap-confirmed": 1
+  },
+  "open_pattern_work": [
+    {
+      "id": "pattern:binary-contiguous-cap",
+      "name": "非负连续分段的最大段和最小化",
+      "state": "draft",
+      "open_variants": [
+        "Codility allows empty blocks and K greater than N; existing entry describes nonempty K<=N blocks"
+      ]
+    },
+    {
+      "id": "pattern:binary-parallel-production",
+      "name": "多机器并行产出计数",
+      "state": "draft",
+      "open_variants": []
+    },
+    {
+      "id": "pattern:binary-operation-prefix-intervals",
+      "name": "操作前缀阈值与区间覆盖判定",
+      "state": "gap",
+      "open_variants": [
+        "compare implementation choices under the original coordinate bound"
+      ]
+    },
+    {
+      "id": "pattern:binary-average-prefix",
+      "name": "均值阈值变换与前缀和判定",
+      "state": "gap",
+      "open_variants": []
+    }
+  ],
+  "scope_state": "discovery-in-progress",
+  "completeness_certified": false,
+  "completion_note": "No script certifies global or semantic completeness. See the protocol and unresolved work."
+}
