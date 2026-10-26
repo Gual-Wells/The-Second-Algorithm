@@ -1,0 +1,7 @@
+{
+  "patterns": 77,
+  "reviewed": 63,
+  "gaps": 14,
+  "cases": 122,
+  "note": "counts are local records, not global completeness or independent held-out success"
+}

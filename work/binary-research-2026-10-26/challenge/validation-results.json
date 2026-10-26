@@ -1,0 +1,14 @@
+{
+  "seed": 20261026,
+  "checks": {
+    "signed_pair_count": "500 arrays x 75 thresholds: passed",
+    "adjacent_cover_dp": "300 arrays x 10 thresholds: passed against all valid subsets",
+    "cutoff_aggregate": "500 cases: passed against materialized sorted rewards",
+    "assignment_greedy": "250 cases, every k: passed against all task subsets and worker permutations",
+    "ratio_clipped_knapsack": "200 cases x 8 q values: passed against all subsets",
+    "chain_radius_nested_search": "300 coordinate sets, every half-unit R and landing point: passed against simultaneous explosion simulation",
+    "two_dimensional_peak": "500 distinct-valued random matrices incl. 1-row/1-col: passed local peak verification",
+    "continuous_root": "3 official samples plus constant zero/nonzero: passed; endpoint and monotonicity proof recorded in analysis"
+  },
+  "note": "These verify selected derivations on small instances, not all constraints or full code implementations."
+}

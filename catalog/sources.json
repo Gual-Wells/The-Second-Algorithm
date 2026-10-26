@@ -587,13 +587,14 @@
       "verification": {
         "checked_at": "2026-10-26",
         "method": "Direct original-site web reading; GitHub metadata where stated",
-        "read_scope": "General模块目录；本轮未读取所有级别或题目。",
-        "catalogue_state": "entry_read",
+        "read_scope": "二分页完整正文及当次20道表题链接和1道正文例题；原题实际读取分别归属对应平台。",
+        "catalogue_state": "binary_topic_inventory_captured",
         "statement_scope": "none",
         "limitations": [
           "它是社区Guide，不把所有内容称USACO官方教材。",
           "引用CSES、CF或其他站原题时必须保留上游身份。",
-          "铜银金等分级不等同求职频率或必要性。"
+          "铜银金等分级不等同求职频率或必要性。",
+          "旧过滤器漏掉http/www USACO、CodeChef及oj.uz；v4已修，旧快照保留且未改写。"
         ],
         "evidence_urls": [
           "https://usaco.guide/general",
@@ -619,7 +620,7 @@
             "adapter": "link_index",
             "state": "implemented",
             "details": "专题资源与原题反向链接适合发现组合模式。 本入口捕获当前专题的原题链接；页面Next为下一模块导航，不是题目列表分页。",
-            "include_url_regex": "^https://(?:usaco\\.org|cses\\.fi|codeforces\\.com|atcoder\\.jp|leetcode\\.com|www\\.luogu\\.com\\.cn)/",
+            "include_url_regex": "^https?://(?:(?:www\\.)?usaco\\.org/|cses\\.fi/problemset/task/|codeforces\\.com/(?:contest/|problemset/problem/|edu/)|atcoder\\.jp/contests/|leetcode\\.com/|www\\.codechef\\.com/problems/|oj\\.uz/problem/view/|www\\.luogu\\.com\\.cn/problem/)",
             "pagination_mode": "single_page",
             "tested_at": "2026-10-26T08:01:41.575436+00:00"
           }
@@ -1023,15 +1024,15 @@
         "upstream": []
       },
       "admission": {
-        "state": "candidate",
-        "reason": "CP书籍原题的重要上游，先按被引用的题目补查，不立即全站纳入。"
+        "state": "adopted",
+        "reason": "本轮按CP分类逐篇实际读取官方原题PDF；全站目录仍待枚举。"
       },
       "verification": {
         "checked_at": "2026-10-26",
         "method": "Direct original-site web reading; GitHub metadata where stated",
-        "read_scope": "主页与Browse Problems／uHunt公开入口。",
-        "catalogue_state": "entry_read",
-        "statement_scope": "none",
+        "read_scope": "本轮案例登记的24个UVa题号中23篇官方题面已读，10742未取得；完整范围见二分census与actual-reads。",
+        "catalogue_state": "manual-topic-reads",
+        "statement_scope": "only individually recorded official PDFs",
         "limitations": [
           "尚未验证题库分页、原题编号与站内content ID映射。",
           "旧平台和外链可能变化，不能按主页访问成功宣称原题全文已取得。"
@@ -1206,6 +1207,258 @@
             "details": "模块文档与源码均固定版本；只核对被实际采用的模块。",
             "include_url_regex": "^https://atcoder\\.github\\.io/ac-library/production/document_en/[a-z0-9_]+\\.html$",
             "tested_at": "2026-10-26T07:55:30.991045+00:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "usaco",
+      "name": "USACO official archive",
+      "homepage": "https://usaco.org/",
+      "priority": "extension",
+      "roles": [
+        "original_problems",
+        "official_editorials"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "USACO official archive"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "本轮二分研究实际使用的原始任务或方法材料。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "direct original pages; actual per-page reads recorded in binary research",
+        "read_scope": "Cow Dance、Convention、两级Angry Cows、Social Distancing、Loan、Bakery以及Gold Milking Order、Talent Show原题；部分官方解析逐篇记录。",
+        "catalogue_state": "manual-topic-read",
+        "statement_scope": "only individually listed tasks",
+        "limitations": [
+          "没有声称枚举或读完全站。"
+        ],
+        "evidence_urls": [
+          "https://usaco.org/index.php?page=contests",
+          "https://usaco.org/index.php?page=viewproblem2&cpid=690"
+        ]
+      },
+      "entries": [
+        {
+          "id": "problem-archive",
+          "url": "https://usaco.org/index.php?page=contests",
+          "kind": "catalogue",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "按实际读件登记；未声称有全站自动适配器。"
+          }
+        },
+        {
+          "id": "binary-current-reads",
+          "url": "https://usaco.org/index.php?page=viewproblem2&cpid=690",
+          "kind": "topic",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "按实际读件登记；未声称有全站自动适配器。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "oj-uz",
+      "name": "oj.uz original contest archive",
+      "homepage": "https://oj.uz/",
+      "priority": "extension",
+      "roles": [
+        "original_problems"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "oj.uz original contest archive"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "本轮二分研究实际使用的原始任务或方法材料。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "direct original pages; actual per-page reads recorded in binary research",
+        "read_scope": "BOI2012 Mobile原题及单页英文题面PDF。",
+        "catalogue_state": "manual-topic-read",
+        "statement_scope": "only individually listed tasks",
+        "limitations": [
+          "只实读该题；几何最优实现尚未完成。"
+        ],
+        "evidence_urls": [
+          "https://oj.uz/problem/view/BOI12_mobile"
+        ]
+      },
+      "entries": [
+        {
+          "id": "boi12-mobile",
+          "url": "https://oj.uz/problem/view/BOI12_mobile",
+          "kind": "topic",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "按实际读件登记；未声称有全站自动适配器。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "codechef",
+      "name": "CodeChef",
+      "homepage": "https://www.codechef.com/",
+      "priority": "extension",
+      "roles": [
+        "original_problems"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "CodeChef"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "candidate",
+        "reason": "本轮二分研究实际使用的原始任务或方法材料。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "direct original pages; actual per-page reads recorded in binary research",
+        "read_scope": "仅目录身份；原题页面为JS空壳，未取得正文。",
+        "catalogue_state": "manual-topic-read",
+        "statement_scope": "only individually listed tasks",
+        "limitations": [
+          "访问失败不表示题目不存在；不登记statement_read。"
+        ],
+        "evidence_urls": [
+          "https://www.codechef.com/problems/TRPTSTIC"
+        ]
+      },
+      "entries": [
+        {
+          "id": "trptstic",
+          "url": "https://www.codechef.com/problems/TRPTSTIC",
+          "kind": "topic",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "按实际读件登记；未声称有全站自动适配器。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "mit-ocw",
+      "name": "MIT OpenCourseWare",
+      "homepage": "https://ocw.mit.edu/",
+      "priority": "extension",
+      "roles": [
+        "method_reference"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "MIT OpenCourseWare"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "本轮二分研究实际使用的原始任务或方法材料。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "direct original pages; actual per-page reads recorded in binary research",
+        "read_scope": "6.006 Fall2011 Lecture1完整六页讲义，重点核对二维峰值示意图；不是全课程。",
+        "catalogue_state": "manual-topic-read",
+        "statement_scope": "only individually listed tasks",
+        "limitations": [
+          "没有声称枚举或读完全站。"
+        ],
+        "evidence_urls": [
+          "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/resources/lecture-1-algorithmic-thinking-peak-finding/"
+        ]
+      },
+      "entries": [
+        {
+          "id": "peak-finding",
+          "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/resources/lecture-1-algorithmic-thinking-peak-finding/",
+          "kind": "method_index",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "按实际读件登记；未声称有全站自动适配器。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cpp-draft",
+      "name": "C++ working draft",
+      "homepage": "https://eel.is/c++draft/",
+      "priority": "extension",
+      "roles": [
+        "language_reference"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "C++ working draft"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "本轮二分研究实际使用的原始任务或方法材料。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "direct original pages; actual per-page reads recorded in binary research",
+        "read_scope": "二分操作整节，用于标准库分区前提及比较/迭代器复杂度；不作为C++17新增特性的许可。",
+        "catalogue_state": "manual-topic-read",
+        "statement_scope": "only individually listed tasks",
+        "limitations": [
+          "没有声称枚举或读完全站。"
+        ],
+        "evidence_urls": [
+          "https://eel.is/c++draft/alg.binary.search"
+        ]
+      },
+      "entries": [
+        {
+          "id": "binary-search",
+          "url": "https://eel.is/c++draft/alg.binary.search",
+          "kind": "method_index",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "按实际读件登记；未声称有全站自动适配器。"
           }
         }
       ]

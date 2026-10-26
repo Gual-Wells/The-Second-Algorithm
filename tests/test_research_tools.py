@@ -65,6 +65,21 @@ class ResearchToolsTest(unittest.TestCase):
         self.assertEqual(identity("https://codeforces.com/contest/123/problem/A"), identity("https://codeforces.com/problemset/problem/123/A"))
         self.assertEqual(identity("https://app.codility.com/programmers/lessons/14-binary_search_algorithm/min_max_division/"), "codility:min-max-division")
 
+    def test_guide_original_tasks_include_www_and_query_identities(self):
+        self.assertEqual(identity("https://www.usaco.org/index.php?page=viewproblem2&cpid=690"), "usaco:690")
+        self.assertEqual(identity("https://usaco.org/index.php?cpid=690&page=viewproblem2"), "usaco:690")
+        self.assertEqual(identity("https://www.codechef.com/problems/TRIPTASTIC"), "codechef:triptastic")
+        self.assertEqual(identity("https://oj.uz/problem/view/BOI12_mobile"), "oj-uz:boi12_mobile")
+        self.assertEqual(identity("https://onlinejudge.org/external/121/12192.pdf"), "uva:12192")
+        self.assertEqual(identity("https://onlinejudge.org/external/17/p1753.pdf"), "uva:1753")
+        entry = next(e for s in read_json(ROOT / "catalog/sources.json")["sources"] if s["id"] == "usaco-guide" for e in s["entries"] if e["id"] == "binary-search")
+        raw = b'''<a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=690">Cow Dance</a>
+        <a href="https://www.codechef.com/problems/TRIPTASTIC">TripTastic</a>
+        <a href="https://oj.uz/problem/view/BOI12_mobile">Mobile</a>'''
+        rows = extract(raw, entry["url"], "link_index", entry["enumeration"])["records"]
+        self.assertEqual(len(rows), 3)
+        self.assertTrue(all(x["kind"] == "problem" for x in rows))
+
     def test_trailing_href_whitespace_does_not_corrupt_problem_identity(self):
         raw = b'<a href="https://open.kattis.com/problems/logo ">logo</a>'
         rows = extract(raw, "https://example.org/index", "link_index", {"include_url_regex": r"^https://open.kattis.com/problems/"})["records"]

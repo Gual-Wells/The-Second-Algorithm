@@ -1,0 +1,648 @@
+{
+  "checked_at": "2026-10-26T10:30:01.236796+00:00",
+  "stage": "final integrated production sources; not prototype tests or judge submissions",
+  "cpp": [
+    {
+      "test": "tests/cpp/binary_advanced_test.cpp",
+      "source_sha256": "b2e0d187ce27abe3be1ccadd178c6369f354fc29f86ee04f633ad33fd2a5b799",
+      "compiler_flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic"
+      ],
+      "compiler_output": "",
+      "exit_code": 0,
+      "output": "464184 independent comparisons passed"
+    },
+    {
+      "test": "tests/cpp/binary_census_compositions_test.cpp",
+      "source_sha256": "7bd033ebef9ff60c931b15178bbe93688eab5601f82010fddbcc577b6fd71fdc",
+      "compiler_flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic"
+      ],
+      "compiler_output": "",
+      "exit_code": 0,
+      "output": "PASS 4506 Slalom independent checks; seed=20261026"
+    },
+    {
+      "test": "tests/cpp/binary_census_foundations_test.cpp",
+      "source_sha256": "b511c8e8d239c20d663337aaae522943fc16b16b43859c6bf574eaffd09e5ec3",
+      "compiler_flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic"
+      ],
+      "compiler_output": "",
+      "exit_code": 0,
+      "output": "digit queries: 151476\nmatrix queries vs exhaustive squares: 22663\nmax-size smoke checks: 2\nfull-range precomputed groups: 31268"
+    },
+    {
+      "test": "tests/cpp/binary_combinations_test.cpp",
+      "source_sha256": "d89957822ddaeb54a9ab461885668fdbe6b2b36c1b890975f918c3e644185fc0",
+      "compiler_flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic"
+      ],
+      "compiler_output": "",
+      "exit_code": 0,
+      "output": "PASS 123804 independent C++ checks; seed=20261026"
+    },
+    {
+      "test": "tests/cpp/binary_composed_test.cpp",
+      "source_sha256": "cd6bc8892912350edba8b7a48c7486e547df9dec1a1ee358dcf4627a3d759fbb",
+      "compiler_flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic"
+      ],
+      "compiler_output": "",
+      "exit_code": 0,
+      "output": "PASS 65576 checks; seed=20261026; independent enumeration/reference algorithms"
+    },
+    {
+      "test": "tests/cpp/binary_foundations_test.cpp",
+      "source_sha256": "364e52c74bf45089ac874f732e5842d36d8677b8996d4077a9161a660377724f",
+      "compiler_flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic"
+      ],
+      "compiler_output": "",
+      "exit_code": 0,
+      "output": "budget-vs-all-subsets: 57344\nfixed-point-extreme-values: 1\nfixed-point-vs-linear: 4096\nh-index-vs-definition: 24310\nlis-length-vs-quadratic-dp: 180766\nlis-recovery-index: 687381\nlis-recovery-length: 180766\nlis-recovery-order: 506727\nlis-recovery-value: 506727\npeak2d-in-range: 24298\npeak2d-neighbor-oracle: 75887\nprefix-64-bit-accumulation: 1\nprefix-embedded-zero: 1\nprefix-maximum-byte: 1\nprefix-position-vs-linear: 57344\nprefix-range-vs-linear: 9504\nsubarray-vs-all-intervals: 51883\nsubsequence-byte-alphabet: 1\nsubsequence-vs-linear-scan: 132253\nunknown-exact-vs-linear: 29568\nunknown-llong-max-index: 1\nunknown-lower-vs-linear: 29568\nunknown-reader-call-budget-small: 29568\nunknown-reader-logarithmic-call-budget: 1\nTOTAL ASSERTIONS: 2587997"
+    },
+    {
+      "test": "tests/cpp/binary_tariff_test.cpp",
+      "source_sha256": "56065003ad7e087c56d75b13040899d0920fde0e883b6375668205162a250068",
+      "compiler_flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic"
+      ],
+      "compiler_output": "",
+      "exit_code": 0,
+      "output": "PASS 162494 tariff checks; exhaustive small consumptions and tier boundaries"
+    },
+    {
+      "test": "tests/cpp/binary_templates_test.cpp",
+      "source_sha256": "f0a334e249baf0d1bea339d404a41fa251321549c0b477624cf4fdbfb8ccdd5f",
+      "compiler_flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic"
+      ],
+      "compiler_output": "",
+      "exit_code": 0,
+      "output": "PASS 178310 comparisons; seed=20261026"
+    }
+  ],
+  "python": {
+    "exit_code": 0,
+    "output": "test_reading_build_and_displayed_code_match_authorities (test_reading_assets.ReadingAssetTest.test_reading_build_and_displayed_code_match_authorities) ... ok\ntest_checkout_without_private_cache_is_valid (test_research_tools.ResearchToolsTest.test_checkout_without_private_cache_is_valid) ... ok\ntest_codility_lesson_does_not_collect_global_navigation (test_research_tools.ResearchToolsTest.test_codility_lesson_does_not_collect_global_navigation) ... ok\ntest_codility_redirect_uses_registered_catalogue_scope (test_research_tools.ResearchToolsTest.test_codility_redirect_uses_registered_catalogue_scope) ... ok\ntest_collection_lock_prevents_overlapping_writers (test_research_tools.ResearchToolsTest.test_collection_lock_prevents_overlapping_writers) ... ok\ntest_cosmetic_index_changes_reuse_inventory (test_research_tools.ResearchToolsTest.test_cosmetic_index_changes_reuse_inventory) ... ok\ntest_cp_author_rows_keep_unresolved_ids_and_method_classification (test_research_tools.ResearchToolsTest.test_cp_author_rows_keep_unresolved_ids_and_method_classification) ... ok\ntest_cses_metadata_deduplicates_and_keeps_section (test_research_tools.ResearchToolsTest.test_cses_metadata_deduplicates_and_keeps_section) ... ok\ntest_empty_or_interstitial_does_not_promote_head (test_research_tools.ResearchToolsTest.test_empty_or_interstitial_does_not_promote_head) ... ok\ntest_explicit_chinese_topic_alias_finds_existing_gap (test_research_tools.ResearchToolsTest.test_explicit_chinese_topic_alias_finds_existing_gap) ... ok\ntest_explicit_single_page_does_not_confuse_next_lesson (test_research_tools.ResearchToolsTest.test_explicit_single_page_does_not_confuse_next_lesson) ... ok\ntest_false_case_mapping_is_rejected (test_research_tools.ResearchToolsTest.test_false_case_mapping_is_rejected) ... ok\ntest_guide_original_tasks_include_www_and_query_identities (test_research_tools.ResearchToolsTest.test_guide_original_tasks_include_www_and_query_identities) ... ok\ntest_head_cannot_be_rebound_to_another_source (test_research_tools.ResearchToolsTest.test_head_cannot_be_rebound_to_another_source) ... ok\ntest_identity_normalizes_platform_variants (test_research_tools.ResearchToolsTest.test_identity_normalizes_platform_variants) ... ok\ntest_link_filter_excludes_unrelated_links (test_research_tools.ResearchToolsTest.test_link_filter_excludes_unrelated_links) ... ok\ntest_metadata_capture_never_marks_statements_read (test_research_tools.ResearchToolsTest.test_metadata_capture_never_marks_statements_read) ... ok\ntest_pending_pagination_preserves_last_good (test_research_tools.ResearchToolsTest.test_pending_pagination_preserves_last_good) ... ok\ntest_receipt_failure_reports_actual_head_side_effect (test_research_tools.ResearchToolsTest.test_receipt_failure_reports_actual_head_side_effect) ... ok\ntest_removed_records_require_review_and_preserve_previous (test_research_tools.ResearchToolsTest.test_removed_records_require_review_and_preserve_previous) ... ok\ntest_scope_filter_change_requires_refresh (test_research_tools.ResearchToolsTest.test_scope_filter_change_requires_refresh) ... ok\ntest_trailing_href_whitespace_does_not_corrupt_problem_identity (test_research_tools.ResearchToolsTest.test_trailing_href_whitespace_does_not_corrupt_problem_identity) ... ok\ntest_truncated_private_cache_is_detected_and_repaired (test_research_tools.ResearchToolsTest.test_truncated_private_cache_is_detected_and_repaired) ... ok\ntest_unread_inventory_is_searchable_without_becoming_read (test_research_tools.ResearchToolsTest.test_unread_inventory_is_searchable_without_becoming_read) ... ok\n\n----------------------------------------------------------------------\nRan 24 tests in 2.404s\n\nOK\n"
+  },
+  "catalog": {
+    "ok": true,
+    "errors": [],
+    "warnings": [
+      "Patterns contain draft/gap work; structural validation is not completeness certification"
+    ],
+    "counts": {
+      "sources": 25,
+      "entries": 38,
+      "books": 5,
+      "patterns": 77,
+      "cases": 122,
+      "inventory_heads": 8
+    }
+  },
+  "reading_builds": {
+    "二分查找": {
+      "codeBlocks": [
+        "predicate",
+        "lower",
+        "upper",
+        "missing",
+        "closest",
+        "fixed-point",
+        "prefix-range",
+        "h-index",
+        "prefix-budget",
+        "prefix-subarray",
+        "lis-length",
+        "lis-restore",
+        "subsequence-positions",
+        "census-nested-digits",
+        "rotated-min",
+        "rotated-search",
+        "peak",
+        "mountain",
+        "singleton",
+        "peak-2d",
+        "flat-matrix",
+        "row-matrix",
+        "staircase",
+        "two-sorted",
+        "census-matrix-square",
+        "segments",
+        "spacing",
+        "rate",
+        "pieces",
+        "bags",
+        "production",
+        "bloom",
+        "matrix-count",
+        "multiplication-count",
+        "pair-count",
+        "sqrt",
+        "expand",
+        "unknown-reader",
+        "real-boundary",
+        "root"
+      ],
+      "headings": [
+        {
+          "depth": 1,
+          "id": "二分查找",
+          "text": "二分查找"
+        },
+        {
+          "depth": 2,
+          "id": "题型导航",
+          "text": "题型导航"
+        },
+        {
+          "depth": 3,
+          "id": "单调边界的两个外壳",
+          "text": "单调边界的两个外壳"
+        },
+        {
+          "depth": 2,
+          "id": "1-有序边界与有序状态",
+          "text": "1 有序边界与有序状态"
+        },
+        {
+          "depth": 3,
+          "id": "1-1-查值-插入位置-首末位置",
+          "text": "1.1 查值、插入位置、首末位置"
+        },
+        {
+          "depth": 3,
+          "id": "1-2-第-k-个缺失正数",
+          "text": "1.2 第 k 个缺失正数"
+        },
+        {
+          "depth": 3,
+          "id": "1-3-最接近-x-的-k-个数",
+          "text": "1.3 最接近 x 的 k 个数"
+        },
+        {
+          "depth": 3,
+          "id": "1-4-值等于索引-隐式有序差值",
+          "text": "1.4 值等于索引：隐式有序差值"
+        },
+        {
+          "depth": 3,
+          "id": "1-5-字符串的字典序前缀范围",
+          "text": "1.5 字符串的字典序前缀范围"
+        },
+        {
+          "depth": 3,
+          "id": "1-6-h-index-引用数与剩余项数的交点",
+          "text": "1.6 H-index：引用数与剩余项数的交点"
+        },
+        {
+          "depth": 3,
+          "id": "1-7-前缀和-预算与最短子段",
+          "text": "1.7 前缀和、预算与最短子段"
+        },
+        {
+          "depth": 3,
+          "id": "1-8-lis-在最小结尾状态上二分",
+          "text": "1.8 LIS：在最小结尾状态上二分"
+        },
+        {
+          "depth": 3,
+          "id": "1-9-出现位置表-反复匹配子序列",
+          "text": "1.9 出现位置表：反复匹配子序列"
+        },
+        {
+          "depth": 3,
+          "id": "1-10-分层累计-先定位块-再定位块内数字",
+          "text": "1.10 分层累计：先定位块，再定位块内数字"
+        },
+        {
+          "depth": 2,
+          "id": "2-特殊数组",
+          "text": "2 特殊数组"
+        },
+        {
+          "depth": 3,
+          "id": "2-1-旋转数组的最小值",
+          "text": "2.1 旋转数组的最小值"
+        },
+        {
+          "depth": 3,
+          "id": "2-2-旋转数组中查找-x",
+          "text": "2.2 旋转数组中查找 x"
+        },
+        {
+          "depth": 3,
+          "id": "2-3-局部峰与山脉数组",
+          "text": "2.3 局部峰与山脉数组"
+        },
+        {
+          "depth": 3,
+          "id": "2-4-成对数组中的唯一单次值",
+          "text": "2.4 成对数组中的唯一单次值"
+        },
+        {
+          "depth": 3,
+          "id": "2-5-二维局部峰",
+          "text": "2.5 二维局部峰"
+        },
+        {
+          "depth": 2,
+          "id": "3-多个有序序列",
+          "text": "3 多个有序序列"
+        },
+        {
+          "depth": 3,
+          "id": "3-1-搜索矩阵-先分清有序条件",
+          "text": "3.1 搜索矩阵：先分清有序条件"
+        },
+        {
+          "depth": 4,
+          "id": "整体有序-虚拟展平",
+          "text": "整体有序：虚拟展平"
+        },
+        {
+          "depth": 4,
+          "id": "仅各行有序-逐行搜索",
+          "text": "仅各行有序：逐行搜索"
+        },
+        {
+          "depth": 4,
+          "id": "行列均有序-阶梯搜索",
+          "text": "行列均有序：阶梯搜索"
+        },
+        {
+          "depth": 3,
+          "id": "3-2-两个有序数组的第-k-小与中位数",
+          "text": "3.2 两个有序数组的第 k 小与中位数"
+        },
+        {
+          "depth": 3,
+          "id": "3-3-值域内的最大正方形",
+          "text": "3.3 值域内的最大正方形"
+        },
+        {
+          "depth": 2,
+          "id": "4-二分答案",
+          "text": "4 二分答案"
+        },
+        {
+          "depth": 3,
+          "id": "4-1-连续分段-使最大段和最小",
+          "text": "4.1 连续分段，使最大段和最小"
+        },
+        {
+          "depth": 3,
+          "id": "4-2-选-k-个位置-使最小间距最大",
+          "text": "4.2 选 k 个位置，使最小间距最大"
+        },
+        {
+          "depth": 3,
+          "id": "4-3-按元素累计-速度-切割与拆袋",
+          "text": "4.3 按元素累计：速度、切割与拆袋"
+        },
+        {
+          "depth": 4,
+          "id": "最小处理速度-最小除数",
+          "text": "最小处理速度／最小除数"
+        },
+        {
+          "depth": 4,
+          "id": "最大整数切割长度",
+          "text": "最大整数切割长度"
+        },
+        {
+          "depth": 4,
+          "id": "限次拆袋-使最大袋最小",
+          "text": "限次拆袋，使最大袋最小"
+        },
+        {
+          "depth": 3,
+          "id": "4-4-多机器并行生产-求最短时间",
+          "text": "4.4 多机器并行生产，求最短时间"
+        },
+        {
+          "depth": 3,
+          "id": "4-5-连续相邻成束-求最早日期",
+          "text": "4.5 连续相邻成束，求最早日期"
+        },
+        {
+          "depth": 2,
+          "id": "5-排名转计数",
+          "text": "5 排名转计数"
+        },
+        {
+          "depth": 3,
+          "id": "5-1-行列有序矩阵的第-k-小",
+          "text": "5.1 行列有序矩阵的第 k 小"
+        },
+        {
+          "depth": 3,
+          "id": "5-2-乘法表的第-k-小",
+          "text": "5.2 乘法表的第 k 小"
+        },
+        {
+          "depth": 3,
+          "id": "5-3-所有数对距离的第-k-小",
+          "text": "5.3 所有数对距离的第 k 小"
+        },
+        {
+          "depth": 2,
+          "id": "6-数值二分",
+          "text": "6 数值二分"
+        },
+        {
+          "depth": 3,
+          "id": "6-1-整数平方根与完全平方数",
+          "text": "6.1 整数平方根与完全平方数"
+        },
+        {
+          "depth": 3,
+          "id": "6-2-可行上界未知-先倍增-再二分",
+          "text": "6.2 可行上界未知：先倍增，再二分"
+        },
+        {
+          "depth": 4,
+          "id": "未知长度-reader",
+          "text": "未知长度 reader"
+        },
+        {
+          "depth": 3,
+          "id": "6-3-实数边界与连续函数求根",
+          "text": "6.3 实数边界与连续函数求根"
+        },
+        {
+          "depth": 4,
+          "id": "实数最小可行值",
+          "text": "实数最小可行值"
+        },
+        {
+          "depth": 4,
+          "id": "连续函数的一个根",
+          "text": "连续函数的一个根"
+        },
+        {
+          "depth": 2,
+          "id": "相关专题与参考",
+          "text": "相关专题与参考"
+        }
+      ],
+      "sourceSha256": "10bc5b2411da8349c0ebf8d7ac392eeaf06f1dae2a4d9972df2531369aec145f",
+      "codeSha256": "e2432a236fdd3b9d82f73be4f9917a0df80235eff51999760ae67d60e811d1f9",
+      "markdownSha256": "a5b46a794d2e2a2c391ec7f4cf617588af3cf584efbd56e0803956d1bbcd3488",
+      "htmlSha256": "3c28a7e66889ca335343086a8a03dcac1eef890e364fb8d1119871a34dd0f6af",
+      "builderSha256": "1f103bf68f33010aae9705425eac5c78624d800314c563d73e46f5a8bcc90f91",
+      "markdownBytes": 42717,
+      "htmlBytes": 87875
+    },
+    "组合判定": {
+      "codeBlocks": [
+        "max_min_segments",
+        "median_budget",
+        "removal_prefix",
+        "nailing_planks",
+        "challenge_prefix_topology",
+        "average_range",
+        "lower_median_subarray",
+        "challenge_adjacent_cover",
+        "threshold_bfs",
+        "challenge_weighted_grid",
+        "nonadjacent",
+        "pill_matching",
+        "line_cover",
+        "interval_spacing",
+        "packmen",
+        "parallel_slots",
+        "periodic_wind",
+        "interval_intersection",
+        "census_slalom",
+        "final_tariff",
+        "challenge_window_median",
+        "signed_product_rank",
+        "challenge_unordered_product",
+        "pair_sum_rank",
+        "top_pair_sum",
+        "challenge_descending_rewards",
+        "unique_duplicate"
+      ],
+      "headings": [
+        {
+          "depth": 1,
+          "id": "组合判定",
+          "text": "组合判定"
+        },
+        {
+          "depth": 2,
+          "id": "分段-最小的最大值-还是最大的最小值",
+          "text": "分段：最小的最大值，还是最大的最小值"
+        },
+        {
+          "depth": 2,
+          "id": "预算-把目标值抬到多少",
+          "text": "预算：把目标值抬到多少"
+        },
+        {
+          "depth": 2,
+          "id": "固定操作序列-二分前缀长度",
+          "text": "固定操作序列：二分前缀长度"
+        },
+        {
+          "depth": 3,
+          "id": "删除位置后匹配子序列",
+          "text": "删除位置后匹配子序列"
+        },
+        {
+          "depth": 3,
+          "id": "新增位置后覆盖区间",
+          "text": "新增位置后覆盖区间"
+        },
+        {
+          "depth": 3,
+          "id": "前缀形成偏序-判环与最终排列",
+          "text": "前缀形成偏序：判环与最终排列"
+        },
+        {
+          "depth": 2,
+          "id": "子段目标-改写成前缀差",
+          "text": "子段目标：改写成前缀差"
+        },
+        {
+          "depth": 2,
+          "id": "受限选集-变换之后仍需dp",
+          "text": "受限选集：变换之后仍需DP"
+        },
+        {
+          "depth": 2,
+          "id": "阈值筛选后-还要满足什么结构",
+          "text": "阈值筛选后，还要满足什么结构"
+        },
+        {
+          "depth": 3,
+          "id": "能不能连通",
+          "text": "能不能连通"
+        },
+        {
+          "depth": 3,
+          "id": "参数改变加法边权",
+          "text": "参数改变加法边权"
+        },
+        {
+          "depth": 3,
+          "id": "能不能选够非邻接位置",
+          "text": "能不能选够非邻接位置"
+        },
+        {
+          "depth": 3,
+          "id": "有药丸的任务匹配",
+          "text": "有药丸的任务匹配"
+        },
+        {
+          "depth": 2,
+          "id": "同在数轴上-不等于同一个贪心",
+          "text": "同在数轴上，不等于同一个贪心"
+        },
+        {
+          "depth": 2,
+          "id": "时间与资源数-用模拟回答可行性",
+          "text": "时间与资源数：用模拟回答可行性"
+        },
+        {
+          "depth": 2,
+          "id": "可行区间是否相交",
+          "text": "可行区间是否相交"
+        },
+        {
+          "depth": 3,
+          "id": "可达区间逐关传播",
+          "text": "可达区间逐关传播"
+        },
+        {
+          "depth": 2,
+          "id": "先反演共同用量-再找账单差",
+          "text": "先反演共同用量，再找账单差"
+        },
+        {
+          "depth": 2,
+          "id": "空间窗口的中位数",
+          "text": "空间窗口的中位数"
+        },
+        {
+          "depth": 2,
+          "id": "隐式第k小-计数怎么写",
+          "text": "隐式第k小：计数怎么写"
+        },
+        {
+          "depth": 3,
+          "id": "单数组无序异下标乘积",
+          "text": "单数组无序异下标乘积"
+        },
+        {
+          "depth": 3,
+          "id": "两数组的第k小和",
+          "text": "两数组的第k小和"
+        },
+        {
+          "depth": 3,
+          "id": "门槛后累计前k大总和",
+          "text": "门槛后累计前k大总和"
+        },
+        {
+          "depth": 3,
+          "id": "递减收益列的前k大总和",
+          "text": "递减收益列的前k大总和"
+        },
+        {
+          "depth": 3,
+          "id": "唯一重复值的抽屉判定",
+          "text": "唯一重复值的抽屉判定"
+        },
+        {
+          "depth": 2,
+          "id": "相关方法与延伸",
+          "text": "相关方法与延伸"
+        }
+      ],
+      "sourceSha256": "77eeeea0c4c11963d4a96c53e26272dc51a0d3f0f7273cf76bf91356c1d4966b",
+      "codeSha256": "b3610efdb62d4b0d60fff4e4fc3182e43e481a6de0a3e40fb2b6760e7b698984",
+      "markdownSha256": "3630e61a63a71baf6ebd8bfe32b6ec8a4b04b4c1cef8caeedce60f52f279fcff",
+      "htmlSha256": "08ce0e7af8cf2b64b3e99ae97c5515fd9e3af901d1396725e5cae52b7ff0cbfa",
+      "builderSha256": "1f103bf68f33010aae9705425eac5c78624d800314c563d73e46f5a8bcc90f91",
+      "markdownBytes": 46325,
+      "htmlBytes": 92487
+    },
+    "进阶扩展": {
+      "codeBlocks": [
+        "fenwick-rank",
+        "segment-first",
+        "parallel-prefix"
+      ],
+      "headings": [
+        {
+          "depth": 1,
+          "id": "进阶扩展",
+          "text": "进阶扩展"
+        },
+        {
+          "depth": 2,
+          "id": "1-动态频数中的第-k-项",
+          "text": "1 动态频数中的第 k 项"
+        },
+        {
+          "depth": 2,
+          "id": "2-动态区间中-第一个达到阈值的位置",
+          "text": "2 动态区间中，第一个达到阈值的位置"
+        },
+        {
+          "depth": 2,
+          "id": "3-多个最早时刻查询-共用操作前缀",
+          "text": "3 多个最早时刻查询，共用操作前缀"
+        },
+        {
+          "depth": 2,
+          "id": "4-已识别-尚未完成的进阶范围",
+          "text": "4 已识别、尚未完成的进阶范围"
+        }
+      ],
+      "sourceSha256": "c48b505caeb0a5983ecd47f63dd739a49f7858fbc41a7b8b210198240266e494",
+      "codeSha256": "7c6276b17f0306ab509b0e3ca97784777ff7375ded81bafcb92d39d6c31a75b7",
+      "markdownSha256": "bf309f4ce7c46fcf8487ea72ff23d9bbc50175b00218b53879352808be758628",
+      "htmlSha256": "7032af06f40a3bba83555bcf62a5764d74a94f47ec2ede2f7aaced2947cc9699",
+      "builderSha256": "1f103bf68f33010aae9705425eac5c78624d800314c563d73e46f5a8bcc90f91",
+      "markdownBytes": 7784,
+      "htmlBytes": 21338
+    }
+  }
+}

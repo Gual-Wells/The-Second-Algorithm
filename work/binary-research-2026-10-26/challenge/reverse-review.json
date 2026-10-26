@@ -1,0 +1,188 @@
+{
+  "version": 1,
+  "reviewed_on": "2026-10-26",
+  "stage": "reverse-review-after-authorized-unblinding",
+  "inputs": [
+    {
+      "path": "challenge/independent-cases.json",
+      "sha256": "AFE08FE63B17800CF85B80F23C432AAC3776850AE90574AFB6626F906E7A5814",
+      "hash_verified": true
+    },
+    {
+      "path": "provisional-scope.md",
+      "sha256": "AAC1041EC7F7A8AF9804D0A6972345F8533D3C3B2BF2EED4FC7A1FA4165A964B",
+      "hash_verified": true
+    },
+    {
+      "path": "foundations/research.md",
+      "sha256": "AF9C1833F241D74A86260E7C612D5222507D6801DA1F4783ED50D9A3027C291D"
+    },
+    {
+      "path": "compositions/research.md",
+      "sha256": "98593004DF8C17401BCBE36FA34017ABC4DDA1EF2432E4CD62A1E0BF7A3F8C10"
+    },
+    {
+      "path": "root-research.md",
+      "sha256": "D224AF0D443447FE95458CD34459C3578D40F66CBA115061B19899DA80E855B0"
+    },
+    {
+      "path": "compositions/actual-reads.json",
+      "sha256": "25572A3B032FD2B413FEB4AEC2D187AFAFCE89774346F2BBF2ED7EEE78B67BB1"
+    },
+    {
+      "path": "foundations/actual-reads.json",
+      "sha256": "A45B4804D896E36DE744C16A2E36CC82FA5AB28F6C394B66BA52E27020B36EF9"
+    }
+  ],
+  "evidence_boundary": "只判断冻结拟定范围及现有建设研究的语义承载，不宣称生产正文/代码已完成或已失败。第一次解盲读取时两个 actual-reads.json 尚未写出；根通知后均已实际读取并记录SHA，不能把写入race当作永久缺件。三个重叠均由实际原题阅读记录再次确认。",
+  "population": {
+    "initially_frozen": 12,
+    "construction_overlap_removed": 3,
+    "eligible_independent": 9,
+    "by_primary_disposition": {
+      "new_checker_composition": 4,
+      "important_variant_of_existing_family": 2,
+      "known_family_support": 1,
+      "advanced_new_checker_gap": 1,
+      "cross_chapter_lookup_gap": 1
+    },
+    "note": "只是本次9题反查结果，不能转述为全网覆盖率。用于修订后这9题转为建设材料，不再是保留挑战。"
+  },
+  "overlaps": [
+    {
+      "id": "leetcode:1901",
+      "evidence": "foundations/actual-reads.json 的 leetcode:1901；foundations/research.md:11,49-53",
+      "reason": "建设分支已经实际读同一原题，并具体讨论中列全局最大及失败的一维峰替代。剔出独立统计。",
+      "disposition": "overlap-excluded"
+    },
+    {
+      "id": "leetcode:2071",
+      "evidence": "compositions/actual-reads.json 的 LC2071；compositions/research.md:53；candidate-patterns comp-resource-matching",
+      "reason": "建设分支同题同约束同 multiset 判定；剔出独立统计。冻结挑战的小规模匹配穷举可转作验证材料，不能继续算独立挑战。",
+      "disposition": "overlap-excluded"
+    },
+    {
+      "id": "usaco:597",
+      "evidence": "compositions/actual-reads.json 的 USACO:597 与 USACO:597-editorial；compositions/research.md:94,104；candidate-patterns comp-cascade-blast",
+      "reason": "建设分支已读同题及官方更优双向DP解。挑战独立推导的嵌套二分只是较慢替代，不应给二分主章另增一大段。剔出独立统计。",
+      "disposition": "overlap-excluded-alternative"
+    }
+  ],
+  "mappings": [
+    {
+      "id": "atcoder:abc155_d",
+      "disposition": "important_variant_of_existing_family",
+      "nearest_scope": "隐式排名：两个数组和/积第k小；负号/零改变计数方向",
+      "construction_evidence": "compositions/research.md:81；comp-sign-aware-product-rank 以LC2040为承载",
+      "judgment": "家族命中，但不能原封不动复用双数组笛卡尔积计数。当前原题是单数组无序对 i<j，不允许自配对；相同数值的不同位置仍分别计。",
+      "required_carriage": "在符号乘积排名旁明确配对契约，提供无序对计数或解释从全笛卡尔积中先移除满足阈值的对角线再除2。保留正负分组两指针O(N)计数；不是新外层二分模式。",
+      "distinguishing_counterexample": "[-3,0,2,2]：阈值0计数5；若直接计同数组×自身得到11，包含对角零且把异下标对计两遍。",
+      "complexity_check": "N=2e5，优先O(N log N+N log 2e18)；不要只给O(N log N log V)后不看2秒规模。"
+    },
+    {
+      "id": "atcoder:abc236_e",
+      "disposition": "new_checker_composition",
+      "nearest_scope": "平均/中位数变换与合法最小前缀；路径非邻接选择",
+      "construction_evidence": "compositions/research.md:43-47只讲连续子段；52只讲阈值筛选后的最大非邻接数量",
+      "judgment": "实质失配。选择集合必须覆盖每条相邻边，既非连续子段，也非限制所选点互不相邻。变换后要最大化带正负权的合法集合总和，最小前缀和或最早合格点贪心都不成立。",
+      "required_carriage": "新增‘数值变换后做状态DP’组合：take'=max(take,skip)+b，skip'=take。均值检查>=0，下中位数检查>0。可邻接连续子段变换讲解，但必须有真实DP代码与约束说明。",
+      "distinguishing_counterexample": "[100,1,1,100]不能只选两个100：中间相邻对没人被选；阈值80下两个正收益不足补必须选取的一个负收益。",
+      "complexity_check": "每轮O(N)、O(1)DP空间，适合N=1e5；均值与整数中位数分别使用正确数值契约。"
+    },
+    {
+      "id": "atcoder:abc203_d",
+      "disposition": "new_checker_composition",
+      "nearest_scope": "矩阵第k小；下中位数±1变换；非负矩阵边长（仅建设研究中）",
+      "construction_evidence": "范围没有固定二维窗口内的秩条件最优化；LC1292的边长目标不能覆盖",
+      "judgment": "实质失配。候选窗口位置是二维空间结构；阈值后统计各K×K窗口，而不是整个矩阵的全局排名，也不是二分窗口边长。",
+      "required_carriage": "新增‘窗口内分位数→阈值指示矩阵→二维前缀和’。存在窗口count(A<=x)>=ceil(K²/2)即可；保留原题偶数下中位数定义。",
+      "distinguishing_counterexample": "两张3×3矩阵都只有两个1、其余100：把两个1放同一2×2窗口可得下中位数1；把它们放相对角则每个2×2仅一个1，答案100。全局多重集合相同，答案不同。",
+      "complexity_check": "O(N² log V)，N<=800；二维前缀必须给实际计算，不能用‘check矩阵’占位。"
+    },
+    {
+      "id": "atcoder:abc020_c",
+      "disposition": "new_checker_composition",
+      "nearest_scope": "阈值图可达、点阈值与边差阈值区别",
+      "construction_evidence": "compositions/research.md:51固定阈值筛边/点后BFS；没有参数参与边权总和的最短路",
+      "judgment": "实质失配。x改变每次进入黑格的代价，所有格仍可走；可行性取决于整条路径成本之和，不能只用阈值可达/BFS或minimax Dijkstra。",
+      "required_carriage": "新增‘参数进入正边权→固定参数求加法最短路→最后可行参数’。解释最短路径可切换仍保单调；Dijkstra的松弛使用目标格颜色。",
+      "distinguishing_counterexample": "每条边分别不超过T不能推出总路程<=T；两条成本6的边在T=10下仍不可行。原题样例2同时存在2x+1的直路与少黑格绕路。",
+      "complexity_check": "O((V+E)log V log T)，V<=100；黑格必经保证支持上界T，删掉该保证可能无界。"
+    },
+    {
+      "id": "atcoder:abc216_e",
+      "disposition": "important_variant_of_existing_family",
+      "nearest_scope": "门槛计数＋前k项和（有序对及边界重数修正）",
+      "construction_evidence": "compositions/research.md:83 的ABC149E是有序对和＋前缀聚合",
+      "judgment": "家族命中，需保留不同表示下的判定与终止条件。这里是每个Ai生成递减等差收益序列，操作数巨大不能逐次堆模拟；可以直接计数量和等差和。",
+      "required_carriage": "作为排名聚合的短变种，写C(t)=sum max(Ai-t,0)，先选全部>t再补等于t。至多K使K'=min(K,sum Ai)，用尽正收益后停止。",
+      "distinguishing_counterexample": "[3,3],K=3得8；[2,3],K=2021得9而非继续把0和负数纳入。只给第K大门槛也未回答总收益。",
+      "complexity_check": "O(N log Amax)，int64最终上界K×Amax<=4e18。"
+    },
+    {
+      "id": "atcoder:abc184_f",
+      "disposition": "cross_chapter_lookup_gap",
+      "nearest_scope": "lower/upper bound前驱；排除规则允许主要算法另承载",
+      "construction_evidence": "拟定范围未明确折半搜索的实际承载位置；root研究当前LIS与前缀预算不提供子集和枚举",
+      "judgment": "二分边界家族已够用；新知识是折半枚举并将一侧排序，再为另一侧查询前驱。这不应另造‘答案二分模板’，也不能因没有便宜check而反复二分容量。",
+      "required_carriage": "二分章节给真实简短交叉入口和为何upper_bound取前驱；折半搜索专题不存在时保留明确内容缺口，不能把‘见搜索’当完成。",
+      "distinguishing_counterexample": "N<=40但T<=1e9，O(NT)背包不适用；所有Ai>T时仍需空集和0保证答案0。",
+      "complexity_check": "O(N×2^(N/2))时间、O(2^(N/2))空间，int64子集和。"
+    },
+    {
+      "id": "usaco:839",
+      "disposition": "advanced_new_checker_gap",
+      "nearest_scope": "明确进阶：DAG/选k项分数规划；尚无真实承载",
+      "construction_evidence": "provisional-scope.md:35 只列DAG/选k，未覆盖至少重量W的0/1背包",
+      "judgment": "可留进阶，但不能算命中。分数变换相同，合法集合由下限重量而非DAG路径或恰好k项约束，必须有O(NW)截断背包。重要的是原始重量仍参与变换分数。",
+      "required_carriage": "进阶缺口增列‘比值优化＋至少重量的0/1背包’，可在整数输出q上二分，以1000ti-qwi为分数；min(totalWeight,W)仅压缩状态。正式代码/讲解未写则仍是缺口。",
+      "distinguishing_counterexample": "W=5，单牛w=10,t=1，q=150：原分数1000-1500<0不可行；若把分母也错截成5会判1000-750>=0，产生错误。",
+      "complexity_check": "N<=250,W<=1000，O(NW log10^6)、O(W)空间；负无穷不可达状态及64位分数。"
+    },
+    {
+      "id": "usaco:838",
+      "disposition": "new_checker_composition",
+      "nearest_scope": "固定操作前缀；进阶DAG/选k分数规划（仅名字相邻）",
+      "construction_evidence": "compositions/research.md:35-41固定前缀只给子序列/区间覆盖；DAG分数规划并非拓扑一致性",
+      "judgment": "实质失配。首X条观察形成偏序约束，随着加边可行性从真变假；需要有向环检测/拓扑排序，不是时刻数组过滤。题目还要求最大前缀之后的字典序最小证书。",
+      "required_carriage": "固定前缀家族增加‘约束一致性→拓扑判定’组合，并在最终阈值重建图以小根堆输出全排列。判定和最终构造应分开。",
+      "distinguishing_counterexample": "观察[1,2]、[2,3]、[3,1]：最大前缀2；输入包含孤立点时仍须出现在完整输出中。",
+      "complexity_check": "O((N+S)log M+S+NlogN)，S<=2e5。仅连接相邻观察元素已足够；每轮入度不可沿用被破坏的旧状态。"
+    },
+    {
+      "id": "uva:10341",
+      "disposition": "known_family_support",
+      "nearest_scope": "连续异号区间内求一个根；实数单调边界与连续不同",
+      "construction_evidence": "foundations/research.md:67-73 已明确夹根与单调的区别",
+      "judgment": "已有家族命中。当前题的系数符号让函数非增，可另证明唯一性（常函数退化除外）；二分夹根本身并不需要把全局单调当必要条件。",
+      "required_carriage": "可用作数值段的原创短例/测试支持，无需新模式。保留端点根、常零/常非零、输出精度；原题未写u范围，不能补造。",
+      "distinguishing_counterexample": "全零p,q,r,s,t且u=0时根不唯一；u!=0时无解。端点相等不可用严格异号条件拒绝。",
+      "complexity_check": "固定60次迭代满足[0,1]上四位小数；每例O(log(1/epsilon))、O(1)空间。"
+    }
+  ],
+  "action_summary": {
+    "add_main_checker_compositions": [
+      "transformed-weight state DP under adjacency coverage",
+      "fixed spatial window quantile via threshold 2D prefix",
+      "additive shortest path with parameter-dependent edge weights",
+      "prefix constraint consistency with topological reconstruction"
+    ],
+    "add_local_variants": [
+      "same-array unordered signed product rank",
+      "decreasing arithmetic ladders for top-K aggregate"
+    ],
+    "preserve_explicit_gaps": [
+      "meet-in-the-middle primary chapter and binary predecessor connection",
+      "at-least-weight fractional 0/1 knapsack"
+    ],
+    "no_new_primary_binary_pattern": [
+      "UVa10341 continuous root",
+      "overlap LC1901",
+      "overlap LC2071",
+      "overlap USACO597; prefer existing more efficient DP discussion"
+    ],
+    "validation_available": "challenge/validate_independent.py 与 validation-results.json 为冻结前已跑的小规模独立oracle；不等同于生产C++代码验证。",
+    "mutations": "仅新增 challenge/reverse-review.json 与 reverse-review.md；未改冻结题集、catalog、content或生产代码，未提交。"
+  },
+  "post_freeze_root_update": "根告知将发布主章、组合稿、进阶稿；进阶稿本轮承载Fenwick kth、MaxTree首个>=x、批量加边前缀DSU，其他仍pending。这不改变冻结范围SHA，也不自动解决本报告发现的四个新判定、两个局部变种与两个明确承载缺口。"
+}

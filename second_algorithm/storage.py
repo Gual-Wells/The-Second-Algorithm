@@ -69,7 +69,7 @@ def valid_url(value: object) -> bool:
     if not isinstance(value, str):
         return False
     parsed = urlparse(value)
-    return parsed.scheme == "https" and bool(parsed.hostname) and not parsed.username and not parsed.password
+    return parsed.scheme in ("http", "https") and bool(parsed.hostname) and not parsed.username and not parsed.password
 
 
 @contextmanager

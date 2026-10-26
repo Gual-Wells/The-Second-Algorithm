@@ -1,0 +1,10 @@
+{
+  "name": "the-second-algorithm-reading-build",
+  "private": true,
+  "type": "module",
+  "engines": {"node": ">=20"},
+  "devDependencies": {"marked": "17.0.5"},
+  "scripts": {
+    "build:binary": "node tools/build_handbook.mjs content/binary-search 二分查找 && node tools/build_handbook.mjs content/binary-search 组合判定 && node tools/build_handbook.mjs content/binary-search 进阶扩展"
+  }
+}

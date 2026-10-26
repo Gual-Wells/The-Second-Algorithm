@@ -11,7 +11,7 @@ from uuid import uuid4
 
 from .storage import canonical_bytes, collection_lock, digest, now, read_json, safe_relative, source_entry, store_bytes, valid_id, valid_url, write_json
 
-PARSER_VERSION = 3
+PARSER_VERSION = 4
 ADAPTERS = ("cses_html", "codility_html", "cpbook_table", "link_index")
 
 
@@ -155,13 +155,22 @@ def identity(url: str) -> str:
         (r"(?:www\.)?luogu\.com\.cn", r"/problem/([^/]+)/?", "luogu:{}"),
         (r"open\.kattis\.com", r"/problems/([^/]+)/?", "kattis:{}"),
         (r"codeforces\.com", r"/(?:problemset/problem|contest)/(\d+)/(?:problem/)?([^/]+)/?", "codeforces:{}:{}"),
+        (r"(?:www\.)?codechef\.com", r"/(?:[^/]+/)?problems/([^/]+)/?", "codechef:{}"),
+        (r"oj\.uz", r"/problem/view/([^/]+)/?", "oj-uz:{}"),
     ]
     for host_pattern, path_pattern, template in rules:
         match = re.fullmatch(path_pattern, path)
         if re.fullmatch(host_pattern, host) and match:
             value = template.format(*match.groups()).lower()
             return value.replace("_", "-") if value.startswith("codility:") else value
+    if host in ("usaco.org", "www.usaco.org") and path in ("/index.php", "/"):
+        query = parse_qs(parsed.query)
+        if query.get("page") == ["viewproblem2"] and re.fullmatch(r"\d+", query.get("cpid", [""])[0]):
+            return "usaco:" + query["cpid"][0]
     if host.endswith("onlinejudge.org"):
+        match = re.fullmatch(r"/external/\d+/(?:p)?(\d+)\.pdf", path)
+        if match:
+            return "uva:" + match[1]
         query = parse_qs(parsed.query)
         if "problem" in query:
             return "onlinejudge:internal:" + query["problem"][0]

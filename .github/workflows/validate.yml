@@ -19,8 +19,11 @@ jobs:
         run: python -m second_algorithm validate
       - name: Verify collectors and recovery without network
         run: python -m unittest discover -s tests -v
-      - name: Check existing C++ template behavior
+      - name: Check C++ references against independent results
         run: |
           mkdir -p .local/ci
-          g++ -std=c++17 -O2 -Wall -Wextra -Wpedantic -D_GLIBCXX_ASSERTIONS tests/cpp/binary_templates_test.cpp -o .local/ci/binary-test
-          .local/ci/binary-test
+          for source in tests/cpp/*_test.cpp; do
+            output=".local/ci/$(basename "$source" .cpp)"
+            g++ -std=c++17 -O2 -Wall -Wextra -Wpedantic -D_GLIBCXX_ASSERTIONS "$source" -o "$output"
+            "$output"
+          done

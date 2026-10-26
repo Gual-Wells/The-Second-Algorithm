@@ -59,6 +59,14 @@ int brute_bloom(const vector<int>& a,int m,int width){
 }
 int main(){
     mt19937_64 rng(20261026);
+    ck(integer_sqrt(LLONG_MAX)==3037000499LL,"sqrt signed64 maximum");
+    ck(integer_sqrt(3037000499LL*3037000499LL)==3037000499LL,"sqrt exact near maximum");
+    ck(expand_first(LLONG_MAX-1,[](ll x){return x>=LLONG_MAX-2;})==LLONG_MAX-2,"doubling large cap");
+    ck(expand_first(LLONG_MAX-1,[](ll){return false;})==LLONG_MAX,"doubling no answer sentinel");
+    for(ll cut=-25;cut<=25;++cut){
+        ck(first_true(-25,25,[&](ll x){return x>=cut;})==cut,"first predicate negative interval");
+        ck(last_true(-25,25,[&](ll x){return x<=cut;})==cut,"last predicate negative interval");
+    }
     for(ll cap=1;cap<=120;++cap)for(ll cut=0;cut<=cap+1;++cut)
         ck(expand_first(cap,[&](ll x){return x>=cut;})==cut,"doubling");
     for(int trial=0;trial<2200;++trial){

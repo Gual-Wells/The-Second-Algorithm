@@ -1,0 +1,225 @@
+{
+  "version": 1,
+  "status": "independent_selection_frozen",
+  "created_at": "2026-10-26",
+  "scope": "二分/参数搜索；计算机本硕、求职上机 C++。外部反查材料，未参与本轮目录构建。",
+  "independence": {
+    "read_local": [
+      "protocol/CONTENT_PIPELINE.md"
+    ],
+    "not_read": [
+      "content",
+      "catalog",
+      "其他 agent 研究",
+      "本轮拟定模式表"
+    ],
+    "selection_process": "从公开原题的目标和约束独立推导解法；没有按已有分类配额选题。排除了任务消息给定的此前已用原题及其同源复制。检索遇到的二手解法不作正确性证据。",
+    "denominator": "12 个独立原题候选；与随后冻结的建设材料重合者应剔出独立挑战统计。这里的 12 只表示本次实际分析数，不表示网站或互联网覆盖率。",
+    "downstream_rule": "文件冻结后先回报 SHA；取得根的范围冻结通知前不读取拟定范围。反查时另写映射文件，不改本文件。用于修订后不继续称保留挑战。"
+  },
+  "retrieval": {
+    "method": "web.run 实际打开原题正文和约束；未保存原题全文。",
+    "search_queries_executed": [
+      "site.atcoder.jp/contests/abc155/tasks/abc155_d",
+      "site.atcoder.jp/contests/abc236/tasks/abc236_e",
+      "site.atcoder.jp/contests/abc203/tasks/abc203_d",
+      "site.usaco.org angry cows gold January 2016",
+      "site.usaco.org \"Talent Show\" \"2018\"",
+      "site.usaco.org \"Milking Order\" \"Gold\""
+    ],
+    "limitations": "不是目录枚举。多数 AtCoder 原题同时返回日文及英文；ABC020 C 原题只有日文可读。UVa 原 PDF 对 u 没写数值范围，不能补造。未读题解全文、提交代码或付费书。",
+    "storage": "所有新增文件仅在本 challenge/；开始时 C 约 12.3GB 可用、D 约 119.3GB 可用，未下载大文件。"
+  },
+  "cases": [
+    {
+      "id": "atcoder:abc155_d",
+      "title": "Pairs",
+      "source_url": "https://atcoder.jp/contests/abc155/tasks/abc155_d?lang=en",
+      "source_identity": "AtCoder ABC155 D 原题；不是 LeetCode 2040 的翻译或复制",
+      "read_scope": "原题目标、完整约束、输入输出与全部样例；正文 98-109 行，样例 126-161 行",
+      "constraints": "2≤N≤200000；Ai∈[-10^9,10^9]；K≤N(N-1)/2。对 i<j 的积排序，求第 K 小。",
+      "derivation": "外层找最小 x 使 C(x)=#{i<j:AiAj≤x}≥K。先按负、零、正分组。x<0 时只数异号积：负数递增、正数递增，用单调指针找每个负数可行的正数后缀。x≥0 时全部异号积与含零的积可直接累加；两个同号组转为递增正绝对值，用两端指针数积≤x 的无序对。每轮计数 O(N)，无需对每个元素再做内层二分。",
+      "complexity": "O(N log N + N log(2×10^18)) 时间，O(N) 空间；数值域约 61 次。",
+      "key_conditions": [
+        "不能把整个有符号数组直接当成单调乘法表；乘以负数会反向。",
+        "零对数为 z(N-z)+z(z-1)/2；只数 i<j，不能把自配对算入或误去重相同值。",
+        "积最大绝对值 10^18、对数最大约 2×10^10，都要 int64。用乘积比较可以绕开 C++ 负数整除的上下取整陷阱。"
+      ],
+      "distinguishing_check": "[-3,0,2,2] 的六个积为 -6,-6,0,0,0,4；阈值 -1 的计数为 2，阈值 0 为 5。"
+    },
+    {
+      "id": "atcoder:abc236_e",
+      "title": "Average and Median",
+      "source_url": "https://atcoder.jp/contests/abc236/tasks/abc236_e?lang=en",
+      "read_scope": "原题目标、相邻二选一限制、完整约束、精度要求及两组样例；94-121 行、125-151 行",
+      "constraints": "2≤N≤100000；1≤Ai≤10^9。选取下标集合必须覆盖每对相邻下标；分别最大化所选平均值与下中位数。平均值允许绝对或相对误差 10^-3。",
+      "derivation": "均值阈值 x 令 bi=Ai-x；是否能取合法集合使和≥0。DP 只记当前位置取/不取，take'=max(take,skip)+bi，skip'=take。初始 take=b0,skip=0。中位数阈值 x 改为 bi=+1(Ai≥x) 或 -1(Ai<x)，同一 DP 判断最终最大和>0。这里要严格正，因为原题采用下中位数。均值用实数二分，中位数用整数二分。",
+      "complexity": "均值 O(N log((Amax-Amin)/ε))；中位数 O(N log Amax)；每次 DP O(1) 额外空间。",
+      "key_conditions": [
+        "集合不连续，不能用最大子段或固定最短长度前缀和判定。",
+        "不能连续跳过两项；只需两个 DP 状态，不能把约束忘成任取子集。",
+        "均值判定≥0，中位数判定>0；取两项 [1,2] 时阈值2不可行，+1/-1 和等于0不能通过。",
+        "N≥2 使相邻覆盖约束自动排除空集合；扩展到 N=1 时需另处理非空性。"
+      ],
+      "distinguishing_check": "原题样例 [2,1,2,1,1,10] 的最大均值4、最大中位数2。还要检查偶数集合中零和的严格性。"
+    },
+    {
+      "id": "atcoder:abc203_d",
+      "title": "Pond",
+      "source_url": "https://atcoder.jp/contests/abc203/tasks/abc203_d?lang=en",
+      "read_scope": "原题空间目标、对中位数的特别定义、完整约束及两组样例；94-106 行、127-149 行",
+      "constraints": "1≤K≤N≤800；0≤Aij≤10^9。最小化所有 K×K 正方形的下中位数：第 floor(K²/2)+1 大。",
+      "derivation": "阈值 x 时把格点变成 [Aij≤x]，建立二维前缀和。存在一个窗口内的1数≥ceil(K²/2)，当且仅当存在窗口的原题中位数≤x。一次扫描所有合法左上角 O(N²)，再找最小可行 x。二分判定的是是否存在一个窗口，不是整个矩阵的第几小。",
+      "complexity": "O(N² log V) 时间、O(N²) 空间，V≤10^9；也可先离散化候选值。",
+      "key_conditions": [
+        "偶数 K² 采用下中位数；K=2 只需至少2个值≤x，不能错设成3。",
+        "窗口必须连续且完全位于矩阵内；不能把所有格点排序后拿全局中位数。",
+        "≤ 与 > 的互补计数必须连同取整一起转换；大量重复值不能用严格小于替代。"
+      ],
+      "distinguishing_check": "单窗口 [[1,2],[100,101]] 的答案2；若按上中位数会错误得到100。"
+    },
+    {
+      "id": "atcoder:abc020_c",
+      "title": "壁抜け",
+      "source_url": "https://atcoder.jp/contests/abc020/tasks/abc020_c?lang=en",
+      "read_scope": "实际读取日文原题正文、完整输入保证、约束及三组样例；27-63 行、69-109 行",
+      "constraints": "2≤H,W≤10；2≤T≤10^9。进入白格花1、进入黑格花正整数 x，求使 S 到 G 最短路≤T 的最大 x。保证必须进入至少一次黑格，且 x=1 可行。",
+      "derivation": "固定 x 后跑 Dijkstra；同一条路径的成本是黑格进入次数×x+白格进入次数，随 x 不减。因此一条路径在 x 可行，则在更小 x 也可行，即使最短路径会随 x 改变。二分最后可行值，范围[1,T]由原题保证支持。",
+      "complexity": "O((V+E) log V log T) 时间、O(V+E) 空间，V=HW,E≤4V。",
+      "key_conditions": [
+        "权重由移动目标格决定，S/G 都是白格；不能对离开黑格计费。",
+        "普通 BFS 不适合 x≠1；该题也不是只比较最大边权的瓶颈路。",
+        "最短路径可能切换，不能先找一条路径再解单个线性不等式。",
+        "若删掉必须过黑格保证，答案可能无界；上界T不能脱离原题使用。距离和用 int64 或在 T+1 饱和。"
+      ],
+      "distinguishing_check": "原题第二例展示直行成本2x+1与少过黑格的绕路竞争，必须重新求固定参数下的最短路。"
+    },
+    {
+      "id": "atcoder:abc216_e",
+      "title": "Amusement Park",
+      "source_url": "https://atcoder.jp/contests/abc216/tasks/abc216_e?lang=en",
+      "read_scope": "原题收益递减操作、至多 K 次、完整约束及全部样例；97-115 行、133-157 行",
+      "constraints": "N≤100000；K≤2×10^9；1≤Ai≤2×10^9。每次获得当前 Ai 后该项减1，至多操作K次，最大化总收益。",
+      "derivation": "每个 Ai 产生有序收益 Ai,Ai-1,…,1，取所有序列中最大的 K'=min(K,sum Ai) 个。令 C(t)=sum max(Ai-t,0)，即严格高于 t 的收益数。找最小 t≥0 使 C(t)≤K'。先用等差和加入所有 >t 的收益，再补 (K'-C(t))×t。t的极小性保证补选次数不会超过值为t的收益数量。二分结果是分界值，最终目标需要再次聚合，不能只返回t。",
+      "complexity": "O(N log Amax) 时间，O(N) 存输入；判定和尾部求和可 O(1) 额外空间。",
+      "key_conditions": [
+        "至多K次使非正收益可以不取；K大于全部正收益数时不能继续算负收益。",
+        "使用严格高于t的计数与等于t的补量，避免重复值时多取。",
+        "计数、sum Ai、等差和、最终收益均用 int64。K×Amax≤4×10^18；可在达到K后提前截断判定计数。"
+      ],
+      "distinguishing_check": "[3,3],K=3 应得3+3+2=8；[2,3],K=2021 仅取正收益，答案9。"
+    },
+    {
+      "id": "atcoder:abc184_f",
+      "title": "Programming Contest",
+      "source_url": "https://atcoder.jp/contests/abc184/tasks/abc184_f?lang=en",
+      "read_scope": "原题子集目标、可选零项、完整约束及四组样例；115-126 行、144-194 行",
+      "constraints": "N≤40；T,Ai≤10^9；Ai正整数。选择任意子集使和≤T，求最大和。",
+      "derivation": "不能做 O(NT) 伪多项式背包，也不能枚举2^40。折半枚举两侧子集和；右侧排序。每个左和 s≤T，通过 upper_bound(T-s) 的前驱取得最佳右和，比较总和。二分只是折半搜索中的前驱查询，没有一个便宜的整段容量可行性 oracle。需在主专题实际定位到折半搜索讲解，而不硬套外层答案二分。",
+      "complexity": "O(N×2^(N/2)) 时间、O(2^(N/2)) 空间。",
+      "key_conditions": [
+        "两侧都含空集和0；若某个左和超过T先跳过，避免对 begin() 取前驱。",
+        "子集和可能达4×10^10，需 int64；输入上限10^9不能据此用int累计。",
+        "重复子集和不影响最大值，保留或去重都可以；枚举时剪枝依赖原题Ai>0。"
+      ],
+      "distinguishing_check": "所有Ai>T时答案0；恰好命中T时 upper_bound 的前驱仍须包含等号。"
+    },
+    {
+      "id": "leetcode:1901",
+      "title": "Find a Peak Element II",
+      "source_url": "https://leetcode.com/problems/find-a-peak-element-ii/description/",
+      "read_scope": "原题峰定义、外围值、复杂度要求、完整约束与全部样例；22-56 行",
+      "constraints": "1≤m,n≤500；元素1..10^5；相邻格不等；外围为-1。任取一个严格四邻峰，要求 O(m log n) 或 O(n log m)。",
+      "derivation": "按列折半；扫描中列找列最大值，该点已经严格大于上下邻居。如果也大于左右邻居就返回；否则沿更大的水平邻居保留半边。正确性靠分隔列最大值形成屏障：从更大邻居沿严格上升路径出发，不能越过整列不更大的分隔列，有限区域内会终止在峰。这里没有排序，也不存在普通真假单调谓词；需要保存存在峰的区间不变量。",
+      "complexity": "按列 O(m log n) 时间、O(1) 额外空间；按行相反。",
+      "key_conditions": [
+        "只拿中列某个固定行比较左右不成立，必须扫描该列最大值。",
+        "相邻不等与外围-1保证严格峰的存在和比较方向；若允许相等平台，需要重新定义与证明。",
+        "多个峰均可返回，不能把目标改为全局最大。",
+        "保留半边的依据是峰存在性，不能把输入矩阵谎称成二维有序表。"
+      ],
+      "distinguishing_check": "随机无相等邻格矩阵中检查返回点严格胜过所有有效四邻；单行、单列、峰位于边缘均须覆盖。"
+    },
+    {
+      "id": "leetcode:2071",
+      "title": "Maximum Number of Tasks You Can Assign",
+      "source_url": "https://leetcode.com/problems/maximum-number-of-tasks-you-can-assign/description/",
+      "read_scope": "原题一人一任务、一人至多一药、目标、完整约束及三组样例；21-62 行",
+      "constraints": "n,m≤50000；药数≤m；tasks,workers,strength∈[0,10^9]。",
+      "derivation": "若能完成k项，只保留最容易的k项和最强的k名工人不会变差，因此二分k。判定从困难任务到容易任务，用工人 multiset：最强工人若无需药就能完成，直接分配；否则该任务必需药，拿最弱的、加药后能完成它的工人（lower_bound(task-strength)），消耗一药。交换论证分别支持不浪费药和保留更强工人给其余任务。",
+      "complexity": "排序 O(n log n+m log m)，每次判定 O(k log k)，共 O(min(n,m) log² min(n,m)) 量级，空间 O(min(n,m))。",
+      "key_conditions": [
+        "二分的是可完成数量，易任务/强工人的替换支配关系必须先证明。",
+        "药有限而每人至多一颗，不能只数 workers+strength≥task 的匹配数。",
+        "必须处理最困难的剩余任务；用药时盲目消耗最强工人可能破坏后续分配。",
+        "multiset 支持相同力量的多个工人，每次只 erase 一个迭代器。workers+strength 的最大值2×10^9仍要谨慎避免后续扩展溢出。"
+      ],
+      "distinguishing_check": "用穷举子任务、子工人及所有匹配的小规模 oracle 检查判定，特别是药为0、加成为0与重复力量。"
+    },
+    {
+      "id": "usaco:839",
+      "title": "Talent Show (2018 US Open Gold)",
+      "source_url": "https://usaco.org/index.php?page=viewproblem2&cpid=839",
+      "read_scope": "原题比值目标、至少W重量、所有输入约束、输出向下取整及样例；12-38 行",
+      "constraints": "N≤250,W≤1000；wi≤10^6,ti≤1000且均正；总重量保证≥W。输出 floor(1000×最大总才艺/总重量)。",
+      "derivation": "直接二分输出整数 q。固定 q 后给牛 i 分数 1000ti-qwi，合法组比值≥q/1000 当且仅当存在重量≥W、总分≥0的0/1子集。以 min(真实总重量,W) 作背包状态，保存最大总分，最后检查 dp[W]≥0。状态重量可截断，但每头牛的分数必须始终用原始wi计算。q可在0..10^6搜索，无需浮点结果再floor。",
+      "complexity": "O(NW log10^6) 时间、O(W) 空间；使用两层滚动数组容易保证每头牛只取一次。",
+      "key_conditions": [
+        "原题是至少W，不是恰好W；超出的重量不能丢弃其分母贡献。",
+        "最高单牛比值未必满足总重量要求；比值排序后贪心并无充分依据。",
+        "不可达状态是负无穷，不能初始化全0；分数允许负。",
+        "qwi可达10^12，累计负分约2.5×10^14，需int64；整数二分避免临界整除时浮点floor错一。"
+      ],
+      "distinguishing_check": "原题三头牛样例最优为32/30，输出1066；单牛11/10虽比值更高，但重量不足15。"
+    },
+    {
+      "id": "usaco:838",
+      "title": "Milking Order (2018 US Open Gold)",
+      "source_url": "https://usaco.org/index.php?page=viewproblem2&cpid=838",
+      "read_scope": "原题优先前缀目标、字典序二级目标、完整规模与样例；12-36 行",
+      "constraints": "N≤100000,M≤50000；观察序列总长度≤200000。满足尽量长的观察前缀，再输出字典序最小的全排列。",
+      "derivation": "给定前缀X，每个观察只给相邻元素加有向边（传递性提供整条顺序），判断是否DAG。加更多观察只增边，前缀可行性真后假，二分最后可行X。得到X后重建图，用小根堆 Kahn 拓扑排序输出字典序最小全排列。阈值求解与证书构造是两个阶段。",
+      "complexity": "若S为所有观察长度总和，O((N+S)log M + S + Nlog N) 时间、O(N+S) 空间。",
+      "key_conditions": [
+        "只允许满足前X条，不能挑任意X条或任意删除冲突边。",
+        "二分判定可用普通队列；最终字典序要求使用小根堆。",
+        "拓扑判定每次会破坏入度，必须重建或复制；重复边需使入度增减一致。",
+        "需要输出所有N头牛，孤立点也要入堆；只输出最大X没有完成题目。"
+      ],
+      "distinguishing_check": "原题前两条可同时满足，第三条成环；最终必须输出1 4 2 3，而不是另一个合法序4 1 2 3。"
+    },
+    {
+      "id": "uva:10341",
+      "title": "Solve It",
+      "source_url": "https://onlinejudge.org/external/103/10341.pdf",
+      "read_scope": "原站单页 PDF 全文解析；方程、区间、系数符号、EOF、输出精度与全部样例",
+      "constraints": "x∈[0,1]；0≤p,r≤20，-20≤q,s,t≤0；最多2100行测试。原题未给u范围。输出根到4位小数或No solution。",
+      "derivation": "f(x)=p exp(-x)+q sinx+r cosx+s tanx+t x²+u。由符号条件，f'(x)=-p exp(-x)+q cosx-r sinx+s sec²x+2tx≤0。除常函数退化外严格递减。先检查端点；若f(0)<0或f(1)>0则无根，否则保持f(lo)≥0≥f(hi)反复折半。常零函数可输出0；非零常函数无根。",
+      "complexity": "每例 O(log(1/ε)) 时间、O(1) 空间；60次迭代足够四位小数。",
+      "key_conditions": [
+        "单调性来自原题系数符号和[0,1]，不能对任意非线性方程盲目二分。",
+        "端点可能就是根；全零系数与u=0时不唯一但任一根有效。",
+        "f(mid)的方向与递减函数匹配；不能套递增函数模板。",
+        "连续性加异号足以保证有根，唯一性是另外的结论；常函数退化要单独说明。"
+      ],
+      "distinguishing_check": "官方样例的平方根根、无解及混合函数；另查根在0、根在1、常零与常非零。"
+    },
+    {
+      "id": "usaco:597",
+      "title": "Angry Cows (2016 January Gold)",
+      "source_url": "https://usaco.org/index.php?page=viewproblem2&cpid=597",
+      "read_scope": "原题每一轮半径递减1、任意初始落点、完整约束、一位小数输出与样例；11-36 行",
+      "constraints": "2≤N≤50000；互异整数坐标0..10^9。单次初始爆炸半径R，连锁每轮R减1，求能清空的最小R。",
+      "derivation": "将坐标与R乘2，精确表示半整数。外层二分半径。固定半径后，初始位置向右移动时，能否最终清空左端只会由真变假，能否清空右端只会由假变真；内层找能清空左端的最右落点，再测右端。单向检查先取初始区间内最靠该方向的爆点，每轮贪心推进到当前半径能到达的最远爆点，再把双倍半径减2；一个方向总扫描O(N)。半整数足够：固定初始命中的端点i,j后，首爆至少需要(xj-xi)/2；后续所需R-1由整数距离与整数轮数约束，故最优是整数或半整数。",
+      "complexity": "排序O(NlogN)，双层二分最直接为O(Nlog²C)时间、O(N)空间，C为坐标跨度；可再用专门DP优化。",
+      "key_conditions": [
+        "初始落点不必是干草坐标，最优半径可能是半整数；如两个坐标0和1，答案0.5。",
+        "每轮连锁半径必须减1；不能用固定半径连通性代替。",
+        "单向贪心选择同轮最远端点，它从同一剩余半径出发支配其他该方向爆点。",
+        "内层位置区间只需[xmin,xmax]；最左落点必能清掉左端，最右可行落点是与右侧可行区间相交的最佳检查点。",
+        "这是进阶组合案例；若在目标范围中排除，应以明确层级和未来去向说明，而不能硬归为普通间距摆放。"
+      ],
+      "distinguishing_check": "官方例答案3.0；[0,1] 为0.5；[0,1,2,100]需区分首爆覆盖与半径递减后的链式覆盖。"
+    }
+  ]
+}

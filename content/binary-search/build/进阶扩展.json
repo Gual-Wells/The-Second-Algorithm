@@ -1,0 +1,41 @@
+{
+  "codeBlocks": [
+    "fenwick-rank",
+    "segment-first",
+    "parallel-prefix"
+  ],
+  "headings": [
+    {
+      "depth": 1,
+      "id": "进阶扩展",
+      "text": "进阶扩展"
+    },
+    {
+      "depth": 2,
+      "id": "1-动态频数中的第-k-项",
+      "text": "1 动态频数中的第 k 项"
+    },
+    {
+      "depth": 2,
+      "id": "2-动态区间中-第一个达到阈值的位置",
+      "text": "2 动态区间中，第一个达到阈值的位置"
+    },
+    {
+      "depth": 2,
+      "id": "3-多个最早时刻查询-共用操作前缀",
+      "text": "3 多个最早时刻查询，共用操作前缀"
+    },
+    {
+      "depth": 2,
+      "id": "4-已识别-尚未完成的进阶范围",
+      "text": "4 已识别、尚未完成的进阶范围"
+    }
+  ],
+  "sourceSha256": "c48b505caeb0a5983ecd47f63dd739a49f7858fbc41a7b8b210198240266e494",
+  "codeSha256": "7c6276b17f0306ab509b0e3ca97784777ff7375ded81bafcb92d39d6c31a75b7",
+  "markdownSha256": "bf309f4ce7c46fcf8487ea72ff23d9bbc50175b00218b53879352808be758628",
+  "htmlSha256": "7032af06f40a3bba83555bcf62a5764d74a94f47ec2ede2f7aaced2947cc9699",
+  "builderSha256": "1f103bf68f33010aae9705425eac5c78624d800314c563d73e46f5a8bcc90f91",
+  "markdownBytes": 7784,
+  "htmlBytes": 21338
+}

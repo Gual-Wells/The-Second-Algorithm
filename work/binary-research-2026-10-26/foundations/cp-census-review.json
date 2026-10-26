@@ -1,0 +1,599 @@
+{
+  "schema_version": 1,
+  "generated_date": "2026-10-26",
+  "finite_scope": "all 36 records captured as3.3a, Binary Search in current CP author dynamic CP5 draft snapshot",
+  "snapshot": "catalog/inventories/cpbook/problem-classification/20261026T083207.751282+0000-c7edbd4550a4-e2f040b09e324596944c1d20ab2b7cb7.json",
+  "not_a_global_coverage_claim": true,
+  "read_counts": {
+    "attempted_403": 1,
+    "not_attempted_after_host_403": 4,
+    "previous_official_statement_read": 7,
+    "new_official_statement_read": 21,
+    "premium_shell_only": 2,
+    "web_unavailable_and_direct_pdf_tls_eof": 1
+  },
+  "disposition_counts": {
+    "unobtained": 8,
+    "existing_pattern": 16,
+    "non_binary_primary": 6,
+    "important_variant": 5,
+    "actual_content_gap": 1
+  },
+  "previous_read_basis": "foundations/actual-reads.json; compared with compositions/actual-reads.json; 7 exact original identities previously read",
+  "new_read_total": 21,
+  "official_statement_read_total_in_this_finite_set": 28,
+  "access_stops": [
+    "Kattis firefly403: no further Kattis access attempted",
+    "LC243/244 premium shells retained unread",
+    "UVa10742 web tool inaccessible and direct official PDF TLS EOF retained unread"
+  ],
+  "source_corrections": [
+    "UVa11621 >=m requires lower_bound; sample108->108 contradicts mechanical use of CP4 upper_bound hint",
+    "UVa12965 official title isAngry Bids, not CP4 Angry Birds"
+  ],
+  "records": [
+    {
+      "identity": "kattis:firefly",
+      "resolved_title": null,
+      "read_state": "attempted_403",
+      "disposition": "unobtained",
+      "related_patterns": [],
+      "verified_statement_conditions": null,
+      "decision_reason": "firefly官方返回403；依指示停止该主机其余题，不用书内提示冒充题干读取。",
+      "content_destination": null,
+      "official_url": "https://open.kattis.com/problems/firefly",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#firefly",
+      "catalog_original_link_state": "published_link"
+    },
+    {
+      "identity": "kattis:massivecardgame",
+      "resolved_title": null,
+      "read_state": "not_attempted_after_host_403",
+      "disposition": "unobtained",
+      "related_patterns": [],
+      "verified_statement_conditions": null,
+      "decision_reason": "firefly官方返回403；依指示停止该主机其余题，不用书内提示冒充题干读取。",
+      "content_destination": null,
+      "official_url": "https://open.kattis.com/problems/massivecardgame",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#massivecardgame",
+      "catalog_original_link_state": "published_link"
+    },
+    {
+      "identity": "kattis:outofsorts",
+      "resolved_title": null,
+      "read_state": "not_attempted_after_host_403",
+      "disposition": "unobtained",
+      "related_patterns": [],
+      "verified_statement_conditions": null,
+      "decision_reason": "firefly官方返回403；依指示停止该主机其余题，不用书内提示冒充题干读取。",
+      "content_destination": null,
+      "official_url": "https://open.kattis.com/problems/outofsorts",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#outofsorts",
+      "catalog_original_link_state": "published_link"
+    },
+    {
+      "identity": "kattis:roompainting",
+      "resolved_title": null,
+      "read_state": "not_attempted_after_host_403",
+      "disposition": "unobtained",
+      "related_patterns": [],
+      "verified_statement_conditions": null,
+      "decision_reason": "firefly官方返回403；依指示停止该主机其余题，不用书内提示冒充题干读取。",
+      "content_destination": null,
+      "official_url": "https://open.kattis.com/problems/roompainting",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#roompainting",
+      "catalog_original_link_state": "published_link"
+    },
+    {
+      "identity": "kattis:synchronizinglists",
+      "resolved_title": null,
+      "read_state": "not_attempted_after_host_403",
+      "disposition": "unobtained",
+      "related_patterns": [],
+      "verified_statement_conditions": null,
+      "decision_reason": "firefly官方返回403；依指示停止该主机其余题，不用书内提示冒充题干读取。",
+      "content_destination": null,
+      "official_url": "https://open.kattis.com/problems/synchronizinglists",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#synchronizinglists",
+      "catalog_original_link_state": "published_link"
+    },
+    {
+      "identity": "leetcode-number:0033",
+      "resolved_title": "Search in Rotated Sorted Array",
+      "read_state": "previous_official_statement_read",
+      "disposition": "existing_pattern",
+      "related_patterns": [
+        "f-rotated-search"
+      ],
+      "verified_statement_conditions": "n<=5000；互异旋转递增数组；O(log n)；返回目标索引。",
+      "decision_reason": "本轮先前已读，当前2.2含该无重复特例。",
+      "content_destination": "二分查找.source.md:2.2",
+      "official_url": "https://leetcode.com/problems/search-in-rotated-sorted-array/description/",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#lc0033",
+      "catalog_original_link_state": "not_resolved"
+    },
+    {
+      "identity": "leetcode-number:0034",
+      "resolved_title": "Find First and Last Position of Element in Sorted Array",
+      "read_state": "previous_official_statement_read",
+      "disposition": "existing_pattern",
+      "related_patterns": [
+        "f-boundary"
+      ],
+      "verified_statement_conditions": "n可为0；非降可重复；首末位置；O(log n)。",
+      "decision_reason": "lower/upper边界区间已经完整承载。",
+      "content_destination": "二分查找.source.md:1.1",
+      "official_url": "https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/description/",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#lc0034",
+      "catalog_original_link_state": "not_resolved"
+    },
+    {
+      "identity": "leetcode-number:0035",
+      "resolved_title": "Search Insert Position",
+      "read_state": "new_official_statement_read",
+      "disposition": "existing_pattern",
+      "related_patterns": [
+        "f-boundary"
+      ],
+      "verified_statement_conditions": "1<=n<=10000；有序互异；值与target在[-10000,10000]；O(log n)。",
+      "decision_reason": "插入位置就是第一个>=target的下标，不生成新模式。",
+      "content_destination": "二分查找.source.md:1.1",
+      "official_url": "https://leetcode.com/problems/search-insert-position/description/",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#lc0035",
+      "catalog_original_link_state": "not_resolved"
+    },
+    {
+      "identity": "leetcode-number:0074",
+      "resolved_title": "Search a 2D Matrix",
+      "read_state": "previous_official_statement_read",
+      "disposition": "existing_pattern",
+      "related_patterns": [
+        "f-flat-matrix"
+      ],
+      "verified_statement_conditions": "各行非降；后一行首项大于前行末项；m,n<=100。",
+      "decision_reason": "整体展开有序与当前虚拟展平契约一致。",
+      "content_destination": "二分查找.source.md:3.1整体有序",
+      "official_url": "https://leetcode.com/problems/search-a-2d-matrix/description/",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#lc0074",
+      "catalog_original_link_state": "not_resolved"
+    },
+    {
+      "identity": "leetcode-number:0162",
+      "resolved_title": "Find Peak Element",
+      "read_state": "previous_official_statement_read",
+      "disposition": "existing_pattern",
+      "related_patterns": [
+        "f-local-extremum"
+      ],
+      "verified_statement_conditions": "n<=1000；相邻不等；边界负无穷；任意严格峰；O(log n)。",
+      "decision_reason": "先前已经读完，存在性折半的正文和代码已在2.3。",
+      "content_destination": "二分查找.source.md:2.3",
+      "official_url": "https://leetcode.com/problems/find-peak-element/description/",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#lc0162",
+      "catalog_original_link_state": "not_resolved"
+    },
+    {
+      "identity": "leetcode-number:0243",
+      "resolved_title": null,
+      "read_state": "premium_shell_only",
+      "disposition": "unobtained",
+      "related_patterns": [],
+      "verified_statement_conditions": null,
+      "decision_reason": "官方仅返回Subscribe to unlock，未取得正文、条件或方法；不得按题名分配覆盖。",
+      "content_destination": null,
+      "official_url": "https://leetcode.com/problems/shortest-word-distance/description/",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#lc0243",
+      "catalog_original_link_state": "not_resolved"
+    },
+    {
+      "identity": "leetcode-number:0244",
+      "resolved_title": null,
+      "read_state": "premium_shell_only",
+      "disposition": "unobtained",
+      "related_patterns": [],
+      "verified_statement_conditions": null,
+      "decision_reason": "官方仅返回Subscribe to unlock，未取得正文、条件或方法；不得按题名分配覆盖。",
+      "content_destination": null,
+      "official_url": "https://leetcode.com/problems/shortest-word-distance-ii/description/",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#lc0244",
+      "catalog_original_link_state": "not_resolved"
+    },
+    {
+      "identity": "leetcode-number:0374",
+      "resolved_title": "Guess Number Higher or Lower",
+      "read_state": "new_official_statement_read",
+      "disposition": "existing_pattern",
+      "related_patterns": [
+        "f-boundary"
+      ],
+      "verified_statement_conditions": "n<=2^31-1；guess返回-1表示猜大、1表示猜小、0命中；答案始终固定且存在。",
+      "decision_reason": "三路比较API或首个guess(mid)<=0均属已讲边界；需要保留API符号语义，无新判定结构。",
+      "content_destination": "二分查找.source.md:单调边界两个外壳",
+      "official_url": "https://leetcode.com/problems/guess-number-higher-or-lower/description/",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#lc0374",
+      "catalog_original_link_state": "not_resolved"
+    },
+    {
+      "identity": "leetcode-number:0506",
+      "resolved_title": "Relative Ranks",
+      "read_state": "new_official_statement_read",
+      "disposition": "non_binary_primary",
+      "related_patterns": [],
+      "verified_statement_conditions": "n<=10000；分数全部互异、0..1e6；按降序名次把奖牌/数字写回原顺序。",
+      "decision_reason": "主解是带原索引排序后回填；二分/哈希只是在已有排名上的可选查找，不是新二分。",
+      "content_destination": "排序与索引恢复专题；当前未写该专题，不能声称已有内容",
+      "official_url": "https://leetcode.com/problems/relative-ranks/description/",
+      "alternative": "排序(分数,原索引)并直接回填，无须每项二分。",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#lc0506",
+      "catalog_original_link_state": "not_resolved"
+    },
+    {
+      "identity": "leetcode-number:0704",
+      "resolved_title": "Binary Search",
+      "read_state": "new_official_statement_read",
+      "disposition": "existing_pattern",
+      "related_patterns": [
+        "f-boundary"
+      ],
+      "verified_statement_conditions": "n<=10000；互异升序；找到返回下标，否则-1；O(log n)。",
+      "decision_reason": "lower_bound后检查相等，当前1.1已有。",
+      "content_destination": "二分查找.source.md:1.1",
+      "official_url": "https://leetcode.com/problems/binary-search/description/",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#lc0704",
+      "catalog_original_link_state": "not_resolved"
+    },
+    {
+      "identity": "leetcode-number:0744",
+      "resolved_title": "Find Smallest Letter Greater Than Target",
+      "read_state": "new_official_statement_read",
+      "disposition": "existing_pattern",
+      "related_patterns": [
+        "f-boundary"
+      ],
+      "verified_statement_conditions": "小写字母非降数组，n<=10000，至少两种；不存在更大字符时回到首项。",
+      "decision_reason": "upper_bound加末尾回绕，当前1.1末尾已明确这一条件变种。",
+      "content_destination": "二分查找.source.md:1.1同型变种",
+      "official_url": "https://leetcode.com/problems/find-smallest-letter-greater-than-target/description/",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#lc0744",
+      "catalog_original_link_state": "not_resolved"
+    },
+    {
+      "identity": "leetcode-number:0849",
+      "resolved_title": "Maximize Distance to Closest Person",
+      "read_state": "new_official_statement_read",
+      "disposition": "non_binary_primary",
+      "related_patterns": [],
+      "verified_statement_conditions": "2<=n<=20000；0/1座位数组，至少一个空位与一个占用位；只新增一个人。",
+      "decision_reason": "应线性扫描占用点间隔：内部距离取两端间距的一半，头尾空段单独处理。不是重新选择k个候选位置的间距贪心。",
+      "content_destination": "数组零段/双指针专题；当前无该正文，不伪作已覆盖",
+      "official_url": "https://leetcode.com/problems/maximize-distance-to-closest-person/description/",
+      "alternative": "每个空位二分最近占用点可复用f-boundary但更慢；不因此新增二分外壳。",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#lc0849",
+      "catalog_original_link_state": "not_resolved"
+    },
+    {
+      "identity": "leetcode-number:0852",
+      "resolved_title": "Peak Index in a Mountain Array",
+      "read_state": "new_official_statement_read",
+      "disposition": "existing_pattern",
+      "related_patterns": [
+        "f-local-extremum",
+        "f-mountain-target"
+      ],
+      "verified_statement_conditions": "3<=n<=100000；山脉数组；0<=值<=1e6；O(log n)求峰。",
+      "decision_reason": "严格山脉唯一峰是现有局部峰模板的强条件特例。",
+      "content_destination": "二分查找.source.md:2.3",
+      "official_url": "https://leetcode.com/problems/peak-index-in-a-mountain-array/description/",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#lc0852",
+      "catalog_original_link_state": "not_resolved"
+    },
+    {
+      "identity": "leetcode-number:1331",
+      "resolved_title": "Rank Transform of an Array",
+      "read_state": "new_official_statement_read",
+      "disposition": "important_variant",
+      "related_patterns": [
+        "f-boundary"
+      ],
+      "verified_statement_conditions": "0<=n<=100000；值在[-1e9,1e9]；相等同排名，从1开始且尽量小。",
+      "decision_reason": "需先复制排序并去重，再lower_bound+1得到稠密排名。不能在保留重复的排序副本上直接+1。",
+      "content_destination": "二分查找.source.md:1.1可加稠密排名局部说明；进阶频数的离散化提及也相关",
+      "official_url": "https://leetcode.com/problems/rank-transform-of-an-array/description/",
+      "content_state": "primitive exists; distinct-vs-multiplicity ranking not explicitly explained",
+      "discriminator": "[1,1,2]中2的稠密排名为2；未去重的lower_bound下标+1会给3。",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#lc1331",
+      "catalog_original_link_state": "not_resolved"
+    },
+    {
+      "identity": "leetcode-number:1365",
+      "resolved_title": "How Many Numbers Are Smaller Than the Current Number",
+      "read_state": "new_official_statement_read",
+      "disposition": "existing_pattern",
+      "related_patterns": [
+        "f-boundary"
+      ],
+      "verified_statement_conditions": "2<=n<=500；值在[0,100]；每项统计所有严格更小元素，重复按重数。",
+      "decision_reason": "排序副本上lower_bound下标就是严格较小数量，当前1.1边界派生可直接承载。",
+      "content_destination": "二分查找.source.md:1.1",
+      "official_url": "https://leetcode.com/problems/how-many-numbers-are-smaller-than-the-current-number/description/",
+      "alternative": "值域仅101，桶频数前缀可O(n+101)处理；不能与LC1331去重排名混算。",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#lc1365",
+      "catalog_original_link_state": "not_resolved"
+    },
+    {
+      "identity": "leetcode-number:1887",
+      "resolved_title": "Reduction Operations to Make the Array Elements Equal",
+      "read_state": "new_official_statement_read",
+      "disposition": "non_binary_primary",
+      "related_patterns": [],
+      "verified_statement_conditions": "n<=50000；值在[1,50000]；每次把某个当前最大值降至当前次大不同值。",
+      "decision_reason": "排序后每项贡献为其下方不同值层数；逐组累计即可，二分只是查该稠密等级的可选工具。",
+      "content_destination": "排序分组/操作计数专题；当前未写该专题",
+      "official_url": "https://leetcode.com/problems/reduction-operations-to-make-the-array-elements-equal/description/",
+      "alternative": "直接维护不同值层数求和；无需二分答案或每步模拟。",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#lc1887",
+      "catalog_original_link_state": "not_resolved"
+    },
+    {
+      "identity": "leetcode-number:2389",
+      "resolved_title": "Longest Subsequence With Limited Sum",
+      "read_state": "previous_official_statement_read",
+      "disposition": "existing_pattern",
+      "related_patterns": [
+        "f-budget-count"
+      ],
+      "verified_statement_conditions": "n,m<=1000；值和预算正数<=1e6；只求预算内最大子序列数量。",
+      "decision_reason": "已在本轮读完并实现排序最小成本前缀及upper_bound。",
+      "content_destination": "二分查找.source.md:1.7",
+      "official_url": "https://leetcode.com/problems/longest-subsequence-with-limited-sum/description/",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#lc2389",
+      "catalog_original_link_state": "not_resolved"
+    },
+    {
+      "identity": "uva:10057",
+      "resolved_title": "A mid-summer night’s dream",
+      "read_state": "new_official_statement_read",
+      "disposition": "non_binary_primary",
+      "related_patterns": [
+        "f-boundary"
+      ],
+      "verified_statement_conditions": "0<n<=1e6；无符号数<65536；最小化绝对偏差和，输出最小A、输入中所有最优值的重数、整数最优A总数。",
+      "decision_reason": "核心是L1最优区间为两个中位数之间；二分只用于统计最优区间中的输入重数。",
+      "content_destination": "选择/中位数专题；该核心证明目前未在二分章承载",
+      "official_url": "https://onlinejudge.org/external/100/10057.pdf",
+      "alternative": "排序后L=a[(n-1)/2],U=a[n/2]；原项数=upper_bound(U)-lower_bound(L)，整数解数=U-L+1；也可用小值域计数桶。",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#10057",
+      "catalog_original_link_state": "not_resolved"
+    },
+    {
+      "identity": "uva:10077",
+      "resolved_title": "The Stern-Brocot Number System",
+      "read_state": "new_official_statement_read",
+      "disposition": "non_binary_primary",
+      "related_patterns": [],
+      "verified_statement_conditions": "输入正的互质m,n；1 1为结束标记不处理；原PDF未给m,n数值上限。",
+      "decision_reason": "维护相邻分数边界并用mediant比较决定L/R，是有理数树路径，不是有限有序数组每轮长度折半；不可直接宣称O(log范围)。",
+      "content_destination": "Stern-Brocot/数论树导航扩展；当前未实现，不声称已有跨章正文",
+      "official_url": "https://onlinejudge.org/external/100/10077.pdf",
+      "visual_review": "official PDF page1 fractions and tree verified",
+      "alternative": "连续同向L/R可由Euclidean/continued-fraction批量计算，但输出路径本身仍有长度成本。",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#10077",
+      "catalog_original_link_state": "not_resolved"
+    },
+    {
+      "identity": "uva:10474",
+      "resolved_title": "Where is the Marble?",
+      "read_state": "new_official_statement_read",
+      "disposition": "existing_pattern",
+      "related_patterns": [
+        "f-boundary"
+      ],
+      "verified_statement_conditions": "输入原本无序；所有输入数非负<=10000；多查询；输出排序后首次命中位置且1-based。",
+      "decision_reason": "先排序，再lower_bound检查相等并输出下标+1。与当前首个x同型。",
+      "content_destination": "二分查找.source.md:1.1",
+      "official_url": "https://onlinejudge.org/external/104/10474.pdf",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#10474",
+      "catalog_original_link_state": "not_resolved"
+    },
+    {
+      "identity": "uva:10567",
+      "resolved_title": "Helping Fill Bates",
+      "read_state": "previous_official_statement_read",
+      "disposition": "existing_pattern",
+      "related_patterns": [
+        "f-subsequence-index"
+      ],
+      "verified_statement_conditions": "|S|<=1e6；Q<=3500；每查询<=100；52字母；最小起点再最小终点。",
+      "decision_reason": "已读并在本轮实现出现位置表及逐次upper_bound。",
+      "content_destination": "二分查找.source.md:1.9",
+      "official_url": "https://onlinejudge.org/external/105/10567.pdf",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#10567",
+      "catalog_original_link_state": "not_resolved"
+    },
+    {
+      "identity": "uva:10611",
+      "resolved_title": "The Playboy Chimp",
+      "read_state": "new_official_statement_read",
+      "disposition": "existing_pattern",
+      "related_patterns": [
+        "f-boundary"
+      ],
+      "verified_statement_conditions": "N<=50000,Q<=25000；非降可重复高度，1..2^31-1；需严格较小的最大值与严格较大的最小值。",
+      "decision_reason": "lower_bound-1与upper_bound，严格性明确排除等高，已在1.1表格。",
+      "content_destination": "二分查找.source.md:1.1",
+      "official_url": "https://onlinejudge.org/external/106/10611.pdf",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#10611",
+      "catalog_original_link_state": "not_resolved"
+    },
+    {
+      "identity": "uva:10706",
+      "resolved_title": "Number Sequence",
+      "read_state": "new_official_statement_read",
+      "disposition": "important_variant",
+      "related_patterns": [
+        "f-prefix-sum-boundary"
+      ],
+      "verified_statement_conditions": "t<=25；1-based位次i<=2147483647；依次拼接S1,S2,...，Sk是十进制1..k拼接。",
+      "decision_reason": "外层累计各组长度定位所在Sk，再以内层累计数字长度定位数字，最后取该数字某一位；不是一次把所有字符生成出来。",
+      "content_destination": "census-addendum.cpp/md; Root integrates into production",
+      "official_url": "https://onlinejudge.org/external/107/10706.pdf",
+      "content_state": "primitive exists; nested cumulative-length composition not yet explained",
+      "derived_method": "L[k]=digits(1..k),B[k]=sum(L[1..k]); k=lower_bound(B,i); j=i-B[k-1]; v=lower_bound(L,j); answer=to_string(v)[j-L[v-1]-1]。64位累计。",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#10706",
+      "catalog_original_link_state": "not_resolved",
+      "followup_resolution": {
+        "state": "authoring_candidate_written_and_independently_tested_not_yet_claimed_production",
+        "cpp": "census-addendum.cpp",
+        "prose": "census-addendum.md",
+        "test": "census-addendum-test.cpp",
+        "namespace": "binary_census_base",
+        "code_key": "census-nested-digits"
+      }
+    },
+    {
+      "identity": "uva:10742",
+      "resolved_title": null,
+      "read_state": "web_unavailable_and_direct_pdf_tls_eof",
+      "disposition": "unobtained",
+      "related_patterns": [],
+      "verified_statement_conditions": null,
+      "decision_reason": "web工具无法取得；同一官方URL直接获取也以SSL UNEXPECTED_EOF失败。未读取题干，不按编号或目录提示猜测。",
+      "content_destination": null,
+      "official_url": "https://onlinejudge.org/external/107/10742.pdf",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#10742",
+      "catalog_original_link_state": "not_resolved"
+    },
+    {
+      "identity": "uva:11057",
+      "resolved_title": "Exact Sum",
+      "read_state": "new_official_statement_read",
+      "disposition": "important_variant",
+      "related_patterns": [
+        "f-boundary"
+      ],
+      "verified_statement_conditions": "2<=N<=10000；书价<1000001；选两本不同实体，总价M；保证有解；多解最小化两价差。",
+      "decision_reason": "可枚举一本并仅在其后缀二分补数，保留重复实体及最小价差；更合适的排序双指针扫描可少一重log。",
+      "content_destination": "边界用于后缀查补数；两和/双指针专题尚未独立写成正文",
+      "official_url": "https://onlinejudge.org/external/110/11057.pdf",
+      "content_state": "binary lookup exists; pair identity/tie objective belongs complementary topic",
+      "alternative": "排序双指针，找到总价M时更新最小价差并双向推进；不能让同一索引和自己配对。",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#11057",
+      "catalog_original_link_state": "not_resolved"
+    },
+    {
+      "identity": "uva:11621",
+      "resolved_title": "Small Factors",
+      "read_state": "new_official_statement_read",
+      "disposition": "existing_pattern",
+      "related_patterns": [
+        "f-boundary"
+      ],
+      "verified_statement_conditions": "1<=m<=2^31；求2^i*3^j集合中最小n>=m；0结束输入。",
+      "decision_reason": "生成受界候选后排序，查lower_bound(m)。等值必须保留，官方样例108的输出是108。",
+      "content_destination": "二分查找.source.md:1.1",
+      "official_url": "https://onlinejudge.org/external/116/11621.pdf",
+      "important_condition": "CP4物理183页目录写upper_bound，不能机械继承；m=2^31和结果须使用64位。",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#11621",
+      "catalog_original_link_state": "not_resolved"
+    },
+    {
+      "identity": "uva:11876",
+      "resolved_title": "N + NOD (N)",
+      "read_state": "new_official_statement_read",
+      "disposition": "existing_pattern",
+      "related_patterns": [
+        "f-boundary"
+      ],
+      "verified_statement_conditions": "N0=1,Ni=Ni-1+约数个数；T<100000；1<=A<=B<=1e6；统计[A,B]内序列项。",
+      "decision_reason": "序列严格递增，预处理约数数量并生成到范围上界；查询upper_bound(B)-lower_bound(A)。",
+      "content_destination": "二分查找.source.md:1.1范围计数；约数预处理本身属于数论",
+      "official_url": "https://onlinejudge.org/external/118/11876.pdf",
+      "important_condition": "只把边界查询归已有模式，不声称当前二分章也教完约数筛。",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#11876",
+      "catalog_original_link_state": "not_resolved"
+    },
+    {
+      "identity": "uva:12192",
+      "resolved_title": "Grapevine",
+      "read_state": "previous_official_statement_read",
+      "disposition": "actual_content_gap",
+      "related_patterns": [
+        "f-matrix-square"
+      ],
+      "verified_statement_conditions": "行列非降；N,M<=500；Q<=10000；求每个[L,U]内所有元素都合格的最大连续正方形边长。",
+      "decision_reason": "不是单目标查值或第k小；每行定位左上>=L，利用右下<=U约束最大边长。该组合先前已研究，当前production无对应函数/正文。",
+      "content_destination": "census-addendum.cpp/md; Root integrates into production",
+      "official_url": "https://onlinejudge.org/external/121/12192.pdf",
+      "alternative": "边长二分可用；逐行lower_bound配合只增长当前best可消掉每行再二分边长的log。",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#12192",
+      "catalog_original_link_state": "not_resolved",
+      "followup_resolution": {
+        "state": "authoring_candidate_written_and_independently_tested_not_yet_claimed_production",
+        "cpp": "census-addendum.cpp",
+        "prose": "census-addendum.md",
+        "test": "census-addendum-test.cpp",
+        "namespace": "binary_census_base",
+        "code_key": "census-matrix-square"
+      }
+    },
+    {
+      "identity": "uva:12965",
+      "resolved_title": "Angry Bids",
+      "read_state": "new_official_statement_read",
+      "disposition": "important_variant",
+      "related_patterns": [
+        "f-boundary"
+      ],
+      "verified_statement_conditions": "生产者P、消费者C各0..1e4；理想价格1..1e8；报价0..1e9；最少愤怒人数，平局最低价。",
+      "decision_reason": "成本=#producer>x+#consumer<x，能由upper/lower计数，但总目标不单调。枚举0与候选断点求最小，不是二分最优答案。",
+      "content_destination": "1.1两类边界组合的离散断点例证；当前未单独解释该目标",
+      "official_url": "https://onlinejudge.org/external/129/12965.pdf",
+      "content_state": "primitive exists; nonmonotone objective and zero endpoint not yet explained",
+      "important_condition": "必须包含价格0；正式题名为Angry Bids，CP4目录物理183页写Angry Birds属名称误记。",
+      "derived_method": "g(x)=P-upper_bound(producers,x)+lower_bound(consumers,x)。最小价可从0或生产者价格的下降断点取得；枚举两侧全部价格+0也正确但冗余。",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#12965",
+      "catalog_original_link_state": "not_resolved"
+    },
+    {
+      "identity": "uva:679",
+      "resolved_title": "Dropping Balls",
+      "read_state": "new_official_statement_read",
+      "disposition": "non_binary_primary",
+      "related_patterns": [],
+      "verified_statement_conditions": "2<=D<=20；1<=I<=524288，且I不超过给定树叶数；完整二叉树层序编号；旗帜每次访问翻转。",
+      "decision_reason": "第I球在每层的奇偶决定左右，转入子树后球序号变成ceil(I/2)或I/2；这是索引/奇偶路径导航，不是查边界。",
+      "content_destination": "树编号/位运算或分治导航专题；目前未写该独立专题",
+      "official_url": "https://onlinejudge.org/external/6/679.pdf",
+      "visual_review": "official PDF page1 figure1 and depth numbering verified",
+      "alternative": "O(D)直接路径代替模拟前I个球；仅因结构是二叉树不自动纳入二分模板。",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#679",
+      "catalog_original_link_state": "not_resolved"
+    },
+    {
+      "identity": "uva:957",
+      "resolved_title": "Popes",
+      "read_state": "new_official_statement_read",
+      "disposition": "important_variant",
+      "related_patterns": [
+        "f-boundary"
+      ],
+      "verified_statement_conditions": "P<=100000，年份按时间顺序可重复，末年<=1e6；Y<=末年；Y年窗口含N..N+Y-1；平局取最早。",
+      "decision_reason": "枚举左端，用lower_bound(years[i]+Y)求右开端，保留同年重数与最早平局；相邻查询边界递增可用双指针。",
+      "content_destination": "1.1范围计数的移动窗口变种；双指针专题尚未单独写成正文",
+      "official_url": "https://onlinejudge.org/external/9/957.pdf",
+      "alternative": "O(P)双指针优于每个左端O(log P)二分；不是新增二分原语。",
+      "catalog_source_locator": "https://cpbook.net/methodstosolve#957",
+      "catalog_original_link_state": "not_resolved"
+    }
+  ],
+  "addendum_verification": {
+    "compile_flags": "-std=c++17 -O2 -Wall -Wextra -Wpedantic",
+    "warnings": 0,
+    "exit_code": 0,
+    "digit_query_checks": 151476,
+    "matrix_query_checks_against_all_squares": 22663,
+    "large_matrix_smoke_checks": 2,
+    "max_original_position": 2147483647,
+    "full_range_constructed_groups": 31268
+  }
+}

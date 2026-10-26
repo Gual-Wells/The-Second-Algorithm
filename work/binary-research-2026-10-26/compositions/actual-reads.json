@@ -1,0 +1,442 @@
+{
+  "generated_on": "2026-10-26",
+  "role": "binary_compositions",
+  "scope": "answer binary search, composed predicates, selected-source completeness and alternatives",
+  "books_read": false,
+  "tests_run": {
+    "stage": "follow-on template implementation",
+    "result": "PASS 65572 checks",
+    "seed": 20261026,
+    "details": "verification.md",
+    "limits": "Only implemented checker scope; CF1866G/Loan/tree/geometry remain unimplemented research extensions."
+  },
+  "actual_search_batches": [
+    {
+      "queries": [
+        "site.leetcode.com/problems divide chocolate 1231 minimum sweetness",
+        "site.leetcode.com/problems maximum number of removable characters 1898",
+        "site.codeforces.com/edu/course/2/lesson/6 maximum average segment"
+      ],
+      "purpose": "find original identities and unlock/access boundaries",
+      "result": "official LC1898 direct readable; LC1231 locked; method average independently read from cp-algorithms; not treating mirrors as official verification"
+    },
+    {
+      "queries": [
+        "site.usaco.org bakery February 2023 silver solution",
+        "site.codechef.com TRPTSTIC editorial TripTastic"
+      ],
+      "purpose": "recover original solution navigation and blocked problem",
+      "result": "Bakery official results page led real solution; TripTastic still unavailable; community search hits not substantive method reads"
+    }
+  ],
+  "reads": [
+    {
+      "id": "method-arbitrary-predicate",
+      "url": "https://cp-algorithms.com/num_methods/binary_search.html",
+      "role": "method",
+      "status": "read-relevant-sections",
+      "actual_scope": "arbitrary monotone predicate; answer search transformed average; continuous root distinction; powers of2; parallel-search introduction",
+      "limitation": "does not certify all applications"
+    },
+    {
+      "id": "usaco-guide",
+      "url": "https://usaco.guide/silver/binary-search",
+      "role": "method-and-directory",
+      "status": "read",
+      "actual_scope": "monotonic first/last; Maximum Median example; common errors; complete currently visible Problems list:7 USACO +13 General",
+      "limitation": "not same denominator as older local inventory"
+    },
+    {
+      "id": "CF1201C",
+      "url": "https://codeforces.com/problemset/problem/1201/C",
+      "role": "original-problem",
+      "status": "read-statement-constraints",
+      "actual_scope": "odd n; increment budget; maximum median; n<=2e5,k<=1e9",
+      "limitation": "solutions not read beyond USACO Guide method"
+    },
+    {
+      "id": "CF1486D",
+      "url": "https://codeforces.com/problemset/problem/1486/D",
+      "role": "original-problem",
+      "status": "read-statement-constraints",
+      "actual_scope": "length>=k maximum lower median; n<=2e5",
+      "limitation": ""
+    },
+    {
+      "id": "CF1486D-editorial",
+      "url": "https://codeforces.com/blog/entry/87849",
+      "role": "official-editorial",
+      "status": "read-D-section",
+      "actual_scope": "transform >=x to1, otherwise-1; positive segment sum; min eligible prefix; O(nlogn)",
+      "limitation": "other sections not relevant/read in full"
+    },
+    {
+      "id": "CF1117C",
+      "url": "https://codeforces.com/problemset/problem/1117/C",
+      "role": "original-problem",
+      "status": "read-statement",
+      "actual_scope": "periodic unit wind, unit self-move or stay, additive moves, min days, coords<=1e9",
+      "limitation": "method derived rather than editorial-read"
+    },
+    {
+      "id": "CF782B",
+      "url": "https://codeforces.com/problemset/problem/782/B",
+      "role": "original-problem",
+      "status": "read-statement-constraints",
+      "actual_scope": "gather on line, real meeting point; positive speeds; n<=60000; error1e-6",
+      "limitation": ""
+    },
+    {
+      "id": "CF847E",
+      "url": "https://codeforces.com/problemset/problem/847/E",
+      "role": "original-problem",
+      "status": "read-statement-constraints",
+      "actual_scope": "line Packmen, unit movement; free target eating; arbitrary direction changes; n<=1e5",
+      "limitation": "checker derived"
+    },
+    {
+      "id": "CF818F",
+      "url": "https://codeforces.com/problemset/problem/818/F",
+      "role": "original-problem",
+      "status": "read-statement-constraints",
+      "actual_scope": "simple undirected graph; >=half edges bridges; maximize edges; n<=2e9,q<=1e5",
+      "limitation": "structural proof not verified"
+    },
+    {
+      "id": "CF818F-editorial",
+      "url": "https://codeforces.com/blog/entry/52991",
+      "role": "official-editorial-page",
+      "status": "method-text-unavailable",
+      "actual_scope": "main tutorial only loading placeholders; comment discusses core-size formula",
+      "limitation": "comment not treated as official proof"
+    },
+    {
+      "id": "CF1520F1",
+      "url": "https://codeforces.com/problemset/problem/1520/F1",
+      "role": "original-problem",
+      "status": "read-statement-interaction-constraints",
+      "actual_scope": "kth zero; one round; <=20 interval sum calls; n<=2e5; flush;-1 exit",
+      "limitation": "F2 not read"
+    },
+    {
+      "id": "CF1866G",
+      "url": "https://codeforces.com/problemset/problem/1866/G",
+      "role": "original-problem",
+      "status": "read-statement-constraints",
+      "actual_scope": "passenger original-location radius limits; min max carriage occupancy; N<=2e5,A<=1e9",
+      "limitation": "checker derived, not yet flow-verified"
+    },
+    {
+      "id": "CF1866G-editorial",
+      "url": "https://codeforces.com/blog/entry/120025",
+      "role": "official-editorial-page",
+      "status": "method-text-unavailable",
+      "actual_scope": "G heading confirmed; tutorial loading placeholder",
+      "limitation": "not counted as method read"
+    },
+    {
+      "id": "ATCODER:abc149_e",
+      "url": "https://atcoder.jp/contests/abc149/tasks/abc149_e",
+      "role": "original-problem",
+      "status": "read-statement-constraints-examples",
+      "actual_scope": "top M distinct ordered hand pairs; same guest both hands allowed; n<=1e5,M<=n²,A<=1e5",
+      "limitation": ""
+    },
+    {
+      "id": "CSES2422",
+      "url": "https://cses.fi/problemset/task/2422/",
+      "role": "original-problem",
+      "status": "read",
+      "actual_scope": "odd square multiplication table middle; n<1e6",
+      "limitation": "confirms existing kth-table pattern"
+    },
+    {
+      "id": "CSES1620",
+      "url": "https://cses.fi/problemset/task/1620/",
+      "role": "original-problem",
+      "status": "read",
+      "actual_scope": "parallel fixed-time production; n<=2e5,t<=1e9,k<=1e9",
+      "limitation": "existing pattern confirmation"
+    },
+    {
+      "id": "CSES1085",
+      "url": "https://cses.fi/problemset/task/1085/",
+      "role": "original-problem",
+      "status": "read",
+      "actual_scope": "positive array; exactly k subarrays; k<=n,n<=2e5",
+      "limitation": "existing pattern confirmation"
+    },
+    {
+      "id": "USACO:690",
+      "url": "https://usaco.org/index.php?page=viewproblem2&cpid=690",
+      "role": "original-problem",
+      "status": "read",
+      "actual_scope": "Cow Dance fixed order start-on-free slot; n<=1e4; K=N guaranteed feasible",
+      "limitation": ""
+    },
+    {
+      "id": "USACO:690-editorial",
+      "url": "https://usaco.org/current/data/sol_cowdance_silver_jan17.html",
+      "role": "official-editorial",
+      "status": "read",
+      "actual_scope": "priority queue O(nlogK) checker; binary slots; O(nlog²n)",
+      "limitation": ""
+    },
+    {
+      "id": "USACO:858",
+      "url": "https://usaco.org/index.php?page=viewproblem2&cpid=858",
+      "role": "original-problem",
+      "status": "read",
+      "actual_scope": "Convention arrival grouping; bus count+capacity; min max wait; n<=1e5",
+      "limitation": "editorial not read"
+    },
+    {
+      "id": "USACO:594",
+      "url": "https://usaco.org/index.php?page=viewproblem2&cpid=594",
+      "role": "original-problem",
+      "status": "read",
+      "actual_scope": "Silver Angry Cows K equal-radius shots; n<=50000,K<=10",
+      "limitation": "different from Gold; editorial not read"
+    },
+    {
+      "id": "USACO:1038",
+      "url": "https://usaco.org/index.php?page=viewproblem2&cpid=1038",
+      "role": "original-problem",
+      "status": "read",
+      "actual_scope": "Social Distancing integer placements in disjoint intervals; n,m<=1e5,coord<=1e18",
+      "limitation": ""
+    },
+    {
+      "id": "USACO:1038-editorial",
+      "url": "https://usaco.org/current/data/sol_socdist_silver_open20.html",
+      "role": "official-editorial",
+      "status": "read",
+      "actual_scope": "greedy earliest placement; check O(n+m); binary distance",
+      "limitation": ""
+    },
+    {
+      "id": "USACO:597",
+      "url": "https://usaco.org/index.php?page=viewproblem2&cpid=597",
+      "role": "original-problem",
+      "status": "read",
+      "actual_scope": "Gold Angry Cows single shot chain reaction with radius decrement; half-unit output",
+      "limitation": ""
+    },
+    {
+      "id": "USACO:597-editorial",
+      "url": "https://usaco.org/current/data/sol_angry_gold_jan16.html",
+      "role": "official-editorial",
+      "status": "read-methods-and-code",
+      "actual_scope": "bidirectional DP/greedy, doubled coordinates, crossover; optional slower nested binary",
+      "limitation": "not empirically reproduced"
+    },
+    {
+      "id": "USACO:991",
+      "url": "https://usaco.org/index.php?page=viewproblem2&cpid=991",
+      "role": "original-problem",
+      "status": "read",
+      "actual_scope": "Loan N,K,M<=1e12; max(floor((N-G)/X),M); maximize X",
+      "limitation": ""
+    },
+    {
+      "id": "USACO:991-editorial",
+      "url": "https://usaco.org/current/data/sol_loan_silver_jan20.html",
+      "role": "official-editorial",
+      "status": "read",
+      "actual_scope": "same quotient batched days; O(sqrt N) checker; O(sqrtNlogN)",
+      "limitation": ""
+    },
+    {
+      "id": "USACO:1302",
+      "url": "https://usaco.org/index.php?page=viewproblem2&cpid=1302",
+      "role": "original-problem",
+      "status": "read",
+      "actual_scope": "Bakery two durations; nonfractional upgrades; all final times positive; a,b up to1e9,c up to2e18",
+      "limitation": ""
+    },
+    {
+      "id": "USACO:1302-results",
+      "url": "https://usaco.org/index.php?page=feb23results",
+      "role": "official-navigation",
+      "status": "read-silver-entry",
+      "actual_scope": "followed genuine Solution link rather than guessed filename",
+      "limitation": ""
+    },
+    {
+      "id": "USACO:1302-editorial",
+      "url": "https://usaco.org/current/data/sol_prob1_silver_feb23.html",
+      "role": "official-editorial",
+      "status": "read",
+      "actual_scope": "budget fixes x+y; eliminate y; intersect signed integer bounds; equal coefficients; complexity",
+      "limitation": ""
+    },
+    {
+      "id": "CODILITY:MinMaxDivision",
+      "url": "https://app.codility.com/programmers/lessons/14-binary_search_algorithm/min_max_division/",
+      "role": "original-problem",
+      "status": "read-unique-statement-block",
+      "actual_scope": "nonnegative; empty blocks allowed; K independent of N",
+      "limitation": "page repeats languages; repeated body not distinct read cases"
+    },
+    {
+      "id": "CODILITY:NailingPlanks",
+      "url": "https://app.codility.com/programmers/lessons/14-binary_search_algorithm/nailing_planks/",
+      "role": "original-problem",
+      "status": "read-unique-statement-block",
+      "actual_scope": "minimum first-J nails; closed intervals; N,M<=30000,coordinates<=2M; impossible=-1",
+      "limitation": ""
+    },
+    {
+      "id": "LC1898",
+      "url": "https://leetcode.com/problems/maximum-number-of-removable-characters/",
+      "role": "original-problem",
+      "status": "read",
+      "actual_scope": "fixed deletion prefix; retain subsequence; length<=1e5; removable distinct",
+      "limitation": ""
+    },
+    {
+      "id": "LC2560",
+      "url": "https://leetcode.com/problems/house-robber-iv/",
+      "role": "original-problem",
+      "status": "read",
+      "actual_scope": "min maximum selected value; >=k nonadjacent houses; n<=1e5",
+      "limitation": ""
+    },
+    {
+      "id": "LC1631",
+      "url": "https://leetcode.com/problems/path-with-minimum-effort/",
+      "role": "original-problem",
+      "status": "read",
+      "actual_scope": "edge height difference bottleneck; 4-neighbor grid <=100x100; values<=1e6",
+      "limitation": ""
+    },
+    {
+      "id": "LC778",
+      "url": "https://leetcode.com/problems/swim-in-rising-water/",
+      "role": "original-problem",
+      "status": "read",
+      "actual_scope": "vertex elevation threshold; n<=50,unique0..n²-1; endpoint eligibility",
+      "limitation": ""
+    },
+    {
+      "id": "LC2071",
+      "url": "https://leetcode.com/problems/maximum-number-of-tasks-you-can-assign/",
+      "role": "original-problem",
+      "status": "read",
+      "actual_scope": "tasks-workers one-to-one; uniform pill boost; n,m<=5e4",
+      "limitation": "checker derived; deque optimization unverified"
+    },
+    {
+      "id": "LC2040",
+      "url": "https://leetcode.com/problems/kth-smallest-product-of-two-sorted-arrays/",
+      "role": "original-problem",
+      "status": "read",
+      "actual_scope": "sorted signed arrays with zero, sizes<=5e4,values abs<=1e5,k<=nm",
+      "limitation": ""
+    },
+    {
+      "id": "LC287",
+      "url": "https://leetcode.com/problems/find-the-duplicate-number/",
+      "role": "original-problem",
+      "status": "read",
+      "actual_scope": "n+1 elements in[1,n]; only one repeated distinct value; constant space; no modification; linear followup",
+      "limitation": ""
+    },
+    {
+      "id": "LC2439",
+      "url": "https://leetcode.com/problems/minimize-maximum-of-array/",
+      "role": "original-problem",
+      "status": "read",
+      "actual_scope": "nonnegative; unit transfers only left; min max; n<=1e5",
+      "limitation": "direct prefix-bound method derived"
+    },
+    {
+      "id": "LC1292",
+      "url": "https://leetcode.com/problems/maximum-side-length-of-a-square-with-sum-less-than-or-equal-to-threshold/",
+      "role": "original-problem",
+      "status": "read",
+      "actual_scope": "nonnegative matrix<=300x300; max square length below threshold",
+      "limitation": "linear growing-size alternative derived"
+    },
+    {
+      "id": "CF1946C",
+      "url": "https://codeforces.com/problemset/problem/1946/C",
+      "role": "original-problem",
+      "status": "read",
+      "actual_scope": "tree unit vertices; exactly k removed edges; maximize minimum component size; total n<=1e5",
+      "limitation": "cross-tree checker derived; not tested"
+    },
+    {
+      "id": "BOI2012:Mobile",
+      "url": "https://oj.uz/problem/view/BOI12_mobile",
+      "role": "original-navigation",
+      "status": "read",
+      "actual_scope": "actual statement PDF link obtained",
+      "limitation": "not an editorial"
+    },
+    {
+      "id": "BOI2012:Mobile-pdf",
+      "url": "https://static.oj.uz/problem/1abfa0e58d455da768bfa9fd4ff922/statement/cd34e8fe3575a2c8aaeca0449592c9a03af380ac391e8e32f0f8d3cbbc39cdd6/statement_en.pdf",
+      "role": "original-problem-pdf",
+      "status": "read-full-single-page-text-and-requested-image",
+      "actual_scope": "road nearest-base max distance; N<=1e6,sorted x,2D bases; 1e-3 tolerance",
+      "limitation": "PDF skill read; optimal envelope method remains research gap"
+    },
+    {
+      "id": "CODECHEF:TRPTSTIC",
+      "url": "https://www.codechef.com/problems/TRPTSTIC",
+      "role": "original-problem",
+      "status": "blocked-js-shell",
+      "actual_scope": "only enable JavaScript message",
+      "limitation": "cannot classify from tags"
+    },
+    {
+      "id": "LC1231",
+      "url": "https://leetcode.com/problems/divide-chocolate/",
+      "role": "original-problem",
+      "status": "blocked-premium",
+      "actual_scope": "title/identity only",
+      "limitation": "not statement-verified"
+    },
+    {
+      "id": "LC1231-cn",
+      "url": "https://leetcode.cn/problems/divide-chocolate/",
+      "role": "original-problem",
+      "status": "blocked-premium",
+      "actual_scope": "title/identity only",
+      "limitation": "not statement-verified"
+    },
+    {
+      "id": "CFEDU:285083A",
+      "url": "https://codeforces.com/edu/course/2/lesson/6/3/practice/contest/285083/problem/A",
+      "role": "original-problem",
+      "status": "redirected",
+      "actual_scope": "redirect to course list",
+      "limitation": "no specific statement read"
+    },
+    {
+      "id": "LUOGU:P1404",
+      "url": "https://www.luogu.com.cn/problem/P1404",
+      "role": "original-problem",
+      "status": "failed429",
+      "actual_scope": "",
+      "limitation": "no official statement read"
+    },
+    {
+      "id": "USACO:bakery-guessed",
+      "url": "https://usaco.org/current/data/sol_bakery_silver_feb23.html",
+      "role": "navigation-attempt",
+      "status": "failed",
+      "actual_scope": "guessed name inaccessible; later resolved through official results link",
+      "limitation": "do not count as actual method"
+    },
+    {
+      "id": "USACO:angry-guessed",
+      "url": "https://usaco.org/current/data/sol_prob1_silver_jan16.html",
+      "role": "navigation-attempt",
+      "status": "failed",
+      "actual_scope": "inaccessible",
+      "limitation": "no method read"
+    }
+  ]
+}

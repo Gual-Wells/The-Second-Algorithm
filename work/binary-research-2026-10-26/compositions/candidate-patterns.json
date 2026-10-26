@@ -1,0 +1,376 @@
+{
+  "generated_on": "2026-10-26",
+  "status": "research-proposals-not-final-catalog",
+  "reader": "root-agent",
+  "patterns": [
+    {
+      "id": "comp-partition-maximin",
+      "name": "连续非负分段：最大化最小段和",
+      "disposition": "required-main",
+      "objective": "max x: every segment sum>=x",
+      "assumptions": "nonnegative, exactly K nonempty, K<=n",
+      "predicate": "greedily close at threshold; count>=K",
+      "complexity": "O(n log(sum/K))",
+      "regression_trap": "[3,3,-3],T=3,K=2 invalidates greedy count without nonnegativity",
+      "cases": [
+        "LC1231"
+      ],
+      "decision": "LC1231 statement locked; original-pattern derivation requires constraint citation"
+    },
+    {
+      "id": "comp-budget-target",
+      "name": "预算抬升目标值",
+      "disposition": "required-main",
+      "objective": "max target with minimum cost<=budget",
+      "assumptions": "CF1201C odd n; increment one element per operation",
+      "predicate": "sort, sum max(0,target-a[i]) over upper half",
+      "complexity": "O(n log n+n log R)",
+      "regression_trap": "must justify which half is cheapest; 64-bit cost",
+      "cases": [
+        "CF1201C"
+      ],
+      "decision": "leveling greedy is a preferable direct alternative when naturally understood"
+    },
+    {
+      "id": "comp-operation-prefix",
+      "name": "固定操作前缀后的状态",
+      "disposition": "required-main",
+      "objective": "last feasible deletion prefix / first feasible addition prefix",
+      "assumptions": "operations have one-direction effect and fixed order",
+      "predicate": "timestamp array plus actual subsequence or interval-coverage checker",
+      "complexity": "O((n+m) log m)",
+      "regression_trap": "arbitrary restores/replacements do not preserve monotonicity",
+      "cases": [
+        "LC1898",
+        "CODILITY:NailingPlanks"
+      ],
+      "decision": "two checker variants under one family; RMQ of earliest nail time can eliminate outer binary"
+    },
+    {
+      "id": "comp-transformed-subarray",
+      "name": "平均值/中位数变换与合法最小前缀",
+      "disposition": "required-main",
+      "objective": "max average or lower median among subarrays length>=L",
+      "assumptions": "must preserve length conditions and median convention",
+      "predicate": "average subtract x then >=0; lower-median +/-1 then >0; eligible minimum prefix",
+      "complexity": "O(n log R) or O(n log(R/eps))",
+      "regression_trap": "[1,2],x=2 lower median requires strict >0; max length adds deque window",
+      "cases": [
+        "CP-ALGORITHMS:binary_search",
+        "CF1486D"
+      ],
+      "decision": "same prefix mechanism, distinct mapping/comparison; retain both"
+    },
+    {
+      "id": "comp-threshold-path",
+      "name": "瓶颈路径阈值可达",
+      "disposition": "required-main",
+      "objective": "min threshold permitting s->t",
+      "assumptions": "edge threshold LC1631 vs vertex threshold LC778",
+      "predicate": "BFS/DFS on filtered graph",
+      "complexity": "O((V+E) log W)",
+      "regression_trap": "LC778 must test source eligibility, unlike edge-difference check",
+      "cases": [
+        "LC1631",
+        "LC778"
+      ],
+      "decision": "graph chapter should foreground minimax Dijkstra/DSU as alternatives"
+    },
+    {
+      "id": "comp-threshold-nonadjacent",
+      "name": "阈值筛选后的非邻接数量",
+      "disposition": "required-main",
+      "objective": "min capability with >=K houses",
+      "assumptions": "unweighted selection on a path, eligible nums[i]<=T",
+      "predicate": "take earliest eligible and skip adjacent",
+      "complexity": "O(n log W)",
+      "regression_trap": "arbitrary graph independent set or weighted benefit needs different checker",
+      "cases": [
+        "LC2560"
+      ],
+      "decision": "not just copy sum-max House Robber DP"
+    },
+    {
+      "id": "comp-resource-matching",
+      "name": "数量二分与带资源匹配",
+      "disposition": "composition-extension",
+      "objective": "max assignable tasks",
+      "assumptions": "uniform pill boost; one task per worker; one pill per worker",
+      "predicate": "easiest K tasks / strongest K workers; hardest first; strongest if no pill else weakest viable boosted",
+      "complexity": "O(n log n+m log m+K log K log min(n,m))",
+      "regression_trap": "tasks[6,8],workers[5,7],pill1,boost3: strongest-pill greedy fails",
+      "cases": [
+        "LC2071"
+      ],
+      "decision": "deque O(K) checker candidate not yet verified"
+    },
+    {
+      "id": "comp-interval-capacity",
+      "name": "区间任务容量可行性",
+      "disposition": "composition-extension",
+      "objective": "min per-slot capacity",
+      "assumptions": "groups A_i have interval destinations; A_i may be 1e9",
+      "predicate": "left-to-right earliest deadline heap with batched counts",
+      "complexity": "O(n log n log W)",
+      "regression_trap": "never loop per passenger; expired remaining group is failure",
+      "cases": [
+        "CF1866G"
+      ],
+      "decision": "autonomous derivation, editorial method unavailable; verify with small max-flow"
+    },
+    {
+      "id": "comp-greedy-cover",
+      "name": "等长区间覆盖/带容量分组",
+      "disposition": "composition-extension",
+      "objective": "min radius or time span",
+      "assumptions": "sorted points; coverage intervals or group size limit",
+      "predicate": "cover leftmost point as far right as possible; add count cap for buses",
+      "complexity": "O(n log R) after sorting",
+      "regression_trap": "coverage center need not be an input point; 2R interval not R",
+      "cases": [
+        "USACO:594",
+        "USACO:858"
+      ],
+      "decision": "merge the short variants; not same as selected-point spacing"
+    },
+    {
+      "id": "comp-interval-spacing",
+      "name": "可用区间中最大化最小间距",
+      "disposition": "composition-extension",
+      "objective": "max D allowing N integer points",
+      "assumptions": "disjoint intervals, coordinates to 1e18, D>0",
+      "predicate": "place earliest legal points; batch arithmetic per interval possible",
+      "complexity": "O((N+M) log R); O(M log R) batched",
+      "regression_trap": "cannot enumerate all integer coordinates; large boundary/last+D",
+      "cases": [
+        "USACO:1038"
+      ],
+      "decision": "important condition variant of existing finite-point spacing"
+    },
+    {
+      "id": "comp-walking-cover",
+      "name": "带折返成本的线性行走覆盖",
+      "disposition": "composition-extension",
+      "objective": "min T covering targets by ordered agents",
+      "assumptions": "line, unit speed, targets visited free, agents do not interfere",
+      "predicate": "leftmost uncovered target; reach p+max(T-2d,(T-d)/2) if left detour d",
+      "complexity": "O(n log n) in strip length bound",
+      "regression_trap": "[p-T,p+T] radius falsely ignores time to visit both sides",
+      "cases": [
+        "CF847E"
+      ],
+      "decision": "retains implementation-changing checker"
+    },
+    {
+      "id": "comp-heap-simulation",
+      "name": "资源数二分与事件堆模拟",
+      "disposition": "composition-extension",
+      "objective": "min parallel slots completing by deadline",
+      "assumptions": "fixed task order; next starts on first completion",
+      "predicate": "heap of completion times",
+      "complexity": "O(n log²n)",
+      "regression_trap": "not arbitrary optimal multiprocessor scheduling and not independent-machine floor count",
+      "cases": [
+        "USACO:690"
+      ],
+      "decision": "official analysis read"
+    },
+    {
+      "id": "comp-periodic-reachability",
+      "name": "周期扰动与可达距离",
+      "disposition": "composition-extension",
+      "objective": "min feasible time",
+      "assumptions": "unit wind each day; unit self move or stay",
+      "predicate": "prefix displacement + cycle; Manhattan(target-natural_position)<=time",
+      "complexity": "O(n+log R)",
+      "regression_trap": "unreachable instances exist; doubling without cap may overflow",
+      "cases": [
+        "CF1117C"
+      ],
+      "decision": "use exact problem-specific monotonicity"
+    },
+    {
+      "id": "comp-interval-intersection",
+      "name": "预算消元/连续时间的区间交",
+      "disposition": "required-main",
+      "objective": "min budget/time with nonempty feasible intersection",
+      "assumptions": "positive speeds; or bounded positive integer final times",
+      "predicate": "intersect reachable intervals; Bakery eliminates y using fixed x+y",
+      "complexity": "O(n log R)",
+      "regression_trap": "signed ceil/floor division; zero coefficient; correct integer vs real feasibility",
+      "cases": [
+        "CF782B",
+        "USACO:1302"
+      ],
+      "decision": "one clean interval-intersection family with distinct numeric contracts"
+    },
+    {
+      "id": "comp-batched-quotient",
+      "name": "整除值不变段批量模拟",
+      "disposition": "cross-chapter-gap",
+      "objective": "max policy parameter repaying in K days",
+      "assumptions": "N,K,M<=1e12; repayment max(floor(remaining/X),M)",
+      "predicate": "skip all days with same quotient; finish minimum-payment phase directly",
+      "complexity": "O(sqrt N log N)",
+      "regression_trap": "O(K) simulation remains infeasible despite binary outer loop",
+      "cases": [
+        "USACO:991"
+      ],
+      "decision": "integer arithmetic/simulation main placement; not core long template"
+    },
+    {
+      "id": "comp-sign-aware-product-rank",
+      "name": "含负数乘积的排名计数",
+      "disposition": "required-important-variant",
+      "objective": "first x count(products<=x)>=K",
+      "assumptions": "sorted signed inputs; products to 1e10",
+      "predicate": "positive rows ascending, negative rows descending, zero all-or-none",
+      "complexity": "O(n log m log W), optimized O((n+m) log W)",
+      "regression_trap": "C++ truncating division cannot stand in for floor/ceil; count needs 64-bit",
+      "cases": [
+        "LC2040"
+      ],
+      "decision": "merge under implicit order statistics but code is materially different"
+    },
+    {
+      "id": "comp-rank-aggregate",
+      "name": "排名门槛后聚合前K项",
+      "disposition": "required-main",
+      "objective": "sum top M implicit pair sums",
+      "assumptions": "ordered pairs distinct, diagonal allowed; M<=n²",
+      "predicate": "count+sum pairs>=T; remove (count-M)*T boundary duplicates",
+      "complexity": "O(n log n log W); two pointers O(n log W)",
+      "regression_trap": "finding threshold alone not the answer; count ordered pairs correctly",
+      "cases": [
+        "ATCODER:abc149_e"
+      ],
+      "decision": "extension of rank inversion with essential duplicate correction"
+    },
+    {
+      "id": "comp-pigeonhole-value-domain",
+      "name": "鸽巢计数定位唯一重复值",
+      "disposition": "alternative",
+      "objective": "locate only duplicated value with O(1) memory",
+      "assumptions": "n+1 entries in[1,n], only one repeated distinct number",
+      "predicate": "count(values<=x)>x",
+      "complexity": "O(n log n)",
+      "regression_trap": "multiple duplicate values break monotonicity: [1,1,4,4,4,5]",
+      "cases": [
+        "LC287"
+      ],
+      "decision": "Floyd O(n) should be primary solution"
+    },
+    {
+      "id": "comp-tree-components",
+      "name": "树上最大最小分量规模",
+      "disposition": "cross-chapter-gap",
+      "objective": "max T allowing exactly K edge removals",
+      "assumptions": "tree with unit positive vertex sizes",
+      "predicate": "postorder gather, collect subtree once size>=T; groups>=K+1",
+      "complexity": "O(n log n)",
+      "regression_trap": "root leftover can merge back; no recursion-stack assumption for 1e5 chain",
+      "cases": [
+        "CF1946C"
+      ],
+      "decision": "tree greedy/DFS primary home absent so unresolved carriage"
+    },
+    {
+      "id": "comp-square-size",
+      "name": "非负矩阵边长与二维前缀",
+      "disposition": "alternative",
+      "objective": "max square side with sum<=threshold",
+      "assumptions": "nonnegative entries",
+      "predicate": "2D prefix sum scan all squares for fixed side",
+      "complexity": "O(mn log min(m,n))",
+      "regression_trap": "negative entries break length monotonicity",
+      "cases": [
+        "LC1292"
+      ],
+      "decision": "grow current best only gives O(mn), preferable primary"
+    },
+    {
+      "id": "comp-prefix-load-invariant",
+      "name": "向左搬运的前缀容量",
+      "disposition": "direct-preferred",
+      "objective": "min maximum after leftward transfers",
+      "assumptions": "nonnegative integer array, moves only left",
+      "predicate": "max ceil(prefixSum/prefixLength)",
+      "complexity": "O(n)",
+      "regression_trap": "generic min-max wording does not require binary search",
+      "cases": [
+        "LC2439"
+      ],
+      "decision": "prefix invariant is main lesson"
+    },
+    {
+      "id": "comp-cascade-blast",
+      "name": "衰减连锁覆盖",
+      "disposition": "cross-chapter-gap",
+      "objective": "min initial blast power",
+      "assumptions": "line, later radius decreases by1, half-integer answer",
+      "predicate": "official two-direction DP/greedy and crossover scan",
+      "complexity": "O(n log n) sorting then near-linear scan",
+      "regression_trap": "same title as Silver Angry Cows but different dynamics",
+      "cases": [
+        "USACO:597"
+      ],
+      "decision": "better main solution than nested binary; scale coordinates by2"
+    },
+    {
+      "id": "comp-graph-formula-crossover",
+      "name": "图构造公式的交叉点",
+      "disposition": "cross-chapter-gap",
+      "objective": "max edges with at least half bridges",
+      "assumptions": "simple undirected graph; n<=2e9",
+      "predicate": "core vertex count k; compare min(C(k,2),n-k)+(n-k) around crossover",
+      "complexity": "O(log n) per query once proven",
+      "regression_trap": "objective itself not monotone; official tutorial text unavailable",
+      "cases": [
+        "CF818F"
+      ],
+      "decision": "retain as math/graph proof gap; comment not authority"
+    },
+    {
+      "id": "comp-geometric-cover",
+      "name": "直线道路的圆覆盖/距离下包络",
+      "disposition": "cross-chapter-gap",
+      "objective": "max over road of nearest-base distance",
+      "assumptions": "N<=1e6, sorted x, 2D base locations",
+      "predicate": "fixed radius gives road intervals; union covers road iff radius sufficient",
+      "complexity": "naive sort each check O(n log n log eps); optimal unresolved",
+      "regression_trap": "center x sorted does not imply interval endpoint sorted",
+      "cases": [
+        "BOI2012:Mobile"
+      ],
+      "decision": "geometry/stack envelope needed before claim full solution"
+    },
+    {
+      "id": "comp-interactive-prefix-rank",
+      "name": "交互前缀计数排名",
+      "disposition": "interface-variant",
+      "objective": "find kth zero with <=20 sum queries",
+      "assumptions": "F1 one query, n<=2e5",
+      "predicate": "zeros(1..mid)=mid-ones; first >=k",
+      "complexity": "O(log n) oracle calls",
+      "regression_trap": "flush and error response are real interface requirements, not a new static search algorithm",
+      "cases": [
+        "CF1520F1"
+      ],
+      "decision": "short cross reference; F2 not read"
+    },
+    {
+      "id": "comp-triptastic",
+      "name": "TripTastic",
+      "disposition": "unread-candidate",
+      "objective": "",
+      "assumptions": "",
+      "predicate": "official page only JS shell",
+      "complexity": "",
+      "regression_trap": "",
+      "cases": [
+        "CODECHEF:TRPTSTIC"
+      ],
+      "decision": "do not infer algorithm from source tag"
+    }
+  ]
+}

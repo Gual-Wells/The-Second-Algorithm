@@ -1,6 +1,6 @@
 # 初步来源站点池
 
-本池服务于求职算法总册的内容发现、条件核对、模式归并和查漏。机器可读权威记录在 [`catalog/sources.json`](../catalog/sources.json)，本页解释用途与采集边界。2026-10-26 首批登记 20 个来源：12 个核心来源、8 个扩展来源；其中 17 个已接受使用，3 个仍待适配或核验。
+本池服务于求职算法总册的内容发现、条件核对、模式归并和查漏。机器可读权威记录在 [`catalog/sources.json`](../catalog/sources.json)，本页解释用途与采集边界。2026-10-26从初始20来源扩展至25来源、38入口：12核心、13扩展；采用与实际取得/读取状态分开。
 
 **接受一个来源，不表示已读完整站点；访问一个入口，也不表示已取得完整题单。** `admission` 表示是否采用，`verification` 表示本轮实际读到哪里，`entries.enumeration` 表示清单取得方式及适配器状态。这三个判断独立保存。
 
@@ -46,7 +46,7 @@
 
 | 来源 | 当前状态 | 后续动作 |
 |---|---|---|
-| [UVa Online Judge](https://onlinejudge.org/) | 仅核对主页、Browse Problems 与 uHunt 入口，尚未核验目录枚举和身份映射 | 优先补读被 CP 作者站实际引用的原题；区分公开题号与站内 content ID |
+| [UVa Online Judge](https://onlinejudge.org/) | 本轮多篇官方PDF已实际取得和读取；官方PDF与外部题号已关联，站内总目录未枚举 | 按专题逐篇研究；UVa10742本轮仍未取得，区分题号与站内content ID |
 | [Kattis Open](https://open.kattis.com/problems) | 本轮读取公开目录返回 403，未取得题单或全文 | 保留候选；正常可访问时核验，不以书中引用代替原题已读 |
 | [NeetCode Roadmap](https://neetcode.io/roadmap) | 本轮文本视图只返回页面空壳／图片链接，完整题单未取得 | 后续正常渲染公开页面，确认实际题目集合与 LC 身份后再采用 |
 
@@ -70,6 +70,10 @@
 自动采集 OI Wiki 本次遇到 TLS EOF、Hello 算法返回 HTTP 429，均保留失败记录，没有冒称采集成功或继续绕过限制。USACO 的下一模块导航与清单分页已按明确单页入口区分；此页原题链接捕获不表示整个 Guide 已枚举。
 
 ## 动态扩张与维护
+
+本轮实际新增的原始入口包括[USACO](https://usaco.org/)原题和官方解析、[oj.uz](https://oj.uz/problem/view/BOI12_mobile)的BOI题面、[MIT OCW峰值讲义](https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/resources/lecture-1-algorithmic-thinking-peak-finding/)、[C++草案二分操作](https://eel.is/c++draft/alg.binary.search)；[CodeChef TRPTSTIC](https://www.codechef.com/problems/TRPTSTIC)仅取得身份，JS壳保留候选。没有为站点数量增加付费或后台服务。
+
+二分实查还修复了http/www原题链接漏采，以及遗漏CodeChef、oj.uz的过滤范围。当前USACO快照为23链接（21原题、2方法）；此前14链接快照只代表旧过滤结果，不再用它作完整题目表。详细的失败与实际读取边界见[本轮研究](../research/2026-10-26/binary-full-cycle.md)。
 
 后续出现以下任一情况，可以新增候选来源：发现当前目录外的新模式；提供会改变算法的关键约束或反例；提供独立原题生态；补足已有材料无法证明的方法细节；改善原件的可读性或可枚举性。
 

@@ -1,4 +1,6 @@
 * text=auto eol=lf
+# Research snapshots retain their recorded byte identities, including frozen challenge hashes.
+work/** -text
 *.png binary
 *.jpg binary
 *.jpeg binary

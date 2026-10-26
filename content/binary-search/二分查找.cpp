@@ -6,6 +6,28 @@
 using namespace std;
 using ll = long long;
 
+// BEGIN predicate
+template<class F>
+ll first_true(ll l, ll r, F can) { // 闭区间 [l,r] 内保证有解；r-l 可用 ll 表示
+    while (l < r) {
+        ll m = l + (r - l) / 2;
+        if (can(m)) r = m;
+        else l = m + 1;
+    }
+    return l;
+}
+template<class F>
+ll last_true(ll l, ll r, F can) { // 闭区间 [l,r] 内保证有解；r-l 可用 ll 表示
+    while (l < r) {
+        ll d = r - l;
+        ll m = l + d / 2 + d % 2; // 向上取整，但不计算 d+1
+        if (can(m)) l = m;
+        else r = m - 1;
+    }
+    return l;
+}
+// END predicate
+
 // BEGIN lower
 int lower_index(const vector<int>& a, int x) {
     int l = 0, r = (int)a.size();
@@ -375,7 +397,7 @@ ll kth_pair_distance(vector<int> a, ll k) {
 
 // BEGIN sqrt
 ll integer_sqrt(ll x) {
-    ll l = 0, r = x;
+    ll l = 0, r = min(x, 3037000499LL); // sqrt(LLONG_MAX) 向下取整
     while (l < r) {
         ll m = l + (r - l + 1) / 2;
         if (m <= x / m) l = m;
@@ -389,7 +411,7 @@ ll integer_sqrt(ll x) {
 template<class F>
 ll expand_first(ll cap, F can) {
     ll r = 1;
-    while (r < cap && !can(r)) r = min(cap, r * 2);
+    while (r < cap && !can(r)) r = r > cap / 2 ? cap : r * 2;
     if (!can(r)) return cap + 1;
     ll l = 0;
     while (l < r) {
@@ -428,3 +450,258 @@ double bracket_root(double l, double r, F f) {
     return l + (r - l) / 2;
 }
 // END root
+
+#include <algorithm>
+#include <array>
+#include <climits>
+#include <optional>
+#include <string>
+#include <string_view>
+#include <utility>
+#include <vector>
+
+namespace binary_foundations {
+using namespace std;
+using ll = long long;
+
+// BEGIN fixed-point
+int fixed_point_distinct(const vector<int>& a) {
+    int l = 0, r = (int)a.size();
+    while (l < r) {
+        int m = l + (r - l) / 2;
+        if ((ll)a[m] >= m) r = m;
+        else l = m + 1;
+    }
+    return l < (int)a.size() && a[l] == l ? l : -1;
+}
+// END fixed-point
+
+// BEGIN prefix-range
+pair<int, int> prefix_range(const vector<string>& words, string_view prefix) {
+    auto part = [&](int i) { return string_view(words[i]).substr(0, prefix.size()); };
+    int l = 0, r = (int)words.size();
+    while (l < r) {
+        int m = l + (r - l) / 2;
+        if (part(m) < prefix) l = m + 1;
+        else r = m;
+    }
+    int first = l;
+    r = (int)words.size();
+    while (l < r) {
+        int m = l + (r - l) / 2;
+        if (part(m) <= prefix) l = m + 1;
+        else r = m;
+    }
+    return {first, l};
+}
+// END prefix-range
+
+// BEGIN h-index
+int h_index_sorted(const vector<int>& citations) {
+    int n = (int)citations.size(), l = 0, r = n;
+    while (l < r) {
+        int m = l + (r - l) / 2;
+        if (citations[m] >= n - m) r = m;
+        else l = m + 1;
+    }
+    return n - l;
+}
+// END h-index
+
+// BEGIN prefix-budget
+vector<ll> prefix_sums(const vector<int>& a) {
+    vector<ll> sum(a.size() + 1, 0);
+    for (int i = 0; i < (int)a.size(); ++i) sum[i + 1] = sum[i] + a[i];
+    return sum;
+}
+
+// sum[0]=0，原数组非负。找最早使前k项和>=target的k；不存在返回-1。
+int first_prefix_at_least(const vector<ll>& sum, ll target) {
+    auto it = lower_bound(sum.begin(), sum.end(), target);
+    return it == sum.end() ? -1 : (int)(it - sum.begin());
+}
+
+// 可任意选元素，只最大化数量：先排序生成最小成本的各长度前缀。
+vector<ll> sorted_cost_prefix(vector<int> costs) {
+    sort(costs.begin(), costs.end());
+    return prefix_sums(costs);
+}
+
+// costs非负，budget>=0；等于预算也能取，所以用upper_bound。
+int max_items_with_budget(const vector<ll>& sorted_sum, ll budget) {
+    return (int)(upper_bound(sorted_sum.begin(), sorted_sum.end(), budget)
+                 - sorted_sum.begin()) - 1;
+}
+// END prefix-budget
+
+// BEGIN prefix-subarray
+int min_nonnegative_subarray_len(const vector<int>& a, ll target) {
+    vector<ll> sum = prefix_sums(a);
+    int n = (int)a.size(), answer = n + 1;
+    for (int l = 0; l < n; ++l) {
+        auto it = lower_bound(sum.begin() + l + 1, sum.end(), sum[l] + target);
+        if (it != sum.end()) answer = min(answer, (int)(it - sum.begin()) - l);
+    }
+    return answer == n + 1 ? 0 : answer;
+}
+// END prefix-subarray
+
+// BEGIN lis-length
+int lis_length(const vector<int>& a, bool non_decreasing = false) {
+    vector<int> tail;
+    for (int x : a) {
+        auto it = non_decreasing ? upper_bound(tail.begin(), tail.end(), x)
+                                 : lower_bound(tail.begin(), tail.end(), x);
+        if (it == tail.end()) tail.push_back(x);
+        else *it = x;
+    }
+    return (int)tail.size();
+}
+// END lis-length
+
+// BEGIN lis-restore
+vector<int> lis_indices(const vector<int>& a, bool non_decreasing = false) {
+    vector<int> tail, end_index, previous(a.size(), -1);
+    for (int i = 0; i < (int)a.size(); ++i) {
+        auto it = non_decreasing ? upper_bound(tail.begin(), tail.end(), a[i])
+                                 : lower_bound(tail.begin(), tail.end(), a[i]);
+        int k = (int)(it - tail.begin());
+        if (k > 0) previous[i] = end_index[k - 1];
+        if (it == tail.end()) {
+            tail.push_back(a[i]);
+            end_index.push_back(i);
+        } else {
+            *it = a[i];
+            end_index[k] = i;
+        }
+    }
+    vector<int> answer;
+    for (int i = end_index.empty() ? -1 : end_index.back(); i != -1; i = previous[i])
+        answer.push_back(i);
+    reverse(answer.begin(), answer.end());
+    return answer;
+}
+// END lis-restore
+
+// BEGIN peak-2d
+pair<int, int> peak2d(const vector<vector<int>>& a) {
+    int rows = (int)a.size(), cols = (int)a[0].size();
+    int l = 0, r = cols - 1;
+    while (l <= r) {
+        int m = l + (r - l) / 2, row = 0;
+        for (int i = 1; i < rows; ++i)
+            if (a[i][m] > a[row][m]) row = i;
+        if (m > 0 && a[row][m - 1] > a[row][m]) r = m - 1;
+        else if (m + 1 < cols && a[row][m + 1] > a[row][m]) l = m + 1;
+        else return {row, m};
+    }
+    return {-1, -1};
+}
+// END peak-2d
+
+// BEGIN subsequence-positions
+using Positions = array<vector<int>, 256>;
+
+Positions build_positions(string_view source) {
+    Positions pos;
+    for (int i = 0; i < (int)source.size(); ++i)
+        pos[(unsigned char)source[i]].push_back(i);
+    return pos;
+}
+
+optional<vector<int>> subsequence_positions(const Positions& pos, string_view query) {
+    vector<int> chosen;
+    int last = -1;
+    for (unsigned char c : query) {
+        const auto& positions = pos[c];
+        auto it = upper_bound(positions.begin(), positions.end(), last);
+        if (it == positions.end()) return nullopt;
+        chosen.push_back(last = *it);
+    }
+    return chosen;
+}
+// END subsequence-positions
+
+// BEGIN unknown-reader
+// read(i)返回optional<ll>；nullopt代表越界，合法值按索引非降。
+template<class Reader>
+optional<ll> unknown_lower_index(Reader read, ll target, ll index_cap = LLONG_MAX) {
+    auto value = read(0);
+    if (!value) return nullopt;
+    if (*value >= target) return 0;
+    ll l = 0, r = 0;
+    while (r < index_cap) {
+        l = r + 1;
+        r = r >= (index_cap - 1) / 2 ? index_cap : 2 * r + 1;
+        value = read(r);
+        if (!value || *value >= target) break;
+    }
+    if (value && *value < target) return nullopt;
+    while (l < r) {
+        ll m = l + (r - l) / 2;
+        value = read(m);
+        if (!value || *value >= target) r = m;
+        else l = m + 1;
+    }
+    return read(l) ? optional<ll>(l) : nullopt;
+}
+
+template<class Reader>
+optional<ll> search_unknown(Reader read, ll target, ll index_cap = LLONG_MAX) {
+    auto index = unknown_lower_index(read, target, index_cap);
+    return index && *read(*index) == target ? index : nullopt;
+}
+// END unknown-reader
+
+} // namespace binary_foundations
+
+#include <algorithm>
+#include <string>
+#include <vector>
+
+namespace binary_census_base {
+using namespace std;
+using ll = long long;
+
+// BEGIN census-nested-digits
+// Sk是十进制1..k的拼接，整个序列为S1S2S3...；位置从1开始。
+struct NestedDigitSequence {
+    vector<ll> digit_prefix{0}, block_prefix{0};
+
+    // 1<=max_position<=2147483647，构建到足以覆盖该位置。
+    explicit NestedDigitSequence(ll max_position = 2147483647LL) {
+        int width = 1, next_power = 10;
+        for (int k = 1; block_prefix.back() < max_position; ++k) {
+            if (k == next_power) { ++width; next_power *= 10; }
+            digit_prefix.push_back(digit_prefix.back() + width);
+            block_prefix.push_back(block_prefix.back() + digit_prefix.back());
+        }
+    }
+
+    char at(ll position) const { // 1<=position<=构建时的max_position
+        auto block = lower_bound(block_prefix.begin() + 1, block_prefix.end(), position);
+        int k = (int)(block - block_prefix.begin());
+        ll inside = position - block_prefix[k - 1];
+        auto end = digit_prefix.begin() + k + 1;
+        auto found = lower_bound(digit_prefix.begin() + 1, end, inside);
+        int number = (int)(found - digit_prefix.begin());
+        int offset = (int)(inside - digit_prefix[number - 1] - 1);
+        return to_string(number)[offset];
+    }
+};
+// END census-nested-digits
+
+// BEGIN census-matrix-square
+// 非空矩形，各行各列非降；求全部元素都在[low,high]的最大正方形边长。
+int largest_square_in_range(const vector<vector<int>>& a, int low, int high) {
+    int rows = (int)a.size(), cols = (int)a[0].size(), best = 0;
+    for (int r = 0; r < rows; ++r) {
+        int c = (int)(lower_bound(a[r].begin(), a[r].end(), low) - a[r].begin());
+        while (r + best < rows && c + best < cols && a[r + best][c + best] <= high)
+            ++best;
+    }
+    return best;
+}
+// END census-matrix-square
+
+} // namespace binary_census_base

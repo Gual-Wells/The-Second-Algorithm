@@ -10,7 +10,7 @@ a{color:var(--blue);text-underline-offset:3px;text-decoration-thickness:1px}a:ho
 .toc a{display:block;line-height:1.6;text-decoration:none;border-left:2px solid transparent;border-radius:0 3px 3px 0;padding:5px 8px 5px 11px;color:#445766;font-size:13px}
 .toc a.group{font-weight:600;color:#203f55;font-size:14px;margin-top:15px}.toc a.group:first-child{margin-top:0}.toc a.topic{padding-left:20px}.toc a:hover{background:#e5edf3}.toc a.active{color:#104d77;background:#e2ecf3;border-left-color:#2b688e;font-weight:600}
 main{min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:36px 42px 42px;box-shadow:0 2px 7px #1f405006}
-h1,h2,h3,h4{color:var(--heading);line-height:1.45;font-weight:600;scroll-margin-top:85px}h1{font-size:32px;margin:0 0 8px}h2{font-size:25px;margin:48px 0 21px;padding-top:30px;border-top:1px solid var(--line)}h2:first-of-type{font-size:19px;margin-top:30px;padding-top:0;border-top:0}h3{font-size:20px;margin:34px 0 13px}h4{font-size:17px;margin:25px 0 12px;color:#253f52}
+h1,h2,h3,h4{color:var(--heading);line-height:1.45;font-weight:600;scroll-margin-top:85px}h1{font-size:32px;margin:0 0 8px}h2{font-size:25px;margin:48px 0 21px;padding-top:30px;border-top:1px solid var(--line)}h2:first-of-type{margin-top:30px;padding-top:0;border-top:0}h3{font-size:20px;margin:34px 0 13px}h4{font-size:17px;margin:25px 0 12px;color:#253f52}
 p{margin:13px 0 17px}.subtitle{font-size:14px;color:#526878;margin:0 0 24px}strong{font-weight:600}li{margin:5px 0}
 code{font-family:Consolas,'Cascadia Code','Noto Sans SC',monospace;font-size:.89em;color:#213f55;background:#eef3f6;padding:1px 4px;border-radius:3px}
 pre{background:#f6f8fa;border:1px solid #d9e2e8;border-radius:3px;padding:16px 18px;margin:17px 0 21px;overflow-x:auto;tab-size:4;font-family:Consolas,'Cascadia Code','Noto Sans SC',monospace;font-size:15px;line-height:1.6;color:#172d3c}
@@ -22,9 +22,9 @@ pre code{font:inherit;color:inherit;background:transparent;padding:0;border-radi
 @media(max-width:1090px){.layout{grid-template-columns:204px minmax(0,1fr);gap:20px;padding:22px 18px}main{padding:30px 28px}.toc a{font-size:12px}.toc a.group{font-size:13px}pre{font-size:14px;padding:14px 15px}}
 @media(max-width:860px){.topbar{height:55px;padding:0 17px}.brand span{display:none}.files{gap:16px;font-size:13px}.layout{display:block;padding:17px 12px 35px}.sidebar{display:none}main{padding:26px 24px;font-size:16px}.mobile-toc{display:block;margin-bottom:17px;border:1px solid var(--line);background:white;padding:10px 15px}.mobile-toc summary{color:#244a65;font-size:15px;cursor:pointer;font-weight:600}.mobile-toc nav{max-height:55vh;overflow:auto;margin-top:12px}h1{font-size:29px}h2{font-size:23px}h3{font-size:19px}table{font-size:14px}pre{font-size:13px}}
 @media print{.topbar,.sidebar,.mobile-toc{display:none}.layout{display:block;max-width:none;margin:0;padding:0}main{border:0;box-shadow:none;padding:0}body{background:white;color:black;font-size:10.5pt;line-height:1.65}h1{font-size:22pt}h2{font-size:16pt}h3{font-size:13pt}h1,h2,h3,h4{break-after:avoid}pre{white-space:pre-wrap;overflow:visible;break-inside:avoid;font-size:8.5pt}pre code{white-space:pre-wrap}table{font-size:9pt}a{color:inherit}.table-wrap{overflow:visible}}
-</style></head><body><header class="topbar"><div class="brand">求职算法总册<span>二分查找</span></div><nav class="files" aria-label="文件"><a href="二分查找.md">Markdown</a><a href="二分查找.cpp">C++ 源码</a></nav></header><div class="layout"><aside class="sidebar"><div class="toc-title">题型目录</div><nav class="toc" aria-label="题型目录"><a class="group" href="#1-有序数组">1 有序数组</a><a class="topic" href="#1-1-查值-插入位置-首末位置">1.1 查值、插入位置、首末位置</a><a class="topic" href="#1-2-第-k-个缺失正数">1.2 第 k 个缺失正数</a><a class="topic" href="#1-3-最接近-x-的-k-个数">1.3 最接近 x 的 k 个数</a><a class="group" href="#2-特殊数组">2 特殊数组</a><a class="topic" href="#2-1-旋转数组的最小值">2.1 旋转数组的最小值</a><a class="topic" href="#2-2-旋转数组中查找-x">2.2 旋转数组中查找 x</a><a class="topic" href="#2-3-局部峰与山脉数组">2.3 局部峰与山脉数组</a><a class="topic" href="#2-4-成对数组中的唯一单次值">2.4 成对数组中的唯一单次值</a><a class="group" href="#3-多个有序序列">3 多个有序序列</a><a class="topic" href="#3-1-搜索矩阵-先分清有序条件">3.1 搜索矩阵：先分清有序条件</a><a class="topic" href="#3-2-两个有序数组的第-k-小与中位数">3.2 两个有序数组的第 k 小与中位数</a><a class="group" href="#4-二分答案">4 二分答案</a><a class="topic" href="#4-1-连续分段-使最大段和最小">4.1 连续分段，使最大段和最小</a><a class="topic" href="#4-2-选-k-个位置-使最小间距最大">4.2 选 k 个位置，使最小间距最大</a><a class="topic" href="#4-3-按元素累计-速度-切割与拆袋">4.3 按元素累计：速度、切割与拆袋</a><a class="topic" href="#4-4-多机器并行生产-求最短时间">4.4 多机器并行生产，求最短时间</a><a class="topic" href="#4-5-连续相邻成束-求最早日期">4.5 连续相邻成束，求最早日期</a><a class="group" href="#5-排名转计数">5 排名转计数</a><a class="topic" href="#5-1-行列有序矩阵的第-k-小">5.1 行列有序矩阵的第 k 小</a><a class="topic" href="#5-2-乘法表的第-k-小">5.2 乘法表的第 k 小</a><a class="topic" href="#5-3-所有数对距离的第-k-小">5.3 所有数对距离的第 k 小</a><a class="group" href="#6-数值二分">6 数值二分</a><a class="topic" href="#6-1-整数平方根与完全平方数">6.1 整数平方根与完全平方数</a><a class="topic" href="#6-2-可行上界未知-先倍增-再二分">6.2 可行上界未知：先倍增，再二分</a><a class="topic" href="#6-3-实数边界与连续函数求根">6.3 实数边界与连续函数求根</a></nav></aside><div><details class="mobile-toc"><summary>题型目录</summary><nav class="toc"><a class="group" href="#1-有序数组">1 有序数组</a><a class="topic" href="#1-1-查值-插入位置-首末位置">1.1 查值、插入位置、首末位置</a><a class="topic" href="#1-2-第-k-个缺失正数">1.2 第 k 个缺失正数</a><a class="topic" href="#1-3-最接近-x-的-k-个数">1.3 最接近 x 的 k 个数</a><a class="group" href="#2-特殊数组">2 特殊数组</a><a class="topic" href="#2-1-旋转数组的最小值">2.1 旋转数组的最小值</a><a class="topic" href="#2-2-旋转数组中查找-x">2.2 旋转数组中查找 x</a><a class="topic" href="#2-3-局部峰与山脉数组">2.3 局部峰与山脉数组</a><a class="topic" href="#2-4-成对数组中的唯一单次值">2.4 成对数组中的唯一单次值</a><a class="group" href="#3-多个有序序列">3 多个有序序列</a><a class="topic" href="#3-1-搜索矩阵-先分清有序条件">3.1 搜索矩阵：先分清有序条件</a><a class="topic" href="#3-2-两个有序数组的第-k-小与中位数">3.2 两个有序数组的第 k 小与中位数</a><a class="group" href="#4-二分答案">4 二分答案</a><a class="topic" href="#4-1-连续分段-使最大段和最小">4.1 连续分段，使最大段和最小</a><a class="topic" href="#4-2-选-k-个位置-使最小间距最大">4.2 选 k 个位置，使最小间距最大</a><a class="topic" href="#4-3-按元素累计-速度-切割与拆袋">4.3 按元素累计：速度、切割与拆袋</a><a class="topic" href="#4-4-多机器并行生产-求最短时间">4.4 多机器并行生产，求最短时间</a><a class="topic" href="#4-5-连续相邻成束-求最早日期">4.5 连续相邻成束，求最早日期</a><a class="group" href="#5-排名转计数">5 排名转计数</a><a class="topic" href="#5-1-行列有序矩阵的第-k-小">5.1 行列有序矩阵的第 k 小</a><a class="topic" href="#5-2-乘法表的第-k-小">5.2 乘法表的第 k 小</a><a class="topic" href="#5-3-所有数对距离的第-k-小">5.3 所有数对距离的第 k 小</a><a class="group" href="#6-数值二分">6 数值二分</a><a class="topic" href="#6-1-整数平方根与完全平方数">6.1 整数平方根与完全平方数</a><a class="topic" href="#6-2-可行上界未知-先倍增-再二分">6.2 可行上界未知：先倍增，再二分</a><a class="topic" href="#6-3-实数边界与连续函数求根">6.3 实数边界与连续函数求根</a></nav></details><main><h1 id="二分查找">二分查找</h1>
+</style></head><body><header class="topbar"><div class="brand">求职算法总册<span>二分查找</span></div><nav class="files" aria-label="文件"><a href="二分查找.md">Markdown</a><a href="二分查找.cpp">C++ 源码</a></nav></header><div class="layout"><aside class="sidebar"><div class="toc-title">题型目录</div><nav class="toc" aria-label="题型目录"><a class="group" href="#题型导航">题型导航</a><a class="topic" href="#单调边界的两个外壳">单调边界的两个外壳</a><a class="group" href="#1-有序边界与有序状态">1 有序边界与有序状态</a><a class="topic" href="#1-1-查值-插入位置-首末位置">1.1 查值、插入位置、首末位置</a><a class="topic" href="#1-2-第-k-个缺失正数">1.2 第 k 个缺失正数</a><a class="topic" href="#1-3-最接近-x-的-k-个数">1.3 最接近 x 的 k 个数</a><a class="topic" href="#1-4-值等于索引-隐式有序差值">1.4 值等于索引：隐式有序差值</a><a class="topic" href="#1-5-字符串的字典序前缀范围">1.5 字符串的字典序前缀范围</a><a class="topic" href="#1-6-h-index-引用数与剩余项数的交点">1.6 H-index：引用数与剩余项数的交点</a><a class="topic" href="#1-7-前缀和-预算与最短子段">1.7 前缀和、预算与最短子段</a><a class="topic" href="#1-8-lis-在最小结尾状态上二分">1.8 LIS：在最小结尾状态上二分</a><a class="topic" href="#1-9-出现位置表-反复匹配子序列">1.9 出现位置表：反复匹配子序列</a><a class="topic" href="#1-10-分层累计-先定位块-再定位块内数字">1.10 分层累计：先定位块，再定位块内数字</a><a class="group" href="#2-特殊数组">2 特殊数组</a><a class="topic" href="#2-1-旋转数组的最小值">2.1 旋转数组的最小值</a><a class="topic" href="#2-2-旋转数组中查找-x">2.2 旋转数组中查找 x</a><a class="topic" href="#2-3-局部峰与山脉数组">2.3 局部峰与山脉数组</a><a class="topic" href="#2-4-成对数组中的唯一单次值">2.4 成对数组中的唯一单次值</a><a class="topic" href="#2-5-二维局部峰">2.5 二维局部峰</a><a class="group" href="#3-多个有序序列">3 多个有序序列</a><a class="topic" href="#3-1-搜索矩阵-先分清有序条件">3.1 搜索矩阵：先分清有序条件</a><a class="topic" href="#3-2-两个有序数组的第-k-小与中位数">3.2 两个有序数组的第 k 小与中位数</a><a class="topic" href="#3-3-值域内的最大正方形">3.3 值域内的最大正方形</a><a class="group" href="#4-二分答案">4 二分答案</a><a class="topic" href="#4-1-连续分段-使最大段和最小">4.1 连续分段，使最大段和最小</a><a class="topic" href="#4-2-选-k-个位置-使最小间距最大">4.2 选 k 个位置，使最小间距最大</a><a class="topic" href="#4-3-按元素累计-速度-切割与拆袋">4.3 按元素累计：速度、切割与拆袋</a><a class="topic" href="#4-4-多机器并行生产-求最短时间">4.4 多机器并行生产，求最短时间</a><a class="topic" href="#4-5-连续相邻成束-求最早日期">4.5 连续相邻成束，求最早日期</a><a class="group" href="#5-排名转计数">5 排名转计数</a><a class="topic" href="#5-1-行列有序矩阵的第-k-小">5.1 行列有序矩阵的第 k 小</a><a class="topic" href="#5-2-乘法表的第-k-小">5.2 乘法表的第 k 小</a><a class="topic" href="#5-3-所有数对距离的第-k-小">5.3 所有数对距离的第 k 小</a><a class="group" href="#6-数值二分">6 数值二分</a><a class="topic" href="#6-1-整数平方根与完全平方数">6.1 整数平方根与完全平方数</a><a class="topic" href="#6-2-可行上界未知-先倍增-再二分">6.2 可行上界未知：先倍增，再二分</a><a class="topic" href="#6-3-实数边界与连续函数求根">6.3 实数边界与连续函数求根</a><a class="group" href="#相关专题与参考">相关专题与参考</a></nav></aside><div><details class="mobile-toc"><summary>题型目录</summary><nav class="toc"><a class="group" href="#题型导航">题型导航</a><a class="topic" href="#单调边界的两个外壳">单调边界的两个外壳</a><a class="group" href="#1-有序边界与有序状态">1 有序边界与有序状态</a><a class="topic" href="#1-1-查值-插入位置-首末位置">1.1 查值、插入位置、首末位置</a><a class="topic" href="#1-2-第-k-个缺失正数">1.2 第 k 个缺失正数</a><a class="topic" href="#1-3-最接近-x-的-k-个数">1.3 最接近 x 的 k 个数</a><a class="topic" href="#1-4-值等于索引-隐式有序差值">1.4 值等于索引：隐式有序差值</a><a class="topic" href="#1-5-字符串的字典序前缀范围">1.5 字符串的字典序前缀范围</a><a class="topic" href="#1-6-h-index-引用数与剩余项数的交点">1.6 H-index：引用数与剩余项数的交点</a><a class="topic" href="#1-7-前缀和-预算与最短子段">1.7 前缀和、预算与最短子段</a><a class="topic" href="#1-8-lis-在最小结尾状态上二分">1.8 LIS：在最小结尾状态上二分</a><a class="topic" href="#1-9-出现位置表-反复匹配子序列">1.9 出现位置表：反复匹配子序列</a><a class="topic" href="#1-10-分层累计-先定位块-再定位块内数字">1.10 分层累计：先定位块，再定位块内数字</a><a class="group" href="#2-特殊数组">2 特殊数组</a><a class="topic" href="#2-1-旋转数组的最小值">2.1 旋转数组的最小值</a><a class="topic" href="#2-2-旋转数组中查找-x">2.2 旋转数组中查找 x</a><a class="topic" href="#2-3-局部峰与山脉数组">2.3 局部峰与山脉数组</a><a class="topic" href="#2-4-成对数组中的唯一单次值">2.4 成对数组中的唯一单次值</a><a class="topic" href="#2-5-二维局部峰">2.5 二维局部峰</a><a class="group" href="#3-多个有序序列">3 多个有序序列</a><a class="topic" href="#3-1-搜索矩阵-先分清有序条件">3.1 搜索矩阵：先分清有序条件</a><a class="topic" href="#3-2-两个有序数组的第-k-小与中位数">3.2 两个有序数组的第 k 小与中位数</a><a class="topic" href="#3-3-值域内的最大正方形">3.3 值域内的最大正方形</a><a class="group" href="#4-二分答案">4 二分答案</a><a class="topic" href="#4-1-连续分段-使最大段和最小">4.1 连续分段，使最大段和最小</a><a class="topic" href="#4-2-选-k-个位置-使最小间距最大">4.2 选 k 个位置，使最小间距最大</a><a class="topic" href="#4-3-按元素累计-速度-切割与拆袋">4.3 按元素累计：速度、切割与拆袋</a><a class="topic" href="#4-4-多机器并行生产-求最短时间">4.4 多机器并行生产，求最短时间</a><a class="topic" href="#4-5-连续相邻成束-求最早日期">4.5 连续相邻成束，求最早日期</a><a class="group" href="#5-排名转计数">5 排名转计数</a><a class="topic" href="#5-1-行列有序矩阵的第-k-小">5.1 行列有序矩阵的第 k 小</a><a class="topic" href="#5-2-乘法表的第-k-小">5.2 乘法表的第 k 小</a><a class="topic" href="#5-3-所有数对距离的第-k-小">5.3 所有数对距离的第 k 小</a><a class="group" href="#6-数值二分">6 数值二分</a><a class="topic" href="#6-1-整数平方根与完全平方数">6.1 整数平方根与完全平方数</a><a class="topic" href="#6-2-可行上界未知-先倍增-再二分">6.2 可行上界未知：先倍增，再二分</a><a class="topic" href="#6-3-实数边界与连续函数求根">6.3 实数边界与连续函数求根</a><a class="group" href="#相关专题与参考">相关专题与参考</a></nav></details><main><h1 id="二分查找">二分查找</h1>
 <p class="subtitle">求职算法总册 · 题型与 C++ 模板</p>
-<p>二分题先分清：<strong>查位置、利用特殊结构排除一半、二分答案、用计数找第 k 小</strong>。它们共用折半过程，真正需要区分的是每次凭什么保留一侧。</p>
+<p>二分题先分清：<strong>查位置、利用特殊结构排除一半、二分答案、用计数找第 k 小</strong>。它们共用折半过程，真正需要区分的是每次凭什么保留一侧。复杂目标的实际判定放在<a href="组合判定.html">组合判定</a>，动态定位与批量查询见<a href="进阶扩展.html">进阶扩展</a>。</p>
 <h2 id="题型导航">题型导航</h2>
 <div class="table-wrap"><table>
 <thead>
@@ -34,8 +34,8 @@ pre code{font:inherit;color:inherit;background:transparent;padding:0;border-radi
 </tr>
 </thead>
 <tbody><tr>
-<td>有序数组中查值、边界、次数、缺失数、近邻</td>
-<td><a href="#ordered">1 有序数组</a></td>
+<td>有序边界、缺失数、前缀和、LIS状态与出现位置表</td>
+<td><a href="#ordered">1 有序边界与有序状态</a></td>
 </tr>
 <tr>
 <td>旋转数组、局部峰、山脉、成对元素</td>
@@ -59,8 +59,30 @@ pre code{font:inherit;color:inherit;background:transparent;padding:0;border-radi
 </tr>
 </tbody></table></div>
 <p>下标从 0 开始，<code>ll</code> 为 <code>long long</code>；“有序”默认非降，允许相等。代码采用 C++17，完整函数见 <a href="二分查找.cpp">二分查找.cpp</a>。</p>
+<h3 id="单调边界的两个外壳">单调边界的两个外壳</h3>
+<p>首真对应 <code>false…false,true…true</code>；末真反向。下面闭区间内<strong>保证有解</strong>，找不到解的题先检查极端值，或按题意另设虚拟端点。<code>r=m</code>保留m时取下中点，<code>l=m</code>保留m时取上中点，才能保证区间缩短。</p>
+<pre class="cpp"><code><span class="keyword">template</span>&lt;<span class="keyword">class</span> F&gt;
+ll first_true(ll l, ll r, F can) { <span class="comment">// 闭区间 [l,r] 内保证有解；r-l 可用 ll 表示</span>
+    <span class="keyword">while</span> (l &lt; r) {
+        ll m = l + (r - l) / <span class="number">2</span>;
+        <span class="keyword">if</span> (can(m)) r = m;
+        <span class="keyword">else</span> l = m + <span class="number">1</span>;
+    }
+    <span class="keyword">return</span> l;
+}
+<span class="keyword">template</span>&lt;<span class="keyword">class</span> F&gt;
+ll last_true(ll l, ll r, F can) { <span class="comment">// 闭区间 [l,r] 内保证有解；r-l 可用 ll 表示</span>
+    <span class="keyword">while</span> (l &lt; r) {
+        ll d = r - l;
+        ll m = l + d / <span class="number">2</span> + d % <span class="number">2</span>; <span class="comment">// 向上取整，但不计算 d+1</span>
+        <span class="keyword">if</span> (can(m)) l = m;
+        <span class="keyword">else</span> r = m - <span class="number">1</span>;
+    }
+    <span class="keyword">return</span> l;
+}</code></pre>
+<p>每次判定花 T，则总时耗 O(T log R)。局部峰不需要全局单调谓词，依靠另一种排除证明，见2.3。标准库二分需要按比较关系分区，不必所有元素互异；降序或按记录字段查找时，排序与比较关系必须一致。链表上的lower_bound只有比较次数为对数，迭代器移动仍可能线性。</p>
 <p><a id="ordered"></a></p>
-<h2 id="1-有序数组">1 有序数组</h2>
+<h2 id="1-有序边界与有序状态">1 有序边界与有序状态</h2>
 <h3 id="1-1-查值-插入位置-首末位置">1.1 查值、插入位置、首末位置</h3>
 <p><strong>把“找一个 x”统一为找边界。</strong> <code>lower_index</code> 找首个 <code>≥x</code> 的位置，<code>upper_index</code> 找首个 <code>&gt;x</code> 的位置；找不到就返回 <code>n</code>。两者只差一个等号。</p>
 <p>遇到 <code>a[m]≥x</code>，<code>m</code> 仍可能是左边界，令 <code>r=m</code>；否则 <code>m</code> 及其左侧都不是答案，令 <code>l=m+1</code>。</p>
@@ -119,7 +141,9 @@ pre code{font:inherit;color:inherit;background:transparent;padding:0;border-radi
 <td>只需比较合法的 <code>L</code>、<code>L-1</code> 两个候选，距离用 <code>ll</code></td>
 </tr>
 </tbody></table></div>
+<p>稠密排名先排序并<code>unique</code>，再取<code>lower_bound+1</code>；若要统计严格较小的原元素数量，则必须保留重复，直接取lower_bound下标。不要把这两种排名混用。</p>
 <p>标准库对应 <code>lower_bound</code>、<code>upper_bound</code>；返回的是迭代器，减去 <code>a.begin()</code> 得下标。求严格大于直接用 <code>upper_bound</code>，无需构造 <code>x+1</code>。</p>
+<p><strong>能二分计数，不代表总目标单调。</strong> 例如<a href="https://onlinejudge.org/external/129/12965.pdf" target="_blank" rel="noopener noreferrer">UVa12965</a>的成本是<code>生产者报价&gt;x的数量 + 消费者报价&lt;x的数量</code>，前者下降、后者上升，总成本不能直接二分。应枚举价格0及相关断点，用上下界加速每次计数。</p>
 <p><strong>同型变种：</strong> 第一个坏版本、首次达标位置，本质是找首个使 <code>check(m)</code> 为真的位置，把代码里的 <code>a[m]&gt;=x</code> 换成 <code>check(m)</code> 即可。循环字符中的“下一个更大字符”用右边界，结果为 <code>n</code> 时回到下标 0。</p>
 <h3 id="1-2-第-k-个缺失正数">1.2 第 k 个缺失正数</h3>
 <p>给定<strong>严格递增的正数数组</strong>，求未出现的第 k 个正数。到下标 <code>i</code> 为止，应有 <code>a[i]</code> 个正数，实际出现 <code>i+1</code> 个，所以缺失数为 <code>a[i]-i-1</code>，它随 <code>i</code> 不减。</p>
@@ -147,6 +171,173 @@ pre code{font:inherit;color:inherit;background:transparent;padding:0;border-radi
     <span class="keyword">return</span> l;  <span class="comment">// 选取 a[l .. l+k-1]</span>
 }</code></pre>
 <p>要求 <code>1≤k≤n</code>。左端查找 O(log(n-k+1))，实际输出 k 个元素再花 O(k)。<a href="https://leetcode.com/problems/find-k-closest-elements/description/" target="_blank" rel="noopener noreferrer">题型原型：LeetCode 658</a>。</p>
+<h3 id="1-4-值等于索引-隐式有序差值">1.4 值等于索引：隐式有序差值</h3>
+<p>递增且互异的整数数组，求<code>a[i]==i</code>。相邻值至少增加1，所以<code>a[i]-i</code>非降；找首个<code>a[i]&gt;=i</code>的位置再核对是否相等。下面返回首个固定点，空数组或没有固定点返回−1。O(log n)。</p>
+<pre class="cpp"><code><span class="type">int</span> fixed_point_distinct(<span class="keyword">const</span> vector&lt;<span class="type">int</span>&gt;&amp; a) {
+    <span class="type">int</span> l = <span class="number">0</span>, r = (<span class="type">int</span>)a.size();
+    <span class="keyword">while</span> (l &lt; r) {
+        <span class="type">int</span> m = l + (r - l) / <span class="number">2</span>;
+        <span class="keyword">if</span> ((ll)a[m] &gt;= m) r = m;
+        <span class="keyword">else</span> l = m + <span class="number">1</span>;
+    }
+    <span class="keyword">return</span> l &lt; (<span class="type">int</span>)a.size() &amp;&amp; a[l] == l ? l : -<span class="number">1</span>;
+}</code></pre>
+<p>允许重复后差值不再单调，例如<code>[0,0]</code>的差值是<code>[0,-1]</code>。此时可递归剪枝到左侧<code>[l,min(mid-1,a[mid])]</code>和右侧<code>[max(mid+1,a[mid]),r]</code>，但最坏O(n)，不能继续承诺一次排除半边。</p>
+<h3 id="1-5-字符串的字典序前缀范围">1.5 字符串的字典序前缀范围</h3>
+<p>输入已按字典序排序。把每项只比较到前缀长度，所得序列仍非降；两次边界得到完整匹配半开区间<code>[first,last)</code>，没有匹配时两端相等。空前缀匹配全部字符串；无需假定只含小写字母，也不依赖“末字符加一”。比较代价计入后为O(|prefix| log n)。</p>
+<pre class="cpp"><code>pair&lt;<span class="type">int</span>, <span class="type">int</span>&gt; prefix_range(<span class="keyword">const</span> vector&lt;string&gt;&amp; words, string_view prefix) {
+    <span class="keyword">auto</span> part = [&amp;](<span class="type">int</span> i) { <span class="keyword">return</span> string_view(words[i]).substr(<span class="number">0</span>, prefix.size()); };
+    <span class="type">int</span> l = <span class="number">0</span>, r = (<span class="type">int</span>)words.size();
+    <span class="keyword">while</span> (l &lt; r) {
+        <span class="type">int</span> m = l + (r - l) / <span class="number">2</span>;
+        <span class="keyword">if</span> (part(m) &lt; prefix) l = m + <span class="number">1</span>;
+        <span class="keyword">else</span> r = m;
+    }
+    <span class="type">int</span> first = l;
+    r = (<span class="type">int</span>)words.size();
+    <span class="keyword">while</span> (l &lt; r) {
+        <span class="type">int</span> m = l + (r - l) / <span class="number">2</span>;
+        <span class="keyword">if</span> (part(m) &lt;= prefix) l = m + <span class="number">1</span>;
+        <span class="keyword">else</span> r = m;
+    }
+    <span class="keyword">return</span> {first, l};
+}</code></pre>
+<p>LC1268只要字典序最小的至多3个建议，可从<code>first</code>取到<code>min(first+3,last)</code>。如果只问是否存在，也可一次<code>lower_bound(prefix)</code>后检查首候选的前缀。</p>
+<h3 id="1-6-h-index-引用数与剩余项数的交点">1.6 H-index：引用数与剩余项数的交点</h3>
+<p>引用次数已非降排序。位置i之后有<code>n-i</code>篇论文；<code>citations[i]&gt;=n-i</code>意味着这些论文都能支撑H值<code>n-i</code>。左边引用数非降、右边需求递减，因此找首个满足的位置，返回<code>n-i</code>；无满足项时返回0。O(log n)。</p>
+<pre class="cpp"><code><span class="type">int</span> h_index_sorted(<span class="keyword">const</span> vector&lt;<span class="type">int</span>&gt;&amp; citations) {
+    <span class="type">int</span> n = (<span class="type">int</span>)citations.size(), l = <span class="number">0</span>, r = n;
+    <span class="keyword">while</span> (l &lt; r) {
+        <span class="type">int</span> m = l + (r - l) / <span class="number">2</span>;
+        <span class="keyword">if</span> (citations[m] &gt;= n - m) r = m;
+        <span class="keyword">else</span> l = m + <span class="number">1</span>;
+    }
+    <span class="keyword">return</span> n - l;
+}</code></pre>
+<p>未排序输入先排序为O(n log n)，也可用计数桶O(n)；它们是同目标的其他输入条件，不能把排序成本藏进二分的O(log n)。</p>
+<h3 id="1-7-前缀和-预算与最短子段">1.7 前缀和、预算与最短子段</h3>
+<p>非负数的前缀和非降，零值会造成重复，仍可以二分。<code>sum[k]</code>表示前k项之和：达到目标找<code>lower_bound</code>；预算内最大项数找<code>upper_bound(budget)-1</code>。累计和用long long，且总和应在其范围内。</p>
+<p>“原顺序前缀”与“任意选元素使数量最多”是两个目标。后一种先取最便宜的元素：任意k项之和都不小于排序后前k项之和，因此先排序建立成本前缀再查询。即使原题叫subsequence，这里只求数量、无相邻约束，选出的索引仍能按原序排列成子序列。排序O(n log n)，每个预算O(log n)。</p>
+<pre class="cpp"><code>vector&lt;ll&gt; prefix_sums(<span class="keyword">const</span> vector&lt;<span class="type">int</span>&gt;&amp; a) {
+    vector&lt;ll&gt; sum(a.size() + <span class="number">1</span>, <span class="number">0</span>);
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; (<span class="type">int</span>)a.size(); ++i) sum[i + <span class="number">1</span>] = sum[i] + a[i];
+    <span class="keyword">return</span> sum;
+}
+
+<span class="comment">// sum[0]=0，原数组非负。找最早使前k项和&gt;=target的k；不存在返回-1。</span>
+<span class="type">int</span> first_prefix_at_least(<span class="keyword">const</span> vector&lt;ll&gt;&amp; sum, ll target) {
+    <span class="keyword">auto</span> it = lower_bound(sum.begin(), sum.end(), target);
+    <span class="keyword">return</span> it == sum.end() ? -<span class="number">1</span> : (<span class="type">int</span>)(it - sum.begin());
+}
+
+<span class="comment">// 可任意选元素，只最大化数量：先排序生成最小成本的各长度前缀。</span>
+vector&lt;ll&gt; sorted_cost_prefix(vector&lt;<span class="type">int</span>&gt; costs) {
+    sort(costs.begin(), costs.end());
+    <span class="keyword">return</span> prefix_sums(costs);
+}
+
+<span class="comment">// costs非负，budget&gt;=0；等于预算也能取，所以用upper_bound。</span>
+<span class="type">int</span> max_items_with_budget(<span class="keyword">const</span> vector&lt;ll&gt;&amp; sorted_sum, ll budget) {
+    <span class="keyword">return</span> (<span class="type">int</span>)(upper_bound(sorted_sum.begin(), sorted_sum.end(), budget)
+                 - sorted_sum.begin()) - <span class="number">1</span>;
+}</code></pre>
+<p><strong>最短连续子数组和至少target。</strong> 固定左端l，找最早的右前缀<code>sum[r]&gt;=sum[l]+target</code>，长度为<code>r-l</code>。下面允许零、要求target&gt;0，无解返回0；O(n log n)。同一非负条件下双指针可做到O(n)。若含负数，前缀和失去有序性，这两种简单写法都不能照用。</p>
+<pre class="cpp"><code><span class="type">int</span> min_nonnegative_subarray_len(<span class="keyword">const</span> vector&lt;<span class="type">int</span>&gt;&amp; a, ll target) {
+    vector&lt;ll&gt; sum = prefix_sums(a);
+    <span class="type">int</span> n = (<span class="type">int</span>)a.size(), answer = n + <span class="number">1</span>;
+    <span class="keyword">for</span> (<span class="type">int</span> l = <span class="number">0</span>; l &lt; n; ++l) {
+        <span class="keyword">auto</span> it = lower_bound(sum.begin() + l + <span class="number">1</span>, sum.end(), sum[l] + target);
+        <span class="keyword">if</span> (it != sum.end()) answer = min(answer, (<span class="type">int</span>)(it - sum.begin()) - l);
+    }
+    <span class="keyword">return</span> answer == n + <span class="number">1</span> ? <span class="number">0</span> : answer;
+}</code></pre>
+<h3 id="1-8-lis-在最小结尾状态上二分">1.8 LIS：在最小结尾状态上二分</h3>
+<p><code>tail[k]</code>表示目前长度为k+1的递增子序列能达到的最小结尾。较小结尾更容易接后续值，所以对新值x找到首个<code>&gt;=x</code>的位置替换，或追加到末尾。严格递增用lower_bound；允许相等接续的非降子序列改用upper_bound。O(n log n)，空间O(n)。</p>
+<pre class="cpp"><code><span class="type">int</span> lis_length(<span class="keyword">const</span> vector&lt;<span class="type">int</span>&gt;&amp; a, <span class="type">bool</span> non_decreasing = <span class="keyword">false</span>) {
+    vector&lt;<span class="type">int</span>&gt; tail;
+    <span class="keyword">for</span> (<span class="type">int</span> x : a) {
+        <span class="keyword">auto</span> it = non_decreasing ? upper_bound(tail.begin(), tail.end(), x)
+                                 : lower_bound(tail.begin(), tail.end(), x);
+        <span class="keyword">if</span> (it == tail.end()) tail.push_back(x);
+        <span class="keyword">else</span> *it = x;
+    }
+    <span class="keyword">return</span> (<span class="type">int</span>)tail.size();
+}</code></pre>
+<p><code>tail</code>记录的是不同长度各自的最优结尾，<strong>它本身不一定是原数组的一条子序列</strong>。要恢复一条真实方案，另存各长度当前结尾的索引，以及每个元素当时接上的前驱；最后沿前驱回溯。下面返回原数组索引，严格／非降规则与上面一致，不承诺字典序最小等额外条件。</p>
+<pre class="cpp"><code>vector&lt;<span class="type">int</span>&gt; lis_indices(<span class="keyword">const</span> vector&lt;<span class="type">int</span>&gt;&amp; a, <span class="type">bool</span> non_decreasing = <span class="keyword">false</span>) {
+    vector&lt;<span class="type">int</span>&gt; tail, end_index, previous(a.size(), -<span class="number">1</span>);
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; (<span class="type">int</span>)a.size(); ++i) {
+        <span class="keyword">auto</span> it = non_decreasing ? upper_bound(tail.begin(), tail.end(), a[i])
+                                 : lower_bound(tail.begin(), tail.end(), a[i]);
+        <span class="type">int</span> k = (<span class="type">int</span>)(it - tail.begin());
+        <span class="keyword">if</span> (k &gt; <span class="number">0</span>) previous[i] = end_index[k - <span class="number">1</span>];
+        <span class="keyword">if</span> (it == tail.end()) {
+            tail.push_back(a[i]);
+            end_index.push_back(i);
+        } <span class="keyword">else</span> {
+            *it = a[i];
+            end_index[k] = i;
+        }
+    }
+    vector&lt;<span class="type">int</span>&gt; answer;
+    <span class="keyword">for</span> (<span class="type">int</span> i = end_index.empty() ? -<span class="number">1</span> : end_index.back(); i != -<span class="number">1</span>; i = previous[i])
+        answer.push_back(i);
+    reverse(answer.begin(), answer.end());
+    <span class="keyword">return</span> answer;
+}</code></pre>
+<p>LIS数量、最大权重等目标不能仅把tail数值改一改；它们需要保留额外状态，归DP／数据结构专题。这里承载“最小结尾状态有序，二分加速定位”这一组合。</p>
+<h3 id="1-9-出现位置表-反复匹配子序列">1.9 出现位置表：反复匹配子序列</h3>
+<p>固定源串、多次短查询。把每个字符的出现位置升序存起来；查询下一字符时，二分首个严格大于上次匹配位置的位置。最早选择为后续留下最多空间，因此得到字典序最小的匹配位置序列，也满足UVa10567最小起点、再最小终点的要求。预处理O(n)，一次查询O(|q| log n)。</p>
+<pre class="cpp"><code><span class="keyword">using</span> Positions = array&lt;vector&lt;<span class="type">int</span>&gt;, <span class="number">256</span>&gt;;
+
+Positions build_positions(string_view source) {
+    Positions pos;
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; (<span class="type">int</span>)source.size(); ++i)
+        pos[(unsigned char)source[i]].push_back(i);
+    <span class="keyword">return</span> pos;
+}
+
+optional&lt;vector&lt;<span class="type">int</span>&gt;&gt; subsequence_positions(<span class="keyword">const</span> Positions&amp; pos, string_view query) {
+    vector&lt;<span class="type">int</span>&gt; chosen;
+    <span class="type">int</span> last = -<span class="number">1</span>;
+    <span class="keyword">for</span> (unsigned char c : query) {
+        <span class="keyword">const</span> <span class="keyword">auto</span>&amp; positions = pos[c];
+        <span class="keyword">auto</span> it = upper_bound(positions.begin(), positions.end(), last);
+        <span class="keyword">if</span> (it == positions.end()) <span class="keyword">return</span> nullopt;
+        chosen.push_back(last = *it);
+    }
+    <span class="keyword">return</span> chosen;
+}</code></pre>
+<p>接口按字节字符工作，覆盖原题的52个大小写ASCII字母；返回nullopt表示无法匹配，空查询返回空索引序列。若采用next表，更多空间可换取O(|q|)查询。</p>
+<h3 id="1-10-分层累计-先定位块-再定位块内数字">1.10 分层累计：先定位块，再定位块内数字</h3>
+<p><a href="https://onlinejudge.org/external/107/10706.pdf" target="_blank" rel="noopener noreferrer">UVa10706 Number Sequence</a>的每个<code>Sk</code>都是十进制<code>1,2,…,k</code>顺次拼接，整个序列为<code>S1S2S3…</code>。查询从1开始的第i个字符，<code>i&lt;=2147483647</code>，不能直接构造到第i个字符。</p>
+<p>令<code>digit_prefix[k]</code>是<code>1..k</code>的总位数，也就是<code>Sk</code>长度；<code>block_prefix[k]</code>再累加各<code>Sk</code>的长度。先在第二层找首个累计长度<code>&gt;=i</code>的块k，扣掉前k−1块；再在第一层找块内所属数字，扣掉此前数字长度，取相应十进制位。长度累计用64位，两个查询都是lower_bound，边界相等时仍属于当前块／数字。</p>
+<pre class="cpp"><code><span class="comment">// Sk是十进制1..k的拼接，整个序列为S1S2S3...；位置从1开始。</span>
+struct NestedDigitSequence {
+    vector&lt;ll&gt; digit_prefix{<span class="number">0</span>}, block_prefix{<span class="number">0</span>};
+
+    <span class="comment">// 1&lt;=max_position&lt;=2147483647，构建到足以覆盖该位置。</span>
+    explicit NestedDigitSequence(ll max_position = <span class="number">2147483647LL</span>) {
+        <span class="type">int</span> width = <span class="number">1</span>, next_power = <span class="number">10</span>;
+        <span class="keyword">for</span> (<span class="type">int</span> k = <span class="number">1</span>; block_prefix.back() &lt; max_position; ++k) {
+            <span class="keyword">if</span> (k == next_power) { ++width; next_power *= <span class="number">10</span>; }
+            digit_prefix.push_back(digit_prefix.back() + width);
+            block_prefix.push_back(block_prefix.back() + digit_prefix.back());
+        }
+    }
+
+    char at(ll position) <span class="keyword">const</span> { <span class="comment">// 1&lt;=position&lt;=构建时的max_position</span>
+        <span class="keyword">auto</span> block = lower_bound(block_prefix.begin() + <span class="number">1</span>, block_prefix.end(), position);
+        <span class="type">int</span> k = (<span class="type">int</span>)(block - block_prefix.begin());
+        ll inside = position - block_prefix[k - <span class="number">1</span>];
+        <span class="keyword">auto</span> end = digit_prefix.begin() + k + <span class="number">1</span>;
+        <span class="keyword">auto</span> found = lower_bound(digit_prefix.begin() + <span class="number">1</span>, end, inside);
+        <span class="type">int</span> number = (<span class="type">int</span>)(found - digit_prefix.begin());
+        <span class="type">int</span> offset = (<span class="type">int</span>)(inside - digit_prefix[number - <span class="number">1</span>] - <span class="number">1</span>);
+        <span class="keyword">return</span> to_string(number)[offset];
+    }
+};</code></pre>
+<p>构建到覆盖最大查询位置的K即可，预处理O(K)、空间O(K)，每次两次二分O(log K)，另加输出数字的十进制转换成本。例如总序列的第8位是2；<code>S10</code>中1到9之后才是数字10，需要同时保留组边界和数字位数变化。</p>
 <p><a id="special"></a></p>
 <h2 id="2-特殊数组">2 特殊数组</h2>
 <h3 id="2-1-旋转数组的最小值">2.1 旋转数组的最小值</h3>
@@ -203,6 +394,7 @@ pre code{font:inherit;color:inherit;background:transparent;padding:0;border-radi
     it = lower_bound(a.begin() + p + <span class="number">1</span>, a.end(), x, greater&lt;<span class="type">int</span>&gt;());
     <span class="keyword">return</span> it != a.end() &amp;&amp; *it == x ? (<span class="type">int</span>)(it - a.begin()) : -<span class="number">1</span>;
 }</code></pre>
+<p>局部峰的坡向不必全局单调；这里证明的是保留的半边仍存在峰。山脉接口若限制读取次数，需要缓存并计数；本节vector版本不处理接口调用次数。</p>
 <h3 id="2-4-成对数组中的唯一单次值">2.4 成对数组中的唯一单次值</h3>
 <p>有序数组中恰好一个值出现一次，其他值各出现两次。<strong>单次值之前，各对从偶数下标开始；之后配对错位。</strong> <code>m^1</code> 在同一组偶／奇下标间切换：配对仍相等，唯一值就在右边；否则保留左边。</p>
 <pre class="cpp"><code><span class="type">int</span> single_unpaired(<span class="keyword">const</span> vector&lt;<span class="type">int</span>&gt;&amp; a) {
@@ -215,6 +407,22 @@ pre code{font:inherit;color:inherit;background:transparent;padding:0;border-radi
     <span class="keyword">return</span> a[l];
 }</code></pre>
 <p>非空、奇数长度，返回唯一值，O(log n)。</p>
+<h3 id="2-5-二维局部峰">2.5 二维局部峰</h3>
+<p>非空矩形矩阵，求一个不小于四邻居的局部峰，外边界视为更小；矩阵无须行列有序。中列取全局最大，已经保证上下方向不更大；左右若有更大邻居，沿该方向的半矩阵仍有峰，否则直接返回。每轮扫描一列并折半列数，O(rows log cols)，空间O(1)。</p>
+<pre class="cpp"><code>pair&lt;<span class="type">int</span>, <span class="type">int</span>&gt; peak2d(<span class="keyword">const</span> vector&lt;vector&lt;<span class="type">int</span>&gt;&gt;&amp; a) {
+    <span class="type">int</span> rows = (<span class="type">int</span>)a.size(), cols = (<span class="type">int</span>)a[<span class="number">0</span>].size();
+    <span class="type">int</span> l = <span class="number">0</span>, r = cols - <span class="number">1</span>;
+    <span class="keyword">while</span> (l &lt;= r) {
+        <span class="type">int</span> m = l + (r - l) / <span class="number">2</span>, row = <span class="number">0</span>;
+        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; rows; ++i)
+            <span class="keyword">if</span> (a[i][m] &gt; a[row][m]) row = i;
+        <span class="keyword">if</span> (m &gt; <span class="number">0</span> &amp;&amp; a[row][m - <span class="number">1</span>] &gt; a[row][m]) r = m - <span class="number">1</span>;
+        <span class="keyword">else</span> <span class="keyword">if</span> (m + <span class="number">1</span> &lt; cols &amp;&amp; a[row][m + <span class="number">1</span>] &gt; a[row][m]) l = m + <span class="number">1</span>;
+        <span class="keyword">else</span> <span class="keyword">return</span> {row, m};
+    }
+    <span class="keyword">return</span> {-<span class="number">1</span>, -<span class="number">1</span>};
+}</code></pre>
+<p>一般输入返回非严格峰；若像LC1901那样相邻不等，返回的就是严格峰。中列“某个局部峰”不能替代整列最大，后者才控制上下邻居并支撑整半矩阵的排除。转置角色可得O(cols log rows)。</p>
 <p><a id="sequences"></a></p>
 <h2 id="3-多个有序序列">3 多个有序序列</h2>
 <h3 id="3-1-搜索矩阵-先分清有序条件">3.1 搜索矩阵：先分清有序条件</h3>
@@ -298,6 +506,20 @@ b： ... bl | br ...    左边取 k-i 个
 <pre class="cpp"><code><span class="type">int</span> N = (<span class="type">int</span>)(a.size() + b.size());
 <span class="type">double</span> median = <span class="number">0.5</span> * (kth_two_sorted(a, b, (N + <span class="number">1</span>) / <span class="number">2</span>)
                     + kth_two_sorted(a, b, (N + <span class="number">2</span>) / <span class="number">2</span>));</code></pre>
+<h3 id="3-3-值域内的最大正方形">3.3 值域内的最大正方形</h3>
+<p><a href="https://onlinejudge.org/external/121/12192.pdf" target="_blank" rel="noopener noreferrer">UVa12192 Grapevine</a>给各行、各列均非降的矩阵，<code>rows,cols&lt;=500</code>，至多10^4个查询，每次求所有格子都在<code>[L,U]</code>内的最大连续正方形边长，<code>L&lt;=U</code>。</p>
+<p>一块正方形的最小值在左上、最大值在右下。对每行，只需把左上角放在首个<code>&gt;=L</code>的列：更靠左不合格，更靠右只会让右下值更大、剩余列数更少。全局已有边长best时，只尝试扩大到best+1、best+2……，用右下角<code>&lt;=U</code>检查即可；失败后换下一行。best只增不减，整个查询成功扩张至多min(rows,cols)次，不必每行再二分边长。</p>
+<pre class="cpp"><code><span class="comment">// 非空矩形，各行各列非降；求全部元素都在[low,high]的最大正方形边长。</span>
+<span class="type">int</span> largest_square_in_range(<span class="keyword">const</span> vector&lt;vector&lt;<span class="type">int</span>&gt;&gt;&amp; a, <span class="type">int</span> low, <span class="type">int</span> high) {
+    <span class="type">int</span> rows = (<span class="type">int</span>)a.size(), cols = (<span class="type">int</span>)a[<span class="number">0</span>].size(), best = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="type">int</span> r = <span class="number">0</span>; r &lt; rows; ++r) {
+        <span class="type">int</span> c = (<span class="type">int</span>)(lower_bound(a[r].begin(), a[r].end(), low) - a[r].begin());
+        <span class="keyword">while</span> (r + best &lt; rows &amp;&amp; c + best &lt; cols &amp;&amp; a[r + best][c + best] &lt;= high)
+            ++best;
+    }
+    <span class="keyword">return</span> best;
+}</code></pre>
+<p>每查询O(rows log(cols+1)+min(rows,cols))，额外空间O(1)。没有合格格子时返回0。这个两角判定依赖<strong>行列同时非降</strong>，只有各行有序不能照搬。</p>
 <p><a id="answer"></a></p>
 <h2 id="4-二分答案">4 二分答案</h2>
 <p><strong>把“最优值是多少”改问“答案限定为 x 时能不能完成”。</strong> 先写判定，再看可行性方向，最后确定二分边界。</p>
@@ -561,7 +783,7 @@ ll kth_pair_distance(vector&lt;<span class="type">int</span>&gt; a, ll k) {
 <h3 id="6-1-整数平方根与完全平方数">6.1 整数平方根与完全平方数</h3>
 <p>求 <code>floor(sqrt(x))</code>，等价于找最大的整数 m 使 <code>m²≤x</code>。判断改为 <code>m≤x/m</code>，避免计算大整数平方。循环取上中点；只有进入循环才会使用 m，因此 x=0 时也不发生除零。</p>
 <pre class="cpp"><code>ll integer_sqrt(ll x) {
-    ll l = <span class="number">0</span>, r = x;
+    ll l = <span class="number">0</span>, r = min(x, <span class="number">3037000499LL</span>); <span class="comment">// sqrt(LLONG_MAX) 向下取整</span>
     <span class="keyword">while</span> (l &lt; r) {
         ll m = l + (r - l + <span class="number">1</span>) / <span class="number">2</span>;
         <span class="keyword">if</span> (m &lt;= x / m) l = m;
@@ -569,13 +791,13 @@ ll kth_pair_distance(vector&lt;<span class="type">int</span>&gt; a, ll k) {
     }
     <span class="keyword">return</span> l;
 }</code></pre>
-<p>模板范围 <code>0≤x≤10^18</code>。若还要判断完全平方数，令 <code>s=integer_sqrt(x)</code>，再核对 <code>s*s==x</code>。</p>
+<p>模板范围 <code>0≤x≤LLONG_MAX</code>。若还要判断完全平方数，令 <code>s=integer_sqrt(x)</code>，再核对 <code>s*s==x</code>。三角数逆问题同理：例如<code>n&lt;=2^31-1</code>时，最大完整阶数可用<code>last_true(0,n,[&amp;](ll k){return k*(k+1)/2&lt;=n;})</code>，乘法先在64位中计算。</p>
 <h3 id="6-2-可行上界未知-先倍增-再二分">6.2 可行上界未知：先倍增，再二分</h3>
 <p>适用条件：非负整数范围内，可行性由假变真。先试 <code>1,2,4,8,...</code>，找到可行上界后再查首真；如果存在接口或数值上限，就在 cap 停止。</p>
 <pre class="cpp"><code><span class="keyword">template</span>&lt;<span class="keyword">class</span> F&gt;
 ll expand_first(ll cap, F can) {
     ll r = <span class="number">1</span>;
-    <span class="keyword">while</span> (r &lt; cap &amp;&amp; !can(r)) r = min(cap, r * <span class="number">2</span>);
+    <span class="keyword">while</span> (r &lt; cap &amp;&amp; !can(r)) r = r &gt; cap / <span class="number">2</span> ? cap : r * <span class="number">2</span>;
     <span class="keyword">if</span> (!can(r)) <span class="keyword">return</span> cap + <span class="number">1</span>;
     ll l = <span class="number">0</span>;
     <span class="keyword">while</span> (l &lt; r) {
@@ -585,7 +807,38 @@ ll expand_first(ll cap, F can) {
     }
     <span class="keyword">return</span> l;
 }</code></pre>
-<p>模板取 <code>1≤cap≤10^18</code>；<code>[0,cap]</code> 内无解返回 <code>cap+1</code>。未知长度数组也可用同样办法扩展查找上界，读取范围外的约定由题目接口决定。</p>
+<p>模板取 <code>1≤cap&lt;LLONG_MAX</code>；<code>[0,cap]</code> 内无解返回 <code>cap+1</code>，倍增在乘2前检查上限。未知长度数组也可用同样办法扩展查找上界，读取范围外的约定由题目接口决定。不能假设所有判定最终都会为真。</p>
+<h4 id="未知长度-reader">未知长度 reader</h4>
+<p>有序reader按索引访问，越界返回nullopt。依次试0、1、3、7……，直到读到<code>&gt;=target</code>或越界，再在最后区间内二分。越界在大小比较中当作+∞，无需先算总长度。<code>index_cap</code>限定可搜索的最大索引且必须非负；默认是long long最大值。两阶段各为对数级访问，实际用时还乘单次reader成本。</p>
+<pre class="cpp"><code><span class="comment">// read(i)返回optional&lt;ll&gt;；nullopt代表越界，合法值按索引非降。</span>
+<span class="keyword">template</span>&lt;<span class="keyword">class</span> Reader&gt;
+optional&lt;ll&gt; unknown_lower_index(Reader read, ll target, ll index_cap = LLONG_MAX) {
+    <span class="keyword">auto</span> value = read(<span class="number">0</span>);
+    <span class="keyword">if</span> (!value) <span class="keyword">return</span> nullopt;
+    <span class="keyword">if</span> (*value &gt;= target) <span class="keyword">return</span> <span class="number">0</span>;
+    ll l = <span class="number">0</span>, r = <span class="number">0</span>;
+    <span class="keyword">while</span> (r &lt; index_cap) {
+        l = r + <span class="number">1</span>;
+        r = r &gt;= (index_cap - <span class="number">1</span>) / <span class="number">2</span> ? index_cap : <span class="number">2</span> * r + <span class="number">1</span>;
+        value = read(r);
+        <span class="keyword">if</span> (!value || *value &gt;= target) break;
+    }
+    <span class="keyword">if</span> (value &amp;&amp; *value &lt; target) <span class="keyword">return</span> nullopt;
+    <span class="keyword">while</span> (l &lt; r) {
+        ll m = l + (r - l) / <span class="number">2</span>;
+        value = read(m);
+        <span class="keyword">if</span> (!value || *value &gt;= target) r = m;
+        <span class="keyword">else</span> l = m + <span class="number">1</span>;
+    }
+    <span class="keyword">return</span> read(l) ? optional&lt;ll&gt;(l) : nullopt;
+}
+
+<span class="keyword">template</span>&lt;<span class="keyword">class</span> Reader&gt;
+optional&lt;ll&gt; search_unknown(Reader read, ll target, ll index_cap = LLONG_MAX) {
+    <span class="keyword">auto</span> index = unknown_lower_index(read, target, index_cap);
+    <span class="keyword">return</span> index &amp;&amp; *read(*index) == target ? index : nullopt;
+}</code></pre>
+<p><code>unknown_lower_index</code>返回首个有效且不小于target的位置，<code>search_unknown</code>再核对相等；数组可空，可含重复。使用有效标志，避免把合法最大值混成越界哨兵。</p>
 <h3 id="6-3-实数边界与连续函数求根">6.3 实数边界与连续函数求根</h3>
 <h4 id="实数最小可行值">实数最小可行值</h4>
 <p>仍要求可行性由假变真，初始右端必须可行。实数没有“加一格”，因此用 <code>l=m</code>、<code>r=m</code>；固定迭代次数结束，返回可行的右端。</p>
@@ -615,8 +868,10 @@ ll expand_first(ll cap, F can) {
     <span class="keyword">return</span> l + (r - l) / <span class="number">2</span>;
 }</code></pre>
 <p>两端之一为零也直接返回。可能存在多个根，模板只保证找到其中一个；端点同号不能据此判断区间内无根。两种实数模板均要求初始区间宽度有限。</p>
+<p><strong>先确定函数定义域，再找夹根区间。</strong> <a href="https://onlinejudge.org/external/17/p1753.pdf" target="_blank" rel="noopener noreferrer">UVa1753</a>的实际速度为<code>s[i]+c</code>，求<code>sum(d[i]/(s[i]+c))=t</code>，所以必须有<code>c&gt;-min(s)</code>；不能因读数可负就把c限制为非负。函数在此开区间严格递减，选有限左端使函数高于t，再扩张右端使其低于t，交给夹根模板。</p>
+<p><a href="https://onlinejudge.org/external/118/11881.pdf" target="_blank" rel="noopener noreferrer">UVa11881</a>的IRR也有开域：<code>r&gt;-1</code>，净现值为<code>CF[0]+sum(CF[i]/(1+r)^i)</code>。该题初始现金流负、以后均正，因此函数严格递减且根唯一；左端不能直接取-1。若改成任意正负现金流，唯一根的结论就不能沿用。</p>
 <h2 id="相关专题与参考">相关专题与参考</h2>
-<p>最长递增子序列中的 <code>tails</code> 查找、树状数组按秩查找，以及整体二分等依赖其他算法的用法，归入各自专题。</p>
+<p><a href="组合判定.html">组合判定</a>继续讲解操作前缀、均值与中位数变换、图与匹配等方法；<a href="进阶扩展.html">进阶扩展</a>讲解动态排名和批量查询。</p>
 <p>算法结构对照了 <a href="https://cp-algorithms.com/num_methods/binary_search.html" target="_blank" rel="noopener noreferrer">cp-algorithms 的 Binary Search</a>、<a href="https://www.hello-algo.com/chapter_searching/binary_search_edge/" target="_blank" rel="noopener noreferrer">Hello 算法的二分边界</a> 与 <a href="https://oi-wiki.org/basic/binary/" target="_blank" rel="noopener noreferrer">OI Wiki 的二分</a>。题型链接指向原题；本文按求职参考用途重新组织，C++ 模板单独编写并校验。</p>
 <footer class="page-foot">二分查找 · 题型与 C++ 模板</footer></main></div></div><script>
 const links=[...document.querySelectorAll('.sidebar a')];

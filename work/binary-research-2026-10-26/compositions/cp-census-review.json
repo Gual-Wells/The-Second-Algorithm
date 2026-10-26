@@ -1,0 +1,339 @@
+{
+  "date": "2026-10-26",
+  "scope": "all 32 captured rows of3.3b from cp-author-candidates.json; distinct from CP4 printed directory",
+  "denominator": 32,
+  "prior_original_statement_reads": 4,
+  "new_statement_reads": 15,
+  "not_acquired": 13,
+  "kattis_policy": "one actual403 then stop whole site;12 deferred entries not misreported as individual403",
+  "production_changes": false,
+  "notes": [
+    "read-level bookkeeping is separate from semantic coverage; important variants may need a short explanation even if outer family exists",
+    "UVa1753 used actual publisher HTML redirect p1753.pdf, not guessed title identity",
+    "PDF skill had already been read earlier in this same task; no original PDF file saved in public work"
+  ],
+  "reads_and_decisions": [
+    {
+      "id": "leetcode-number:0069",
+      "url": "https://leetcode.com/problems/sqrtx/description/",
+      "read_status": "already-read",
+      "actual_scope": "foundations/actual-reads.json web_reads leetcode:69",
+      "disposition": "已有",
+      "family": "integer_sqrt",
+      "reason": "按整数平方根；本轮不重复取原题。"
+    },
+    {
+      "id": "leetcode-number:0274",
+      "url": "https://leetcode.com/problems/h-index/",
+      "read_status": "read-new",
+      "actual_scope": "whole official statement/constraints/examples",
+      "disposition": "非二分优先",
+      "family": "H-index unsorted -> sorting or bucket counting",
+      "reason": "n<=5000，citations<=1000。h是最大值使至少h项>=h；无序输入不能直接套275的下标单调边界。排序或桶可直接做，桶O(n+maxCitation)，不另造复杂二分check。"
+    },
+    {
+      "id": "leetcode-number:0275",
+      "url": "https://leetcode.com/problems/h-index-ii/description/",
+      "read_status": "already-read",
+      "actual_scope": "foundations/actual-reads.json web_reads leetcode:275",
+      "disposition": "已有",
+      "family": "sorted h-index",
+      "reason": "升序数据判citations[i]>=n-i找首真；已有参考承载。"
+    },
+    {
+      "id": "leetcode-number:0278",
+      "url": "https://leetcode.com/problems/first-bad-version/",
+      "read_status": "read-new",
+      "actual_scope": "whole official statement/constraints/examples",
+      "disposition": "已有",
+      "family": "first_true",
+      "reason": "1<=bad<=n<=2^31-1，API首个true；边界从版本1开始，不问不存在的0。"
+    },
+    {
+      "id": "leetcode-number:0367",
+      "url": "https://leetcode.com/problems/valid-perfect-square/",
+      "read_status": "read-new",
+      "actual_scope": "whole official statement/constraints/examples",
+      "disposition": "已有",
+      "family": "integer_sqrt exact-square followup",
+      "reason": "正整数<=2^31-1，不能用sqrt库；已有integer_sqrt后判s*s==num，乘积需足够宽。"
+    },
+    {
+      "id": "leetcode-number:0441",
+      "url": "https://leetcode.com/problems/arranging-coins/",
+      "read_status": "read-new",
+      "actual_scope": "whole official statement/constraints/examples",
+      "disposition": "重要变种",
+      "family": "numeric monotone inverse",
+      "reason": "求最大k使k(k+1)/2<=n，n<=2^31-1；已有last_true外壳直接承载。先64位再乘，若扩展到64位n可除法/128位避免溢出。无需新二分家族。"
+    },
+    {
+      "id": "leetcode-number:0875",
+      "url": "https://leetcode.com/problems/koko-eating-bananas/",
+      "read_status": "read-new",
+      "actual_scope": "whole official statement/constraints/examples",
+      "disposition": "已有",
+      "family": "ceil-rate sum",
+      "reason": "n<=1e4,h>=n且<=1e9,pile<=1e9；每小时只能吃一堆，剩余小时不可转给另一堆，因此sum ceil而不是ceil sum。旧min-rate完整实现已承载。"
+    },
+    {
+      "id": "leetcode-number:1011",
+      "url": "https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/",
+      "read_status": "read-new",
+      "actual_scope": "whole official statement/constraints/examples",
+      "disposition": "已有",
+      "family": "nonnegative consecutive capacity",
+      "reason": "1<=days<=n<=5e4，weight1..500，顺序不可变；给容量贪心数最少天数<=days，旧分段容量代码可复用。"
+    },
+    {
+      "id": "leetcode-number:2560",
+      "url": "https://leetcode.com/problems/house-robber-iv/",
+      "read_status": "already-read",
+      "actual_scope": "compositions/actual-reads.json LC2560",
+      "disposition": "已有",
+      "family": "threshold path nonadjacent count",
+      "reason": "compositions/source.md nonadjacent代码已承载，1e5路径、数目至少k。"
+    },
+    {
+      "id": "uva:10341",
+      "url": "https://onlinejudge.org/external/103/10341.pdf",
+      "read_status": "already-read",
+      "actual_scope": "challenge/independent-cases.json uva:10341 original PDF",
+      "disposition": "已有",
+      "family": "continuous bracket root",
+      "reason": "系数符号支持非增，常零函数不唯一；基础bracket_root已承载，不能补造u范围。"
+    },
+    {
+      "id": "uva:11413",
+      "url": "https://onlinejudge.org/external/114/11413.pdf",
+      "read_status": "read-new",
+      "actual_scope": "both official PDF pages full text",
+      "disposition": "已有",
+      "family": "consecutive capacity including spare containers",
+      "reason": "n<=1000,m<=1e6可大于n，正体积<=1e6，容器可空/多余；不能把exact nonempty K<=n限制套来。same min-max partition contract variant already identified via Codility。"
+    },
+    {
+      "id": "uva:11627",
+      "url": "https://onlinejudge.org/external/116/11627.pdf",
+      "read_status": "read-new",
+      "actual_scope": "both official PDF pages full text",
+      "disposition": "真缺口→本轮工作稿已补",
+      "family": "sequential reachable-interval propagation",
+      "reason": "固定下滑速度s，在相邻门之间可横移vh*dy/s；把可达区间左右扩张再与本门[x,x+W]交。每次O(N)，候选ski排序后二分O(SlogS+NlogS)。现有静态区间交代码不等价；N<=1e5,S<=1e6需短checker承载。",
+      "implementation": {
+        "source": "census-addendum.md",
+        "code": "census-addendum.cpp",
+        "tests": "census-addendum-test.cpp",
+        "result": "PASS4506 independent checks",
+        "production": "root integration pending"
+      }
+    },
+    {
+      "id": "uva:11881",
+      "url": "https://onlinejudge.org/external/118/11881.pdf",
+      "read_status": "read-new",
+      "actual_scope": "official one-page PDF full equation/input/output/examples",
+      "disposition": "重要变种",
+      "family": "root domain and coefficient sign",
+      "reason": "CF0<0，其余CF>0，IRR>-1；NPV在(-1,infty)连续严格递减，从+infty到CF0，恰一个根。不能在-1评估、不能固定[0,1]、不能把有正有负现金流推广后仍声称单根。原题未给CF0数值范围。"
+    },
+    {
+      "id": "uva:11935",
+      "url": "https://onlinejudge.org/external/119/11935.pdf",
+      "read_status": "read-new",
+      "actual_scope": "both official PDF pages full text",
+      "disposition": "非二分优先",
+      "family": "event scan / maximum fuel consumption between refill events",
+      "reason": "最多50事件；耗油率n/100加leaks，消耗按相邻距离乘当前速率；加油时累计清零、修理只清leaks；取两次加满之间消耗最大值即答案O(events)，同距离按输入次序，没必要O(events*logeps)二分油箱。"
+    },
+    {
+      "id": "uva:12032",
+      "url": "https://onlinejudge.org/external/120/12032.pdf",
+      "read_status": "read-new",
+      "actual_scope": "both official PDF pages full text",
+      "disposition": "非二分优先；保留状态衰减条件",
+      "family": "depleting-strength simulation with direct O(n) shortcut",
+      "reason": "固定初始k顺序跳；gap>k失败，gap==k后k--，gap<k不变。不是只取最大相邻差。设D最大差，只需检查D，若失败答案D+1（后者每个gap都小于初始强度，从不衰减）。O(n)，不必泛化成长二分模板。"
+    },
+    {
+      "id": "uva:12190",
+      "url": "https://onlinejudge.org/external/121/12190.pdf",
+      "read_status": "read-new",
+      "actual_scope": "both official PDF pages full text",
+      "disposition": "重要变种",
+      "family": "monotone piecewise tariff inverse and split",
+      "reason": "A=按总用量共同计费的账单，不是两账单和；先反演单调阶梯计费函数f，得总耗电C，再在自家x∈[0,C/2]二分g(x)=f(C-x)-f(x)，其严格递减，找给定差B并输出f(x)。A,B<=1e9且保证唯一，64位处理。非普通balance sum。"
+    },
+    {
+      "id": "uva:12791",
+      "url": "https://onlinejudge.org/external/127/12791.pdf",
+      "read_status": "read-new",
+      "actual_scope": "official one-page PDF full text",
+      "disposition": "非二分优先",
+      "family": "relative-speed arithmetic",
+      "reason": "1<=X<Y<=10000，快慢每圈时长；首次套圈时间XY/(Y-X)，快者所处圈号为ceil(Y/(Y-X))。样例X4,Y8为第2圈，不能习惯性floor+1。直接整数上取整无需二分。"
+    },
+    {
+      "id": "uva:13142",
+      "url": "https://onlinejudge.org/external/131/13142.pdf",
+      "read_status": "read-new",
+      "actual_scope": "both official PDF pages full text",
+      "disposition": "非二分优先",
+      "family": "unit conversion/direct linear correction",
+      "reason": "D公里偏差在T天修正，速度改变量D*1e6/(T*86400) mm/s，质量吨数为绝对值截断；D正Remove，D负Add，零Add0。S基准速度不影响增量；无需二分，不补造原题没写的数值上限。"
+    },
+    {
+      "id": "uva:1753",
+      "url": "https://onlinejudge.org/external/17/p1753.pdf",
+      "read_status": "read-new-via-direct-official-pdf",
+      "actual_scope": "full one-page PDF pypdf extraction from publisher bytes; web PDF tool inaccessible",
+      "disposition": "重要变种",
+      "family": "decreasing sum of reciprocal shifted speeds",
+      "reason": "n<=1000,t<=1e6,d<=1000,|s|<=1000。真实速度s+c必须全部>0，故c> -min(s)；sum d/(s+c)=t连续严格递减，存在唯一根。读数允许负数，不能固定c>=0。现有root家族可用，但必须按开域和上界扩张构造有限夹根。"
+    },
+    {
+      "id": "kattis:bootstrappingnumber",
+      "url": "https://open.kattis.com/problems/bootstrappingnumber",
+      "read_status": "failed403",
+      "actual_scope": "direct official open returned403; stopped",
+      "disposition": "未取得",
+      "family": null,
+      "reason": "保留身份，不凭题名/CP标签/镜像猜算法；未绕过站点访问限制。"
+    },
+    {
+      "id": "kattis:carefulascent",
+      "url": "https://open.kattis.com/problems/carefulascent",
+      "read_status": "not-attempted-after-site403",
+      "actual_scope": "not individually requested; stopped entire site after first403 per parent instruction",
+      "disposition": "未取得",
+      "family": null,
+      "reason": "保留身份，不凭题名/CP标签/镜像猜算法；未绕过站点访问限制。"
+    },
+    {
+      "id": "kattis:financialplanning",
+      "url": "https://open.kattis.com/problems/financialplanning",
+      "read_status": "not-attempted-after-site403",
+      "actual_scope": "not individually requested; stopped entire site after first403 per parent instruction",
+      "disposition": "未取得",
+      "family": null,
+      "reason": "保留身份，不凭题名/CP标签/镜像猜算法；未绕过站点访问限制。"
+    },
+    {
+      "id": "kattis:freeweights",
+      "url": "https://open.kattis.com/problems/freeweights",
+      "read_status": "not-attempted-after-site403",
+      "actual_scope": "not individually requested; stopped entire site after first403 per parent instruction",
+      "disposition": "未取得",
+      "family": null,
+      "reason": "保留身份，不凭题名/CP标签/镜像猜算法；未绕过站点访问限制。"
+    },
+    {
+      "id": "kattis:hindex",
+      "url": "https://open.kattis.com/problems/hindex",
+      "read_status": "not-attempted-after-site403",
+      "actual_scope": "not individually requested; stopped entire site after first403 per parent instruction",
+      "disposition": "未取得",
+      "family": null,
+      "reason": "保留身份，不凭题名/CP标签/镜像猜算法；未绕过站点访问限制。"
+    },
+    {
+      "id": "kattis:htoo",
+      "url": "https://open.kattis.com/problems/htoo",
+      "read_status": "not-attempted-after-site403",
+      "actual_scope": "not individually requested; stopped entire site after first403 per parent instruction",
+      "disposition": "未取得",
+      "family": null,
+      "reason": "保留身份，不凭题名/CP标签/镜像猜算法；未绕过站点访问限制。"
+    },
+    {
+      "id": "kattis:monk",
+      "url": "https://open.kattis.com/problems/monk",
+      "read_status": "not-attempted-after-site403",
+      "actual_scope": "not individually requested; stopped entire site after first403 per parent instruction",
+      "disposition": "未取得",
+      "family": null,
+      "reason": "保留身份，不凭题名/CP标签/镜像猜算法；未绕过站点访问限制。"
+    },
+    {
+      "id": "kattis:slalom2",
+      "url": "https://open.kattis.com/problems/slalom2",
+      "read_status": "not-attempted-after-site403",
+      "actual_scope": "not individually requested; stopped entire site after first403 per parent instruction",
+      "disposition": "未取得",
+      "family": null,
+      "reason": "保留身份，不凭题名/CP标签/镜像猜算法；未绕过站点访问限制。"
+    },
+    {
+      "id": "kattis:smallschedule",
+      "url": "https://open.kattis.com/problems/smallschedule",
+      "read_status": "not-attempted-after-site403",
+      "actual_scope": "not individually requested; stopped entire site after first403 per parent instruction",
+      "disposition": "未取得",
+      "family": null,
+      "reason": "保留身份，不凭题名/CP标签/镜像猜算法；未绕过站点访问限制。"
+    },
+    {
+      "id": "kattis:speed",
+      "url": "https://open.kattis.com/problems/speed",
+      "read_status": "not-attempted-after-site403",
+      "actual_scope": "not individually requested; stopped entire site after first403 per parent instruction",
+      "disposition": "未取得",
+      "family": null,
+      "reason": "保留身份，不凭题名/CP标签/镜像猜算法；未绕过站点访问限制。"
+    },
+    {
+      "id": "kattis:suspensionbridges",
+      "url": "https://open.kattis.com/problems/suspensionbridges",
+      "read_status": "not-attempted-after-site403",
+      "actual_scope": "not individually requested; stopped entire site after first403 per parent instruction",
+      "disposition": "未取得",
+      "family": null,
+      "reason": "保留身份，不凭题名/CP标签/镜像猜算法；未绕过站点访问限制。"
+    },
+    {
+      "id": "kattis:svada",
+      "url": "https://open.kattis.com/problems/svada",
+      "read_status": "not-attempted-after-site403",
+      "actual_scope": "not individually requested; stopped entire site after first403 per parent instruction",
+      "disposition": "未取得",
+      "family": null,
+      "reason": "保留身份，不凭题名/CP标签/镜像猜算法；未绕过站点访问限制。"
+    },
+    {
+      "id": "kattis:taxing",
+      "url": "https://open.kattis.com/problems/taxing",
+      "read_status": "not-attempted-after-site403",
+      "actual_scope": "not individually requested; stopped entire site after first403 per parent instruction",
+      "disposition": "未取得",
+      "family": null,
+      "reason": "保留身份，不凭题名/CP标签/镜像猜算法；未绕过站点访问限制。"
+    }
+  ],
+  "retrieval_events": [
+    {
+      "url": "https://open.kattis.com/problems/bootstrappingnumber",
+      "result": "403; no more Kattis requests"
+    },
+    {
+      "url": "https://onlinejudge.org/external/17/1753.pdf",
+      "result": "web tool inaccessible; not accepted as read"
+    },
+    {
+      "url": "https://onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&page=show_problem&problem=5110",
+      "result": "official title1753 Need for Speed; fetched publisher page HTML to follow iframe external/17/1753.html"
+    },
+    {
+      "url": "https://onlinejudge.org/external/17/1753.html",
+      "result": "publisher meta-refresh target p1753.pdf; raw HTML read using urllib"
+    },
+    {
+      "url": "https://onlinejudge.org/external/17/p1753.pdf",
+      "result": "web tool inaccessible; same official publisher direct urllib200 application/pdf45516bytes, one page fully extracted with pypdf; no file written"
+    }
+  ],
+  "actual_queries": [
+    "site.onlinejudge.org 1753",
+    "site.onlinejudge.org/external \"1753\" \"Need\""
+  ],
+  "source_limits": "Original problem definitions/constraints read, not official editorials or all method proofs; classifications are independent reasoning."
+}

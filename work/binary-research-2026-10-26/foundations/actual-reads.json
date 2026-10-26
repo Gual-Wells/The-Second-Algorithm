@@ -1,0 +1,334 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-26",
+  "book_reads": [
+    {
+      "book": "CP4 Book1 2020 native digital",
+      "source_sha256": "020c307a8173ef0db0bdc51b46e3b7c0288e49bc5d6ee970508aedb3d12b0c7c",
+      "complete_sections": [
+        "3.3.1 including exercises",
+        "3.3.2 including code continuation",
+        "3.3.3 including both directory pages"
+      ],
+      "physical_pages": [
+        178,
+        179,
+        180,
+        181,
+        182,
+        183,
+        184
+      ],
+      "additional_passages": [
+        {
+          "physical_page": 87,
+          "scope": "Searching subsection only; other matched book pages85,105,108 were inspected for search context but not claimed whole sections"
+        }
+      ],
+      "visual_pages": [
+        179,
+        180,
+        181,
+        182
+      ],
+      "method": "existing glyph-corrected layout extraction plus original-page visual checks",
+      "limits": "book directory entries are catalogue-level, not all original problem statements"
+    },
+    {
+      "book": "EPI C++2015 v2.0.0",
+      "visual_sha256": "b003be9cbea5c927e912bec5560e20e99ea864575a5aa6b3f1c01fb37a82b2d3",
+      "complete_sections": [
+        "Chapter12 Searching",
+        "25.15 Search a sorted array of unknown length",
+        "25.16 Search in two sorted arrays"
+      ],
+      "physical_pages": [
+        198,
+        199,
+        200,
+        201,
+        202,
+        203,
+        204,
+        205,
+        206,
+        207,
+        208,
+        209,
+        210,
+        211,
+        212,
+        213,
+        214,
+        215,
+        216,
+        217,
+        470,
+        471,
+        472
+      ],
+      "printed_pages": [
+        185,
+        186,
+        187,
+        188,
+        189,
+        190,
+        191,
+        192,
+        193,
+        194,
+        195,
+        196,
+        197,
+        198,
+        199,
+        200,
+        201,
+        202,
+        203,
+        204,
+        457,
+        458,
+        459
+      ],
+      "visual_pages": [
+        202,
+        203,
+        204,
+        205,
+        206,
+        207,
+        470,
+        471,
+        472
+      ],
+      "partial_only": [
+        {
+          "section": "25.17",
+          "scope": "opening statement onphysical472 only; remaining solution unread"
+        }
+      ],
+      "method": "OCR for prose locating; original visual PDF for code, formulas and disputed conditions",
+      "limits": "chapter OCR code is not trusted as authoring source"
+    }
+  ],
+  "web_reads": [
+    {
+      "identity": "leetcode:34",
+      "url": "https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/description/",
+      "actual_scope": "official_statement_and_constraints"
+    },
+    {
+      "identity": "cpp-draft:alg.binary.search",
+      "url": "https://eel.is/c++draft/alg.binary.search",
+      "actual_scope": "whole_section"
+    },
+    {
+      "identity": "leetcode:1268",
+      "url": "https://leetcode.com/problems/search-suggestions-system/description/",
+      "actual_scope": "official_statement_and_constraints"
+    },
+    {
+      "identity": "leetcode:1539",
+      "url": "https://leetcode.com/problems/kth-missing-positive-number/description/",
+      "actual_scope": "official_statement_and_constraints"
+    },
+    {
+      "identity": "leetcode:658",
+      "url": "https://leetcode.com/problems/find-k-closest-elements/description/",
+      "actual_scope": "official_statement_and_constraints"
+    },
+    {
+      "identity": "leetcode:154",
+      "url": "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/description/",
+      "actual_scope": "official_statement_and_constraints"
+    },
+    {
+      "identity": "leetcode:33",
+      "url": "https://leetcode.com/problems/search-in-rotated-sorted-array/description/",
+      "actual_scope": "official_statement_and_constraints"
+    },
+    {
+      "identity": "leetcode:81",
+      "url": "https://leetcode.com/problems/search-in-rotated-sorted-array-ii/description/",
+      "actual_scope": "official_statement_and_constraints"
+    },
+    {
+      "identity": "leetcode:162",
+      "url": "https://leetcode.com/problems/find-peak-element/description/",
+      "actual_scope": "official_statement_and_constraints"
+    },
+    {
+      "identity": "leetcode:1095",
+      "url": "https://leetcode.com/problems/find-in-mountain-array/description/",
+      "actual_scope": "official_statement_and_constraints"
+    },
+    {
+      "identity": "leetcode:540",
+      "url": "https://leetcode.com/problems/single-element-in-a-sorted-array/description/",
+      "actual_scope": "official_statement_and_constraints"
+    },
+    {
+      "identity": "leetcode:74",
+      "url": "https://leetcode.com/problems/search-a-2d-matrix/description/",
+      "actual_scope": "official_statement_and_constraints"
+    },
+    {
+      "identity": "leetcode:240",
+      "url": "https://leetcode.com/problems/search-a-2d-matrix-ii/description/",
+      "actual_scope": "official_statement_and_constraints"
+    },
+    {
+      "identity": "leetcode:4",
+      "url": "https://leetcode.com/problems/median-of-two-sorted-arrays/description/",
+      "actual_scope": "official_statement_and_constraints"
+    },
+    {
+      "identity": "leetcode:378",
+      "url": "https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/description/",
+      "actual_scope": "official_statement_and_constraints"
+    },
+    {
+      "identity": "leetcode:69",
+      "url": "https://leetcode.com/problems/sqrtx/description/",
+      "actual_scope": "official_statement_and_constraints"
+    },
+    {
+      "identity": "cp-algorithms:binary-search-continuous",
+      "url": "https://cp-algorithms.com/num_methods/binary_search.html#continuous-search",
+      "actual_scope": "full_continuous_search_section"
+    },
+    {
+      "identity": "uva:10567",
+      "url": "https://onlinejudge.org/external/105/10567.pdf",
+      "actual_scope": "whole_official_statement"
+    },
+    {
+      "identity": "leetcode:1901",
+      "url": "https://leetcode.com/problems/find-a-peak-element-ii/description/",
+      "actual_scope": "official_statement_and_constraints"
+    },
+    {
+      "identity": "mit-6.006-fall2011-lecture1",
+      "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/c32185c7158955425455159a8455298b_MIT6_006F11_lec01.pdf",
+      "actual_scope": "all_6_pages_and_visual_pages_4_5"
+    },
+    {
+      "identity": "uva:12192",
+      "url": "https://onlinejudge.org/external/121/12192.pdf",
+      "actual_scope": "both_pages_whole_official_statement"
+    },
+    {
+      "identity": "cp-algorithms-binary-search",
+      "url": "https://cp-algorithms.com/num_methods/binary_search.html",
+      "actual_scope": "sorted search, bounds, arbitrary predicate, answer search, continuous search, powers-of-2 sections; root handles parallel binary search in depth"
+    },
+    {
+      "identity": "EPIJudge-author-resource",
+      "url": "https://github.com/adnanaziz/EPIJudge",
+      "actual_scope": "repository readme only; no claim of enumerating or executing all C++solutions"
+    },
+    {
+      "identity": "MITlecture-page",
+      "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/resources/lecture-1-algorithmic-thinking-peak-finding/",
+      "actual_scope": "resource identity and PDF navigation; linked six-page PDF then fully read"
+    },
+    {
+      "identity": "leetcode:275",
+      "url": "https://leetcode.com/problems/h-index-ii/description/",
+      "actual_scope": "official_statement_and_constraints"
+    },
+    {
+      "identity": "leetcode:209",
+      "url": "https://leetcode.com/problems/minimum-size-subarray-sum/description/",
+      "actual_scope": "whole_official_statement_constraints_and_followup"
+    },
+    {
+      "identity": "leetcode:2389",
+      "url": "https://leetcode.com/problems/longest-subsequence-with-limited-sum/description/",
+      "actual_scope": "whole_official_statement_and_constraints"
+    },
+    {
+      "identity": "cp-algorithms:lis",
+      "url": "https://cp-algorithms.com/dynamic_programming/longest_increasing_subsequence.html",
+      "actual_scope": "complete_algorithm_body_including_n2_dp_nlogn_binary_recovery_data_structure_and_related_tasks"
+    }
+  ],
+  "unavailable": [
+    {
+      "url": "https://leetcode.com/problems/search-in-a-sorted-array-of-unknown-size/description/",
+      "result": "premium_shell_only",
+      "effect": "not counted as statement-read; EPI25.15 read instead"
+    },
+    {
+      "url": "https://leetcode.com/problems/fixed-point/description/",
+      "result": "web_tool_inaccessible",
+      "effect": "not counted; EPI12.2 read instead"
+    },
+    {
+      "url": "https://algs4.cs.princeton.edu/11model/BinarySearch.java.html",
+      "result": "403",
+      "effect": "no method claim derived from this entry"
+    }
+  ],
+  "private_render_location": ".local/work/binary-research-2026-10-26/foundations/",
+  "production_changes": "none; work/foundations contains authoring candidates and independently tested code",
+  "test_execution": {
+    "compiler_flags": "-std=c++17 -O2 -Wall -Wextra -Wpedantic",
+    "warnings": 0,
+    "exit_code": 0,
+    "assertions": 2587997,
+    "independent_case_count_claim": "No single combined count: some assertions inspect the same input, and family counts intentionally differ. See verification.md."
+  },
+  "independent_review_reads": [
+    {
+      "identity": "usaco:1302",
+      "url": "https://usaco.org/index.php?page=viewproblem2&cpid=1302",
+      "scope": "whole_statement_and_original_numeric_constraints; confirms a+b<=c"
+    },
+    {
+      "identity": "leetcode:1631",
+      "url": "https://leetcode.com/problems/path-with-minimum-effort/description/",
+      "scope": "whole_statement_and_constraints; positive heights"
+    },
+    {
+      "identity": "leetcode:2040",
+      "url": "https://leetcode.com/problems/kth-smallest-product-of-two-sorted-arrays/description/",
+      "scope": "whole_statement_and_constraints; abs values<=1e5"
+    },
+    {
+      "identity": "codeforces:782B",
+      "url": "https://codeforces.com/problemset/problem/782/B",
+      "scope": "whole_statement_and_constraints; speed>=1,coordinate<=1e9"
+    }
+  ],
+  "independent_review_local_reads": [
+    "work/binary-research-2026-10-26/compositions/compositions.cpp",
+    "work/binary-research-2026-10-26/compositions/source.md",
+    "work/binary-research-2026-10-26/compositions/research.md: targeted evidence for original identities"
+  ],
+  "cp_author_3_3a_census": {
+    "record": "cp-census-review.json",
+    "scope_count": 36,
+    "previous_statement_reads": 7,
+    "new_statement_reads": 21,
+    "statement_read_total": 28,
+    "unobtained": 8,
+    "new_original_pdf_visual_checks": [
+      "UVa10077 page1",
+      "UVa679 page1"
+    ],
+    "note": "Actual official URLs and per-entry access states in census record; no Kattis retries after first403."
+  },
+  "census_addendum_tests": {
+    "compile_flags": "-std=c++17 -O2 -Wall -Wextra -Wpedantic",
+    "warnings": 0,
+    "exit_code": 0,
+    "digit_query_checks": 151476,
+    "matrix_query_checks_against_all_squares": 22663,
+    "large_matrix_smoke_checks": 2,
+    "max_original_position": 2147483647,
+    "full_range_constructed_groups": 31268
+  }
+}

@@ -1,0 +1,1233 @@
+{
+  "snapshot": "catalog/inventories/cpbook/problem-classification/20261026T083207.751282+0000-c7edbd4550a4-e2f040b09e324596944c1d20ab2b7cb7.json",
+  "source_version_note": "dynamic author CP5 draft; distinct from private CP4 2020 edition",
+  "boundary": "all rows in current captured categories3.3a/3.3b; not every relevant problem on this site",
+  "count": 68,
+  "statement_read": "not implied by enumeration",
+  "records": [
+    {
+      "id": "kattis:bootstrappingnumber",
+      "title": "bootstrappingnumber",
+      "url": "https://open.kattis.com/problems/bootstrappingnumber",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "Kattis nonstarred cp5"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#bootstrappingnumber",
+      "original_url": "https://open.kattis.com/problems/bootstrappingnumber",
+      "original_link_state": "published_link",
+      "title_state": "source_label",
+      "aliases": []
+    },
+    {
+      "id": "kattis:carefulascent",
+      "title": "carefulascent",
+      "url": "https://open.kattis.com/problems/carefulascent",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "Kattis starred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#carefulascent",
+      "original_url": "https://open.kattis.com/problems/carefulascent",
+      "original_link_state": "published_link",
+      "title_state": "source_label",
+      "aliases": []
+    },
+    {
+      "id": "kattis:financialplanning",
+      "title": "financialplanning",
+      "url": "https://open.kattis.com/problems/financialplanning",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "Kattis nonstarred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#financialplanning",
+      "original_url": "https://open.kattis.com/problems/financialplanning",
+      "original_link_state": "published_link",
+      "title_state": "source_label",
+      "aliases": []
+    },
+    {
+      "id": "kattis:firefly",
+      "title": "firefly",
+      "url": "https://open.kattis.com/problems/firefly",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "Kattis starred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#firefly",
+      "original_url": "https://open.kattis.com/problems/firefly",
+      "original_link_state": "published_link",
+      "title_state": "source_label",
+      "aliases": []
+    },
+    {
+      "id": "kattis:freeweights",
+      "title": "freeweights",
+      "url": "https://open.kattis.com/problems/freeweights",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "Kattis starred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#freeweights",
+      "original_url": "https://open.kattis.com/problems/freeweights",
+      "original_link_state": "published_link",
+      "title_state": "source_label",
+      "aliases": []
+    },
+    {
+      "id": "kattis:hindex",
+      "title": "hindex",
+      "url": "https://open.kattis.com/problems/hindex",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "Kattis nonstarred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#hindex",
+      "original_url": "https://open.kattis.com/problems/hindex",
+      "original_link_state": "published_link",
+      "title_state": "source_label",
+      "aliases": []
+    },
+    {
+      "id": "kattis:htoo",
+      "title": "htoo",
+      "url": "https://open.kattis.com/problems/htoo",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "Kattis nonstarred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#htoo",
+      "original_url": "https://open.kattis.com/problems/htoo",
+      "original_link_state": "published_link",
+      "title_state": "source_label",
+      "aliases": []
+    },
+    {
+      "id": "kattis:massivecardgame",
+      "title": "massivecardgame",
+      "url": "https://open.kattis.com/problems/massivecardgame",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "Kattis nonstarred cp5"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#massivecardgame",
+      "original_url": "https://open.kattis.com/problems/massivecardgame",
+      "original_link_state": "published_link",
+      "title_state": "source_label",
+      "aliases": []
+    },
+    {
+      "id": "kattis:monk",
+      "title": "monk",
+      "url": "https://open.kattis.com/problems/monk",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "Kattis starred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#monk",
+      "original_url": "https://open.kattis.com/problems/monk",
+      "original_link_state": "published_link",
+      "title_state": "source_label",
+      "aliases": []
+    },
+    {
+      "id": "kattis:outofsorts",
+      "title": "outofsorts",
+      "url": "https://open.kattis.com/problems/outofsorts",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "Kattis starred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#outofsorts",
+      "original_url": "https://open.kattis.com/problems/outofsorts",
+      "original_link_state": "published_link",
+      "title_state": "source_label",
+      "aliases": []
+    },
+    {
+      "id": "kattis:roompainting",
+      "title": "roompainting",
+      "url": "https://open.kattis.com/problems/roompainting",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "Kattis starred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#roompainting",
+      "original_url": "https://open.kattis.com/problems/roompainting",
+      "original_link_state": "published_link",
+      "title_state": "source_label",
+      "aliases": []
+    },
+    {
+      "id": "kattis:slalom2",
+      "title": "slalom2",
+      "url": "https://open.kattis.com/problems/slalom2",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "Kattis nonstarred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#slalom2",
+      "original_url": "https://open.kattis.com/problems/slalom2",
+      "original_link_state": "published_link",
+      "title_state": "source_label",
+      "aliases": []
+    },
+    {
+      "id": "kattis:smallschedule",
+      "title": "smallschedule",
+      "url": "https://open.kattis.com/problems/smallschedule",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "Kattis nonstarred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#smallschedule",
+      "original_url": "https://open.kattis.com/problems/smallschedule",
+      "original_link_state": "published_link",
+      "title_state": "source_label",
+      "aliases": []
+    },
+    {
+      "id": "kattis:speed",
+      "title": "speed",
+      "url": "https://open.kattis.com/problems/speed",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "Kattis nonstarred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#speed",
+      "original_url": "https://open.kattis.com/problems/speed",
+      "original_link_state": "published_link",
+      "title_state": "source_label",
+      "aliases": []
+    },
+    {
+      "id": "kattis:suspensionbridges",
+      "title": "suspensionbridges",
+      "url": "https://open.kattis.com/problems/suspensionbridges",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "Kattis starred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#suspensionbridges",
+      "original_url": "https://open.kattis.com/problems/suspensionbridges",
+      "original_link_state": "published_link",
+      "title_state": "source_label",
+      "aliases": []
+    },
+    {
+      "id": "kattis:svada",
+      "title": "svada",
+      "url": "https://open.kattis.com/problems/svada",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "Kattis nonstarred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#svada",
+      "original_url": "https://open.kattis.com/problems/svada",
+      "original_link_state": "published_link",
+      "title_state": "source_label",
+      "aliases": []
+    },
+    {
+      "id": "kattis:synchronizinglists",
+      "title": "synchronizinglists",
+      "url": "https://open.kattis.com/problems/synchronizinglists",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "Kattis nonstarred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#synchronizinglists",
+      "original_url": "https://open.kattis.com/problems/synchronizinglists",
+      "original_link_state": "published_link",
+      "title_state": "source_label",
+      "aliases": []
+    },
+    {
+      "id": "kattis:taxing",
+      "title": "taxing",
+      "url": "https://open.kattis.com/problems/taxing",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "Kattis nonstarred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#taxing",
+      "original_url": "https://open.kattis.com/problems/taxing",
+      "original_link_state": "published_link",
+      "title_state": "source_label",
+      "aliases": []
+    },
+    {
+      "id": "leetcode-number:0033",
+      "title": "LeetCode 0033",
+      "url": "https://cpbook.net/methodstosolve#lc0033",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "LeetCode nonstarred cp5"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#lc0033",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "leetcode-number:0034",
+      "title": "LeetCode 0034",
+      "url": "https://cpbook.net/methodstosolve#lc0034",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "LeetCode nonstarred cp5"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#lc0034",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "leetcode-number:0035",
+      "title": "LeetCode 0035",
+      "url": "https://cpbook.net/methodstosolve#lc0035",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "LeetCode nonstarred cp5"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#lc0035",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "leetcode-number:0069",
+      "title": "LeetCode 0069",
+      "url": "https://cpbook.net/methodstosolve#lc0069",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "LeetCode nonstarred cp5"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#lc0069",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "leetcode-number:0074",
+      "title": "LeetCode 0074",
+      "url": "https://cpbook.net/methodstosolve#lc0074",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "LeetCode nonstarred cp5"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#lc0074",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "leetcode-number:0162",
+      "title": "LeetCode 0162",
+      "url": "https://cpbook.net/methodstosolve#lc0162",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "LeetCode starred cp5"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#lc0162",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "leetcode-number:0243",
+      "title": "LeetCode 0243",
+      "url": "https://cpbook.net/methodstosolve#lc0243",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "LeetCode nonstarred cp5"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#lc0243",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "leetcode-number:0244",
+      "title": "LeetCode 0244",
+      "url": "https://cpbook.net/methodstosolve#lc0244",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "LeetCode nonstarred cp5"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#lc0244",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "leetcode-number:0274",
+      "title": "LeetCode 0274",
+      "url": "https://cpbook.net/methodstosolve#lc0274",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "LeetCode nonstarred cp5"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#lc0274",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "leetcode-number:0275",
+      "title": "LeetCode 0275",
+      "url": "https://cpbook.net/methodstosolve#lc0275",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "LeetCode nonstarred cp5"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#lc0275",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "leetcode-number:0278",
+      "title": "LeetCode 0278",
+      "url": "https://cpbook.net/methodstosolve#lc0278",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "LeetCode nonstarred cp5"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#lc0278",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "leetcode-number:0367",
+      "title": "LeetCode 0367",
+      "url": "https://cpbook.net/methodstosolve#lc0367",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "LeetCode nonstarred cp5"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#lc0367",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "leetcode-number:0374",
+      "title": "LeetCode 0374",
+      "url": "https://cpbook.net/methodstosolve#lc0374",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "LeetCode nonstarred cp5"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#lc0374",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "leetcode-number:0441",
+      "title": "LeetCode 0441",
+      "url": "https://cpbook.net/methodstosolve#lc0441",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "LeetCode nonstarred cp5"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#lc0441",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "leetcode-number:0506",
+      "title": "LeetCode 0506",
+      "url": "https://cpbook.net/methodstosolve#lc0506",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "LeetCode nonstarred cp5"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#lc0506",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "leetcode-number:0704",
+      "title": "LeetCode 0704",
+      "url": "https://cpbook.net/methodstosolve#lc0704",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "LeetCode nonstarred cp5"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#lc0704",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "leetcode-number:0744",
+      "title": "LeetCode 0744",
+      "url": "https://cpbook.net/methodstosolve#lc0744",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "LeetCode nonstarred cp5"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#lc0744",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "leetcode-number:0849",
+      "title": "LeetCode 0849",
+      "url": "https://cpbook.net/methodstosolve#lc0849",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "LeetCode nonstarred cp5"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#lc0849",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "leetcode-number:0852",
+      "title": "LeetCode 0852",
+      "url": "https://cpbook.net/methodstosolve#lc0852",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "LeetCode nonstarred cp5"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#lc0852",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "leetcode-number:0875",
+      "title": "LeetCode 0875",
+      "url": "https://cpbook.net/methodstosolve#lc0875",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "LeetCode starred cp5"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#lc0875",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "leetcode-number:1011",
+      "title": "LeetCode 1011",
+      "url": "https://cpbook.net/methodstosolve#lc1011",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "LeetCode nonstarred cp5"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#lc1011",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "leetcode-number:1331",
+      "title": "LeetCode 1331",
+      "url": "https://cpbook.net/methodstosolve#lc1331",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "LeetCode nonstarred cp5"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#lc1331",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "leetcode-number:1365",
+      "title": "LeetCode 1365",
+      "url": "https://cpbook.net/methodstosolve#lc1365",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "LeetCode nonstarred cp5"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#lc1365",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "leetcode-number:1887",
+      "title": "LeetCode 1887",
+      "url": "https://cpbook.net/methodstosolve#lc1887",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "LeetCode nonstarred cp5"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#lc1887",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "leetcode-number:2389",
+      "title": "LeetCode 2389",
+      "url": "https://cpbook.net/methodstosolve#lc2389",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "LeetCode nonstarred cp5"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#lc2389",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "leetcode-number:2560",
+      "title": "LeetCode 2560",
+      "url": "https://cpbook.net/methodstosolve#lc2560",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "LeetCode nonstarred cp5"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#lc2560",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "uva:10057",
+      "title": "UVa 10057",
+      "url": "https://cpbook.net/methodstosolve#10057",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "UVa nonstarred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#10057",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "uva:10077",
+      "title": "UVa 10077",
+      "url": "https://cpbook.net/methodstosolve#10077",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "UVa nonstarred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#10077",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "uva:10341",
+      "title": "UVa 10341",
+      "url": "https://cpbook.net/methodstosolve#10341",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "UVa nonstarred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#10341",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "uva:10474",
+      "title": "UVa 10474",
+      "url": "https://cpbook.net/methodstosolve#10474",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "UVa nonstarred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#10474",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "uva:10567",
+      "title": "UVa 10567",
+      "url": "https://cpbook.net/methodstosolve#10567",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "UVa nonstarred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#10567",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "uva:10611",
+      "title": "UVa 10611",
+      "url": "https://cpbook.net/methodstosolve#10611",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "UVa nonstarred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#10611",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "uva:10706",
+      "title": "UVa 10706",
+      "url": "https://cpbook.net/methodstosolve#10706",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "UVa nonstarred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#10706",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "uva:10742",
+      "title": "UVa 10742",
+      "url": "https://cpbook.net/methodstosolve#10742",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "UVa nonstarred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#10742",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "uva:11057",
+      "title": "UVa 11057",
+      "url": "https://cpbook.net/methodstosolve#11057",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "UVa starred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#11057",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "uva:11413",
+      "title": "UVa 11413",
+      "url": "https://cpbook.net/methodstosolve#11413",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "UVa nonstarred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#11413",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "uva:11621",
+      "title": "UVa 11621",
+      "url": "https://cpbook.net/methodstosolve#11621",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "UVa starred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#11621",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "uva:11627",
+      "title": "UVa 11627",
+      "url": "https://cpbook.net/methodstosolve#11627",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "UVa nonstarred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#11627",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "uva:11876",
+      "title": "UVa 11876",
+      "url": "https://cpbook.net/methodstosolve#11876",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "UVa nonstarred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#11876",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "uva:11881",
+      "title": "UVa 11881",
+      "url": "https://cpbook.net/methodstosolve#11881",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "UVa nonstarred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#11881",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "uva:11935",
+      "title": "UVa 11935",
+      "url": "https://cpbook.net/methodstosolve#11935",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "UVa nonstarred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#11935",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "uva:12032",
+      "title": "UVa 12032",
+      "url": "https://cpbook.net/methodstosolve#12032",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "UVa nonstarred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#12032",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "uva:12190",
+      "title": "UVa 12190",
+      "url": "https://cpbook.net/methodstosolve#12190",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "UVa starred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#12190",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "uva:12192",
+      "title": "UVa 12192",
+      "url": "https://cpbook.net/methodstosolve#12192",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "UVa nonstarred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#12192",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "uva:12791",
+      "title": "UVa 12791",
+      "url": "https://cpbook.net/methodstosolve#12791",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "UVa nonstarred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#12791",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "uva:12965",
+      "title": "UVa 12965",
+      "url": "https://cpbook.net/methodstosolve#12965",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "UVa starred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#12965",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "uva:13142",
+      "title": "UVa 13142",
+      "url": "https://cpbook.net/methodstosolve#13142",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "UVa starred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#13142",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "uva:1753",
+      "title": "UVa 1753",
+      "url": "https://cpbook.net/methodstosolve#1753",
+      "kind": "problem",
+      "section": "3.3b, Bisection and BSTA, E",
+      "categories": [
+        "3.3b, Bisection and BSTA, E"
+      ],
+      "source_classes": [
+        "UVa nonstarred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#1753",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "uva:679",
+      "title": "UVa 679",
+      "url": "https://cpbook.net/methodstosolve#679",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "UVa nonstarred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#679",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    },
+    {
+      "id": "uva:957",
+      "title": "UVa 957",
+      "url": "https://cpbook.net/methodstosolve#957",
+      "kind": "problem",
+      "section": "3.3a, Binary Search",
+      "categories": [
+        "3.3a, Binary Search"
+      ],
+      "source_classes": [
+        "UVa nonstarred"
+      ],
+      "source_locator": "https://cpbook.net/methodstosolve#957",
+      "original_url": null,
+      "original_link_state": "not_resolved",
+      "title_state": "identifier_only",
+      "aliases": []
+    }
+  ]
+}

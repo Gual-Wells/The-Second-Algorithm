@@ -1,0 +1,1036 @@
+{
+  "schema_version": 1,
+  "status": "provisional_scope_candidates_not_final_coverage",
+  "generated_date": "2026-10-26",
+  "scope": "binary foundations, implicit/structured arrays, ordered sequences, numeric search and selected concrete compositions",
+  "evidence_policy": "Book locators refer to user-provided private editions. No book text/code copied. Source statements and independent reasoning separated. Current draft presence means symbols/navigation observed, not full semantic revalidation.",
+  "patterns": [
+    {
+      "id": "f-boundary",
+      "title": "有序／分区区间的上下边界",
+      "placement": "main",
+      "relationship": "primitive",
+      "conditions": [
+        "元素按当前比较关系分区；数组随机访问时总O(log n)；空区间合法"
+      ],
+      "decisive_reason": "lower_bound分隔<key与>=key，upper_bound分隔<=key与>key；其余位置/数量问题从这两个半开边界推出。",
+      "suggested_cpp_interface": "int lower_index(span<const int> a, int x); int upper_index(span<const int> a,int x);",
+      "important_variants": [
+        "首末／计数／前驱后继／区间计数是同型派生，不各造模板",
+        "最近值比较lower_bound左右候选；等距规则单独落实",
+        "降序／记录字段／异型查询键需同一个排序与比较关系",
+        "标准库在链表等forward iterator上仍可能线性移动；不要套数组总时耗"
+      ],
+      "evidence": [
+        {
+          "identity": "epi-cpp-2015-v2.0.0:12.1",
+          "locator": {
+            "physical_pages": [
+              201,
+              202
+            ],
+            "printed_pages": [
+              188,
+              189
+            ]
+          },
+          "read": "full_problem_solution_and_listed_variants",
+          "conditions": "非降数组可重复，求首次；另有upper_bound、区间、前缀练习"
+        },
+        {
+          "identity": "leetcode:34",
+          "url": "https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/description/",
+          "read": "official_statement_and_constraints",
+          "conditions": "0<=n<=100000；允许空数组、重复；返回[-1,-1]；O(log n)"
+        },
+        {
+          "identity": "cpp-draft:alg.binary.search",
+          "url": "https://eel.is/c++draft/alg.binary.search",
+          "read": "whole_section",
+          "conditions": "partition前提、比较器等价、forward vs random access"
+        }
+      ],
+      "alternative_relationships": [
+        "只查存在性且无需顺序时哈希是不同预处理选择；动态有序集合应考虑树结构成员lower_bound"
+      ],
+      "current_draft_presence": "lower_index / upper_index已存在；本轮只查符号，不声称重验所有语义",
+      "implementation_status": "research_only_not_newly_implemented_by_this_agent"
+    },
+    {
+      "id": "f-prefix",
+      "title": "字典序字符串中的前缀范围",
+      "placement": "main_local_variant",
+      "relationship": "condition_variant_of:f-boundary",
+      "conditions": [
+        "字符串按与查询一致的字典序排序；所有prefix匹配连续"
+      ],
+      "decisive_reason": "lower_bound(prefix)是第一个可能匹配项；返回整个区间时对截断到prefix长度的视图求上下边界，字符比较成本不能忽略。",
+      "suggested_cpp_interface": "pair<int,int> prefix_range(const vector<string>& words,string_view prefix);",
+      "important_variants": [
+        "只求存在：找首候选再检查starts_with",
+        "LC1268每次仅取最小3项，扫描首候选之后最多3项",
+        "不能不说明字母表就用prefix最后字符+1制造上界"
+      ],
+      "evidence": [
+        {
+          "identity": "epi-cpp-2015-v2.0.0:12.1-prefix-variant",
+          "locator": {
+            "physical_pages": [
+              202
+            ],
+            "printed_pages": [
+              189
+            ]
+          },
+          "read": "full_problem_solution_and_listed_variants",
+          "conditions": "已排序字符串数组，判断某字符串是否是某项前缀"
+        },
+        {
+          "identity": "leetcode:1268",
+          "url": "https://leetcode.com/problems/search-suggestions-system/description/",
+          "read": "official_statement_and_constraints",
+          "conditions": "n<=1000；总字符<=20000；小写字母；每个输入前缀返回字典序最小至多3项"
+        }
+      ],
+      "alternative_relationships": [
+        "Trie是独立索引结构；排序后二分更适合静态列表，不以这道题自动推广动态更新性能"
+      ],
+      "current_draft_presence": "当前试章没有专门承载前缀的正文或接口",
+      "implementation_status": "implemented_in_foundations_cpp_and_independently_tested"
+    },
+    {
+      "id": "f-fixed-point",
+      "title": "隐式有序差值：A[i]=i",
+      "placement": "main",
+      "relationship": "independent_transformation",
+      "conditions": [
+        "递增且互异的整数数组；索引为0基"
+      ],
+      "decisive_reason": "A[i+1]>=A[i]+1，故A[i]-i非降。求其零点或首个非负后核对。",
+      "suggested_cpp_interface": "int fixed_point_distinct(const vector<int>& a);",
+      "important_variants": [
+        "重复后差值可能下降，不能保持O(log n)的单侧二分",
+        "重复版递归剪枝：left到min(mid-1,A[mid])；right从max(mid+1,A[mid])；最坏O(n)",
+        "求任意固定点与求首个固定点输出条件不同",
+        "EPI印刷190页的差值至少增1是原文错误，实际仅非降"
+      ],
+      "evidence": [
+        {
+          "identity": "epi-cpp-2015-v2.0.0:12.2",
+          "locator": {
+            "physical_pages": [
+              202,
+              203
+            ],
+            "printed_pages": [
+              189,
+              190
+            ]
+          },
+          "read": "full_problem_solution_and_listed_variants",
+          "conditions": "sorted distinct整数；返回任意A[i]=i的索引；书内追问允许重复"
+        }
+      ],
+      "alternative_relationships": [
+        "重复版保留分治剪枝作为条件变种；线性扫描作为最坏复杂度对照"
+      ],
+      "current_draft_presence": "当前试章缺失",
+      "implementation_status": "implemented_in_foundations_cpp_and_independently_tested"
+    },
+    {
+      "id": "f-missing-rank",
+      "title": "排序缺失数量转索引边界",
+      "placement": "main",
+      "relationship": "related_transformation_to:f-fixed-point",
+      "conditions": [
+        "正整数严格递增；k>=1；缺失从1开始计"
+      ],
+      "decisive_reason": "第i项之前缺失A[i]-(i+1)个；找首个缺失数>=k的i，答案为i+k，i可等于n。",
+      "suggested_cpp_interface": "long long kth_missing_positive(const vector<int>& a,long long k);",
+      "important_variants": [
+        "缺失从A[0]开始则计数改为A[i]-A[0]-i，尾部公式也要同步",
+        "允许重复必须去重或重新定义重数，不能照搬严格递增推导"
+      ],
+      "evidence": [
+        {
+          "identity": "leetcode:1539",
+          "url": "https://leetcode.com/problems/kth-missing-positive-number/description/",
+          "read": "official_statement_and_constraints",
+          "conditions": "n<=1000；A[i],k<=1000；严格递增；要求可低于O(n)"
+        }
+      ],
+      "alternative_relationships": [
+        "线性扫描也是有效解，但大规模多查询时边界形式不同"
+      ],
+      "current_draft_presence": "kth_missing_positive已存在",
+      "implementation_status": "research_only_not_newly_implemented_by_this_agent"
+    },
+    {
+      "id": "f-closest-window",
+      "title": "有序数组k最近数的窗口起点",
+      "placement": "main",
+      "relationship": "independent_boundary_predicate",
+      "conditions": [
+        "非降整数数组；1<=k<=n；等距取小值；输出也排序"
+      ],
+      "decisive_reason": "最优k项可取连续窗口；若x-A[mid]>A[mid+k]-x，右侧替换更优，起点右移，否则保留左侧。",
+      "suggested_cpp_interface": "int closest_window_left(const vector<int>& a,int k,int x);",
+      "important_variants": [
+        "比较式不能随意替为绝对值比较；端点位于同侧时原交换准则仍成立",
+        "重复值按元素重数取，等距规则决定是否用严格>",
+        "O(log(n-k+1))确定起点，输出本身O(k)"
+      ],
+      "evidence": [
+        {
+          "identity": "leetcode:658",
+          "url": "https://leetcode.com/problems/find-k-closest-elements/description/",
+          "read": "official_statement_and_constraints",
+          "conditions": "n<=10000；非降可重复；值与x在[-10000,10000]"
+        }
+      ],
+      "alternative_relationships": [
+        "lower_bound后双侧扩张O(log n+k)；删两端O(n-k)；堆适合输入未排序的不同条件"
+      ],
+      "current_draft_presence": "closest_window_left已存在",
+      "implementation_status": "research_only_not_newly_implemented_by_this_agent"
+    },
+    {
+      "id": "f-rotated-min",
+      "title": "旋转有序数组最小值",
+      "placement": "main",
+      "relationship": "structural_elimination",
+      "conditions": [
+        "某个非降有序数组的旋转；非空"
+      ],
+      "decisive_reason": "与右端比较：mid更大则最小在右；mid更小则答案不在(mid,r]；相等时仅能删除一个等值端点。",
+      "suggested_cpp_interface": "int rotated_min_index(const vector<int>& a);",
+      "important_variants": [
+        "互异O(log n)，重复最坏O(n)",
+        "有重复时返回某个最小值位置，不保证它是有序段真实切口",
+        "[0,0,1,0]的最小值查询可能返回0，不可据此把原数组当作一个有序段"
+      ],
+      "evidence": [
+        {
+          "identity": "epi-cpp-2015-v2.0.0:12.3",
+          "locator": {
+            "physical_pages": [
+              203,
+              204
+            ],
+            "printed_pages": [
+              190,
+              191
+            ]
+          },
+          "read": "full_problem_solution_and_listed_variants",
+          "conditions": "先假设互异；给出隐藏0与其余1的线性下界"
+        },
+        {
+          "identity": "leetcode:154",
+          "url": "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/description/",
+          "read": "official_statement_and_constraints",
+          "conditions": "n<=5000；允许重复；返回最小值而非旋转切口"
+        }
+      ],
+      "alternative_relationships": [
+        "线性min_element是重复最坏情形的有效下界对照"
+      ],
+      "current_draft_presence": "rotated_min_index已存在",
+      "implementation_status": "research_only_not_newly_implemented_by_this_agent"
+    },
+    {
+      "id": "f-rotated-search",
+      "title": "旋转数组目标查找",
+      "placement": "main",
+      "relationship": "related_structure_distinct_goal_from:f-rotated-min",
+      "conditions": [
+        "非空旋转有序数组；目标存在返回某位置或布尔值"
+      ],
+      "decisive_reason": "确定哪半有序后按区间包含关系消除；当重复使左右端与mid相等无法判断有序侧，先缩等值端点。",
+      "suggested_cpp_interface": "int rotated_search(const vector<int>& a,int x);",
+      "important_variants": [
+        "LC33互异且要求O(log n)；LC81允许重复，最坏线性",
+        "任意匹配位置不等于最小原索引；有重复时需求若改首项必须补规则",
+        "先最小再拆两段只在切口语义真正成立时可用"
+      ],
+      "evidence": [
+        {
+          "identity": "leetcode:33",
+          "url": "https://leetcode.com/problems/search-in-rotated-sorted-array/description/",
+          "read": "official_statement_and_constraints",
+          "conditions": "n<=5000；全异；O(log n)；返回索引"
+        },
+        {
+          "identity": "leetcode:81",
+          "url": "https://leetcode.com/problems/search-in-rotated-sorted-array-ii/description/",
+          "read": "official_statement_and_constraints",
+          "conditions": "n<=5000；可重复；返回布尔；追问最坏复杂度"
+        }
+      ],
+      "alternative_relationships": [
+        "互异可先找切口再在虚拟有序序列搜索；与单次判有序侧是两种实现"
+      ],
+      "current_draft_presence": "rotated_search已存在",
+      "implementation_status": "research_only_not_newly_implemented_by_this_agent"
+    },
+    {
+      "id": "f-local-extremum",
+      "title": "任意多峰序列找局部峰／谷",
+      "placement": "main",
+      "relationship": "existential_halving_not_global_monotone",
+      "conditions": [
+        "严格峰版要求相邻不等，外侧为负无穷；非严格峰/谷需说明边界定义"
+      ],
+      "decisive_reason": "往较高邻居一侧总能保留某个峰；不要求坡向对全数组单调。谷可反转比较。",
+      "suggested_cpp_interface": "int peak_index(const vector<int>& a); int local_min_index(const vector<int>& a);",
+      "important_variants": [
+        "严格山脉只一峰，该峰才同时是全局最大；一般多峰不能承诺全局最大",
+        "存在平台时可以求非严格峰，严格峰不保证存在",
+        "EPI谷练习要求A0>=A1及A[n-2]<=A[n-1]，是内部谷的边界条件"
+      ],
+      "evidence": [
+        {
+          "identity": "leetcode:162",
+          "url": "https://leetcode.com/problems/find-peak-element/description/",
+          "read": "official_statement_and_constraints",
+          "conditions": "n<=1000；相邻不等；求任意严格峰；O(log n)"
+        },
+        {
+          "identity": "epi-cpp-2015-v2.0.0:12.1-local-min-variant",
+          "locator": {
+            "physical_pages": [
+              202
+            ],
+            "printed_pages": [
+              189
+            ]
+          },
+          "read": "full_problem_solution_and_listed_variants",
+          "conditions": "求非严格局部谷；特定两端方向"
+        }
+      ],
+      "alternative_relationships": [
+        "扫描求全局极值解决不同目标，不能冒充局部峰二分的优化"
+      ],
+      "current_draft_presence": "peak_index已存在；谷的条件差异尚未明确承载",
+      "implementation_status": "research_only_not_newly_implemented_by_this_agent"
+    },
+    {
+      "id": "f-mountain-target",
+      "title": "严格山脉数组的目标查找",
+      "placement": "main",
+      "relationship": "composition_of_peak_and_ordered_boundaries",
+      "conditions": [
+        "严格递增后严格递减，峰在内部；相同值可能出现在峰两侧"
+      ],
+      "decisive_reason": "先找唯一峰；在左升序段搜索，再右降序段搜索；先左后右满足最小原索引。",
+      "suggested_cpp_interface": "int mountain_search(const vector<int>& a,int x); // reader版另计get调用",
+      "important_variants": [
+        "仅一般局部多峰数组不能据一个峰拆成两有序段",
+        "LC1095限制100次get，需考虑缓存重复读取，不能只有大O运行时间",
+        "同一目标两侧均存在时须返回左侧"
+      ],
+      "evidence": [
+        {
+          "identity": "leetcode:1095",
+          "url": "https://leetcode.com/problems/find-in-mountain-array/description/",
+          "read": "official_statement_and_constraints",
+          "conditions": "3<=n<=10000；通过MountainArray接口；get最多100次；最小索引"
+        },
+        {
+          "identity": "epi-cpp-2015-v2.0.0:12.3-mountain-variant",
+          "locator": {
+            "physical_pages": [
+              204
+            ],
+            "printed_pages": [
+              191
+            ]
+          },
+          "read": "full_problem_solution_and_listed_variants",
+          "conditions": "严格增后严格减，求最大值"
+        }
+      ],
+      "alternative_relationships": [
+        "线性查找不满足接口预算；普通数组版与受限reader版是重要实现差异"
+      ],
+      "current_draft_presence": "普通vector版本mountain_search存在；reader调用预算未承载",
+      "implementation_status": "research_only_not_newly_implemented_by_this_agent"
+    },
+    {
+      "id": "f-singleton-parity",
+      "title": "成对有序数组的配对失效点",
+      "placement": "main",
+      "relationship": "independent_structural_predicate",
+      "conditions": [
+        "有序；恰一个元素一次，其余全部恰两次；数组长度奇数"
+      ],
+      "decisive_reason": "单次值前配对从偶索引开始，之后从奇索引开始；mid^1提供预期配对对象。",
+      "suggested_cpp_interface": "int single_unpaired(const vector<int>& a);",
+      "important_variants": [
+        "不能把三次组或多个单次值直接代入mid^1",
+        "XOR虽得值但O(n)，不满足原题O(log n)"
+      ],
+      "evidence": [
+        {
+          "identity": "leetcode:540",
+          "url": "https://leetcode.com/problems/single-element-in-a-sorted-array/description/",
+          "read": "official_statement_and_constraints",
+          "conditions": "n<=100000；要求O(log n)时间、O(1)额外空间"
+        }
+      ],
+      "alternative_relationships": [
+        "逐对扫描和XOR只作同目标复杂度对照"
+      ],
+      "current_draft_presence": "single_unpaired存在",
+      "implementation_status": "research_only_not_newly_implemented_by_this_agent"
+    },
+    {
+      "id": "f-flat-matrix",
+      "title": "整体行优先有序矩阵的虚拟展平",
+      "placement": "main",
+      "relationship": "accessor_variant_of:f-boundary",
+      "conditions": [
+        "每行非降，后一行首项大于前一行末项；矩形"
+      ],
+      "decisive_reason": "位置t映射到[t/cols][t%cols]后整体有序；普通lower_bound可用。",
+      "suggested_cpp_interface": "bool flat_matrix_search(const vector<vector<int>>& a,int x);",
+      "important_variants": [
+        "仅行列分别有序不保证展平有序",
+        "先二分所属行再在行内二分是等价实现",
+        "矩形大小乘积与索引类型按约束选取"
+      ],
+      "evidence": [
+        {
+          "identity": "leetcode:74",
+          "url": "https://leetcode.com/problems/search-a-2d-matrix/description/",
+          "read": "official_statement_and_constraints",
+          "conditions": "m,n<=100；要求O(log(m*n))；行间严格连接"
+        }
+      ],
+      "alternative_relationships": [
+        "阶梯搜索在此仍正确但不利用更强有序性"
+      ],
+      "current_draft_presence": "flat_matrix_search存在",
+      "implementation_status": "research_only_not_newly_implemented_by_this_agent"
+    },
+    {
+      "id": "f-rowwise-matrix",
+      "title": "只有各行有序的多序列查找",
+      "placement": "main_local_variant",
+      "relationship": "weaker_condition_than:f-flat-matrix",
+      "conditions": [
+        "每一行独立非降；跨行顺序未知，可允许不等长行"
+      ],
+      "decisive_reason": "每行单独二分；没有跨行信息就不能扔掉未经排除的行。",
+      "suggested_cpp_interface": "bool row_matrix_search(const vector<vector<int>>& rows,int x);",
+      "important_variants": [
+        "总复杂度sum log(row_length+1)，不是O(log(total))",
+        "若另有行列有序可改阶梯／更专用算法；不等长需避免虚拟矩形展平"
+      ],
+      "evidence": [
+        {
+          "identity": "epi-cpp-2015-v2.0.0:12.6",
+          "locator": {
+            "physical_pages": [
+              207,
+              208,
+              209
+            ],
+            "printed_pages": [
+              194,
+              195,
+              196
+            ]
+          },
+          "read": "full_problem_solution_and_listed_variants",
+          "conditions": "解答先列逐行O(m log n)，后以更强行列单调改进"
+        }
+      ],
+      "alternative_relationships": [
+        "堆归并适合排名问题，不是单次存在查询的必需开销"
+      ],
+      "current_draft_presence": "row_matrix_search存在",
+      "implementation_status": "research_only_not_newly_implemented_by_this_agent"
+    },
+    {
+      "id": "f-staircase",
+      "title": "行列分别有序矩阵的角点消除",
+      "placement": "main_comparison",
+      "relationship": "alternative_algorithm_not_binary_search",
+      "conditions": [
+        "各行各列非降；矩形"
+      ],
+      "decisive_reason": "右上角小于目标删该行，大于目标删该列，每步去掉一整行或列。",
+      "suggested_cpp_interface": "bool matrix_staircase(const vector<vector<int>>& a,int x);",
+      "important_variants": [
+        "O(m+n)并非任何长宽比都优于逐行/逐列二分；可比较min(m log n,n log m,m+n)",
+        "无全局行间连接时不能展平二分"
+      ],
+      "evidence": [
+        {
+          "identity": "epi-cpp-2015-v2.0.0:12.6",
+          "locator": {
+            "physical_pages": [
+              207,
+              208,
+              209
+            ],
+            "printed_pages": [
+              194,
+              195,
+              196
+            ]
+          },
+          "read": "full_problem_solution_and_listed_variants",
+          "conditions": "完整分析和实现"
+        },
+        {
+          "identity": "leetcode:240",
+          "url": "https://leetcode.com/problems/search-a-2d-matrix-ii/description/",
+          "read": "official_statement_and_constraints",
+          "conditions": "m,n<=300；行列升序；目标查询"
+        }
+      ],
+      "alternative_relationships": [
+        "逐行或逐列二分是同目标真实替代；本模板诚实标记为角点消除"
+      ],
+      "current_draft_presence": "matrix_staircase存在",
+      "implementation_status": "research_only_not_newly_implemented_by_this_agent"
+    },
+    {
+      "id": "f-two-sorted-kth",
+      "title": "两个有序数组的第k小与中位数",
+      "placement": "main",
+      "relationship": "partition_boundary",
+      "conditions": [
+        "两数组各非降；可重复；1<=k<=m+n；其中一个可空"
+      ],
+      "decisive_reason": "左侧总取k个，A取i则B取k-i；只要两侧交叉最大值不越界，左侧最大就是第k小。",
+      "suggested_cpp_interface": "long long kth_two_sorted(const vector<int>& a,const vector<int>& b,int k);",
+      "important_variants": [
+        "i搜索区间[max(0,k-n),min(m,k)]；短数组上搜得到O(log(min(m,n)+1))",
+        "中位数是中间一或两项，重复按重数，不是distinct排名",
+        "按约束用哨兵或边界分支；总长奇偶和求均值的宽度须一致"
+      ],
+      "evidence": [
+        {
+          "identity": "epi-cpp-2015-v2.0.0:25.16",
+          "locator": {
+            "physical_pages": [
+              471,
+              472
+            ],
+            "printed_pages": [
+              458,
+              459
+            ]
+          },
+          "read": "full_problem_solution_and_listed_variants",
+          "conditions": "完整问题、分割推导和代码；O(log k)表述"
+        },
+        {
+          "identity": "leetcode:4",
+          "url": "https://leetcode.com/problems/median-of-two-sorted-arrays/description/",
+          "read": "official_statement_and_constraints",
+          "conditions": "m,n<=1000；总长>=1；允许空一侧；要求O(log(m+n))"
+        }
+      ],
+      "alternative_relationships": [
+        "归并到第k项O(k)；二数组每次丢弃k/2项是不同但同目标实现；堆更适合多路而非仅两路"
+      ],
+      "current_draft_presence": "kth_two_sorted存在",
+      "implementation_status": "research_only_not_newly_implemented_by_this_agent"
+    },
+    {
+      "id": "f-multisequence-rank",
+      "title": "多有序序列第k小：值域上累计排名",
+      "placement": "main_related",
+      "relationship": "counting_search_distinct_from:f-two-sorted-kth",
+      "conditions": [
+        "有限整数值域；各行有序；k按重数计算"
+      ],
+      "decisive_reason": "count_le(x)=sum每行upper_bound(x)单调；首个累计数>=k的值就是第k小。",
+      "suggested_cpp_interface": "long long kth_sorted_rows(const vector<vector<int>>& rows,long long k);",
+      "important_variants": [
+        "行列都单调时可阶梯计数O(m+n)，仅各行有序时必须逐行upper_bound",
+        "LC378是第k项不是第k个不同值；大整数值域宽度参与log范围",
+        "实数候选不能靠任意容差保证返回精确某个原元素，需另定选择方法"
+      ],
+      "evidence": [
+        {
+          "identity": "leetcode:378",
+          "url": "https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/description/",
+          "read": "official_statement_and_constraints",
+          "conditions": "n<=300；值[-1e9,1e9]；行列非降；内存优于n^2"
+        }
+      ],
+      "alternative_relationships": [
+        "k路堆归并O(k log m)是独立算法；一般矩阵线性选择属于扩展，不据题面链接声称已学完"
+      ],
+      "current_draft_presence": "已有行列矩阵matrix_le_count/kth_matrix_value；仅行有序计数未单独写",
+      "implementation_status": "research_only_not_newly_implemented_by_this_agent"
+    },
+    {
+      "id": "f-integer-inverse",
+      "title": "整数单调逆问题：平方根",
+      "placement": "main",
+      "relationship": "discrete_answer_boundary",
+      "conditions": [
+        "x非负整数；求最大r使r*r<=x"
+      ],
+      "decisive_reason": "可行谓词对r为真前缀，边界为floor(sqrt x)；乘法比较不能超出实际整数宽度。",
+      "suggested_cpp_interface": "long long integer_sqrt(long long x);",
+      "important_variants": [
+        "mid>0时用mid<=x/mid避免平方溢出",
+        "x=0单独处理或区间自然覆盖，不能除0",
+        "EPI用long乘法在Windows long32不能保证足够宽；不是可照抄代码",
+        "完全平方判断在最终根上精确核对；一般p次根需安全乘方比较"
+      ],
+      "evidence": [
+        {
+          "identity": "epi-cpp-2015-v2.0.0:12.4",
+          "locator": {
+            "physical_pages": [
+              204,
+              205
+            ],
+            "printed_pages": [
+              191,
+              192
+            ]
+          },
+          "read": "full_problem_solution_and_listed_variants",
+          "conditions": "非负整数平方根；原代码long mid_squared"
+        },
+        {
+          "identity": "leetcode:69",
+          "url": "https://leetcode.com/problems/sqrtx/description/",
+          "read": "official_statement_and_constraints",
+          "conditions": "x<=2^31-1；不可用pow等幂函数"
+        }
+      ],
+      "alternative_relationships": [
+        "Newton迭代是不同数值算法；浮点sqrt后强转需精确修正才满足整数目标"
+      ],
+      "current_draft_presence": "integer_sqrt存在",
+      "implementation_status": "research_only_not_newly_implemented_by_this_agent"
+    },
+    {
+      "id": "f-real-monotone",
+      "title": "实数单调边界／逆运算",
+      "placement": "main",
+      "relationship": "continuous_threshold_search",
+      "conditions": [
+        "有效初始夹区间；单调判定；误差度量明确"
+      ],
+      "decisive_reason": "保留可行与不可行端点或目标大小两端，使区间宽度指数缩小。",
+      "suggested_cpp_interface": "template<class Pred> double real_first(double lo,double hi,Pred feasible);",
+      "important_variants": [
+        "sqrt(x),0<x<1时答案大于x，不能用[0,x]",
+        "绝对误差与相对误差不同；迭代次数应联系初始宽度/容许误差",
+        "贷款月供、正数除法是逆单调函数的同型例证，有时有闭式解",
+        "同一实数模板不能假定50轮适用于任意1e18量级初始区间"
+      ],
+      "evidence": [
+        {
+          "identity": "epi-cpp-2015-v2.0.0:12.5",
+          "locator": {
+            "physical_pages": [
+              205,
+              206,
+              207
+            ],
+            "printed_pages": [
+              192,
+              193,
+              194
+            ]
+          },
+          "read": "full_problem_solution_and_listed_variants",
+          "conditions": "实数平方根及不用除法求x/y的变种"
+        },
+        {
+          "identity": "cp4-book1-2020:3.3.1-bisection-loan",
+          "locator": {
+            "physical_pages": [
+              179,
+              180
+            ],
+            "printed_pages": [
+              149,
+              150
+            ]
+          },
+          "read": "full_section_relevant_passage",
+          "conditions": "贷款m期末清零，求月供"
+        }
+      ],
+      "alternative_relationships": [
+        "闭式解或库sqrt是可用时优先考虑的替代，不为练二分强加搜索"
+      ],
+      "current_draft_presence": "real_first存在",
+      "implementation_status": "research_only_not_newly_implemented_by_this_agent"
+    },
+    {
+      "id": "f-real-root",
+      "title": "连续函数异号夹根",
+      "placement": "main",
+      "relationship": "different_correctness_from:f-real-monotone",
+      "conditions": [
+        "f连续；f(lo),f(hi)异号或端点已为0"
+      ],
+      "decisive_reason": "中值定理保证异号两端夹着某个根；按符号保留一对异号端点，不要求全局单调。",
+      "suggested_cpp_interface": "template<class F> double bracket_root(double lo,double hi,F f);",
+      "important_variants": [
+        "只能承诺某个根，不保证最小根或所有根",
+        "同号不表示无根；偶重根可能不穿过0",
+        "避免以f(lo)*f(mid)溢出的乘法判断符号",
+        "函数值很小不等于横轴误差很小；需区间宽度或适当误差判定"
+      ],
+      "evidence": [
+        {
+          "identity": "cp-algorithms:binary-search-continuous",
+          "url": "https://cp-algorithms.com/num_methods/binary_search.html#continuous-search",
+          "read": "full_continuous_search_section",
+          "conditions": "连续，不要求单调；以奇次多项式示例"
+        }
+      ],
+      "alternative_relationships": [
+        "Newton更快但依赖导数/初值及收敛；三分用于单峰最优化而非求根"
+      ],
+      "current_draft_presence": "bracket_root存在",
+      "implementation_status": "research_only_not_newly_implemented_by_this_agent"
+    },
+    {
+      "id": "f-unknown-reader",
+      "title": "未知长度有序接口：倍增确定搜索区间",
+      "placement": "main_local_variant",
+      "relationship": "bound_discovery_and_accessor_conditions",
+      "conditions": [
+        "可按索引读取的非降序列；越界能可靠识别；索引有可表示上限"
+      ],
+      "decisive_reason": "不断倍增直到读取值>=target或越界，再只查最后形成的区间；不用先求总长度。",
+      "suggested_cpp_interface": "template<class Reader> optional<long long> search_unknown(Reader read,long long target,long long index_cap); // read返回optional值",
+      "important_variants": [
+        "越界异常／valid标志／题目专用sentinel是不同接口条件，不把合法最大值当无穷",
+        "索引翻倍前截断到cap避免溢出；无可行端点时应返回无解或明确cap限制",
+        "EPI25.15原代码p=0会构造1<<(p-1)，负移位不能照抄"
+      ],
+      "evidence": [
+        {
+          "identity": "epi-cpp-2015-v2.0.0:25.15",
+          "locator": {
+            "physical_pages": [
+              470,
+              471
+            ],
+            "printed_pages": [
+              457,
+              458
+            ]
+          },
+          "read": "full_problem_solution_and_listed_variants",
+          "conditions": "完整已读；未知长度，越界抛异常；书代码已核对原图"
+        }
+      ],
+      "alternative_relationships": [
+        "已知硬上限可直接二分；若只允许顺序流访问就不能假定O(1)随机访问"
+      ],
+      "current_draft_presence": "expand_first只有数值寻界，reader语义是新变种",
+      "implementation_status": "implemented_in_foundations_cpp_and_independently_tested"
+    },
+    {
+      "id": "f-subsequence-index",
+      "title": "静态出现位置表＋后继查询",
+      "placement": "extension",
+      "relationship": "composition_of_occurrence_index_and:f-boundary",
+      "conditions": [
+        "固定源串，多次短子序列匹配；每个字符出现位置已排序"
+      ],
+      "decisive_reason": "逐字符upper_bound到上次位置之后的最早出现；更早匹配不会阻碍余下匹配。",
+      "suggested_cpp_interface": "optional<pair<int,int>> subsequence_span(const array<vector<int>,52>& pos,string_view query);",
+      "important_variants": [
+        "原题返回最小起点，起点相同再最小终点；最早贪心自然满足",
+        "字母表是52个大小写ASCII，不能默认26小写",
+        "预处理O(n)，一次O(|q| log n)；若改动态源串需不同结构"
+      ],
+      "evidence": [
+        {
+          "identity": "uva:10567",
+          "url": "https://onlinejudge.org/external/105/10567.pdf",
+          "read": "whole_official_statement",
+          "conditions": "|S|<=1e6；Q<=3500；|SS|<=100；52字母；字典序(start,end)最小"
+        }
+      ],
+      "alternative_relationships": [
+        "每次双指针扫描O(n)；next表用更高空间换O(|q|)查询"
+      ],
+      "current_draft_presence": "当前试章缺失",
+      "implementation_status": "implemented_in_foundations_cpp_and_independently_tested"
+    },
+    {
+      "id": "f-monotone-path",
+      "title": "DFS活动根路径上的边界查询",
+      "placement": "extension",
+      "relationship": "binary_search_on_implicit_sorted_path",
+      "conditions": [
+        "树根到叶的权值单调；查询已离线挂在节点；祖先是否含自身须明确"
+      ],
+      "decisive_reason": "DFS维护当前路径数组，入栈/回溯弹栈；在查询节点对活动有序路径lower_bound，复用树遍历。",
+      "suggested_cpp_interface": "vector<int> first_ancestor_at_least(tree,weights,queries,bool include_self);",
+      "important_variants": [
+        "n<=80000,q<=20000是CP4书述规模；总O(n+q log n)",
+        "proper ancestor需在排除当前节点的路径上查",
+        "原始赛题尚未获取，书中排除自身文字和包含current路径算法有语义缺口，不能自称官方确认"
+      ],
+      "evidence": [
+        {
+          "identity": "cp4-book1-2020:3.3.1-My-Ancestor",
+          "locator": {
+            "physical_pages": [
+              178,
+              179
+            ],
+            "printed_pages": [
+              148,
+              149
+            ]
+          },
+          "read": "full_section_relevant_passage",
+          "conditions": "Thailand ICPC National Contest2009书内完整简述与解法"
+        }
+      ],
+      "alternative_relationships": [
+        "在线查询可用二进制提升；无路径单调性不能lower_bound，需别的数据结构"
+      ],
+      "current_draft_presence": "当前试章缺失；扩展不应只填树章节名冒充已有承载",
+      "implementation_status": "research_only_not_newly_implemented_by_this_agent"
+    },
+    {
+      "id": "f-peak-2d",
+      "title": "二维矩阵找局部峰",
+      "placement": "extension",
+      "relationship": "existential_halving_with_column_max",
+      "conditions": [
+        "不要求行列有序；四邻域峰；严格版相邻不等且外边界更小"
+      ],
+      "decisive_reason": "中列先求全局最大，已控制上下邻居；若左右存在更高邻居，保留那侧半矩阵，否则此项是二维峰。",
+      "suggested_cpp_interface": "pair<int,int> peak2d(const vector<vector<int>>& a);",
+      "important_variants": [
+        "中列某局部峰不足以替代中列全局最大；MIT原讲义给失败尝试与反例",
+        "O(rows log cols)或转置版本；无需行列排序",
+        "MIT非严格峰与LC1901严格峰的相邻不等条件不同，保留条件差异"
+      ],
+      "evidence": [
+        {
+          "identity": "leetcode:1901",
+          "url": "https://leetcode.com/problems/find-a-peak-element-ii/description/",
+          "read": "official_statement_and_constraints",
+          "conditions": "m,n<=500；相邻不等；所有值>=1，边界-1；要求m log n或n log m"
+        },
+        {
+          "identity": "mit-6.006-fall2011-lecture1",
+          "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/c32185c7158955425455159a8455298b_MIT6_006F11_lec01.pdf",
+          "read": "all_6_pages_and_visual_pages_4_5",
+          "conditions": "1D与2D非严格峰；中列全局最大分治及错误局部峰替代"
+        }
+      ],
+      "alternative_relationships": [
+        "贪心爬坡最坏可遍历矩阵；它不提供二分复杂度"
+      ],
+      "current_draft_presence": "当前试章缺失",
+      "implementation_status": "implemented_in_foundations_cpp_and_independently_tested"
+    },
+    {
+      "id": "f-matrix-square",
+      "title": "行列有序矩阵内值域受限最大正方形",
+      "placement": "extension",
+      "relationship": "composition_of_ordered_boundary_and_extreme_corners",
+      "conditions": [
+        "矩形各行各列非降；要求正方形内每项都在[L,U]"
+      ],
+      "decisive_reason": "每行找首个>=L的位置；方块最小在左上最大在右下，只查对角终点<=U即可判断长度。",
+      "suggested_cpp_interface": "int largest_square_in_range(const vector<vector<int>>& a,int low,int high);",
+      "important_variants": [
+        "边长二分是可用解；维护当前最佳并只扩张，可消去每行再二分的一重log",
+        "n,m<=500,q<=10000，查询多，应比较实际复杂度",
+        "仅行有序时左右角不足以约束所有行，不能复用该判定"
+      ],
+      "evidence": [
+        {
+          "identity": "uva:12192",
+          "url": "https://onlinejudge.org/external/121/12192.pdf",
+          "read": "both_pages_whole_official_statement",
+          "conditions": "行列非降；N,M<=500；Q<=10000；0<=L<=U<=1e5"
+        },
+        {
+          "identity": "cp4-book1-2020:3.3.3-directory",
+          "locator": {
+            "physical_pages": [
+              183
+            ],
+            "printed_pages": [
+              153
+            ]
+          },
+          "read": "full_section_relevant_passage",
+          "conditions": "目录列为lower_bound应用；原题随后独立实读"
+        }
+      ],
+      "alternative_relationships": [
+        "行首lower_bound+全局best扩张为更优替代；不因目录标二分而强加所有维度都二分"
+      ],
+      "current_draft_presence": "当前试章缺失",
+      "implementation_status": "research_only_not_newly_implemented_by_this_agent"
+    },
+    {
+      "id": "f-h-index",
+      "title": "有序引用数与剩余篇数的交点",
+      "placement": "main_local_variant",
+      "relationship": "implicit_monotone_predicate",
+      "conditions": [
+        "citations非降且非负"
+      ],
+      "decisive_reason": "citations[i]>=n-i随i单调，首个满足位置给出最大可行篇数n-i。",
+      "suggested_cpp_interface": "int h_index_sorted(const vector<int>& citations);",
+      "important_variants": [
+        "输入未排序需先排序计入成本；或桶计数线性处理",
+        "空数组可自然扩展为0；正式LC275非空"
+      ],
+      "evidence": [
+        {
+          "identity": "leetcode:275",
+          "url": "https://leetcode.com/problems/h-index-ii/description/",
+          "read": "official_statement_and_constraints",
+          "conditions": "n<=1e5；非降；引用非负；要求O(log n)"
+        }
+      ],
+      "alternative_relationships": [
+        "未排序H-index可以桶计数O(n)，不是排序后二分的无成本同型"
+      ],
+      "current_draft_presence": "new work implementation",
+      "implementation_status": "implemented_and_independently_tested"
+    },
+    {
+      "id": "f-prefix-sum-boundary",
+      "title": "非负前缀和上的阈值位置与区间右端",
+      "placement": "main_local_variant",
+      "relationship": "prefix_sum_plus_ordered_boundary",
+      "conditions": [
+        "原数组非负；前缀和sum[0]=0且用足够宽整数"
+      ],
+      "decisive_reason": "非负性使前缀和非降；达到阈值找lower_bound；固定左端后查sum[r]>=sum[l]+target。",
+      "suggested_cpp_interface": "first_prefix_at_least(sum,target); min_nonnegative_subarray_len(a,target);",
+      "important_variants": [
+        "零导致重复但不破坏边界；target>0时最短子数组无解返回0",
+        "LC209正数可用双指针O(n)，前缀二分O(n log n)是其明确follow-up",
+        "负数会破坏前缀有序，不能直接沿用"
+      ],
+      "evidence": [
+        {
+          "identity": "leetcode:209",
+          "url": "https://leetcode.com/problems/minimum-size-subarray-sum/description/",
+          "read": "whole_official_statement_constraints_and_followup",
+          "conditions": "n<=1e5；nums正整数；target<=1e9；明确要求另一种n log n解"
+        }
+      ],
+      "alternative_relationships": [
+        "非负滑动窗口可线性；含负数的目标需其他有序/单调队列结构，不在此假装覆盖"
+      ],
+      "current_draft_presence": "new work implementation",
+      "implementation_status": "implemented_and_independently_tested"
+    },
+    {
+      "id": "f-budget-count",
+      "title": "任意挑选的最大数量：排序成本前缀",
+      "placement": "main_local_variant",
+      "relationship": "greedy_exchange_then_prefix_boundary",
+      "conditions": [
+        "成本非负；预算非负；只最大化元素数量，不要求连续或其他结构"
+      ],
+      "decisive_reason": "任意k项成本不低于k个最便宜元素；排序前缀非降，对预算求upper_bound-1。",
+      "suggested_cpp_interface": "sorted_cost_prefix(costs); max_items_with_budget(sorted_sum,budget);",
+      "important_variants": [
+        "不能与原顺序前缀/连续区间混淆",
+        "即使叫subsequence，选择后按原索引排列仍可构成子序列，成本总和与顺序无关",
+        "预处理O(n log n)，每查询O(log n)"
+      ],
+      "evidence": [
+        {
+          "identity": "leetcode:2389",
+          "url": "https://leetcode.com/problems/longest-subsequence-with-limited-sum/description/",
+          "read": "whole_official_statement_and_constraints",
+          "conditions": "n,m<=1000；数值与预算正数<=1e6"
+        }
+      ],
+      "alternative_relationships": [
+        "可把查询排序后扫描成本前缀，时间为排序加线性扫描；是批量优化"
+      ],
+      "current_draft_presence": "new work implementation",
+      "implementation_status": "implemented_and_independently_tested"
+    },
+    {
+      "id": "f-lis-tail",
+      "title": "LIS最小结尾状态上的边界与方案恢复",
+      "placement": "main_composition",
+      "relationship": "dynamic_programming_state_order_then_binary_search",
+      "conditions": [
+        "求最长严格递增或非降子序列的长度／一条方案"
+      ],
+      "decisive_reason": "同长度更小结尾更易扩展；tail[k]记录长度k+1的最小结尾且有序，每个新值只更新一个位置。",
+      "suggested_cpp_interface": "int lis_length(a,bool non_decreasing=false); vector<int> lis_indices(a,bool non_decreasing=false);",
+      "important_variants": [
+        "严格递增lower_bound；非降upper_bound；重复是决定性条件",
+        "tail本身不保证是一条原数组子序列，恢复须保留前驱/结束索引",
+        "代码返回任意最优方案，不附加字典序或最早索引承诺",
+        "计数和最大权重不能只保留最小结尾，需更丰富DP/数据结构"
+      ],
+      "evidence": [
+        {
+          "identity": "cp-algorithms:lis",
+          "url": "https://cp-algorithms.com/dynamic_programming/longest_increasing_subsequence.html",
+          "read": "complete_algorithm_body_including_n2_dp_nlogn_binary_recovery_data_structure_and_related_tasks",
+          "conditions": "严格递增、非降、恢复；计数需额外状态"
+        }
+      ],
+      "alternative_relationships": [
+        "O(n^2) DP为独立参考；Fenwick/segment tree保留额外聚合状态适合加权和计数"
+      ],
+      "current_draft_presence": "new work implementation",
+      "implementation_status": "implemented_and_independently_tested"
+    }
+  ],
+  "read_but_routed_outside_binary": [
+    {
+      "identity": "epi:12.7",
+      "topic": "pairwise simultaneous min/max",
+      "route": "selection/comparison algorithms",
+      "reason": "no binary interval search"
+    },
+    {
+      "identity": "epi:12.8",
+      "topic": "Quickselect, median, weighted median",
+      "route": "selection algorithms",
+      "reason": "random pivot rank elimination is not guaranteed binary halving"
+    },
+    {
+      "identity": "epi:12.9",
+      "topic": "missing IP under low RAM",
+      "route": "bucket counting / bitsets / pigeonhole",
+      "reason": "not sorted-boundary search; multi-pass decomposition is distinct"
+    },
+    {
+      "identity": "epi:12.10",
+      "topic": "duplicate and missing by XOR",
+      "route": "bit manipulation",
+      "reason": "no binary search despite Searching chapter placement"
+    },
+    {
+      "identity": "cp4:3.3.2",
+      "topic": "ternary optimization",
+      "route": "adjacent method with own actual content needed",
+      "reason": "unimodal optimization is distinct from monotone feasibility or sign-bracket root"
+    }
+  ]
+}
