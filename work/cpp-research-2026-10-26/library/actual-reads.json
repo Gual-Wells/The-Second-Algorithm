@@ -1,0 +1,648 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-26",
+  "domain": "cpp-library-practice",
+  "reads": [
+    {
+      "id": "challenge-23",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-challenge",
+      "title": "Binary to string conversion",
+      "locator": {
+        "problem": 23,
+        "problem_spine": 76,
+        "solution_spine": 86,
+        "problem_pdf_start": 61,
+        "solution_pdf_start": 64
+      },
+      "read_scope": "complete problem and complete solution; not whole book",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "challenge-24",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-challenge",
+      "title": "String to binary conversion",
+      "locator": {
+        "problem": 24,
+        "problem_spine": 77,
+        "solution_spine": 87,
+        "problem_pdf_start": 61,
+        "solution_pdf_start": 65
+      },
+      "read_scope": "complete problem and complete solution; not whole book",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "challenge-26",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-challenge",
+      "title": "Joining strings together separated by a delimiter",
+      "locator": {
+        "problem": 26,
+        "problem_spine": 79,
+        "solution_spine": 89,
+        "problem_pdf_start": 62,
+        "solution_pdf_start": 67
+      },
+      "read_scope": "complete problem and complete solution; not whole book",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "challenge-27",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-challenge",
+      "title": "Splitting a string into tokens with a list of possible delimiters",
+      "locator": {
+        "problem": 27,
+        "problem_spine": 80,
+        "solution_spine": 90,
+        "problem_pdf_start": 62,
+        "solution_pdf_start": 68
+      },
+      "read_scope": "complete problem and complete solution; not whole book",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "challenge-30",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-challenge",
+      "title": "Extracting URL parts",
+      "locator": {
+        "problem": 30,
+        "problem_spine": 83,
+        "solution_spine": 93,
+        "problem_pdf_start": 63,
+        "solution_pdf_start": 72
+      },
+      "read_scope": "complete problem and complete solution; not whole book",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "challenge-31",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-challenge",
+      "title": "Transforming dates in strings",
+      "locator": {
+        "problem": 31,
+        "problem_spine": 84,
+        "solution_spine": 94,
+        "problem_pdf_start": 63,
+        "solution_pdf_start": 74
+      },
+      "read_scope": "complete problem and complete solution; not whole book",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "challenge-34",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-challenge",
+      "title": "Removing empty lines from a text file",
+      "locator": {
+        "problem": 34,
+        "problem_spine": 99,
+        "solution_spine": 107,
+        "problem_pdf_start": 77,
+        "solution_pdf_start": 81
+      },
+      "read_scope": "complete problem and complete solution; not whole book",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "challenge-35",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-challenge",
+      "title": "Computing the size of a directory",
+      "locator": {
+        "problem": 35,
+        "problem_spine": 100,
+        "solution_spine": 108,
+        "problem_pdf_start": 77,
+        "solution_pdf_start": 82
+      },
+      "read_scope": "complete problem and complete solution; not whole book",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "challenge-37",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-challenge",
+      "title": "Finding files in a directory that match a regular expression",
+      "locator": {
+        "problem": 37,
+        "problem_spine": 102,
+        "solution_spine": 110,
+        "problem_pdf_start": 77,
+        "solution_pdf_start": 85
+      },
+      "read_scope": "complete problem and complete solution; not whole book",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "challenge-38",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-challenge",
+      "title": "Temporary log files",
+      "locator": {
+        "problem": 38,
+        "problem_spine": 103,
+        "solution_spine": 111,
+        "problem_pdf_start": 77,
+        "solution_pdf_start": 86
+      },
+      "read_scope": "complete problem and complete solution; not whole book",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "challenge-45",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-challenge",
+      "title": "Priority queue",
+      "locator": {
+        "problem": 45,
+        "problem_spine": 129,
+        "solution_spine": 146,
+        "problem_pdf_start": 98,
+        "solution_pdf_start": 104
+      },
+      "read_scope": "complete problem and complete solution; not whole book",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "challenge-46",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-challenge",
+      "title": "Circular buffer",
+      "locator": {
+        "problem": 46,
+        "problem_spine": 130,
+        "solution_spine": 147,
+        "problem_pdf_start": 99,
+        "solution_pdf_start": 106
+      },
+      "read_scope": "complete problem and complete solution; not whole book",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "challenge-48",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-challenge",
+      "title": "The most frequent element in a range",
+      "locator": {
+        "problem": 48,
+        "problem_spine": 132,
+        "solution_spine": 149,
+        "problem_pdf_start": 99,
+        "solution_pdf_start": 113
+      },
+      "read_scope": "complete problem and complete solution; not whole book",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "challenge-49",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-challenge",
+      "title": "Text histogram",
+      "locator": {
+        "problem": 49,
+        "problem_spine": 133,
+        "solution_spine": 150,
+        "problem_pdf_start": 99,
+        "solution_pdf_start": 114
+      },
+      "read_scope": "complete problem and complete solution; not whole book",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "challenge-50",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-challenge",
+      "title": "Filtering a list of phone numbers",
+      "locator": {
+        "problem": 50,
+        "problem_spine": 134,
+        "solution_spine": 151,
+        "problem_pdf_start": 99,
+        "solution_pdf_start": 116
+      },
+      "read_scope": "complete problem and complete solution; not whole book",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "challenge-51",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-challenge",
+      "title": "Transforming a list of phone numbers",
+      "locator": {
+        "problem": 51,
+        "problem_spine": 135,
+        "solution_spine": 152,
+        "problem_pdf_start": 100,
+        "solution_pdf_start": 117
+      },
+      "read_scope": "complete problem and complete solution; not whole book",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "challenge-54",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-challenge",
+      "title": "Pairwise algorithm",
+      "locator": {
+        "problem": 54,
+        "problem_spine": 138,
+        "solution_spine": 155,
+        "problem_pdf_start": 100,
+        "solution_pdf_start": 123
+      },
+      "read_scope": "complete problem and complete solution; not whole book",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "challenge-55",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-challenge",
+      "title": "Zip algorithm",
+      "locator": {
+        "problem": 55,
+        "problem_spine": 139,
+        "solution_spine": 156,
+        "problem_pdf_start": 101,
+        "solution_pdf_start": 124
+      },
+      "read_scope": "complete problem and complete solution; not whole book",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "challenge-56",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-challenge",
+      "title": "Select algorithm",
+      "locator": {
+        "problem": 56,
+        "problem_spine": 140,
+        "solution_spine": 157,
+        "problem_pdf_start": 101,
+        "solution_pdf_start": 126
+      },
+      "read_scope": "complete problem and complete solution; not whole book",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "challenge-57",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-challenge",
+      "title": "Sort algorithm",
+      "locator": {
+        "problem": 57,
+        "problem_spine": 141,
+        "solution_spine": 158,
+        "problem_pdf_start": 102,
+        "solution_pdf_start": 127
+      },
+      "read_scope": "complete problem and complete solution; not whole book",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "cookbook-0133",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-cookbook-2",
+      "locator": {
+        "section_id": "section-0133",
+        "physical_pages": [
+          160,
+          163
+        ]
+      },
+      "read_scope": "complete recipe, including its surrounding page context",
+      "visual_check_physical_pages": [
+        163
+      ],
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "cookbook-0229",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-cookbook-2",
+      "locator": {
+        "section_id": "section-0229",
+        "physical_pages": [
+          253,
+          257
+        ]
+      },
+      "read_scope": "complete recipe, including its surrounding page context",
+      "visual_check_physical_pages": [],
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "cookbook-0240",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-cookbook-2",
+      "locator": {
+        "section_id": "section-0240",
+        "physical_pages": [
+          265,
+          269
+        ]
+      },
+      "read_scope": "complete recipe, including its surrounding page context",
+      "visual_check_physical_pages": [],
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "cookbook-0371",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-cookbook-2",
+      "locator": {
+        "section_id": "section-0371",
+        "physical_pages": [
+          378,
+          383
+        ]
+      },
+      "read_scope": "complete recipe, including its surrounding page context",
+      "visual_check_physical_pages": [],
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "cookbook-0685",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-cookbook-2",
+      "locator": {
+        "section_id": "section-0685",
+        "physical_pages": [
+          701,
+          707
+        ]
+      },
+      "read_scope": "complete recipe, including its surrounding page context",
+      "visual_check_physical_pages": [],
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "cookbook-0277",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-cookbook-2",
+      "locator": {
+        "section_id": "section-0277",
+        "physical_pages": [
+          294,
+          298
+        ]
+      },
+      "read_scope": "first five pages of recipe; remaining299-302 not read",
+      "visual_check_physical_pages": [],
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "cs106l-hashmap",
+      "source_kind": "web-primary-or-reference",
+      "url": "https://web.stanford.edu/class/archive/cs/cs106l/cs106l.1212/hashmap2.html",
+      "read_scope": "Whole task page, required milestones and optional extensions; starter code/test source not downloaded or executed.",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "exercism-ring-task",
+      "source_kind": "web-primary-or-reference",
+      "url": "https://raw.githubusercontent.com/exercism/cpp/main/exercises/practice/circular-buffer/.docs/instructions.md",
+      "read_scope": "Whole task instructions.",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "exercism-ring-tests",
+      "source_kind": "web-primary-or-reference",
+      "url": "https://raw.githubusercontent.com/exercism/cpp/main/exercises/practice/circular-buffer/circular_buffer_test.cpp",
+      "read_scope": "Whole222-line test file; not run.",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "tddd38-deque",
+      "source_kind": "web-primary-or-reference",
+      "url": "https://www.ida.liu.se/~TDDD38/exercises/Custom_Deque/exercise.pdf",
+      "read_scope": "Whole2-page assignment via direct HTTP+pypdf after web renderer failed; course constraints deliberately omit per-element lifetime and exception safety; not a std::deque certification.",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "cert-ctr51",
+      "source_kind": "web-primary-or-reference",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/containers-ctr/ctr51-cpp/",
+      "read_scope": "Opening validity rule and table for deque/list/vector; not all downstream code examples.",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "cppref-vector",
+      "source_kind": "web-primary-or-reference",
+      "url": "https://en.cppreference.com/cpp/container/vector",
+      "read_scope": "Description, standard-version markers and full iterator-invalidation table; not every linked member.",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "n4659-view-access",
+      "source_kind": "web-primary-or-reference",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/string.view.access",
+      "read_scope": "Whole element-access subsection, including operator[] versus string and non-NUL data note.",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "n4659-vector-capacity",
+      "source_kind": "web-primary-or-reference",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/vector.capacity",
+      "read_scope": "Whole capacity/reserve/shrink/resize subsection.",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "n4659-map-access",
+      "source_kind": "web-primary-or-reference",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/map.access",
+      "read_scope": "Whole map access subsection.",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "n4659-map-modifiers",
+      "source_kind": "web-primary-or-reference",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/map.modifiers",
+      "read_scope": "Whole modifiers subsection, try_emplace and insert_or_assign.",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "n4659-unordered",
+      "source_kind": "web-primary-or-reference",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/unord.req",
+      "read_scope": "Paragraphs1-10 and beginning requirements table: hash/equality, buckets, rehash/invalidation. Not whole table.",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "n4659-sorting",
+      "source_kind": "web-primary-or-reference",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/alg.sorting",
+      "read_scope": "Opening ordering/partition/stability requirements and sort/stable_sort/partial_sort specifications; not entire sorting chapter.",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "n4659-remove",
+      "source_kind": "web-primary-or-reference",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/alg.remove",
+      "read_scope": "Whole removal subsection.",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "n4659-accumulate",
+      "source_kind": "web-primary-or-reference",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/accumulate",
+      "read_scope": "Whole accumulate subsection.",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "n4659-set-ops",
+      "source_kind": "web-primary-or-reference",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/alg.set.operations",
+      "read_scope": "Whole sorted set-operation subsection, including duplicate multiplicities and output non-overlap.",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "ms-charconv",
+      "source_kind": "web-primary-or-reference",
+      "url": "https://learn.microsoft.com/en-us/cpp/standard-library/charconv-functions?view=msvc-170",
+      "read_scope": "from_chars remarks/return contract and example from actual search result; sales/other linked APIs not read. Example is not adopted as a full correct wrapper.",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "cppref-from-chars",
+      "source_kind": "web-primary-or-reference",
+      "url": "https://cppreference.com/cpp/utility/from_chars",
+      "read_scope": "Whole page including integer grammar, result/error conditions, example and defect-report version history.",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "cppref-fs-iterator",
+      "source_kind": "web-primary-or-reference",
+      "url": "https://en.cppreference.com/cpp/filesystem/recursive_directory_iterator",
+      "read_scope": "Iterator category, default symlink behavior, error/end, mutation visibility and cycle notes from actual result.",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "n4861-span",
+      "source_kind": "web-primary-or-reference",
+      "url": "https://timsong-cpp.github.io/cppwp/n4861/span.overview",
+      "read_scope": "Whole span overview and synopsis; fixed C++20 draft, not every linked constructor specification.",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "n4861-filter-iterator",
+      "source_kind": "web-primary-or-reference",
+      "url": "https://timsong-cpp.github.io/cppwp/n4861/range.filter.iterator",
+      "read_scope": "Whole iterator subsection, parent relationship, operations/category and mutation predicate condition.",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "n4950-owning-view",
+      "source_kind": "web-primary-or-reference",
+      "url": "https://timsong-cpp.github.io/cppwp/n4950/range.owning.view",
+      "read_scope": "Whole owning_view subsection, C++23 draft snapshot.",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "n4950-adjacent",
+      "source_kind": "web-primary-or-reference",
+      "url": "https://timsong-cpp.github.io/cppwp/n4950/range.adjacent.overview",
+      "read_scope": "Whole adjacent overview and overlapping-pair example, C++23 draft snapshot.",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "challenge-39",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-challenge",
+      "title": "Measuring function execution time",
+      "locator": {
+        "problem": 39,
+        "problem_spine": 114,
+        "solution_spine": 121,
+        "problem_pdf_start": 88,
+        "solution_pdf_start": 90
+      },
+      "read_scope": "complete problem and complete solution; not whole book",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "challenge-40",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-challenge",
+      "title": "Number of days between two dates",
+      "locator": {
+        "problem": 40,
+        "problem_spine": 115,
+        "solution_spine": 122,
+        "problem_pdf_start": 88,
+        "solution_pdf_start": 91
+      },
+      "read_scope": "complete problem and complete solution; not whole book",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "challenge-43",
+      "source_kind": "provided-book",
+      "book_id": "modern-cpp-challenge",
+      "title": "Meeting time for multiple time zones",
+      "locator": {
+        "problem": 43,
+        "problem_spine": 118,
+        "solution_spine": 125,
+        "problem_pdf_start": 89,
+        "solution_pdf_start": 94
+      },
+      "read_scope": "complete problem and complete solution; not whole book",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "cppref-steady-clock",
+      "source_kind": "web-primary-or-reference",
+      "url": "https://en.cppreference.com/cpp/chrono/steady_clock",
+      "read_scope": "Clock declaration and monotonic/interval suitability description.",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "cppref-uniform-int",
+      "source_kind": "web-primary-or-reference",
+      "url": "https://en.cppreference.com/cpp/numeric/random/uniform_int_distribution",
+      "read_scope": "Whole member overview, closed interval distribution and engine+distribution dice example; not linked member bodies.",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "n4659-nth-element",
+      "source_kind": "web-primary-or-reference",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/alg.nth.element",
+      "read_scope": "Whole20-line nth_element subsection; output partition guarantee and average-linear serial complexity.",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "n4659-view-modifiers",
+      "source_kind": "web-primary-or-reference",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/string.view.modifiers",
+      "read_scope": "Whole42-line modifiers subsection, remove_prefix/remove_suffix bounds.",
+      "state": "read-and-analyzed"
+    },
+    {
+      "id": "n4659-uniform-int",
+      "source_kind": "web-primary-or-reference",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/rand.dist.uni.int",
+      "read_scope": "Whole70-line uniform_int_distribution subsection, closed interval, parameters and a<=b precondition.",
+      "state": "read-and-analyzed"
+    }
+  ],
+  "access_failures": [
+    {
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/charconv.from.chars",
+      "result": "web inaccessible; not treated as read"
+    },
+    {
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/charconv",
+      "result": "web inaccessible; from_chars contract checked via listed reference/implementation docs"
+    }
+  ],
+  "limits": [
+    "No entire book, source website or entire standard read is claimed.",
+    "N4659/N4861/N4950 are fixed draft snapshots rendered by a third-party host; distinguish these from a published ISO edition.",
+    "Local preprocessed code can contain layout artifacts; key findings checked against source contract or visual page."
+  ]
+}

@@ -1,0 +1,157 @@
+{
+  "codeBlocks": [
+    "array-bound",
+    "invoke-forward",
+    "append-pack",
+    "logical-folds",
+    "value-minimum",
+    "traits",
+    "partial-storage",
+    "detected-member",
+    "priority-dispatch",
+    "dependent-names",
+    "adl-swap",
+    "compile-time",
+    "tuple-indices",
+    "static-queue",
+    "concepts",
+    "same-deduction",
+    "move-only-callable",
+    "erased-move-only",
+    "measure-call"
+  ],
+  "headings": [
+    {
+      "depth": 1,
+      "id": "泛型与约束",
+      "text": "泛型与约束"
+    },
+    {
+      "depth": 2,
+      "id": "一-让通用函数保留输入的真实含义",
+      "text": "一、让通用函数保留输入的真实含义"
+    },
+    {
+      "depth": 3,
+      "id": "数组传进模板后-长度为什么丢了",
+      "text": "数组传进模板后，长度为什么丢了"
+    },
+    {
+      "depth": 3,
+      "id": "包装一层调用-如何不把引用-移动或返回类型弄丢",
+      "text": "包装一层调用，如何不把引用、移动或返回类型弄丢"
+    },
+    {
+      "depth": 3,
+      "id": "批量追加-为什么整数能用-unique-ptr却失败",
+      "text": "批量追加：为什么整数能用，unique_ptr却失败"
+    },
+    {
+      "depth": 3,
+      "id": "任意多个条件-短路与空参数包",
+      "text": "任意多个条件：短路与空参数包"
+    },
+    {
+      "depth": 3,
+      "id": "多参数最小值-返回引用-首参数类型和公共类型是三种合同",
+      "text": "多参数最小值：返回引用、首参数类型和公共类型是三种合同"
+    },
+    {
+      "depth": 2,
+      "id": "二-类型条件改变实现时-如何选择分支",
+      "text": "二、类型条件改变实现时，如何选择分支"
+    },
+    {
+      "depth": 3,
+      "id": "类型萃取-const到底限定哪一层",
+      "text": "类型萃取：const到底限定哪一层"
+    },
+    {
+      "depth": 3,
+      "id": "同一个类模板-某类实参需要不同存储",
+      "text": "同一个类模板，某类实参需要不同存储"
+    },
+    {
+      "depth": 3,
+      "id": "有没有size成员-检测与真正调用分开",
+      "text": "有没有size成员：检测与真正调用分开"
+    },
+    {
+      "depth": 3,
+      "id": "多个成员同时存在-怎样明确优先级",
+      "text": "多个成员同时存在，怎样明确优先级"
+    },
+    {
+      "depth": 3,
+      "id": "typename-template和this-分别在解决什么",
+      "text": "typename、template和this->分别在解决什么"
+    },
+    {
+      "depth": 3,
+      "id": "通用swap为什么常见using-std-swap再不限定调用",
+      "text": "通用swap为什么常见using std::swap再不限定调用"
+    },
+    {
+      "depth": 2,
+      "id": "三-编译期计算与异构结构",
+      "text": "三、编译期计算与异构结构"
+    },
+    {
+      "depth": 3,
+      "id": "constexpr函数不等于每次都在编译期运行",
+      "text": "constexpr函数不等于每次都在编译期运行"
+    },
+    {
+      "depth": 3,
+      "id": "tuple元素类型不同-为什么要生成编译期索引",
+      "text": "tuple元素类型不同，为什么要生成编译期索引"
+    },
+    {
+      "depth": 2,
+      "id": "四-组合实作-固定容量泛型队列",
+      "text": "四、组合实作：固定容量泛型队列"
+    },
+    {
+      "depth": 3,
+      "id": "类型-容量-对象生命周期和成员模板怎样共同落地",
+      "text": "类型、容量、对象生命周期和成员模板怎样共同落地"
+    },
+    {
+      "depth": 2,
+      "id": "五-c-20约束与接口演进",
+      "text": "五、C++20约束与接口演进"
+    },
+    {
+      "depth": 3,
+      "id": "概念怎样把要求放到调用边界",
+      "text": "概念怎样把要求放到调用边界"
+    },
+    {
+      "depth": 3,
+      "id": "两个auto参数不表示同一个类型",
+      "text": "两个auto参数不表示同一个类型"
+    },
+    {
+      "depth": 3,
+      "id": "类型擦除后-为什么move-only闭包放不进std-function",
+      "text": "类型擦除后，为什么move-only闭包放不进std::function"
+    },
+    {
+      "depth": 2,
+      "id": "六-给调用计时也要保留原接口",
+      "text": "六、给调用计时也要保留原接口"
+    },
+    {
+      "depth": 2,
+      "id": "来源与后续分支",
+      "text": "来源与后续分支"
+    }
+  ],
+  "sourceSha256": "cc4d1d4a6ee1e7f10c1de2e814b51808107e231b5da5aceaef16e0800d4f64c9",
+  "codeSha256": "8333fe2dac9fbfc39587e8363862ce128be4d0ed3a6e4872a649b10c60a7d7e1",
+  "markdownSha256": "a9286d9f54069e8498e27a7ba664e576d7276bece78d65f13b91e6bb5c109a2a",
+  "htmlSha256": "dd95e601283584034b8273fa757353e1dd9237e37170a97dba5665ae29498ea5",
+  "builderSha256": "86d65155c26e85dfd7b84bccd818659cb050a4dea870b0ffd43ac34965e8491e",
+  "markdownBytes": 20355,
+  "htmlBytes": 45886
+}

@@ -115,6 +115,135 @@
         }
       ],
       "state": "planned-not-executed"
+    },
+    {
+      "id": "cpp",
+      "name": "C++实战",
+      "aliases": [
+        "C++",
+        "C++本身",
+        "cplusplus",
+        "C++语言"
+      ],
+      "source_entries": [
+        "liu-tddd38/exercise-index",
+        "sutter-gotw/revised-index",
+        "sei-cert-cpp/rules"
+      ],
+      "queries": [
+        {
+          "axis": "problem-and-mechanism",
+          "query": "C++ implementation exercises object lifetime exception safety generic containers"
+        },
+        {
+          "axis": "problem-and-mechanism",
+          "query": "C++ language standard version defect report code examples"
+        }
+      ],
+      "state": "planned-not-executed-as-a-batch",
+      "note": "用于下一轮缺口查询；本次实际查询和读件另在work/cpp-research-2026-10-26分域记录，不把计划词冒充已执行查询。"
+    },
+    {
+      "id": "cpp-language",
+      "name": "类型、对象与资源",
+      "aliases": [
+        "C++对象",
+        "C++资源"
+      ],
+      "source_entries": [
+        "liu-tddd38/exercise-index",
+        "sutter-gotw/revised-index",
+        "sei-cert-cpp/rules"
+      ],
+      "queries": [
+        {
+          "axis": "problem-and-mechanism",
+          "query": "C++ initialization overload move ownership lifetime implementation exercise"
+        }
+      ],
+      "state": "planned-not-executed-as-a-batch",
+      "note": "用于下一轮缺口查询；本次实际查询和读件另在work/cpp-research-2026-10-26分域记录，不把计划词冒充已执行查询。"
+    },
+    {
+      "id": "cpp-generic",
+      "name": "泛型与约束",
+      "aliases": [
+        "C++模板",
+        "C++泛型"
+      ],
+      "source_entries": [
+        "liu-tddd38/exercise-index",
+        "sutter-gotw/revised-index",
+        "sei-cert-cpp/rules"
+      ],
+      "queries": [
+        {
+          "axis": "problem-and-mechanism",
+          "query": "C++ template exercise forwarding deduction SFINAE constraints expression templates"
+        }
+      ],
+      "state": "planned-not-executed-as-a-batch",
+      "note": "用于下一轮缺口查询；本次实际查询和读件另在work/cpp-research-2026-10-26分域记录，不把计划词冒充已执行查询。"
+    },
+    {
+      "id": "cpp-library",
+      "name": "容器、范围与文本实作",
+      "aliases": [
+        "C++标准库"
+      ],
+      "source_entries": [
+        "liu-tddd38/exercise-index",
+        "sutter-gotw/revised-index",
+        "sei-cert-cpp/rules"
+      ],
+      "queries": [
+        {
+          "axis": "problem-and-mechanism",
+          "query": "C++ iterator container invalidation ranges string_view exception implementation exercise"
+        }
+      ],
+      "state": "planned-not-executed-as-a-batch",
+      "note": "用于下一轮缺口查询；本次实际查询和读件另在work/cpp-research-2026-10-26分域记录，不把计划词冒充已执行查询。"
+    },
+    {
+      "id": "cpp-concurrency",
+      "name": "线程、同步与任务",
+      "aliases": [
+        "C++并发"
+      ],
+      "source_entries": [
+        "liu-tddd38/exercise-index",
+        "sutter-gotw/revised-index",
+        "sei-cert-cpp/rules"
+      ],
+      "queries": [
+        {
+          "axis": "problem-and-mechanism",
+          "query": "C++ bounded queue close drain condition variable cancellation exception atomic exercise"
+        }
+      ],
+      "state": "planned-not-executed-as-a-batch",
+      "note": "用于下一轮缺口查询；本次实际查询和读件另在work/cpp-research-2026-10-26分域记录，不把计划词冒充已执行查询。"
+    },
+    {
+      "id": "cpp-translation",
+      "name": "翻译与链接",
+      "aliases": [
+        "C++链接"
+      ],
+      "source_entries": [
+        "liu-tddd38/exercise-index",
+        "sutter-gotw/revised-index",
+        "sei-cert-cpp/rules"
+      ],
+      "queries": [
+        {
+          "axis": "problem-and-mechanism",
+          "query": "C++ multiple translation units ODR incomplete type pimpl template definition exercise"
+        }
+      ],
+      "state": "planned-not-executed-as-a-batch",
+      "note": "用于下一轮缺口查询；本次实际查询和读件另在work/cpp-research-2026-10-26分域记录，不把计划词冒充已执行查询。"
     }
   ]
 }

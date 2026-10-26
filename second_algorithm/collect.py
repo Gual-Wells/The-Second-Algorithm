@@ -11,7 +11,7 @@ from uuid import uuid4
 
 from .storage import canonical_bytes, collection_lock, digest, now, read_json, safe_relative, source_entry, store_bytes, valid_id, valid_url, write_json
 
-PARSER_VERSION = 4
+PARSER_VERSION = 5
 ADAPTERS = ("cses_html", "codility_html", "cpbook_table", "link_index")
 
 
@@ -19,6 +19,8 @@ def capture_configuration(entry: dict) -> dict:
     value = {"url": entry["url"], "adapter": entry["enumeration"]["adapter"], "include_url_regex": entry["enumeration"].get("include_url_regex")}
     if "pagination_mode" in entry["enumeration"]:
         value["pagination_mode"] = entry["enumeration"]["pagination_mode"]
+    if "text_encoding" in entry["enumeration"]:
+        value["text_encoding"] = entry["enumeration"]["text_encoding"]
     return value
 
 
@@ -184,7 +186,7 @@ def extract(raw: bytes, url: str, adapter: str, configuration: dict | None = Non
         return extract_cpbook(raw, url)
     configuration = configuration or {}
     page = PageLinks()
-    text = raw.decode("utf-8-sig", errors="strict")
+    text = raw.decode(configuration.get("text_encoding", "utf-8-sig"), errors="strict")
     page.feed(text)
     if any(marker in " ".join(page.title).lower() for marker in ("just a moment", "access denied", "sign in to continue")):
         raise ValueError("Access interstitial; not a catalogue")

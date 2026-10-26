@@ -9,7 +9,7 @@ from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
-CONTENT = ROOT / "content/binary-search"
+CONTENT = ROOT / "content"
 
 
 class ReadingPage(HTMLParser):
@@ -45,12 +45,13 @@ class ReadingPage(HTMLParser):
 
 class ReadingAssetTest(unittest.TestCase):
     def test_reading_build_and_displayed_code_match_authorities(self):
-        for source in CONTENT.glob("*.source.md"):
+        for source in CONTENT.glob("*/*.source.md"):
+            content = source.parent
             name = source.name.removesuffix(".source.md")
             with self.subTest(chapter=name):
-                manifest = json.loads((CONTENT / "build" / (name + ".json")).read_text(encoding="utf8"))
-                files = {"source": source, "code": CONTENT / (name + ".cpp"),
-                         "markdown": CONTENT / (name + ".md"), "html": CONTENT / (name + ".html"),
+                manifest = json.loads((content / "build" / (name + ".json")).read_text(encoding="utf8"))
+                files = {"source": source, "code": content / (name + ".cpp"),
+                         "markdown": content / (name + ".md"), "html": content / (name + ".html"),
                          "builder": ROOT / "tools/build_handbook.mjs"}
                 for kind, path in files.items():
                     self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), manifest[kind + "Sha256"], str(path))
@@ -71,7 +72,7 @@ class ReadingAssetTest(unittest.TestCase):
                     parsed = urlsplit(href)
                     if parsed.scheme or parsed.netloc:
                         continue
-                    target = (CONTENT / unquote(parsed.path)).resolve() if parsed.path else files["html"]
+                    target = (content / unquote(parsed.path)).resolve() if parsed.path else files["html"]
                     self.assertTrue(target.exists(), href)
                     if parsed.fragment and target.suffix == ".html":
                         linked = page if target == files["html"] else ReadingPage()

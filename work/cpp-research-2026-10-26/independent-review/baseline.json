@@ -1,0 +1,62 @@
+{
+  "frozen_at": "2026-10-26T13:19:27.311924+00:00",
+  "purpose": "freeze before independent external case reading",
+  "files": [
+    {
+      "path": "content/cpp/容器与范围.cpp",
+      "sha256": "f6a9405eed1453c8d7ffcec80c7d1d529284a6abe3bc9115bd1dae1de614ab5f"
+    },
+    {
+      "path": "content/cpp/对象与资源.cpp",
+      "sha256": "945a8395ff86ac3a05a35dd8d4b40476e1e2c2cb8ef9fa7a37f4f42bff924359"
+    },
+    {
+      "path": "content/cpp/文本与文件.cpp",
+      "sha256": "033ab47560dee30435ba1e635eb0477aa88fd6591e34c8f088a6df4577854b11"
+    },
+    {
+      "path": "content/cpp/泛型与约束.cpp",
+      "sha256": "8333fe2dac9fbfc39587e8363862ce128be4d0ed3a6e4872a649b10c60a7d7e1"
+    },
+    {
+      "path": "content/cpp/类型与调用.cpp",
+      "sha256": "e749b93929a7319db788aaa98c2e9ebf791535484c9517799b111c390e6d5d59"
+    },
+    {
+      "path": "content/cpp/线程与同步.cpp",
+      "sha256": "58c18377285d052b83bfd617d5f70fe40b9bdbb40a4b55724441c6d3ca37202c"
+    },
+    {
+      "path": "content/cpp/翻译与链接.cpp",
+      "sha256": "515cf36a2e395951d6626ddc87eef81b4cc35de34e2be0d571fa31ab3795b096"
+    },
+    {
+      "path": "content/cpp/容器与范围.source.md",
+      "sha256": "992b80bc81d0bd476a7648b1879cbb1d6e4bbf2b0367e4473f6bf169cabf90e9"
+    },
+    {
+      "path": "content/cpp/对象与资源.source.md",
+      "sha256": "463e7950ba78a6c3e4a822eed1b3177dcab3eb1bb1001ebaae75878c86f9c4d5"
+    },
+    {
+      "path": "content/cpp/文本与文件.source.md",
+      "sha256": "cc4ee6842942dd350466971b3094d4ee1308d38674606083f8572ea394df6c53"
+    },
+    {
+      "path": "content/cpp/泛型与约束.source.md",
+      "sha256": "21b07f2de8afa6f944745fa492d5769cf2e23dc30a3a6c72f91c52914e92ba4a"
+    },
+    {
+      "path": "content/cpp/类型与调用.source.md",
+      "sha256": "26bf01e3fc3ca34e0eafcde9e8c9413f0bb57f328566c951eabe3cefd84def32"
+    },
+    {
+      "path": "content/cpp/线程与同步.source.md",
+      "sha256": "6dad8fd8ae3609b4619e42778f900503687a2699af6201cc426a0286aa265c6d"
+    },
+    {
+      "path": "content/cpp/翻译与链接.source.md",
+      "sha256": "46b0a62bd8c869516f44412cafe58a889177b07a5f3e59f8a4fb6b8d0263acaa"
+    }
+  ]
+}

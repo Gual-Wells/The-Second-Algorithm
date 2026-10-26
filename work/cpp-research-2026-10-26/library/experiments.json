@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-26",
+  "compiler": {
+    "path": "D:\\CodexStorage\\tools\\w64devkit-2.10.1\\w64devkit\\bin\\g++.exe",
+    "version": "g++.exe (GCC) 16.2.0"
+  },
+  "scope": "Independent semantic boundary checks, not a complete standard-library suite. No UB examples executed.",
+  "checks": [
+    {
+      "source": "work/cpp-research-2026-10-26/library/library_boundary_checks.cpp",
+      "standard": "c++17",
+      "flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-D_GLIBCXX_ASSERTIONS"
+      ],
+      "build_exit": 0,
+      "build_stderr": "",
+      "run_exit": 0,
+      "stdout": "library boundary checks passed; no UB examples executed",
+      "output_executable": ".local/cpp-research/library/library_boundary_checks.exe"
+    },
+    {
+      "source": "work/cpp-research-2026-10-26/library/library_views_checks.cpp",
+      "standard": "c++20",
+      "flags": [
+        "-std=c++20",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-D_GLIBCXX_ASSERTIONS"
+      ],
+      "build_exit": 0,
+      "build_stderr": "",
+      "run_exit": 0,
+      "stdout": "views checks passed; compiler/library version and DR state matter",
+      "output_executable": ".local/cpp-research/library/library_views_checks.exe"
+    }
+  ]
+}

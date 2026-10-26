@@ -1,0 +1,70 @@
+[
+  {
+    "source": "tests/cpp/cpp_library_test.cpp",
+    "standard": "c++17",
+    "flags": [
+      "-std=c++17",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-D_GLIBCXX_ASSERTIONS"
+    ],
+    "build_exit": 0,
+    "build_stderr": "",
+    "run_exit": 0,
+    "stdout": "C++17 library semantic checks passed",
+    "stderr": ""
+  },
+  {
+    "source": "tests/cpp/cpp_library_ranges_test.cpp",
+    "standard": "c++17",
+    "flags": [
+      "-std=c++17",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-D_GLIBCXX_ASSERTIONS"
+    ],
+    "build_exit": 0,
+    "build_stderr": "",
+    "run_exit": 0,
+    "stdout": "ranges checks skipped: require C++20 or later",
+    "stderr": ""
+  },
+  {
+    "source": "tests/cpp/cpp_library_ranges_test.cpp",
+    "standard": "c++20",
+    "flags": [
+      "-std=c++20",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-D_GLIBCXX_ASSERTIONS"
+    ],
+    "build_exit": 0,
+    "build_stderr": "",
+    "run_exit": 0,
+    "stdout": "C++20/23 ranges semantic checks passed",
+    "stderr": ""
+  },
+  {
+    "source": "tests/cpp/cpp_library_ranges_test.cpp",
+    "standard": "c++23",
+    "flags": [
+      "-std=c++23",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-D_GLIBCXX_ASSERTIONS"
+    ],
+    "build_exit": 0,
+    "build_stderr": "",
+    "run_exit": 0,
+    "stdout": "C++20/23 ranges semantic checks passed",
+    "stderr": ""
+  }
+]

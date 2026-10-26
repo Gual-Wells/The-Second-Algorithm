@@ -1,0 +1,99 @@
+{
+  "codeBlocks": [
+    "tu-client-a",
+    "tu-client-b",
+    "odr-bad-header",
+    "odr-declaration-header",
+    "odr-one-definition",
+    "odr-inline-header",
+    "odr-local-header",
+    "hidden-definition",
+    "pimpl-header",
+    "pimpl-definition",
+    "feature-probe"
+  ],
+  "headings": [
+    {
+      "depth": 1,
+      "id": "翻译与链接",
+      "text": "翻译与链接"
+    },
+    {
+      "depth": 2,
+      "id": "1-翻译单元与头文件",
+      "text": "1 翻译单元与头文件"
+    },
+    {
+      "depth": 3,
+      "id": "1-1-两个源文件共同使用一个接口",
+      "text": "1.1 两个源文件共同使用一个接口"
+    },
+    {
+      "depth": 3,
+      "id": "1-2-有include-guard-仍可能重复定义",
+      "text": "1.2 有include guard，仍可能重复定义"
+    },
+    {
+      "depth": 2,
+      "id": "2-共享定义与tu私有状态",
+      "text": "2 共享定义与TU私有状态"
+    },
+    {
+      "depth": 3,
+      "id": "2-1-头里声明-源里唯一定义",
+      "text": "2.1 头里声明，源里唯一定义"
+    },
+    {
+      "depth": 3,
+      "id": "2-2-header-only-inline不是强制内联优化",
+      "text": "2.2 header-only：inline不是强制内联优化"
+    },
+    {
+      "depth": 3,
+      "id": "2-3-私有副本-不报错不代表保持了语义",
+      "text": "2.3 私有副本：不报错不代表保持了语义"
+    },
+    {
+      "depth": 3,
+      "id": "2-4-定义存在-但不是声明的那个实体",
+      "text": "2.4 定义存在，但不是声明的那个实体"
+    },
+    {
+      "depth": 2,
+      "id": "3-前置声明与完整类型",
+      "text": "3 前置声明与完整类型"
+    },
+    {
+      "depth": 3,
+      "id": "3-1-头文件只暴露拥有关系",
+      "text": "3.1 头文件只暴露拥有关系"
+    },
+    {
+      "depth": 3,
+      "id": "3-2-在实现完整的位置生成销毁操作",
+      "text": "3.2 在实现完整的位置生成销毁操作"
+    },
+    {
+      "depth": 2,
+      "id": "4-实现与版本边界",
+      "text": "4 实现与版本边界"
+    },
+    {
+      "depth": 3,
+      "id": "4-1-探测具体功能-保持调用接口",
+      "text": "4.1 探测具体功能，保持调用接口"
+    },
+    {
+      "depth": 3,
+      "id": "4-2-模块-c接口与诊断工具",
+      "text": "4.2 模块、C接口与诊断工具"
+    }
+  ],
+  "sourceSha256": "46b0a62bd8c869516f44412cafe58a889177b07a5f3e59f8a4fb6b8d0263acaa",
+  "codeSha256": "515cf36a2e395951d6626ddc87eef81b4cc35de34e2be0d571fa31ab3795b096",
+  "markdownSha256": "a5c264fe4c6fdad020784176ce458fcc8d22dbd98cf779b65cbe9574001718a6",
+  "htmlSha256": "22c784d00b00f5a3154d510d30f49b4163adbc985a042a83fe97d6592e4707d7",
+  "builderSha256": "86d65155c26e85dfd7b84bccd818659cb050a4dea870b0ffd43ac34965e8491e",
+  "markdownBytes": 9943,
+  "htmlBytes": 24309
+}

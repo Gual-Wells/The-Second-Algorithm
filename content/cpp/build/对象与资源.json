@@ -1,0 +1,161 @@
+{
+  "codeBlocks": [
+    "rule-zero",
+    "owning-buffer",
+    "move-cast",
+    "vector-relocation",
+    "value-return",
+    "owner-interfaces",
+    "get-reset-release",
+    "custom-deleter",
+    "array-owner",
+    "c-output-owner",
+    "shared-alias",
+    "weak-owner",
+    "shared-from-this",
+    "conditional-retain",
+    "polymorphic-value",
+    "construction-dispatch",
+    "constructor-failure",
+    "rethrow"
+  ],
+  "headings": [
+    {
+      "depth": 1,
+      "id": "对象与资源",
+      "text": "对象与资源"
+    },
+    {
+      "depth": 2,
+      "id": "1-复制-移动与对象自身的契约",
+      "text": "1 复制、移动与对象自身的契约"
+    },
+    {
+      "depth": 3,
+      "id": "1-1-能直接组合资源-就先不写五个特殊成员",
+      "text": "1.1 能直接组合资源，就先不写五个特殊成员"
+    },
+    {
+      "depth": 3,
+      "id": "1-2-独立复制动态数组-准备新状态-再无异常提交",
+      "text": "1.2 独立复制动态数组：准备新状态，再无异常提交"
+    },
+    {
+      "depth": 3,
+      "id": "1-3-std-move-只改变表达式类别",
+      "text": "1.3 std::move 只改变表达式类别"
+    },
+    {
+      "depth": 3,
+      "id": "1-4-noexcept-改变容器的搬迁选择-不是-能否移动-的开关",
+      "text": "1.4 noexcept 改变容器的搬迁选择，不是“能否移动”的开关"
+    },
+    {
+      "depth": 2,
+      "id": "2-按值返回-直接构造与可选-nrvo",
+      "text": "2 按值返回：直接构造与可选 NRVO"
+    },
+    {
+      "depth": 3,
+      "id": "2-1-return-t-与-return-local-不属于同一条保证",
+      "text": "2.1 return T{} 与 return local 不属于同一条保证"
+    },
+    {
+      "depth": 2,
+      "id": "3-独占所有权-从接口看释放责任",
+      "text": "3 独占所有权：从接口看释放责任"
+    },
+    {
+      "depth": 3,
+      "id": "3-1-借用-交出与替换是三类接口",
+      "text": "3.1 借用、交出与替换是三类接口"
+    },
+    {
+      "depth": 3,
+      "id": "3-2-get-reset-release-取地址-替换与放弃",
+      "text": "3.2 get、reset、release：取地址、替换与放弃"
+    },
+    {
+      "depth": 3,
+      "id": "3-3-释放方式必须与取得方式匹配",
+      "text": "3.3 释放方式必须与取得方式匹配"
+    },
+    {
+      "depth": 3,
+      "id": "3-4-c-风格-t-输出-先接结果-再装入拥有者",
+      "text": "3.4 C 风格 T** 输出：先接结果，再装入拥有者"
+    },
+    {
+      "depth": 2,
+      "id": "4-共享拥有-对象地址不是控制块",
+      "text": "4 共享拥有：对象地址不是控制块"
+    },
+    {
+      "depth": 3,
+      "id": "4-1-一份控制块-可以观察不同的子对象",
+      "text": "4.1 一份控制块，可以观察不同的子对象"
+    },
+    {
+      "depth": 3,
+      "id": "4-2-反向边用-weak-ptr-需要使用时一次-lock",
+      "text": "4.2 反向边用 weak_ptr，需要使用时一次 lock"
+    },
+    {
+      "depth": 3,
+      "id": "4-3-从-this-延续既有拥有关系",
+      "text": "4.3 从 this 延续既有拥有关系"
+    },
+    {
+      "depth": 3,
+      "id": "4-4-shared-ptr-参数要表达是否保留",
+      "text": "4.4 shared_ptr 参数要表达是否保留"
+    },
+    {
+      "depth": 2,
+      "id": "5-多态对象-释放-复制与构造阶段",
+      "text": "5 多态对象：释放、复制与构造阶段"
+    },
+    {
+      "depth": 3,
+      "id": "5-1-基类拥有者与按值切片",
+      "text": "5.1 基类拥有者与按值切片"
+    },
+    {
+      "depth": 3,
+      "id": "5-2-构造与析构期间-虚调用只看到当前阶段",
+      "text": "5.2 构造与析构期间，虚调用只看到当前阶段"
+    },
+    {
+      "depth": 2,
+      "id": "6-异常-清理半成品-与提交最终状态",
+      "text": "6 异常：清理半成品，与提交最终状态"
+    },
+    {
+      "depth": 3,
+      "id": "6-1-构造失败时-谁的析构函数执行",
+      "text": "6.1 构造失败时，谁的析构函数执行"
+    },
+    {
+      "depth": 3,
+      "id": "6-2-throw-保留原异常-throw-e-创建新异常",
+      "text": "6.2 throw; 保留原异常，throw e; 创建新异常"
+    },
+    {
+      "depth": 3,
+      "id": "6-3-强保证-基本保证与不抛保证-分别检查什么",
+      "text": "6.3 强保证、基本保证与不抛保证，分别检查什么"
+    },
+    {
+      "depth": 2,
+      "id": "依据与适用范围",
+      "text": "依据与适用范围"
+    }
+  ],
+  "sourceSha256": "ef576609cd6985ab267a86dda44ddabe502e2ffe659d7c63a3489711cf9412b6",
+  "codeSha256": "945a8395ff86ac3a05a35dd8d4b40476e1e2c2cb8ef9fa7a37f4f42bff924359",
+  "markdownSha256": "ce5563aed7ab46a042c6a3e045aa1ed2366465f7d886eb301f6bc62376c8f28a",
+  "htmlSha256": "bfb54c67d8ca056d2051aa7efda201c26635d250d90e6d3042603a5854317ce1",
+  "builderSha256": "86d65155c26e85dfd7b84bccd818659cb050a4dea870b0ffd43ac34965e8491e",
+  "markdownBytes": 30809,
+  "htmlBytes": 56727
+}

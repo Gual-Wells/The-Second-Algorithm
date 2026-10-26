@@ -1,0 +1,606 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-10-26",
+  "scope": "Systems authoring maps research candidates to actual text/code; state is not scope completeness.",
+  "authorities": [
+    {
+      "draft": "content/cpp/线程与同步.source.md",
+      "code": "content/cpp/线程与同步.cpp",
+      "blocks": 12
+    },
+    {
+      "draft": "content/cpp/翻译与链接.source.md",
+      "code": "content/cpp/翻译与链接.cpp",
+      "blocks": 11
+    }
+  ],
+  "verification": {
+    "thread": "tests/cpp/cpp_systems_test.cpp: C++17 GCC16.2.0, 2903 assertions passed; normal call_once only",
+    "translation": "tools/verify_cpp_systems.py:9/9 expected compile/link/run outcomes",
+    "exception_retry": "tests/cpp/cpp_systems_once_retry.cpp via --once-retry: timed out8s on local GCC16.2.0/winpthreads; reported FAIL",
+    "local_detail": ".local/cpp-systems-verification/translation/report.json"
+  },
+  "patterns": [
+    {
+      "id": "cpp-sys-thread-arguments",
+      "title": "线程参数的值、移动与借用",
+      "state": "partial",
+      "file": "content/cpp/线程与同步.source.md",
+      "h3": "1.1 值、移动与借用",
+      "code_blocks": [],
+      "source_disposition": "core",
+      "open_branches": [
+        "Direct std::ref/cref and member-function parameter examples not authored.",
+        "Move-only closure instantiated in run-and-join tests."
+      ]
+    },
+    {
+      "id": "cpp-sys-thread-lifetime",
+      "title": "线程句柄与作用域收尾",
+      "state": "authored-tested",
+      "file": "content/cpp/线程与同步.source.md",
+      "h3": "1.2 作用域收尾：提前返回也要join",
+      "code_blocks": [
+        "joining-thread"
+      ],
+      "source_disposition": "core",
+      "open_branches": [
+        "C++20 jthread/stop-aware lifecycle remains a separate branch."
+      ]
+    },
+    {
+      "id": "cpp-sys-worker-error",
+      "title": "跨线程传递错误",
+      "state": "authored-tested",
+      "file": "content/cpp/线程与同步.source.md",
+      "h3": "1.3 返回值与异常：让任务通道负责传递",
+      "code_blocks": [
+        "run-and-join"
+      ],
+      "source_disposition": "core",
+      "open_branches": [
+        "No generic executor exception policy implied."
+      ]
+    },
+    {
+      "id": "cpp-sys-thread-local",
+      "title": "每线程状态与汇总",
+      "state": "not-authored",
+      "file": null,
+      "h3": null,
+      "code_blocks": [],
+      "source_disposition": "core",
+      "open_branches": [
+        "Only a boundary sentence in section5; task-local reset and aggregate example absent."
+      ]
+    },
+    {
+      "id": "cpp-sys-cooperative-stop",
+      "title": "停止、暂停、恢复后台工作",
+      "state": "not-authored",
+      "file": null,
+      "h3": null,
+      "code_blocks": [],
+      "source_disposition": "core",
+      "open_branches": [
+        "Stop/pause/resume and stop-aware waits not implemented."
+      ]
+    },
+    {
+      "id": "cpp-sys-raii-lock",
+      "title": "有异常与多出口的临界区",
+      "state": "authored-tested",
+      "file": "content/cpp/线程与同步.source.md",
+      "h3": "2.2 两个对象一起操作，先处理别名",
+      "code_blocks": [
+        "two-lock-swap",
+        "closing-queue"
+      ],
+      "source_disposition": "core",
+      "open_branches": [
+        "adopt_lock/defer_lock discussed without standalone instantiation."
+      ]
+    },
+    {
+      "id": "cpp-sys-two-locks",
+      "title": "同时保护两个对象",
+      "state": "authored-tested",
+      "file": "content/cpp/线程与同步.source.md",
+      "h3": "2.2 两个对象一起操作，先处理别名",
+      "code_blocks": [
+        "two-lock-swap"
+      ],
+      "source_disposition": "core",
+      "open_branches": [
+        "No fairness or global arbitrary-lock-set claim."
+      ]
+    },
+    {
+      "id": "cpp-sys-read-mostly-lock",
+      "title": "多读少写缓存",
+      "state": "not-authored",
+      "file": null,
+      "h3": null,
+      "code_blocks": [],
+      "source_disposition": "core",
+      "open_branches": [
+        "还需实际读取完整shared_mutex病例及公平性语义，当前只有wrapper部分。",
+        "shared_mutex cases/fairness await deeper reading."
+      ]
+    },
+    {
+      "id": "cpp-sys-blocking-queue",
+      "title": "带阻塞的生产者消费者队列",
+      "state": "authored-tested",
+      "file": "content/cpp/线程与同步.source.md",
+      "h3": "2.3 有数据就取，关闭后排空",
+      "code_blocks": [
+        "closing-queue"
+      ],
+      "source_disposition": "core",
+      "open_branches": [
+        "Unbounded close-and-drain only; no bounded capacity or cancellation.",
+        "T must be nothrow move constructible; by-value rejection may consume moved argument."
+      ]
+    },
+    {
+      "id": "cpp-sys-timed-wait",
+      "title": "超时等待和虚假唤醒",
+      "state": "not-authored",
+      "file": null,
+      "h3": null,
+      "code_blocks": [],
+      "source_disposition": "core",
+      "open_branches": [
+        "绝对deadline完整标准条款与可运行变种尚需补读。",
+        "Deadline issue mentioned; no timed queue implementation."
+      ]
+    },
+    {
+      "id": "cpp-sys-condition-liveness",
+      "title": "通知与条件的活性",
+      "state": "partial",
+      "file": "content/cpp/线程与同步.source.md",
+      "h3": "2.3 有数据就取，关闭后排空",
+      "code_blocks": [
+        "closing-queue"
+      ],
+      "source_disposition": "core",
+      "open_branches": [
+        "CON55正文待取，当前索引不是全文证据。",
+        "Only single predicate and close notify_all covered; heterogeneous predicates/CON55 not closed."
+      ]
+    },
+    {
+      "id": "cpp-sys-one-time-init",
+      "title": "并发懒初始化",
+      "state": "authored-tested-with-runtime-gap",
+      "file": "content/cpp/线程与同步.source.md",
+      "h3": "2.1 初始化一次，失败可以重试",
+      "code_blocks": [
+        "once-cell"
+      ],
+      "source_disposition": "core",
+      "open_branches": [
+        "Normal concurrent initialization passed.",
+        "Exception retry required by N4659 but isolated GCC16.2.0/winpthreads probe timed out; not a pass."
+      ]
+    },
+    {
+      "id": "cpp-sys-future-state",
+      "title": "future的结果与可消费状态",
+      "state": "authored-tested",
+      "file": "content/cpp/线程与同步.source.md",
+      "h3": "1.4 future的四种状态",
+      "code_blocks": [
+        "future-state"
+      ],
+      "source_disposition": "core",
+      "open_branches": [
+        "No inference that valid means ready."
+      ]
+    },
+    {
+      "id": "cpp-sys-promise-channel",
+      "title": "promise结果通道",
+      "state": "partial",
+      "file": "content/cpp/线程与同步.source.md",
+      "h3": "1.4 future的四种状态",
+      "code_blocks": [
+        "future-state"
+      ],
+      "source_disposition": "core",
+      "open_branches": [
+        "broken_promise边界标准原文需补读。",
+        "Promise transition used in tests, not an authored channel template; broken_promise detailed rule still gap."
+      ]
+    },
+    {
+      "id": "cpp-sys-packaged-task",
+      "title": "包装任务与实际执行分开",
+      "state": "authored-tested",
+      "file": "content/cpp/线程与同步.source.md",
+      "h3": "1.3 返回值与异常：让任务通道负责传递",
+      "code_blocks": [
+        "run-and-join"
+      ],
+      "source_disposition": "core",
+      "open_branches": [
+        "Reference implementation takes result synchronously; not a nonblocking submit API."
+      ]
+    },
+    {
+      "id": "cpp-sys-async-policy",
+      "title": "async究竟何时并发",
+      "state": "authored-tested",
+      "file": "content/cpp/线程与同步.source.md",
+      "h3": "1.5 要求并发时明确async策略",
+      "code_blocks": [
+        "explicit-async",
+        "future-state"
+      ],
+      "source_disposition": "core",
+      "open_branches": [
+        "Default policy nondeterminism is described, not treated as a fixed runtime outcome."
+      ]
+    },
+    {
+      "id": "cpp-sys-shared-future",
+      "title": "一次发布，多线程读取结果",
+      "state": "not-authored",
+      "file": null,
+      "h3": null,
+      "code_blocks": [],
+      "source_disposition": "core",
+      "open_branches": [
+        "Only contrasted in prose; no multi-reader shared_future code."
+      ]
+    },
+    {
+      "id": "cpp-sys-atomic-rmw",
+      "title": "原子变量不等于原子复合操作",
+      "state": "authored-tested",
+      "file": "content/cpp/线程与同步.source.md",
+      "h3": "3.1 独立计数：少碰共享热点",
+      "code_blocks": [
+        "local-count"
+      ],
+      "source_disposition": "core",
+      "open_branches": [
+        "Independent counter only; no publication claim."
+      ]
+    },
+    {
+      "id": "cpp-sys-publish-payload",
+      "title": "发布对象而非仅发布计数",
+      "state": "authored-tested",
+      "file": "content/cpp/线程与同步.source.md",
+      "h3": "3.2 一次性发布普通payload",
+      "code_blocks": [
+        "one-shot-publish"
+      ],
+      "source_disposition": "core",
+      "open_branches": [
+        "Single producer, one publication, immutable afterwards; no reset/reuse protocol."
+      ]
+    },
+    {
+      "id": "cpp-sys-cas-update",
+      "title": "CAS重试循环与失败反馈",
+      "state": "authored-tested",
+      "file": "content/cpp/线程与同步.source.md",
+      "h3": "3.3 CAS更新：失败会刷新expected",
+      "code_blocks": [
+        "atomic-min"
+      ],
+      "source_disposition": "core",
+      "open_branches": [
+        "Minimum update uses constant desired; pointer reclamation and ABA not implemented."
+      ]
+    },
+    {
+      "id": "cpp-sys-atomic-pointer",
+      "title": "共享所有权与共享对象线程安全",
+      "state": "not-authored",
+      "file": null,
+      "h3": null,
+      "code_blocks": [],
+      "source_disposition": "core",
+      "open_branches": [
+        "pre-C++20原子shared_ptr自由函数的具体代码待补。",
+        "shared_ptr atomic access variations not implemented."
+      ]
+    },
+    {
+      "id": "cpp-sys-atomic-ref",
+      "title": "给既有对象施加原子访问",
+      "state": "not-authored",
+      "file": null,
+      "h3": null,
+      "code_blocks": [],
+      "source_disposition": "extension",
+      "open_branches": [
+        "需补读完整atomic_ref原文，当前只够入口，不可直接给无条件模板。",
+        "Alignment/lifetime and mixed access constraints need full body reading."
+      ]
+    },
+    {
+      "id": "cpp-sys-atomic-wait",
+      "title": "等待原子状态变化",
+      "state": "not-authored",
+      "file": null,
+      "h3": null,
+      "code_blocks": [],
+      "source_disposition": "extension",
+      "open_branches": [
+        "书只读到本节开头；完整契约和实现题待补。",
+        "No C++20 wait implementation; full contract/ABA branch still open."
+      ]
+    },
+    {
+      "id": "cpp-sys-coordination-primitives",
+      "title": "阶段同步与资源配额",
+      "state": "not-authored",
+      "file": null,
+      "h3": null,
+      "code_blocks": [],
+      "source_disposition": "extension",
+      "open_branches": [
+        "latch/barrier段落未完整读取，当前为明确待补；semaphore例的遗漏捕获已独立确认。",
+        "latch/barrier/semaphore examples not authored; known book capture error is not coverage."
+      ]
+    },
+    {
+      "id": "cpp-sys-parallel-partition",
+      "title": "按块并行处理范围",
+      "state": "authored-tested",
+      "file": "content/cpp/线程与同步.source.md",
+      "h3": "4.1 分块极值：空范围、核数与异常收尾",
+      "code_blocks": [
+        "parallel-min"
+      ],
+      "source_disposition": "core",
+      "open_branches": [
+        "Only const int min worker; arbitrary throwing/stateful function not supported.",
+        "Thread-launch failure cleanup reasoned from RAII; launch failure not injected in tests."
+      ]
+    },
+    {
+      "id": "cpp-sys-parallel-reduce",
+      "title": "并行极值与归约",
+      "state": "partial",
+      "file": "content/cpp/线程与同步.source.md",
+      "h3": "4.1 分块极值：空范围、核数与异常收尾",
+      "code_blocks": [
+        "parallel-min"
+      ],
+      "source_disposition": "core",
+      "open_branches": [
+        "Integer minimum covered; generic identities/associativity/floating reduction only boundaries in prose."
+      ]
+    },
+    {
+      "id": "cpp-sys-bounded-executor",
+      "title": "有限线程池与任务提交",
+      "state": "not-authored",
+      "file": null,
+      "h3": null,
+      "code_blocks": [],
+      "source_disposition": "extension",
+      "open_branches": [
+        "尚无完整标准线程池原语或独立实现验证，必须按原创小型executor约束创作。",
+        "No full thread pool or submission/cancel/backpressure interface."
+      ]
+    },
+    {
+      "id": "cpp-sys-record-logging",
+      "title": "按记录写并发日志",
+      "state": "authored-tested",
+      "file": "content/cpp/线程与同步.source.md",
+      "h3": "4.2 日志完整性不是“cout必然data race”",
+      "code_blocks": [
+        "record-logger"
+      ],
+      "source_disposition": "core",
+      "open_branches": [
+        "Synchronous record mutex only; no osyncstream build or background logger implementation."
+      ]
+    },
+    {
+      "id": "cpp-sys-shutdown-order",
+      "title": "含线程成员的对象析构",
+      "state": "partial",
+      "file": "content/cpp/线程与同步.source.md",
+      "h3": "4.2 日志完整性不是“cout必然data race”",
+      "code_blocks": [
+        "closing-queue",
+        "joining-thread"
+      ],
+      "source_disposition": "core",
+      "open_branches": [
+        "Ownership/join order explained; no class that owns a worker and state implemented."
+      ]
+    },
+    {
+      "id": "cpp-sys-coroutine-boundary",
+      "title": "协程是挂起机制而非自动线程",
+      "state": "not-authored",
+      "file": null,
+      "h3": null,
+      "code_blocks": [],
+      "source_disposition": "deferred",
+      "open_branches": [
+        "本轮仅目录发现及线程池边界，未完整读取协程实现；不把它混进已闭合主干。",
+        "Discovery only; no frame/lifetime implementation."
+      ]
+    },
+    {
+      "id": "cpp-sys-tu-pipeline",
+      "title": "从源码到链接错误",
+      "state": "authored-tested",
+      "file": "content/cpp/翻译与链接.source.md",
+      "h3": "1.1 两个源文件共同使用一个接口",
+      "code_blocks": [
+        "tu-client-a",
+        "tu-client-b"
+      ],
+      "source_disposition": "core",
+      "open_branches": [
+        "Separate compile/link stages executed; -E/-S only described."
+      ]
+    },
+    {
+      "id": "cpp-sys-header-odr",
+      "title": "头文件保护不解决跨TU普通定义",
+      "state": "authored-tested",
+      "file": "content/cpp/翻译与链接.source.md",
+      "h3": "1.2 有include guard，仍可能重复定义",
+      "code_blocks": [
+        "odr-bad-header",
+        "odr-declaration-header",
+        "odr-one-definition",
+        "odr-inline-header"
+      ],
+      "source_disposition": "core",
+      "open_branches": [
+        "Illegal ordinary definitions diagnosed without execution; no claim all ODR errors must be diagnosed."
+      ]
+    },
+    {
+      "id": "cpp-sys-internal-linkage",
+      "title": "相同名字对应几个实体",
+      "state": "authored-tested",
+      "file": "content/cpp/翻译与链接.source.md",
+      "h3": "2.3 私有副本：不报错不代表保持了语义",
+      "code_blocks": [
+        "odr-local-header",
+        "hidden-definition"
+      ],
+      "source_disposition": "core",
+      "open_branches": [
+        "const linkage variations only described; not separate fixtures."
+      ]
+    },
+    {
+      "id": "cpp-sys-template-location",
+      "title": "模板定义可见性与显式实例化",
+      "state": "crossref-unwritten-here",
+      "file": null,
+      "h3": null,
+      "code_blocks": [],
+      "source_disposition": "crossref",
+      "open_branches": [
+        "模板作者组应主讲；系统组仅保留跨TU症状与证据。",
+        "Template author owns visibility/explicit instantiation examples; no claim from mere mention."
+      ]
+    },
+    {
+      "id": "cpp-sys-forward-completeness",
+      "title": "前置声明和完整类型需求",
+      "state": "authored-tested",
+      "file": "content/cpp/翻译与链接.source.md",
+      "h3": "3.2 在实现完整的位置生成销毁操作",
+      "code_blocks": [
+        "pimpl-header",
+        "pimpl-definition"
+      ],
+      "source_disposition": "crossref",
+      "open_branches": [
+        "资源作者组主讲所有权/Pimpl，具体库析构完整性另需核验。",
+        "Only Pimpl cross-TU completeness; ownership semantics main coverage belongs to core author."
+      ]
+    },
+    {
+      "id": "cpp-sys-macro-evaluation",
+      "title": "宏展开与函数求值不同",
+      "state": "not-authored",
+      "file": null,
+      "h3": null,
+      "code_blocks": [],
+      "source_disposition": "core",
+      "open_branches": [
+        "重复副作用例需按具体标准判sequencing，不能笼统说固定输出。",
+        "Macro side-effect sequencing cases not authored."
+      ]
+    },
+    {
+      "id": "cpp-sys-feature-detection",
+      "title": "标准号不等于具体库功能可用",
+      "state": "authored-tested",
+      "file": "content/cpp/翻译与链接.source.md",
+      "h3": "4.1 探测具体功能，保持调用接口",
+      "code_blocks": [
+        "feature-probe"
+      ],
+      "source_disposition": "core",
+      "open_branches": [
+        "Only span feature branch exercised: local C++17 fallback, local C++20 span."
+      ]
+    },
+    {
+      "id": "cpp-sys-modules-toolchain",
+      "title": "模块接口与工具链构建",
+      "state": "not-authored",
+      "file": null,
+      "h3": null,
+      "code_blocks": [],
+      "source_disposition": "extension",
+      "open_branches": [
+        "未运行模块构建；当前GCC滚动文档不能硬套本地版本标志。",
+        "Compiler docs read; no module or CMI build executed."
+      ]
+    },
+    {
+      "id": "cpp-sys-c-abi-boundary",
+      "title": "C与C++接口边界",
+      "state": "not-authored",
+      "file": null,
+      "h3": null,
+      "code_blocks": [],
+      "source_disposition": "extension",
+      "open_branches": [
+        "本轮只目录发现Pro34章，需补读实际C链接实现和ABI目标文档。",
+        "Only cautions in prose; C ABI/allocator/exception boundary implementation unclosed."
+      ]
+    },
+    {
+      "id": "cpp-sys-diagnostic-limits",
+      "title": "用编译器和诊断工具定位实际问题",
+      "state": "partial",
+      "file": "content/cpp/翻译与链接.source.md",
+      "h3": "4.2 模块、C接口与诊断工具",
+      "code_blocks": [],
+      "source_disposition": "core",
+      "open_branches": [
+        "本机未验证任何sanitizer运行；只实际执行语法／链接边界实验。",
+        "Compile/link diagnostics tested; no sanitizers or cross-toolchain proof."
+      ]
+    },
+    {
+      "id": "cpp-sys-packed-locations",
+      "title": "逻辑上不同字段可能共享同一存储位置",
+      "state": "not-authored",
+      "file": null,
+      "h3": null,
+      "code_blocks": [],
+      "source_disposition": "extension",
+      "open_branches": [
+        "CON52正文及容器数据竞争例外条款尚未完整读取。",
+        "vector<bool> boundary mentioned; CON52 body and runnable lawful comparison absent."
+      ]
+    },
+    {
+      "id": "cpp-sys-false-sharing",
+      "title": "没有数据竞争的并行代码仍可能性能差",
+      "state": "not-authored",
+      "file": null,
+      "h3": null,
+      "code_blocks": [],
+      "source_disposition": "extension",
+      "open_branches": [
+        "Pro物理1043 false-sharing仅在目录发现，未读正文；没有做硬件性能实验。",
+        "No body read/performance experiment; not coverage."
+      ]
+    }
+  ]
+}

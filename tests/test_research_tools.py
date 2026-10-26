@@ -105,6 +105,21 @@ class ResearchToolsTest(unittest.TestCase):
         rows = extract(raw, "https://atcoder.jp/contests/dp/tasks", "link_index", {"include_url_regex": r"^https://atcoder.jp/contests/dp/tasks/dp_[a-z]+$"})["records"]
         self.assertEqual([r["id"] for r in rows], ["atcoder:dp:dp_a"])
 
+    def test_declared_legacy_encoding_preserves_labels_without_lossy_fallback(self):
+        raw = b'<meta charset="iso-8859-1"><a href="/exercises/">F\xf6rdjupning</a>'
+        config = {"include_url_regex": r"/exercises/", "text_encoding": "iso-8859-1"}
+        rows = extract(raw, "https://example.org/", "link_index", config)["records"]
+        self.assertEqual(rows[0]["title"], "Fördjupning")
+        with self.assertRaises(UnicodeDecodeError):
+            extract(raw, "https://example.org/", "link_index", {"include_url_regex": r"/exercises/"})
+
+    def test_encoding_changes_invalidate_a_previous_capture(self):
+        self.capture()
+        data = read_json(self.root / "catalog/sources.json")
+        data["sources"][0]["entries"][0]["enumeration"]["text_encoding"] = "iso-8859-1"
+        write_json(self.root / "catalog/sources.json", data)
+        self.assertFalse(validate(self.root)["ok"])
+
     def test_empty_or_interstitial_does_not_promote_head(self):
         self.capture()
         old = self.head()

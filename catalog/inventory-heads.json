@@ -8,6 +8,9 @@
     "cp-algorithms/navigation": "catalog/inventories/cp-algorithms/navigation/20261026T075513.706063+0000-b387ea377cd4.json",
     "cpbook/problem-classification": "catalog/inventories/cpbook/problem-classification/20261026T083207.751282+0000-c7edbd4550a4-e2f040b09e324596944c1d20ab2b7cb7.json",
     "ac-library/documentation": "catalog/inventories/ac-library/documentation/20261026T075530.991045+0000-3774617ad6f8.json",
-    "usaco-guide/binary-search": "catalog/inventories/usaco-guide/binary-search/20261026T092737.814516+0000-df88c65fa82a-07d4412eaf6b4c4e85551a1a577f54f2.json"
+    "usaco-guide/binary-search": "catalog/inventories/usaco-guide/binary-search/20261026T092737.814516+0000-df88c65fa82a-07d4412eaf6b4c4e85551a1a577f54f2.json",
+    "sutter-gotw/revised-index": "catalog/inventories/sutter-gotw/revised-index/20261026T124351.917430+0000-980ef9f3b70f-8316681c5a7d4061b3332c95e72c38f4.json",
+    "liu-tddd38/exercise-index": "catalog/inventories/liu-tddd38/exercise-index/20261026T124549.089723+0000-e29a4a6dce85-cda55a8505334ea5b5642dfe8bd7820f.json",
+    "sei-cert-cpp/rules": "catalog/inventories/sei-cert-cpp/rules/20261026T124549.116383+0000-a4b1204016d7-8440fb95a3b743d0a71cd5f4eb2a3b37.json"
   }
 }

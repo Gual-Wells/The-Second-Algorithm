@@ -90,7 +90,9 @@ HackerRank既有来源新增的C++方向只作扩展线索：当前首页大量�
 
 `implemented` 只表示适配器已实现并针对该入口验证，不能表示全部材料已读。初始登记时尚未集成的入口保留 `planned` 或 `manual`，实际采集后由执行结果更新。
 
-2026-10-26 已实际接通 8 个入口：CSES problemset、Codility lessons／binary-search、AtCoder educational-dp、cp-algorithms navigation、CPbook problem-classification、USACO binary-search、AtCoder Library documentation。结果与清单边界见[本次来源状态](../research/2026-10-26/source-status.json)，各版本由[inventory-heads](../catalog/inventory-heads.json)定位。
+2026-10-26 算法研究先接通8个入口：CSES problemset、Codility lessons／binary-search、AtCoder educational-dp、cp-algorithms navigation、CPbook problem-classification、USACO binary-search、AtCoder Library documentation。其阶段结果见[来源状态](../research/2026-10-26/source-status.json)。后续C++研究增加GotW修订文章、TDDD38练习目录及CERT规则列表三个成功快照，当前合计11个指针，由[inventory-heads](../catalog/inventory-heads.json)定位。
+
+C++新快照分别取得16个文章链接、16个练习目录、83个规则链接；读取正文仍限实际登记范围。TDDD38按页面声明显式使用iso-8859-1，不以有损替换解码。Exercism配置另有101项有限目录分析；LLVM libc++固定llvmorg-20.1.8的五份实际回归材料用于独立反查，未执行其完整上游harness。详见[C++首轮研究](../research/2026-10-26/cpp-full-cycle.md)。
 
 自动采集 OI Wiki 本次遇到 TLS EOF、Hello 算法返回 HTTP 429，均保留失败记录，没有冒称采集成功或继续绕过限制。USACO 的下一模块导航与清单分页已按明确单页入口区分；此页原题链接捕获不表示整个 Guide 已枚举。
 

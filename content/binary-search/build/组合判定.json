@@ -168,8 +168,8 @@
   "sourceSha256": "77eeeea0c4c11963d4a96c53e26272dc51a0d3f0f7273cf76bf91356c1d4966b",
   "codeSha256": "b3610efdb62d4b0d60fff4e4fc3182e43e481a6de0a3e40fb2b6760e7b698984",
   "markdownSha256": "3630e61a63a71baf6ebd8bfe32b6ec8a4b04b4c1cef8caeedce60f52f279fcff",
-  "htmlSha256": "08ce0e7af8cf2b64b3e99ae97c5515fd9e3af901d1396725e5cae52b7ff0cbfa",
-  "builderSha256": "1f103bf68f33010aae9705425eac5c78624d800314c563d73e46f5a8bcc90f91",
+  "htmlSha256": "c63835037a20b1e25f719b63253a5f01f5f430a083ffa388b0b6ccf661871468",
+  "builderSha256": "86d65155c26e85dfd7b84bccd818659cb050a4dea870b0ffd43ac34965e8491e",
   "markdownBytes": 46325,
-  "htmlBytes": 92487
+  "htmlBytes": 92547
 }

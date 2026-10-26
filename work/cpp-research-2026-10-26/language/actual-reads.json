@@ -1,0 +1,366 @@
+{
+  "schema_version": 1,
+  "reads": [
+    {
+      "id": "pro-init",
+      "source_type": "provided_local_book",
+      "material_key": "professional-cpp",
+      "location": "physical95–102",
+      "read_scope": "initializer_list, class initialization examples and ()/{} contrast; no claim to all chapter1",
+      "completeness": "selected relevant passages; not whole chapter/book",
+      "full_book_read": false
+    },
+    {
+      "id": "pro-refs",
+      "source_type": "provided_local_book",
+      "material_key": "professional-cpp",
+      "location": "physical111–118",
+      "read_scope": "reference binding, const references, reference members/parameters/returns, C-style split-output example",
+      "completeness": "selected relevant passages; not whole chapter/book",
+      "full_book_read": false
+    },
+    {
+      "id": "pro-owners",
+      "source_type": "provided_local_book",
+      "material_key": "professional-cpp",
+      "location": "physical296–307",
+      "read_scope": "entire selected smart-pointer range: unique/shared/weak, deleters, aliases, enable_shared_from_this, C API output pointers",
+      "completeness": "selected complete source units",
+      "full_book_read": false
+    },
+    {
+      "id": "pro-ctor",
+      "source_type": "provided_local_book",
+      "material_key": "professional-cpp",
+      "location": "physical328–332",
+      "read_scope": "ctor-initializers, no-default/const/reference members, declaration-order dependence, copy construction",
+      "completeness": "selected complete source units",
+      "full_book_read": false
+    },
+    {
+      "id": "pro-copy-move",
+      "source_type": "provided_local_book",
+      "material_key": "professional-cpp",
+      "location": "physical353–369",
+      "read_scope": "complete contiguous range: raw resource value semantics, assignment exception safety, move, swap, moved-from, return/elision",
+      "completeness": "selected complete source units",
+      "full_book_read": false
+    },
+    {
+      "id": "pro-member",
+      "source_type": "provided_local_book",
+      "material_key": "professional-cpp",
+      "location": "physical375–378",
+      "read_scope": "const/nonconst overloads, const_cast/as_const reuse, deleted overloads, ref-qualified TextHolder accessors",
+      "completeness": "selected complete source units",
+      "full_book_read": false
+    },
+    {
+      "id": "pro-poly",
+      "source_type": "provided_local_book",
+      "material_key": "professional-cpp",
+      "location": "physical427–428",
+      "read_scope": "base construction/destruction order and virtual calls in constructors/destructors",
+      "completeness": "selected complete source units",
+      "full_book_read": false
+    },
+    {
+      "id": "pro-errors",
+      "source_type": "provided_local_book",
+      "material_key": "professional-cpp",
+      "location": "physical607–611 and624–626",
+      "read_scope": "rethrow/slicing, unwinding and cleanup, destructor failure, exception guarantee tiers, exercise14-1 and14-2",
+      "completeness": "selected relevant passages; not whole chapter/book",
+      "full_book_read": false
+    },
+    {
+      "id": "pro-ex9",
+      "source_type": "provided_local_book",
+      "material_key": "professional-cpp",
+      "location": "physical406–407",
+      "read_scope": "exercise9-1 through9-5 questions; prerequisite Person class exercises8-3/8-4 not read",
+      "completeness": "selected relevant passages; not whole chapter/book",
+      "full_book_read": false
+    },
+    {
+      "id": "challenge15",
+      "source_type": "provided_local_book",
+      "material_key": "modern-cpp-challenge",
+      "location": "problem15 and solution15; EPUB spine57 and66; PDF40–45",
+      "read_scope": "complete IPv4 value-class problem and worked solution",
+      "completeness": "selected complete source units",
+      "full_book_read": false
+    },
+    {
+      "id": "challenge16",
+      "source_type": "provided_local_book",
+      "material_key": "modern-cpp-challenge",
+      "location": "problem16 and solution16; EPUB spine58 and67; PDF40–46",
+      "read_scope": "complete IPv4 comparison, prefix/postfix increment and closed-range enumeration",
+      "completeness": "selected complete source units",
+      "full_book_read": false
+    },
+    {
+      "id": "gotw-index",
+      "source_type": "primary_author_or_standard_text",
+      "url": "https://herbsutter.com/gotw/",
+      "read_scope": "revised index16 entries; only selected article bodies read",
+      "completeness": "main source unit read",
+      "standard_version": null
+    },
+    {
+      "id": "gotw1",
+      "source_type": "primary_author_or_standard_text",
+      "url": "https://herbsutter.com/2013/05/09/gotw-1-solution/",
+      "read_scope": "problem and solution main body through section4; comments not research authority",
+      "completeness": "main source unit read",
+      "standard_version": null
+    },
+    {
+      "id": "gotw89",
+      "source_type": "primary_author_or_standard_text",
+      "url": "https://herbsutter.com/2013/05/29/gotw-89-solution-smart-pointers/",
+      "read_scope": "four questions and main solutions including ownership, make helpers and pre-C++17 exception example",
+      "completeness": "main source unit read",
+      "standard_version": null
+    },
+    {
+      "id": "gotw90",
+      "source_type": "primary_author_or_standard_text",
+      "url": "https://herbsutter.com/2013/05/30/gotw-90-solution-factories/",
+      "read_scope": "all question text and owning polymorphic factory answer; nonpolymorphic final answer not fully inspected",
+      "completeness": "selected clauses/body passages",
+      "standard_version": null
+    },
+    {
+      "id": "gotw91",
+      "source_type": "primary_author_or_standard_text",
+      "url": "https://herbsutter.com/2013/06/05/gotw-91-solution-smart-pointer-parameters/",
+      "read_scope": "ownership parameter answers, including conditional retention exception for const shared_ptr&",
+      "completeness": "selected clauses/body passages",
+      "standard_version": null
+    },
+    {
+      "id": "gotw92",
+      "source_type": "primary_author_or_standard_text",
+      "url": "https://herbsutter.com/2013/06/07/gotw-92-solution-auto-variables-part-1/",
+      "read_scope": "problem and answers through summary; discovered outdated auto direct-list rule",
+      "completeness": "main source unit read",
+      "standard_version": null
+    },
+    {
+      "id": "std-init",
+      "source_type": "primary_author_or_standard_text",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/dcl.init",
+      "read_scope": "paragraphs6–17, including zero/default/value initialization, indeterminate values and same-type prvalue initialization",
+      "completeness": "selected clauses/body passages",
+      "standard_version": "C++17 working draft N4659"
+    },
+    {
+      "id": "std-list",
+      "source_type": "primary_author_or_standard_text",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/dcl.init.list",
+      "read_scope": "paragraphs1–6 through const backing array and lifetime discussion; rest of narrowing subcategories not fully inspected",
+      "completeness": "selected clauses/body passages",
+      "standard_version": "C++17 working draft N4659"
+    },
+    {
+      "id": "std-auto",
+      "source_type": "primary_author_or_standard_text",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/dcl.spec.auto",
+      "read_scope": "auto/decltype(auto) and placeholder deduction including direct-list single-element rule",
+      "completeness": "main source unit read",
+      "standard_version": "C++17 working draft N4659"
+    },
+    {
+      "id": "std-decltype",
+      "source_type": "primary_author_or_standard_text",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/dcl.type.simple",
+      "read_scope": "decltype expression category cases paragraph4 and unevaluated context paragraph5",
+      "completeness": "selected clauses/body passages",
+      "standard_version": "C++17 working draft N4659"
+    },
+    {
+      "id": "std-temp",
+      "source_type": "primary_author_or_standard_text",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/class.temporary",
+      "read_scope": "materialization and lifetime extension exceptions, including return/reference parameter/new",
+      "completeness": "main source unit read",
+      "standard_version": "C++17 working draft N4659"
+    },
+    {
+      "id": "std-movedfrom",
+      "source_type": "primary_author_or_standard_text",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/lib.types.movedfrom",
+      "read_scope": "valid-but-unspecified default standard-library moved-from requirement",
+      "completeness": "main source unit read",
+      "standard_version": "C++17 working draft N4659"
+    },
+    {
+      "id": "std-vector",
+      "source_type": "primary_author_or_standard_text",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/vector.modifiers",
+      "read_scope": "reallocation invalidation and exceptions for throwing move of non-CopyInsertable T",
+      "completeness": "main source unit read",
+      "standard_version": "C++17 working draft N4659"
+    },
+    {
+      "id": "std-copyctor",
+      "source_type": "primary_author_or_standard_text",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/class.copy.ctor",
+      "read_scope": "implicit/defaulted/deleted copy/move constructors and fallback distinctions",
+      "completeness": "main source unit read",
+      "standard_version": "C++17 working draft N4659"
+    },
+    {
+      "id": "std-elision",
+      "source_type": "primary_author_or_standard_text",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/class.copy.elision",
+      "read_scope": "optional NRVO and implicit move eligibility; guaranteed prvalue construction instead checked in dcl.init",
+      "completeness": "main source unit read",
+      "standard_version": "C++17 working draft N4659"
+    },
+    {
+      "id": "std-call",
+      "source_type": "primary_author_or_standard_text",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/expr.call",
+      "read_scope": "argument initialization and C++17 indeterminate sequencing; result value categories",
+      "completeness": "main source unit read",
+      "standard_version": "C++17 working draft N4659"
+    },
+    {
+      "id": "std-weak",
+      "source_type": "primary_author_or_standard_text",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/util.smartptr.weak",
+      "read_scope": "weak observer and atomic lock semantics",
+      "completeness": "main source unit read",
+      "standard_version": "C++17 working draft N4659"
+    },
+    {
+      "id": "std-cdtor",
+      "source_type": "primary_author_or_standard_text",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/class.cdtor",
+      "read_scope": "virtual dispatch during construction/destruction and validity of object access",
+      "completeness": "main source unit read",
+      "standard_version": "C++17 working draft N4659"
+    },
+    {
+      "id": "std-delete",
+      "source_type": "primary_author_or_standard_text",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/expr.delete",
+      "read_scope": "paragraphs1–7, matching allocation, static/dynamic type and virtual destruction",
+      "completeness": "selected clauses/body passages",
+      "standard_version": "C++17 working draft N4659"
+    },
+    {
+      "id": "std-baseinit",
+      "source_type": "primary_author_or_standard_text",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/class.base.init",
+      "read_scope": "constructor initializer grammar, delegating restrictions and temporary reference member rule",
+      "completeness": "selected clauses/body passages",
+      "standard_version": "C++17 working draft N4659"
+    },
+    {
+      "id": "std-shift",
+      "source_type": "primary_author_or_standard_text",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/expr.shift",
+      "read_scope": "complete shift rules, width/negative bound, signed right-shift version distinction",
+      "completeness": "main source unit read",
+      "standard_version": "C++17 working draft N4659"
+    },
+    {
+      "id": "std-mul",
+      "source_type": "primary_author_or_standard_text",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/expr.mul",
+      "read_scope": "complete multiplication/division/remainder type and preconditions",
+      "completeness": "main source unit read",
+      "standard_version": "C++17 working draft N4659"
+    },
+    {
+      "id": "std-arith",
+      "source_type": "primary_author_or_standard_text",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/expr",
+      "read_scope": "paragraph11 usual arithmetic conversions and nearby value-category passages, not entire 3256-line clause",
+      "completeness": "selected clauses/body passages",
+      "standard_version": "C++17 working draft N4659"
+    },
+    {
+      "id": "std-exceptctor",
+      "source_type": "primary_author_or_standard_text",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/except.ctor",
+      "read_scope": "stack unwinding and partial construction cleanup",
+      "completeness": "main source unit read",
+      "standard_version": "C++17 working draft N4659"
+    },
+    {
+      "id": "std-exceptthrow",
+      "source_type": "primary_author_or_standard_text",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/except.throw",
+      "read_scope": "exception object, rethrow identity and terminate during unwinding",
+      "completeness": "main source unit read",
+      "standard_version": "C++17 working draft N4659"
+    },
+    {
+      "id": "cert-err56",
+      "source_type": "primary_author_or_standard_text",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/exceptions-and-error-handling-err/err56-cpp/",
+      "read_scope": "original-site main body returned by search; flawed IntArray assignment versus prepare/commit solution",
+      "completeness": "main source unit read",
+      "standard_version": null
+    },
+    {
+      "id": "cert-oop52",
+      "source_type": "primary_author_or_standard_text",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/object-oriented-programming-oop/oop52-cpp/",
+      "read_scope": "original-site main body returned by search; raw and unique_ptr deletion cases plus newer destroying-delete exception",
+      "completeness": "main source unit read",
+      "standard_version": null
+    },
+    {
+      "id": "pro-nullptr",
+      "source_type": "provided_local_book",
+      "material_key": "professional-cpp",
+      "location": "physical107",
+      "read_scope": "allocation/deallocation pairing and beginning of null-pointer constant example; continuation not read",
+      "completeness": "selected passage",
+      "full_book_read": false
+    },
+    {
+      "id": "std-nullptr",
+      "source_type": "historical_standard_rendering",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/conv.ptr",
+      "read_scope": "Full clause paragraphs 1-3; nullptr_t and integer literal zero conversions.",
+      "completeness": "full clause",
+      "full_book_read": false
+    },
+    {
+      "id": "std-overload-rank",
+      "source_type": "historical_standard_rendering",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/over.ics.rank",
+      "read_scope": "Actual returned clause inspected; used standard-conversion subsequence/rank and pointer-overload comparisons.",
+      "completeness": "full returned clause",
+      "full_book_read": false
+    }
+  ],
+  "actual_queries": [
+    "site:herbsutter.com \"GotW #5\" \"Solution\" virtual",
+    "site:cmu-sei.github.io/secure-coding-standards ERR56 CPP exception safety",
+    "site:cmu-sei.github.io/secure-coding-standards OOP52 delete polymorphic object virtual destructor",
+    "site:timsong-cpp.github.io/cppwp/n4659 \"usual arithmetic conversions\" signed unsigned"
+  ],
+  "access_failures": [
+    {
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/expr.arith.conv",
+      "reason": "not accessible as this historical clause name; read expr paragraph11 instead"
+    },
+    {
+      "url": "GotW #5 index click",
+      "reason": "tool returned internal error; no body read claimed"
+    }
+  ],
+  "limits": [
+    "Book source excerpts remain in private .local library; this public record contains references and original analysis only.",
+    "Directory access is not article/prose completion.",
+    "No whole C++ semantic completeness or interview-frequency estimate is asserted."
+  ]
+}

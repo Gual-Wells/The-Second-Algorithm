@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "domain": "cpp-generic-practice",
+  "patterns": [
+    {
+      "id": "cpp-generic-array-bound",
+      "title": "数组边界、退化与引用推导",
+      "scenario": "数组边界、退化与引用推导",
+      "mechanism": "数组按值退化与按引用保留边界；字符数组边界含末尾NUL",
+      "disposition": "authored-selected-scope",
+      "evidence_note": "actual-reads.json and research.md; related variants share a single authoritative block"
+    },
+    {
+      "id": "cpp-generic-invoke-forward",
+      "title": "保留泛型调用实参与返回值",
+      "scenario": "保留泛型调用实参与返回值",
+      "mechanism": "转发调用对象与每个实参；借用返回仍受原对象生命周期约束",
+      "disposition": "authored-selected-scope",
+      "evidence_note": "actual-reads.json and research.md; related variants share a single authoritative block"
+    },
+    {
+      "id": "cpp-generic-append-pack",
+      "title": "参数包批量移动追加",
+      "scenario": "参数包批量移动追加",
+      "mechanism": "体内逗号fold有序执行；调用实参求值顺序和异常事务性另有边界",
+      "disposition": "authored-selected-scope",
+      "evidence_note": "actual-reads.json and research.md; related variants share a single authoritative block"
+    },
+    {
+      "id": "cpp-generic-logical-folds",
+      "title": "逻辑fold的空集与短路",
+      "scenario": "逻辑fold的空集与短路",
+      "mechanism": "all空集为true，any空集为false；不重复移动有状态谓词",
+      "disposition": "authored-selected-scope",
+      "evidence_note": "actual-reads.json and research.md; related variants share a single authoritative block"
+    },
+    {
+      "id": "cpp-generic-value-minimum",
+      "title": "拥有式混合类型最小值",
+      "scenario": "拥有式混合类型最小值",
+      "mechanism": "至少一个实参，common_type值域内比较；不伪装原始混合数值无损",
+      "disposition": "authored-selected-scope",
+      "evidence_note": "actual-reads.json and research.md; related variants share a single authoritative block"
+    },
+    {
+      "id": "cpp-generic-traits",
+      "title": "递归类型萃取与cv层级",
+      "scenario": "递归类型萃取与cv层级",
+      "mechanism": "顶层const、数组已知未知界、递归移除指针保留最终pointee const",
+      "disposition": "authored-selected-scope",
+      "evidence_note": "actual-reads.json and research.md; related variants share a single authoritative block"
+    },
+    {
+      "id": "cpp-generic-partial-storage",
+      "title": "偏特化改变存储策略",
+      "scenario": "偏特化改变存储策略",
+      "mechanism": "类偏特化与CTAD；C字符串值复制为string，key类型不擅自变更",
+      "disposition": "authored-selected-scope",
+      "evidence_note": "actual-reads.json and research.md; related variants share a single authoritative block"
+    },
+    {
+      "id": "cpp-generic-detected-member",
+      "title": "检测表达式与按需实例化",
+      "scenario": "检测表达式与按需实例化",
+      "mechanism": "void_t与if constexpr；检测存在性不等于结果可转换或语义正确",
+      "disposition": "authored-selected-scope",
+      "evidence_note": "actual-reads.json and research.md; related variants share a single authoritative block"
+    },
+    {
+      "id": "cpp-generic-priority-dispatch",
+      "title": "多种成员接口的显式优先级",
+      "scenario": "多种成员接口的显式优先级",
+      "mechanism": "priority tag与表达式替换；函数体内部错误不普遍被SFINAE吞掉",
+      "disposition": "authored-selected-scope",
+      "evidence_note": "actual-reads.json and research.md; related variants share a single authoritative block"
+    },
+    {
+      "id": "cpp-generic-dependent-names",
+      "title": "依赖名与依赖基类查找",
+      "scenario": "依赖名与依赖基类查找",
+      "mechanism": "typename、template消歧与this访问依赖基类",
+      "disposition": "authored-selected-scope",
+      "evidence_note": "actual-reads.json and research.md; related variants share a single authoritative block"
+    },
+    {
+      "id": "cpp-generic-adl-swap",
+      "title": "泛型swap的ADL与回退",
+      "scenario": "泛型swap的ADL与回退",
+      "mechanism": "using std::swap后非限定调用；异常规格对应真实选择",
+      "disposition": "authored-selected-scope",
+      "evidence_note": "actual-reads.json and research.md; related variants share a single authoritative block"
+    },
+    {
+      "id": "cpp-generic-compile-time",
+      "title": "constexpr求值与数值边界",
+      "scenario": "constexpr求值与数值边界",
+      "mechanism": "constexpr允许而非强制常量求值；uint64 Fibonacci计算避免先溢出再检查",
+      "disposition": "authored-selected-scope",
+      "evidence_note": "actual-reads.json and research.md; related variants share a single authoritative block"
+    },
+    {
+      "id": "cpp-generic-tuple-indices",
+      "title": "异构tuple按索引展开",
+      "scenario": "异构tuple按索引展开",
+      "mechanism": "index_sequence和空tuple；元素须满足输出操作",
+      "disposition": "authored-selected-scope",
+      "evidence_note": "actual-reads.json and research.md; related variants share a single authoritative block"
+    },
+    {
+      "id": "cpp-generic-static-queue",
+      "title": "固定容量队列与对象存活",
+      "scenario": "固定容量队列与对象存活",
+      "mechanism": "optional槽、满时拒绝、移动专属、失败提交、复制扩容及耦合不变量",
+      "disposition": "authored-selected-scope",
+      "evidence_note": "actual-reads.json and research.md; related variants share a single authoritative block"
+    },
+    {
+      "id": "cpp-generic-measure-call",
+      "title": "保留接口的调用计时",
+      "scenario": "保留接口的调用计时",
+      "mechanism": "steady_clock和duration；不把单次计时称作性能基准",
+      "disposition": "authored-selected-scope",
+      "evidence_note": "actual-reads.json and research.md; related variants share a single authoritative block"
+    },
+    {
+      "id": "cpp-generic-move-only-callable",
+      "title": "移动闭包与std::function能力差异",
+      "scenario": "移动闭包与std::function能力差异",
+      "mechanism": "可调用不等于可复制目标；不为擦除方便擅自改共享所有权",
+      "disposition": "authored-selected-scope",
+      "evidence_note": "actual-reads.json and research.md; related variants share a single authoritative block"
+    },
+    {
+      "id": "cpp-generic-concepts",
+      "title": "C++20约束与subsumption",
+      "scenario": "C++20约束与subsumption",
+      "mechanism": "requires表达式与命名原子约束；不能自动证明比较序或借用安全",
+      "disposition": "authored-selected-scope",
+      "evidence_note": "actual-reads.json and research.md; related variants share a single authoritative block"
+    },
+    {
+      "id": "cpp-generic-same-deduction",
+      "title": "缩写模板与同类型推导",
+      "scenario": "缩写模板与同类型推导",
+      "mechanism": "两个auto各自推导；同类型与共同可转换类型是不同合同",
+      "disposition": "authored-selected-scope",
+      "evidence_note": "actual-reads.json and research.md; related variants share a single authoritative block"
+    },
+    {
+      "id": "cpp-generic-erased-move-only",
+      "title": "C++23移动专属类型擦除",
+      "scenario": "C++23移动专属类型擦除",
+      "mechanism": "move_only_function需对应库功能；在具备功能的版本实际实例化",
+      "disposition": "authored-selected-scope",
+      "evidence_note": "actual-reads.json and research.md; related variants share a single authoritative block"
+    },
+    {
+      "id": "cpp-generic-expression-templates",
+      "title": "表达式模板的别名与延迟求值",
+      "scenario": "表达式模板的别名与延迟求值",
+      "mechanism": "目录与关联概念发现；尚未形成完整实际问题研究和作者稿",
+      "disposition": "gap",
+      "evidence_note": "范围反查与作者稿后续分支，不伪装正文已读"
+    },
+    {
+      "id": "cpp-generic-allocators",
+      "title": "allocator、pmr与内存池",
+      "scenario": "allocator、pmr与内存池",
+      "mechanism": "目录与关联概念发现；尚未形成完整实际问题研究和作者稿",
+      "disposition": "gap",
+      "evidence_note": "范围反查与作者稿后续分支，不伪装正文已读"
+    },
+    {
+      "id": "cpp-generic-crtp",
+      "title": "CRTP mixin及静态接口设计",
+      "scenario": "CRTP mixin及静态接口设计",
+      "mechanism": "目录与关联概念发现；尚未形成完整实际问题研究和作者稿",
+      "disposition": "gap",
+      "evidence_note": "范围反查与作者稿后续分支，不伪装正文已读"
+    },
+    {
+      "id": "cpp-generic-structural-nttp",
+      "title": "结构化非类型模板实参",
+      "scenario": "结构化非类型模板实参",
+      "mechanism": "目录与关联概念发现；尚未形成完整实际问题研究和作者稿",
+      "disposition": "gap",
+      "evidence_note": "范围反查与作者稿后续分支，不伪装正文已读"
+    },
+    {
+      "id": "cpp-generic-coroutines",
+      "title": "协程状态、生命周期与执行器",
+      "scenario": "协程状态、生命周期与执行器",
+      "mechanism": "目录与关联概念发现；尚未形成完整实际问题研究和作者稿",
+      "disposition": "gap",
+      "evidence_note": "范围反查与作者稿后续分支，不伪装正文已读"
+    },
+    {
+      "id": "cpp-generic-type-algorithms",
+      "title": "复杂编译期类型算法",
+      "scenario": "复杂编译期类型算法",
+      "mechanism": "目录与关联概念发现；尚未形成完整实际问题研究和作者稿",
+      "disposition": "gap",
+      "evidence_note": "范围反查与作者稿后续分支，不伪装正文已读"
+    }
+  ]
+}

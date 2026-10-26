@@ -6,6 +6,8 @@ import { marked } from 'marked';
 
 const ROOT=path.resolve(process.argv[2] || 'content/binary-search');
 const NAME=process.argv[3] || '二分查找';
+const SERIES=process.argv[4] || '求职算法总册';
+const TOC=SERIES === '求职C++实战总册' ? '问题与机制目录' : '题型目录';
 const source=await fs.readFile(path.join(ROOT,NAME+'.cpp'),'utf8');
 const draft=await fs.readFile(path.join(ROOT,NAME+'.source.md'),'utf8');
 const blocks=new Map();
@@ -34,9 +36,10 @@ function highlight(s){
 const headings=[];
 const renderer=new marked.Renderer();
 const ids=new Set();
+const decodeText=s=>s.replace(/&(amp|lt|gt|quot|#39);/g,(_,key)=>({amp:'&',lt:'<',gt:'>',quot:'"','#39':"'"})[key]);
 renderer.heading=function({tokens,depth}){
   const content=this.parser.parseInline(tokens);
-  const text=content.replace(/<[^>]+>/g,'');
+  const text=decodeText(content.replace(/<[^>]+>/g,''));
   const base=text.toLowerCase().replace(/[^\p{L}\p{N}]+/gu,'-').replace(/^-|-$/g,'');
   let id=base,i=2;while(ids.has(id))id=base+'-'+i++;
   ids.add(id);headings.push({depth,id,text});
@@ -50,7 +53,7 @@ renderer.link=function({href,title,tokens}){
 };
 let body=marked.parse(md,{renderer,gfm:true});
 body=body.replace(/<table>/g,'<div class="table-wrap"><table>').replace(/<\/table>/g,'</table></div>');
-body=body.replace('<p>求职算法总册 · 题型与 C++ 模板</p>','<p class="subtitle">求职算法总册 · 题型与 C++ 模板</p>');
+body=body.replace(/<p>(求职(?:算法总册 · 题型与 C\+\+ 模板|C\+\+实战总册[^<]*))<\/p>/,'<p class="subtitle">$1</p>');
 let nav='';
 for(const h of headings.filter(h=>h.depth===2||h.depth===3)){
   nav+='<a class="'+(h.depth===2?'group':'topic')+'" href="#'+h.id+'">'+esc(h.text)+'</a>';
@@ -68,7 +71,7 @@ a{color:var(--blue);text-underline-offset:3px;text-decoration-thickness:1px}a:ho
 .toc a.group{font-weight:600;color:#203f55;font-size:14px;margin-top:15px}.toc a.group:first-child{margin-top:0}.toc a.topic{padding-left:20px}.toc a:hover{background:#e5edf3}.toc a.active{color:#104d77;background:#e2ecf3;border-left-color:#2b688e;font-weight:600}
 main{min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:36px 42px 42px;box-shadow:0 2px 7px #1f405006}
 h1,h2,h3,h4{color:var(--heading);line-height:1.45;font-weight:600;scroll-margin-top:85px}h1{font-size:32px;margin:0 0 8px}h2{font-size:25px;margin:48px 0 21px;padding-top:30px;border-top:1px solid var(--line)}h2:first-of-type{margin-top:30px;padding-top:0;border-top:0}h3{font-size:20px;margin:34px 0 13px}h4{font-size:17px;margin:25px 0 12px;color:#253f52}
-p{margin:13px 0 17px}.subtitle{font-size:14px;color:#526878;margin:0 0 24px}strong{font-weight:600}li{margin:5px 0}
+p{margin:13px 0 17px}.subtitle{font-size:14px;color:#526878;margin:0 0 24px}strong{font-weight:600}li{margin:5px 0}main p,main li,main h2,main h3,main h4{overflow-wrap:anywhere}
 code{font-family:Consolas,'Cascadia Code','Noto Sans SC',monospace;font-size:.89em;color:#213f55;background:#eef3f6;padding:1px 4px;border-radius:3px}
 pre{background:#f6f8fa;border:1px solid #d9e2e8;border-radius:3px;padding:16px 18px;margin:17px 0 21px;overflow-x:auto;tab-size:4;font-family:Consolas,'Cascadia Code','Noto Sans SC',monospace;font-size:15px;line-height:1.6;color:#172d3c}
 pre code{font:inherit;color:inherit;background:transparent;padding:0;border-radius:0;white-space:pre}.keyword{color:#135aa0;font-weight:500}.type{color:#255d61}.comment{color:#526776}.number{color:#884920}.string{color:#8b3d21}
@@ -88,7 +91,7 @@ function mark(){scheduled=false;let current=targets[0];for(const t of targets){i
 addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(mark)}},{passive:true});mark();
 document.querySelectorAll('.mobile-toc a').forEach(a=>a.addEventListener('click',()=>{document.querySelector('.mobile-toc').open=false}));
 `;
-const html='<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(NAME)+' · 求职算法总册</title><style>'+css+'</style></head><body><header class="topbar"><div class="brand">求职算法总册<span>'+esc(NAME)+'</span></div><nav class="files" aria-label="文件"><a href="'+esc(NAME)+'.md">Markdown</a><a href="'+esc(NAME)+'.cpp">C++ 源码</a></nav></header><div class="layout"><aside class="sidebar"><div class="toc-title">题型目录</div><nav class="toc" aria-label="题型目录">'+nav+'</nav></aside><div><details class="mobile-toc"><summary>题型目录</summary><nav class="toc">'+nav+'</nav></details><main>'+body+'<footer class="page-foot">'+esc(NAME)+' · 题型与 C++ 模板</footer></main></div></div><script>'+script+'</script></body></html>';
+const html='<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(NAME)+' · '+esc(SERIES)+'</title><style>'+css+'</style></head><body><header class="topbar"><div class="brand">'+esc(SERIES)+'<span>'+esc(NAME)+'</span></div><nav class="files" aria-label="文件"><a href="'+esc(NAME)+'.md">Markdown</a><a href="'+esc(NAME)+'.cpp">C++ 源码</a></nav></header><div class="layout"><aside class="sidebar"><div class="toc-title">'+TOC+'</div><nav class="toc" aria-label="'+TOC+'">'+nav+'</nav></aside><div><details class="mobile-toc"><summary>'+TOC+'</summary><nav class="toc">'+nav+'</nav></details><main>'+body+'<footer class="page-foot">'+esc(NAME)+' · '+esc(SERIES)+'</footer></main></div></div><script>'+script+'</script></body></html>';
 await fs.writeFile(path.join(ROOT,NAME+'.html'),html,'utf8');
 await fs.mkdir(path.join(ROOT,'build'),{recursive:true});
 const sha=s=>createHash('sha256').update(s).digest('hex');

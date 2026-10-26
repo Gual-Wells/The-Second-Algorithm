@@ -11,7 +11,7 @@ a{color:var(--blue);text-underline-offset:3px;text-decoration-thickness:1px}a:ho
 .toc a.group{font-weight:600;color:#203f55;font-size:14px;margin-top:15px}.toc a.group:first-child{margin-top:0}.toc a.topic{padding-left:20px}.toc a:hover{background:#e5edf3}.toc a.active{color:#104d77;background:#e2ecf3;border-left-color:#2b688e;font-weight:600}
 main{min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:36px 42px 42px;box-shadow:0 2px 7px #1f405006}
 h1,h2,h3,h4{color:var(--heading);line-height:1.45;font-weight:600;scroll-margin-top:85px}h1{font-size:32px;margin:0 0 8px}h2{font-size:25px;margin:48px 0 21px;padding-top:30px;border-top:1px solid var(--line)}h2:first-of-type{margin-top:30px;padding-top:0;border-top:0}h3{font-size:20px;margin:34px 0 13px}h4{font-size:17px;margin:25px 0 12px;color:#253f52}
-p{margin:13px 0 17px}.subtitle{font-size:14px;color:#526878;margin:0 0 24px}strong{font-weight:600}li{margin:5px 0}
+p{margin:13px 0 17px}.subtitle{font-size:14px;color:#526878;margin:0 0 24px}strong{font-weight:600}li{margin:5px 0}main p,main li,main h2,main h3,main h4{overflow-wrap:anywhere}
 code{font-family:Consolas,'Cascadia Code','Noto Sans SC',monospace;font-size:.89em;color:#213f55;background:#eef3f6;padding:1px 4px;border-radius:3px}
 pre{background:#f6f8fa;border:1px solid #d9e2e8;border-radius:3px;padding:16px 18px;margin:17px 0 21px;overflow-x:auto;tab-size:4;font-family:Consolas,'Cascadia Code','Noto Sans SC',monospace;font-size:15px;line-height:1.6;color:#172d3c}
 pre code{font:inherit;color:inherit;background:transparent;padding:0;border-radius:0;white-space:pre}.keyword{color:#135aa0;font-weight:500}.type{color:#255d61}.comment{color:#526776}.number{color:#884920}.string{color:#8b3d21}
@@ -873,7 +873,7 @@ optional&lt;ll&gt; search_unknown(Reader read, ll target, ll index_cap = LLONG_M
 <h2 id="相关专题与参考">相关专题与参考</h2>
 <p><a href="组合判定.html">组合判定</a>继续讲解操作前缀、均值与中位数变换、图与匹配等方法；<a href="进阶扩展.html">进阶扩展</a>讲解动态排名和批量查询。</p>
 <p>算法结构对照了 <a href="https://cp-algorithms.com/num_methods/binary_search.html" target="_blank" rel="noopener noreferrer">cp-algorithms 的 Binary Search</a>、<a href="https://www.hello-algo.com/chapter_searching/binary_search_edge/" target="_blank" rel="noopener noreferrer">Hello 算法的二分边界</a> 与 <a href="https://oi-wiki.org/basic/binary/" target="_blank" rel="noopener noreferrer">OI Wiki 的二分</a>。题型链接指向原题；本文按求职参考用途重新组织，C++ 模板单独编写并校验。</p>
-<footer class="page-foot">二分查找 · 题型与 C++ 模板</footer></main></div></div><script>
+<footer class="page-foot">二分查找 · 求职算法总册</footer></main></div></div><script>
 const links=[...document.querySelectorAll('.sidebar a')];
 const targets=links.map(a=>document.getElementById(decodeURIComponent(a.hash.slice(1)))) .filter(Boolean);
 let scheduled=false,last='';

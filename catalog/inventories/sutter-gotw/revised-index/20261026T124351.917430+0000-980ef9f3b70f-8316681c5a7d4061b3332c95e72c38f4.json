@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "source_id": "sutter-gotw",
+  "entry_id": "revised-index",
+  "captured_at": "2026-10-26T12:43:51.917430+00:00",
+  "request_url": "https://herbsutter.com/gotw/",
+  "final_url": "https://herbsutter.com/gotw/",
+  "adapter": "link_index",
+  "parser_version": 4,
+  "page_title": "GotW – Sutter’s Mill",
+  "entry_configuration": {
+    "url": "https://herbsutter.com/gotw/",
+    "adapter": "link_index",
+    "include_url_regex": "herbsutter\\.com/\\d{4}/.*/gotw-"
+  },
+  "entry_configuration_sha256": "cd0d38ef8756ad102888818abbef21b340c20ebd55f33182029558b4a8f6e003",
+  "input_sha256": "980ef9f3b70f1c6ac18198f8181ae115f5a705958e1c4f65719704ef1a551e20",
+  "input_bytes": 114251,
+  "records_sha256": "c25c32a3ffb063f2f68136818ed155b4f333641f0fdfb3c4ac493000bfda20df",
+  "boundary": "matching metadata links on this registered page; not site-wide content",
+  "filter": "herbsutter\\.com/\\d{4}/.*/gotw-",
+  "pagination_next": [],
+  "state": "captured",
+  "records": [
+    {
+      "id": "url:012ce0db6f490f23544a",
+      "title": "#94: AAA Style (Almost Always Auto).",
+      "url": "https://herbsutter.com/2013/08/12/gotw-94-solution-aaa-style-almost-always-auto/",
+      "kind": "reference_link",
+      "section": "GotW / GotW Archive"
+    },
+    {
+      "id": "url:0cecdb1e3ee46c634486",
+      "title": "#5: Overriding Virtual Functions.",
+      "url": "https://herbsutter.com/2013/05/22/gotw-5-solution-overriding-virtual-functions/",
+      "kind": "reference_link",
+      "section": "GotW / GotW Archive"
+    },
+    {
+      "id": "url:35c2b736e190a88f4b97",
+      "title": "#7b: Minimizing Compile-Time Dependencies, Part 2.",
+      "url": "https://herbsutter.com/2013/12/31/gotw-7b-solution-minimizing-compile-time-dependencies-part-2/",
+      "kind": "reference_link",
+      "section": "GotW / GotW Archive"
+    },
+    {
+      "id": "url:4d85df8b6f95fd16bf92",
+      "title": "#92: Auto Variables, Part 1.",
+      "url": "https://herbsutter.com/2013/06/07/gotw-92-solution-auto-variables-part-1/",
+      "kind": "reference_link",
+      "section": "GotW / GotW Archive"
+    },
+    {
+      "id": "url:63220734db7a12651583",
+      "title": "#91: Smart Pointer Parameters.",
+      "url": "https://herbsutter.com/2013/06/05/gotw-91-solution-smart-pointer-parameters/",
+      "kind": "reference_link",
+      "section": "GotW / GotW Archive"
+    },
+    {
+      "id": "url:6bcafd615043a6ec78c3",
+      "title": "#4: Class Mechanics.",
+      "url": "https://herbsutter.com/2013/05/20/gotw-4-class-mechanics/",
+      "kind": "reference_link",
+      "section": "GotW / GotW Archive"
+    },
+    {
+      "id": "url:7a9a693900dd73d3e9ca",
+      "title": "#93: Auto Variables, Part 2.",
+      "url": "https://herbsutter.com/2013/06/13/gotw-93-solution-auto-variables-part-2/",
+      "kind": "reference_link",
+      "section": "GotW / GotW Archive"
+    },
+    {
+      "id": "url:847d9d97de8ab6481e80",
+      "title": "#3: Using the Standard Library (or, Temporaries Revisited).",
+      "url": "https://herbsutter.com/2013/05/16/gotw-3-solution-using-the-standard-library-or-temporaries-revisited/",
+      "kind": "reference_link",
+      "section": "GotW / GotW Archive"
+    },
+    {
+      "id": "url:9883f8a653c806aeddca",
+      "title": "#90: Factories.",
+      "url": "https://herbsutter.com/2013/05/30/gotw-90-solution-factories/",
+      "kind": "reference_link",
+      "section": "GotW / GotW Archive"
+    },
+    {
+      "id": "url:9e074bf1f9ccee591523",
+      "title": "#6b: Const-Correctness, Part 2.",
+      "url": "https://herbsutter.com/2013/05/28/gotw-6b-solution-const-correctness-part-2/",
+      "kind": "reference_link",
+      "section": "GotW / GotW Archive"
+    },
+    {
+      "id": "url:a11868a63e6a7d564f1b",
+      "title": "#89: Smart Pointers.",
+      "url": "https://herbsutter.com/2013/05/29/gotw-89-solution-smart-pointers/",
+      "kind": "reference_link",
+      "section": "GotW / GotW Archive"
+    },
+    {
+      "id": "url:ae4f6970e6beb8748eb3",
+      "title": "#7a: Minimizing Compile-Time Dependencies, Part 1.",
+      "url": "https://herbsutter.com/2013/08/19/gotw-7a-solution-minimizing-compile-time-dependencies-part-1/",
+      "kind": "reference_link",
+      "section": "GotW / GotW Archive"
+    },
+    {
+      "id": "url:af337ea93a3a1f13bebb",
+      "title": "#6a: Const-Correctness, Part 1.",
+      "url": "https://herbsutter.com/2013/05/24/gotw-6a-const-correctness-part-1-3/",
+      "kind": "reference_link",
+      "section": "GotW / GotW Archive"
+    },
+    {
+      "id": "url:dd094aa2091746777952",
+      "title": "#2: Temporary Objects.",
+      "url": "https://herbsutter.com/2013/05/13/gotw-2-solution-temporary-objects/",
+      "kind": "reference_link",
+      "section": "GotW / GotW Archive"
+    },
+    {
+      "id": "url:e85154c305f0e6bf0d75",
+      "title": "#7c: Minimizing Compile-Time Dependencies, Part 3.",
+      "url": "https://herbsutter.com/2014/01/06/gotw-7c-solution-minimizing-compile-time-dependencies-part-3",
+      "kind": "reference_link",
+      "section": "GotW / GotW Archive"
+    },
+    {
+      "id": "url:edafb6fa96279a32d616",
+      "title": "#1: Variable Initialization – or Is It?",
+      "url": "https://herbsutter.com/2013/05/09/gotw-1-solution/",
+      "kind": "reference_link",
+      "section": "GotW / GotW Archive"
+    }
+  ]
+}

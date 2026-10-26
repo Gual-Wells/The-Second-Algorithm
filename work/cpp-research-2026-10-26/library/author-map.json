@@ -1,0 +1,536 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-26",
+  "state": "authored-local-semantic-tests-passed-pending-root-review",
+  "candidates": [
+    {
+      "candidate_id": "cpp-lib-vector-capacity",
+      "title": "容量、已构造元素与增长",
+      "file": "content/cpp/容器与范围.source.md",
+      "h3": "预分配后填充，还是先创建再赋值",
+      "code_blocks": [
+        "capacity-fill"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-mutation-invalidation",
+      "title": "容器修改后的句柄有效性",
+      "file": "content/cpp/容器与范围.source.md",
+      "h3": "批量删除与遍历中删除",
+      "code_blocks": [
+        "erase-range"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-erase-during-iteration",
+      "title": "遍历删除与返回迭代器",
+      "file": "content/cpp/容器与范围.source.md",
+      "h3": "批量删除与遍历中删除",
+      "code_blocks": [
+        "erase-range"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-contiguous-interop",
+      "title": "连续存储与C接口",
+      "file": "content/cpp/容器与范围.source.md",
+      "h3": "连续接口与代理引用",
+      "code_blocks": [
+        "contiguous-interface"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-proxy-reference",
+      "title": "代理引用与auto",
+      "file": "content/cpp/容器与范围.source.md",
+      "h3": "连续接口与代理引用",
+      "code_blocks": [
+        "proxy-reference"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-map-lookup",
+      "title": "读取、查询与默认插入",
+      "file": "content/cpp/容器与范围.source.md",
+      "h3": "统计、只读查询与有条件更新",
+      "code_blocks": [
+        "map-access"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-map-update",
+      "title": "条件构造与覆盖更新",
+      "file": "content/cpp/容器与范围.source.md",
+      "h3": "统计、只读查询与有条件更新",
+      "code_blocks": [
+        "map-access"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-hash-equivalence",
+      "title": "自定义键的哈希与相等",
+      "file": "content/cpp/容器与范围.source.md",
+      "h3": "自定义哈希键与排序比较器",
+      "code_blocks": [
+        "custom-key"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-rehash-handles",
+      "title": "rehash与元素稳定性",
+      "file": "content/cpp/容器与范围.source.md",
+      "h3": "统计、只读查询与有条件更新",
+      "code_blocks": [
+        "map-access"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-ordering-contract",
+      "title": "比较器、等价与稳定性",
+      "file": "content/cpp/容器与范围.source.md",
+      "h3": "自定义哈希键与排序比较器",
+      "code_blocks": [
+        "order-records"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-iterator-contract",
+      "title": "自定义迭代器真实能力",
+      "file": "content/cpp/容器与范围.source.md",
+      "h3": "单遍输入、输出位置与两种“成对”",
+      "code_blocks": [
+        "zip-output",
+        "overwrite-ring"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-single-pass",
+      "title": "单遍输入与多遍迭代",
+      "file": "content/cpp/文本与文件.source.md",
+      "h3": "连接：避免对迭代器偷偷提出额外要求",
+      "code_blocks": [
+        "join-input"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-output-iterator",
+      "title": "输出位置与插入适配器",
+      "file": "content/cpp/容器与范围.source.md",
+      "h3": "单遍输入、输出位置与两种“成对”",
+      "code_blocks": [
+        "zip-output"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-remove-erase",
+      "title": "逻辑移除与物理擦除",
+      "file": "content/cpp/容器与范围.source.md",
+      "h3": "批量删除与遍历中删除",
+      "code_blocks": [
+        "erase-range"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-algorithm-selection",
+      "title": "全排、部分排与第k元素",
+      "file": "content/cpp/容器与范围.source.md",
+      "h3": "需要有序前缀，还是只要第 k 项",
+      "code_blocks": [
+        "selected-order"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-sorted-set-operations",
+      "title": "有序范围的集合运算",
+      "file": "content/cpp/容器与范围.source.md",
+      "h3": "有序范围上的多重集合运算",
+      "code_blocks": [
+        "sorted-set-difference"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-zip",
+      "title": "异构双范围zip",
+      "file": "content/cpp/容器与范围.source.md",
+      "h3": "单遍输入、输出位置与两种“成对”",
+      "code_blocks": [
+        "zip-output"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-pair-grouping",
+      "title": "非重叠分组与重叠相邻窗口",
+      "file": "content/cpp/容器与范围.source.md",
+      "h3": "单遍输入、输出位置与两种“成对”",
+      "code_blocks": [
+        "zip-output",
+        "owning-view"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-projection-transform",
+      "title": "投影与结果类型",
+      "file": "content/cpp/容器与范围.source.md",
+      "h3": "将记录投影成新值",
+      "code_blocks": [
+        "projection"
+      ],
+      "status": "authored-pending-root-review",
+      "open": [
+        "需与root泛型稿保持唯一主讲位置；本篇承载std::invoke投影及值结果。"
+      ]
+    },
+    {
+      "candidate_id": "cpp-lib-string-view-lifetime",
+      "title": "非拥有字符串子视图",
+      "file": "content/cpp/文本与文件.source.md",
+      "h3": "裁剪与切分：返回 view 还是 string",
+      "code_blocks": [
+        "trim-split"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-view-c-string",
+      "title": "长度视图与NUL字符串",
+      "file": "content/cpp/文本与文件.source.md",
+      "h3": "有界视图不能只传 data",
+      "code_blocks": [
+        "bounded-regex"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-span",
+      "title": "连续对象的借用接口",
+      "file": "content/cpp/容器与范围.source.md",
+      "h3": "span 传连续对象，views 延迟组合",
+      "code_blocks": [
+        "span-and-lazy"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-lazy-views",
+      "title": "惰性管道与能力变化",
+      "file": "content/cpp/容器与范围.source.md",
+      "h3": "span 传连续对象，views 延迟组合",
+      "code_blocks": [
+        "span-and-lazy"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-view-ownership",
+      "title": "view、所有权与借用",
+      "file": "content/cpp/容器与范围.source.md",
+      "h3": "view、拥有与 borrowed_range 是三个问题",
+      "code_blocks": [
+        "borrowed-result",
+        "owning-view"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-filtered-mutation",
+      "title": "过滤视图中的修改",
+      "file": "content/cpp/容器与范围.source.md",
+      "h3": "span 传连续对象，views 延迟组合",
+      "code_blocks": [
+        "span-and-lazy"
+      ],
+      "status": "authored-pending-root-review",
+      "open": [],
+      "notes": "正文说明修改后须保持谓词，代码展示正常延迟读取；不执行违反前提的反例。"
+    },
+    {
+      "candidate_id": "cpp-lib-byte-hex",
+      "title": "字节范围的十六进制编码",
+      "file": "content/cpp/文本与文件.source.md",
+      "h3": "十六进制编解码：字节不是有符号字符数值",
+      "code_blocks": [
+        "hex-codec"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-hex-input-policy",
+      "title": "十六进制解析的输入策略",
+      "file": "content/cpp/文本与文件.source.md",
+      "h3": "十六进制编解码：字节不是有符号字符数值",
+      "code_blocks": [
+        "hex-codec"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-join",
+      "title": "分隔符连接",
+      "file": "content/cpp/文本与文件.source.md",
+      "h3": "连接：避免对迭代器偷偷提出额外要求",
+      "code_blocks": [
+        "join-input"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-split",
+      "title": "分隔符切分与结果所有权",
+      "file": "content/cpp/文本与文件.source.md",
+      "h3": "裁剪与切分：返回 view 还是 string",
+      "code_blocks": [
+        "trim-split"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-regex-operations",
+      "title": "校验、查找、捕获与替换",
+      "file": "content/cpp/文本与文件.source.md",
+      "h3": "正则：整串校验、局部查找与替换",
+      "code_blocks": [
+        "bounded-regex"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-character-policy",
+      "title": "字符分类与空白定义",
+      "file": "content/cpp/文本与文件.source.md",
+      "h3": "字符分类：明确是哪一种“空白”和“字母”",
+      "code_blocks": [
+        "character-policy"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-strict-numeric-parse",
+      "title": "严格数值解析",
+      "file": "content/cpp/文本与文件.source.md",
+      "h3": "严格整数解析：同时核对错误与终点",
+      "code_blocks": [
+        "strict-integer"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-fold-type",
+      "title": "聚合的类型与顺序",
+      "file": "content/cpp/文本与文件.source.md",
+      "h3": "accumulate 的初值决定类型",
+      "code_blocks": [
+        "fold-type"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-stream-read-state",
+      "title": "流状态与读取循环",
+      "file": "content/cpp/文本与文件.source.md",
+      "h3": "读取操作成功，才推进结果",
+      "code_blocks": [
+        "stream-read"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-stream-format",
+      "title": "输出格式及状态",
+      "file": "content/cpp/文本与文件.source.md",
+      "h3": "格式设置会留在流里",
+      "code_blocks": [
+        "stream-format"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-binary-records",
+      "title": "对象数据的二进制表示",
+      "file": "content/cpp/文本与文件.source.md",
+      "h3": "二进制记录：保存字段，不保存 string 的内部指针",
+      "code_blocks": [
+        "binary-record"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-filesystem-path",
+      "title": "路径语义与接口",
+      "file": "content/cpp/文本与文件.source.md",
+      "h3": "目录遍历与路径操作",
+      "code_blocks": [
+        "filesystem-query"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-filesystem-traverse",
+      "title": "目录遍历与错误策略",
+      "file": "content/cpp/文本与文件.source.md",
+      "h3": "目录遍历与路径操作",
+      "code_blocks": [
+        "filesystem-query"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-file-rewrite",
+      "title": "文件内容变换与替换",
+      "file": "content/cpp/文本与文件.source.md",
+      "h3": "内容变换与文件替换是两步",
+      "code_blocks": [
+        "stream-transform"
+      ],
+      "status": "partially-authored",
+      "open": [
+        "已完成流内容变换；跨平台原位替换、持久提交与失败恢复尚未完成。"
+      ]
+    },
+    {
+      "candidate_id": "cpp-lib-temporary-file-resource",
+      "title": "临时资源的提交与清理",
+      "file": null,
+      "h3": null,
+      "code_blocks": [],
+      "status": "gap-not-authored",
+      "open": [
+        "本轮没有完成临时文件唯一创建、提交、清理及目标平台替换语义；通用RAII不等于此具体实现已讲完。"
+      ]
+    },
+    {
+      "candidate_id": "cpp-lib-ring-buffer",
+      "title": "有界环形容器",
+      "file": "content/cpp/容器与范围.source.md",
+      "h3": "最近若干项：运行时容量的覆盖式环形缓冲",
+      "code_blocks": [
+        "overwrite-ring"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-heap-adaptor",
+      "title": "按比较策略维护优先队列",
+      "file": "content/cpp/容器与范围.source.md",
+      "h3": "优先处理：把决胜条件写进比较器",
+      "code_blocks": [
+        "heap-adaptor"
+      ],
+      "status": "authored-pending-root-review",
+      "open": []
+    },
+    {
+      "candidate_id": "cpp-lib-container-implementation",
+      "title": "泛型容器的组合实现",
+      "file": null,
+      "h3": null,
+      "code_blocks": [],
+      "status": "gap-not-authored",
+      "open": [
+        "HashMap/分块deque长实作尚无完整参考实现，教学任务已读不算已完成内容。"
+      ]
+    },
+    {
+      "candidate_id": "cpp-lib-clock-duration",
+      "title": "测量间隔与时间单位",
+      "file": null,
+      "h3": null,
+      "code_blocks": [],
+      "status": "delegated-root",
+      "open": [
+        "root主讲clock/measure，本组未重复；最终跨稿位置由root确认。"
+      ]
+    },
+    {
+      "candidate_id": "cpp-lib-calendar-timezone",
+      "title": "日期、时区与本地时间",
+      "file": null,
+      "h3": null,
+      "code_blocks": [],
+      "status": "gap-not-authored",
+      "open": [
+        "第三方date、标准chrono及平台时区数据未完成复现，不编入本轮正文。"
+      ]
+    },
+    {
+      "candidate_id": "cpp-lib-random-engine-distribution",
+      "title": "随机引擎与分布",
+      "file": null,
+      "h3": null,
+      "code_blocks": [],
+      "status": "gap-not-authored",
+      "open": [
+        "目前只有实际例程与契约，完整随机抽样实作范围尚未深研究。"
+      ]
+    }
+  ],
+  "summary": {
+    "authored-pending-root-review": 40,
+    "partially-authored": 1,
+    "gap-not-authored": 4,
+    "delegated-root": 1
+  },
+  "test_sources": [
+    "tests/cpp/cpp_library_test.cpp",
+    "tests/cpp/cpp_library_ranges_test.cpp"
+  ],
+  "limits": [
+    "This mapping verifies actual destinations and known gaps, not broad C++ completeness.",
+    "C++17 CI can compile the ranges test and explicitly skip; genuine range execution requires a C++20/23 build.",
+    "No UB examples are executed."
+  ]
+}

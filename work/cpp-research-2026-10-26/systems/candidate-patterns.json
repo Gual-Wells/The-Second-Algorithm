@@ -1,0 +1,862 @@
+{
+  "schema_version": 1,
+  "scope": "Concurrency, coordination, execution boundaries and translation/linkage for practical C++",
+  "patterns": [
+    {
+      "id": "cpp-sys-thread-arguments",
+      "title": "线程参数的值、移动与借用",
+      "scenario": "把对象或任务交给线程后，原对象为何没变／失效？",
+      "mechanism": "decay/materialize存储、std::move与std::ref/cref、闭包捕获寿命。",
+      "variants": [
+        "move-only任务和unique_ptr",
+        "引用对象先销毁",
+        "成员函数this／引用借用"
+      ],
+      "evidence": [
+        "pro-thread",
+        "ref-thread-construct"
+      ],
+      "disposition": "core",
+      "open_questions": [],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-thread-lifetime",
+      "title": "线程句柄与作用域收尾",
+      "scenario": "发生提前return或异常时，已启动线程如何收尾？",
+      "mechanism": "std::thread拥有可join句柄；join同步结束；detach不延长被借用对象寿命。",
+      "variants": [
+        "C++17 scope joiner",
+        "C++20 jthread",
+        "join时不得持有工作线程还需要的锁"
+      ],
+      "evidence": [
+        "pro-thread",
+        "std17-thread-join"
+      ],
+      "disposition": "core",
+      "open_questions": [],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-worker-error",
+      "title": "跨线程传递错误",
+      "scenario": "工作线程抛异常，调用者为什么catch不到？",
+      "mechanism": "线程边界捕获；exception_ptr或future shared state在接收线程重抛。",
+      "variants": [
+        "裸thread入口异常终止",
+        "promise.set_exception",
+        "packaged_task/async自动保存"
+      ],
+      "evidence": [
+        "pro-thread",
+        "pro-futures",
+        "cook-future"
+      ],
+      "disposition": "core",
+      "open_questions": [],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-thread-local",
+      "title": "每线程状态与汇总",
+      "scenario": "并行统计或临时缓存如何避免共享热点？",
+      "mechanism": "thread_local每线程实例；局部归约后合并；对象寿命与线程结束相关。",
+      "variants": [
+        "thread_local不是共享对象锁",
+        "TLS初始化与析构",
+        "与任务迁移／线程池线程复用区别"
+      ],
+      "evidence": [
+        "pro-thread",
+        "pro-atomic"
+      ],
+      "disposition": "core",
+      "open_questions": [],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-cooperative-stop",
+      "title": "停止、暂停、恢复后台工作",
+      "scenario": "用户请求取消或暂停一个循环，不能强制杀线程。",
+      "mechanism": "共享停止/暂停状态经同步发布；C++20 stop_token是协作式请求。",
+      "variants": [
+        "取消不等于通知普通CV",
+        "stop-aware condition_variable_any",
+        "暂停条件与队列是否为空不是同一状态"
+      ],
+      "evidence": [
+        "pro-thread",
+        "pro-exercises",
+        "ref-jthread"
+      ],
+      "disposition": "core",
+      "open_questions": [],
+      "version": "C++17 explicit state; C++20 jthread/stop_token",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-raii-lock",
+      "title": "有异常与多出口的临界区",
+      "scenario": "函数退出时锁未释放或临时lock_guard立即销毁。",
+      "mechanism": "命名RAII lock与受保护状态同生命周期。",
+      "variants": [
+        "lock_guard最小所有权",
+        "unique_lock可移动/解锁",
+        "defer_lock/adopt_lock/try_to_lock前提"
+      ],
+      "evidence": [
+        "pro-locks"
+      ],
+      "disposition": "core",
+      "open_questions": [],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-two-locks",
+      "title": "同时保护两个对象",
+      "scenario": "转账／交换两个带mutex对象，如何避免ABBA与自锁？",
+      "mechanism": "同一对象先判别；统一顺序或std::lock/scoped_lock一次获取。",
+      "variants": [
+        "from==to",
+        "锁外回调再入",
+        "std::lock只处理这次获取的锁，不消除任意等待图"
+      ],
+      "evidence": [
+        "pro-locks",
+        "cert-con53"
+      ],
+      "disposition": "core",
+      "open_questions": [],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-read-mostly-lock",
+      "title": "多读少写缓存",
+      "scenario": "共享读取怎样与更新互斥？",
+      "mechanism": "shared_mutex的共享/独占所有权与shared_lock、unique_lock。",
+      "variants": [
+        "读锁下不能写cache",
+        "返回引用超过锁寿命",
+        "公平性不由标准自动保证"
+      ],
+      "evidence": [
+        "pro-locks"
+      ],
+      "disposition": "core",
+      "open_questions": [
+        "还需实际读取完整shared_mutex病例及公平性语义，当前只有wrapper部分。"
+      ],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-blocking-queue",
+      "title": "带阻塞的生产者消费者队列",
+      "scenario": "空队列等待，有数据或关闭时醒来。",
+      "mechanism": "队列与closed谓词同mutex保护，wait predicate；锁内取出、锁外执行。",
+      "variants": [
+        "关闭后排空与立即丢弃",
+        "有界队列另设not_full",
+        "notify_one vs all和多类等待谓词"
+      ],
+      "evidence": [
+        "pro-cv",
+        "pro-logger",
+        "cert-con54"
+      ],
+      "disposition": "core",
+      "open_questions": [],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-timed-wait",
+      "title": "超时等待和虚假唤醒",
+      "scenario": "反复被唤醒是否会把原定超时无限延长？",
+      "mechanism": "以steady_clock绝对deadline或predicate overload管理总等待预算。",
+      "variants": [
+        "wait_for返回不等于条件成立",
+        "超时与条件在截止时竞态",
+        "CV与future_status枚举不同"
+      ],
+      "evidence": [
+        "pro-cv",
+        "ref-cv"
+      ],
+      "disposition": "core",
+      "open_questions": [
+        "绝对deadline完整标准条款与可运行变种尚需补读。"
+      ],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-condition-liveness",
+      "title": "通知与条件的活性",
+      "scenario": "多个不同条件的等待者使用同一CV，为什么notify_one可能卡住？",
+      "mechanism": "通知不是有记忆的事件；共享谓词是状态，唤醒对象与实际可满足条件需匹配。",
+      "variants": [
+        "虚假唤醒",
+        "先通知后等待",
+        "多个谓词下notify_all或分CV"
+      ],
+      "evidence": [
+        "cert-con54",
+        "cert-con-index",
+        "ref-cv"
+      ],
+      "disposition": "core",
+      "open_questions": [
+        "CON55正文待取，当前索引不是全文证据。"
+      ],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-one-time-init",
+      "title": "并发懒初始化",
+      "scenario": "多个线程只完成一次初始化，失败后要不要重试？",
+      "mechanism": "call_once/once_flag与函数局部static的成功初始化同步。",
+      "variants": [
+        "初始化抛异常重试",
+        "不是每次获取都上全局mutex",
+        "递归初始化/析构先后另核"
+      ],
+      "evidence": [
+        "pro-locks",
+        "challenge-65",
+        "std17-once-exception",
+        "gcc-once-status"
+      ],
+      "disposition": "core",
+      "open_questions": [],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-future-state",
+      "title": "future的结果与可消费状态",
+      "scenario": "轮询结果、区分未就绪／deferred，get可否多次调用？",
+      "mechanism": "wait_for需duration，返回future_status；future.get消费shared state，shared_future另有契约。",
+      "variants": [
+        "ready/timeout/deferred",
+        "valid不是ready",
+        "引用结果必须保证被引用对象存活"
+      ],
+      "evidence": [
+        "pro-futures",
+        "cook-future",
+        "std17-future"
+      ],
+      "disposition": "core",
+      "open_questions": [],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-promise-channel",
+      "title": "promise结果通道",
+      "scenario": "生产者如何交付值或异常，若提前退出又如何？",
+      "mechanism": "promise/future共享状态；promise可移动不可复制，消费者等待就绪。",
+      "variants": [
+        "set_value一次",
+        "broken_promise",
+        "set_value_at_thread_exit区别"
+      ],
+      "evidence": [
+        "pro-futures",
+        "cook-future"
+      ],
+      "disposition": "core",
+      "open_questions": [
+        "broken_promise边界标准原文需补读。"
+      ],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-packaged-task",
+      "title": "包装任务与实际执行分开",
+      "scenario": "提交一个可返回值且能传异常的move-only任务。",
+      "mechanism": "packaged_task负责共享状态与调用包装，不自动启动线程。",
+      "variants": [
+        "移动进thread",
+        "任务队列类型擦除",
+        "重复调用与reset"
+      ],
+      "evidence": [
+        "pro-futures",
+        "std17-future"
+      ],
+      "disposition": "core",
+      "open_questions": [],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-async-policy",
+      "title": "async究竟何时并发",
+      "scenario": "某段分治或后台计算没有真正并行。",
+      "mechanism": "默认可选async/deferred；需要并发时显式launch::async并保留future。",
+      "variants": [
+        "deferred非定时wait触发",
+        "销毁最后async状态可能等待",
+        "未get也不意味着异常会向主线程自动抛"
+      ],
+      "evidence": [
+        "pro-futures",
+        "cook-future",
+        "challenge-63",
+        "std17-async"
+      ],
+      "disposition": "core",
+      "open_questions": [],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-shared-future",
+      "title": "一次发布，多线程读取结果",
+      "scenario": "多个任务等待同一启动参数或一次性配置。",
+      "mechanism": "复制shared_future共享就绪状态和只读结果访问。",
+      "variants": [
+        "future<void>作一次性门",
+        "每线程持有自己的shared_future对象",
+        "可变返回对象仍需另同步"
+      ],
+      "evidence": [
+        "pro-futures",
+        "std17-future"
+      ],
+      "disposition": "core",
+      "open_questions": [],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-atomic-rmw",
+      "title": "原子变量不等于原子复合操作",
+      "scenario": "counter = counter + 1为何仍会丢更新？",
+      "mechanism": "分离load/store不是RMW；fetch_add/++/CAS为单次原子更新。",
+      "variants": [
+        "独立计数可relaxed",
+        "先局部累加再合并",
+        "is_lock_free是实现属性"
+      ],
+      "evidence": [
+        "pro-atomic",
+        "std17-atomic-order"
+      ],
+      "disposition": "core",
+      "open_questions": [],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-publish-payload",
+      "title": "发布对象而非仅发布计数",
+      "scenario": "用ready标志发布普通内存里的已构造payload。",
+      "mechanism": "release-store与读取该值的acquire-load建立happens-before。",
+      "variants": [
+        "relaxed标志不能替代发布",
+        "多次复用ready需要完整协议",
+        "单原子顺序不等于跨原子总顺序"
+      ],
+      "evidence": [
+        "std17-races",
+        "std17-atomic-order"
+      ],
+      "disposition": "core",
+      "open_questions": [],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-cas-update",
+      "title": "CAS重试循环与失败反馈",
+      "scenario": "实现atomicMin或根据旧状态计算新值。",
+      "mechanism": "失败时expected被更新；desired按新expected重算；weak可虚假失败。",
+      "variants": [
+        "min不需变更时提前返回",
+        "溢出不是靠atomic免除",
+        "failure memory_order限制另核"
+      ],
+      "evidence": [
+        "pro-atomic",
+        "pro-exercises",
+        "std17-atomic-order"
+      ],
+      "disposition": "core",
+      "open_questions": [],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-atomic-pointer",
+      "title": "共享所有权与共享对象线程安全",
+      "scenario": "多个线程更新同一shared_ptr槽位或修改其指向数据。",
+      "mechanism": "控制块、shared_ptr对象本体、pointee是三个同步层次。",
+      "variants": [
+        "不同shared_ptr共享控制块",
+        "C++20 atomic<shared_ptr<T>>",
+        "共享对象字段仍需锁"
+      ],
+      "evidence": [
+        "pro-atomic",
+        "std17-races"
+      ],
+      "disposition": "core",
+      "open_questions": [
+        "pre-C++20原子shared_ptr自由函数的具体代码待补。"
+      ],
+      "version": "C++17 shared_ptr atomics API; C++20 specialization",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-atomic-ref",
+      "title": "给既有对象施加原子访问",
+      "scenario": "外部数组中的计数对象不方便改成atomic类型。",
+      "mechanism": "atomic_ref对引用对象原子操作；对齐、寿命、并发期间访问约束必须满足。",
+      "variants": [
+        "同一存储的普通访问仍可race",
+        "required_alignment",
+        "C++20 API且非所有类型lock-free"
+      ],
+      "evidence": [
+        "pro-atomic"
+      ],
+      "disposition": "extension",
+      "open_questions": [
+        "需补读完整atomic_ref原文，当前只够入口，不可直接给无条件模板。"
+      ],
+      "version": "C++20",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-atomic-wait",
+      "title": "等待原子状态变化",
+      "scenario": "替代轮询烧CPU，等待一个原子值不再等于旧值。",
+      "mechanism": "atomic.wait/notify只在观察值改变时返回，需配合memory ordering协议。",
+      "variants": [
+        "ABA值改回旧值可能漏中间变化",
+        "notify不改值",
+        "与CV多变量谓词不同"
+      ],
+      "evidence": [
+        "pro-atomic"
+      ],
+      "disposition": "extension",
+      "open_questions": [
+        "书只读到本节开头；完整契约和实现题待补。"
+      ],
+      "version": "C++20",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-coordination-primitives",
+      "title": "阶段同步与资源配额",
+      "scenario": "一次性启动门、循环屏障、最多K个并发操作。",
+      "mechanism": "latch一次性计数，barrier可复用阶段，semaphore资源票据。",
+      "variants": [
+        "参与者计数",
+        "异常路径释放配额",
+        "stop请求不自动抵达barrier"
+      ],
+      "evidence": [
+        "pro-futures",
+        "pro-exercises"
+      ],
+      "disposition": "extension",
+      "open_questions": [
+        "latch/barrier段落未完整读取，当前为明确待补；semaphore例的遗漏捕获已独立确认。"
+      ],
+      "version": "C++20",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-parallel-partition",
+      "title": "按块并行处理范围",
+      "scenario": "实现parallel transform，不能把核数当无条件有效除数。",
+      "mechanism": "按可用工作、粒度和worker上限切块；hardware_concurrency可为0；任务独立。",
+      "variants": [
+        "空范围",
+        "最后尾块",
+        "共享有状态callable",
+        "vector<bool>逻辑元素不等于独立存储"
+      ],
+      "evidence": [
+        "challenge-61",
+        "std17-hardware",
+        "std17-races"
+      ],
+      "disposition": "core",
+      "open_questions": [],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-parallel-reduce",
+      "title": "并行极值与归约",
+      "scenario": "分块求min/max或和，再组合局部结果。",
+      "mechanism": "空范围与identity、关联性、迭代器类别、异常与任务回收。",
+      "variants": [
+        "浮点和不可随意换序",
+        "min无默认空值",
+        "任务比元素多",
+        "线程启动异常清理"
+      ],
+      "evidence": [
+        "challenge-63",
+        "std17-hardware",
+        "std17-async"
+      ],
+      "disposition": "core",
+      "open_questions": [],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-bounded-executor",
+      "title": "有限线程池与任务提交",
+      "scenario": "少量长寿命workers处理任务队列并返回future。",
+      "mechanism": "线程拥有任务执行环境，队列传move-only包装，close后明确drain/cancel。",
+      "variants": [
+        "拒绝新任务",
+        "析构时不能持锁join",
+        "任务异常通过future",
+        "worker里嵌套等待同池任务可饥饿"
+      ],
+      "evidence": [
+        "pro-logger",
+        "pro-futures",
+        "pro-cv"
+      ],
+      "disposition": "extension",
+      "open_questions": [
+        "尚无完整标准线程池原语或独立实现验证，必须按原创小型executor约束创作。"
+      ],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-record-logging",
+      "title": "按记录写并发日志",
+      "scenario": "数据race-free的cout仍可能把多段消息交错。",
+      "mechanism": "同步标准流保证与记录原子性不同；mutex包整条记录或C++20 osyncstream。",
+      "variants": [
+        "sync_with_stdio改变前提",
+        "锁外组装消息",
+        "后台队列落盘与即时控制台不同"
+      ],
+      "evidence": [
+        "challenge-65",
+        "pro-locks",
+        "std17-iostream",
+        "pro-logger"
+      ],
+      "disposition": "core",
+      "open_questions": [],
+      "version": "C++17 mutex; C++20 osyncstream",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-shutdown-order",
+      "title": "含线程成员的对象析构",
+      "scenario": "对象停止时既不能漏任务，也不能访问已销毁mutex/queue。",
+      "mechanism": "先关闭/通知，再不持锁join；成员构造/析构顺序确保worker需要的状态活着。",
+      "variants": [
+        "构造中启动this",
+        "线程成员声明顺序",
+        "jthread不自动唤醒普通CV",
+        "回调持有对象寿命"
+      ],
+      "evidence": [
+        "pro-logger",
+        "pro-thread",
+        "std17-thread-join"
+      ],
+      "disposition": "core",
+      "open_questions": [],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-coroutine-boundary",
+      "title": "协程是挂起机制而非自动线程",
+      "scenario": "coroutine任务是否会自动异步、awaitable谁恢复它？",
+      "mechanism": "C++20协程状态机与执行器/调度器职责分离，handle/frame寿命关键。",
+      "variants": [
+        "initial/final suspend",
+        "取消与销毁",
+        "引用跨suspend寿命"
+      ],
+      "evidence": [
+        "pro-thread"
+      ],
+      "disposition": "deferred",
+      "open_questions": [
+        "本轮仅目录发现及线程池边界，未完整读取协程实现；不把它混进已闭合主干。"
+      ],
+      "version": "C++20",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-tu-pipeline",
+      "title": "从源码到链接错误",
+      "scenario": "同一代码单文件能跑，拆文件后为何undefined reference？",
+      "mechanism": "预处理得到TU、分别编译对象、再链接；编译成功不意味着定义已经存在。",
+      "variants": [
+        "-E/-S/-c阶段",
+        "仅声明无定义",
+        "签名/语言链接不一致"
+      ],
+      "evidence": [
+        "pro-linkage",
+        "gcc-overall",
+        "std17-linkage"
+      ],
+      "disposition": "core",
+      "open_questions": [],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-header-odr",
+      "title": "头文件保护不解决跨TU普通定义",
+      "scenario": "两个.cpp都include带函数定义的头，出现重复符号。",
+      "mechanism": "include guard只去重单TU；外部普通函数需单一定义或合格inline定义。",
+      "variants": [
+        "头里声明源里定义",
+        "inline函数",
+        "C++17 inline变量",
+        "类内定义成员函数"
+      ],
+      "evidence": [
+        "pro-linkage",
+        "std17-odr"
+      ],
+      "disposition": "core",
+      "open_questions": [],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-internal-linkage",
+      "title": "相同名字对应几个实体",
+      "scenario": "匿名namespace/static/namespace const与extern如何跨文件解析？",
+      "mechanism": "名字链接与对象存储期分开；内部链接的每TU实体不是程序级共享实例。",
+      "variants": [
+        "头中static产生多份状态",
+        "extern带初始化是定义",
+        "inline const共享身份",
+        "typedef不是一般存储实体"
+      ],
+      "evidence": [
+        "pro-linkage",
+        "std17-linkage"
+      ],
+      "disposition": "core",
+      "open_questions": [],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-template-location",
+      "title": "模板定义可见性与显式实例化",
+      "scenario": "模板只放.cpp中，为何某些类型无法链接？",
+      "mechanism": "使用点需要定义用于隐式实例化；可用包含实现或明确实例化支持集合。",
+      "variants": [
+        "普通声明不能替代模板定义",
+        "extern template",
+        "特化的ODR及inline规则"
+      ],
+      "evidence": [
+        "std17-odr"
+      ],
+      "disposition": "crossref",
+      "open_questions": [
+        "模板作者组应主讲；系统组仅保留跨TU症状与证据。"
+      ],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-forward-completeness",
+      "title": "前置声明和完整类型需求",
+      "scenario": "用Pimpl打断循环依赖，哪些地方仍需完整定义？",
+      "mechanism": "指针/引用可指向未完整类型，定义对象、sizeof、销毁等有完整性要求。",
+      "variants": [
+        "unique_ptr Pimpl析构放.cpp",
+        "shared_ptr与unique_ptr构造/销毁条件不同",
+        "按值声明与定义/调用不同"
+      ],
+      "evidence": [
+        "pro-linkage",
+        "std17-odr",
+        "std17-unique-dtor",
+        "std17-default-delete"
+      ],
+      "disposition": "crossref",
+      "open_questions": [
+        "资源作者组主讲所有权/Pimpl，具体库析构完整性另需核验。"
+      ],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-macro-evaluation",
+      "title": "宏展开与函数求值不同",
+      "scenario": "SQUARE(i++)或条件宏为何改变行为？",
+      "mechanism": "预处理代换不具函数求值/作用域语义；括号只解决一部分优先级问题。",
+      "variants": [
+        "重复求值",
+        "字符串化/拼接分层",
+        "inline/constexpr替代可替代场景"
+      ],
+      "evidence": [
+        "pro-linkage"
+      ],
+      "disposition": "core",
+      "open_questions": [
+        "重复副作用例需按具体标准判sequencing，不能笼统说固定输出。"
+      ],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-feature-detection",
+      "title": "标准号不等于具体库功能可用",
+      "scenario": "启用c++20却缺ranges或format，怎样提供有意义fallback？",
+      "mechanism": "__cpp_*、__cpp_lib_*、__has_include与实现版本分别核对。",
+      "variants": [
+        "头存在不代表功能完备",
+        "feature宏修订值",
+        "跨库实现差异"
+      ],
+      "evidence": [
+        "pro-linkage",
+        "gcc-modules"
+      ],
+      "disposition": "core",
+      "open_questions": [],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-modules-toolchain",
+      "title": "模块接口与工具链构建",
+      "scenario": "import std为何不能直接替换所有#include？",
+      "mechanism": "C++20模块、标准库命名模块与实现支持分开；CMI依赖先于importer。",
+      "variants": [
+        "命名模块与header unit",
+        "全局module fragment",
+        "跨编译器CMI不可当稳定二进制接口"
+      ],
+      "evidence": [
+        "pro-linkage",
+        "gcc-modules"
+      ],
+      "disposition": "extension",
+      "open_questions": [
+        "未运行模块构建；当前GCC滚动文档不能硬套本地版本标志。"
+      ],
+      "version": "C++20 modules; C++23 standard library modules",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-c-abi-boundary",
+      "title": "C与C++接口边界",
+      "scenario": "链接C编译的函数为何发生符号不匹配？",
+      "mechanism": "extern \"C\"影响语言链接；不使C++对象布局/异常/STL自动适合C ABI。",
+      "variants": [
+        "C header的__cplusplus守卫",
+        "跨DLL分配释放协议",
+        "异常不跨未约定C边界"
+      ],
+      "evidence": [
+        "std17-linkage"
+      ],
+      "disposition": "extension",
+      "open_questions": [
+        "本轮只目录发现Pro34章，需补读实际C链接实现和ABI目标文档。"
+      ],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-diagnostic-limits",
+      "title": "用编译器和诊断工具定位实际问题",
+      "scenario": "证明编译／链接失败或抓到race，与证明无缺陷不是一回事。",
+      "mechanism": "固定编译器/标准/库/优化选项，编译期诊断、链接期及运行期检测各有覆盖。",
+      "variants": [
+        "-Wall并非所有warning",
+        "TSan平台与开销",
+        "ASan不代替race检查",
+        "未诊断ODR仍可能非法"
+      ],
+      "evidence": [
+        "gcc-overall",
+        "std17-odr",
+        "clang-tsan"
+      ],
+      "disposition": "core",
+      "open_questions": [
+        "本机未验证任何sanitizer运行；只实际执行语法／链接边界实验。"
+      ],
+      "version": "C++17-compatible unless stated",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-packed-locations",
+      "title": "逻辑上不同字段可能共享同一存储位置",
+      "scenario": "两个线程各改一个bit-field或vector<bool>元素，为什么仍可能race？",
+      "mechanism": "C++内存位置与逻辑字段不总是一一对应，原子/互斥需覆盖实际共享位置。",
+      "variants": [
+        "相邻bit-field",
+        "vector<bool>代理表示",
+        "普通不同数组元素的对照"
+      ],
+      "evidence": [
+        "cert-con-index",
+        "std17-races",
+        "challenge-61"
+      ],
+      "disposition": "extension",
+      "open_questions": [
+        "CON52正文及容器数据竞争例外条款尚未完整读取。"
+      ],
+      "version": "C++17",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    },
+    {
+      "id": "cpp-sys-false-sharing",
+      "title": "没有数据竞争的并行代码仍可能性能差",
+      "scenario": "多个线程更新独立计数却比单线程更慢。",
+      "mechanism": "false sharing、共享原子热点、粒度与线程创建开销分别测量，不把性能慢当UB。",
+      "variants": [
+        "局部归约再合并",
+        "cache-line干扰大小是实现与目标相关",
+        "任务不足与超额线程"
+      ],
+      "evidence": [
+        "pro-atomic",
+        "std17-hardware",
+        "challenge-61"
+      ],
+      "disposition": "extension",
+      "open_questions": [
+        "Pro物理1043 false-sharing仅在目录发现，未读正文；没有做硬件性能实验。"
+      ],
+      "version": "C++17 interference-size hints; implementation-sensitive",
+      "review_state": "source-analyzed; current authoring and verification states are tracked separately in author-map.json"
+    }
+  ],
+  "counts_are_not_algorithms_or_questions": true
+}

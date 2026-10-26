@@ -1,0 +1,900 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-26",
+  "domain": "cpp-library-practice",
+  "patterns": [
+    {
+      "id": "cpp-lib-vector-capacity",
+      "title": "容量、已构造元素与增长",
+      "scenario": "预知数量后填充vector，区分reserve与resize",
+      "mechanism": "容量表示可容纳空间，size表示现有对象；reserve不创建可下标访问的元素；增长因子不是统一规定。",
+      "variants": [
+        "reserve后push/emplace",
+        "resize后赋值",
+        "clear与非绑定shrink_to_fit"
+      ],
+      "evidence": [
+        "cookbook-0229",
+        "n4659-vector-capacity"
+      ],
+      "proposed_home": "storage",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-mutation-invalidation",
+      "title": "容器修改后的句柄有效性",
+      "scenario": "保存元素地址或迭代器后再插入、擦除、扩容",
+      "mechanism": "按容器和操作判定失效；不能统一说修改容器就全部失效，也不能把指针与迭代器当完全相同。",
+      "variants": [
+        "vector重分配与未重分配",
+        "deque端点与中部",
+        "list节点擦除"
+      ],
+      "evidence": [
+        "cppref-vector",
+        "cert-ctr51"
+      ],
+      "proposed_home": "storage",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-erase-during-iteration",
+      "title": "遍历删除与返回迭代器",
+      "scenario": "按谓词删除部分元素并继续遍历",
+      "mechanism": "用容器erase的返回位置推进；不同容器/标准版本接口不同，不能复用已失效迭代器。",
+      "variants": [
+        "vector连续搬移",
+        "map节点删除",
+        "C++20 erase_if"
+      ],
+      "evidence": [
+        "cppref-vector",
+        "cert-ctr51",
+        "challenge-51"
+      ],
+      "proposed_home": "storage",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-contiguous-interop",
+      "title": "连续存储与C接口",
+      "scenario": "把容器传给接收地址和长度的接口",
+      "mechanism": "data加size表达范围；空容器不应通过front或下标取首地址；容器连续性必须成立。",
+      "variants": [
+        "vector/array",
+        "空范围",
+        "vector<bool>不提供bool数组语义"
+      ],
+      "evidence": [
+        "cookbook-0229",
+        "cookbook-0240"
+      ],
+      "proposed_home": "storage",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-proxy-reference",
+      "title": "代理引用与auto",
+      "scenario": "在vector<bool>及泛型循环中保存、修改元素",
+      "mechanism": "auto可能保留代理而非复制值，显式bool是快照；泛型代码不能假定每次解引用都给T&。",
+      "variants": [
+        "auto/auto&&/显式值",
+        "const与赋值能力版本差异",
+        "std::bitset及容器替代"
+      ],
+      "evidence": [
+        "cookbook-0240"
+      ],
+      "proposed_home": "storage",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-map-lookup",
+      "title": "读取、查询与默认插入",
+      "scenario": "缺键时应报错、返回未找到，还是创建计数项",
+      "mechanism": "find/at/operator[]语义不同；[]会按需创建mapped对象，因此const map没有对应修改接口。",
+      "variants": [
+        "频次表默认值",
+        "不允许创建的查询",
+        "非默认构造mapped类型"
+      ],
+      "evidence": [
+        "cs106l-hashmap",
+        "n4659-map-access",
+        "challenge-48"
+      ],
+      "proposed_home": "lookup",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-map-update",
+      "title": "条件构造与覆盖更新",
+      "scenario": "已有键时保留资源，新键时原位构造",
+      "mechanism": "try_emplace、insert_or_assign与emplace的构造/覆盖语义不同；形参表达式仍先求值。",
+      "variants": [
+        "move-only mapped",
+        "重复键不搬走传入资源",
+        "工厂调用不会因try_emplace自动延迟"
+      ],
+      "evidence": [
+        "n4659-map-modifiers",
+        "cs106l-hashmap"
+      ],
+      "proposed_home": "lookup",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-hash-equivalence",
+      "title": "自定义键的哈希与相等",
+      "scenario": "用大小写无关或复合键做unordered索引",
+      "mechanism": "相等谓词定义等价关系，等价键必须有相同哈希，反向不成立；键在容器内不能漂移哈希身份。",
+      "variants": [
+        "组合字段",
+        "自定义等价规则",
+        "碰撞不等于相等"
+      ],
+      "evidence": [
+        "n4659-unordered"
+      ],
+      "proposed_home": "lookup",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-rehash-handles",
+      "title": "rehash与元素稳定性",
+      "scenario": "扩容哈希桶后继续使用既有句柄",
+      "mechanism": "rehash改变桶和迭代顺序并使迭代器失效，现有元素指针/引用仍有效；擦除该元素另论。",
+      "variants": [
+        "reserve/load_factor",
+        "最坏与均摊复杂度",
+        "稳定句柄不等于稳定顺序"
+      ],
+      "evidence": [
+        "n4659-unordered"
+      ],
+      "proposed_home": "lookup",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-ordering-contract",
+      "title": "比较器、等价与稳定性",
+      "scenario": "按多个字段或业务优先级排序和去重",
+      "mechanism": "严格弱序要求比较关系及不可比等价关系传递；并非只要不写<=就正确。排序等价可与operator==不同。",
+      "variants": [
+        "词典序tie",
+        "稳定排序保相对次序",
+        "浮点NaN需要另定业务次序"
+      ],
+      "evidence": [
+        "n4659-sorting"
+      ],
+      "proposed_home": "lookup",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-iterator-contract",
+      "title": "自定义迭代器真实能力",
+      "scenario": "让自定义容器能用于算法，而不止range-for",
+      "mechanism": "迭代器类别必须由实际运算和语义支撑；arrow、差值、常量访问、可复制等不能只写typedef。",
+      "variants": [
+        "forward与random-access",
+        "const_iterator",
+        "C++20概念检查与C++17要求"
+      ],
+      "evidence": [
+        "cookbook-0277",
+        "challenge-46",
+        "cs106l-hashmap"
+      ],
+      "proposed_home": "generic-algorithm",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-single-pass",
+      "title": "单遍输入与多遍迭代",
+      "scenario": "同一实现接受流迭代器、list、vector",
+      "mechanism": "单遍输入不能先distance扫描再重用；尽量使用算法所需的最弱迭代能力，不无故依赖end-1。",
+      "variants": [
+        "istream_iterator",
+        "forward_list",
+        "随机访问可选优化"
+      ],
+      "evidence": [
+        "challenge-26",
+        "challenge-54",
+        "challenge-55"
+      ],
+      "proposed_home": "generic-algorithm",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-output-iterator",
+      "title": "输出位置与插入适配器",
+      "scenario": "结果可写入预分配数组，也可追加容器",
+      "mechanism": "通用输出使用*out++；back_inserter赋值能追加，但不能据此省略解引用后声称兼容所有输出迭代器。",
+      "variants": [
+        "裸指针输出",
+        "back/front/inserter",
+        "容量由调用方保证"
+      ],
+      "evidence": [
+        "challenge-54",
+        "challenge-55",
+        "cookbook-0277"
+      ],
+      "proposed_home": "generic-algorithm",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-remove-erase",
+      "title": "逻辑移除与物理擦除",
+      "scenario": "原地过滤vector或string",
+      "mechanism": "remove_if返回新逻辑尾，容器size不变；再erase移除尾部。不能把未指定尾值当结果。",
+      "variants": [
+        "原地与copy_if新容器",
+        "list成员remove",
+        "C++20 erase_if"
+      ],
+      "evidence": [
+        "n4659-remove",
+        "challenge-51"
+      ],
+      "proposed_home": "generic-algorithm",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-algorithm-selection",
+      "title": "全排、部分排与第k元素",
+      "scenario": "只需前k个、保持等价项次序或完全有序",
+      "mechanism": "选择sort/stable_sort/partial_sort/nth_element取决于输出保证和迭代能力，不能以同样调用形式混为同题。",
+      "variants": [
+        "仅分区与已排序前缀",
+        "投影排序",
+        "昂贵比较器"
+      ],
+      "evidence": [
+        "n4659-sorting",
+        "challenge-57",
+        "n4659-nth-element"
+      ],
+      "proposed_home": "generic-algorithm",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": [
+        "排序算法推导跨回算法册；语言册只主讲接口选择、输出保证、迭代能力与比较器约束"
+      ]
+    },
+    {
+      "id": "cpp-lib-sorted-set-operations",
+      "title": "有序范围的集合运算",
+      "scenario": "两个有重复元素的序列求并交差",
+      "mechanism": "要求按同一次序有序；结果按多重集计数，输出不可覆盖输入；不是无序集合去重的别名。",
+      "variants": [
+        "union取max频次",
+        "intersection取min频次",
+        "差集与对称差"
+      ],
+      "evidence": [
+        "n4659-set-ops"
+      ],
+      "proposed_home": "generic-algorithm",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-zip",
+      "title": "异构双范围zip",
+      "scenario": "一列数值与一列文本组合，长度可能不同",
+      "mechanism": "两个输入迭代器类型独立，按较短范围终止，输出迭代器遵守写入契约。",
+      "variants": [
+        "空一侧",
+        "异构值与异构容器",
+        "C++23 zip的引用/懒求值差别"
+      ],
+      "evidence": [
+        "challenge-55"
+      ],
+      "proposed_home": "generic-algorithm",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-pair-grouping",
+      "title": "非重叠分组与重叠相邻窗口",
+      "scenario": "把序列拆成二元组或取每对相邻项",
+      "mechanism": "Challenge pairwise是非重叠两两分组；C++23 views::pairwise/adjacent<2>是滑动相邻对，不能因名称相同合并。",
+      "variants": [
+        "奇数尾丢弃/保留",
+        "空与单元素",
+        "值结果与引用视图"
+      ],
+      "evidence": [
+        "challenge-54",
+        "n4950-adjacent"
+      ],
+      "proposed_home": "generic-algorithm",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-projection-transform",
+      "title": "投影与结果类型",
+      "scenario": "从对象集合提取字段或应用可调用对象",
+      "mechanism": "transform/select把读取、调用与结果存储分开；invoke_result/decay及成员指针兼容性需要按泛型组共同归并。",
+      "variants": [
+        "返回引用时是否复制",
+        "move-only结果",
+        "C++17 result_of迁移至invoke_result"
+      ],
+      "evidence": [
+        "challenge-56"
+      ],
+      "proposed_home": "generic-algorithm",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": [
+        "与root模板泛型组共同定最终实现，避免单独重复主讲解"
+      ]
+    },
+    {
+      "id": "cpp-lib-string-view-lifetime",
+      "title": "非拥有字符串子视图",
+      "scenario": "零复制切分或返回输入的一部分",
+      "mechanism": "string_view保存范围而非所有权；输入销毁/重分配会悬空，返回临时string的子视图不可延寿。",
+      "variants": [
+        "调用期只读参数",
+        "长存储视图",
+        "显式构造拥有string"
+      ],
+      "evidence": [
+        "cookbook-0133",
+        "n4659-view-access",
+        "n4659-view-modifiers"
+      ],
+      "proposed_home": "borrowed-views",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-view-c-string",
+      "title": "长度视图与NUL字符串",
+      "scenario": "将string_view交给正则、日志或旧C接口",
+      "mechanism": "data不保证NUL且不表达size；采用迭代器范围/长度接口，或明确创建拥有且终止的副本。",
+      "variants": [
+        "底层有合法后缀",
+        "内嵌NUL",
+        "空视图"
+      ],
+      "evidence": [
+        "n4659-view-access",
+        "challenge-31",
+        "challenge-37",
+        "challenge-38"
+      ],
+      "proposed_home": "borrowed-views",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-span",
+      "title": "连续对象的借用接口",
+      "scenario": "统一接收array/vector/数组并返回子范围",
+      "mechanism": "span借用连续对象，extent和const元素语义区别于span对象本身的const；它不延长所有者寿命。",
+      "variants": [
+        "静态/动态extent",
+        "span<T>与span<const T>",
+        "重分配后失效"
+      ],
+      "evidence": [
+        "n4861-span"
+      ],
+      "proposed_home": "borrowed-views",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-lazy-views",
+      "title": "惰性管道与能力变化",
+      "scenario": "过滤、变换、截取后遍历或交给算法",
+      "mechanism": "view适配通常延迟计算且可能降迭代能力；过滤后的vector范围不再随机访问，管道次序影响结果和工作量。",
+      "variants": [
+        "filter后take",
+        "materialize快照",
+        "返回结果的引用/值"
+      ],
+      "evidence": [
+        "cookbook-0685",
+        "n4861-filter-iterator"
+      ],
+      "proposed_home": "borrowed-views",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-view-ownership",
+      "title": "view、所有权与借用",
+      "scenario": "从临时范围创建view或取得算法返回迭代器",
+      "mechanism": "view并不必然非拥有；owning_view与borrowed_range解决不同问题，临时非借用范围算法结果可为dangling。",
+      "variants": [
+        "lvalue ref_view",
+        "rvalue owning_view",
+        "库DR与标准年代"
+      ],
+      "evidence": [
+        "cookbook-0685",
+        "n4950-owning-view"
+      ],
+      "proposed_home": "borrowed-views",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-filtered-mutation",
+      "title": "过滤视图中的修改",
+      "scenario": "通过filter迭代器修改元素",
+      "mechanism": "修改后仍需满足过滤谓词；不要把过滤视图当可随意变更成员资格的稳定索引。",
+      "variants": [
+        "保持谓词的就地修改",
+        "改变成员资格则重新筛选",
+        "view与底层双重生命周期"
+      ],
+      "evidence": [
+        "n4861-filter-iterator"
+      ],
+      "proposed_home": "borrowed-views",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-byte-hex",
+      "title": "字节范围的十六进制编码",
+      "scenario": "将8bit数据输出成固定宽度文本",
+      "mechanism": "字节值、signed char提升、大小写与固定两位宽需明确；流格式状态与手工nibble法可对照。",
+      "variants": [
+        "unsigned byte接口",
+        "前导零",
+        "输出范围/拥有string"
+      ],
+      "evidence": [
+        "challenge-23"
+      ],
+      "proposed_home": "text-codecs",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-hex-input-policy",
+      "title": "十六进制解析的输入策略",
+      "scenario": "把任意长度文本解析为字节向量",
+      "mechanism": "逐对读取前必须定义奇数位策略并验证字符；SV下标前提严格小于size。",
+      "variants": [
+        "拒绝odd",
+        "前补0或丢尾需显式约定",
+        "空串/分隔符/非法字符"
+      ],
+      "evidence": [
+        "challenge-24",
+        "n4659-view-access"
+      ],
+      "proposed_home": "text-codecs",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-join",
+      "title": "分隔符连接",
+      "scenario": "将一个可能为空的输入范围连接成文本",
+      "mechanism": "用首项标记或首项单独处理避免尾分隔符，不需要随机访问；输入可以是单遍流。",
+      "variants": [
+        "空/单元素",
+        "分隔符是view",
+        "可流式打印的非string值"
+      ],
+      "evidence": [
+        "challenge-26"
+      ],
+      "proposed_home": "text-codecs",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-split",
+      "title": "分隔符切分与结果所有权",
+      "scenario": "按一个或多个分隔字符产生token",
+      "mechanism": "连续分隔、首尾空项是否保留属于题意；拥有string与借用string_view结果有不同寿命。",
+      "variants": [
+        "保空/去空",
+        "字符集合与整个分隔串",
+        "Unicode另需明确编码"
+      ],
+      "evidence": [
+        "challenge-27",
+        "cookbook-0133"
+      ],
+      "proposed_home": "text-codecs",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-regex-operations",
+      "title": "校验、查找、捕获与替换",
+      "scenario": "解析受限格式或重排文本字段",
+      "mechanism": "regex_match覆盖全串，search找局部，replace格式使用捕获；迭代器范围和smatch对象寿命需跟输入一致。",
+      "variants": [
+        "受限URL练习不是通用URL解析器",
+        "多次匹配",
+        "边界/长度/空匹配"
+      ],
+      "evidence": [
+        "challenge-30",
+        "challenge-31"
+      ],
+      "proposed_home": "text-codecs",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-character-policy",
+      "title": "字符分类与空白定义",
+      "scenario": "统计字母、规范化文本、删除空白行",
+      "mechanism": "cctype输入先转unsigned char；ASCII、locale与Unicode不是同一规范；空集合的统计分母要定义。",
+      "variants": [
+        "space与tab",
+        "零字母输入",
+        "字符计数与字节计数"
+      ],
+      "evidence": [
+        "challenge-49",
+        "challenge-51",
+        "challenge-34"
+      ],
+      "proposed_home": "text-codecs",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-strict-numeric-parse",
+      "title": "严格数值解析",
+      "scenario": "只接受完整合法整数，不能吞掉后缀",
+      "mechanism": "from_chars同时检查ec与ptr；默认不跳空白且不认前导+；输出值在失败时不更新。",
+      "variants": [
+        "前缀解析与整串校验",
+        "溢出",
+        "不同进制/浮点接口版本"
+      ],
+      "evidence": [
+        "cppref-from-chars",
+        "ms-charconv"
+      ],
+      "proposed_home": "text-codecs",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-fold-type",
+      "title": "聚合的类型与顺序",
+      "scenario": "对计数或小数范围计算总和",
+      "mechanism": "accumulate的累加器类型由init决定且按顺序应用；0、0LL、0.0改变计算语义。",
+      "variants": [
+        "整数溢出",
+        "浮点精度",
+        "reduce可重排需另读契约"
+      ],
+      "evidence": [
+        "n4659-accumulate",
+        "challenge-48",
+        "challenge-49"
+      ],
+      "proposed_home": "numeric",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-stream-read-state",
+      "title": "流状态与读取循环",
+      "scenario": "逐行或逐对象读取直到失败",
+      "mechanism": "以读取操作成功作为推进条件；eof是某次读取后的状态，不能以!eof预测下一读成功。",
+      "variants": [
+        "getline保空行",
+        "格式化提取后的换行",
+        "截断记录与非EOF错误"
+      ],
+      "evidence": [
+        "challenge-34",
+        "cookbook-0371"
+      ],
+      "proposed_home": "io-files",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-stream-format",
+      "title": "输出格式及状态",
+      "scenario": "输出十六进制字节或对齐表格",
+      "mechanism": "宽度、填充、进制等操纵符的作用范围不同；复用流时避免意外继承先前格式。",
+      "variants": [
+        "setw每次重设",
+        "持久flags",
+        "C++20 format作现代补充"
+      ],
+      "evidence": [
+        "challenge-23",
+        "challenge-43"
+      ],
+      "proposed_home": "io-files",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-binary-records",
+      "title": "对象数据的二进制表示",
+      "scenario": "保存含数值和字符串的记录并读回",
+      "mechanism": "对象表示不是通用文件协议；动态资源需要字段序列化，长度/字节序/截断规则明确，不能写指针。",
+      "variants": [
+        "同进程快照与可移植格式",
+        "空字符串",
+        "trivially-copyable不是跨ABI保证"
+      ],
+      "evidence": [
+        "cookbook-0371"
+      ],
+      "proposed_home": "io-files",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-filesystem-path",
+      "title": "路径语义与接口",
+      "scenario": "组合路径并按文件名匹配",
+      "mechanism": "filesystem::path负责路径组件，不把路径当普通字符串拼接；扩展名/filename/跨平台编码分开。",
+      "variants": [
+        "原生宽窄字符串",
+        "相对/绝对",
+        "字符串解析示例不能当通用路径解析"
+      ],
+      "evidence": [
+        "challenge-35",
+        "challenge-37"
+      ],
+      "proposed_home": "io-files",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": [
+        "路径编码细节与权限策略仅发现，写稿前补读指定标准或实现文档"
+      ]
+    },
+    {
+      "id": "cpp-lib-filesystem-traverse",
+      "title": "目录遍历与错误策略",
+      "scenario": "递归筛选文件、汇总大小",
+      "mechanism": "recursive_directory_iterator为单遍输入；默认不跟目录符号链接，跟随可遇环；error_code和异常接口按需求选。",
+      "variants": [
+        "是否跟链接",
+        "权限失败",
+        "遍历时文件变化与未规定顺序"
+      ],
+      "evidence": [
+        "challenge-35",
+        "challenge-37",
+        "cppref-fs-iterator"
+      ],
+      "proposed_home": "io-files",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-file-rewrite",
+      "title": "文件内容变换与替换",
+      "scenario": "去掉空白行后保存到同一路径",
+      "mechanism": "读取、写入、关闭、替换是不同失败阶段；不要先删除原件再期待rename一定成功。",
+      "variants": [
+        "同目录临时文件",
+        "避免固定temp名冲突",
+        "跨卷/平台替换语义"
+      ],
+      "evidence": [
+        "challenge-34"
+      ],
+      "proposed_home": "io-files",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": [
+        "跨平台原子替换不是标准filesystem保证；若做生产实现需限定平台，本册先做明确范围示例"
+      ]
+    },
+    {
+      "id": "cpp-lib-temporary-file-resource",
+      "title": "临时资源的提交与清理",
+      "scenario": "临时日志默认清理，成功时转为持久文件",
+      "mechanism": "把资源状态与所有权转移建模；析构路径不能传播异常，显式persist可报告失败。",
+      "variants": [
+        "成功提交后析构不删目标",
+        "移动对象",
+        "输出SV用有长度接口"
+      ],
+      "evidence": [
+        "challenge-38"
+      ],
+      "proposed_home": "composite-container",
+      "disposition": "proposed-crosslink",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": [
+        "与资源所有权专题合并主讲解，不重复包装成整个日志产品"
+      ]
+    },
+    {
+      "id": "cpp-lib-ring-buffer",
+      "title": "有界环形容器",
+      "scenario": "固定容量FIFO、溢出拒绝或覆盖旧项",
+      "mechanism": "状态不变量决定head/size和逻辑遍历；容量0、非默认构造T、移出销毁等实现条件不能隐含。",
+      "variants": [
+        "Challenge默认覆盖",
+        "Exercism分write/overwrite",
+        "空/满/回绕/clear"
+      ],
+      "evidence": [
+        "challenge-46",
+        "exercism-ring-task",
+        "exercism-ring-tests"
+      ],
+      "proposed_home": "composite-container",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-heap-adaptor",
+      "title": "按比较策略维护优先队列",
+      "scenario": "自定义优先级并提供top/push/pop",
+      "mechanism": "底层vector与heap算法各自负责存储及堆不变量；pop_heap只是调整范围，随后才pop_back。",
+      "variants": [
+        "最大/最小",
+        "自定义比较器",
+        "空队列访问前提"
+      ],
+      "evidence": [
+        "challenge-45"
+      ],
+      "proposed_home": "composite-container",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-container-implementation",
+      "title": "泛型容器的组合实现",
+      "scenario": "在给定容器结构上完善接口与值语义",
+      "mechanism": "HashMap/分段deque把引用访问、迭代器、复制移动、所有权和测试结合；按明确任务边界做，不冒称完整STL实现。",
+      "variants": [
+        "CS106L骨架补齐",
+        "TDDD38分段稳定地址",
+        "异常安全/非默认构造元素拓展"
+      ],
+      "evidence": [
+        "cs106l-hashmap",
+        "tddd38-deque"
+      ],
+      "proposed_home": "composite-container",
+      "disposition": "proposed-extension",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": [
+        "TDDD38明确放宽逐元素构析与异常安全，不能将其答案升级为标准容器承诺"
+      ]
+    },
+    {
+      "id": "cpp-lib-clock-duration",
+      "title": "测量间隔与时间单位",
+      "scenario": "泛型计时器返回可组合的duration",
+      "mechanism": "间隔宜选单调steady_clock；high_resolution_clock不保证单调，duration与tick数/单位转换分开。",
+      "variants": [
+        "丢精度的duration_cast",
+        "可调用对象转发",
+        "墙上时间与间隔时间"
+      ],
+      "evidence": [
+        "challenge-39",
+        "cppref-steady-clock"
+      ],
+      "proposed_home": "time-random",
+      "disposition": "proposed-core",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-lib-calendar-timezone",
+      "title": "日期、时区与本地时间",
+      "scenario": "求日期差或把会议时刻展示到各时区",
+      "mechanism": "C++17 date库与C++20 chrono API要分版，日历时间不等同固定秒数；时区数据和夏令时冲突需明确。",
+      "variants": [
+        "signed差与绝对差",
+        "不合法日期",
+        "ambiguous/nonexistent local time"
+      ],
+      "evidence": [
+        "challenge-40",
+        "challenge-43"
+      ],
+      "proposed_home": "time-random",
+      "disposition": "proposed-extension",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": [
+        "本轮没有安装date/tzdb；时区映射和平台支持尚未验证，保留待补实现"
+      ]
+    },
+    {
+      "id": "cpp-lib-random-engine-distribution",
+      "title": "随机引擎与分布",
+      "scenario": "生成给定区间的随机测试数据或抽样",
+      "mechanism": "引擎提供状态序列，分布映射到目标范围；uniform_int的两端包含，不能简单用取模替代均匀映射。",
+      "variants": [
+        "固定seed复现",
+        "引擎重用而非每次重播种",
+        "分布与平台重现边界"
+      ],
+      "evidence": [
+        "cppref-uniform-int",
+        "n4659-uniform-int"
+      ],
+      "proposed_home": "time-random",
+      "disposition": "proposed-extension",
+      "state": "analyzed-candidate-not-authored",
+      "open_questions": [
+        "完整抽样题与跨库序列一致性未研究，当前只是有实际例程的扩张候选"
+      ]
+    }
+  ],
+  "boundary_notes": [
+    "These are analyzed research candidates, not reviewed teaching sections or proof of complete C++ coverage.",
+    "Different homes are discovery/authoring groups, not a fixed chapter count.",
+    "Algorithm derivations are cross-referenced; current material focuses on language/library implementation contracts."
+  ]
+}

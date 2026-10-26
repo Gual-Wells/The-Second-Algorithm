@@ -1,0 +1,429 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-10-26",
+  "reads": [
+    {
+      "id": "pro-thread",
+      "kind": "local_book_read",
+      "book_id": "professional-cpp-6",
+      "physical_pages": [
+        1045,
+        1046,
+        1047,
+        1048,
+        1049,
+        1050,
+        1051,
+        1052
+      ],
+      "read_scope": "Function objects/lambda/member-call ownership, thread-local storage, cancellation/jthread, result retrieval and exception_ptr transport. Physical1043–1044 appeared in a truncated combined tool output and are not counted as fully read.",
+      "limitations": [
+        "Selected complete pages only; no claim of whole-book semantic reading."
+      ]
+    },
+    {
+      "id": "pro-atomic",
+      "kind": "local_book_read",
+      "book_id": "professional-cpp-6",
+      "physical_pages": [
+        1053,
+        1054,
+        1055,
+        1056,
+        1057,
+        1058
+      ],
+      "read_scope": "Atomic counters, lock-free qualification, CAS expected/desired update, atomic smart pointers, atomic_ref, batching updates; atomic-wait section begins on1058 but continuation not fully read.",
+      "limitations": [
+        "Selected complete pages only; no claim of whole-book semantic reading."
+      ]
+    },
+    {
+      "id": "pro-locks",
+      "kind": "local_book_read",
+      "book_id": "professional-cpp-6",
+      "physical_pages": [
+        1063,
+        1064,
+        1065,
+        1066,
+        1067
+      ],
+      "read_scope": "Lock ownership wrappers/tags, multi-lock acquisition, call_once retries and ordering, beginning of synchronized-stream discussion.",
+      "limitations": [
+        "Selected complete pages only; no claim of whole-book semantic reading."
+      ]
+    },
+    {
+      "id": "pro-cv",
+      "kind": "local_book_read",
+      "book_id": "professional-cpp-6",
+      "physical_pages": [
+        1071,
+        1072,
+        1073
+      ],
+      "read_scope": "Condition variable API, predicate loop, spurious wakes, queue sketch and notify-at-exit; latch section begins but continuation not read.",
+      "limitations": [
+        "Selected complete pages only; no claim of whole-book semantic reading."
+      ]
+    },
+    {
+      "id": "pro-futures",
+      "kind": "local_book_read",
+      "book_id": "professional-cpp-6",
+      "physical_pages": [
+        1077,
+        1078,
+        1079,
+        1080,
+        1081,
+        1082
+      ],
+      "read_scope": "Semaphore tail/example; promise/future, packaged_task, async policy, exception transport, shared_future broadcast. PDF1077/1078 additionally rendered and visually checked for suspected compile errors.",
+      "limitations": [
+        "Selected complete pages only; no claim of whole-book semantic reading."
+      ]
+    },
+    {
+      "id": "pro-logger",
+      "kind": "local_book_read",
+      "book_id": "professional-cpp-6",
+      "physical_pages": [
+        1083,
+        1084,
+        1085,
+        1086,
+        1087
+      ],
+      "read_scope": "Complete two-iteration background logger narrative/code, queue swap outside lock, exit/drain and join placement, introductory thread-pool paragraph.",
+      "limitations": [
+        "Selected complete pages only; no claim of whole-book semantic reading."
+      ]
+    },
+    {
+      "id": "pro-exercises",
+      "kind": "local_book_read",
+      "book_id": "professional-cpp-6",
+      "physical_pages": [
+        1092
+      ],
+      "read_scope": "Six Chapter27 exercises: timed action, stop, pause/resume, parallel Fibonacci aggregation, barrier startup, atomicMin CAS.",
+      "limitations": [
+        "Selected complete pages only; no claim of whole-book semantic reading."
+      ]
+    },
+    {
+      "id": "pro-linkage",
+      "kind": "local_book_read",
+      "book_id": "professional-cpp-6",
+      "physical_pages": [
+        488,
+        489,
+        490,
+        491,
+        492,
+        493,
+        494,
+        495,
+        496
+      ],
+      "read_scope": "Preprocessor, translation/linkage, extern, header guards, ODR and forward declarations, feature-test macros. Some module-adjacent material is overview only.",
+      "limitations": [
+        "Selected complete pages only; no claim of whole-book semantic reading."
+      ]
+    },
+    {
+      "id": "cook-future",
+      "kind": "local_book_read",
+      "book_id": "modern-cpp-cookbook-2",
+      "physical_pages": [
+        459,
+        460,
+        461,
+        462,
+        463,
+        464,
+        465,
+        466
+      ],
+      "read_scope": "Promise value/exception channel and async policy/polling recipes. Read across462 to close prior recipe code that its outline candidate range459–461 cuts off.",
+      "limitations": [
+        "Selected complete pages only; no claim of whole-book semantic reading."
+      ]
+    },
+    {
+      "id": "challenge-61",
+      "kind": "local_book_problem_and_solution",
+      "book_id": "modern-cpp-challenge",
+      "problem_number": 61,
+      "parts": [
+        "problem",
+        "solution"
+      ],
+      "read_scope": "Complete derived problem and solution with original EPUB-member and PDF locators retained in local package.",
+      "limitations": [
+        "Book code not adopted verbatim as verified template."
+      ]
+    },
+    {
+      "id": "challenge-63",
+      "kind": "local_book_problem_and_solution",
+      "book_id": "modern-cpp-challenge",
+      "problem_number": 63,
+      "parts": [
+        "problem",
+        "solution"
+      ],
+      "read_scope": "Complete derived problem and solution with original EPUB-member and PDF locators retained in local package.",
+      "limitations": [
+        "Book code not adopted verbatim as verified template."
+      ]
+    },
+    {
+      "id": "challenge-65",
+      "kind": "local_book_problem_and_solution",
+      "book_id": "modern-cpp-challenge",
+      "problem_number": 65,
+      "parts": [
+        "problem",
+        "solution"
+      ],
+      "read_scope": "Complete derived problem and solution with original EPUB-member and PDF locators retained in local package.",
+      "limitations": [
+        "Book code not adopted verbatim as verified template."
+      ]
+    },
+    {
+      "id": "std17-races",
+      "kind": "web_read",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/intro.races",
+      "read_scope": "C++17 N4659 conflicts, modification order, happens-before, data-race condition and UB; page read in two views including paragraphs20/21.",
+      "limitations": [
+        "Selected clause/article, not entire site."
+      ]
+    },
+    {
+      "id": "std17-atomic-order",
+      "kind": "web_read",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/atomics.order",
+      "read_scope": "Relaxed, release/acquire synchronization and seq_cst ordering clauses; long fence/consume branches not developed into implementations.",
+      "limitations": [
+        "Selected clause/article, not entire site."
+      ]
+    },
+    {
+      "id": "std17-async",
+      "kind": "web_read",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/futures.async",
+      "read_scope": "Entire short async clause including default policy, deferred invocation, shared-state synchronization and may-not-run note.",
+      "limitations": [
+        "Selected clause/article, not entire site."
+      ]
+    },
+    {
+      "id": "std17-future",
+      "kind": "web_read",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/futures.unique_future",
+      "read_scope": "future state/get semantics, wait_for duration signature and future_status outcomes.",
+      "limitations": [
+        "Selected clause/article, not entire site."
+      ]
+    },
+    {
+      "id": "std17-odr",
+      "kind": "web_read",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/basic.def.odr",
+      "read_scope": "ODR paragraphs1–5, odr-use and completeness examples; later multiple-definition conditions also cross-checked via reference page.",
+      "limitations": [
+        "Selected clause/article, not entire site."
+      ]
+    },
+    {
+      "id": "std17-linkage",
+      "kind": "web_read",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/basic.link",
+      "read_scope": "Namespace/static/const/unnamed-namespace linkage and external-vs-internal examples; not every later paragraph.",
+      "limitations": [
+        "Selected clause/article, not entire site."
+      ]
+    },
+    {
+      "id": "std17-thread-join",
+      "kind": "web_read",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/thread.thread.member",
+      "read_scope": "Complete short thread member clause: join synchronization, detach effects and invalid use conditions.",
+      "limitations": [
+        "Selected clause/article, not entire site."
+      ]
+    },
+    {
+      "id": "std17-hardware",
+      "kind": "web_read",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/thread.thread.static",
+      "read_scope": "Complete short hardware_concurrency clause explicitly allowing0.",
+      "limitations": [
+        "Selected clause/article, not entire site."
+      ]
+    },
+    {
+      "id": "std17-iostream",
+      "kind": "web_read",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/iostream.objects.overview",
+      "read_scope": "Complete short overview; synchronized standard I/O data-race guarantee vs interleaved characters.",
+      "limitations": [
+        "Selected clause/article, not entire site."
+      ]
+    },
+    {
+      "id": "ref-thread-construct",
+      "kind": "web_read",
+      "url": "https://en.cppreference.com/cpp/thread/thread/thread",
+      "read_scope": "Constructor materialization/decay, move construction, argument moves and constructor synchronization; read body around185–221.",
+      "limitations": [
+        "Selected clause/article, not entire site."
+      ]
+    },
+    {
+      "id": "ref-cv",
+      "kind": "web_read",
+      "url": "https://en.cppreference.com/cpp/thread/condition_variable",
+      "read_scope": "Predicate/mutex/wait protocol and lock type requirements; body around165–218.",
+      "limitations": [
+        "Selected clause/article, not entire site."
+      ]
+    },
+    {
+      "id": "ref-jthread",
+      "kind": "web_read",
+      "url": "https://en.cppreference.com/cpp/thread/jthread",
+      "read_scope": "C++20 cooperative stop and join behavior; body173–204.",
+      "limitations": [
+        "Selected clause/article, not entire site."
+      ]
+    },
+    {
+      "id": "ref-async",
+      "kind": "web_read",
+      "url": "https://en.cppreference.com/cpp/thread/async",
+      "read_scope": "Default policies, result type, async/deferred and selection; body160–236; destructor nuance follows N4659 clause instead of assuming all futures block.",
+      "limitations": [
+        "Selected clause/article, not entire site."
+      ]
+    },
+    {
+      "id": "cert-con-index",
+      "kind": "web_read",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/concurrency-con/",
+      "read_scope": "Complete finite index: seven direct CON50–56 C++ rules plus five inherited C rule links; enumeration is not12 rule-body reads.",
+      "limitations": [
+        "Selected clause/article, not entire site."
+      ]
+    },
+    {
+      "id": "cert-con53",
+      "kind": "web_read",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/concurrency-con/con53-cpp/",
+      "read_scope": "Bank transfer wrong lock order, manual ID ordering, deferred unique_lock plus std::lock solutions; viewed body through215.",
+      "limitations": [
+        "Selected clause/article, not entire site."
+      ]
+    },
+    {
+      "id": "cert-con54",
+      "kind": "web_read",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/concurrency-con/con54-cpp/",
+      "read_scope": "Complete wrong-if/while/predicate-overload examples and reasoning, read in two views.",
+      "limitations": [
+        "Selected clause/article, not entire site."
+      ]
+    },
+    {
+      "id": "gcc-overall",
+      "kind": "web_read",
+      "url": "https://gcc.gnu.org/onlinedocs/gcc/Overall-Options.html",
+      "read_scope": "Compilation-stage overview, source/object distinctions; -E/-S/-c details not all displayed in initial returned view, experiment uses known flags.",
+      "limitations": [
+        "Selected clause/article, not entire site."
+      ]
+    },
+    {
+      "id": "gcc-modules",
+      "kind": "web_read",
+      "url": "https://gcc.gnu.org/onlinedocs/gcc/C_002b_002b-Modules.html",
+      "read_scope": "Current official module feature, incomplete support, CMI dependency order and explicit enable flag. Current manual is rolling; do not hardcode its option name for every compiler release.",
+      "limitations": [
+        "Selected clause/article, not entire site."
+      ]
+    },
+    {
+      "id": "ms-tu",
+      "kind": "web_read",
+      "url": "https://learn.microsoft.com/en-us/cpp/cpp/program-and-linkage-cpp",
+      "read_scope": "Translation units/header definition/linkage examples; simplified ODR prose corrected against N4659, not treated as complete language standard.",
+      "limitations": [
+        "Selected clause/article, not entire site."
+      ]
+    },
+    {
+      "id": "clang-tsan",
+      "kind": "web_read",
+      "url": "https://clang.llvm.org/docs/ThreadSanitizer.html",
+      "read_scope": "Tool entry and navigation initially observed; detailed target support/limitations not fully read in this pass; remains a follow-up, not evidence of local TSan capability.",
+      "limitations": [
+        "Selected clause/article, not entire site."
+      ]
+    },
+    {
+      "id": "std17-once-exception",
+      "kind": "web_read",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/thread.once.callonce",
+      "read_scope": "Full clause body through example: exceptional/returning/passive executions and synchronization. Checked while diagnosing local exception retry hang.",
+      "limitations": [
+        "C++17 draft rule; does not prove local implementation conformance."
+      ]
+    },
+    {
+      "id": "std17-unique-dtor",
+      "kind": "web_read",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/unique.ptr.single.dtor",
+      "read_scope": "Full short destructor clause including default deleter complete type requirement.",
+      "limitations": [
+        "Only selected smart pointer clause."
+      ]
+    },
+    {
+      "id": "std17-default-delete",
+      "kind": "web_read",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/unique.ptr.dltr.dflt",
+      "read_scope": "Full default_delete<T> clause including incomplete type ill-formed requirement.",
+      "limitations": [
+        "Only selected deleter clause."
+      ]
+    },
+    {
+      "id": "gcc-once-status",
+      "kind": "web_read",
+      "url": "https://gcc.gnu.org/onlinedocs/libstdc++/manual/status.html",
+      "read_scope": "Implementation-status introduction and located C++11/14/17/20 call_once exception-support rows, official PR66146 pointer.",
+      "limitations": [
+        "Rolling implementation-status page; not every release and target is established affected.",
+        "Bugzilla detail not read; direct click returned429."
+      ]
+    },
+    {
+      "id": "gcc-once-issue-attempt",
+      "kind": "web_access_attempt",
+      "url": "https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66146",
+      "read_scope": "Actual attempted access from official status pointer. HTTP429 prevented body retrieval.",
+      "limitations": [
+        "Unavailable, not counted as an issue-body read."
+      ]
+    }
+  ],
+  "global_limits": [
+    "No site-wide/body-wide completion claim.",
+    "Initial research enumeration is not authored or tested coverage; see author-map.json for later authoring states.",
+    "Commercial book originals/extracts remain ignored local files."
+  ]
+}

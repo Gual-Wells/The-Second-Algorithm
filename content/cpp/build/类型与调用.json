@@ -1,0 +1,133 @@
+{
+  "codeBlocks": [
+    "init-forms",
+    "list-owner",
+    "auto-deduction",
+    "decltype-return",
+    "explicit-null",
+    "deleted-overload",
+    "integer-width",
+    "bit-width",
+    "sequencing",
+    "ref-lifetime",
+    "ref-accessor",
+    "member-init",
+    "ipv4-value",
+    "ipv4-parse",
+    "ipv4-range"
+  ],
+  "headings": [
+    {
+      "depth": 1,
+      "id": "类型与调用",
+      "text": "类型与调用"
+    },
+    {
+      "depth": 2,
+      "id": "1-构造的到底是什么",
+      "text": "1 构造的到底是什么"
+    },
+    {
+      "depth": 3,
+      "id": "1-1-默认初始化-值初始化与列表初始化",
+      "text": "1.1 默认初始化、值初始化与列表初始化"
+    },
+    {
+      "depth": 3,
+      "id": "1-2-为什么-unique-ptr-不能直接列成初始化列表",
+      "text": "1.2 为什么 unique_ptr 不能直接列成初始化列表"
+    },
+    {
+      "depth": 2,
+      "id": "2-推导与转换-值-引用和候选函数",
+      "text": "2 推导与转换：值、引用和候选函数"
+    },
+    {
+      "depth": 3,
+      "id": "2-1-auto-保留什么-去掉什么",
+      "text": "2.1 auto 保留什么，去掉什么"
+    },
+    {
+      "depth": 3,
+      "id": "2-2-decltype-与返回类型-一个括号可能改变所有权",
+      "text": "2.2 decltype 与返回类型：一个括号可能改变所有权"
+    },
+    {
+      "depth": 3,
+      "id": "2-3-explicit-nullptr-与被删除的精确匹配",
+      "text": "2.3 explicit、nullptr 与被删除的精确匹配"
+    },
+    {
+      "depth": 2,
+      "id": "3-整数表达式-先决定计算类型-再决定结果类型",
+      "text": "3 整数表达式：先决定计算类型，再决定结果类型"
+    },
+    {
+      "depth": 3,
+      "id": "3-1-扩宽乘法-下标比较与负数取模",
+      "text": "3.1 扩宽乘法、下标比较与负数取模"
+    },
+    {
+      "depth": 3,
+      "id": "3-2-位移宽度属于左操作数",
+      "text": "3.2 位移宽度属于左操作数"
+    },
+    {
+      "depth": 3,
+      "id": "3-3-多个修改表达式-先把顺序写出来",
+      "text": "3.3 多个修改表达式：先把顺序写出来"
+    },
+    {
+      "depth": 2,
+      "id": "4-借用何时有效-接口该返回什么",
+      "text": "4 借用何时有效，接口该返回什么"
+    },
+    {
+      "depth": 3,
+      "id": "4-1-引用绑定与临时量的寿命",
+      "text": "4.1 引用绑定与临时量的寿命"
+    },
+    {
+      "depth": 3,
+      "id": "4-2-const-重载与引用限定-左值借用-右值交出值",
+      "text": "4.2 const 重载与引用限定：左值借用，右值交出值"
+    },
+    {
+      "depth": 3,
+      "id": "4-3-成员初始化顺序-声明决定依赖",
+      "text": "4.3 成员初始化顺序：声明决定依赖"
+    },
+    {
+      "depth": 2,
+      "id": "5-贯穿实现-可解析-可递增的-ipv4-值",
+      "text": "5 贯穿实现：可解析、可递增的 IPv4 值"
+    },
+    {
+      "depth": 3,
+      "id": "5-1-前置返回新对象-后置返回旧值",
+      "text": "5.1 前置返回新对象，后置返回旧值"
+    },
+    {
+      "depth": 3,
+      "id": "5-2-输入先校验-再提交",
+      "text": "5.2 输入先校验，再提交"
+    },
+    {
+      "depth": 3,
+      "id": "5-3-闭区间-到达末值立即停-再考虑递增",
+      "text": "5.3 闭区间：到达末值立即停，再考虑递增"
+    },
+    {
+      "depth": 2,
+      "id": "依据与适用范围",
+      "text": "依据与适用范围"
+    }
+  ],
+  "sourceSha256": "08828931a0175b8b3357849f415e7bf576eb9a24cf313fda81cc120d043a8d20",
+  "codeSha256": "e749b93929a7319db788aaa98c2e9ebf791535484c9517799b111c390e6d5d59",
+  "markdownSha256": "494c0a6a523ca6b51ba4ec186a90d30043beef555de160a8bc511591dcced3ca",
+  "htmlSha256": "4b9c4330b9646e1e34564c0a8b4e2f30116fdcf515b01f2a26024b5e0c080683",
+  "builderSha256": "86d65155c26e85dfd7b84bccd818659cb050a4dea870b0ffd43ac34965e8491e",
+  "markdownBytes": 22977,
+  "htmlBytes": 48329
+}

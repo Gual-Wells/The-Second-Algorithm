@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "source_id": "liu-tddd38",
+  "entry_id": "exercise-index",
+  "captured_at": "2026-10-26T12:45:49.089723+00:00",
+  "request_url": "https://www.ida.liu.se/~TDDD38/lecture/index.en.shtml",
+  "final_url": "https://www.ida.liu.se/~TDDD38/lecture/index.en.shtml",
+  "adapter": "link_index",
+  "parser_version": 5,
+  "page_title": "TDDD38 > Seminars",
+  "entry_configuration": {
+    "url": "https://www.ida.liu.se/~TDDD38/lecture/index.en.shtml",
+    "adapter": "link_index",
+    "include_url_regex": "/~TDDD38/exercises/",
+    "pagination_mode": "single_page",
+    "text_encoding": "iso-8859-1"
+  },
+  "entry_configuration_sha256": "362ff1cbbeb53f39271126afc42d26afc846d1bfb2ec74ae37445e0929988e4c",
+  "input_sha256": "e29a4a6dce85a176b23c703c448011bf417a4bcfa6e8482f00ffdd4f39729002",
+  "input_bytes": 34263,
+  "records_sha256": "897385467f55ab8c0751b340fd73859c6375486d41d8f7d4d6f761cdc79fb888",
+  "boundary": "matching metadata links on this registered page; not site-wide content",
+  "filter": "/~TDDD38/exercises/",
+  "pagination_next": [],
+  "state": "captured",
+  "records": [
+    {
+      "id": "url:05a4220b90773156d9b0",
+      "title": "Print all the things!",
+      "url": "https://www.ida.liu.se/~TDDD38/exercises/Print_all_things/",
+      "kind": "reference_link",
+      "section": "TDDD38 Advanced Programming in C++ / Seminars"
+    },
+    {
+      "id": "url:0b0903398a701705e4db",
+      "title": "Allocation tracker",
+      "url": "https://www.ida.liu.se/~TDDD38/exercises/Allocation_Tracker/",
+      "kind": "reference_link",
+      "section": "TDDD38 Advanced Programming in C++ / Seminars"
+    },
+    {
+      "id": "url:1779a31b1feb6e83a2ff",
+      "title": "Mixins",
+      "url": "https://www.ida.liu.se/~TDDD38/exercises/Mixins/",
+      "kind": "reference_link",
+      "section": "TDDD38 Advanced Programming in C++ / Seminars"
+    },
+    {
+      "id": "url:1ad371dd0e01dab5ac06",
+      "title": "Specialization & Type Traits",
+      "url": "https://www.ida.liu.se/~TDDD38/exercises/Specialization/",
+      "kind": "reference_link",
+      "section": "TDDD38 Advanced Programming in C++ / Seminars"
+    },
+    {
+      "id": "url:1c041fed003184c72679",
+      "title": "Mixed algorithm exercises",
+      "url": "https://www.ida.liu.se/~TDDD38/exercises/Algorithm/",
+      "kind": "reference_link",
+      "section": "TDDD38 Advanced Programming in C++ / Seminars"
+    },
+    {
+      "id": "url:5c6b8f1c79ab6b543e14",
+      "title": "Mixed Templates",
+      "url": "https://www.ida.liu.se/~TDDD38/exercises/Mixed_Templates/",
+      "kind": "reference_link",
+      "section": "TDDD38 Advanced Programming in C++ / Seminars"
+    },
+    {
+      "id": "url:75a8a53dee98540c453b",
+      "title": "Vector",
+      "url": "https://www.ida.liu.se/~TDDD38/exercises/Vector/",
+      "kind": "reference_link",
+      "section": "TDDD38 Advanced Programming in C++ / Seminars"
+    },
+    {
+      "id": "url:7a4de8e764e67a63c02b",
+      "title": "Variant",
+      "url": "https://www.ida.liu.se/~TDDD38/exercises/Variant/",
+      "kind": "reference_link",
+      "section": "TDDD38 Advanced Programming in C++ / Seminars"
+    },
+    {
+      "id": "url:871b583c8838de3b975c",
+      "title": "Variadic templates",
+      "url": "https://www.ida.liu.se/~TDDD38/exercises/Variadic_Templates/",
+      "kind": "reference_link",
+      "section": "TDDD38 Advanced Programming in C++ / Seminars"
+    },
+    {
+      "id": "url:8a29c5cc098695cddfd6",
+      "title": "Static Queue",
+      "url": "https://www.ida.liu.se/~TDDD38/exercises/Static_Queue/",
+      "kind": "reference_link",
+      "section": "TDDD38 Advanced Programming in C++ / Seminars"
+    },
+    {
+      "id": "url:955490c527e6ec20f222",
+      "title": "Calculator",
+      "url": "https://www.ida.liu.se/~TDDD38/exercises/Calculator/",
+      "kind": "reference_link",
+      "section": "TDDD38 Advanced Programming in C++ / Seminars"
+    },
+    {
+      "id": "url:ba6d0edbd158eb0715f8",
+      "title": "Mixed function templates exercises",
+      "url": "https://www.ida.liu.se/~TDDD38/exercises/Function_Templates/",
+      "kind": "reference_link",
+      "section": "TDDD38 Advanced Programming in C++ / Seminars"
+    },
+    {
+      "id": "url:bb643b8364c7ac30d94d",
+      "title": "SFINAE and overload priority",
+      "url": "https://www.ida.liu.se/~TDDD38/exercises/SFINAE/",
+      "kind": "reference_link",
+      "section": "TDDD38 Advanced Programming in C++ / Seminars"
+    },
+    {
+      "id": "url:cbe92dbd628bd010b5e9",
+      "title": "Basic language construct exercises",
+      "url": "https://www.ida.liu.se/~TDDD38/exercises/Basic_Theory/",
+      "kind": "reference_link",
+      "section": "TDDD38 Advanced Programming in C++ / Seminars"
+    },
+    {
+      "id": "url:d59738ba7d6a5f39db38",
+      "title": "Custom Deque",
+      "url": "https://www.ida.liu.se/~TDDD38/exercises/Custom_Deque/",
+      "kind": "reference_link",
+      "section": "TDDD38 Advanced Programming in C++ / Seminars"
+    },
+    {
+      "id": "url:dd73081bb16981febf7b",
+      "title": "Basic language construct exercises",
+      "url": "https://www.ida.liu.se/~TDDD38/exercises/Basic/",
+      "kind": "reference_link",
+      "section": "TDDD38 Advanced Programming in C++ / Seminars"
+    }
+  ]
+}

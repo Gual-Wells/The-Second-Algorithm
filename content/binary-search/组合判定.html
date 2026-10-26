@@ -11,7 +11,7 @@ a{color:var(--blue);text-underline-offset:3px;text-decoration-thickness:1px}a:ho
 .toc a.group{font-weight:600;color:#203f55;font-size:14px;margin-top:15px}.toc a.group:first-child{margin-top:0}.toc a.topic{padding-left:20px}.toc a:hover{background:#e5edf3}.toc a.active{color:#104d77;background:#e2ecf3;border-left-color:#2b688e;font-weight:600}
 main{min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:36px 42px 42px;box-shadow:0 2px 7px #1f405006}
 h1,h2,h3,h4{color:var(--heading);line-height:1.45;font-weight:600;scroll-margin-top:85px}h1{font-size:32px;margin:0 0 8px}h2{font-size:25px;margin:48px 0 21px;padding-top:30px;border-top:1px solid var(--line)}h2:first-of-type{margin-top:30px;padding-top:0;border-top:0}h3{font-size:20px;margin:34px 0 13px}h4{font-size:17px;margin:25px 0 12px;color:#253f52}
-p{margin:13px 0 17px}.subtitle{font-size:14px;color:#526878;margin:0 0 24px}strong{font-weight:600}li{margin:5px 0}
+p{margin:13px 0 17px}.subtitle{font-size:14px;color:#526878;margin:0 0 24px}strong{font-weight:600}li{margin:5px 0}main p,main li,main h2,main h3,main h4{overflow-wrap:anywhere}
 code{font-family:Consolas,'Cascadia Code','Noto Sans SC',monospace;font-size:.89em;color:#213f55;background:#eef3f6;padding:1px 4px;border-radius:3px}
 pre{background:#f6f8fa;border:1px solid #d9e2e8;border-radius:3px;padding:16px 18px;margin:17px 0 21px;overflow-x:auto;tab-size:4;font-family:Consolas,'Cascadia Code','Noto Sans SC',monospace;font-size:15px;line-height:1.6;color:#172d3c}
 pre code{font:inherit;color:inherit;background:transparent;padding:0;border-radius:0;white-space:pre}.keyword{color:#135aa0;font-weight:500}.type{color:#255d61}.comment{color:#526776}.number{color:#884920}.string{color:#8b3d21}
@@ -919,7 +919,7 @@ i64 amusementReward(<span class="keyword">const</span> vector&lt;i64&gt;&amp; a,
 <h2 id="相关方法与延伸">相关方法与延伸</h2>
 <p>Loan Repayment还需整除商分段跳跃，CF1866G需要区间容量分配，树上切分和几何覆盖也有各自的判定算法，见<a href="../../work/binary-research-2026-10-26/compositions/research.md">扩展研究</a>。LC1292可用增长边长O(mn)、LC2439可用最大前缀平均上取整O(n)，均应优先讲直接结构，避免为了收集二分题而保留更慢主解。</p>
 <p>具体原题、方法资料、读取边界与失败入口见<a href="../../work/binary-research-2026-10-26/compositions/research.md">研究记录</a>；本稿只保留足以辨别题型并理解相邻代码的内容。</p>
-<footer class="page-foot">组合判定 · 题型与 C++ 模板</footer></main></div></div><script>
+<footer class="page-foot">组合判定 · 求职算法总册</footer></main></div></div><script>
 const links=[...document.querySelectorAll('.sidebar a')];
 const targets=links.map(a=>document.getElementById(decodeURIComponent(a.hash.slice(1)))) .filter(Boolean);
 let scheduled=false,last='';

@@ -1,0 +1,1077 @@
+{
+  "schema_version": 1,
+  "domain": "core-language-objects-resources",
+  "generated_at": "2026-10-26",
+  "baseline": "C++17 unless variant explicitly names newer standard",
+  "patterns": [
+    {
+      "id": "cpp-core-init-forms",
+      "title": "为同一数据选择正确的初始化形式",
+      "problem_scenario": "构造容器大小/填充值和列举元素，修复函数声明被误当对象构造",
+      "mechanism": "default/value/direct/copy/list initialization meanings differ",
+      "important_variants": [
+        "automatic scalar vs static zero initialization",
+        "T() declaration ambiguity",
+        "vector(n,value) vs vector{elements}",
+        "user-provided default constructor may prevent zero-initializing members"
+      ],
+      "evidence_refs": [
+        "pro-init",
+        "gotw1",
+        "std-init",
+        "std-list"
+      ],
+      "proposed_section": "类型、表达式与初始化",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-explicit-conversion",
+      "title": "阻止隐式转换而保留显式构造",
+      "problem_scenario": "值包装类型不接受隐式整数/字符串转换",
+      "mechanism": "explicit constructors participate differently in direct versus copy initialization",
+      "important_variants": [
+        "T{x} vs T t=x vs T t={x}",
+        "explicit operator bool contextual conversion"
+      ],
+      "evidence_refs": [
+        "gotw1",
+        "std-list"
+      ],
+      "proposed_section": "类型、表达式与初始化",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": [
+        "完整的user-defined conversion ranking仍需具体重载题补读"
+      ]
+    },
+    {
+      "id": "cpp-core-initializer-list-owner",
+      "title": "批量初始化move-only元素为何失败",
+      "problem_scenario": "构造vector<unique_ptr<T>>而不试图复制所有权",
+      "mechanism": "initializer_list backing array elements are const; copying list view does not move elements",
+      "important_variants": [
+        "list constructor vs reserve+push_back/emplace",
+        "temporary array lifetime",
+        "initializer_list returned from function dangles"
+      ],
+      "evidence_refs": [
+        "std-list",
+        "std-temp",
+        "pro-owners"
+      ],
+      "proposed_section": "类型、表达式与初始化",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-auto-cv-ref",
+      "title": "让推导保留需要的引用与const",
+      "problem_scenario": "遍历/接收访问器结果时避免意外复制或丢只读约束",
+      "mechanism": "by-value auto drops top-level cv/reference while auto&/const auto& bind",
+      "important_variants": [
+        "pointee const is retained",
+        "array/function decay in by-value contexts",
+        "auto&& binding depends on initializer"
+      ],
+      "evidence_refs": [
+        "gotw92",
+        "std-auto",
+        "pro-refs"
+      ],
+      "proposed_section": "类型、表达式与初始化",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-auto-braces-version",
+      "title": "auto花括号的两条不同规则",
+      "problem_scenario": "识别auto x{1}和auto x={1}的真实类型",
+      "mechanism": "C++17 direct-list deduction requires one element; copy-list produces initializer_list",
+      "important_variants": [
+        "auto x{1,2} ill-formed",
+        "mixed-type auto x={1,2.0} fails",
+        "GotW2013 answer outdated for baseline"
+      ],
+      "evidence_refs": [
+        "gotw92",
+        "std-auto"
+      ],
+      "proposed_section": "类型、表达式与初始化",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-decltype-return",
+      "title": "访问器/转发结果保值还是保引用",
+      "problem_scenario": "修复decltype(auto)因括号多一层而返回悬空引用",
+      "mechanism": "unparenthesized named entity decltype differs from general expression category",
+      "important_variants": [
+        "decltype(x) vs decltype((x))",
+        "auto return strips references",
+        "return (local) with decltype(auto) dangles"
+      ],
+      "evidence_refs": [
+        "std-decltype",
+        "std-auto",
+        "pro-refs"
+      ],
+      "proposed_section": "类型、表达式与初始化",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-arithmetic-width",
+      "title": "在运算之前提升类型",
+      "problem_scenario": "乘积、长度差和累加结果存入64位却仍溢出",
+      "mechanism": "operand promotions and usual conversions determine intermediate type",
+      "important_variants": [
+        "1LL*a*b vs cast after a*b",
+        "signed overflow not unsigned wrap",
+        "literal/initial accumulator type affects result"
+      ],
+      "evidence_refs": [
+        "std-arith",
+        "std-mul"
+      ],
+      "proposed_section": "类型、表达式与初始化",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-signed-unsigned",
+      "title": "修复有符号与无符号混合比较",
+      "problem_scenario": "负索引与size_t比较产生反直觉结果",
+      "mechanism": "rank and representability select common arithmetic type",
+      "important_variants": [
+        "negative signed converts to unsigned in common cases",
+        "safe range check before cast",
+        "C++20 cmp_* alternative outside C++17 baseline"
+      ],
+      "evidence_refs": [
+        "std-arith",
+        "std-init"
+      ],
+      "proposed_section": "类型、表达式与初始化",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-division-remainder",
+      "title": "负数整除与奇偶分类",
+      "problem_scenario": "修复对全部int输入用x%2==1判断奇数",
+      "mechanism": "integer division truncates toward zero; remainder follows dividend sign",
+      "important_variants": [
+        "x%2!=0 includes negative odd",
+        "normalized modulo for cyclic indices",
+        "zero divisor and unrepresentable quotient excluded"
+      ],
+      "evidence_refs": [
+        "std-mul",
+        "pro-refs"
+      ],
+      "proposed_section": "类型、表达式与初始化",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-bit-width",
+      "title": "按目标宽度构造位掩码",
+      "problem_scenario": "避免1<<k按int宽度运算及越界位移",
+      "mechanism": "left operand promoted type and shift amount bounds are decisive",
+      "important_variants": [
+        "unsigned literal suffix",
+        "k equals width is UB",
+        "signed negative right shift implementation-defined in C++17"
+      ],
+      "evidence_refs": [
+        "std-shift"
+      ],
+      "proposed_section": "类型、表达式与初始化",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-sequencing",
+      "title": "区分未指定顺序与未排序副作用",
+      "problem_scenario": "分析函数参数中多个修改、调用链和重载操作符",
+      "mechanism": "C++17 parameter initializations indeterminately sequenced; call order still unspecified",
+      "important_variants": [
+        "f(i++,i++) differs from pre17 UB classification",
+        "braced initializer clauses left-to-right",
+        "operator notation versus direct operator function call"
+      ],
+      "evidence_refs": [
+        "std-call",
+        "std-list"
+      ],
+      "proposed_section": "类型、表达式与初始化",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-nullptr-overload",
+      "title": "明确空指针传参的目标类型",
+      "problem_scenario": "重载f(int)/f(T*)时避免0或NULL走整数分支",
+      "mechanism": "nullptr has its own type and converts to pointers",
+      "important_variants": [
+        "NULL macro actual type implementation-specific",
+        "typed null pointer vs integer0"
+      ],
+      "evidence_refs": [
+        "pro-nullptr",
+        "std-call",
+        "std-nullptr",
+        "std-overload-rank"
+      ],
+      "proposed_section": "类型、表达式与初始化",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-ref-binding",
+      "title": "同一接口接收左值和临时值",
+      "problem_scenario": "选择T&/const T&/T&&避免意外拒绝或修改",
+      "mechanism": "reference compatibility and category govern binding",
+      "important_variants": [
+        "const reference may bind conversion temporary",
+        "rvalue reference variable is named lvalue expression",
+        "reference does not rebind on assignment"
+      ],
+      "evidence_refs": [
+        "pro-refs",
+        "std-temp",
+        "std-copyctor",
+        "std-call"
+      ],
+      "proposed_section": "引用、生命周期与调用接口",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-temporary-lifetime",
+      "title": "判断临时对象究竟活到哪里",
+      "problem_scenario": "返回借用结果或在对象中保存引用后避免悬空",
+      "mechanism": "lifetime extension is syntactic and has explicit exceptions",
+      "important_variants": [
+        "direct const&/T&& binding",
+        "reference function parameter only full-expression",
+        "returned reference and new-initializer exceptions"
+      ],
+      "evidence_refs": [
+        "std-temp",
+        "std-baseinit",
+        "pro-refs"
+      ],
+      "proposed_section": "引用、生命周期与调用接口",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-borrowed-return",
+      "title": "区分返回对象与返回内部借用",
+      "problem_scenario": "容器/类访问器返回引用或视图时明确拥有者",
+      "mechanism": "reference return does not create ownership or renew lifetime",
+      "important_variants": [
+        "return local reference invalid",
+        "member owner destroyed after full-expression",
+        "consumer auto may copy while auto& borrows"
+      ],
+      "evidence_refs": [
+        "pro-refs",
+        "std-temp",
+        "std-auto"
+      ],
+      "proposed_section": "引用、生命周期与调用接口",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-const-accessor",
+      "title": "实现const与可修改访问器",
+      "problem_scenario": "同一索引检查供两个const重载复用",
+      "mechanism": "object cv selects overload; controlled forwarding avoids duplicated logic",
+      "important_variants": [
+        "as_const forwarding then cast only when original object nonconst",
+        "private helper versus template explicit object later",
+        "return type alone cannot overload"
+      ],
+      "evidence_refs": [
+        "pro-member"
+      ],
+      "proposed_section": "类接口与多态",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-refqualified-accessor",
+      "title": "为右值访问器返回独立值",
+      "problem_scenario": "优化临时对象取成员而不产生持久悬空引用",
+      "mechanism": "&/&& ref-qualification reflects source lifetime; returning by value can transfer ownership",
+      "important_variants": [
+        "named lvalue getter returns const&",
+        "rvalue getter returns value via move",
+        "return T&& safe only if consumer completes within owning temporary lifetime"
+      ],
+      "evidence_refs": [
+        "pro-member",
+        "std-temp",
+        "pro-ex9"
+      ],
+      "proposed_section": "引用、生命周期与调用接口",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-member-init-order",
+      "title": "修复初始化次序依赖",
+      "problem_scenario": "成员b的初始化依赖a但声明顺序相反",
+      "mechanism": "bases/members initialize before body and declaration order controls members",
+      "important_variants": [
+        "const/reference/no-default members need initializer",
+        "constructor body assignment is a second operation",
+        "delegating constructor cannot initialize other members alongside target"
+      ],
+      "evidence_refs": [
+        "pro-ctor",
+        "std-baseinit"
+      ],
+      "proposed_section": "类接口与多态",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-rule-zero",
+      "title": "让成员负责资源而省掉五个特殊成员",
+      "problem_scenario": "给值对象添加动态数组/字符串而保持正确拷贝移动",
+      "mechanism": "composing RAII members delegates special-member semantics",
+      "important_variants": [
+        "vector/unique_ptr member choices imply copyable/move-only",
+        "user-declared destructor can suppress implicit move",
+        "explicit default/delete when API requires"
+      ],
+      "evidence_refs": [
+        "pro-copy-move",
+        "std-copyctor",
+        "pro-ex9"
+      ],
+      "proposed_section": "值语义与特殊成员",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-deep-copy",
+      "title": "拥有缓冲区的独立值语义",
+      "problem_scenario": "为Buffer复制/赋值而不共享裸指针资源",
+      "mechanism": "default memberwise pointer copy does not duplicate owned object",
+      "important_variants": [
+        "copy construction vs assignment",
+        "shared ownership is different intended semantics",
+        "partial allocation/copy failure needs RAII"
+      ],
+      "evidence_refs": [
+        "pro-copy-move",
+        "cert-err56"
+      ],
+      "proposed_section": "值语义与特殊成员",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-copy-commit",
+      "title": "先准备后提交的赋值",
+      "problem_scenario": "分配或复制抛异常时目标值保持不变",
+      "mechanism": "allocate/copy temporary before no-throw commit",
+      "important_variants": [
+        "copy-and-swap requires safe copy and nonthrowing swap/destruction",
+        "self-copy covered without obligatory branch",
+        "capacity-reuse optimization trades guarantees/complexity"
+      ],
+      "evidence_refs": [
+        "pro-copy-move",
+        "cert-err56"
+      ],
+      "proposed_section": "异常与事务式修改",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-move-resource",
+      "title": "实现move-only资源句柄",
+      "problem_scenario": "转移fd/heap buffer后恰好释放一次",
+      "mechanism": "move acquires source ownership and leaves contractually valid source",
+      "important_variants": [
+        "move construction has no old target",
+        "move assignment must dispose old resource",
+        "exchange-based steal vs move-and-swap"
+      ],
+      "evidence_refs": [
+        "pro-copy-move",
+        "pro-owners"
+      ],
+      "proposed_section": "值语义与特殊成员",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-self-move",
+      "title": "让自移动赋值保持对象可析构",
+      "problem_scenario": "x=std::move(x)不重复释放资源",
+      "mechanism": "self-move is an API invariant question, not automatically same as copy",
+      "important_variants": [
+        "branch early",
+        "move-and-swap safe design",
+        "standard library moved-from/self-move guarantees must be checked individually"
+      ],
+      "evidence_refs": [
+        "pro-copy-move",
+        "std-movedfrom"
+      ],
+      "proposed_section": "值语义与特殊成员",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-move-is-cast",
+      "title": "std::move不执行资源转移",
+      "problem_scenario": "解释move调用后为何仍发生拷贝",
+      "mechanism": "std::move changes expression category; selected constructor performs operation",
+      "important_variants": [
+        "const T&& usually binds const T& copy",
+        "named T&& parameter is lvalue expression",
+        "type with no move may copy from rvalue"
+      ],
+      "evidence_refs": [
+        "pro-copy-move",
+        "std-copyctor",
+        "std-call"
+      ],
+      "proposed_section": "值语义与特殊成员",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-moved-from-state",
+      "title": "使用移动后的对象而不假设内容",
+      "problem_scenario": "移动string后重新赋值/clear而非断言为空",
+      "mechanism": "standard library default is valid but unspecified state",
+      "important_variants": [
+        "specific unique_ptr/shared_ptr empty postcondition",
+        "operations with preconditions require checking",
+        "user-defined move contract is separately designed"
+      ],
+      "evidence_refs": [
+        "std-movedfrom",
+        "pro-copy-move",
+        "pro-owners"
+      ],
+      "proposed_section": "值语义与特殊成员",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-implicit-special-members",
+      "title": "判断编译器生成还是删除移动",
+      "problem_scenario": "增加析构函数后性能或可编译性变化",
+      "mechanism": "user-declared special members affect implicit declarations; defaulted deleted move ignored in overload resolution",
+      "important_variants": [
+        "explicit =delete move can block copy fallback",
+        "reference/const/move-only members affect operations",
+        "rule-of-five is design advice not mechanical obligation"
+      ],
+      "evidence_refs": [
+        "std-copyctor",
+        "pro-copy-move"
+      ],
+      "proposed_section": "值语义与特殊成员",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-move-noexcept",
+      "title": "准确说明容器重分配的移动选择",
+      "problem_scenario": "让value type在vector扩容中保持异常保证",
+      "mechanism": "noexcept and CopyInsertable determine available guarantees",
+      "important_variants": [
+        "copy available and move may throw",
+        "move-only throwing type may still move",
+        "do not label entire container policy as only-noexcept-moves"
+      ],
+      "evidence_refs": [
+        "std-vector",
+        "std-copyctor",
+        "pro-copy-move"
+      ],
+      "proposed_section": "值语义与特殊成员",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-prvalue-elision",
+      "title": "返回不可拷贝不可移动对象",
+      "problem_scenario": "工厂直接return T{}仍可用于C++17",
+      "mechanism": "same-type prvalue initializes destination directly",
+      "important_variants": [
+        "destructor must be accessible",
+        "C++14 may require move/copy even if optimizer elides",
+        "base-subobject and other contexts are separate"
+      ],
+      "evidence_refs": [
+        "std-init",
+        "std-temp",
+        "pro-copy-move"
+      ],
+      "proposed_section": "值语义与特殊成员",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-nrvo-return",
+      "title": "返回局部值时避免多余std::move",
+      "problem_scenario": "保留NRVO机会并理解不能强求构造次数",
+      "mechanism": "named return optimization is optional; implicit move used when eligible",
+      "important_variants": [
+        "return local vs return std::move(local)",
+        "return data member differs",
+        "conditional lvalue expression may cause copy"
+      ],
+      "evidence_refs": [
+        "std-elision",
+        "pro-copy-move"
+      ],
+      "proposed_section": "值语义与特殊成员",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-unique-transfer",
+      "title": "唯一所有权的函数参数",
+      "problem_scenario": "消费对象用unique_ptr按值，借用对象用T&/T*",
+      "mechanism": "parameter type should convey ownership contract",
+      "important_variants": [
+        "sink value",
+        "reseating unique_ptr&",
+        "nullable observing pointer",
+        "const unique_ptr does not mean const pointee"
+      ],
+      "evidence_refs": [
+        "gotw91",
+        "pro-owners"
+      ],
+      "proposed_section": "所有权与资源",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-get-reset-release",
+      "title": "区分观察、替换与释放所有权",
+      "problem_scenario": "连接C API时正确使用智能指针三个接口",
+      "mechanism": "get observes; reset disposes/replaces; release relinquishes responsibility",
+      "important_variants": [
+        "release result must gain new owner",
+        "reset(get()) is invalid for unique ownership",
+        "borrowed aliases can still dangle after reset"
+      ],
+      "evidence_refs": [
+        "pro-owners"
+      ],
+      "proposed_section": "所有权与资源",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-custom-deleter",
+      "title": "包装非new来源的资源",
+      "problem_scenario": "FILE*/library buffer/fd按正确API释放",
+      "mechanism": "RAII cleanup policy must match resource acquisition",
+      "important_variants": [
+        "function pointer vs stateful callable deleter",
+        "unique_ptr deleter is type parameter",
+        "make helpers do not accept custom deleter"
+      ],
+      "evidence_refs": [
+        "pro-owners",
+        "gotw89"
+      ],
+      "proposed_section": "所有权与资源",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-array-resource",
+      "title": "匹配单对象与数组删除",
+      "problem_scenario": "管理动态T[]而不发生new/delete[]不匹配",
+      "mechanism": "allocation category determines destruction and deletion",
+      "important_variants": [
+        "unique_ptr<T[]> vs unique_ptr<T>",
+        "array deletion through base pointer invalid",
+        "prefer vector when it matches ownership needs"
+      ],
+      "evidence_refs": [
+        "std-delete",
+        "pro-owners"
+      ],
+      "proposed_section": "所有权与资源",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-shared-control-block",
+      "title": "同一raw pointer为何会重复释放",
+      "problem_scenario": "禁止对已拥有指针重建无关shared_ptr",
+      "mechanism": "shared ownership is control-block identity, not pointer value equality",
+      "important_variants": [
+        "copy owner vs shared_ptr(p.get())",
+        "shared_ptr(this) creates unrelated owner",
+        "conversion preserving control block"
+      ],
+      "evidence_refs": [
+        "pro-owners",
+        "gotw89"
+      ],
+      "proposed_section": "所有权与资源",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-shared-alias",
+      "title": "保持外层对象活着但指向其成员",
+      "problem_scenario": "返回shared_ptr<Member>且共享Outer生命周期",
+      "mechanism": "stored pointer and managed object/control block can differ",
+      "important_variants": [
+        "aliasing constructor",
+        "get equality differs from ownership equality",
+        "member subobject lifetime still requires owner invariant"
+      ],
+      "evidence_refs": [
+        "pro-owners",
+        "std-weak"
+      ],
+      "proposed_section": "所有权与资源",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-weak-observation",
+      "title": "弱观察与循环拥有",
+      "problem_scenario": "缓存/回调/父子图中不延长对象生命",
+      "mechanism": "weak_ptr lock acquires temporary strong ownership atomically",
+      "important_variants": [
+        "expired then use is not atomic acquisition",
+        "weak edge breaks strong ownership cycle",
+        "expired lock empty vs shared_ptr(weak) throws"
+      ],
+      "evidence_refs": [
+        "pro-owners",
+        "std-weak"
+      ],
+      "proposed_section": "所有权与资源",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-shared-from-this",
+      "title": "成员函数安全返回自身拥有者",
+      "problem_scenario": "避免shared_ptr(this)重复控制块",
+      "mechanism": "enable_shared_from_this joins existing shared owner",
+      "important_variants": [
+        "must already be owned before shared_from_this",
+        "construction-time call fails",
+        "weak_from_this may be empty and needs lock"
+      ],
+      "evidence_refs": [
+        "pro-owners"
+      ],
+      "proposed_section": "所有权与资源",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-factory-return",
+      "title": "选择工厂返回值类型",
+      "problem_scenario": "同一工厂返回值、unique_ptr或shared_ptr",
+      "mechanism": "value/reference identity and ownership intent decide interface",
+      "important_variants": [
+        "nonpolymorphic value return",
+        "polymorphic unique default",
+        "factory retains shared ownership"
+      ],
+      "evidence_refs": [
+        "gotw90",
+        "pro-owners",
+        "std-init"
+      ],
+      "proposed_section": "所有权与资源",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": [
+        "非多态工厂的原文最终答案未完整读取，值返回依据由标准与已读教材补证"
+      ]
+    },
+    {
+      "id": "cpp-core-conditional-shared-retain",
+      "title": "仅偶尔保留对象的参数",
+      "problem_scenario": "避免每次shared_ptr复制却仍能按需续命",
+      "mechanism": "conditional retention differs from mandatory owning sink and plain borrowing",
+      "important_variants": [
+        "shared_ptr value always retains",
+        "const shared_ptr& can copy on needed branch",
+        "plain T& cannot manufacture owning control block"
+      ],
+      "evidence_refs": [
+        "gotw91",
+        "pro-owners"
+      ],
+      "proposed_section": "所有权与资源",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-alias-null-reset",
+      "title": "置空一个指针不能修复所有别名",
+      "problem_scenario": "解释delete p;p=nullptr后q仍悬空",
+      "mechanism": "pointer objects and pointed storage lifetimes are distinct",
+      "important_variants": [
+        "raw aliases",
+        "smart owner plus borrowed raw",
+        "observing weak handle can detect lifetime"
+      ],
+      "evidence_refs": [
+        "pro-owners",
+        "std-temp",
+        "std-delete"
+      ],
+      "proposed_section": "所有权与资源",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-polymorphic-destruction",
+      "title": "基类接口销毁正确动态对象",
+      "problem_scenario": "unique_ptr<Base>管理Derived时基类析构契约",
+      "mechanism": "C++17 delete through mismatched base requires virtual destructor",
+      "important_variants": [
+        "public virtual base destructor",
+        "protected nonvirtual base prevents public delete",
+        "shared_ptr remembers creation deleter in a different way; needs separate case"
+      ],
+      "evidence_refs": [
+        "cert-oop52",
+        "std-delete",
+        "pro-poly"
+      ],
+      "proposed_section": "类接口与多态",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-construction-virtual",
+      "title": "构造析构期间虚调用的目标",
+      "problem_scenario": "避免基类构造调用依赖未构造派生状态",
+      "mechanism": "call uses final overrider in current constructor/destructor class",
+      "important_variants": [
+        "construction and destruction directions",
+        "pure virtual call requires separate restriction",
+        "explicit qualified call bypasses dispatch"
+      ],
+      "evidence_refs": [
+        "std-cdtor",
+        "pro-poly",
+        "std-call"
+      ],
+      "proposed_section": "类接口与多态",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-polymorphic-slicing",
+      "title": "传值切掉派生部分",
+      "problem_scenario": "异常和普通多态对象的值传递保留什么",
+      "mechanism": "copy base subobject differs from reference/pointer dispatch",
+      "important_variants": [
+        "catch by value",
+        "return clone through owning base pointer",
+        "ordinary Base by-value object"
+      ],
+      "evidence_refs": [
+        "pro-errors",
+        "std-exceptthrow",
+        "pro-poly"
+      ],
+      "proposed_section": "类接口与多态",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-overload-delete",
+      "title": "对不支持输入给编译错误",
+      "problem_scenario": "保留double setter同时拒绝int隐式转换",
+      "mechanism": "deleted exact-match overload can win overload resolution",
+      "important_variants": [
+        "=delete vs omitted overload",
+        "const overload pair",
+        "return type alone not overload"
+      ],
+      "evidence_refs": [
+        "pro-member"
+      ],
+      "proposed_section": "类接口与多态",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-operator-prefix-postfix",
+      "title": "实现符合值语义的前后置++",
+      "problem_scenario": "修复IPv4后置++返回新值的原书实现",
+      "mechanism": "prefix mutates and returns reference; postfix returns old value",
+      "important_variants": [
+        "postfix dummy int parameter",
+        "old object copied before mutation",
+        "overflow/end sentinel contract"
+      ],
+      "evidence_refs": [
+        "challenge16"
+      ],
+      "proposed_section": "类接口与多态",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-stream-extraction-commit",
+      "title": "输入失败不破坏目标对象",
+      "problem_scenario": "修复IPv4的分隔符、数值范围和流状态检查",
+      "mechanism": "parse into initialized temporaries then validate and commit",
+      "important_variants": [
+        "failed extraction must be checked before reading separators",
+        "octet0..255 validation",
+        "failbit versus exception-enabled streams"
+      ],
+      "evidence_refs": [
+        "challenge15",
+        "std-init",
+        "cert-err56"
+      ],
+      "proposed_section": "异常与事务式修改",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-bounded-enumeration",
+      "title": "闭区间达到最大值后停止",
+      "problem_scenario": "IPv4枚举last=2^32-1时防止绕回0",
+      "mechanism": "inclusive terminal condition must be tested before increment",
+      "important_variants": [
+        "equal endpoints",
+        "last maximum",
+        "counter with wider sentinel only if representable"
+      ],
+      "evidence_refs": [
+        "challenge16",
+        "std-arith"
+      ],
+      "proposed_section": "类型、表达式与初始化",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-constructor-failure",
+      "title": "构造半途失败的资源清理",
+      "problem_scenario": "第二个成员构造抛异常时第一个资源不能泄漏",
+      "mechanism": "only fully constructed subobjects unwind; incomplete containing destructor not called",
+      "important_variants": [
+        "RAII members vs raw resource",
+        "delegating constructor body throw differs",
+        "new storage cleanup not same as owned resources"
+      ],
+      "evidence_refs": [
+        "std-exceptctor",
+        "pro-errors",
+        "pro-owners"
+      ],
+      "proposed_section": "异常与事务式修改",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-rethrow-preserve",
+      "title": "重抛保留动态异常类型",
+      "problem_scenario": "修复throw e导致异常切片",
+      "mechanism": "bare throw reuses active exception object; throw e constructs new static type",
+      "important_variants": [
+        "catch const&",
+        "rethrow outside active handler terminates",
+        "wrap/nested exception is a distinct design"
+      ],
+      "evidence_refs": [
+        "pro-errors",
+        "std-exceptthrow"
+      ],
+      "proposed_section": "异常与事务式修改",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-catch-order",
+      "title": "异常处理由派生到基类",
+      "problem_scenario": "修复domain_error在logic_error之后无法命中的处理器",
+      "mechanism": "first matching handler wins; inheritance affects matching",
+      "important_variants": [
+        "catch by const reference",
+        "generic handler last",
+        "handler changing object does not recreate exception"
+      ],
+      "evidence_refs": [
+        "pro-errors"
+      ],
+      "proposed_section": "异常与事务式修改",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-unwinding-raii",
+      "title": "正常返回和异常出口统一释放",
+      "problem_scenario": "去掉多分支中重复delete/close逻辑",
+      "mechanism": "automatic RAII objects destruct in reverse construction completion order",
+      "important_variants": [
+        "raw pointer local does not own cleanup",
+        "multiple return paths",
+        "constructor subobject cleanup"
+      ],
+      "evidence_refs": [
+        "std-exceptctor",
+        "pro-errors",
+        "pro-owners"
+      ],
+      "proposed_section": "异常与事务式修改",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-destructor-failure",
+      "title": "析构失败如何报告而不炸掉展开",
+      "problem_scenario": "资源关闭错误由显式操作报告，析构保底清理",
+      "mechanism": "escaping noexcept destructor or destructor during unwinding can terminate",
+      "important_variants": [
+        "explicit close/commit may throw",
+        "destructor noexcept(false) not blanket remedy",
+        "member destructor affects implicit exception specification"
+      ],
+      "evidence_refs": [
+        "pro-errors",
+        "std-exceptthrow"
+      ],
+      "proposed_section": "异常与事务式修改",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-exception-guarantees",
+      "title": "把异常保证落实为可观察条件",
+      "problem_scenario": "给更新操作区分不抛/强/基本保证",
+      "mechanism": "strong requires rollback/no observable state change plus basic invariants",
+      "important_variants": [
+        "noexcept is not proof of successful work",
+        "prepare/commit transaction",
+        "I/O/external side effects may prevent rollback"
+      ],
+      "evidence_refs": [
+        "pro-errors",
+        "cert-err56"
+      ],
+      "proposed_section": "异常与事务式修改",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-c-api-output-owner",
+      "title": "C输出指针与RAII接管",
+      "problem_scenario": "调用int api(T**)后在成功路径安全接管",
+      "mechanism": "status output and ownership state must agree before reset/commit",
+      "important_variants": [
+        "C++17 explicit raw temp",
+        "C++23 out_ptr/inout_ptr",
+        "failure cleanup convention must come from actual C API"
+      ],
+      "evidence_refs": [
+        "pro-owners"
+      ],
+      "proposed_section": "所有权与资源",
+      "disposition": "retain",
+      "state": "analyzed-candidate",
+      "open_questions": []
+    },
+    {
+      "id": "cpp-core-pimpl-resource",
+      "title": "稳定接口隐藏拥有资源的实现",
+      "problem_scenario": "Person练习9-4将接口与实现分离",
+      "mechanism": "incomplete implementation and owning member special-member definition points",
+      "important_variants": [
+        "unique_ptr<Impl>",
+        "destructor out-of-line",
+        "copy policy explicit"
+      ],
+      "evidence_refs": [
+        "pro-ex9",
+        "std-delete"
+      ],
+      "proposed_section": "类接口与多态",
+      "disposition": "handoff-not-complete",
+      "state": "analyzed-candidate",
+      "open_questions": [
+        "Pimpl完整方法段尚未读，转交编译/接口专题补证"
+      ]
+    }
+  ],
+  "counts_note": "Candidates and mechanisms, not independent algorithms or completed author sections. No final chapter count is fixed."
+}

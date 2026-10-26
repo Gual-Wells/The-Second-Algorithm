@@ -1,0 +1,76 @@
+{
+  "date": "2026-10-26",
+  "web_indexes": [
+    {
+      "id": "gotw",
+      "matching_links_or_exercises": 16,
+      "body_read": "selected_only",
+      "input": {
+        "id": "gotw",
+        "url": "https://herbsutter.com/gotw/",
+        "final_url": "https://herbsutter.com/gotw/",
+        "bytes": 114251,
+        "sha256": "980ef9f3b70f1c6ac18198f8181ae115f5a705958e1c4f65719704ef1a551e20",
+        "state": "captured"
+      }
+    },
+    {
+      "id": "cert",
+      "matching_links_or_exercises": 83,
+      "body_read": "selected_only",
+      "input": {
+        "id": "cert",
+        "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/",
+        "final_url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/",
+        "bytes": 219596,
+        "sha256": "a4b1204016d7ff26b9647ea619c0037d5cc737d8c0b6b59998ec95100a8beb92",
+        "state": "captured"
+      }
+    },
+    {
+      "id": "tddd38",
+      "matching_links_or_exercises": 16,
+      "body_read": "selected_only",
+      "input": {
+        "id": "tddd38",
+        "url": "https://www.ida.liu.se/~TDDD38/lecture/index.en.shtml",
+        "final_url": "https://www.ida.liu.se/~TDDD38/lecture/index.en.shtml",
+        "bytes": 34263,
+        "sha256": "e29a4a6dce85a176b23c703c448011bf417a4bcfa6e8482f00ffdd4f39729002",
+        "state": "captured"
+      }
+    },
+    {
+      "id": "exercism",
+      "matching_links_or_exercises": 101,
+      "body_read": "selected_only",
+      "input": {
+        "id": "exercism-config",
+        "url": "https://raw.githubusercontent.com/exercism/cpp/main/config.json",
+        "final_url": "https://raw.githubusercontent.com/exercism/cpp/main/config.json",
+        "bytes": 34746,
+        "sha256": "bbea658c3d23322683b3db54a7e06b257e65baa1d0a525e092e5e39f5fe703f4",
+        "state": "captured"
+      }
+    }
+  ],
+  "exercism_types": {
+    "concept": 15,
+    "practice": 86
+  },
+  "exercism_foregone": [
+    "point-mutations"
+  ],
+  "book_discovery_units": {
+    "professional_cpp_chapters": 34,
+    "discovering_cpp_chapters": 7,
+    "cookbook_recipe_entries": 132,
+    "challenge_problem_texts": 100
+  },
+  "challenge_routes": {
+    "algorithm_cross_reference_pending": 29,
+    "cpp_problem_candidate": 46,
+    "third_party_integration_extension": 25
+  },
+  "not_a_global_coverage_rate": true
+}

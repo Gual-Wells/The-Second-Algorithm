@@ -24,6 +24,17 @@ jobs:
           mkdir -p .local/ci
           for source in tests/cpp/*_test.cpp; do
             output=".local/ci/$(basename "$source" .cpp)"
-            g++ -std=c++17 -O2 -Wall -Wextra -Wpedantic -D_GLIBCXX_ASSERTIONS "$source" -o "$output"
-            "$output"
+            g++ -std=c++17 -pthread -O2 -Wall -Wextra -Wpedantic -D_GLIBCXX_ASSERTIONS "$source" -o "$output"
+            timeout 30s "$output"
           done
+      - name: Instantiate newer C++ language and range branches
+        run: |
+          for standard in c++20 c++23; do
+            for source in tests/cpp/cpp_generic_test.cpp tests/cpp/cpp_library_ranges_test.cpp tests/cpp/cpp_ring_exception_test.cpp; do
+              output=".local/ci/$(basename "$source" .cpp)-$standard"
+              g++ -std="$standard" -pthread -O2 -Wall -Wextra -Wpedantic -D_GLIBCXX_ASSERTIONS "$source" -o "$output"
+              timeout 30s "$output"
+            done
+          done
+      - name: Verify separate translation units and call_once retry
+        run: python tools/verify_cpp_systems.py --once-retry --output .local/ci/translation

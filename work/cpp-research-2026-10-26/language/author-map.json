@@ -1,0 +1,625 @@
+{
+  "schema_version": 1,
+  "scope": "55 language-core candidates from actual source research; not all C++",
+  "baseline": "C++17",
+  "entries": [
+    {
+      "candidate_id": "cpp-core-init-forms",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/类型与调用.source.md",
+      "h3": "1.1 默认初始化、值初始化与列表初始化",
+      "blocks": [
+        "init-forms"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-explicit-conversion",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/类型与调用.source.md",
+      "h3": "2.3 explicit、nullptr 与被删除的精确匹配",
+      "blocks": [
+        "explicit-null"
+      ],
+      "open_variants": [
+        "完整用户定义转换优先级仍待真实重载题补证；本稿只承载 explicit 与已核实的局部排序。"
+      ]
+    },
+    {
+      "candidate_id": "cpp-core-initializer-list-owner",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/类型与调用.source.md",
+      "h3": "1.2 为什么 unique_ptr 不能直接列成初始化列表",
+      "blocks": [
+        "list-owner"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-auto-cv-ref",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/类型与调用.source.md",
+      "h3": "2.1 auto 保留什么，去掉什么",
+      "blocks": [
+        "auto-deduction"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-auto-braces-version",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/类型与调用.source.md",
+      "h3": "2.1 auto 保留什么，去掉什么",
+      "blocks": [
+        "auto-deduction"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-decltype-return",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/类型与调用.source.md",
+      "h3": "2.2 decltype 与返回类型：一个括号可能改变所有权",
+      "blocks": [
+        "decltype-return"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-arithmetic-width",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/类型与调用.source.md",
+      "h3": "3.1 扩宽乘法、下标比较与负数取模",
+      "blocks": [
+        "integer-width"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-signed-unsigned",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/类型与调用.source.md",
+      "h3": "3.1 扩宽乘法、下标比较与负数取模",
+      "blocks": [
+        "integer-width"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-division-remainder",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/类型与调用.source.md",
+      "h3": "3.1 扩宽乘法、下标比较与负数取模",
+      "blocks": [
+        "integer-width"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-bit-width",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/类型与调用.source.md",
+      "h3": "3.2 位移宽度属于左操作数",
+      "blocks": [
+        "bit-width"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-sequencing",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/类型与调用.source.md",
+      "h3": "3.3 多个修改表达式：先把顺序写出来",
+      "blocks": [
+        "sequencing"
+      ],
+      "open_variants": [
+        "运算符记法与函数记法仅说明边界，未扩为完整运算符排序目录。"
+      ]
+    },
+    {
+      "candidate_id": "cpp-core-nullptr-overload",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/类型与调用.source.md",
+      "h3": "2.3 explicit、nullptr 与被删除的精确匹配",
+      "blocks": [
+        "explicit-null"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-ref-binding",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/类型与调用.source.md",
+      "h3": "4.1 引用绑定与临时量的寿命",
+      "blocks": [
+        "ref-lifetime",
+        "auto-deduction"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-temporary-lifetime",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/类型与调用.source.md",
+      "h3": "4.1 引用绑定与临时量的寿命",
+      "blocks": [
+        "ref-lifetime"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-borrowed-return",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/类型与调用.source.md",
+      "h3": "4.1 引用绑定与临时量的寿命",
+      "blocks": [
+        "ref-lifetime",
+        "decltype-return"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-const-accessor",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/类型与调用.source.md",
+      "h3": "4.2 const 重载与引用限定：左值借用，右值交出值",
+      "blocks": [
+        "ref-accessor"
+      ],
+      "open_variants": [
+        "显式对象形参等 C++23 去重方案未在本组实现；主体使用 C++17 成对访问器。"
+      ]
+    },
+    {
+      "candidate_id": "cpp-core-refqualified-accessor",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/类型与调用.source.md",
+      "h3": "4.2 const 重载与引用限定：左值借用，右值交出值",
+      "blocks": [
+        "ref-accessor"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-member-init-order",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/类型与调用.source.md",
+      "h3": "4.3 成员初始化顺序：声明决定依赖",
+      "blocks": [
+        "member-init"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-rule-zero",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "1.1 能直接组合资源，就先不写五个特殊成员",
+      "blocks": [
+        "rule-zero"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-deep-copy",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "1.2 独立复制动态数组：准备新状态，再无异常提交",
+      "blocks": [
+        "owning-buffer"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-copy-commit",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "1.2 独立复制动态数组：准备新状态，再无异常提交",
+      "blocks": [
+        "owning-buffer"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-move-resource",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "1.2 独立复制动态数组：准备新状态，再无异常提交",
+      "blocks": [
+        "owning-buffer"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-self-move",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "1.2 独立复制动态数组：准备新状态，再无异常提交",
+      "blocks": [
+        "owning-buffer"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-move-is-cast",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "1.3 std::move 只改变表达式类别",
+      "blocks": [
+        "move-cast"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-moved-from-state",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "1.3 std::move 只改变表达式类别",
+      "blocks": [
+        "move-cast",
+        "owning-buffer"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-implicit-special-members",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "1.1 能直接组合资源，就先不写五个特殊成员",
+      "blocks": [
+        "rule-zero"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-move-noexcept",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "1.4 noexcept 改变容器的搬迁选择，不是“能否移动”的开关",
+      "blocks": [
+        "vector-relocation"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-prvalue-elision",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "2.1 return T{} 与 return local 不属于同一条保证",
+      "blocks": [
+        "value-return"
+      ],
+      "open_variants": [
+        "基类子对象不属于同一直接构造保证，未在本稿扩为独立实现题。"
+      ]
+    },
+    {
+      "candidate_id": "cpp-core-nrvo-return",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "2.1 return T{} 与 return local 不属于同一条保证",
+      "blocks": [
+        "value-return"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-unique-transfer",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "3.1 借用、交出与替换是三类接口",
+      "blocks": [
+        "owner-interfaces"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-get-reset-release",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "3.2 get、reset、release：取地址、替换与放弃",
+      "blocks": [
+        "get-reset-release"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-custom-deleter",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "3.3 释放方式必须与取得方式匹配",
+      "blocks": [
+        "custom-deleter"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-array-resource",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "3.3 释放方式必须与取得方式匹配",
+      "blocks": [
+        "array-owner"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-shared-control-block",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "4.1 一份控制块，可以观察不同的子对象",
+      "blocks": [
+        "shared-alias"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-shared-alias",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "4.1 一份控制块，可以观察不同的子对象",
+      "blocks": [
+        "shared-alias"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-weak-observation",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "4.2 反向边用 weak_ptr，需要使用时一次 lock",
+      "blocks": [
+        "weak-owner"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-shared-from-this",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "4.3 从 this 延续既有拥有关系",
+      "blocks": [
+        "shared-from-this"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-factory-return",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "2.1 return T{} 与 return local 不属于同一条保证",
+      "blocks": [
+        "value-return",
+        "owner-interfaces",
+        "shared-from-this"
+      ],
+      "open_variants": [
+        "GotW90 非多态工厂末段尚未完整读；本稿普通值返回由标准及教材支撑，不升级阅读状态。"
+      ]
+    },
+    {
+      "candidate_id": "cpp-core-conditional-shared-retain",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "4.4 shared_ptr 参数要表达是否保留",
+      "blocks": [
+        "conditional-retain"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-alias-null-reset",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "3.2 get、reset、release：取地址、替换与放弃",
+      "blocks": [
+        "get-reset-release"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-polymorphic-destruction",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "5.1 基类拥有者与按值切片",
+      "blocks": [
+        "polymorphic-value"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-construction-virtual",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "5.2 构造与析构期间，虚调用只看到当前阶段",
+      "blocks": [
+        "construction-dispatch"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-polymorphic-slicing",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "5.1 基类拥有者与按值切片",
+      "blocks": [
+        "polymorphic-value"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-overload-delete",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/类型与调用.source.md",
+      "h3": "2.3 explicit、nullptr 与被删除的精确匹配",
+      "blocks": [
+        "deleted-overload"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-operator-prefix-postfix",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/类型与调用.source.md",
+      "h3": "5.1 前置返回新对象，后置返回旧值",
+      "blocks": [
+        "ipv4-value"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-stream-extraction-commit",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/类型与调用.source.md",
+      "h3": "5.2 输入先校验，再提交",
+      "blocks": [
+        "ipv4-parse"
+      ],
+      "open_variants": [
+        "采用格式化流输入，未实现禁止空格、前导加号或前导零的严格网络词法。"
+      ]
+    },
+    {
+      "candidate_id": "cpp-core-bounded-enumeration",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/类型与调用.source.md",
+      "h3": "5.3 闭区间：到达末值立即停，再考虑递增",
+      "blocks": [
+        "ipv4-range"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-constructor-failure",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "6.1 构造失败时，谁的析构函数执行",
+      "blocks": [
+        "constructor-failure"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-rethrow-preserve",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "6.2 throw; 保留原异常，throw e; 创建新异常",
+      "blocks": [
+        "rethrow"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-catch-order",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "6.2 throw; 保留原异常，throw e; 创建新异常",
+      "blocks": [
+        "rethrow"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-unwinding-raii",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "6.1 构造失败时，谁的析构函数执行",
+      "blocks": [
+        "constructor-failure",
+        "custom-deleter"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-destructor-failure",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "6.3 强保证、基本保证与不抛保证，分别检查什么",
+      "blocks": [
+        "custom-deleter"
+      ],
+      "open_variants": [
+        "未人工触发进程终止，析构失败的 terminate 路径依据规则说明，不冒称运行验证。"
+      ]
+    },
+    {
+      "candidate_id": "cpp-core-exception-guarantees",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "6.3 强保证、基本保证与不抛保证，分别检查什么",
+      "blocks": [
+        "owning-buffer",
+        "custom-deleter"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-core-c-api-output-owner",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/对象与资源.source.md",
+      "h3": "3.4 C 风格 T** 输出：先接结果，再装入拥有者",
+      "blocks": [
+        "c-output-owner"
+      ],
+      "open_variants": [
+        "未为实际第三方 C API 写具体适配；示例的失败输出约定明确限定，C++23 out_ptr 只做版本指示。"
+      ]
+    },
+    {
+      "candidate_id": "cpp-core-pimpl-resource",
+      "status": "gap",
+      "file": null,
+      "h3": null,
+      "blocks": [],
+      "open_variants": [
+        "本组未完整读取 Pimpl 方法，未在这两份作者稿主讲。由翻译/编译边界专题核实实际承载，不能只填跨链算完成。"
+      ]
+    }
+  ],
+  "assembly_checks": [
+    {
+      "name": "类型与调用",
+      "code_blocks": 15,
+      "all_used_exactly_once": true
+    },
+    {
+      "name": "对象与资源",
+      "code_blocks": 18,
+      "all_used_exactly_once": true
+    }
+  ],
+  "validation": {
+    "compiler": "GCC 16.2.0",
+    "standard": "c++17",
+    "test_file": "tests/cpp/cpp_core_test.cpp",
+    "flags": [
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-D_GLIBCXX_ASSERTIONS",
+      "-fno-elide-constructors"
+    ],
+    "result": "passed, no diagnostics on final run",
+    "risk_cases": [
+      "array partially constructed default failure cleanup",
+      "element copy failure leaves assignment target unchanged",
+      "deep copy independence",
+      "self copy/self move",
+      "named rvalue and const-move copies",
+      "IPv4 failed extraction and exception-enabled streams leave target unchanged",
+      "IPv4 postfix old value and max closed interval termination",
+      "shared alias ownership and weak cycle release",
+      "virtual destruction and construction phase dispatch",
+      "constructor failure member cleanup",
+      "exception dynamic type preserved"
+    ],
+    "limits": [
+      "No undefined behavior executed.",
+      "The code tests do not prove global language coverage or every variant.",
+      "No actual failing fclose operation forced.",
+      "C output adapter uses an explicit mock API contract, not an actual service."
+    ]
+  }
+}

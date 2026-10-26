@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "platform": "Windows, GCC16.2.0 w64devkit/winpthreads",
+  "python_unittest": {
+    "tests": 26,
+    "passed": 26
+  },
+  "catalog": {
+    "ok": true,
+    "sources": 39,
+    "entries": 72,
+    "patterns": 246,
+    "cases": 126,
+    "inventory_heads": 11
+  },
+  "cpp17": {
+    "executables": 14,
+    "passed": 14,
+    "includes_legacy_algorithm_tests": 8,
+    "language_library_system_tests": 6,
+    "ranges_only_test": "C++17 explicitly skips unsupported range branch; separately exercised below"
+  },
+  "newer_standards": {
+    "standards": [
+      "c++20",
+      "c++23"
+    ],
+    "test_sources": [
+      "cpp_generic_test.cpp",
+      "cpp_library_ranges_test.cpp",
+      "cpp_ring_exception_test.cpp"
+    ],
+    "executables": 6,
+    "passed": 6
+  },
+  "translation_units": {
+    "cases": 9,
+    "passed": 9,
+    "invalid_examples": "two expected link failures, never executed"
+  },
+  "call_once_exception_retry": {
+    "expected": "initializer may throw; a later call must retry",
+    "observed": "timeout after8s",
+    "passed": false,
+    "isolated": true,
+    "local_note": "valid standard test fails with this local Windows library; not silently suppressed",
+    "ci": "same isolated probe required in Linux workflow"
+  },
+  "visual_checks": "cpp-visual-checks.json",
+  "authorities": {
+    "容器与范围.cpp": "b9eb5ce0b58b8d530e3365c1afb5ef903f8eb25c3993f3da37eb12e6f96a7399",
+    "容器与范围.source.md": "69327b438f1f4c452ecf17ef923c820ee52e3bc4b566cd5b3bd65b80a1f55dcb",
+    "对象与资源.cpp": "945a8395ff86ac3a05a35dd8d4b40476e1e2c2cb8ef9fa7a37f4f42bff924359",
+    "对象与资源.source.md": "ef576609cd6985ab267a86dda44ddabe502e2ffe659d7c63a3489711cf9412b6",
+    "文本与文件.cpp": "00a620b0abc1b28632bd17d19603cbfe7c3bb316a76cd09d3c1c472e321dc1b3",
+    "文本与文件.source.md": "a3404b0905886ff8140c071a84ba453f2b007bf0a50c02fd7042af9a64456b16",
+    "泛型与约束.cpp": "8333fe2dac9fbfc39587e8363862ce128be4d0ed3a6e4872a649b10c60a7d7e1",
+    "泛型与约束.source.md": "cc4d1d4a6ee1e7f10c1de2e814b51808107e231b5da5aceaef16e0800d4f64c9",
+    "类型与调用.cpp": "e749b93929a7319db788aaa98c2e9ebf791535484c9517799b111c390e6d5d59",
+    "类型与调用.source.md": "08828931a0175b8b3357849f415e7bf576eb9a24cf313fda81cc120d043a8d20",
+    "线程与同步.cpp": "58c18377285d052b83bfd617d5f70fe40b9bdbb40a4b55724441c6d3ca37202c",
+    "线程与同步.source.md": "ec2f6044b02d90d282392b4d9dae735c755201570b2abaf652f2b2b84a6bcebd",
+    "翻译与链接.cpp": "515cf36a2e395951d6626ddc87eef81b4cc35de34e2be0d571fa31ab3795b096",
+    "翻译与链接.source.md": "46b0a62bd8c869516f44412cafe58a889177b07a5f3e59f8a4fb6b8d0263acaa"
+  },
+  "limits": [
+    "Counts refer to concrete checks, not completeness, interview frequency, or proof for all execution paths.",
+    "No sanitizer or MSVC execution this cycle.",
+    "Linux CI status is recorded separately by actual GitHub Actions run after publication."
+  ]
+}

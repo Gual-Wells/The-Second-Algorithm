@@ -1,0 +1,112 @@
+{
+  "records": [
+    {
+      "id": "pro12-exercises",
+      "kind": "book",
+      "book_id": "professional-cpp-6",
+      "locator": "physical550-551",
+      "read": "complete exercise text12-1..12-6; preceding chapter methods only where separately listed"
+    },
+    {
+      "id": "pro26-exercises",
+      "kind": "book",
+      "book_id": "professional-cpp-6",
+      "locator": "physical1036",
+      "read": "complete exercise text26-1..26-6"
+    },
+    {
+      "id": "pro12-concepts",
+      "kind": "book",
+      "book_id": "professional-cpp-6",
+      "locator": "physical539-543,545-548",
+      "read": "selected complete pages; not whole chapter; expression requirements and subsumption examples"
+    },
+    {
+      "id": "dmc3-exercises",
+      "kind": "book",
+      "book_id": "discovering-modern-cpp-2",
+      "locator": "physical329-333",
+      "read": "complete3.12 exercise text; image1298 linked bysource331 not yet visually reviewed thiscycle"
+    },
+    {
+      "id": "challenge100-problems",
+      "kind": "book",
+      "book_id": "modern-cpp-challenge",
+      "locator": "problem1..100 EPUB original member mapping in challenge-census.json",
+      "read": "all problem text; figures not reviewed thiscycle; solutions separate"
+    },
+    {
+      "id": "challenge18-20-39-solutions",
+      "kind": "book",
+      "book_id": "modern-cpp-challenge",
+      "locator": "solutions18,19,20,39",
+      "read": "complete EPUB solution text and code"
+    },
+    {
+      "id": "tddd-queue",
+      "kind": "web",
+      "url": "https://www.ida.liu.se/~TDDD38/exercises/Static_Queue/exercise.pdf",
+      "read": "all four text pages; diagram layout not treated as decoded statement geometry"
+    },
+    {
+      "id": "tddd-traits",
+      "kind": "web",
+      "url": "https://www.ida.liu.se/~TDDD38/exercises/Specialization/exercise.pdf",
+      "read": "complete3 pages via direct PDF+ pypdf; code glyph/spacing remains source artifact"
+    },
+    {
+      "id": "tddd-sfinae",
+      "kind": "web",
+      "url": "https://www.ida.liu.se/~TDDD38/exercises/SFINAE/exercise.pdf",
+      "read": "complete3 pages; priority exercise and overloadexamples"
+    },
+    {
+      "id": "tddd-mixed",
+      "kind": "web",
+      "url": "https://www.ida.liu.se/~TDDD38/exercises/Mixed_Templates/exercise.pdf",
+      "read": "complete4pages; recursive traits, factory policies, pointer exercise"
+    },
+    {
+      "id": "std17-deduction",
+      "kind": "web",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/temp.deduct.call",
+      "read": "deduction adjustment, cv/ref/array behavior and forwarding reference paragraphs; not all subordinate template chapter"
+    },
+    {
+      "id": "std17-dependent",
+      "kind": "web",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/temp.dep",
+      "read": "general + dependentbase and dependenttype sections oflongpage"
+    },
+    {
+      "id": "tddd-index",
+      "kind": "web",
+      "url": "https://www.ida.liu.se/~TDDD38/lecture/index.en.shtml",
+      "read": "index only;16 exercise directories captured, not16exercisebodies read"
+    },
+    {
+      "id": "std17-packs",
+      "kind": "web",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/temp.variadic",
+      "read": "selected complete pack expansion paragraphs"
+    },
+    {
+      "id": "std17-immediate",
+      "kind": "web",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/temp.deduct",
+      "read": "paragraph8 immediate context with preceding selected paragraphs; not entire long page"
+    },
+    {
+      "id": "std17-function-copy",
+      "kind": "web",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/func.wrap.func.con",
+      "read": "construct/copy/destruct clauses including CopyConstructible target requirement"
+    },
+    {
+      "id": "std20-constraint-order",
+      "kind": "web",
+      "url": "https://timsong-cpp.github.io/cppwp/n4861/temp.constr.order",
+      "read": "complete short page on constraint subsumption"
+    }
+  ]
+}

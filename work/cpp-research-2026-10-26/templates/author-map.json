@@ -1,0 +1,238 @@
+{
+  "schema_version": 1,
+  "scope": "generic selected scope, not all templates",
+  "entries": [
+    {
+      "candidate_id": "cpp-generic-array-bound",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/泛型与约束.source.md",
+      "h3": "数组传进模板后，长度为什么丢了",
+      "blocks": [
+        "array-bound"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-generic-invoke-forward",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/泛型与约束.source.md",
+      "h3": "包装一层调用，如何不把引用、移动或返回类型弄丢",
+      "blocks": [
+        "invoke-forward"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-generic-append-pack",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/泛型与约束.source.md",
+      "h3": "批量追加：为什么整数能用，unique_ptr却失败",
+      "blocks": [
+        "append-pack"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-generic-logical-folds",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/泛型与约束.source.md",
+      "h3": "任意多个条件：短路与空参数包",
+      "blocks": [
+        "logical-folds"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-generic-value-minimum",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/泛型与约束.source.md",
+      "h3": "多参数最小值：返回引用、首参数类型和公共类型是三种合同",
+      "blocks": [
+        "value-minimum"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-generic-traits",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/泛型与约束.source.md",
+      "h3": "类型萃取：const到底限定哪一层",
+      "blocks": [
+        "traits"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-generic-partial-storage",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/泛型与约束.source.md",
+      "h3": "同一个类模板，某类实参需要不同存储",
+      "blocks": [
+        "partial-storage"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-generic-detected-member",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/泛型与约束.source.md",
+      "h3": "有没有size成员：检测与真正调用分开",
+      "blocks": [
+        "detected-member"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-generic-priority-dispatch",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/泛型与约束.source.md",
+      "h3": "多个成员同时存在，怎样明确优先级",
+      "blocks": [
+        "priority-dispatch"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-generic-dependent-names",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/泛型与约束.source.md",
+      "h3": "typename、template和this->分别在解决什么",
+      "blocks": [
+        "dependent-names"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-generic-adl-swap",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/泛型与约束.source.md",
+      "h3": "通用swap为什么常见using std::swap再不限定调用",
+      "blocks": [
+        "adl-swap"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-generic-compile-time",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/泛型与约束.source.md",
+      "h3": "constexpr函数不等于每次都在编译期运行",
+      "blocks": [
+        "compile-time"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-generic-tuple-indices",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/泛型与约束.source.md",
+      "h3": "tuple元素类型不同，为什么要生成编译期索引",
+      "blocks": [
+        "tuple-indices"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-generic-static-queue",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/泛型与约束.source.md",
+      "h3": "类型、容量、对象生命周期和成员模板怎样共同落地",
+      "blocks": [
+        "static-queue"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-generic-measure-call",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/泛型与约束.source.md",
+      "h3": "类型擦除后，为什么move-only闭包放不进std::function",
+      "blocks": [
+        "measure-call"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-generic-move-only-callable",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/泛型与约束.source.md",
+      "h3": "类型擦除后，为什么move-only闭包放不进std::function",
+      "blocks": [
+        "move-only-callable"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-generic-concepts",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/泛型与约束.source.md",
+      "h3": "概念怎样把要求放到调用边界",
+      "blocks": [
+        "concepts"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-generic-same-deduction",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/泛型与约束.source.md",
+      "h3": "两个auto参数不表示同一个类型",
+      "blocks": [
+        "same-deduction"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-generic-erased-move-only",
+      "status": "authored-selected-scope",
+      "file": "content/cpp/泛型与约束.source.md",
+      "h3": "类型擦除后，为什么move-only闭包放不进std::function",
+      "blocks": [
+        "erased-move-only"
+      ],
+      "open_variants": []
+    },
+    {
+      "candidate_id": "cpp-generic-expression-templates",
+      "status": "gap",
+      "open_variants": [
+        "需继续取得具体实现题、语义依据与参考实现"
+      ]
+    },
+    {
+      "candidate_id": "cpp-generic-allocators",
+      "status": "gap",
+      "open_variants": [
+        "需继续取得具体实现题、语义依据与参考实现"
+      ]
+    },
+    {
+      "candidate_id": "cpp-generic-crtp",
+      "status": "gap",
+      "open_variants": [
+        "需继续取得具体实现题、语义依据与参考实现"
+      ]
+    },
+    {
+      "candidate_id": "cpp-generic-structural-nttp",
+      "status": "gap",
+      "open_variants": [
+        "需继续取得具体实现题、语义依据与参考实现"
+      ]
+    },
+    {
+      "candidate_id": "cpp-generic-coroutines",
+      "status": "gap",
+      "open_variants": [
+        "需继续取得具体实现题、语义依据与参考实现"
+      ]
+    },
+    {
+      "candidate_id": "cpp-generic-type-algorithms",
+      "status": "gap",
+      "open_variants": [
+        "需继续取得具体实现题、语义依据与参考实现"
+      ]
+    }
+  ]
+}

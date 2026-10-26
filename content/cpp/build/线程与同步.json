@@ -1,0 +1,120 @@
+{
+  "codeBlocks": [
+    "joining-thread",
+    "run-and-join",
+    "future-state",
+    "explicit-async",
+    "once-cell",
+    "two-lock-swap",
+    "closing-queue",
+    "local-count",
+    "one-shot-publish",
+    "atomic-min",
+    "parallel-min",
+    "record-logger"
+  ],
+  "headings": [
+    {
+      "depth": 1,
+      "id": "线程与同步",
+      "text": "线程与同步"
+    },
+    {
+      "depth": 2,
+      "id": "1-线程所有权与结果通道",
+      "text": "1 线程所有权与结果通道"
+    },
+    {
+      "depth": 3,
+      "id": "1-1-值-移动与借用",
+      "text": "1.1 值、移动与借用"
+    },
+    {
+      "depth": 3,
+      "id": "1-2-作用域收尾-提前返回也要join",
+      "text": "1.2 作用域收尾：提前返回也要join"
+    },
+    {
+      "depth": 3,
+      "id": "1-3-返回值与异常-让任务通道负责传递",
+      "text": "1.3 返回值与异常：让任务通道负责传递"
+    },
+    {
+      "depth": 3,
+      "id": "1-4-future的四种状态",
+      "text": "1.4 future的四种状态"
+    },
+    {
+      "depth": 3,
+      "id": "1-5-要求并发时明确async策略",
+      "text": "1.5 要求并发时明确async策略"
+    },
+    {
+      "depth": 2,
+      "id": "2-锁组合与关闭队列",
+      "text": "2 锁组合与关闭队列"
+    },
+    {
+      "depth": 3,
+      "id": "2-1-初始化一次-失败可以重试",
+      "text": "2.1 初始化一次，失败可以重试"
+    },
+    {
+      "depth": 3,
+      "id": "2-2-两个对象一起操作-先处理别名",
+      "text": "2.2 两个对象一起操作，先处理别名"
+    },
+    {
+      "depth": 3,
+      "id": "2-3-有数据就取-关闭后排空",
+      "text": "2.3 有数据就取，关闭后排空"
+    },
+    {
+      "depth": 2,
+      "id": "3-原子更新与发布",
+      "text": "3 原子更新与发布"
+    },
+    {
+      "depth": 3,
+      "id": "3-1-独立计数-少碰共享热点",
+      "text": "3.1 独立计数：少碰共享热点"
+    },
+    {
+      "depth": 3,
+      "id": "3-2-一次性发布普通payload",
+      "text": "3.2 一次性发布普通payload"
+    },
+    {
+      "depth": 3,
+      "id": "3-3-cas更新-失败会刷新expected",
+      "text": "3.3 CAS更新：失败会刷新expected"
+    },
+    {
+      "depth": 2,
+      "id": "4-并行任务与完整记录",
+      "text": "4 并行任务与完整记录"
+    },
+    {
+      "depth": 3,
+      "id": "4-1-分块极值-空范围-核数与异常收尾",
+      "text": "4.1 分块极值：空范围、核数与异常收尾"
+    },
+    {
+      "depth": 3,
+      "id": "4-2-日志完整性不是-cout必然data-race",
+      "text": "4.2 日志完整性不是“cout必然data race”"
+    },
+    {
+      "depth": 2,
+      "id": "5-相关分支",
+      "text": "5 相关分支"
+    }
+  ],
+  "sourceSha256": "ec2f6044b02d90d282392b4d9dae735c755201570b2abaf652f2b2b84a6bcebd",
+  "codeSha256": "58c18377285d052b83bfd617d5f70fe40b9bdbb40a4b55724441c6d3ca37202c",
+  "markdownSha256": "c86c7282c4e9cfbdda6918ba19b7164f9609dd1cbb153235caf41c70fcbc41cd",
+  "htmlSha256": "569c7ebe911b1828481d9635e4b5a9cdf1642c284518e848db5b9e9933bb63fd",
+  "builderSha256": "86d65155c26e85dfd7b84bccd818659cb050a4dea870b0ffd43ac34965e8491e",
+  "markdownBytes": 16964,
+  "htmlBytes": 33554
+}

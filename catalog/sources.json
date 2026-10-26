@@ -1638,16 +1638,29 @@
       "verification": {
         "checked_at": "2026-10-26",
         "method": "原作者／项目／大学／机构公开页面实际读取；本轮分工研究与主Agent复核",
-        "read_scope": "修订版目录与#91 Smart Pointer Parameters完整问题、六种签名及解答。",
-        "catalogue_state": "selected_entries_read",
+        "read_scope": "修订版单页实际捕获16个匹配文章链接。正文实际读件包括#1初始化、#89智能指针、#92 auto问题与主要解答；#90只读完整题干及多态工厂答案；#91本轮核对参数拥有关系及条件保留条款，先前已有完整题干／答案读件。未读文章不因目录捕获升级。",
+        "catalogue_state": "finite_filtered_index_captured",
         "statement_scope": "selected_only",
         "limitations": [
           "官方只说明部分更新至C++14，不是全库现代化；作者建议、性能推理与标准保证分开。",
-          "旧gotw.ca入口本轮超时，不以其未读内容充当已读。"
+          "旧gotw.ca入口本轮超时，不以其未读内容充当已读。",
+          "2013 auto直接列表初始化及智能指针异常例须按C++17规则重新核对，不将当年结论不加版本地照录。"
         ],
         "evidence_urls": [
           "https://herbsutter.com/gotw/",
-          "https://herbsutter.com/2013/06/05/gotw-91-solution-smart-pointer-parameters/"
+          "https://herbsutter.com/2013/06/05/gotw-91-solution-smart-pointer-parameters/",
+          "https://herbsutter.com/2013/05/09/gotw-1-solution/",
+          "https://herbsutter.com/2013/05/29/gotw-89-solution-smart-pointers/",
+          "https://herbsutter.com/2013/06/07/gotw-92-solution-auto-variables-part-1/"
+        ],
+        "catalogue_census": {
+          "entry": "revised-index",
+          "matching_links": 16,
+          "unit": "article links matching configured filter",
+          "body_read": "selected_only"
+        },
+        "reading_notes": [
+          "work/cpp-research-2026-10-26/language/actual-reads.json"
         ]
       },
       "entries": [
@@ -1656,9 +1669,10 @@
           "url": "https://herbsutter.com/gotw/",
           "kind": "problem_catalogue",
           "enumeration": {
-            "adapter": "manual",
-            "state": "manual",
-            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+            "adapter": "link_index",
+            "state": "implemented",
+            "include_url_regex": "herbsutter\\.com/\\d{4}/.*/gotw-",
+            "details": "2026-10-26实际采集并逐一核对该单页匹配链接；仅覆盖此过滤范围，不表示正文已读或站内所有资料。"
           }
         },
         {
@@ -1703,17 +1717,29 @@
       "verification": {
         "checked_at": "2026-10-26",
         "method": "原作者／项目／大学／机构公开页面实际读取；本轮分工研究与主Agent复核",
-        "read_scope": "规则分类、MEM50释放后访问与CTR57比较谓词的错误／修复代码。",
-        "catalogue_state": "selected_entries_read",
+        "read_scope": "规则单页实际捕获83个匹配规则链接；并发分类另读七个CON50–56链接及五个继承C规则链接的目录。正文为选定范围：ERR56异常提交、OOP52多态销毁、CON53多锁、CON54条件等待；CTR51只读开头及deque/list/vector有效性表，先前另读MEM50与CTR57。不是83篇全文已读。",
+        "catalogue_state": "finite_filtered_index_captured",
         "statement_scope": "selected_only",
         "limitations": [
           "旧Confluence入口502；使用机构官方GitHub Pages入口。",
-          "CTR57第二例的asymmetry归因不准确，须用严格弱序及独立反例纠正；官方身份不是自动正确性认证。"
+          "CTR57第二例的asymmetry归因不准确，须用严格弱序及独立反例纠正；官方身份不是自动正确性认证。",
+          "目录上的Next是章节导航，采集范围显式限定单页过滤集合；不能以此推断全站零遗漏。"
         ],
         "evidence_urls": [
           "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/",
           "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/memory-management-mem/mem50-cpp/",
           "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/containers-ctr/ctr57-cpp/"
+        ],
+        "catalogue_census": {
+          "entry": "rules",
+          "matching_links": 83,
+          "unit": "rule links matching configured filter on this page",
+          "body_read": "selected_only"
+        },
+        "reading_notes": [
+          "work/cpp-research-2026-10-26/language/actual-reads.json",
+          "work/cpp-research-2026-10-26/library/actual-reads.json",
+          "work/cpp-research-2026-10-26/systems/actual-reads.json"
         ]
       },
       "entries": [
@@ -1722,9 +1748,11 @@
           "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/",
           "kind": "rule_index",
           "enumeration": {
-            "adapter": "manual",
-            "state": "manual",
-            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+            "adapter": "link_index",
+            "state": "implemented",
+            "include_url_regex": "/[a-z]+\\d+-cpp/?$",
+            "details": "2026-10-26实际采集并逐一核对该单页匹配链接；仅覆盖此过滤范围，不表示正文已读或站内所有资料。",
+            "pagination_mode": "single_page"
           }
         },
         {
@@ -1929,8 +1957,8 @@
       "verification": {
         "checked_at": "2026-10-26",
         "method": "原作者／项目／大学／机构公开页面实际读取；本轮分工研究与主Agent复核",
-        "read_scope": "当前练习导航；Static Queue四页、Specialization & Type Traits三页、Allocation Tracker一页题面；Custom Deque任务入口；另读旧Mixed Exercises六页。",
-        "catalogue_state": "selected_entries_read",
+        "read_scope": "单页实际捕获16个练习目录链接（iso-8859-1）；本轮完整题干文本读取Static Queue四页、Specialization三页、SFINAE三页、Mixed Templates四页、Custom Deque两页；先前另有Allocation Tracker与旧Mixed读件。目录枚举不等于16套正文或参考解答均已读。",
+        "catalogue_state": "finite_filtered_index_captured",
         "statement_scope": "selected_only",
         "limitations": [
           "取练习而不是要求上课；未运行骨架或解答。",
@@ -1942,7 +1970,20 @@
           "https://www.ida.liu.se/~TDDD38/exercises/Static_Queue/exercise.pdf",
           "https://www.ida.liu.se/~TDDD38/exercises/Specialization/exercise.pdf",
           "https://www.ida.liu.se/~TDDD38/exercises/Allocation_Tracker/exercise.pdf",
-          "https://www.ida.liu.se/~TDDD38/exercises/Custom_Deque/"
+          "https://www.ida.liu.se/~TDDD38/exercises/Custom_Deque/",
+          "https://www.ida.liu.se/~TDDD38/exercises/SFINAE/exercise.pdf",
+          "https://www.ida.liu.se/~TDDD38/exercises/Mixed_Templates/exercise.pdf",
+          "https://www.ida.liu.se/~TDDD38/exercises/Custom_Deque/exercise.pdf"
+        ],
+        "catalogue_census": {
+          "entry": "exercise-index",
+          "matching_links": 16,
+          "unit": "exercise directory links matching configured filter",
+          "body_read": "selected_only"
+        },
+        "reading_notes": [
+          "work/cpp-research-2026-10-26/templates/actual-reads.json",
+          "work/cpp-research-2026-10-26/library/actual-reads.json"
         ]
       },
       "entries": [
@@ -1951,9 +1992,12 @@
           "url": "https://www.ida.liu.se/~TDDD38/lecture/index.en.shtml",
           "kind": "exercise_catalogue",
           "enumeration": {
-            "adapter": "manual",
-            "state": "manual",
-            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+            "adapter": "link_index",
+            "state": "implemented",
+            "include_url_regex": "/~TDDD38/exercises/",
+            "details": "2026-10-26实际采集并逐一核对该单页匹配链接；仅覆盖此过滤范围，不表示正文已读或站内所有资料。",
+            "text_encoding": "iso-8859-1",
+            "pagination_mode": "single_page"
           }
         },
         {
@@ -2332,6 +2376,116 @@
             "adapter": "manual",
             "state": "manual",
             "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "llvm-libcxx",
+      "name": "LLVM libc++ implementation regression tests",
+      "homepage": "https://github.com/llvm/llvm-project",
+      "priority": "extension",
+      "roles": [
+        "library_implementation",
+        "implementation_regression"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "LLVM libc++",
+        "libcxx"
+      ],
+      "domains": [
+        "cpp-language",
+        "cpp-library"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "本轮以未参与目录建设的官方固定发布标签回归测试进行独立反查，补充实际边界与缺口。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "独立反查分工实际读取固定release tag的完整源码文件，记录字节摘要与范围；未构建上游测试框架。",
+        "read_scope": "llvmorg-20.1.8下5份完整回归文件：optional复制赋值、vector构造异常、filter_view begin缓存、variant复制赋值／换型及无效比较器断言。逐项范围见independent-review/actual-reads.json。",
+        "catalogue_state": "selected_entries_read",
+        "statement_scope": "selected_implementation_tests_only",
+        "release_tag": "llvmorg-20.1.8",
+        "reading_notes": [
+          "work/cpp-research-2026-10-26/independent-review/actual-reads.json",
+          "work/cpp-research-2026-10-26/independent-review/review.md"
+        ],
+        "limitations": [
+          "仅5份选定实现回归全文，不是全目录枚举、完整题库或5道新增上机题。",
+          "上游libc++ harness未在本机编译运行；自写参考探针及本项目回归与上游运行分开记录。",
+          "固定release tag限定本轮实际读取版本；库实现与调试断言不能单独代替通用C++标准保证。"
+        ],
+        "evidence_urls": [
+          "https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-20.1.8/libcxx/test/std/utilities/optional/optional.object/optional.object.assign/copy.pass.cpp",
+          "https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-20.1.8/libcxx/test/std/containers/sequences/vector/vector.cons/exceptions.pass.cpp",
+          "https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-20.1.8/libcxx/test/std/ranges/range.adaptors/range.filter/begin.pass.cpp",
+          "https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-20.1.8/libcxx/test/std/utilities/variant/variant.variant/variant.assign/copy.pass.cpp",
+          "https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-20.1.8/libcxx/test/libcxx/algorithms/alg.sorting/assert.sort.invalid_comparator/assert.sort.invalid_comparator.pass.cpp"
+        ]
+      },
+      "entries": [
+        {
+          "id": "optional-copy",
+          "url": "https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-20.1.8/libcxx/test/std/utilities/optional/optional.object/optional.object.assign/copy.pass.cpp",
+          "kind": "implementation_regression",
+          "release_tag": "llvmorg-20.1.8",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "人工实际读取此固定标签下单个源文件，未自动枚举所在目录，未运行上游harness。"
+          }
+        },
+        {
+          "id": "vector-construction",
+          "url": "https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-20.1.8/libcxx/test/std/containers/sequences/vector/vector.cons/exceptions.pass.cpp",
+          "kind": "implementation_regression",
+          "release_tag": "llvmorg-20.1.8",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "人工实际读取此固定标签下单个源文件，未自动枚举所在目录，未运行上游harness。"
+          }
+        },
+        {
+          "id": "filter-begin",
+          "url": "https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-20.1.8/libcxx/test/std/ranges/range.adaptors/range.filter/begin.pass.cpp",
+          "kind": "implementation_regression",
+          "release_tag": "llvmorg-20.1.8",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "人工实际读取此固定标签下单个源文件，未自动枚举所在目录，未运行上游harness。"
+          }
+        },
+        {
+          "id": "variant-copy",
+          "url": "https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-20.1.8/libcxx/test/std/utilities/variant/variant.variant/variant.assign/copy.pass.cpp",
+          "kind": "implementation_regression",
+          "release_tag": "llvmorg-20.1.8",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "人工实际读取此固定标签下单个源文件，未自动枚举所在目录，未运行上游harness。"
+          }
+        },
+        {
+          "id": "invalid-comparator",
+          "url": "https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-20.1.8/libcxx/test/libcxx/algorithms/alg.sorting/assert.sort.invalid_comparator/assert.sort.invalid_comparator.pass.cpp",
+          "kind": "implementation_regression",
+          "release_tag": "llvmorg-20.1.8",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "人工实际读取此固定标签下单个源文件，未自动枚举所在目录，未运行上游harness。"
           }
         }
       ]

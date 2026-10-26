@@ -1,0 +1,75 @@
+{
+  "scope": "held out from catalogue construction in this cycle, not a claim of unseen model training data",
+  "records": [
+    {
+      "id": "optional-copy",
+      "source": "LLVM libc++ official regression tests",
+      "release_tag": "llvmorg-20.1.8",
+      "url": "https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-20.1.8/libcxx/test/std/utilities/optional/optional.object/optional.object.assign/copy.pass.cpp",
+      "sha256": "9ed3abb44cd9c3803fef5f0c7f1599d6b71427373b5de03017654ca0ee3c63fd",
+      "bytes": 2460,
+      "read_scope": "complete file, 99 lines",
+      "read_before_mapping": true,
+      "upstream_test_executed": false,
+      "notes": "Inspected semantics and test assertions; upstream harness not built locally. Independent reference probes are separate."
+    },
+    {
+      "id": "vector-construction",
+      "source": "LLVM libc++ official regression tests",
+      "release_tag": "llvmorg-20.1.8",
+      "url": "https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-20.1.8/libcxx/test/std/containers/sequences/vector/vector.cons/exceptions.pass.cpp",
+      "sha256": "1024d7cd1f4faf5589edf600706ea6201d96b70419286c3838547397118300eb",
+      "bytes": 5718,
+      "read_scope": "complete file, 156 lines",
+      "read_before_mapping": true,
+      "upstream_test_executed": false,
+      "notes": "Inspected semantics and test assertions; upstream harness not built locally. Independent reference probes are separate."
+    },
+    {
+      "id": "filter-begin",
+      "source": "LLVM libc++ official regression tests",
+      "release_tag": "llvmorg-20.1.8",
+      "url": "https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-20.1.8/libcxx/test/std/ranges/range.adaptors/range.filter/begin.pass.cpp",
+      "sha256": "68961b3325c96e3f2dbf02213d314125f352e31f3fefeecff4c1fba9c94099ef",
+      "bytes": 5714,
+      "read_scope": "complete file, 187 lines",
+      "read_before_mapping": true,
+      "upstream_test_executed": false,
+      "notes": "Inspected semantics and test assertions; upstream harness not built locally. Independent reference probes are separate."
+    },
+    {
+      "id": "variant-copy",
+      "source": "LLVM libc++ official regression tests",
+      "release_tag": "llvmorg-20.1.8",
+      "url": "https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-20.1.8/libcxx/test/std/utilities/variant/variant.variant/variant.assign/copy.pass.cpp",
+      "sha256": "e2c390ed9c308bc116e0ecd138846e328bc966f581dadb2358858e91ead17f0d",
+      "bytes": 19654,
+      "read_scope": "complete file across two web reads, 633 lines",
+      "read_before_mapping": true,
+      "upstream_test_executed": false,
+      "notes": "Inspected semantics and test assertions; upstream harness not built locally. Independent reference probes are separate."
+    },
+    {
+      "id": "invalid-comparator",
+      "source": "LLVM libc++ official regression tests",
+      "release_tag": "llvmorg-20.1.8",
+      "url": "https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-20.1.8/libcxx/test/libcxx/algorithms/alg.sorting/assert.sort.invalid_comparator/assert.sort.invalid_comparator.pass.cpp",
+      "sha256": "65cfef60cc17e5f37d34f4617b54f3492c3013d11a3f82bc7fdb870a1853a64b",
+      "bytes": 8838,
+      "read_scope": "complete file, 183 lines",
+      "read_before_mapping": true,
+      "upstream_test_executed": false,
+      "notes": "Inspected semantics and test assertions; upstream harness not built locally. Independent reference probes are separate."
+    }
+  ],
+  "failed_entries": [
+    {
+      "url": "https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-20.1.8/libcxx/test/std/containers/sequences/vector/vector.cons/throwing.pass.cpp",
+      "result": "404; discovered correct exceptions.pass.cpp via actual directory API"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-20.1.8/libcxx/test/std/algorithms/alg.sorting/alg.sort/sort/sort_invalid_comparator.pass.cpp",
+      "result": "404; found actual libcxx debug regression directory via actual API listing"
+    }
+  ]
+}

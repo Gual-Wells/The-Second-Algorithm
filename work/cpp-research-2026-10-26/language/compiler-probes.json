@@ -1,0 +1,50 @@
+{
+  "compiler": "g++.exe (GCC) 16.2.0",
+  "flags": "-O0 -Wall -Wextra -Wpedantic -fno-elide-constructors",
+  "results": [
+    {
+      "probe": "immovable",
+      "standard": "c++14",
+      "expected_compile": false,
+      "compiled": false,
+      "matches_expectation": true,
+      "diagnostic": ".local\\cpp-core-probes\\immovable.cpp: In function 'X make()':\n.local\\cpp-core-probes\\immovable.cpp:2:80: error: use of deleted function 'X::X(X&&)'\n    2 | struct X { X()=default; X(const X&)=delete; X(X&&)=delete; }; X make(){ return X{}; } int main(){ X x=make(); (void)x; }\n      |                                                                                ^~~\n.local\\cpp-core-probes\\immovable.cpp:2:45: note: declared here\n    2 | struct X { X()=default; X(const X&)=delete; X(X&&)=delete; }; X make(){ return X{}; } int main(){ X x=make(); (void)x; }\n      |                                             ^\n.local\\cpp-core-probes\\immovable.cpp:2:80: note: use '-fdiagnostics-all-candidates' to display considered candidates\n    2 | struct X { X()=default; X(const X&)=delete; X(X&&)=delete; }; X make(){ return X{}; } int main(){ X x=make(); (void)x; }\n      |                                                                                ^~~\n.local\\cpp-core-probes\\immovable.cpp: In function 'int main()':\n.local\\cpp-core-probes\\immovable.cpp:2:108: error: use of deleted function 'X::X(X&&)'\n    2 | struct X { X()=default; X(const X&)=delete; X(X&&)=delete; }; X make(){ return X{}; } int main(){ X x=make(); (void)x; }\n      |                                                                                                            ^\n.local\\cpp-core-probes\\immovable.cpp:2:45: note: declared here\n    2 | struct X { X()=default; X(const X&)=delete; X(X&&)=delete; }; X make(){ return X{}; } int main(){ X x=make(); (void)x; }\n      |                                             ^\n.local\\cpp-core-probes\\immovable.cpp:2:108: note: use '-fdiagnostics-all-candidates' to display considered candidates\n    2 | struct X { X()=default; X(const X&)=delete; X(X&&)=delete; }; X make(){ return X{}; } int main(){ X x=make(); (void)x; }\n      |                                                                                                            ^\n"
+    },
+    {
+      "probe": "immovable",
+      "standard": "c++17",
+      "expected_compile": true,
+      "compiled": true,
+      "matches_expectation": true,
+      "diagnostic": "",
+      "run_exit": 0
+    },
+    {
+      "probe": "explicit-deleted-move",
+      "standard": "c++17",
+      "expected_compile": false,
+      "compiled": false,
+      "matches_expectation": true,
+      "diagnostic": ".local\\cpp-core-probes\\explicit-deleted-move.cpp: In function 'int main()':\n.local\\cpp-core-probes\\explicit-deleted-move.cpp:2:97: error: use of deleted function 'X::X(X&&)'\n    2 | struct X { X()=default; X(const X&)=default; X(X&&)=delete; }; int main(){ X x; X y(std::move(x)); }\n      |                                                                                                 ^\n.local\\cpp-core-probes\\explicit-deleted-move.cpp:2:46: note: declared here\n    2 | struct X { X()=default; X(const X&)=default; X(X&&)=delete; }; int main(){ X x; X y(std::move(x)); }\n      |                                              ^\n.local\\cpp-core-probes\\explicit-deleted-move.cpp:2:97: note: use '-fdiagnostics-all-candidates' to display considered candidates\n    2 | struct X { X()=default; X(const X&)=default; X(X&&)=delete; }; int main(){ X x; X y(std::move(x)); }\n      |                                                                                                 ^\n.local\\cpp-core-probes\\explicit-deleted-move.cpp:2:83: warning: unused variable 'y' [-Wunused-variable]\n    2 | struct X { X()=default; X(const X&)=default; X(X&&)=delete; }; int main(){ X x; X y(std::move(x)); }\n      |                                                                                   ^\n"
+    },
+    {
+      "probe": "defaulted-deleted-move",
+      "standard": "c++17",
+      "expected_compile": true,
+      "compiled": true,
+      "matches_expectation": true,
+      "diagnostic": "",
+      "run_exit": 0
+    },
+    {
+      "probe": "c17-deduction",
+      "standard": "c++17",
+      "expected_compile": true,
+      "compiled": true,
+      "matches_expectation": true,
+      "diagnostic": "",
+      "run_exit": 0
+    }
+  ],
+  "note": "No undefined behavior executed. GCC may apply historical defect resolutions retroactively."
+}

@@ -1,0 +1,609 @@
+{
+  "schema_version": 1,
+  "source_id": "sei-cert-cpp",
+  "entry_id": "rules",
+  "captured_at": "2026-10-26T12:43:59.937567+00:00",
+  "request_url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/",
+  "final_url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/",
+  "adapter": "link_index",
+  "parser_version": 4,
+  "page_title": "Rules | CERT Secure Coding",
+  "entry_configuration": {
+    "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/",
+    "adapter": "link_index",
+    "include_url_regex": "/[a-z]+\\d+-cpp/?$"
+  },
+  "entry_configuration_sha256": "d2ec829e642880d455699cb30526d60b7332cfe466f00e76f04a462528d847e7",
+  "input_sha256": "a4b1204016d7ff26b9647ea619c0037d5cc737d8c0b6b59998ec95100a8beb92",
+  "input_bytes": 219596,
+  "records_sha256": "68a8dac384bbb6c118193db8dab5d4533d4c1c11bb2b82005116eb8480a2e7ca",
+  "boundary": "matching metadata links on this registered page; not site-wide content",
+  "filter": "/[a-z]+\\d+-cpp/?$",
+  "pagination_next": [
+    "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/characters-and-strings-str"
+  ],
+  "state": "pagination_pending",
+  "records": [
+    {
+      "id": "url:00cbcb5ce8de4d7f193d",
+      "title": "MSC54-CPP. A signal handler must be a plain old function",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/miscellaneous-msc/msc54-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:080d64091682d3795b84",
+      "title": "EXP63-CPP. Do not rely on the value of a moved-from object",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/expressions-exp/exp63-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:0ac8cb93c24960122b53",
+      "title": "ERR61-CPP. Catch exceptions by lvalue reference",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/exceptions-and-error-handling-err/err61-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:0f3ecf6a339d5659c7da",
+      "title": "EXP57-CPP. Do not cast or delete pointers to incomplete classes",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/expressions-exp/exp57-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:10a79ef811e1d32b7cf0",
+      "title": "ERR56-CPP. Guarantee exception safety",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/exceptions-and-error-handling-err/err56-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:10f449e4c2b38fd47ac7",
+      "title": "OOP55-CPP. Do not use pointer-to-member operators to access nonexistent members",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/object-oriented-programming-oop/oop55-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:13335a31e97533bd124f",
+      "title": "CTR51-CPP. Use valid references, pointers, and iterators to reference elements of a container",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/containers-ctr/ctr51-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:1414f7f578ac43cabea7",
+      "title": "ERR62-CPP. Detect errors when converting a string to a number",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/exceptions-and-error-handling-err/err62-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:146d30d2c5b0b5ee02a2",
+      "title": "DCL56-CPP. Avoid cycles during initialization of static objects",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/declarations-and-initialization-dcl/dcl56-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:147d3c317478c8344e02",
+      "title": "OOP54-CPP. Gracefully handle self-copy assignment",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/object-oriented-programming-oop/oop54-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:1ca9d7c4cf3e1691b084",
+      "title": "EXP61-CPP. A lambda object must not outlive any of its reference captured objects",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/expressions-exp/exp61-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:1eec687197d01b363b1d",
+      "title": "MEM56-CPP. Do not store an already-owned pointer value in an unrelated smart pointer",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/memory-management-mem/mem56-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:200dff5a51d0a3f1bde2",
+      "title": "DCL57-CPP. Do not let exceptions escape from destructors or deallocation functions",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/declarations-and-initialization-dcl/dcl57-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:25d6afcc1b340bc577f4",
+      "title": "CON50-CPP. Do not destroy a mutex while it is locked",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/concurrency-con/con50-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:260d024fecae88e4f224",
+      "title": "MSC53-CPP. Do not return from a function declared [[noreturn]]",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/miscellaneous-msc/msc53-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:29b3c40ca2f479de3d0e",
+      "title": "CTR50-CPP. Guarantee that container indices and iterators are within the valid range",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/containers-ctr/ctr50-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:2a3a7f20292f29f69ad2",
+      "title": "ERR53-CPP. Do not reference base classes or class data members in a constructor or destructor function-try-block handler",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/exceptions-and-error-handling-err/err53-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:2d20e367992bb4edda55",
+      "title": "CON55-CPP. Preserve thread safety and liveness when using condition variables",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/concurrency-con/con55-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:2f5d7e8aa5f86be07091",
+      "title": "MEM52-CPP. Detect and handle memory allocation errors",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/memory-management-mem/mem52-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:316d9573ff312504a17c",
+      "title": "FIO51-CPP. Close files when they are no longer needed",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/input-output-fio/fio51-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:332ca17b61aa52bf77a2",
+      "title": "DCL59-CPP. Do not define an unnamed namespace in a header file",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/declarations-and-initialization-dcl/dcl59-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:46ebbc69c8710ddeec28",
+      "title": "MSC51-CPP. Ensure your random number generator is properly seeded",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/miscellaneous-msc/msc51-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:4acb60c283e2df6c4511",
+      "title": "OOP58-CPP. Copy operations must not mutate the source object",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/object-oriented-programming-oop/oop58-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:4f320aab491bddbd7899",
+      "title": "ERR58-CPP. Handle all exceptions thrown before main() begins executing",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/exceptions-and-error-handling-err/err58-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:4fbf6273617dbeb44ccf",
+      "title": "EXP59-CPP. Use offsetof() on valid types and members",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/expressions-exp/exp59-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:50f409ec453220170fb6",
+      "title": "MEM54-CPP. Provide placement new with properly aligned pointers to sufficient storage capacity",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/memory-management-mem/mem54-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:50ffe4b0ddaec9554834",
+      "title": "ERR59-CPP. Do not throw an exception across execution boundaries",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/exceptions-and-error-handling-err/err59-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:52c2581eb88cd4cff834",
+      "title": "OOP52-CPP. Do not delete a polymorphic object without a virtual destructor",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/object-oriented-programming-oop/oop52-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:581beda71df49a856824",
+      "title": "DCL51-CPP. Do not declare or define a reserved identifier",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/declarations-and-initialization-dcl/dcl51-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:5936c6458943539d1614",
+      "title": "OOP56-CPP. Honor replacement handler requirements",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/object-oriented-programming-oop/oop56-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:5e43259b163c6debde67",
+      "title": "MEM53-CPP. Explicitly construct and destruct objects when manually managing object lifetime",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/memory-management-mem/mem53-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:5e99753e001ca1082ab9",
+      "title": "CON52-CPP. Prevent data races when accessing bit-fields from multiple threads",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/concurrency-con/con52-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:61268b4f32d3a313dcee",
+      "title": "OOP57-CPP. Prefer special member functions and overloaded operators to C Standard Library functions",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/object-oriented-programming-oop/oop57-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:62d6f8540db11ce601fc",
+      "title": "EXP55-CPP. Do not access a cv-qualified object through a cv-unqualified type",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/expressions-exp/exp55-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:668720b500440a7dfdbd",
+      "title": "EXP60-CPP. Do not pass a nonstandard-layout type object across execution boundaries",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/expressions-exp/exp60-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:6ea57b1b2be694796de6",
+      "title": "STR53-CPP. Range check element access",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/characters-and-strings-str/str53-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:722b97e1da688e53d9f8",
+      "title": "OOP53-CPP. Write constructor member initializers in the canonical order",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/object-oriented-programming-oop/oop53-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:7364221eb9fe418b5540",
+      "title": "EXP51-CPP. Do not delete an array through a pointer of the incorrect type",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/expressions-exp/exp51-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:77279582adc397518dfd",
+      "title": "CON53-CPP. Avoid deadlock by locking in a predefined order",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/concurrency-con/con53-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:78e73fec65a7d5ba11e0",
+      "title": "DCL58-CPP. Do not modify the standard namespaces",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/declarations-and-initialization-dcl/dcl58-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:7919ea42476b8f0cbaa2",
+      "title": "STR52-CPP. Use valid references, pointers, and iterators to reference elements of a basic_string",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/characters-and-strings-str/str52-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:807332d3f83f33fbf030",
+      "title": "ERR51-CPP. Handle all exceptions",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/exceptions-and-error-handling-err/err51-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:847dffbda5d877a8fafd",
+      "title": "STR51-CPP. Do not attempt to create a std::string from a null pointer",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/characters-and-strings-str/str51-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:865ed3b555e34cb566f8",
+      "title": "ERR52-CPP. Do not use setjmp() or longjmp()",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/exceptions-and-error-handling-err/err52-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:889d820559df42ebaace",
+      "title": "MEM51-CPP. Properly deallocate dynamically allocated resources",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/memory-management-mem/mem51-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:8a8fea07b61b8c6f8e44",
+      "title": "DCL55-CPP. Avoid information leakage when passing a class object across a trust boundary",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/declarations-and-initialization-dcl/dcl55-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:8c14cefb8213cd717053",
+      "title": "MEM50-CPP. Do not access freed memory",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/memory-management-mem/mem50-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:91e61b2b5338891290cd",
+      "title": "EXP50-CPP. Do not depend on the order of evaluation for side effects",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/expressions-exp/exp50-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:97c9cde2f3a37d455c31",
+      "title": "CON51-CPP. Ensure actively held locks are released on exceptional conditions",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/concurrency-con/con51-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:98d842d22c2897c3794d",
+      "title": "CTR52-CPP. Guarantee that library functions do not overflow",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/containers-ctr/ctr52-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:9a8a4c25a3dcca7c75ee",
+      "title": "CTR53-CPP. Use valid iterator ranges",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/containers-ctr/ctr53-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:a1a65f9c7fcf73a04239",
+      "title": "ERR54-CPP. Catch handlers should order their parameter types from most derived to least derived",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/exceptions-and-error-handling-err/err54-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:a1f37b03d75faf097847",
+      "title": "EXP56-CPP. Do not call a function with a mismatched language linkage",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/expressions-exp/exp56-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:a838df19d512102439b8",
+      "title": "CTR57-CPP. Provide a valid ordering predicate",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/containers-ctr/ctr57-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:acf6cac0afef2e5a7c73",
+      "title": "MSC52-CPP. Value-returning functions must return a value from all exit paths",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/miscellaneous-msc/msc52-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:af0c046ab3c78dfe28ed",
+      "title": "EXP54-CPP. Do not access an object outside of its lifetime",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/expressions-exp/exp54-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:b2828a64a686b7eff494",
+      "title": "OOP51-CPP. Do not slice derived objects",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/object-oriented-programming-oop/oop51-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:b31d655a2a4ae38cc17b",
+      "title": "EXP62-CPP. Do not access the bits of an object representation that are not part of the object's value representation",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/expressions-exp/exp62-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:bc18d3b00e2d3796f6fe",
+      "title": "MSC50-CPP. Do not use std::rand() for generating pseudorandom numbers",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/miscellaneous-msc/msc50-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:bcc893ad2c74445a622c",
+      "title": "DCL53-CPP. Do not write syntactically ambiguous declarations",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/declarations-and-initialization-dcl/dcl53-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:bd5763e60f8a79758711",
+      "title": "ERR60-CPP. Exception objects must be nothrow copy constructible",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/exceptions-and-error-handling-err/err60-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:bd925e25e99349ccb4cd",
+      "title": "ERR55-CPP. Honor exception specifications",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/exceptions-and-error-handling-err/err55-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:bf2135182035b4cc8f34",
+      "title": "CON54-CPP. Wrap functions that can spuriously wake up in a loop",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/concurrency-con/con54-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:bf511a557f93ee7eed35",
+      "title": "EXP58-CPP. Pass an object of the correct type to va_start",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/expressions-exp/exp58-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:c0d01cc903a3ab100bd6",
+      "title": "EXP53-CPP. Do not read uninitialized memory",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/expressions-exp/exp53-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:c376a05ffacd7f9670ad",
+      "title": "MEM57-CPP. Avoid using default operator new for over-aligned types",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/memory-management-mem/mem57-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:c75aba54f8432835f1d1",
+      "title": "CTR56-CPP. Do not use pointer arithmetic on polymorphic objects",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/containers-ctr/ctr56-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:d11e7b8942e00b313c51",
+      "title": "DCL52-CPP. Never qualify a reference type with const or volatile",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/declarations-and-initialization-dcl/dcl52-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:d1aa61dd5540774c4b23",
+      "title": "INT50-CPP. Do not cast to an out-of-range enumeration value",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/integers-int/int50-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:d2943344bae91f9c6d75",
+      "title": "MEM55-CPP. Honor replacement dynamic storage management requirements",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/memory-management-mem/mem55-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:d5fb5cdd320a036d470b",
+      "title": "CTR55-CPP. Do not use an additive operator on an iterator if the result would overflow",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/containers-ctr/ctr55-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:d65597bb2a526525007e",
+      "title": "DCL54-CPP. Overload allocation and deallocation functions as a pair in the same scope",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/declarations-and-initialization-dcl/dcl54-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:d7a82ebb94ca315e723b",
+      "title": "ERR50-CPP. Do not abruptly terminate the program",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/exceptions-and-error-handling-err/err50-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:e0bf592dd88df724c810",
+      "title": "ERR57-CPP. Do not leak resources when handling exceptions",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/exceptions-and-error-handling-err/err57-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:e37e25bd6e4f729920d4",
+      "title": "OOP50-CPP. Do not invoke virtual functions from constructors or destructors",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/object-oriented-programming-oop/oop50-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:eb369dc3a2dba58ad268",
+      "title": "FIO50-CPP. Do not alternately input and output from a file stream without an intervening positioning call",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/input-output-fio/fio50-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:edb34c44bf831d765f1e",
+      "title": "EXP52-CPP. Do not rely on side effects in unevaluated operands",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/expressions-exp/exp52-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:ee4212d8d677b834fea7",
+      "title": "DCL60-CPP. Obey the one-definition rule",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/declarations-and-initialization-dcl/dcl60-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:efb2f55045dd1b1eb251",
+      "title": "CTR58-CPP. Predicate function objects should not be mutable",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/containers-ctr/ctr58-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:f4dc6edf1e6909aaf14f",
+      "title": "CTR54-CPP. Do not subtract iterators that do not refer to the same container",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/containers-ctr/ctr54-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:fc8af8022d67d73cf9ba",
+      "title": "DCL50-CPP. Do not define a C-style variadic function",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/declarations-and-initialization-dcl/dcl50-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:fe0fa79fbb809a60a2b7",
+      "title": "CON56-CPP. Do not speculatively lock a non-recursive mutex that is already owned by the calling thread",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/concurrency-con/con56-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    },
+    {
+      "id": "url:fea6f9a020020d3254f6",
+      "title": "STR50-CPP. Guarantee that storage for strings has sufficient space for character data and the null terminator",
+      "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/characters-and-strings-str/str50-cpp",
+      "kind": "reference_link",
+      "section": "Rule Listing"
+    }
+  ]
+}
