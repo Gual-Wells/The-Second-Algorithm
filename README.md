@@ -4,17 +4,17 @@
 
 内容建设先建立来源与范围，再研究归并，最后编写正文。二分专题现已完成一次全流程研究与修订，提供基础、组合判定、进阶扩展三份离线阅读稿；已知进阶缺口及未取得原题继续保留，尚未宣称范围完备。
 
-C++本身已完成初步来源与实战书研究，尚未全量枚举或编写语言章；它按与算法相同的方法系统建设，不是零基础补课，章节数由实际研究确定。
+C++本身已完成初步来源研究，并取得四种教材的本地检索基座：Professional C++ 6e、The Modern C++ Challenge、Discovering Modern C++ 2e和Cookbook 2e。尚未全量归并或编写语言章；章节数由实际研究确定。
 
 ## 当前可用内容
 
 | 内容 | 入口 | 状态 |
 |---|---|---|
 | 来源站点池 | [来源说明](docs/SOURCE_POOL.md) · [机器登记](catalog/sources.json) | 38个来源、67个入口；14个来源用于C++，包含共享草案与2个实验工具，不能混称14个题库 |
-| 实战书单 | [书目与准确版本](docs/BOOKS.md) · [书目登记](catalog/books.json) | 算法首批EPI、CP4已取得；C++首批建议Professional C++ 6e与Modern C++ Challenge，尚未取得商业原件 |
+| 实战书单 | [书目与准确版本](docs/BOOKS.md) · [书目登记](catalog/books.json) | 算法EPI、CP4及四种C++教材已有本地基座；完整版与提取内容不上传Git |
 | 实际目录快照 | [快照指针](catalog/inventory-heads.json) · [本次来源状态](research/2026-10-26/source-status.json) | 8 个入口完成目录／候选链接捕获，不能据此推断正文已读 |
 | 二分专题 | [阅读入口](content/binary-search/README.md) · [全流程研究](research/2026-10-26/binary-full-cycle.md) | 3份阅读稿、70组相邻C++代码；原题、模式、代码块数量分别统计 |
-| C++本身 | [来源与书籍研究](research/2026-10-26/cpp-source-foundation.md) | 来源角色、实际读件、书籍优先级与下一步；未将目录或示例冒称完整章节 |
+| C++本身 | [来源研究](research/2026-10-26/cpp-source-foundation.md) · [教材入库](research/2026-10-26/cpp-material-intake.md) | 来源与四种教材可按章／题／页恢复研究；尚未形成语言章节 |
 | 协议与工程 | [执行协议](protocol/CONTENT_PIPELINE.md) · [架构](docs/ARCHITECTURE.md) · [恢复](docs/RECOVERY.md) | 一份语义入口，确定性工具与实际内容判断分工 |
 
 目录捕获包括 CSES 400 个任务链接、Codility 17 个课程入口与二分课 2 题、AtCoder DP 26 题、cp-algorithms 163 个候选方法链接、CP 作者站 5555 条题号与分类记录、USACO 二分页 23 个相关链接及 AtCoder Library 14 个文档链接。CP 作者表中3462条原题链接在该历史快照仍未解析；本轮逐题实际解析的入口另存案例和核对记录，不回写历史。各集合互有重叠，不累加成“已掌握题数”或覆盖率。

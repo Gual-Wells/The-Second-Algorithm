@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "job-coding-cpp-initial",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "state": "discovery-in-progress",
   "purpose": "面向中国大陆大厂及欧美外企软件相关岗位的算法与C++实战参考总册；算法按题型、方法、变种与实现组织，C++按具体代码问题、机制、关键差异与实现组织。",
   "implementation_language": "C++17",
@@ -28,7 +28,7 @@
     "C++发现入口不是章节承诺或完备性结论；不预设约8章补强。",
     "实现题、诊断改写题、配方、语义谜题、规则参考和实验工具分开；不同标准与实现边界就地说明。"
   ],
-  "current_frontier": "二分已完成全流程首轮研究并重写，3份阅读稿共70组代码；14项明确进阶/接口缺口与21条未取得原题保留，尚不封为范围完备。恢复从research/2026-10-26/binary-full-cycle.md继续。 C++本身已完成初步来源与实战书研究，尚未全量枚举或编写语言章；从research/2026-10-26/cpp-source-foundation.md恢复。",
+  "current_frontier": "二分已完成全流程首轮研究与3份阅读稿，70组代码，14项明确缺口及21条未取得原题保留，尚不封为范围完备；见research/2026-10-26/binary-full-cycle.md。C++本身已有来源池与四种本地教材基座（Professional 6e、Challenge 1e、Discovering 2e、Cookbook 2e），教材入库见research/2026-10-26/cpp-material-intake.md；尚未全量归并语言题目或编写语言章。",
   "cpp_discovery_entries": [
     "类型、表达式、推导、转换与初始化",
     "对象生命周期、值类别、复制与移动",

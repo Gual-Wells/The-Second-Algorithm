@@ -171,7 +171,7 @@
       ],
       "language": "en",
       "publisher": "Wiley",
-      "edition_note": "2024；C++23；ISBN9781394193189",
+      "edition_note": "Sixth Edition，版权2024；C++23；纸书ISBN9781394193172，ePDF9781394193196，ePub9781394193189",
       "priority": "core",
       "domains": [
         "cpp-language"
@@ -185,8 +185,23 @@
         "https://github.com/Professional-CPP/edition-6",
         "https://www.wiley.com/en-us/professional-c-6th-edition-p-9781394193189"
       ],
-      "acquisition_state": "not_provided",
-      "notes": "官方仓库明确提供例程和习题解答，另有无模块版；已读取README并取得Exercises - No Modules的34个章目录，未逐题读取、运行或取得全书。Wiley销售页本轮返回403。"
+      "acquisition_state": "provided_local",
+      "notes": "官方例程与练习解答仍作配套；本机采用版本与格式ISBN由原件版权页核实。公开仓库仅登记元数据，本地manifest保存摘要与实际材料。",
+      "local_material_key": "professional-cpp",
+      "provided_edition": {
+        "edition": 6,
+        "copyright_year": 2024,
+        "physical_pdf_pages": 1379,
+        "isbn": {
+          "paperback": "9781394193172",
+          "epdf": "9781394193196",
+          "epub": "9781394193189"
+        },
+        "chapters": 34,
+        "bookmark_sections": 1426,
+        "exercise_sections": 34
+      },
+      "quality_summary": "两份均为第6版；采用1379页原版式PDF，1970页重排本不重复采用。全页文字、34章、1426书签和34章后练习入口已建索引，保留物理/印刷页映射、原始plain/layout及视觉主件。PDFium有假字符、layout有假空格，默认plain；31无文字页已查明为封面/空白。未声称逐页语义精读或全代码编译。"
     },
     {
       "id": "modern-cpp-challenge",
@@ -196,7 +211,7 @@
       ],
       "language": "en",
       "publisher": "Packt",
-      "edition_note": "2018；1st edition；C++17；ISBN9781788993869",
+      "edition_note": "1st edition，May2018；C++17；纸书ISBN9781788993869，EPUB ISBN9781788994026",
       "priority": "core",
       "domains": [
         "cpp-language"
@@ -210,8 +225,22 @@
         "https://www.packtpub.com/en-us/product/the-modern-c-challenge-9781788993869",
         "https://subscription.packtpub.com/book/programming/9781788993869/pref/preflvl1sec01/preface"
       ],
-      "acquisition_state": "not_provided",
-      "notes": "100题由官方前言检索文本核实；作者配套Git树有101个problem目录（客户端/服务端拆分等，不能当题数）。读取README、勘误、IPv4题预览；不同读取路径中出版社页部分可读、部分403，未下载全书。"
+      "acquisition_state": "provided_local",
+      "notes": "题数已由原件和结构核实；同一题的client/server源码目录不重复计题。原书勘误与第三方库依赖在内容采用时继续核验。",
+      "local_material_key": "modern-cpp-challenge",
+      "provided_edition": {
+        "edition": 1,
+        "publication_year": 2018,
+        "print_isbn": "9781788993869",
+        "epub_isbn": "9781788994026",
+        "physical_pdf_pages": 321,
+        "chapters": 12,
+        "problems": 100,
+        "solution_sections": 100,
+        "epub_spine_items": 264,
+        "preformatted_blocks": 316
+      },
+      "quality_summary": "采用完整EPUB为语义主件，321页PDF为视觉与页码伴随；另一EPUB的第79–100题解截断，已排除。100题/100解答、12章、原spine与316个PRE、图资源及PDF书签页定位可读取。独立复核316个PRE的实体/换行/缩进转换均对应原件；未将代码块计为算法数，未批量编译。"
     },
     {
       "id": "discovering-modern-cpp-2",
@@ -235,8 +264,27 @@
         "https://github.com/petergottschling/dmc3",
         "https://www.informit.com/content/images/9780136677642/samplepages/9780136677642_Sample.pdf"
       ],
-      "acquisition_state": "not_provided",
-      "notes": "已读出版社目录、样章目录及官方例程入口；移动赋值、资源、泛型栈、迭代器等练习可明确定位。未确认公开全习题解答，未取得商业原件。"
+      "acquisition_state": "provided_local",
+      "notes": "作者官方例程仍可补证；原件内代码图像的失效临时URI不执行或直接复活，改用有证据的本地PDF页关联。",
+      "local_material_key": "discovering-modern-cpp",
+      "provided_edition": {
+        "edition": 2,
+        "copyright_year": 2022,
+        "isbn": "9780136677642",
+        "physical_pdf_pages": 1898,
+        "body_and_index_physical_range": [
+          1,
+          816
+        ],
+        "code_image_appendix_physical_range": [
+          817,
+          1898
+        ],
+        "chapters": 7,
+        "bookmark_sections": 102,
+        "mapped_code_image_pages": 1081
+      },
+      "quality_summary": "采用电子书重排PDF，1898为文件物理页而非576页纸书分页。正文/索引1–816，之后为代码图像备份；1081图像页已按原PDF反向链接关联正文，不能计作新增题目或正文学习量。原始/读取文字、7章/102书签、原页与代码图像定位已建立，无需OCR。plain默认，layout仅旁证；未声称全书精读或代码编译。"
     },
     {
       "id": "modern-cpp-cookbook-3",
@@ -259,7 +307,7 @@
         "https://github.com/PacktPublishing/Modern-Cpp-Programming-Cookbook-Third-Edition"
       ],
       "acquisition_state": "not_provided",
-      "notes": "官方源码README与章节说明核实140+recipes；它们是配方而非140+道独立待解题，尚未逐个研究或编译代码。"
+      "notes": "第三版仍未取得，不作为当前工作的阻塞条件；本机已采用2020第二版，另以modern-cpp-cookbook-2记录。第三版官方源码及新增C++23内容按需补证，配方不是待解题。"
     },
     {
       "id": "cpp-concurrency-in-action-2",
@@ -357,6 +405,40 @@
       ],
       "acquisition_state": "not_provided",
       "notes": "出版社说明、目录与样章入口核查；谓词、容器、模板、异常与类机制题有价值；包含auto_ptr等旧标准内容，不列为首批主书，未取得全书。"
+    },
+    {
+      "id": "modern-cpp-cookbook-2",
+      "title": "Modern C++ Programming Cookbook, 2nd Edition",
+      "authors": [
+        "Marius Bancila"
+      ],
+      "language": "en",
+      "publisher": "Packt",
+      "edition_note": "Second Edition，September2020；C++20相关内容；ISBN9781800208988",
+      "priority": "extension",
+      "domains": [
+        "cpp-language"
+      ],
+      "roles": [
+        "reference-implementations",
+        "idiom-variants"
+      ],
+      "official_urls": [
+        "https://github.com/PacktPublishing/Modern-CPP-Programming-Cookbook-Second-Edition"
+      ],
+      "acquisition_state": "provided_local",
+      "local_material_key": "modern-cpp-cookbook",
+      "provided_edition": {
+        "edition": 2,
+        "publication_year": 2020,
+        "isbn": "9781800208988",
+        "physical_pdf_pages": 751,
+        "chapters": 12,
+        "bookmark_sections": 712,
+        "recipe_entries": 132
+      },
+      "quality_summary": "原生排版PDF，751物理页、12章/712书签/132食谱级条目；全页原始与读取文字可定位。重复页脚只从读取层按精确前缀清除，原PDF/raw不变。plain默认，layout保旁证；未将配方计为未解题或已掌握模式。",
+      "notes": "可直接采用第二版，无需等待第三版；部分C++20相关示例依赖range-v3/cppcoro，必须按代码核查标准与依赖，不冒称第三版C++23内容已经取得。"
     }
   ]
 }
