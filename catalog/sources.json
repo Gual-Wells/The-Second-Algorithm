@@ -1421,7 +1421,9 @@
       "homepage": "https://eel.is/c++draft/",
       "priority": "extension",
       "roles": [
-        "language_reference"
+        "language_reference",
+        "library_reference",
+        "versioned_semantics"
       ],
       "languages": [
         "en"
@@ -1435,19 +1437,22 @@
       },
       "admission": {
         "state": "adopted",
-        "reason": "本轮二分研究实际使用的原始任务或方法材料。"
+        "reason": "算法库前提与C++机制的规则核验；对应版本及条款独立判断。"
       },
       "verification": {
         "checked_at": "2026-10-26",
         "method": "direct original pages; actual per-page reads recorded in binary research",
-        "read_scope": "二分操作整节，用于标准库分区前提及比较/迭代器复杂度；不作为C++17新增特性的许可。",
+        "read_scope": "二分操作整节，用于标准库分区前提及比较/迭代器复杂度；不作为C++17新增特性的许可。 本轮另读草案目录、滚动版本声明及WG21 2026文档索引。",
         "catalogue_state": "manual-topic-read",
         "statement_scope": "only individually listed tasks",
         "limitations": [
-          "没有声称枚举或读完全站。"
+          "没有声称枚举或读完全站。",
+          "滚动草案不是C++17规则全集；WG21提案不等于已经采纳的标准。"
         ],
         "evidence_urls": [
-          "https://eel.is/c++draft/alg.binary.search"
+          "https://eel.is/c++draft/alg.binary.search",
+          "https://eel.is/c++draft/",
+          "https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2026/"
         ]
       },
       "entries": [
@@ -1459,6 +1464,874 @@
             "adapter": "manual",
             "state": "manual",
             "details": "按实际读件登记；未声称有全站自动适配器。"
+          }
+        },
+        {
+          "id": "current-draft",
+          "url": "https://eel.is/c++draft/",
+          "kind": "mechanism_index",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "按目标标准版本选择对应条款；当前滚动版本不混用。"
+          }
+        },
+        {
+          "id": "wg21-2026",
+          "url": "https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2026/",
+          "kind": "proposal_index",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "仅为设计与修订线索；须核查提案是否采纳及所在标准版本。"
+          }
+        }
+      ],
+      "domains": [
+        "algorithm-implementation",
+        "cpp-language"
+      ]
+    },
+    {
+      "id": "cppreference",
+      "name": "cppreference",
+      "homepage": "https://cppreference.com/",
+      "priority": "core",
+      "roles": [
+        "language_reference",
+        "library_reference",
+        "mechanism_index"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "cppreference"
+      ],
+      "domains": [
+        "cpp-language"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "2026-10-26 C++实战来源研究；具体角色与边界见本条读取范围。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "原作者／项目／大学／机构公开页面实际读取；本轮分工研究与主Agent复核",
+        "read_scope": "语言与标准库总目录、标准版本入口，以及vector迭代器失效表；不是全站全文。",
+        "catalogue_state": "selected_entries_read",
+        "statement_scope": "selected_only",
+        "limitations": [
+          "社区参考资料，不是ISO官方标准；新版、缺陷报告与版本差异需逐项核对。"
+        ],
+        "evidence_urls": [
+          "https://www.cppreference.com/",
+          "https://en.cppreference.com/cpp/container/vector"
+        ]
+      },
+      "entries": [
+        {
+          "id": "reference",
+          "url": "https://www.cppreference.com/",
+          "kind": "mechanism_index",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+          }
+        },
+        {
+          "id": "vector",
+          "url": "https://en.cppreference.com/cpp/container/vector",
+          "kind": "library_reference",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cpp-core-guidelines",
+      "name": "C++ Core Guidelines",
+      "homepage": "https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines",
+      "priority": "core",
+      "roles": [
+        "design_reference",
+        "code_examples"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "C++ Core Guidelines"
+      ],
+      "domains": [
+        "cpp-language"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "2026-10-26 C++实战来源研究；具体角色与边界见本条读取范围。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "原作者／项目／大学／机构公开页面实际读取；本轮分工研究与主Agent复核",
+        "read_scope": "介绍、领域与机制索引；页面标注2026-06-14。",
+        "catalogue_state": "selected_entries_read",
+        "statement_scope": "selected_only",
+        "limitations": [
+          "建议与惯用法不是ISO语义标准；尚未逐条读取全部规则。"
+        ],
+        "evidence_urls": [
+          "https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines"
+        ]
+      },
+      "entries": [
+        {
+          "id": "guidelines",
+          "url": "https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines",
+          "kind": "guideline_index",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "sutter-gotw",
+      "name": "Herb Sutter GotW",
+      "homepage": "https://herbsutter.com/gotw/",
+      "priority": "core",
+      "roles": [
+        "language_problem_collection",
+        "code_diagnosis",
+        "design_reference"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "Herb Sutter GotW"
+      ],
+      "domains": [
+        "cpp-language"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "2026-10-26 C++实战来源研究；具体角色与边界见本条读取范围。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "原作者／项目／大学／机构公开页面实际读取；本轮分工研究与主Agent复核",
+        "read_scope": "修订版目录与#91 Smart Pointer Parameters完整问题、六种签名及解答。",
+        "catalogue_state": "selected_entries_read",
+        "statement_scope": "selected_only",
+        "limitations": [
+          "官方只说明部分更新至C++14，不是全库现代化；作者建议、性能推理与标准保证分开。",
+          "旧gotw.ca入口本轮超时，不以其未读内容充当已读。"
+        ],
+        "evidence_urls": [
+          "https://herbsutter.com/gotw/",
+          "https://herbsutter.com/2013/06/05/gotw-91-solution-smart-pointer-parameters/"
+        ]
+      },
+      "entries": [
+        {
+          "id": "revised-index",
+          "url": "https://herbsutter.com/gotw/",
+          "kind": "problem_catalogue",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+          }
+        },
+        {
+          "id": "smart-pointer-parameters",
+          "url": "https://herbsutter.com/2013/06/05/gotw-91-solution-smart-pointer-parameters/",
+          "kind": "problem_and_solution",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "sei-cert-cpp",
+      "name": "CMU SEI CERT C++",
+      "homepage": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/",
+      "priority": "core",
+      "roles": [
+        "code_diagnosis",
+        "repair_examples",
+        "rule_index"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "CMU SEI CERT C++"
+      ],
+      "domains": [
+        "cpp-language"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "2026-10-26 C++实战来源研究；具体角色与边界见本条读取范围。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "原作者／项目／大学／机构公开页面实际读取；本轮分工研究与主Agent复核",
+        "read_scope": "规则分类、MEM50释放后访问与CTR57比较谓词的错误／修复代码。",
+        "catalogue_state": "selected_entries_read",
+        "statement_scope": "selected_only",
+        "limitations": [
+          "旧Confluence入口502；使用机构官方GitHub Pages入口。",
+          "CTR57第二例的asymmetry归因不准确，须用严格弱序及独立反例纠正；官方身份不是自动正确性认证。"
+        ],
+        "evidence_urls": [
+          "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/",
+          "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/memory-management-mem/mem50-cpp/",
+          "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/containers-ctr/ctr57-cpp/"
+        ]
+      },
+      "entries": [
+        {
+          "id": "rules",
+          "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/",
+          "kind": "rule_index",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+          }
+        },
+        {
+          "id": "mem50",
+          "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/memory-management-mem/mem50-cpp/",
+          "kind": "code_diagnosis",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+          }
+        },
+        {
+          "id": "ctr57",
+          "url": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/containers-ctr/ctr57-cpp/",
+          "kind": "code_diagnosis",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cppquiz",
+      "name": "CppQuiz",
+      "homepage": "https://cppquiz.org/",
+      "priority": "extension",
+      "roles": [
+        "language_puzzles",
+        "semantic_counterexamples"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "CppQuiz"
+      ],
+      "domains": [
+        "cpp-language"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "2026-10-26 C++实战来源研究；具体角色与边界见本条读取范围。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "原作者／项目／大学／机构公开页面实际读取；本轮分工研究与主Agent复核",
+        "read_scope": "说明页、当前C++23规则和#179修改真正const对象的题目。",
+        "catalogue_state": "selected_entries_read",
+        "statement_scope": "selected_only",
+        "limitations": [
+          "不是实现题主干；UB、未指定、实现定义与编译错误分开。",
+          "knatten/cppquiz仓库是网站代码，不包含题目数据；首页题数不是已枚举或已读题数。"
+        ],
+        "evidence_urls": [
+          "https://cppquiz.org/quiz/about/",
+          "https://cppquiz.org/quiz/question/179"
+        ]
+      },
+      "entries": [
+        {
+          "id": "about",
+          "url": "https://cppquiz.org/quiz/about/",
+          "kind": "scope_rules",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+          }
+        },
+        {
+          "id": "question-179",
+          "url": "https://cppquiz.org/quiz/question/179",
+          "kind": "language_puzzle",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "exercism-cpp",
+      "name": "Exercism C++",
+      "homepage": "https://github.com/exercism/cpp",
+      "priority": "core",
+      "roles": [
+        "implementation_exercises",
+        "concept_index",
+        "exercise_tests"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "Exercism C++"
+      ],
+      "domains": [
+        "cpp-language"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "2026-10-26 C++实战来源研究；具体角色与边界见本条读取范围。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "原作者／项目／大学／机构公开页面实际读取；本轮分工研究与主Agent复核",
+        "read_scope": "README、config.json结构及部分条目，Power of Troy题干，Circular Buffer题干和测试；未统计全量题数。",
+        "catalogue_state": "selected_entries_read",
+        "statement_scope": "selected_only",
+        "limitations": [
+          "大量内容偏基础，按C++机制增量取用，不继承学习顺序。",
+          "本轮配置analyzer:false，不宣称已有自动静态分析；未运行习题测试。"
+        ],
+        "evidence_urls": [
+          "https://raw.githubusercontent.com/exercism/cpp/main/config.json",
+          "https://raw.githubusercontent.com/exercism/cpp/main/exercises/concept/power-of-troy/.docs/instructions.md",
+          "https://raw.githubusercontent.com/exercism/cpp/main/exercises/practice/circular-buffer/.docs/instructions.md",
+          "https://raw.githubusercontent.com/exercism/cpp/main/exercises/practice/circular-buffer/circular_buffer_test.cpp"
+        ]
+      },
+      "entries": [
+        {
+          "id": "configuration",
+          "url": "https://raw.githubusercontent.com/exercism/cpp/main/config.json",
+          "kind": "exercise_catalogue",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+          }
+        },
+        {
+          "id": "power-of-troy",
+          "url": "https://raw.githubusercontent.com/exercism/cpp/main/exercises/concept/power-of-troy/.docs/instructions.md",
+          "kind": "implementation_exercise",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+          }
+        },
+        {
+          "id": "circular-buffer",
+          "url": "https://raw.githubusercontent.com/exercism/cpp/main/exercises/practice/circular-buffer/.docs/instructions.md",
+          "kind": "implementation_exercise",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+          }
+        },
+        {
+          "id": "circular-buffer-tests",
+          "url": "https://raw.githubusercontent.com/exercism/cpp/main/exercises/practice/circular-buffer/circular_buffer_test.cpp",
+          "kind": "exercise_tests",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "liu-tddd38",
+      "name": "Linkoping TDDD38 Advanced C++ exercises",
+      "homepage": "https://www.ida.liu.se/~TDDD38/",
+      "priority": "core",
+      "roles": [
+        "implementation_exercises",
+        "language_problem_collection"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "Linkoping TDDD38 Advanced C++ exercises"
+      ],
+      "domains": [
+        "cpp-language"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "2026-10-26 C++实战来源研究；具体角色与边界见本条读取范围。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "原作者／项目／大学／机构公开页面实际读取；本轮分工研究与主Agent复核",
+        "read_scope": "当前练习导航；Static Queue四页、Specialization & Type Traits三页、Allocation Tracker一页题面；Custom Deque任务入口；另读旧Mixed Exercises六页。",
+        "catalogue_state": "selected_entries_read",
+        "statement_scope": "selected_only",
+        "limitations": [
+          "取练习而不是要求上课；未运行骨架或解答。",
+          "Allocation Tracker峰值计数提示疑似笔误，分配失败语义提示不完整；需独立核验。",
+          "Variant只在目录发现，进入正文编码失败；旧Mixed材料不作现代主干。"
+        ],
+        "evidence_urls": [
+          "https://www.ida.liu.se/~TDDD38/lecture/index.en.shtml",
+          "https://www.ida.liu.se/~TDDD38/exercises/Static_Queue/exercise.pdf",
+          "https://www.ida.liu.se/~TDDD38/exercises/Specialization/exercise.pdf",
+          "https://www.ida.liu.se/~TDDD38/exercises/Allocation_Tracker/exercise.pdf",
+          "https://www.ida.liu.se/~TDDD38/exercises/Custom_Deque/"
+        ]
+      },
+      "entries": [
+        {
+          "id": "exercise-index",
+          "url": "https://www.ida.liu.se/~TDDD38/lecture/index.en.shtml",
+          "kind": "exercise_catalogue",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+          }
+        },
+        {
+          "id": "static-queue",
+          "url": "https://www.ida.liu.se/~TDDD38/exercises/Static_Queue/exercise.pdf",
+          "kind": "implementation_exercise",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+          }
+        },
+        {
+          "id": "type-traits",
+          "url": "https://www.ida.liu.se/~TDDD38/exercises/Specialization/exercise.pdf",
+          "kind": "implementation_exercise",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+          }
+        },
+        {
+          "id": "allocation-tracker",
+          "url": "https://www.ida.liu.se/~TDDD38/exercises/Allocation_Tracker/exercise.pdf",
+          "kind": "implementation_exercise",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+          }
+        },
+        {
+          "id": "custom-deque",
+          "url": "https://www.ida.liu.se/~TDDD38/exercises/Custom_Deque/",
+          "kind": "exercise_entry",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "stanford-cs106l",
+      "name": "Stanford CS106L assignments",
+      "homepage": "https://web.stanford.edu/class/cs106l/",
+      "priority": "core",
+      "roles": [
+        "implementation_exercises",
+        "code_reading"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "Stanford CS106L assignments"
+      ],
+      "domains": [
+        "cpp-language"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "2026-10-26 C++实战来源研究；具体角色与边界见本条读取范围。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "原作者／项目／大学／机构公开页面实际读取；本轮分工研究与主Agent复核",
+        "read_scope": "archive cs106l.1212 HashMap任务正文：模板、const、迭代器、RAII、流操作、特殊成员、自赋值与任务测试说明。",
+        "catalogue_state": "selected_entries_read",
+        "statement_scope": "selected_only",
+        "limitations": [
+          "只核查指定历史版本；未读取全部学期或运行源码。",
+          "课程宣传的industrial strength不作工程质量认证；不以整项作业为必须完成的学习单位。"
+        ],
+        "evidence_urls": [
+          "https://web.stanford.edu/class/archive/cs/cs106l/cs106l.1212/hashmap2.html"
+        ]
+      },
+      "entries": [
+        {
+          "id": "hashmap-1212",
+          "url": "https://web.stanford.edu/class/archive/cs/cs106l/cs106l.1212/hashmap2.html",
+          "kind": "implementation_exercise",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "learncpp",
+      "name": "LearnCpp",
+      "homepage": "https://www.learncpp.com/",
+      "priority": "extension",
+      "roles": [
+        "mechanism_index",
+        "selective_exercises"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "LearnCpp"
+      ],
+      "domains": [
+        "cpp-language"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "2026-10-26 C++实战来源研究；具体角色与边界见本条读取范围。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "原作者／项目／大学／机构公开页面实际读取；本轮分工研究与主Agent复核",
+        "read_scope": "全站目录及14.x类章节总结练习中的Point2d实现与解答。",
+        "catalogue_state": "selected_entries_read",
+        "statement_scope": "selected_only",
+        "limitations": [
+          "大量正文面向初学者，仅按机制缺口筛选题目，不按网站课程序列教学。"
+        ],
+        "evidence_urls": [
+          "https://www.learncpp.com/",
+          "https://www.learncpp.com/cpp-tutorial/chapter-14-summary-and-quiz/"
+        ]
+      },
+      "entries": [
+        {
+          "id": "index",
+          "url": "https://www.learncpp.com/",
+          "kind": "mechanism_index",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+          }
+        },
+        {
+          "id": "class-quiz",
+          "url": "https://www.learncpp.com/cpp-tutorial/chapter-14-summary-and-quiz/",
+          "kind": "exercise_and_solution",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cpp-insights",
+      "name": "C++ Insights",
+      "homepage": "https://cppinsights.io/",
+      "priority": "extension",
+      "roles": [
+        "diagnostic_tool",
+        "explanatory_transformation"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "C++ Insights"
+      ],
+      "domains": [
+        "cpp-language"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "2026-10-26 C++实战来源研究；具体角色与边界见本条读取范围。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "原作者／项目／大学／机构公开页面实际读取；本轮分工研究与主Agent复核",
+        "read_scope": "项目说明及特殊成员、复制调用、基类转换的展开示例。",
+        "catalogue_state": "selected_entries_read",
+        "statement_scope": "selected_only",
+        "limitations": [
+          "Clang源码到源码解释，不是编译器必须生成的C++形式；不保证所有输出都正确或可编译。",
+          "本轮未提交新实验，不作为题库或标准证明。"
+        ],
+        "evidence_urls": [
+          "https://cppinsights.io/",
+          "https://github.com/andreasfertig/cppinsights"
+        ]
+      },
+      "entries": [
+        {
+          "id": "tool",
+          "url": "https://cppinsights.io/",
+          "kind": "diagnostic_tool",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+          }
+        },
+        {
+          "id": "project",
+          "url": "https://github.com/andreasfertig/cppinsights",
+          "kind": "tool_documentation",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "compiler-explorer",
+      "name": "Compiler Explorer",
+      "homepage": "https://godbolt.org/",
+      "priority": "extension",
+      "roles": [
+        "diagnostic_tool",
+        "cross_compiler_experiment"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "Compiler Explorer"
+      ],
+      "domains": [
+        "cpp-language"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "2026-10-26 C++实战来源研究；具体角色与边界见本条读取范围。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "原作者／项目／大学／机构公开页面实际读取；本轮分工研究与主Agent复核",
+        "read_scope": "工具页面与编译器、运行、汇编、AST/IR及优化备注入口。",
+        "catalogue_state": "selected_entries_read",
+        "statement_scope": "selected_only",
+        "limitations": [
+          "本轮未执行编译实验；工具不是题库。",
+          "后续实验记录编译器、库、标准与选项；单次输出不证明无UB或可移植性。"
+        ],
+        "evidence_urls": [
+          "https://godbolt.org/"
+        ]
+      },
+      "entries": [
+        {
+          "id": "tool",
+          "url": "https://godbolt.org/",
+          "kind": "diagnostic_tool",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "modernescpp",
+      "name": "Modernes C++",
+      "homepage": "https://www.modernescpp.com/",
+      "priority": "extension",
+      "roles": [
+        "method_index",
+        "implementation_examples"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "Modernes C++"
+      ],
+      "domains": [
+        "cpp-language"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "2026-10-26 C++实战来源研究；具体角色与边界见本条读取范围。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "原作者／项目／大学／机构公开页面实际读取；本轮分工研究与主Agent复核",
+        "read_scope": "分类目录中的模板、并发与lock-free stack等入口。",
+        "catalogue_state": "selected_entries_read",
+        "statement_scope": "selected_only",
+        "limitations": [
+          "本轮只读目录，具体文章的方法与实现尚未实际研究；按发布日期和C++版本取用。"
+        ],
+        "evidence_urls": [
+          "https://www.modernescpp.com/index.php/table-of-content/"
+        ]
+      },
+      "entries": [
+        {
+          "id": "contents",
+          "url": "https://www.modernescpp.com/index.php/table-of-content/",
+          "kind": "method_index",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "msvc-stl",
+      "name": "Microsoft STL implementation",
+      "homepage": "https://github.com/microsoft/STL",
+      "priority": "extension",
+      "roles": [
+        "library_implementation",
+        "implementation_tests"
+      ],
+      "languages": [
+        "en"
+      ],
+      "aliases": [
+        "Microsoft STL implementation"
+      ],
+      "domains": [
+        "cpp-language"
+      ],
+      "lineage": {
+        "kind": "original",
+        "upstream": []
+      },
+      "admission": {
+        "state": "adopted",
+        "reason": "2026-10-26 C++实战来源研究；具体角色与边界见本条读取范围。"
+      },
+      "verification": {
+        "checked_at": "2026-10-26",
+        "method": "原作者／项目／大学／机构公开页面实际读取；本轮分工研究与主Agent复核",
+        "read_scope": "README中库实现、测试与跨实现比较说明。",
+        "catalogue_state": "selected_entries_read",
+        "statement_scope": "selected_only",
+        "limitations": [
+          "未逐个研究实现文件与测试；后续具体材料需固定release或commit。",
+          "MSVC实现与ABI不是C++通用保证；libc++和libstdc++暂列研究扩张方向，未注册为已取得实现案例。"
+        ],
+        "evidence_urls": [
+          "https://github.com/microsoft/STL"
+        ]
+      },
+      "entries": [
+        {
+          "id": "repository",
+          "url": "https://github.com/microsoft/STL",
+          "kind": "implementation_index",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
           }
         }
       ]

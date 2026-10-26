@@ -1,6 +1,6 @@
 # 第二算法实战书单
 
-优先寻找 **EPI 的 C++ 版和 CP4 两卷**。它们分别提供求职算法题的近距离样本与更广的实战分类；中文进阶资料按需要补充。书是总册的材料来源，用户无需按书从头上课或全部刷完。
+算法方面优先寻找 **EPI 的 C++ 版和 CP4 两卷**。C++ 本身的实战资料另见下节，首批优先 **Professional C++ 第6版＋The Modern C++ Challenge**。书是总册的研究材料，用户无需按书从头上课或全部刷完。
 
 以下推荐以 2026-10-26 实际核查的作者／出版社资料为准。`core` 表示优先收集，不表示必须购买。本轮已接收用户提供的 CP4 与 EPI 文件，原件仅在本地鉴别与预处理；取得状态与采用版本见书目登记和[本地教材约定](LOCAL_MATERIALS.md)。
 
@@ -41,6 +41,27 @@
 ## 免费补充
 
 [CSES 作者书目](https://cses.fi/book/index.php)提供 *Competitive Programmer’s Handbook* 的官方免费 PDF 和项目入口。可直接作为后续收集对象，但本项目尚未导入原件；公开可下载与实际已取得是两个状态。它更适合作为结构参考，不替代前几本的详细题目分析。
+
+## C++ 本身：实战书来源
+
+这一组与算法教材互补，服务于具体代码问题、语言／库机制、关键差异和参考实现的系统整理。它不是从零学习顺序。2026-10-26 核查了官方书目、目录／样章入口与配套仓库；尚未取得这些商业原件，也没有声称逐页读完全书。
+
+| 取得优先级 | 准确书名与版本 | 真实材料形态及采用理由 |
+|---|---|---|
+| 首批主干 | **Professional C++, 6th Edition**，Marc Gregoire，Wiley，2024，ISBN **9781394193189** | 广覆盖的语言／库与工程案例，有章后练习及作者官方解答源码；对象、内存、模板、容器、迭代器、并发等可作为机制和实现任务母本。涉及 C++23；按题标版本、选择相关章节 |
+| 首批题源 | **The Modern C++ Challenge**，Marius Bancila，Packt，2018，ISBN **9781788993869** | 100 个问题与解答，面向 C++17；除数学算法，还包括语言特性、字符串、容器、文件、并发等具体实现任务。作者明确不逐项教授解法所用语言特性，须与机制资料配合 |
+| 第二批，机制练习 | **Discovering Modern C++, 2nd Edition**，Peter Gottschling，2021出版／版权2022，Addison-Wesley Professional，ISBN **9780136677642** | 目录含移动赋值、资源救援、泛型栈、自定义迭代器、`make_unique` 等实现练习；C++17／20，部分科学计算题按价值取用。官方代码仓库已确认是例程，未确认包含所有练习的答案 |
+| 第二批，参考解法 | **Modern C++ Programming Cookbook, 3rd Edition**，Marius Bancila，Packt，2024 | 140＋实用配方，覆盖现代语言、库、惯用法和并发，配套源码公开。用于实现和变种对照；配方不是140＋道待解训练题 |
+| 专题补充 | **C++ Concurrency in Action, 2nd Edition**，Anthony Williams，Manning，2019，ISBN **9781617294693** | 线程安全结构、并行算法、线程管理等案例与实作，覆盖至 C++17；并发章需要时再取，不代替通用 C++ 题目基座 |
+| 语义短题补充 | **C++ Brain Teasers: Exercise Your Mind**，Anders Schau Knatten，PragProg，2024，ISBN **9798888650516** | 25 个短程序及行为解析，补初始化、转换、重载与生命周期的边界；含刻意古怪的问题，不能主导求职实战范围 |
+
+推荐依据：Professional C++ 的[官方例程与习题解答](https://github.com/Professional-CPP/edition-6)；Modern C++ Challenge 的[官方配套仓库](https://github.com/PacktPublishing/The-Modern-Cpp-Challenge)；Discovering Modern C++ 的[出版社目录](https://www.informit.com/store/discovering-modern-c-plus-plus-9780136677642)与[作者例程](https://github.com/petergottschling/dmc3)；Cookbook 的[官方源码和章节说明](https://github.com/PacktPublishing/Modern-Cpp-Programming-Cookbook-Third-Edition)；并发书的[出版社页](https://www.manning.com/books/c-plus-plus-concurrency-in-action-second-edition)；Brain Teasers 的[出版社页](https://pragprog.com/titles/akbrain/c-brain-teasers/)。部分出版社页本轮返回403，能读到的作者／官方源码与打不开的销售页分别登记。
+
+Modern C++ Challenge 的100题由[官方前言](https://subscription.packtpub.com/book/programming/9781788993869/pref/preflvl1sec01/preface)核实；源码中同一题的客户端／服务端可以有两个目录，不能以目录数替代题数。
+
+**先取得前两本即可开始建立基座；第三本补充语言机制的实现练习。** 这不是让用户重新上三门课，也不要求全部书籍齐备才能研究。书中现成分类用于交叉核对，最终章节仍按问题和机制重新组织。
+
+Herb Sutter 的 *Exceptional C++*（47题，1999出版／版权2000，ISBN9780201615623）和 *More Exceptional C++*（40题，2001出版／版权2002，ISBN9780201704341）是很好的“给代码→辨析问题→改进”补充，见[前册](https://www.informit.com/store/exceptional-c-plus-plus-47-engineering-puzzles-programming-9780201615623)与[后册](https://www.informit.com/store/more-exceptional-c-plus-plus-40-new-engineering-puzzles-9780201704341)官方目录。但包含旧标准内容，答案需按目标版本复核。[GotW 更新索引](https://herbsutter.com/gotw/)只说明部分条目更新到 C++14，不等于全库已经现代化；暂不列为必须寻找的首批原件。
 
 ## 导入与使用
 

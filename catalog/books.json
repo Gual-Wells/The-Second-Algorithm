@@ -5,12 +5,20 @@
     {
       "id": "epi-cpp",
       "title": "Elements of Programming Interviews in C++: The Insiders’ Guide",
-      "authors": ["Adnan Aziz", "Tsung-Hsien Lee", "Amit Prakash"],
+      "authors": [
+        "Adnan Aziz",
+        "Tsung-Hsien Lee",
+        "Amit Prakash"
+      ],
       "language": "en",
       "edition_note": "已核实本地采用的是2015、Version 2.0.0的C++／C++11版；不将旧版权页、沿用的2012致谢或作者站旧年份混同为其他版次。",
       "publisher": null,
       "priority": "core",
-      "roles": ["interview-problem-reference", "cpp-implementation", "variant-analysis"],
+      "roles": [
+        "interview-problem-reference",
+        "cpp-implementation",
+        "variant-analysis"
+      ],
       "official_urls": [
         "https://elementsofprogramminginterviews.com/",
         "https://elementsofprogramminginterviews.com/sample/"
@@ -24,7 +32,10 @@
         "language": "en",
         "programming_language": "C++ / C++11",
         "physical_pdf_pages": 530,
-        "material_roles": ["visual-master", "ocr-search-companion"]
+        "material_roles": [
+          "visual-master",
+          "ocr-search-companion"
+        ]
       },
       "quality_summary": "采用同版530页图像主件与OCR搜索伴随件，已建立页级定位及25章目录索引；图像原页为权威，OCR仅供检索，代码、公式及表格需回原页核对。两份误标C++的EPUB实际为Python样章，已排除。未声称全书语义精读或代码校正完成。",
       "notes": "官方样章及EPI Judge继续作为配套线索；非算法面试章节不自动纳入本册。出版社与ISBN未由所采用原件可靠核实。"
@@ -32,12 +43,21 @@
     {
       "id": "competitive-programming-4",
       "title": "Competitive Programming 4: The Lower Bound of Programming Contests in the 2020s",
-      "authors": ["Steven Halim", "Felix Halim", "Suhendry Effendy"],
+      "authors": [
+        "Steven Halim",
+        "Felix Halim",
+        "Suhendry Effendy"
+      ],
       "language": "en",
       "edition_note": "采用Book 1与Book 2独立数字卷；内页明确为2020年7月19日CP4原内容，2022年PDF创建日期不代表改写版。当前Methods to Solve属于CP5草稿动态分类，须与CP4书本分开登记。",
       "publisher": null,
       "priority": "core",
-      "roles": ["algorithm-taxonomy", "contest-problem-reference", "cpp-implementation", "coverage-crosscheck"],
+      "roles": [
+        "algorithm-taxonomy",
+        "contest-problem-reference",
+        "cpp-implementation",
+        "coverage-crosscheck"
+      ],
       "official_urls": [
         "https://cpbook.net/",
         "https://cpbook.net/details",
@@ -50,8 +70,27 @@
         "content_release": "2020-07-19",
         "language": "en",
         "volumes": [
-          {"volume": 1, "chapters": [1, 2, 3, 4], "physical_pdf_pages": 329},
-          {"volume": 2, "chapters": [5, 6, 7, 8, 9], "physical_pdf_pages": 352}
+          {
+            "volume": 1,
+            "chapters": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "physical_pdf_pages": 329
+          },
+          {
+            "volume": 2,
+            "chapters": [
+              5,
+              6,
+              7,
+              8,
+              9
+            ],
+            "physical_pdf_pages": 352
+          }
         ],
         "total_physical_pdf_pages": 681
       },
@@ -61,12 +100,18 @@
     {
       "id": "algorithm-competition-advanced-guide",
       "title": "算法竞赛进阶指南",
-      "authors": ["李煜东"],
+      "authors": [
+        "李煜东"
+      ],
       "language": "zh-CN",
       "edition_note": "优先作者配套仓库推荐的大象出版社重新排版修订本；以原件版权页确认印次，不随意称为正式第二版。",
       "publisher": "大象出版社",
       "priority": "optional",
-      "roles": ["chinese-advanced-problem-reference", "cpp-implementation", "variant-analysis"],
+      "roles": [
+        "chinese-advanced-problem-reference",
+        "cpp-implementation",
+        "variant-analysis"
+      ],
       "official_urls": [
         "https://github.com/lydrainbowcat/tedukuri"
       ],
@@ -76,12 +121,20 @@
     {
       "id": "aoapc-training-guide-2021",
       "title": "算法竞赛入门经典——训练指南（升级版）",
-      "authors": ["刘汝佳", "陈锋"],
+      "authors": [
+        "刘汝佳",
+        "陈锋"
+      ],
       "language": "zh-CN",
       "edition_note": "2021升级版，ISBN 9787302571742；不是普通入门经典第2版，也不是ISBN 9787302291077的旧训练指南。",
       "publisher": "清华大学出版社",
       "priority": "optional",
-      "roles": ["advanced-problem-modeling", "topic-deepening", "cpp-implementation", "variant-analysis"],
+      "roles": [
+        "advanced-problem-modeling",
+        "topic-deepening",
+        "cpp-implementation",
+        "variant-analysis"
+      ],
       "official_urls": [
         "https://www.tup.tsinghua.edu.cn/bookscenter/book_08256901.html",
         "https://www.tup.tsinghua.edu.cn/bookscenter/bookpreface?id=08256901"
@@ -92,17 +145,218 @@
     {
       "id": "competitive-programmers-handbook",
       "title": "Competitive Programmer’s Handbook",
-      "authors": ["Antti Laaksonen"],
+      "authors": [
+        "Antti Laaksonen"
+      ],
       "language": "en",
       "edition_note": "作者通过CSES提供的免费在线书；正式导入时记录实际文件摘要与版本，不与Springer的Guide to Competitive Programming混为同一本。",
       "publisher": null,
       "priority": "optional",
-      "roles": ["free-supplement", "algorithm-map", "cpp-reference"],
+      "roles": [
+        "free-supplement",
+        "algorithm-map",
+        "cpp-reference"
+      ],
       "official_urls": [
         "https://cses.fi/book/index.php"
       ],
       "acquisition_state": "not_provided",
       "notes": "免费结构参考，不属于高阶主书，不增加必要购买成本。官网入口已核查，完整书籍尚未导入。"
+    },
+    {
+      "id": "professional-cpp-6",
+      "title": "Professional C++, 6th Edition",
+      "authors": [
+        "Marc Gregoire"
+      ],
+      "language": "en",
+      "publisher": "Wiley",
+      "edition_note": "2024；C++23；ISBN9781394193189",
+      "priority": "core",
+      "domains": [
+        "cpp-language"
+      ],
+      "roles": [
+        "cpp-mechanism-reference",
+        "implementation-exercises",
+        "official-exercise-solutions"
+      ],
+      "official_urls": [
+        "https://github.com/Professional-CPP/edition-6",
+        "https://www.wiley.com/en-us/professional-c-6th-edition-p-9781394193189"
+      ],
+      "acquisition_state": "not_provided",
+      "notes": "官方仓库明确提供例程和习题解答，另有无模块版；已读取README并取得Exercises - No Modules的34个章目录，未逐题读取、运行或取得全书。Wiley销售页本轮返回403。"
+    },
+    {
+      "id": "modern-cpp-challenge",
+      "title": "The Modern C++ Challenge",
+      "authors": [
+        "Marius Bancila"
+      ],
+      "language": "en",
+      "publisher": "Packt",
+      "edition_note": "2018；1st edition；C++17；ISBN9781788993869",
+      "priority": "core",
+      "domains": [
+        "cpp-language"
+      ],
+      "roles": [
+        "implementation-exercises",
+        "worked-solutions"
+      ],
+      "official_urls": [
+        "https://github.com/PacktPublishing/The-Modern-Cpp-Challenge",
+        "https://www.packtpub.com/en-us/product/the-modern-c-challenge-9781788993869",
+        "https://subscription.packtpub.com/book/programming/9781788993869/pref/preflvl1sec01/preface"
+      ],
+      "acquisition_state": "not_provided",
+      "notes": "100题由官方前言检索文本核实；作者配套Git树有101个problem目录（客户端/服务端拆分等，不能当题数）。读取README、勘误、IPv4题预览；不同读取路径中出版社页部分可读、部分403，未下载全书。"
+    },
+    {
+      "id": "discovering-modern-cpp-2",
+      "title": "Discovering Modern C++, 2nd Edition",
+      "authors": [
+        "Peter Gottschling"
+      ],
+      "language": "en",
+      "publisher": "Addison-Wesley Professional",
+      "edition_note": "2021-12-17出版／版权2022；C++17/20；ISBN9780136677642",
+      "priority": "core",
+      "domains": [
+        "cpp-language"
+      ],
+      "roles": [
+        "cpp-mechanism-reference",
+        "implementation-exercises"
+      ],
+      "official_urls": [
+        "https://www.informit.com/store/discovering-modern-c-plus-plus-9780136677642",
+        "https://github.com/petergottschling/dmc3",
+        "https://www.informit.com/content/images/9780136677642/samplepages/9780136677642_Sample.pdf"
+      ],
+      "acquisition_state": "not_provided",
+      "notes": "已读出版社目录、样章目录及官方例程入口；移动赋值、资源、泛型栈、迭代器等练习可明确定位。未确认公开全习题解答，未取得商业原件。"
+    },
+    {
+      "id": "modern-cpp-cookbook-3",
+      "title": "Modern C++ Programming Cookbook, 3rd Edition",
+      "authors": [
+        "Marius Bancila"
+      ],
+      "language": "en",
+      "publisher": "Packt",
+      "edition_note": "2024；C++11/14/17/20/23",
+      "priority": "extension",
+      "domains": [
+        "cpp-language"
+      ],
+      "roles": [
+        "reference-implementations",
+        "idiom-variants"
+      ],
+      "official_urls": [
+        "https://github.com/PacktPublishing/Modern-Cpp-Programming-Cookbook-Third-Edition"
+      ],
+      "acquisition_state": "not_provided",
+      "notes": "官方源码README与章节说明核实140+recipes；它们是配方而非140+道独立待解题，尚未逐个研究或编译代码。"
+    },
+    {
+      "id": "cpp-concurrency-in-action-2",
+      "title": "C++ Concurrency in Action, 2nd Edition",
+      "authors": [
+        "Anthony Williams"
+      ],
+      "language": "en",
+      "publisher": "Manning",
+      "edition_note": "2019；覆盖至C++17；ISBN9781617294693",
+      "priority": "extension",
+      "domains": [
+        "cpp-language"
+      ],
+      "roles": [
+        "concurrency-implementations",
+        "practical-tasks"
+      ],
+      "official_urls": [
+        "https://www.manning.com/books/c-plus-plus-concurrency-in-action-second-edition",
+        "https://www.cplusplusconcurrencyinaction.com/"
+      ],
+      "acquisition_state": "not_provided",
+      "notes": "出版社介绍、目录与作者配套入口核查；并发专题按需取用，不是一般OJ题库，未取得全书。"
+    },
+    {
+      "id": "cpp-brain-teasers",
+      "title": "C++ Brain Teasers: Exercise Your Mind",
+      "authors": [
+        "Anders Schau Knatten"
+      ],
+      "language": "en",
+      "publisher": "Pragmatic Bookshelf",
+      "edition_note": "2024；ISBN9798888650516",
+      "priority": "extension",
+      "domains": [
+        "cpp-language"
+      ],
+      "roles": [
+        "semantic-short-programs",
+        "counterexamples"
+      ],
+      "official_urls": [
+        "https://pragprog.com/titles/akbrain/c-brain-teasers/"
+      ],
+      "acquisition_state": "not_provided",
+      "notes": "官方介绍核实25个短程序与解析；含刻意怪题，仅补语义边界，不担当实战主干。未取得全书。"
+    },
+    {
+      "id": "exceptional-cpp",
+      "title": "Exceptional C++: 47 Engineering Puzzles, Programming Problems, and Solutions",
+      "authors": [
+        "Herb Sutter"
+      ],
+      "language": "en",
+      "publisher": "Addison-Wesley Professional",
+      "edition_note": "1999出版／版权2000；ISBN9780201615623",
+      "priority": "extension",
+      "domains": [
+        "cpp-language"
+      ],
+      "roles": [
+        "code-diagnosis",
+        "repair-problems",
+        "historical-reference"
+      ],
+      "official_urls": [
+        "https://www.informit.com/store/exceptional-c-plus-plus-47-engineering-puzzles-programming-9780201615623",
+        "https://herbsutter.com/gotw/"
+      ],
+      "acquisition_state": "not_provided",
+      "notes": "出版社说明与目录确认问题→剖析→修复形态；含C++98旧机制，必须现代校订。GotW只部分更新至C++14，未取得全书。"
+    },
+    {
+      "id": "more-exceptional-cpp",
+      "title": "More Exceptional C++: 40 New Engineering Puzzles, Programming Problems, and Solutions",
+      "authors": [
+        "Herb Sutter"
+      ],
+      "language": "en",
+      "publisher": "Addison-Wesley Professional",
+      "edition_note": "2001出版／版权2002；ISBN9780201704341",
+      "priority": "extension",
+      "domains": [
+        "cpp-language"
+      ],
+      "roles": [
+        "code-diagnosis",
+        "repair-problems",
+        "historical-reference"
+      ],
+      "official_urls": [
+        "https://www.informit.com/store/more-exceptional-c-plus-plus-40-new-engineering-puzzles-9780201704341",
+        "https://herbsutter.com/gotw/"
+      ],
+      "acquisition_state": "not_provided",
+      "notes": "出版社说明、目录与样章入口核查；谓词、容器、模板、异常与类机制题有价值；包含auto_ptr等旧标准内容，不列为首批主书，未取得全书。"
     }
   ]
 }
