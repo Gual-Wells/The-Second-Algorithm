@@ -43,17 +43,19 @@
     <section id="libraryView" class="library-scroll" hidden>
       <div class="shelf-toolbar"><h2 id="libraryTitle">算法册</h2><span id="connectionLabel" class="muted"></span></div>
       <label class="search-field"><span class="sr-only">全册检索</span><input id="librarySearch" type="search" placeholder="查找题型、方法、代码" autocomplete="off"></label>
+      <button id="libraryResume" class="resume-row" type="button" hidden></button>
       <div id="bookList"></div>
     </section>
     <section id="readerView" class="reader-view" hidden>
-      <div class="context-bar"><span id="currentTitle"></span><span id="currentKind" class="kind-label"></span><button type="button" id="pureButton" aria-pressed="false">纯净</button></div>
-      <nav id="documentTabs" class="document-tabs" role="tablist" aria-label="本篇组成"></nav>
+      <div class="context-bar"><button id="returnButton" type="button" aria-label="返回跳转前的阅读位置" hidden>‹ 原处</button><span id="currentTitle"></span><span id="currentKind" class="kind-label"></span><button type="button" id="pureButton" aria-pressed="false">纯净</button></div>
+      <nav id="documentTabs" class="document-tabs" aria-label="篇目选择"></nav>
       <main id="readingPane" class="reader-scroll" tabindex="-1"><article id="readingArticle" class="paper"></article></main>
-      <footer class="reader-footer"><button type="button" id="tocButton">目录</button><button type="button" id="progressLabel" aria-label="阅读位置">0%</button><button type="button" id="notesButton">笔记</button></footer>
+      <div id="readingNotice" class="reading-notice" role="status" hidden></div>
+      <footer class="reader-footer"><span class="reading-progress" aria-hidden="true"></span><button type="button" id="tocButton">目录</button><span id="progressLabel" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><strong>0%</strong><span></span></span><button type="button" id="notesButton">笔记</button></footer>
     </section>
   </div>
   <dialog id="sheetDialog" class="sheet" aria-labelledby="sheetTitle">
-    <div class="sheet-header"><button type="button" id="sheetBack" hidden>返回</button><h2 id="sheetTitle"></h2><button type="button" data-sheet-close>完成</button></div>
+    <div class="sheet-header"><button type="button" id="sheetBack" hidden>返回</button><h2 id="sheetTitle" tabindex="-1"></h2><button type="button" data-sheet-close>完成</button></div>
     <div class="sheet-body" id="sheetBody"></div>
   </dialog>
   <div id="toast" class="toast" role="status" hidden></div>

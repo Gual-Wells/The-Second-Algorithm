@@ -2,14 +2,25 @@
   "name": "the-second-algorithm",
   "private": true,
   "type": "module",
-  "engines": {"node": ">=24"},
-  "dependencies": {"@simplewebauthn/server": "13.3.0"},
-  "devDependencies": {"marked": "17.0.5", "esbuild": "0.25.12", "wrangler": "4.140.0"},
+  "engines": {
+    "node": ">=24"
+  },
+  "dependencies": {
+    "@simplewebauthn/server": "13.3.0"
+  },
+  "devDependencies": {
+    "marked": "17.0.5",
+    "esbuild": "0.25.12",
+    "wrangler": "4.140.0",
+    "highlight.js": "11.11.1",
+    "playwright": "1.62.1"
+  },
   "scripts": {
     "build:binary": "node tools/build_handbook.mjs content/binary-search 二分查找 && node tools/build_handbook.mjs content/binary-search 组合判定 && node tools/build_handbook.mjs content/binary-search 进阶扩展",
     "build": "node scripts/build-carrier.mjs",
     "test:carrier": "node --test test/carrier-*.test.mjs",
     "dev": "wrangler pages dev dist --port 8796",
-    "deploy": "node scripts/deploy-carrier.mjs"
+    "deploy": "node scripts/deploy-carrier.mjs",
+    "test:browser": "node scripts/check-carrier-browser.cjs"
   }
 }

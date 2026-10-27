@@ -4,6 +4,10 @@ import { createHash, randomUUID } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import { marked } from 'marked';
+import hljs from 'highlight.js/lib/core';
+import cpp from 'highlight.js/lib/languages/cpp';
+
+hljs.registerLanguage('cpp', cpp);
 
 const REPOSITORY = 'https://github.com/Gual-Wells/The-Second-Algorithm';
 const ID = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/;
@@ -134,18 +138,6 @@ export function createLinkRewriter({ collection, document, byPath, gitRevision }
   };
 }
 
-function highlight(code) {
-  const pattern = /\/\/[^\n]*|\/\*[\s\S]*?\*\/|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\b(?:if|else|while|for|return|const|auto|using|namespace|template|class|int|long|double|bool|void|true|false|noexcept|constexpr|requires|concept|struct)\b|\b\d+(?:\.\d+)?(?:LL)?\b/g;
-  let output = '', start = 0;
-  for (const token of code.matchAll(pattern)) {
-    output += esc(code.slice(start, token.index));
-    const value = token[0], kind = value.startsWith('//') || value.startsWith('/*') ? 'comment'
-      : /^['"]/.test(value) ? 'string' : /^\d/.test(value) ? 'number' : 'keyword';
-    output += `<span class="${kind}">${esc(value)}</span>`; start = token.index + value.length;
-  }
-  return output + esc(code.slice(start));
-}
-
 export function renderAuthority(authority, rewriteLink) {
   const renderer = new marked.Renderer();
   let heading = 0, codeIndex = 0, inlineIndex = 0, firstParagraph = true, strippedH1 = false;
@@ -177,8 +169,9 @@ export function renderAuthority(authority, rewriteLink) {
       id = 'inline-example-' + (++inlineIndex) + '-' + hash(normalized).slice(0, 8);
       text = normalized;
     }
-    return `<div class="code-block" data-code-id="${esc(id)}"><button type="button" class="code-copy" data-copy-code="${esc(id)}" aria-label="复制代码">复制</button><pre><code class="language-${esc(lang || 'text')}">`
-      + (lang === 'cpp' ? highlight(text) : esc(text)) + '</code></pre></div>\n';
+    const label = lang === 'cpp' ? 'C++' : lang || '代码';
+    return `<div class="code-block" data-code-id="${esc(id)}"><div class="code-toolbar"><span>${esc(label)}</span><button type="button" class="code-copy" data-copy-code="${esc(id)}" aria-label="复制代码">复制</button></div><pre><code class="language-${esc(lang || 'text')}">`
+      + (lang === 'cpp' ? hljs.highlight(text, { language: 'cpp', ignoreIllegals: true }).value : esc(text)) + '</code></pre></div>\n';
   };
   renderer.link = function ({ href, title, tokens }) {
     const target = rewriteLink(href);
@@ -212,7 +205,7 @@ export async function buildLibrary(root, output, publications, gitRevision) {
       const prefix = `/library/${collection.id}/${descriptor.id}/${authority.revision.slice(0, 16)}`;
       const entry = { collection: collection.id, document: descriptor.id, sourceUrl: prefix + '.cpp', markdownUrl: prefix + '.md' };
       for (const extension of ['.html', '.cpp', '.md']) byPath.set(descriptor.path + extension, entry);
-      documents.push({ authority, entry, url: prefix + '.json' });
+      documents.push({ authority, entry });
     }
     rows.push({ collection, documents });
   }
@@ -222,17 +215,23 @@ export async function buildLibrary(root, output, publications, gitRevision) {
   for (const { collection, documents } of rows) {
     const item = { id: collection.id, track: collection.track, kind: collection.kind, title: collection.title, documents: [] };
     if (collection.kind === 'chapter') item.chapterNumber = collection.chapterNumber;
-    for (const { authority, entry, url } of documents) {
+    for (const { authority, entry } of documents) {
       const rendered = renderAuthority(authority, createLinkRewriter({ collection, document: authority, byPath, gitRevision }));
-      const document = { id: authority.id, title: authority.title, revision: authority.revision, html: rendered.html,
+      // A source-only revision would overwrite an immutable URL whenever the
+      // renderer/highlighter changes. Fingerprint the actual reader payload too.
+      const payload = { id: authority.id, title: authority.title, html: rendered.html,
         sourceUrl: entry.sourceUrl, headings: rendered.headings };
+      const revision = hash(JSON.stringify({ authorityRevision: authority.revision, ...payload }));
+      const url = `/library/${collection.id}/${authority.id}/${revision.slice(0, 16)}.json`;
+      const document = { id: payload.id, title: payload.title, revision, html: payload.html,
+        sourceUrl: payload.sourceUrl, headings: payload.headings };
       renderedDocuments.set(collection.id + '/' + authority.id, document);
       const filename = path.join(output, url.slice(1));
       await fs.mkdir(path.dirname(filename), { recursive: true });
       await fs.writeFile(filename, JSON.stringify(document) + '\n', 'utf8');
       await fs.writeFile(path.join(output, entry.sourceUrl.slice(1)), authority.source, 'utf8');
       await fs.writeFile(path.join(output, entry.markdownUrl.slice(1)), authority.markdownBytes);
-      item.documents.push({ id: authority.id, title: authority.title, revision: authority.revision, url,
+      item.documents.push({ id: authority.id, title: authority.title, revision, url,
         sourceUrl: entry.sourceUrl, markdownUrl: entry.markdownUrl, headings: rendered.headings });
       codeBlocks += authority.blocks.size;
     }

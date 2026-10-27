@@ -187,6 +187,7 @@ self.addEventListener('message', event => {
   if (!message || typeof message !== 'object') return;
   let result;
   if (message.type === 'OWNER') result = setOwner(message);
+  else if (message.type === 'VERSION') result = Promise.resolve({ ok: true, build: BUILD });
   else if (message.type === 'CACHE_CONTENT') result = cacheContent(message);
   else if (message.type === 'CLEAR_PRIVATE') result = clearPrivate().then(() => ({ ok: true }));
   else result = Promise.resolve({ ok: false, error: 'Unknown request' });

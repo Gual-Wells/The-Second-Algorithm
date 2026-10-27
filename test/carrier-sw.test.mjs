@@ -76,6 +76,8 @@ test('versioned public shell installs and replaces only old shell caches', async
   assert(names.includes('second-algorithm-shell-fixture-build'));
   assert(!names.includes('second-algorithm-shell-previous'));
   assert(names.includes('another-app-data'));
+  const version = await sw.message({ type: 'VERSION' });
+  assert.equal(version.build, 'fixture-build');
   sw.controls.online = false;
   assert.match(await (await sw.fetch('/app.js?v=fixture-build')).text(), /^shell:/);
   assert.equal(await sw.fetch('/auth/status'), null);

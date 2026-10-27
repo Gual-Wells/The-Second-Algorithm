@@ -12,8 +12,9 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const hash = text => createHash('sha256').update(text).digest('hex');
 const gitRevision = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim();
 const publications = JSON.parse(await fs.readFile(path.join(ROOT, 'carrier/publications.json'), 'utf8'));
-const decode = text => text.replace(/&(amp|lt|gt|quot|#39);/g,
-  (_, name) => ({ amp: '&', lt: '<', gt: '>', quot: '"', '#39': "'" })[name]);
+const decode = text => text.replace(/&(#x[0-9a-f]+|#[0-9]+|amp|lt|gt|quot|apos);/gi,
+  (_, name) => name.startsWith('#') ? String.fromCodePoint(Number.parseInt(name.replace(/^#x?/i, ''), /^#x/i.test(name) ? 16 : 10))
+    : ({ amp: '&', lt: '<', gt: '>', quot: '"', apos: "'" })[name.toLowerCase()]);
 const codeText = html => decode(html.replace(/<[^>]+>/g, ''));
 
 test('dependency lock is portable and never captures shared local runtime links', async () => {
@@ -159,6 +160,53 @@ test('a broken internal anchor prevents publication instead of leaving a dead re
   } finally { await dispose(f.root); }
 });
 
+test('explicit C++ highlighting preserves raw strings, digit separators and actual comment tokens', async () => {
+  const f = await fixture();
+  try {
+    const authority = await readAuthority(f.root, f.descriptor);
+    const text = 'const auto raw = R"tag(// literal, not comment\n"still string" /* literal */ <&>)tag";\n'
+      + "constexpr auto count = 1'000'000ULL; // actual comment <&>\n"
+      + "auto quote = '\\'';";
+    authority.markdown = authority.markdown.replace(authority.blocks.get('one'), text);
+    authority.blocks.set('one', text);
+    const rendered = renderAuthority(authority, createLinkRewriter({ collection: f.collection,
+      document: authority, byPath: new Map(), gitRevision }));
+    const match = rendered.html.match(/data-code-id="one">([\s\S]*?)<pre><code[^>]*>([\s\S]*?)<\/code><\/pre>/);
+    assert.ok(match); assert.equal(codeText(match[2]), text);
+    assert.match(match[1], /^<div class="code-toolbar"><span>C\+\+<\/span><button[^>]+data-copy-code="one"/);
+    assert.match(match[2], /class="hljs-string">R&quot;tag\([\s\S]*?literal, not comment/);
+    assert.match(match[2], /class="hljs-number">1(?:&#x27;|&#39;|')000(?:&#x27;|&#39;|')000ULL<\/span>/);
+    assert.equal([...match[2].matchAll(/class="hljs-comment"/g)].length, 1);
+    assert.match(match[2], /class="hljs-comment">\/\/ actual comment &lt;&amp;&gt;<\/span>/);
+    assert.equal(renderAuthority(authority, createLinkRewriter({ collection: f.collection,
+      document: authority, byPath: new Map(), gitRevision })).html, rendered.html);
+  } finally { await dispose(f.root); }
+});
+
+test('immutable reader paths follow rendered bytes while authority downloads remain stable', async () => {
+  const f = await fixture();
+  try {
+    const manifest = { schemaVersion: 1, collections: [f.collection] };
+    const build = async (directory, revision) => {
+      const output = path.join(f.root, '.local', directory);
+      const { catalog } = await buildLibrary(f.root, output, manifest, revision);
+      const entry = catalog.collections[0].documents[0];
+      const document = JSON.parse(await fs.readFile(path.join(output, entry.url.slice(1)), 'utf8'));
+      return { catalog, entry, document };
+    };
+    const first = await build('first', gitRevision), repeat = await build('repeat', gitRevision);
+    assert.deepEqual(repeat, first, 'identical authority and rendering must be deterministic');
+    const changed = await build('changed', gitRevision === 'a'.repeat(40) ? 'b'.repeat(40) : 'a'.repeat(40));
+    assert.notEqual(changed.document.html, first.document.html, 'fixed public research link changes rendered bytes');
+    assert.notEqual(changed.entry.revision, first.entry.revision);
+    assert.notEqual(changed.entry.url, first.entry.url);
+    assert.equal(changed.document.revision, changed.entry.revision);
+    assert.match(changed.entry.url, new RegExp('/' + changed.entry.revision.slice(0, 16) + '\\.json$'));
+    assert.equal(changed.entry.sourceUrl, first.entry.sourceUrl);
+    assert.equal(changed.entry.markdownUrl, first.entry.markdownUrl);
+  } finally { await dispose(f.root); }
+});
+
 test('real ten-document build preserves all 173 canonical code copies and canonical anchors', async () => {
   const output = await temporary();
   try {
@@ -172,12 +220,16 @@ test('real ten-document build preserves all 173 canonical code copies and canoni
         const descriptor = publications.collections.find(x => x.id === collection.id).documents.find(x => x.id === entry.id);
         const authority = await readAuthority(ROOT, descriptor);
         const doc = JSON.parse(await fs.readFile(path.join(output, entry.url.slice(1)), 'utf8'));
-        assert.equal(doc.revision, authority.revision);
-        assert.match(entry.url, new RegExp('/' + authority.revision.slice(0, 16) + '\\.json$'));
+        assert.equal(doc.revision, entry.revision);
+        assert.notEqual(doc.revision, authority.revision);
+        assert.match(entry.url, new RegExp('/' + doc.revision.slice(0, 16) + '\\.json$'));
+        assert.match(entry.sourceUrl, new RegExp('/' + authority.revision.slice(0, 16) + '\\.cpp$'));
         assert.equal(await fs.readFile(path.join(output, doc.sourceUrl.slice(1)), 'utf8'), authority.source);
         assert.equal(await fs.readFile(path.join(output, entry.markdownUrl.slice(1)), 'utf8'), authority.markdown);
         assert.doesNotMatch(doc.html, /<h1[ >]/);
         const seen = new Set();
+        assert.equal([...doc.html.matchAll(/class="code-toolbar"/g)].length,
+          [...doc.html.matchAll(/class="code-block"/g)].length);
         for (const match of doc.html.matchAll(/<div class="code-block" data-code-id="([^"]+)">[\s\S]*?<pre><code[^>]*>([\s\S]*?)<\/code><\/pre><\/div>/g)) {
           const key = match[1], text = codeText(match[2]);
           assert.ok(!seen.has(key)); seen.add(key);
@@ -200,6 +252,8 @@ test('real ten-document build preserves all 173 canonical code copies and canoni
     }
     assert.equal(canonicalCopies, 173);
     assert.ok(inlineExamples > 0, 'original short examples should not be silently stripped');
+    assert.match(await fs.readFile(path.join(ROOT, 'web/styles.css'), 'utf8'),
+      /@media print\s*\{[\s\S]*?\.code-toolbar[^{}]*\{[^{}]*display:\s*none/);
     assert.deepEqual((await fs.readdir(output)).sort(), ['library']);
   } finally { await dispose(output); }
 });
