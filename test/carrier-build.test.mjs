@@ -66,19 +66,36 @@ async function fixture() {
   return { root, descriptor, collection, manifest, source, cpp, markdown, html, builder };
 }
 
-test('published carrier registers exactly two trials, not ten formal chapters', () => {
+test('legacy trial authorities are retained hidden and never promoted to formal chapters', () => {
   validatePublications(publications);
-  assert.deepEqual(publications.collections.map(x => [x.id, x.track, x.kind, x.documents.length]),
+  const trials = publications.collections.filter(x => x.kind === 'trial');
+  assert.deepEqual(trials.map(x => [x.id, x.track, x.kind, x.documents.length]),
     [['binary-search', 'algorithm', 'trial', 3], ['cpp-reference', 'cpp', 'trial', 7]]);
-  assert.ok(publications.collections.every(x => !Object.hasOwn(x, 'chapterNumber')));
+  assert.ok(trials.every(x => x.visibility === 'hidden' && !Object.hasOwn(x, 'chapterNumber')));
   const ids = publications.collections.flatMap(x => x.documents.map(d => d.id));
   assert.equal(ids.length, new Set(ids).size);
   const bad = structuredClone(publications); bad.collections[0].chapterNumber = 1;
   assert.throws(() => validatePublications(bad), /Trial collections cannot/);
 });
 
+test('hidden collections produce neither public catalog entries nor deployed content files', async () => {
+  const f = await fixture();
+  try {
+    f.collection.visibility = 'hidden';
+    const output = path.join(f.root, '.local/hidden-output');
+    const result = await buildLibrary(f.root, output, { schemaVersion: 1, collections: [f.collection] }, gitRevision);
+    assert.deepEqual(result.catalog.collections, []);
+    assert.equal(result.documents, 0); assert.equal(result.codeBlocks, 0);
+    assert.deepEqual(await fs.readdir(path.join(output, 'library')), ['catalog.json']);
+    assert.equal(await fs.readFile(path.join(f.root, 'content/unit/Fixture.cpp'), 'utf8'), f.cpp);
+    f.collection.visibility = 'not-valid';
+    assert.throws(() => validatePublications({ schemaVersion: 1, collections: [f.collection] }), /visibility/);
+  } finally { await dispose(f.root); }
+});
+
 test('future chapters require valid numbers and uniqueness per independent track', () => {
   const sample = structuredClone(publications);
+  sample.collections = sample.collections.filter(collection => collection.kind === 'trial');
   sample.collections[0].kind = sample.collections[1].kind = 'chapter';
   assert.throws(() => validatePublications(sample), /positive integer/);
   sample.collections[0].chapterNumber = sample.collections[1].chapterNumber = 1;
@@ -207,10 +224,13 @@ test('immutable reader paths follow rendered bytes while authority downloads rem
   } finally { await dispose(f.root); }
 });
 
-test('real ten-document build preserves all 173 canonical code copies and canonical anchors', async () => {
+test('isolated QA corpus preserves all 173 legacy canonical copies without publishing hidden trials', async () => {
   const output = await temporary();
   try {
-    const result = await buildLibrary(ROOT, output, publications, gitRevision);
+    const corpus = structuredClone(publications);
+    corpus.collections = corpus.collections.filter(collection => collection.kind === 'trial');
+    for (const collection of corpus.collections) delete collection.visibility;
+    const result = await buildLibrary(ROOT, output, corpus, gitRevision);
     assert.equal(result.documents, 10); assert.equal(result.codeBlocks, 173);
     assert.match(result.catalog.version, /^[a-f0-9]{64}$/);
     let canonicalCopies = 0, inlineExamples = 0;
@@ -291,6 +311,8 @@ test('full bundle embeds relative auth before fingerprinting and invalidates unc
     await fs.writeFile(path.join(f.root, 'server/worker.mjs'), "export default {fetch(){return new Response('worker-one')}};\n");
     const first = await buildCarrier({ root: f.root });
     assert.equal(first.mode, 'full'); assert.match(first.buildID, /^[a-f0-9]{64}$/);
+    const notFound = await fs.readFile(path.join(f.root, 'dist/404.html'), 'utf8');
+    assert.match(notFound, /未找到内容/); assert.doesNotMatch(notFound, /app\.js|Fixture|__BUILD__/);
     await assert.rejects(fs.access(path.join(f.root, 'dist/DESIGN.md')));
     const index = await fs.readFile(path.join(f.root, 'dist/index.html'), 'utf8');
     const sw = await fs.readFile(path.join(f.root, 'dist/sw.js'), 'utf8');

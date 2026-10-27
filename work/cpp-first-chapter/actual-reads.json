@@ -1,0 +1,171 @@
+{
+  "scope": "C++ first-chapter research target v1; actual selected reads, not corpus completion",
+  "date": "2026-10-27",
+  "records": [
+    {
+      "id": "unique-spec",
+      "url": "https://api.github.com/repos/cs106l/cs106l-assignments/contents/assignment7/README.md?ref=bb14106a0fad2b4cf032d3de1a84576a56fad461",
+      "sha256": "e542f205dd9005a30ca64419d63db4d42b1242373f5a57498254230b1d0be35a",
+      "bytes": 11204,
+      "fetched": true,
+      "read_scope": "README lines20-150 and initial overview via web; task interface and RAII/move body; final submission/setup not treated as implementation evidence",
+      "role": "official-code-task",
+      "version": "bb14106a0fad2b4cf032d3de1a84576a56fad461",
+      "execution": "not executed; task and starter are research inputs"
+    },
+    {
+      "id": "unique-starter",
+      "url": "https://api.github.com/repos/cs106l/cs106l-assignments/contents/assignment7/unique_ptr.h?ref=bb14106a0fad2b4cf032d3de1a84576a56fad461",
+      "sha256": "1ed9ce77bafcdd1d7c17afd35105cf1697f58c7d6e1441414bfea08d1ad8f3bc",
+      "bytes": 3614,
+      "fetched": true,
+      "read_scope": "complete unique_ptr.h, all declarations and TODO contract",
+      "role": "official-code-task",
+      "version": "bb14106a0fad2b4cf032d3de1a84576a56fad461",
+      "execution": "not executed; task and starter are research inputs"
+    },
+    {
+      "id": "unique-client",
+      "url": "https://api.github.com/repos/cs106l/cs106l-assignments/contents/assignment7/main.cpp?ref=bb14106a0fad2b4cf032d3de1a84576a56fad461",
+      "sha256": "1b4a20edc32626d248b18d4d1112999247716bf305705e1bd20b5fbb0dcbe2b3",
+      "bytes": 2479,
+      "fetched": true,
+      "read_scope": "complete main.cpp, ListNode/create_list/map_list interfaces; autograder harness not run",
+      "role": "official-code-task",
+      "version": "bb14106a0fad2b4cf032d3de1a84576a56fad461",
+      "execution": "not executed; task and starter are research inputs"
+    },
+    {
+      "id": "treebook-spec",
+      "url": "https://api.github.com/repos/cs106l/cs106l-assignments/contents/assignment5/README.md?ref=bb14106a0fad2b4cf032d3de1a84576a56fad461",
+      "sha256": "6cdec0f6668f1f911525636445a4fa2d647153bdffffed277878102c512843d6",
+      "bytes": 8046,
+      "fetched": true,
+      "read_scope": "README lines20-146, task sections1-3 and explicit copy/delete-move requirements; no submission action",
+      "role": "official-code-task",
+      "version": "bb14106a0fad2b4cf032d3de1a84576a56fad461",
+      "execution": "not executed; task and starter are research inputs"
+    },
+    {
+      "id": "treebook-starter",
+      "url": "https://api.github.com/repos/cs106l/cs106l-assignments/contents/assignment5/user.h?ref=bb14106a0fad2b4cf032d3de1a84576a56fad461",
+      "sha256": "5fb7ac51944e52529579486b484f0d224b8bd3a1df1f9343ebfffa0164d35b9e",
+      "bytes": 557,
+      "fetched": true,
+      "read_scope": "complete user.h declaration",
+      "role": "official-code-task",
+      "version": "bb14106a0fad2b4cf032d3de1a84576a56fad461",
+      "execution": "not executed; task and starter are research inputs"
+    },
+    {
+      "id": "gotw91",
+      "url": "https://herbsutter.com/2013/06/05/gotw-91-solution-smart-pointer-parameters/",
+      "role": "design-advice",
+      "read_scope": "selected main-body lines before comments, ordinary borrowed use/sink/reseat/shared/conditional retain; not comments",
+      "version": "current page read2026-10-27"
+    },
+    {
+      "id": "core-guidelines",
+      "url": "https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines",
+      "role": "design-advice",
+      "read_scope": "R.30 body and related rule headings/F.7 excerpts; C.20 heading/reason; not whole19985line page",
+      "version": "current page read2026-10-27"
+    },
+    {
+      "id": "unique-observers",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/unique.ptr.single.observers",
+      "role": "fixed-working-draft-rule",
+      "read_scope": "complete short section, reference return/pointer/explicitbool and preconditions",
+      "version": "N4659"
+    },
+    {
+      "id": "unique-constructors",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/unique.ptr.single.ctor",
+      "role": "fixed-working-draft-rule",
+      "read_scope": "complete section as returned, default/deleter/move/converting constructor clauses",
+      "version": "N4659"
+    },
+    {
+      "id": "moved-from",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/lib.types.movedfrom",
+      "role": "fixed-working-draft-rule",
+      "read_scope": "complete one-paragraph section",
+      "version": "N4659"
+    },
+    {
+      "id": "copy-elision",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/class.copy.elision",
+      "role": "fixed-working-draft-rule",
+      "read_scope": "complete section including permitted NRVO and move selection in return",
+      "version": "N4659"
+    },
+    {
+      "id": "pro-copy",
+      "book_id": "professional-cpp-6",
+      "locator": "physical353-359",
+      "role": "private-book-input",
+      "read_scope": "selected relevant text on deep copy/assignment/prepare-commit/move; first353-358 output truncated,358-359 read separately complete; no figure-decoding claim"
+    },
+    {
+      "id": "pro-owner",
+      "book_id": "professional-cpp-6",
+      "locator": "physical296-300",
+      "role": "private-book-input",
+      "read_scope": "selected ownership-related paragraphs as returned; no wholechapter claim"
+    },
+    {
+      "id": "pro-exercises",
+      "book_id": "professional-cpp-6",
+      "locator": "physical406-408",
+      "role": "private-book-input",
+      "read_scope": "complete text pages including exercises9-1..9-5"
+    },
+    {
+      "id": "cookbook-view",
+      "book_id": "modern-cpp-cookbook-2",
+      "locator": "physical160-163 section-0133",
+      "role": "private-book-input",
+      "read_scope": "complete selected recipe text; diagrams/visuals not reviewed this cycle"
+    },
+    {
+      "id": "challenge-ring",
+      "book_id": "modern-cpp-challenge",
+      "locator": "problem46 EPUB spine130",
+      "role": "private-book-input",
+      "read_scope": "complete problem text only; no solution claim this cycle"
+    },
+    {
+      "id": "copy-ctor-defaulted",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/class.copy.ctor",
+      "role": "fixed-working-draft-rule",
+      "version": "N4659",
+      "read_scope": "actual returned paragraphs6-10 and surrounding clauses; implicit move conditions and defaulted deleted move ignored by overload resolution"
+    },
+    {
+      "id": "delete-base",
+      "url": "https://timsong-cpp.github.io/cppwp/n4659/expr.delete",
+      "role": "fixed-working-draft-rule",
+      "version": "N4659",
+      "read_scope": "actual returned paragraph3 plus related delete clauses; static/dynamic type and virtual destructor requirement"
+    },
+    {
+      "id": "guideline-r37-root-review",
+      "url": "https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rr-smartptrget",
+      "role": "root-independent-case-review",
+      "version": "read2026-10-27 by root",
+      "read_scope": "root read concrete code whose called chain resets an externally aliased shared owner; root supplied finding to child for revision, not an additional child direct read",
+      "disposition": "construction revision after independent review; no longer held-out"
+    }
+  ],
+  "failures": [
+    {
+      "url": "https://raw.githubusercontent.com/cs106l/cs106l-assignments/bb14106a0fad2b4cf032d3de1a84576a56fad461/assignment7/README.md",
+      "error": "direct urllib TLS EOF; same-SHA official Contents API succeeded afterwards"
+    }
+  ],
+  "limits": [
+    "Global source/book/old-draft review is not全量逐字阅读.",
+    "Official upstream code tasks are not run or copied into public author prose.",
+    "No current author implementation or code verification yet; scope-stage only."
+  ]
+}

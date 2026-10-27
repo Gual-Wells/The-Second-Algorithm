@@ -1,5 +1,6 @@
 import { passkey } from './auth.js';
 import { NotesJournal } from './notes-journal.js';
+import { waitForWorkerRelease } from './worker-release.js';
 
 const $ = id => document.getElementById(id);
 const esc = text => String(text ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
@@ -16,7 +17,25 @@ let positionTimer, toastTimer, sheetView, sheetParent, sheetSequence = 0, reconn
 let sheetHistory = false, sheetClosing = false, afterSheetClose = null, journalInstance, heldControls = false;
 const CLIENT_ID = crypto.randomUUID();
 const BUILD = new URL(import.meta.url).searchParams.get('v');
+const PUBLICATION_INDEX = typeof __PUBLICATION_INDEX__ === 'undefined' ? { version: '', collections: {} } : __PUBLICATION_INDEX__;
+function publishedLibrary(catalog) {
+  return { version: PUBLICATION_INDEX.version, collections: (catalog?.collections || []).flatMap(collection => {
+    const allowed = PUBLICATION_INDEX.collections[collection.id];
+    if (!allowed) return [];
+    const documents = collection.documents.filter(document => allowed[document.id] === document.revision);
+    return documents.length ? [{ ...collection, documents }] : [];
+  }) };
+}
 const syncing = new Map(), downloads = new Map();
+let contentController = null, contentReleaseJob = null;
+async function ensureContentRelease() {
+  const worker = 'serviceWorker' in navigator ? navigator.serviceWorker : null;
+  if (!worker?.controller || !BUILD || contentController === worker.controller) return;
+  if (!contentReleaseJob) contentReleaseJob = waitForWorkerRelease({ serviceWorker: worker, build: BUILD,
+    onWait: () => toast('应用正在更新，请稍候…') }).then(result => { contentController = result.controller; })
+    .finally(() => { contentReleaseJob = null; });
+  await contentReleaseJob;
+}
 const shelves = { algorithm: { query: '', scroll: 0 }, cpp: { query: '', scroll: 0 } };
 const activeHash = () => S.active?.route || location.hash;
 function journal() {
@@ -48,7 +67,7 @@ async function swMessage(message) {
   if (!('serviceWorker' in navigator)) return;
   const registration = await Promise.race([navigator.serviceWorker.ready, new Promise(resolve => setTimeout(() => resolve(null), 4000))]);
   if (!registration) return null;
-  const worker = registration.active || navigator.serviceWorker.controller;
+  const worker = navigator.serviceWorker.controller || registration.active;
   if (!worker) return;
   return new Promise(resolve => {
     const channel = new MessageChannel(); const timer = setTimeout(() => resolve(null), 45_000);
@@ -95,7 +114,7 @@ async function enter(owner, offline, connection) {
   if (S.owner !== owner) { S.notes.clear(); S.docs.clear(); }
   S.owner = owner; S.offline = offline;
   const cached = readLocal('catalog');
-  S.library = offline ? cached : await api('/api/library');
+  S.library = publishedLibrary(offline ? cached : await api('/api/library'));
   if (connection !== S.connectionSequence || S.owner !== owner) return;
   if (!S.library?.collections) throw Error('还没有可离线阅读的内容。');
   writeLocal('catalog', S.library);
@@ -151,6 +170,8 @@ async function getDocument(meta) {
   if (S.docs.get(meta.id)?.revision === meta.revision) return S.docs.get(meta.id);
   const owner = S.owner;
   const connection = S.connectionSequence;
+  await ensureContentRelease();
+  if (S.owner !== owner || S.connectionSequence !== connection) throw Error('登录状态已变化。');
   const response = await fetch(meta.url, { credentials: 'same-origin', signal: AbortSignal.timeout(30_000) });
   if (response.status === 401) { if (S.owner === owner && S.connectionSequence === connection) lock(); throw Error('请重新登录。'); }
   if (!response.ok) throw Error(S.offline ? '此篇尚未下载。' : response.status === 404 ? '内容已更新，请刷新阅读器。' : '此篇暂时无法打开。');
@@ -258,7 +279,7 @@ function renderLibrary() {
     return `<button class="book-row" type="button" data-open-collection="${c.id}" data-open-document="${last.id}"><span><strong>${esc(c.kind === 'chapter' ? `第${c.chapterNumber}章　${c.title}` : c.title)}</strong><small>${c.documents.length}篇${c.documents.some(d => positionFor(d.id)) ? ' · 继续阅读' : ''}</small></span><span aria-hidden="true">›</span></button>`;
   };
   const chapters = entries.filter(c => c.kind === 'chapter'), trials = entries.filter(c => c.kind === 'trial');
-  $('bookList').innerHTML = `<section class="shelf-section"><h3>章节</h3>${chapters.length ? chapters.map(row).join('') : '<p class="empty-state">尚无正式章节</p>'}</section>`
+  $('bookList').innerHTML = `<section class="shelf-section"><h3>章节</h3>${chapters.length ? chapters.map(row).join('') : '<p class="empty-state">暂无章节</p>'}</section>`
     + (trials.length ? `<section class="shelf-section"><h3>试读</h3>${trials.map(row).join('')}</section>` : '');
   const resume = readLocal(`resume:${S.track}`), collection = entries.find(c => c.id === resume?.collection), meta = collection?.documents.find(d => d.id === resume.document);
   $('libraryResume').hidden = !meta;
@@ -338,7 +359,10 @@ function updateProgress() {
 }
 
 function currentHeading() {
-  const top = $('readingPane').getBoundingClientRect().top + 24;
+  const pane = $('readingPane');
+  // Native anchor alignment combines the pane's padding with the heading's
+  // scroll margin. A newly reached heading should already be the current one.
+  const top = pane.getBoundingClientRect().top + (parseFloat(getComputedStyle(pane).scrollPaddingTop) || 0) + 24;
   const headings = [...$('readingArticle').querySelectorAll('h2[id],h3[id]')];
   return headings.filter(h => h.getBoundingClientRect().top <= top).at(-1);
 }
@@ -539,6 +563,8 @@ async function showSource() {
   showSheet('C++源码', '<p class="empty-state">正在打开…</p>', 'source', rememberSheet(showSettings));
   const sequence = sheetSequence, owner = S.owner;
   try {
+    await ensureContentRelease();
+    if (sheetView !== 'source' || sequence !== sheetSequence || S.owner !== owner) return;
     const response = await fetch(meta.sourceUrl, { credentials: 'same-origin' });
     if (response.status === 401) { lock(); return; }
     if (!response.ok) throw Error('源码暂时不可用。');
@@ -560,6 +586,9 @@ async function copyText(text) {
 
 async function downloadCollection(collection, show = true) {
   if (!S.owner) return;
+  try { await ensureContentRelease(); }
+  catch (error) { if (show) toast(error.message); return; }
+  if (!S.owner) return;
   const key = `${S.owner}:${collection.id}:${S.library.version}`;
   const urls = ['/library/catalog.json', ...collection.documents.flatMap(d => [d.url, d.sourceUrl])];
   if (!downloads.has(key)) downloads.set(key, swMessage({ type: 'CACHE_CONTENT', owner: S.owner, urls }));
@@ -575,10 +604,17 @@ async function checkUpdates() {
     await syncPending();
     const [library, { state }] = await Promise.all([api('/api/library'), api('/api/state')]);
     if (S.owner !== owner) return;
-    const changed = library.version !== S.library.version;
-    S.library = library; S.offline = false; writeLocal('catalog', library);
+    const published = publishedLibrary(library), changed = library.version !== S.library.version;
+    const newerRelease = library.version !== PUBLICATION_INDEX.version;
+    if (newerRelease) {
+      await waitForWorkerRelease({ serviceWorker: 'serviceWorker' in navigator ? navigator.serviceWorker : null,
+        build: BUILD, different: true, onWait: () => toast('应用正在更新，请稍候…') });
+      if (S.owner !== owner) return;
+      S.updateReady = true; const reload = document.querySelector('[data-reload-app]'); if (reload) reload.hidden = false;
+    }
+    S.library = published; S.offline = false; writeLocal('catalog', published);
     for (const [key, record] of Object.entries(state)) {
-      if (key.startsWith('notes:')) { const id = key.slice(6); journal().cache(id, { text: record.value, revision: record.revision }); const note = S.notes.get(id); if (!note?.dirty && !note?.saving) S.notes.set(id, journal().load(id)); }
+      if (key.startsWith('notes:')) { const id = key.slice(6); journal().cache(id, { text: record.value, revision: record.revision }); const note = S.notes.get(id); if (PUBLICATION_INDEX.collections[id] && !note?.dirty && !note?.saving) S.notes.set(id, journal().load(id)); }
       else if (!S.records[key]?.dirty && (!S.records[key]?.revision || record.revision >= S.records[key].revision)) S.records[key] = record;
     }
     writeLocal('records', S.records);
@@ -587,10 +623,23 @@ async function checkUpdates() {
     const active = S.active, current = allDocuments().find(x => x.document.id === active?.meta.id)?.document;
     if (active && current?.revision !== active.meta.revision) dismissSheet(() => navigate(active.route, { replace: true }));
     else if (!$('libraryView').hidden) { const query = $('librarySearch').value; renderLibrary(); if (query.trim()) void search(query, $('bookList'), allDocuments().filter(x => x.collection.track === S.track)); }
-    toast(changed ? '内容已更新' : '已是最新内容');
+    toast(newerRelease ? '有内容更新，请重新载入应用。' : changed ? '内容已更新' : '已是最新内容');
     if ('serviceWorker' in navigator) void navigator.serviceWorker.getRegistration().then(registration => registration?.update()).catch(() => {});
-  } catch (error) { if (S.owner === owner) toast('暂时无法检查更新，请联网重试。'); }
+  } catch (error) { if (S.owner === owner) toast(error.code === 'WORKER_RELEASE_PENDING' ? error.message : '暂时无法检查更新，请联网重试。'); }
   finally { if (button) button.disabled = false; }
+}
+
+async function reloadApp(button) {
+  savePosition();
+  if ([...S.notes.values()].some(note => note.dirty && note.localFailed)) { toast('本机草稿尚未保存，请先导出。'); return; }
+  button.disabled = true;
+  try {
+    await waitForWorkerRelease({ serviceWorker: 'serviceWorker' in navigator ? navigator.serviceWorker : null,
+      build: BUILD, different: true, onWait: () => toast('应用正在更新，请稍候…') });
+    if ([...S.notes.values()].some(note => note.dirty && note.localFailed)) { toast('本机草稿尚未保存，请先导出。'); return; }
+    location.reload();
+  } catch (error) { toast(error.message); }
+  finally { button.disabled = false; }
 }
 
 function setPure(on) {
@@ -632,7 +681,18 @@ async function logout(confirmed = false) {
   }
   const owner = S.owner;
   try { await api('/auth/logout', { method: 'POST', body: {} }); } catch { toast('暂时无法退出，请联网重试。'); return; }
-  for (const key of Object.keys(localStorage)) if (key.startsWith(`second-algorithm:${owner}:`)) localStorage.removeItem(key);
+  const namespace = `second-algorithm:${owner}:`, visible = new Set(S.library.collections.map(collection => collection.id));
+  for (const key of Object.keys(localStorage)) if (key.startsWith(namespace)) {
+    let noteKey = key.slice(namespace.length);
+    if (noteKey.startsWith('notes-confirmed:')) {
+      try { noteKey = decodeURIComponent(noteKey.slice('notes-confirmed:'.length)); } catch { continue; }
+    }
+    const match = noteKey.match(/^notes(?:-cache|-draft|-backup)?:([^:]+)(?::|$)/);
+    // Retired material has no reader/recovery UI. Keep its historical notes and
+    // unsent drafts recoverable rather than silently deleting them at logout.
+    if (noteKey.startsWith('notes') && (!match || !visible.has(match[1]))) continue;
+    localStorage.removeItem(key);
+  }
   lock('已退出登录。'); await connect();
 }
 
@@ -662,7 +722,7 @@ document.addEventListener('click', event => {
   if (button?.matches('[data-show-source]')) { void showSource(); return; }
   if (button?.matches('[data-download-current]')) { const collection = S.active.collection; button.disabled = true; void downloadCollection(collection).finally(() => { button.disabled = false; }); return; }
   if (button?.matches('[data-check-updates]')) { void checkUpdates(); return; }
-  if (button?.matches('[data-reload-app]')) { savePosition(); if ([...S.notes.values()].some(note => note.dirty && note.localFailed)) { toast('本机草稿尚未保存，请先导出。'); return; } location.reload(); return; }
+  if (button?.matches('[data-reload-app]')) { void reloadApp(button); return; }
   if (button?.matches('[data-sync-notes]')) { void reconnect(); return; }
   if (button?.matches('[data-export-notes]')) { exportNotes($('noteEditor').dataset.collection); return; }
   if (button?.matches('[data-notes-cloud]')) {

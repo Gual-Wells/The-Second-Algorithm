@@ -1,0 +1,157 @@
+// Actual browser + actual service worker transition. Local in-memory auth only;
+// no passkey enrollment, production requests or database writes.
+const http = require('node:http');
+const fs = require('node:fs/promises');
+const path = require('node:path');
+const assert = require('node:assert/strict');
+const { chromium } = require(process.env.ALGORITHM_QA_PLAYWRIGHT || 'playwright');
+const esbuild = require(process.env.ALGORITHM_QA_ESBUILD || 'esbuild');
+const root = path.resolve(__dirname, '..');
+const owner = 'a'.repeat(43), oldBuild = 'upgrade-old', newBuild = 'upgrade-new';
+const documentURL = '/library/formal-first/first-document/new.json';
+const meta = { id: 'first-document', title: '正文', revision: 'new', url: documentURL,
+  sourceUrl: documentURL.replace('.json', '.cpp'), markdownUrl: documentURL.replace('.json', '.md'),
+  headings: [{ depth: 2, id: 'example', text: '新章例子' }] };
+const catalog = { version: 'formal-new', collections: [{ id: 'formal-first', track: 'algorithm', kind: 'chapter',
+  chapterNumber: 1, title: '正式章', documents: [meta] }] };
+const payload = { ...meta, html: '<h2 id="example">新章例子</h2><div class="code-block" data-code-id="demo"><pre><code>int answer = 42;</code></pre></div>' };
+const index = { version: catalog.version, collections: { 'formal-first': { 'first-document': meta.revision } } };
+const oldCatalog = { version: 'hidden-old', collections: [] };
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+(async () => {
+  const physical = await fs.realpath(root);
+  if (process.platform === 'win32' && !/^D:[\\/]/i.test(physical)) throw Error('Upgrade QA must reside on D.');
+  const temporary = path.join(root, '.local/carrier-upgrade-tmp');
+  const output = path.join(root, '.local/carrier-upgrade-qa');
+  await fs.mkdir(temporary, { recursive: true }); await fs.mkdir(output, { recursive: true });
+  process.env.TEMP = process.env.TMP = process.env.TMPDIR = temporary;
+  const bundle = await esbuild.build({ entryPoints: [path.join(root, 'web/app.js')], bundle: true, write: false,
+    format: 'esm', platform: 'browser', target: 'es2022', logLevel: 'silent',
+    define: { __PUBLICATION_INDEX__: JSON.stringify(index) } });
+  const app = bundle.outputFiles[0].text + '\nglobalThis.__carrierUpgrade = { get state() { return S; }, get downloading() { return downloads.size; } };\n';
+  const oldBundle = await esbuild.build({ entryPoints: [path.join(root, 'web/app.js')], bundle: true, write: false,
+    format: 'esm', platform: 'browser', target: 'es2022', logLevel: 'silent',
+    define: { __PUBLICATION_INDEX__: JSON.stringify({ version: oldCatalog.version, collections: {} }) } });
+  const oldApp = oldBundle.outputFiles[0].text;
+  const sw = await fs.readFile(path.join(root, 'web/sw.js'), 'utf8');
+  const manifest = await fs.readFile(path.join(root, 'web/manifest.webmanifest'));
+  let published = false, networkOffline = false, documentRequests = 0;
+  const held = new Set(), errors = [];
+  const server = http.createServer(async (request, response) => {
+    try {
+      // Also close worker-originated connections: context.setOffline alone can
+      // leave those requests online in Chromium automation.
+      if (networkOffline) { request.socket.destroy(); return; }
+      const url = new URL(request.url, 'http://localhost');
+      const json = value => { response.writeHead(200, { 'Content-Type': 'application/json' }); response.end(JSON.stringify(value)); };
+      if (url.pathname === '/setup') {
+        response.writeHead(200, { 'Content-Type': 'text/html' });
+        response.end(`<body>setup<script>navigator.serviceWorker.register('/sw.js').then(()=>navigator.serviceWorker.ready).then(async()=>{
+          if(!navigator.serviceWorker.controller)await new Promise(r=>navigator.serviceWorker.addEventListener('controllerchange',r,{once:true}));
+          document.body.dataset.ready='true';});</script>`); return;
+      }
+      if (url.pathname === '/sw.js') {
+        response.writeHead(200, { 'Content-Type': 'text/javascript', 'Cache-Control': 'no-store' });
+        response.end(sw.replaceAll('__BUILD__', published ? newBuild : oldBuild)
+          .replaceAll('__LIBRARY_PATHS__', JSON.stringify(published
+            ? ['/library/catalog.json', documentURL, meta.sourceUrl, meta.markdownUrl] : ['/library/catalog.json']))); return;
+      }
+      if (url.pathname === '/manifest.webmanifest' && url.searchParams.get('v') === newBuild) {
+        // Keep the replacement installing while the new app is already running.
+        held.add(response); response.on('close', () => held.delete(response)); return;
+      }
+      if (url.pathname === '/auth/status') return json({ authenticated: true, enrolled: true, enrollmentOpen: false, ownerScope: owner });
+      if (url.pathname === '/api/library' || url.pathname === '/library/catalog.json') return json(published ? catalog : oldCatalog);
+      if (url.pathname === '/api/state') return json({ state: {} });
+      if (url.pathname === documentURL) { ++documentRequests; return json(payload); }
+      if (url.pathname === meta.sourceUrl || url.pathname === meta.markdownUrl) { response.end('int answer = 42;'); return; }
+      if (url.pathname === '/app.js') {
+        response.writeHead(200, { 'Content-Type': 'text/javascript' }); response.end(url.searchParams.get('v') === oldBuild ? oldApp : app); return;
+      }
+      const filename = path.join(root, 'web', url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname.slice(1)));
+      if (!filename.startsWith(path.join(root, 'web') + path.sep)) { response.writeHead(404); response.end(); return; }
+      let bytes = await fs.readFile(filename);
+      if (filename.endsWith('index.html')) bytes = Buffer.from(bytes.toString().replaceAll('__BUILD__', published ? newBuild : oldBuild));
+      const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.webmanifest': 'application/manifest+json' };
+      response.writeHead(200, { 'Content-Type': types[path.extname(filename)] || 'text/plain' }); response.end(bytes);
+    } catch (error) { if (error.code !== 'ENOENT') errors.push(error.message); response.writeHead(404); response.end(); }
+  });
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  const origin = `http://127.0.0.1:${server.address().port}`;
+  const browser = await chromium.launch({ executablePath: process.env.ALGORITHM_QA_CHROME, headless: true,
+    env: { ...process.env, TEMP: temporary, TMP: temporary, TMPDIR: temporary }, args: ['--disk-cache-dir=' + path.join(temporary, 'disk-cache')] });
+  let report;
+  try {
+    const context = await browser.newContext({ viewport: { width: 402, height: 874 } });
+    await context.addInitScript(owner => {
+      const key = 'second-algorithm:' + owner + ':notes:binary-search';
+      if (!localStorage.getItem(key)) localStorage.setItem(key, JSON.stringify({ text: 'historical unsent note', revision: 2, dirty: true }));
+    }, owner);
+    const page = await context.newPage(); page.on('pageerror', error => errors.push(error.message));
+    await page.goto(origin + '/setup'); await page.waitForFunction(() => document.body.dataset.ready === 'true');
+    published = true;
+    await page.goto(origin + '/#/read/formal-first/first-document');
+    const deadline = Date.now() + 8000;
+    while (!held.size && Date.now() < deadline) await sleep(25);
+    assert(held.size, 'replacement worker should still be installing');
+    await page.waitForTimeout(250);
+    assert.equal(documentRequests, 0, 'new app must not send a formal content request through the old hidden policy');
+    const build = await page.evaluate(() => new Promise(resolve => {
+      const c = new MessageChannel(); c.port1.onmessage = e => { c.port1.close(); resolve(e.data.build); };
+      navigator.serviceWorker.controller.postMessage({ type: 'VERSION' }, [c.port2]);
+    }));
+    assert.equal(build, oldBuild);
+    for (const response of held) { response.writeHead(200, { 'Content-Type': 'application/manifest+json' }); response.end(manifest); }
+    held.clear();
+    await page.locator('#readingArticle .code-block').first().waitFor();
+    await page.waitForFunction(() => !window.__carrierUpgrade.state.restoring && !window.__carrierUpgrade.downloading);
+    assert.match(await page.locator('#readingArticle').innerText(), /answer = 42/);
+    assert.equal(documentRequests, 1);
+    assert.match(await page.evaluate(owner => localStorage.getItem('second-algorithm:' + owner + ':notes:binary-search'), owner), /historical unsent note/);
+    assert.equal(await page.evaluate(() => performance.getEntriesByType('navigation')[0].type), 'navigate', 'upgrade must not automatically reload the page');
+    networkOffline = true; await context.setOffline(true);
+    await page.reload();
+    await page.locator('#readingArticle .code-block').first().waitFor();
+    assert.match(await page.locator('#readingArticle').innerText(), /answer = 42/);
+    assert.equal(documentRequests, 1, 'same-version offline restart reuses downloaded content');
+    assert.deepEqual(errors, []);
+    await context.close();
+    networkOffline = false; published = false; documentRequests = 0;
+    const updateContext = await browser.newContext();
+    const updatePage = await updateContext.newPage(); updatePage.on('pageerror', error => errors.push(error.message));
+    await updatePage.goto(origin + '/setup'); await updatePage.waitForFunction(() => document.body.dataset.ready === 'true');
+    await updatePage.goto(origin + '/#/library/algorithm');
+    await updatePage.locator('#libraryView').waitFor({ state: 'visible' });
+    published = true;
+    await updatePage.locator('#settingsButton').click();
+    await updatePage.locator('[data-check-updates]').click();
+    const updateDeadline = Date.now() + 8000;
+    while (!held.size && Date.now() < updateDeadline) await sleep(25);
+    assert(held.size, 'check updates must actually start replacement installation');
+    await updatePage.waitForTimeout(100);
+    assert.equal(await updatePage.locator('[data-reload-app]').isVisible(), false,
+      'a resolved update request must not enable reload while the old policy still controls the page');
+    for (const response of held) { response.writeHead(200, { 'Content-Type': 'application/manifest+json' }); response.end(manifest); }
+    held.clear();
+    await updatePage.locator('[data-reload-app]').waitFor({ state: 'visible' });
+    assert.equal(await updatePage.evaluate(() => performance.getEntriesByType('navigation')[0].type), 'navigate');
+    await updatePage.locator('[data-reload-app]').click();
+    await updatePage.locator('#bookList .book-row').first().waitFor();
+    await updatePage.locator('#bookList .book-row').first().click();
+    await updatePage.locator('#readingArticle .code-block').first().waitFor();
+    assert.match(await updatePage.locator('#readingArticle').innerText(), /answer = 42/);
+    assert.deepEqual(errors, []);
+    report = { passed: true, realBrowserAndServiceWorker: true, heldNewWorkerWhileNewAppRan: true,
+      prematureRequests: 0, offlineRestart: true, historicalNotesPreserved: true,
+      checkUpdatesWaitsForTakeover: true, manualReloadOpensFormalChapter: true,
+      automaticReload: false, productionContacted: false, databaseModified: false };
+    await updateContext.close();
+  } catch (error) { report = { passed: false, error: error.message, errors }; throw error; }
+  finally {
+    for (const response of held) response.destroy();
+    await browser.close(); server.closeAllConnections(); await new Promise(resolve => server.close(resolve));
+    await fs.writeFile(path.join(output, 'results.json'), JSON.stringify(report, null, 2) + '\n');
+    console.log(JSON.stringify(report));
+  }
+})().catch(error => { console.error(error); process.exitCode = 1; });

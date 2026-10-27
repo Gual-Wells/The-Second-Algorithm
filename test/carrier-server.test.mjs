@@ -2,9 +2,15 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { DatabaseSync } from 'node:sqlite';
 import { readFileSync } from 'node:fs';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import worker, { validStateInput } from '../server/worker.mjs';
+import { buildLibrary } from '../scripts/build-carrier.mjs';
 
 const origin = 'https://second-algorithm.pages.dev';
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 function environment() {
   const sql = new DatabaseSync(':memory:');
   sql.exec(readFileSync(new URL('../migrations/0001_owner_state.sql', import.meta.url), 'utf8'));
@@ -69,6 +75,43 @@ test('only public shell paths bypass owner access, while protected content is fe
   assert.equal(response.headers.get('X-Content-Type-Options'), 'nosniff');
   assert.equal((await call(env, '/unknown.json', cookie)).status, 404);
   env.sql.close();
+});
+
+test('release assets and authenticated API hide retired trial content while retaining historical notes', async () => {
+  const directory = path.join(ROOT, '.local/carrier-server-tests');
+  await fs.mkdir(directory, { recursive: true });
+  const output = await fs.mkdtemp(path.join(directory, 'release-')), env = environment();
+  try {
+    const publications = JSON.parse(await fs.readFile(path.join(ROOT, 'carrier/publications.json'), 'utf8'));
+    await buildLibrary(ROOT, output, publications,
+      execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim());
+    env.ASSETS.fetch = async request => {
+      const filename = path.join(output, new URL(request.url).pathname.slice(1));
+      try { return new Response(await fs.readFile(filename), { headers: { 'Content-Type': 'application/json' } }); }
+      catch (error) { if (error.code === 'ENOENT') return new Response('Not found', { status: 404 }); throw error; }
+    };
+    const cookie = await authenticate(env);
+    assert.equal((await put(env, cookie, 'notes:binary-search', 'historical private note', 0)).status, 200);
+    const catalog = await (await call(env, '/api/library', cookie)).json();
+    assert(!catalog.collections.some(collection => ['binary-search', 'cpp-reference'].includes(collection.id)));
+    for (const extension of ['json', 'cpp', 'md']) {
+      for (const location of ['/library/binary-search/bs-foundations/retired.' + extension,
+        '/library/cpp-reference/cpp-types/retired.' + extension])
+      {
+        const response = await call(env, location, cookie);
+        assert.equal(response.status, 404, location);
+        assert.doesNotMatch(await response.text(), /<!doctype|app\.js|<html|"html"|historical private note/i);
+      }
+    }
+    const state = await (await call(env, '/api/state', cookie)).json();
+    assert.equal(state.state['notes:binary-search'].value, 'historical private note');
+    assert.equal((await (await call(env, '/auth/status', cookie)).json()).authenticated, true);
+  } finally {
+    env.sql.close();
+    const relative = path.relative(directory, output);
+    assert(relative && !relative.startsWith('..') && !path.isAbsolute(relative));
+    await fs.rm(output, { recursive: true, force: true });
+  }
 });
 
 test('enrollment defaults closed, checks origin/key, and generates the independent RP challenge', async () => {

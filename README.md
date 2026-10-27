@@ -2,21 +2,28 @@
 
 面向求职的算法与 C++ 实战参考总册。算法按**题型条件、关键思路、重要变种和 C++ 模板**组织；C++本身按**具体代码问题、语言／库机制、关键差异和参考实现**组织，供已有计算机背景的读者查阅、理解和记忆实现。
 
-阅读器：[第二算法](https://second-algorithm.pages.dev/) · iPhone PWA＋电脑浏览器 · [载体与发布](docs/READER.md)。算法与C++独立成册，现有材料以试读提供；正式章节仍按以下研究协议逐章形成。
+正式版1.0.0：[第二算法](https://second-algorithm.pages.dev/) · iPhone PWA＋电脑浏览器 · [载体与发布](docs/READER.md)。算法与C++独立成册、独立编号；旧试读已从站点目录、部署正文和新版离线缓存撤下，保留研究资产与个人记录。
 
 研究部综合全部已知资料、当前研究和真实已发布内容，深度调查下一章值得研究什么，在过程中动态增量或调整范围，再向算法或C++工程线交接明确研究目标。工程继续深入内容、编写、核验和逐章发布，范围新证据和发布结果回流研究部。章的边界、体量和组织由研究产生，不按旧目录或gap列表顺次批量写全册。
 
-二分专题已有基础、组合判定、进阶扩展三份离线阅读稿，属于同一专题，已知缺口继续保留。C++前期批量产出的七份稿、103个代码块保留为研究资产与候选作者稿，后续逐章重核范围并复用；它们不是已正式发布的七章，也不预定最终目录。
+## 正式章节
 
-## 当前可用内容
+| 内容线 | 第一章 | 研究与实现依据 |
+|---|---|---|
+| 算法 | [连续片段：前缀状态与滑动边界](https://second-algorithm.pages.dev/#/read/algorithm-contiguous-ranges/algorithm-contiguous) | [研究目标与回流](work/algorithm-first-chapter/README.md) · [阅读与源码](content/contiguous-ranges/README.md) |
+| C++ | [对象如何传递](https://second-algorithm.pages.dev/#/read/cpp-objects-interfaces/cpp-object-transfer) | [研究目标与回流](work/cpp-first-chapter/README.md) · [阅读与源码](content/cpp-object-interfaces/README.md) |
+
+两个第一章分别经过选题比较、目标交接、内容研究、实现、反查与阅读核验。它们各由一份正文承载，不依赖旧试稿。实际范围与暂不纳入的内容见对应研究记录；章节已发布不表示全网或整册已经覆盖。
+
+## 研究基座
 
 | 内容 | 入口 | 状态 |
 |---|---|---|
-| 来源站点池 | [来源说明](docs/SOURCE_POOL.md) · [机器登记](catalog/sources.json) | 39个来源、72个入口；新增LLVM libc++固定版本回归材料，规则、练习、配方与工具分别登记 |
+| 来源站点池 | [来源说明](docs/SOURCE_POOL.md) · [机器登记](catalog/sources.json) | 39个来源、78个入口；本轮补入CS106L固定任务、N4659条款和Codility方法入口，规则、练习、配方与工具分别登记 |
 | 实战书单 | [书目与准确版本](docs/BOOKS.md) · [书目登记](catalog/books.json) | 算法EPI、CP4及四种C++教材已有本地基座；完整版与提取内容不上传Git |
 | 实际目录快照 | [快照指针](catalog/inventory-heads.json) · [C++目录边界](work/cpp-research-2026-10-26/census-summary.json) | 11个入口有成功快照；目录取得与正文已读分开 |
-| 二分专题 | [阅读入口](content/binary-search/README.md) · [全流程研究](research/2026-10-26/binary-full-cycle.md) | 3份阅读稿、70组相邻C++代码；原题、模式、代码块数量分别统计 |
-| C++本身 | [前期研究稿](content/cpp/README.md) · [阶段研究记录](research/2026-10-26/cpp-full-cycle.md) | 七份候选稿保留供逐章研究复用，不视为七章正式发布 |
+| 历史二分研究 | [全流程研究](research/2026-10-26/binary-full-cycle.md) | 3份旧稿、70组代码与明确缺口保留为研究资产，不在产品中展示 |
+| C++前期研究 | [阶段研究记录](research/2026-10-26/cpp-full-cycle.md) | 七份候选稿保留复用，未直接改名为正式章节 |
 | 研究部 | [研究与目标交接协议](protocol/RESEARCH_DEPARTMENT.md) | 全局资料与内容判断、动态下一章范围、明确目标及工程反馈 |
 | 协议与工程 | [共同入口](protocol/CONTENT_PIPELINE.md) · [算法工程线](protocol/ALGORITHM_TRACK.md) · [C++工程线](protocol/CPP_TRACK.md) · [工程](docs/ARCHITECTURE.md) | 上游研究与两条工程线，共用来源、记录、构建、验证与恢复工程 |
 
@@ -68,4 +75,4 @@ python -m second_algorithm validate
 
 CI 还编译运行现有 C++ 模板的独立结果对照。网络源采集不放入提交必跑检查，避免把站点限流和临时故障当成代码回归。
 
-当前仍处于范围研究与专题建设阶段。来源清单、已读范围、待判案例和实际正文去向共同说明进度；不宣称已穷尽互联网或全部求职算法题。
+本册继续逐章研究与发布。来源清单、实际读件、候选去向和真实正文共同说明进度；下一章仍由研究部重新判断，不按旧文件或gap列表机械续写。

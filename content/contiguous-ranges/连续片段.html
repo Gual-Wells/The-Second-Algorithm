@@ -1,0 +1,470 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>连续片段 · 求职算法总册</title><style>
+:root{color-scheme:light;--ink:#202b34;--heading:#193b51;--blue:#1e5b80;--line:#d9e1e7;--paper:#fff;--back:#f2f5f7}
+*{box-sizing:border-box}html{scroll-padding-top:85px}body{margin:0;background:var(--back);font-family:'Noto Sans SC','Microsoft YaHei','Segoe UI',sans-serif;font-size:17px;line-height:1.78;color:var(--ink);font-weight:400}
+a{color:var(--blue);text-underline-offset:3px;text-decoration-thickness:1px}a:hover{color:#0a3b5c;text-decoration-thickness:2px}
+.topbar{height:61px;background:#fafcfd;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:0 max(24px,calc((100vw - 1230px)/2));gap:24px}
+.brand{font-size:16px;font-weight:600;color:var(--heading);white-space:nowrap}.brand span{font-weight:400;color:#5b6975;margin-left:17px;font-size:14px}.files{display:flex;gap:22px;font-size:14px;white-space:nowrap}.files a{text-decoration:none}
+.layout{max-width:1230px;margin:0 auto;display:grid;grid-template-columns:240px minmax(0,1fr);gap:28px;padding:28px 24px 65px}
+.sidebar{position:sticky;top:86px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;padding:2px 11px 24px 0;scrollbar-width:thin}
+.toc-title{font-size:13px;color:#526474;letter-spacing:.08em;margin:0 0 13px 10px;font-weight:600}
+.toc a{display:block;line-height:1.6;text-decoration:none;border-left:2px solid transparent;border-radius:0 3px 3px 0;padding:5px 8px 5px 11px;color:#445766;font-size:13px}
+.toc a.group{font-weight:600;color:#203f55;font-size:14px;margin-top:15px}.toc a.group:first-child{margin-top:0}.toc a.topic{padding-left:20px}.toc a:hover{background:#e5edf3}.toc a.active{color:#104d77;background:#e2ecf3;border-left-color:#2b688e;font-weight:600}
+main{min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:36px 42px 42px;box-shadow:0 2px 7px #1f405006}
+h1,h2,h3,h4{color:var(--heading);line-height:1.45;font-weight:600;scroll-margin-top:85px}h1{font-size:32px;margin:0 0 8px}h2{font-size:25px;margin:48px 0 21px;padding-top:30px;border-top:1px solid var(--line)}h2:first-of-type{margin-top:30px;padding-top:0;border-top:0}h3{font-size:20px;margin:34px 0 13px}h4{font-size:17px;margin:25px 0 12px;color:#253f52}
+p{margin:13px 0 17px}.subtitle{font-size:14px;color:#526878;margin:0 0 24px}strong{font-weight:600}li{margin:5px 0}main p,main li,main h2,main h3,main h4{overflow-wrap:anywhere}
+code{font-family:Consolas,'Cascadia Code','Noto Sans SC',monospace;font-size:.89em;color:#213f55;background:#eef3f6;padding:1px 4px;border-radius:3px}
+pre{background:#f6f8fa;border:1px solid #d9e2e8;border-radius:3px;padding:16px 18px;margin:17px 0 21px;overflow-x:auto;tab-size:4;font-family:Consolas,'Cascadia Code','Noto Sans SC',monospace;font-size:15px;line-height:1.6;color:#172d3c}
+pre code{font:inherit;color:inherit;background:transparent;padding:0;border-radius:0;white-space:pre}.keyword{color:#135aa0;font-weight:500}.type{color:#255d61}.comment{color:#526776}.number{color:#884920}.string{color:#8b3d21}
+.table-wrap{overflow-x:auto;margin:18px 0 24px}table{border-collapse:collapse;width:100%;font-size:15px;line-height:1.65}th,td{border:1px solid #cfdae2;padding:10px 12px;vertical-align:top;text-align:left}th{background:#eef3f7;color:#28485e;font-weight:600}tr:nth-child(even) td{background:#fbfcfd}td:first-child{min-width:122px}td code{font-size:.91em;background:transparent;padding:0}td p{margin:0}
+.mobile-toc{display:none}.page-foot{font-size:13px;color:#526878;border-top:1px solid var(--line);padding-top:18px;margin-top:35px}
+:focus-visible{outline:2px solid #397caa;outline-offset:3px}::selection{background:#cde3f3;color:#142d40}
+@media(min-width:1600px){.layout{max-width:1310px;grid-template-columns:250px minmax(0,1fr);gap:36px}main{padding-left:50px;padding-right:50px}.topbar{padding-left:max(24px,calc((100vw - 1260px)/2));padding-right:max(24px,calc((100vw - 1260px)/2))}}
+@media(max-width:1090px){.layout{grid-template-columns:204px minmax(0,1fr);gap:20px;padding:22px 18px}main{padding:30px 28px}.toc a{font-size:12px}.toc a.group{font-size:13px}pre{font-size:14px;padding:14px 15px}}
+@media(max-width:860px){.topbar{height:55px;padding:0 17px}.brand span{display:none}.files{gap:16px;font-size:13px}.layout{display:block;padding:17px 12px 35px}.sidebar{display:none}main{padding:26px 24px;font-size:16px}.mobile-toc{display:block;margin-bottom:17px;border:1px solid var(--line);background:white;padding:10px 15px}.mobile-toc summary{color:#244a65;font-size:15px;cursor:pointer;font-weight:600}.mobile-toc nav{max-height:55vh;overflow:auto;margin-top:12px}h1{font-size:29px}h2{font-size:23px}h3{font-size:19px}table{font-size:14px}pre{font-size:13px}}
+@media print{.topbar,.sidebar,.mobile-toc{display:none}.layout{display:block;max-width:none;margin:0;padding:0}main{border:0;box-shadow:none;padding:0}body{background:white;color:black;font-size:10.5pt;line-height:1.65}h1{font-size:22pt}h2{font-size:16pt}h3{font-size:13pt}h1,h2,h3,h4{break-after:avoid}pre{white-space:pre-wrap;overflow:visible;break-inside:avoid;font-size:8.5pt}pre code{white-space:pre-wrap}table{font-size:9pt}a{color:inherit}.table-wrap{overflow:visible}}
+</style></head><body><header class="topbar"><div class="brand">求职算法总册<span>连续片段</span></div><nav class="files" aria-label="文件"><a href="连续片段.md">Markdown</a><a href="连续片段.cpp">C++ 源码</a></nav></header><div class="layout"><aside class="sidebar"><div class="toc-title">题型目录</div><nav class="toc" aria-label="题型目录"><a class="group" href="#1-已给定区间-保留摘要-不反复求和">1. 已给定区间：保留摘要，不反复求和</a><a class="topic" href="#区间和-空前缀消掉左端特判">区间和：空前缀消掉左端特判</a><a class="topic" href="#异或也可消去相同前缀-最小值和or却不行">异或也可消去相同前缀，最小值和OR却不行</a><a class="topic" href="#固定长度的和-只维护当前窗口">固定长度的和：只维护当前窗口</a><a class="group" href="#2-固定窗口的频数-同一边界可维护多个状态">2. 固定窗口的频数：同一边界可维护多个状态</a><a class="topic" href="#不同值数量-频数降到0才真正离开">不同值数量：频数降到0才真正离开</a><a class="topic" href="#固定长度-互异-最大和是状态组合">固定长度、互异、最大和是状态组合</a><a class="topic" href="#异位词位置-需要的是每种字符的数量">异位词位置：需要的是每种字符的数量</a><a class="group" href="#3-任意正负的目标关系-匹配历史前缀">3. 任意正负的目标关系：匹配历史前缀</a><a class="topic" href="#目标和的数量-找p-r-target出现过几次">目标和的数量：找p[r]-target出现过几次</a><a class="topic" href="#同一匹配关系-最长留最早-最短留最近">同一匹配关系，最长留最早，最短留最近</a><a class="topic" href="#整除与余数-把精确和值换成同类状态">整除与余数：把精确和值换成同类状态</a><a class="topic" href="#两类数量相等-将一类记成-1">两类数量相等：将一类记成-1</a><a class="group" href="#4-可变窗口-合法左端能否连续移动">4. 可变窗口：合法左端能否连续移动</a><a class="topic" href="#最长无重复段-左端不能倒退">最长无重复段：左端不能倒退</a><a class="topic" href="#至多k类-一个右端贡献一段左端">至多K类：一个右端贡献一段左端</a><a class="topic" href="#非负和计数-允许零时仍要保存所有合法起点">非负和计数：允许零时仍要保存所有合法起点</a><a class="topic" href="#非负和最短段-达到下界以后继续收缩">非负和最短段：达到下界以后继续收缩</a><a class="group" href="#5-合法性由不同状态决定的窗口">5. 合法性由不同状态决定的窗口</a><a class="topic" href="#最短覆盖-满足以后收缩-缺额重现就停止">最短覆盖：满足以后收缩，缺额重现就停止</a><a class="topic" href="#替换预算-窗口长度减去最大频数">替换预算：窗口长度减去最大频数</a><a class="topic" href="#正整数乘积严格小于k-先保证能乘-再相乘">正整数乘积严格小于K：先保证能乘，再相乘</a><a class="group" href="#6-最优段与支配候选-保留真正可能变优的历史">6. 最优段与支配候选：保留真正可能变优的历史</a><a class="topic" href="#最大段和-每个右端减去最小历史前缀">最大段和：每个右端减去最小历史前缀</a><a class="topic" href="#kadane-以当前位置结尾-是延长还是重新开始">Kadane：以当前位置结尾，是延长还是重新开始</a><a class="topic" href="#固定窗口极值-后来的更优值支配旧候选">固定窗口极值：后来的更优值支配旧候选</a><a class="topic" href="#含负数的最短阈值段-队列维护历史前缀-而非原元素">含负数的最短阈值段：队列维护历史前缀，而非原元素</a><a class="group" href="#范围与原题参照">范围与原题参照</a></nav></aside><div><details class="mobile-toc"><summary>题型目录</summary><nav class="toc"><a class="group" href="#1-已给定区间-保留摘要-不反复求和">1. 已给定区间：保留摘要，不反复求和</a><a class="topic" href="#区间和-空前缀消掉左端特判">区间和：空前缀消掉左端特判</a><a class="topic" href="#异或也可消去相同前缀-最小值和or却不行">异或也可消去相同前缀，最小值和OR却不行</a><a class="topic" href="#固定长度的和-只维护当前窗口">固定长度的和：只维护当前窗口</a><a class="group" href="#2-固定窗口的频数-同一边界可维护多个状态">2. 固定窗口的频数：同一边界可维护多个状态</a><a class="topic" href="#不同值数量-频数降到0才真正离开">不同值数量：频数降到0才真正离开</a><a class="topic" href="#固定长度-互异-最大和是状态组合">固定长度、互异、最大和是状态组合</a><a class="topic" href="#异位词位置-需要的是每种字符的数量">异位词位置：需要的是每种字符的数量</a><a class="group" href="#3-任意正负的目标关系-匹配历史前缀">3. 任意正负的目标关系：匹配历史前缀</a><a class="topic" href="#目标和的数量-找p-r-target出现过几次">目标和的数量：找p[r]-target出现过几次</a><a class="topic" href="#同一匹配关系-最长留最早-最短留最近">同一匹配关系，最长留最早，最短留最近</a><a class="topic" href="#整除与余数-把精确和值换成同类状态">整除与余数：把精确和值换成同类状态</a><a class="topic" href="#两类数量相等-将一类记成-1">两类数量相等：将一类记成-1</a><a class="group" href="#4-可变窗口-合法左端能否连续移动">4. 可变窗口：合法左端能否连续移动</a><a class="topic" href="#最长无重复段-左端不能倒退">最长无重复段：左端不能倒退</a><a class="topic" href="#至多k类-一个右端贡献一段左端">至多K类：一个右端贡献一段左端</a><a class="topic" href="#非负和计数-允许零时仍要保存所有合法起点">非负和计数：允许零时仍要保存所有合法起点</a><a class="topic" href="#非负和最短段-达到下界以后继续收缩">非负和最短段：达到下界以后继续收缩</a><a class="group" href="#5-合法性由不同状态决定的窗口">5. 合法性由不同状态决定的窗口</a><a class="topic" href="#最短覆盖-满足以后收缩-缺额重现就停止">最短覆盖：满足以后收缩，缺额重现就停止</a><a class="topic" href="#替换预算-窗口长度减去最大频数">替换预算：窗口长度减去最大频数</a><a class="topic" href="#正整数乘积严格小于k-先保证能乘-再相乘">正整数乘积严格小于K：先保证能乘，再相乘</a><a class="group" href="#6-最优段与支配候选-保留真正可能变优的历史">6. 最优段与支配候选：保留真正可能变优的历史</a><a class="topic" href="#最大段和-每个右端减去最小历史前缀">最大段和：每个右端减去最小历史前缀</a><a class="topic" href="#kadane-以当前位置结尾-是延长还是重新开始">Kadane：以当前位置结尾，是延长还是重新开始</a><a class="topic" href="#固定窗口极值-后来的更优值支配旧候选">固定窗口极值：后来的更优值支配旧候选</a><a class="topic" href="#含负数的最短阈值段-队列维护历史前缀-而非原元素">含负数的最短阈值段：队列维护历史前缀，而非原元素</a><a class="group" href="#范围与原题参照">范围与原题参照</a></nav></details><main><h1 id="连续片段-前缀状态与滑动边界">连续片段：前缀状态与滑动边界</h1>
+<p class="subtitle">求职算法总册 · 题型与 C++ 模板</p>
+<p>面对子数组或子串，先看<strong>需要怎样的区间，以及条件改变后哪些历史信息仍有用</strong>。同样有两个下标，可能是在做固定长度更新、单调窗口、匹配历史前缀，或淘汰已被支配的候选；它们的成立理由不同。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>条件与目标</th>
+<th>方法与核心状态</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>静态区间和／异或，多次查询</td>
+<td>前缀差／前缀异或；保存边界摘要</td>
+</tr>
+<tr>
+<td>固定长度的和、频数、覆盖</td>
+<td>移入一个、移出一个；维护当前状态</td>
+</tr>
+<tr>
+<td>任意正负，目标和的数量／最长／最短</td>
+<td>匹配历史前缀；保存频数／最早／最近位置</td>
+</tr>
+<tr>
+<td>无重复、至多K类</td>
+<td>单向移动合法边界；频数或最近位置</td>
+</tr>
+<tr>
+<td>非负和的上界／下界</td>
+<td>利用和的方向性；维护当前和</td>
+</tr>
+<tr>
+<td>多重集覆盖、替换预算、正整数乘积</td>
+<td>分别维护缺额／最大频数／乘积</td>
+</tr>
+<tr>
+<td>任意正负，最大连续段和</td>
+<td>最小历史前缀／Kadane；一个最优摘要</td>
+</tr>
+<tr>
+<td>固定极值、含负数的最短阈值段</td>
+<td>单调队列；未过期且未被支配的候选</td>
+</tr>
+</tbody></table></div>
+<p>以下为C++17。区间统一写作<code>[l,r)</code>；代码使用<code>vector&lt;int&gt;</code>，n与n+1均能用<code>int</code>表示，累计、答案和前缀差使用<code>long long</code>。需要满足相应中间值可表示的数值范围；哈希方法的O(n)指通常的期望复杂度，最坏情况另计。字符串示例按字节处理，256计数不是Unicode码点分词。</p>
+<h2 id="1-已给定区间-保留摘要-不反复求和">1. 已给定区间：保留摘要，不反复求和</h2>
+<h3 id="区间和-空前缀消掉左端特判">区间和：空前缀消掉左端特判</h3>
+<p>令<code>p[i]</code>为前i项之和，<code>p[0]=0</code>，则<code>[l,r)</code>的和为<code>p[r]-p[l]</code>。原数组允许负数；负数不会破坏这个等式。预处理O(n)、单次查询O(1)、空间O(n)，查询要求<code>0&lt;=l&lt;=r&lt;=n</code>。</p>
+<pre class="cpp"><code>std::vector&lt;i64&gt; prefix_sum(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; a) {
+    std::vector&lt;i64&gt; p(a.size() + <span class="number">1</span>, <span class="number">0</span>);
+    <span class="keyword">for</span> (std::size_t i = <span class="number">0</span>; i &lt; a.size(); ++i) p[i + <span class="number">1</span>] = p[i] + a[i];
+    <span class="keyword">return</span> p;
+}
+i64 interval_sum(<span class="keyword">const</span> std::vector&lt;i64&gt;&amp; p, <span class="type">int</span> l, <span class="type">int</span> r) {
+    <span class="keyword">return</span> p[r] - p[l];                       <span class="comment">// [l,r)</span>
+}</code></pre>
+<p>例如<code>a={2,-1,3}</code>的前缀为<code>{0,2,1,4}</code>，<code>[1,3)</code>得到<code>4-2=2</code>。前缀下标表示元素间的位置，长度为<code>r-l</code>；原题若使用1-based闭区间<code>[a,b]</code>，对应这里的<code>[a-1,b)</code>。前缀差可以计算空区间，但后面的子数组计数仍只数非空段。</p>
+<h3 id="异或也可消去相同前缀-最小值和or却不行">异或也可消去相同前缀，最小值和OR却不行</h3>
+<p>相同位模式异或两次会抵消，因此区间异或用<code>p[r]^p[l]</code>。这里显式转为unsigned位模式。</p>
+<pre class="cpp"><code>std::vector&lt;unsigned&gt; prefix_xor(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; a) {
+    std::vector&lt;unsigned&gt; p(a.size() + <span class="number">1</span>, <span class="number">0</span>);
+    <span class="keyword">for</span> (std::size_t i = <span class="number">0</span>; i &lt; a.size(); ++i)
+        p[i + <span class="number">1</span>] = p[i] ^ static_cast&lt;unsigned&gt;(a[i]);
+    <span class="keyword">return</span> p;
+}
+unsigned interval_xor(<span class="keyword">const</span> std::vector&lt;unsigned&gt;&amp; p, <span class="type">int</span> l, <span class="type">int</span> r) {
+    <span class="keyword">return</span> p[r] ^ p[l];
+}</code></pre>
+<p>不能照着把前缀最小值“相减”得到区间最小值；前缀OR也无法知道某个位来自被移除部分还是保留部分。能否消去旧状态，是决定所需结构的条件。</p>
+<h3 id="固定长度的和-只维护当前窗口">固定长度的和：只维护当前窗口</h3>
+<p>若只顺序处理所有长度k的窗口，不必保留整份前缀：加入新元素，移除<code>r-k</code>，第k项到达后输出。负数、零均可使用，因为窗口长度固定，不根据和决定移动方向。</p>
+<pre class="cpp"><code>std::vector&lt;i64&gt; fixed_window_sums(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; a, <span class="type">int</span> k) {
+    <span class="keyword">const</span> <span class="type">int</span> n = static_cast&lt;<span class="type">int</span>&gt;(a.size());
+    <span class="keyword">if</span> (k &lt;= <span class="number">0</span> || k &gt; n) <span class="keyword">return</span> {};
+    std::vector&lt;i64&gt; result;
+    result.reserve(n - k + <span class="number">1</span>);
+    i64 sum = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="type">int</span> r = <span class="number">0</span>; r &lt; n; ++r) {
+        sum += a[r];
+        <span class="keyword">if</span> (r &gt;= k) sum -= a[r - k];
+        <span class="keyword">if</span> (r + <span class="number">1</span> &gt;= k) result.push_back(sum);
+    }
+    <span class="keyword">return</span> result;
+}</code></pre>
+<p>时间O(n)，除输出外额外空间O(1)。<code>k&lt;=0</code>或<code>k&gt;n</code>时没有合法的正长度窗口，返回空列表。固定窗口异或把加减都换为异或即可。</p>
+<h2 id="2-固定窗口的频数-同一边界可维护多个状态">2. 固定窗口的频数：同一边界可维护多个状态</h2>
+<h3 id="不同值数量-频数降到0才真正离开">不同值数量：频数降到0才真正离开</h3>
+<p>用<code>unordered_map</code>支持稀疏或较大的值域。删除旧元素时不能直接删键，窗口里可能还有相同值；计数变为0后才擦除。</p>
+<pre class="cpp"><code>std::vector&lt;<span class="type">int</span>&gt; fixed_window_distinct(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; a, <span class="type">int</span> k) {
+    <span class="keyword">const</span> <span class="type">int</span> n = static_cast&lt;<span class="type">int</span>&gt;(a.size());
+    <span class="keyword">if</span> (k &lt;= <span class="number">0</span> || k &gt; n) <span class="keyword">return</span> {};
+    std::unordered_map&lt;<span class="type">int</span>, <span class="type">int</span>&gt; count;
+    std::vector&lt;<span class="type">int</span>&gt; result;
+    <span class="keyword">for</span> (<span class="type">int</span> r = <span class="number">0</span>; r &lt; n; ++r) {
+        ++count[a[r]];
+        <span class="keyword">if</span> (r &gt;= k) {
+            <span class="keyword">auto</span> it = count.find(a[r - k]);
+            <span class="keyword">if</span> (--it-&gt;second == <span class="number">0</span>) count.erase(it);
+        }
+        <span class="keyword">if</span> (r + <span class="number">1</span> &gt;= k) result.push_back(static_cast&lt;<span class="type">int</span>&gt;(count.size()));
+    }
+    <span class="keyword">return</span> result;
+}</code></pre>
+<p>时间期望O(n)，除输出外空间O(min(k,d))，d为值域中实际出现的不同值数。小而确定的值域可改数组；“元素值可能到10^9”不适合按最大值直接开表。</p>
+<h3 id="固定长度-互异-最大和是状态组合">固定长度、互异、最大和是状态组合</h3>
+<p>窗口边界仍由k决定，同时维护和与频数。长度为k时，恰有k种值就等价于互异；满足后更新最优和，不需要为每一种条件组合发明新的移动规则。</p>
+<pre class="cpp"><code>std::optional&lt;i64&gt; max_distinct_window_sum(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; a, <span class="type">int</span> k) {
+    <span class="keyword">const</span> <span class="type">int</span> n = static_cast&lt;<span class="type">int</span>&gt;(a.size());
+    <span class="keyword">if</span> (k &lt;= <span class="number">0</span> || k &gt; n) <span class="keyword">return</span> std::nullopt;
+    std::unordered_map&lt;<span class="type">int</span>, <span class="type">int</span>&gt; count;
+    i64 sum = <span class="number">0</span>;
+    std::optional&lt;i64&gt; best;
+    <span class="keyword">for</span> (<span class="type">int</span> r = <span class="number">0</span>; r &lt; n; ++r) {
+        sum += a[r];
+        ++count[a[r]];
+        <span class="keyword">if</span> (r &gt;= k) {
+            sum -= a[r - k];
+            <span class="keyword">auto</span> it = count.find(a[r - k]);
+            <span class="keyword">if</span> (--it-&gt;second == <span class="number">0</span>) count.erase(it);
+        }
+        <span class="keyword">if</span> (r + <span class="number">1</span> &gt;= k &amp;&amp; static_cast&lt;<span class="type">int</span>&gt;(count.size()) == k)
+            <span class="keyword">if</span> (!best || sum &gt; *best) best = sum;
+    }
+    <span class="keyword">return</span> best;
+}</code></pre>
+<p>这里用<code>optional</code>区分无合法窗口与合法的负数答案。若题目保证正数并规定无解输出0，可将无值转换为0；不能把一般有符号版本的初始最优值直接设为0。</p>
+<h3 id="异位词位置-需要的是每种字符的数量">异位词位置：需要的是每种字符的数量</h3>
+<p>模式串给出所需多重集。<code>need[ch]</code>表示还缺多少个该字符，负值表示多了；<code>missing</code>记录总缺额。长度相等时，总缺额为0便得到一个异位词窗口。</p>
+<pre class="cpp"><code>std::vector&lt;<span class="type">int</span>&gt; anagram_starts(std::string_view s, std::string_view pattern) {
+    <span class="keyword">const</span> <span class="type">int</span> n = static_cast&lt;<span class="type">int</span>&gt;(s.size());
+    <span class="keyword">const</span> <span class="type">int</span> k = static_cast&lt;<span class="type">int</span>&gt;(pattern.size());
+    <span class="keyword">if</span> (k == <span class="number">0</span> || k &gt; n) <span class="keyword">return</span> {};
+    std::array&lt;<span class="type">int</span>, <span class="number">256</span>&gt; need{};
+    <span class="keyword">for</span> (unsigned char ch : pattern) ++need[ch];
+    <span class="type">int</span> missing = k;
+    std::vector&lt;<span class="type">int</span>&gt; result;
+    <span class="keyword">for</span> (<span class="type">int</span> r = <span class="number">0</span>; r &lt; n; ++r) {
+        <span class="keyword">if</span> (--need[static_cast&lt;unsigned char&gt;(s[r])] &gt;= <span class="number">0</span>) --missing;
+        <span class="keyword">if</span> (r &gt;= k)
+            <span class="keyword">if</span> (++need[static_cast&lt;unsigned char&gt;(s[r - k])] &gt; <span class="number">0</span>) ++missing;
+        <span class="keyword">if</span> (r + <span class="number">1</span> &gt;= k &amp;&amp; missing == <span class="number">0</span>) result.push_back(r - k + <span class="number">1</span>);
+    }
+    <span class="keyword">return</span> result;
+}</code></pre>
+<p>加入字符时，新的<code>need</code>仍非负才补上一个缺额；移出字符后<code>need&gt;0</code>才新产生缺额。例如模式<code>aab</code>需要两个a，仅看“含a和b”会误判。时间O(n+m)，计数空间固定；本接口对空模式返回空列表。</p>
+<h2 id="3-任意正负的目标关系-匹配历史前缀">3. 任意正负的目标关系：匹配历史前缀</h2>
+<h3 id="目标和的数量-找p-r-target出现过几次">目标和的数量：找<code>p[r]-target</code>出现过几次</h3>
+<p><code>p[r]-p[l]=target</code>改写为<code>p[l]=p[r]-target</code>。处理右端时，只在此前的前缀中查询这个状态；一份频数能一次计入多个左端，而不是每次重新扫描。</p>
+<pre class="cpp"><code>i64 count_sum(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; a, i64 target) {
+    std::unordered_map&lt;i64, i64&gt; frequency;
+    frequency[<span class="number">0</span>] = <span class="number">1</span>;                         <span class="comment">// 空前缀，不是空子数组</span>
+    i64 p = <span class="number">0</span>, answer = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="type">int</span> value : a) {
+        p += value;
+        <span class="keyword">auto</span> it = frequency.find(p - target);
+        <span class="keyword">if</span> (it != frequency.end()) answer += it-&gt;second;
+        ++frequency[p];                      <span class="comment">// 查询后才记入当前前缀</span>
+    }
+    <span class="keyword">return</span> answer;
+}</code></pre>
+<p><code>frequency[0]=1</code>使从第0项开始的段能被找到。<strong>先查、后记录当前前缀</strong>保证<code>l&lt;r</code>；若反过来，target为0时会把当前前缀与自己配对，额外数入空段。<code>{0,0}</code>的非空零和段共有3个，也说明同一前缀状态的重数不能丢。</p>
+<h3 id="同一匹配关系-最长留最早-最短留最近">同一匹配关系，最长留最早，最短留最近</h3>
+<p>目标从数量改为长度，查询的键不变，保存的信息却变了。固定右端r，最早的l使<code>r-l</code>最大，最近的l使它最小。</p>
+<pre class="cpp"><code><span class="type">int</span> longest_sum(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; a, i64 target) {
+    std::unordered_map&lt;i64, <span class="type">int</span>&gt; first;
+    first[<span class="number">0</span>] = <span class="number">0</span>;
+    i64 p = <span class="number">0</span>;
+    <span class="type">int</span> answer = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="type">int</span> r = <span class="number">1</span>; r &lt;= static_cast&lt;<span class="type">int</span>&gt;(a.size()); ++r) {
+        p += a[r - <span class="number">1</span>];
+        <span class="keyword">auto</span> it = first.find(p - target);
+        <span class="keyword">if</span> (it != first.end()) answer = std::max(answer, r - it-&gt;second);
+        first.emplace(p, r);                 <span class="comment">// 相同状态只留最早位置</span>
+    }
+    <span class="keyword">return</span> answer;
+}
+<span class="type">int</span> shortest_exact_sum(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; a, i64 target) {
+    std::unordered_map&lt;i64, <span class="type">int</span>&gt; last;
+    last[<span class="number">0</span>] = <span class="number">0</span>;
+    i64 p = <span class="number">0</span>;
+    <span class="type">int</span> answer = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="type">int</span> r = <span class="number">1</span>; r &lt;= static_cast&lt;<span class="type">int</span>&gt;(a.size()); ++r) {
+        p += a[r - <span class="number">1</span>];
+        <span class="keyword">auto</span> it = last.find(p - target);
+        <span class="keyword">if</span> (it != last.end()) {
+            <span class="keyword">const</span> <span class="type">int</span> length = r - it-&gt;second;
+            <span class="keyword">if</span> (answer == <span class="number">0</span> || length &lt; answer) answer = length;
+        }
+        last[p] = r;                         <span class="comment">// 求最短改为最近位置</span>
+    }
+    <span class="keyword">return</span> answer;                           <span class="comment">// 0 表示没有非空解</span>
+}</code></pre>
+<p>最长版本用<code>emplace</code>保留首次位置，最短版本覆盖最近位置；都在查询以后更新。两个函数以0表示没有非空解。时间期望O(n)，空间O(n)。只记一个位置无法替代频数来统计数量。</p>
+<h3 id="整除与余数-把精确和值换成同类状态">整除与余数：把精确和值换成同类状态</h3>
+<p>段和能被m整除，当且仅当两端前缀和具有相同的规范化余数。C++的负数<code>%</code>可能得到负余数，应转到<code>[0,m)</code>后再作为键。m须为正。</p>
+<pre class="cpp"><code>i64 count_divisible_sum(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; a, <span class="type">int</span> modulus) {
+    <span class="keyword">if</span> (modulus &lt;= <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;
+    std::unordered_map&lt;<span class="type">int</span>, i64&gt; frequency;
+    frequency[<span class="number">0</span>] = <span class="number">1</span>;
+    i64 p = <span class="number">0</span>, answer = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="type">int</span> value : a) {
+        p += value;
+        <span class="type">int</span> residue = static_cast&lt;<span class="type">int</span>&gt;(p % modulus);
+        <span class="keyword">if</span> (residue &lt; <span class="number">0</span>) residue += modulus;
+        answer += frequency[residue];
+        ++frequency[residue];
+    }
+    <span class="keyword">return</span> answer;
+}</code></pre>
+<p>若m较小，可以用长度m的数组；上面用哈希只保存出现过的类。不要将不同状态碰巧拥有相同哈希值理解为同类，相等性仍由键决定。</p>
+<h3 id="两类数量相等-将一类记成-1">两类数量相等：将一类记成-1</h3>
+<p>二元数组中把0视作-1、1视作+1，数量相等就成为段和为0。要求最长，因此保存每个balance的最早位置。</p>
+<pre class="cpp"><code><span class="type">int</span> longest_balanced_binary(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; a) {
+    std::unordered_map&lt;<span class="type">int</span>, <span class="type">int</span>&gt; first;
+    first[<span class="number">0</span>] = <span class="number">0</span>;
+    <span class="type">int</span> balance = <span class="number">0</span>, answer = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="type">int</span> r = <span class="number">1</span>; r &lt;= static_cast&lt;<span class="type">int</span>&gt;(a.size()); ++r) {
+        balance += a[r - <span class="number">1</span>] == <span class="number">0</span> ? -<span class="number">1</span> : <span class="number">1</span>;    <span class="comment">// 前提：只有 0、1</span>
+        <span class="keyword">auto</span> [it, inserted] = first.emplace(balance, r);
+        <span class="keyword">if</span> (!inserted) answer = std::max(answer, r - it-&gt;second);
+    }
+    <span class="keyword">return</span> answer;
+}</code></pre>
+<p>推广时先写清状态表示什么：两类数量差、奇偶次数或余数关系可能都能成为前缀状态，但不是只要出现“数量相等”就机械套整数和。这里的函数合同只接受0、1。</p>
+<h2 id="4-可变窗口-合法左端能否连续移动">4. 可变窗口：合法左端能否连续移动</h2>
+<h3 id="最长无重复段-左端不能倒退">最长无重复段：左端不能倒退</h3>
+<p>新值上次出现在窗口内时，将左端越过它；出现在旧窗口以前时不影响当前窗口。因此更新是<code>max(left,last+1)</code>，而不是无条件改成上次位置加一。</p>
+<pre class="cpp"><code><span class="type">int</span> longest_distinct(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; a) {
+    std::unordered_map&lt;<span class="type">int</span>, <span class="type">int</span>&gt; last;
+    <span class="type">int</span> left = <span class="number">0</span>, answer = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="type">int</span> r = <span class="number">0</span>; r &lt; static_cast&lt;<span class="type">int</span>&gt;(a.size()); ++r) {
+        <span class="keyword">auto</span> it = last.find(a[r]);
+        <span class="keyword">if</span> (it != last.end()) left = std::max(left, it-&gt;second + <span class="number">1</span>);
+        last[a[r]] = r;
+        answer = std::max(answer, r - left + <span class="number">1</span>);
+    }
+    <span class="keyword">return</span> answer;
+}</code></pre>
+<p>在<code>{1,2,2,1}</code>中遇到最后的1，不能把已经右移的left退回去。每个位置处理一次，时间期望O(n)、空间O(d)。字符串的同型题可把键改为字节或字符编码。</p>
+<p>若元素<strong>严格为正</strong>，改求变长互异段的最大和，仍沿用这个合法left：先用本章的<code>p=prefix_sum(a)</code>，将长度更新换成64位的<code>best=max(best,p[r+1]-p[left])</code>即可。正数保证固定右端时，最左合法起点的和最大；这是状态与目标的组合，不是另一种移动外壳。<a href="https://leetcode.com/problems/maximum-erasure-value/" target="_blank" rel="noopener noreferrer">Maximum Erasure Value</a>就是此合同。含负数时不能这样改，例如<code>{-5,1}</code>的最长合法段和为-4，最优和却是1。</p>
+<h3 id="至多k类-一个右端贡献一段左端">至多K类：一个右端贡献一段左端</h3>
+<p>加入右端后，若种类太多就收缩；直到<code>[left,r]</code>合法。此时所有<code>[l,r]</code>，<code>left&lt;=l&lt;=r</code>也合法，更早的左端不合法。因此当前右端的贡献是<code>r-left+1</code>，同一边界还可求最长长度。</p>
+<pre class="cpp"><code>struct WindowStats { i64 count; <span class="type">int</span> longest; };
+WindowStats at_most_distinct(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; a, <span class="type">int</span> k) {
+    <span class="keyword">if</span> (k &lt;= <span class="number">0</span>) <span class="keyword">return</span> {<span class="number">0</span>, <span class="number">0</span>};
+    std::unordered_map&lt;<span class="type">int</span>, <span class="type">int</span>&gt; frequency;
+    WindowStats answer{<span class="number">0</span>, <span class="number">0</span>};
+    <span class="type">int</span> left = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="type">int</span> r = <span class="number">0</span>; r &lt; static_cast&lt;<span class="type">int</span>&gt;(a.size()); ++r) {
+        ++frequency[a[r]];
+        <span class="keyword">while</span> (static_cast&lt;<span class="type">int</span>&gt;(frequency.size()) &gt; k) {
+            <span class="keyword">auto</span> it = frequency.find(a[left++]);
+            <span class="keyword">if</span> (--it-&gt;second == <span class="number">0</span>) frequency.erase(it);
+        }
+        <span class="keyword">const</span> <span class="type">int</span> length = r - left + <span class="number">1</span>;
+        answer.count += length;              <span class="comment">// 所有 [l,r]，left&lt;=l&lt;=r</span>
+        answer.longest = std::max(answer.longest, length);
+    }
+    <span class="keyword">return</span> answer;
+}
+i64 exactly_distinct(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; a, <span class="type">int</span> k) {
+    <span class="keyword">if</span> (k &lt;= <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;
+    <span class="keyword">return</span> at_most_distinct(a, k).count - at_most_distinct(a, k - <span class="number">1</span>).count;
+}</code></pre>
+<p>恰好K类并不满足同样的“收缩仍合法”：少删一个可能是K类，多删一个就变为K-1类。用<code>F(K)-F(K-1)</code>统计恰好K类，F表示至多的数量。两次线性扫描仍为期望O(n)；K&lt;=0时非空答案为0。</p>
+<h3 id="非负和计数-允许零时仍要保存所有合法起点">非负和计数：允许零时仍要保存所有合法起点</h3>
+<p>当元素非负时，扩大右端不会使和减小，移走左端不会使和增大。可按“和至多limit”维护合法左端，并用两个上界计数之差得到精确和。</p>
+<pre class="cpp"><code>i64 count_sum_at_most(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; a, i64 limit) {
+    <span class="keyword">if</span> (limit &lt; <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;                  <span class="comment">// 前提：a[i]&gt;=0</span>
+    <span class="type">int</span> left = <span class="number">0</span>;
+    i64 sum = <span class="number">0</span>, answer = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="type">int</span> r = <span class="number">0</span>; r &lt; static_cast&lt;<span class="type">int</span>&gt;(a.size()); ++r) {
+        sum += a[r];
+        <span class="keyword">while</span> (sum &gt; limit) sum -= a[left++];
+        answer += r - left + <span class="number">1</span>;
+    }
+    <span class="keyword">return</span> answer;
+}
+i64 count_nonnegative_sum(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; a, i64 target) {
+    <span class="keyword">if</span> (target &lt; <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;
+    <span class="keyword">return</span> count_sum_at_most(a, target) - count_sum_at_most(a, target - <span class="number">1</span>);
+}</code></pre>
+<p>这个写法同时承载正数和零。严格正数的精确和，在固定右端时最多有一个左端；一旦允许零，该简化不再成立。例如<code>{0,0}</code>、target=0需要数3段，而不是每个右端只加1。含负数时，先前和过大的左端以后可能重新有用，改用上一节的历史前缀匹配。</p>
+<h3 id="非负和最短段-达到下界以后继续收缩">非负和最短段：达到下界以后继续收缩</h3>
+<p>这次目标是最短且和至少target。窗口达到下界时先记录，再不断删左端；一旦不满足，等待新的右端。每个元素至多进入与离开一次。</p>
+<pre class="cpp"><code><span class="type">int</span> shortest_nonnegative_sum(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; a, i64 target) {
+    <span class="comment">// 非空段；target&lt;=0时，非空非负数组的任一单元素已满足。</span>
+    <span class="keyword">if</span> (target &lt;= <span class="number">0</span>) <span class="keyword">return</span> a.empty() ? <span class="number">0</span> : <span class="number">1</span>;
+    <span class="type">int</span> left = <span class="number">0</span>, answer = <span class="number">0</span>;
+    i64 sum = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="type">int</span> r = <span class="number">0</span>; r &lt; static_cast&lt;<span class="type">int</span>&gt;(a.size()); ++r) {
+        sum += a[r];
+        <span class="keyword">while</span> (sum &gt;= target) {
+            <span class="keyword">const</span> <span class="type">int</span> length = r - left + <span class="number">1</span>;
+            <span class="keyword">if</span> (answer == <span class="number">0</span> || length &lt; answer) answer = length;
+            sum -= a[left++];
+        }
+    }
+    <span class="keyword">return</span> answer;
+}</code></pre>
+<p>时间O(n)、额外空间O(1)，0表示无非空解。对非空非负数组，target&lt;=0时最短长度为1。<strong>不能把它直接用于负数</strong>：<code>{1,-1,5}</code>、target=5中，普通窗口会在删掉1后因和降到4而停止，漏掉后面的单元素5；第6节给出这种条件下的真正替代结构。</p>
+<h2 id="5-合法性由不同状态决定的窗口">5. 合法性由不同状态决定的窗口</h2>
+<h3 id="最短覆盖-满足以后收缩-缺额重现就停止">最短覆盖：满足以后收缩，缺额重现就停止</h3>
+<p>覆盖指定多重集与无重复是不同条件。<code>missing==0</code>表示每个必需字符都够了；此时逐步收缩，直到移走了一个仍有需求的字符。</p>
+<pre class="cpp"><code>std::string minimum_cover(std::string_view s, std::string_view pattern) {
+    <span class="keyword">if</span> (pattern.empty()) <span class="keyword">return</span> {};
+    std::array&lt;<span class="type">int</span>, <span class="number">256</span>&gt; need{};
+    <span class="keyword">for</span> (unsigned char ch : pattern) ++need[ch];
+    <span class="type">int</span> missing = static_cast&lt;<span class="type">int</span>&gt;(pattern.size());
+    <span class="type">int</span> left = <span class="number">0</span>, best_left = -<span class="number">1</span>, best_length = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="type">int</span> r = <span class="number">0</span>; r &lt; static_cast&lt;<span class="type">int</span>&gt;(s.size()); ++r) {
+        <span class="keyword">if</span> (--need[static_cast&lt;unsigned char&gt;(s[r])] &gt;= <span class="number">0</span>) --missing;
+        <span class="keyword">while</span> (missing == <span class="number">0</span>) {
+            <span class="keyword">if</span> (best_left &lt; <span class="number">0</span> || r - left + <span class="number">1</span> &lt; best_length) {
+                best_left = left;
+                best_length = r - left + <span class="number">1</span>;
+            }
+            <span class="keyword">if</span> (++need[static_cast&lt;unsigned char&gt;(s[left++])] &gt; <span class="number">0</span>) ++missing;
+        }
+    }
+    <span class="keyword">return</span> best_left &lt; <span class="number">0</span> ? std::string{} : std::string(s.substr(best_left, best_length));
+}</code></pre>
+<p>长度并不固定，所以覆盖窗口可以有多余字符。代码返回最短内容，无解或空模式返回空串；时间O(n+m)、计数空间固定。模式含重复字符时仍按重数覆盖，不能将总需求改成不同字符种类而沿用同一更新条件。</p>
+<h3 id="替换预算-窗口长度减去最大频数">替换预算：窗口长度减去最大频数</h3>
+<p>把窗口全部变成同一个字母，应保留最多的那种，其余都替换；成本是<code>length-max_frequency</code>。这里针对大写字母，每次用26项扫描得到<strong>当前窗口的真实最大频数</strong>。</p>
+<pre class="cpp"><code><span class="type">int</span> longest_replacement(std::string_view s, <span class="type">int</span> budget) {
+    <span class="keyword">if</span> (budget &lt; <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;
+    std::array&lt;<span class="type">int</span>, <span class="number">26</span>&gt; frequency{};          <span class="comment">// 前提：大写英文字母</span>
+    <span class="type">int</span> left = <span class="number">0</span>, answer = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="type">int</span> r = <span class="number">0</span>; r &lt; static_cast&lt;<span class="type">int</span>&gt;(s.size()); ++r) {
+        ++frequency[s[r] - <span class="string">'A'</span>];
+        <span class="keyword">while</span> (r - left + <span class="number">1</span> - *std::max_element(frequency.begin(), frequency.end()) &gt; budget)
+            --frequency[s[left++] - <span class="string">'A'</span>];
+        answer = std::max(answer, r - left + <span class="number">1</span>);
+    }
+    <span class="keyword">return</span> answer;
+}</code></pre>
+<p>时间O(26n)，固定字母表下仍为O(n)。另一种常见最长答案技巧只维护历史最大频数，它不保证当前窗口实时合法；不能把该历史值直接拿去枚举合法区间或作为每次收缩后的真实证书。上面的版本选择明确的实时合同。</p>
+<h3 id="正整数乘积严格小于k-先保证能乘-再相乘">正整数乘积严格小于K：先保证能乘，再相乘</h3>
+<p>元素至少为1时，扩大窗口不会使乘积变小；K&lt;=1时没有合法非空段。需要严格小于K，所以使用整数上界<code>K-1</code>。当参数较宽时，不能先把乘法溢出，再试图通过收缩补救。</p>
+<pre class="cpp"><code>i64 count_product_below(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; a, i64 k) {
+    <span class="keyword">if</span> (k &lt;= <span class="number">1</span>) <span class="keyword">return</span> <span class="number">0</span>;                    <span class="comment">// 前提：每个 a[i]&gt;=1</span>
+    <span class="keyword">const</span> i64 limit = k - <span class="number">1</span>;
+    i64 product = <span class="number">1</span>, answer = <span class="number">0</span>;
+    <span class="type">int</span> left = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="type">int</span> r = <span class="number">0</span>; r &lt; static_cast&lt;<span class="type">int</span>&gt;(a.size()); ++r) {
+        <span class="keyword">const</span> i64 value = a[r];
+        <span class="keyword">while</span> (left &lt; r &amp;&amp; product &gt; limit / value) product /= a[left++];
+        <span class="keyword">if</span> (product &gt; limit / value) {       <span class="comment">// 单个 value 已不合法</span>
+            left = r + <span class="number">1</span>;
+            product = <span class="number">1</span>;
+            continue;
+        }
+        product *= value;                   <span class="comment">// 到这里才乘，不会先溢出</span>
+        answer += r - left + <span class="number">1</span>;
+    }
+    <span class="keyword">return</span> answer;
+}</code></pre>
+<p><code>product &gt; (K-1)/value</code>在相乘前判断是否超界。单个新元素已经过大时丢弃这次窗口并重启；其余情况下乘积一直不超过K-1。每个元素至多移出一次，时间O(n)、空间O(1)。本节合同是严格正整数，不包含零或负数乘积。</p>
+<h2 id="6-最优段与支配候选-保留真正可能变优的历史">6. 最优段与支配候选：保留真正可能变优的历史</h2>
+<h3 id="最大段和-每个右端减去最小历史前缀">最大段和：每个右端减去最小历史前缀</h3>
+<p>任意符号都可用<code>p[r]-p[l]</code>。固定r，要让差最大，只需此前最小的前缀，不必枚举所有l。先比较答案，再用当前前缀更新最小值，保持非空段。</p>
+<pre class="cpp"><code>struct SumRange { i64 sum; <span class="type">int</span> left, right; }; <span class="comment">// [left,right)</span>
+std::optional&lt;SumRange&gt; maximum_sum_prefix(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; a) {
+    <span class="keyword">if</span> (a.empty()) <span class="keyword">return</span> std::nullopt;
+    SumRange answer{std::numeric_limits&lt;i64&gt;::lowest(), <span class="number">0</span>, <span class="number">0</span>};
+    i64 p = <span class="number">0</span>, minimum = <span class="number">0</span>;
+    <span class="type">int</span> minimum_position = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="type">int</span> r = <span class="number">1</span>; r &lt;= static_cast&lt;<span class="type">int</span>&gt;(a.size()); ++r) {
+        p += a[r - <span class="number">1</span>];
+        <span class="keyword">if</span> (p - minimum &gt; answer.sum) answer = {p - minimum, minimum_position, r};
+        <span class="keyword">if</span> (p &lt; minimum) { minimum = p; minimum_position = r; }
+    }
+    <span class="keyword">return</span> answer;                          <span class="comment">// 全负也返回非空段</span>
+}</code></pre>
+<p>返回和及半开区间；空数组没有非空答案，返回无值。同和允许返回其中一个最优段。初始化为0会让全负数组错误选择空段；<code>{-5,-2,-7}</code>的非空最优值应是-2。</p>
+<h3 id="kadane-以当前位置结尾-是延长还是重新开始">Kadane：以当前位置结尾，是延长还是重新开始</h3>
+<p>若上一段结尾的最优和已经小于0，接上它不如从当前元素重启；否则延长。<code>ending</code>和全局最优是两份不同状态。</p>
+<pre class="cpp"><code>std::optional&lt;SumRange&gt; maximum_sum_kadane(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; a) {
+    <span class="keyword">if</span> (a.empty()) <span class="keyword">return</span> std::nullopt;
+    SumRange answer{a[<span class="number">0</span>], <span class="number">0</span>, <span class="number">1</span>};
+    i64 ending = a[<span class="number">0</span>];
+    <span class="type">int</span> start = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; static_cast&lt;<span class="type">int</span>&gt;(a.size()); ++i) {
+        <span class="keyword">if</span> (ending &lt; <span class="number">0</span>) { ending = a[i]; start = i; }
+        <span class="keyword">else</span> ending += a[i];
+        <span class="keyword">if</span> (ending &gt; answer.sum) answer = {ending, start, i + <span class="number">1</span>};
+    }
+    <span class="keyword">return</span> answer;
+}</code></pre>
+<p>两种实现均为O(n)时间、O(1)额外空间，且能保留答案边界。前缀视角在后续增加限制时更容易看出“还允许使用哪些左端”；Kadane的短实现不能不加判断地推广到任意长度限制或多段约束。</p>
+<h3 id="固定窗口极值-后来的更优值支配旧候选">固定窗口极值：后来的更优值支配旧候选</h3>
+<p>求每个长度k窗口的最大值。新值更大或相等时，旧候选更差且更早过期，之后不会再成为必要答案，可以从队尾淘汰。队首按下标检查过期，队列保持从大到小的候选值；求最小值反转比较方向。</p>
+<pre class="cpp"><code>std::vector&lt;<span class="type">int</span>&gt; fixed_window_extreme(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; a, <span class="type">int</span> k,
+                                    <span class="type">bool</span> maximum = <span class="keyword">true</span>) {
+    <span class="keyword">const</span> <span class="type">int</span> n = static_cast&lt;<span class="type">int</span>&gt;(a.size());
+    <span class="keyword">if</span> (k &lt;= <span class="number">0</span> || k &gt; n) <span class="keyword">return</span> {};
+    std::deque&lt;<span class="type">int</span>&gt; candidates;              <span class="comment">// 下标，不是整个窗口</span>
+    std::vector&lt;<span class="type">int</span>&gt; result;
+    <span class="keyword">for</span> (<span class="type">int</span> r = <span class="number">0</span>; r &lt; n; ++r) {
+        <span class="keyword">while</span> (!candidates.empty() &amp;&amp; candidates.front() &lt;= r - k)
+            candidates.pop_front();         <span class="comment">// 下标过期</span>
+        <span class="keyword">while</span> (!candidates.empty() &amp;&amp;
+               (maximum ? a[candidates.back()] &lt;= a[r] : a[candidates.back()] &gt;= a[r]))
+            candidates.pop_back();          <span class="comment">// 后来的候选更好，且更晚过期</span>
+        candidates.push_back(r);
+        <span class="keyword">if</span> (r + <span class="number">1</span> &gt;= k) result.push_back(a[candidates.front()]);
+    }
+    <span class="keyword">return</span> result;
+}</code></pre>
+<p>这里保存的是<strong>候选下标，不是排序后的整个窗口</strong>。等值时可以保留较新的下标；旧下标移出窗口时不能凭值误删新的同值候选。<code>{2,2,3}</code>、k=2的最小值应为<code>{2,2}</code>。每个下标至多入队、出队一次，总时间O(n)，除输出外空间O(k)。</p>
+<h3 id="含负数的最短阈值段-队列维护历史前缀-而非原元素">含负数的最短阈值段：队列维护历史前缀，而非原元素</h3>
+<p>目标是最短非空段满足<code>p[r]-p[l]&gt;=target</code>。负数使普通窗口失去方向性，但可以证明两种历史候选可永久删除：</p>
+<ul>
+<li>某个l已与当前r配成合法段，同一起点配更晚终点只会更长，记录后可删。</li>
+<li>新起点j比旧起点i晚，且<code>p[j]&lt;=p[i]</code>，则对所有未来右端，j得到的和不更小、长度却更短，i被支配。</li>
+</ul>
+<pre class="cpp"><code><span class="type">int</span> shortest_signed_sum(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; a, i64 target) {
+    <span class="keyword">const</span> <span class="keyword">auto</span> p = prefix_sum(a);
+    std::deque&lt;<span class="type">int</span>&gt; candidates;
+    <span class="type">int</span> answer = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="type">int</span> r = <span class="number">0</span>; r &lt; static_cast&lt;<span class="type">int</span>&gt;(p.size()); ++r) {
+        <span class="keyword">while</span> (!candidates.empty() &amp;&amp; p[r] - p[candidates.front()] &gt;= target) {
+            <span class="keyword">const</span> <span class="type">int</span> length = r - candidates.front();
+            <span class="keyword">if</span> (answer == <span class="number">0</span> || length &lt; answer) answer = length;
+            candidates.pop_front();         <span class="comment">// 同一起点的更晚终点只会更长</span>
+        }
+        <span class="keyword">while</span> (!candidates.empty() &amp;&amp; p[candidates.back()] &gt;= p[r])
+            candidates.pop_back();          <span class="comment">// 新起点更晚，且前缀值不更大</span>
+        candidates.push_back(r);            <span class="comment">// 查询在前，不选空段</span>
+    }
+    <span class="keyword">return</span> answer;                          <span class="comment">// 0 表示无解；题目要求-1时作返回值转换</span>
+}</code></pre>
+<p>队列的下标递增，前缀值也递增。队首反复取出已经满足阈值的起点，以免只记录一个较长答案；队尾删除被新前缀支配的候选。当前r最后才入队，保证不是拿同一个前缀与自己组成空段。本接口无解返回0；原题若规定-1，对无解返回值作对应转换。</p>
+<p>两种单调队列不能混用弹出理由：固定极值的队首因为<strong>下标过期</strong>删除；本题的队首因为<strong>已经产生该起点最短可用答案</strong>删除。时间O(n)、空间O(n)，前缀值与差均使用64位。</p>
+<h2 id="范围与原题参照">范围与原题参照</h2>
+<p>本章主讲一维序列的连续片段、静态前缀关系与窗口状态。一般排序、任意位置的k-sum、二维矩形、动态区间更新、窗口中位数／排名与代价不由本章外壳自动覆盖。</p>
+<p>原题可对照<a href="https://cses.fi/problemset/task/1646/" target="_blank" rel="noopener noreferrer">CSES区间和</a>、<a href="https://cses.fi/problemset/task/1660/" target="_blank" rel="noopener noreferrer">正数和计数</a>、<a href="https://cses.fi/problemset/task/1661/" target="_blank" rel="noopener noreferrer">有符号和计数</a>、<a href="https://cses.fi/problemset/task/2428/" target="_blank" rel="noopener noreferrer">不同值限制</a>，以及LeetCode的<a href="https://leetcode.com/problems/minimum-window-substring/" target="_blank" rel="noopener noreferrer">最短覆盖</a>、<a href="https://leetcode.com/problems/longest-repeating-character-replacement/" target="_blank" rel="noopener noreferrer">替换预算</a>、<a href="https://leetcode.com/problems/subarray-product-less-than-k/" target="_blank" rel="noopener noreferrer">正整数乘积</a>、<a href="https://leetcode.com/problems/shortest-subarray-with-sum-at-least-k/" target="_blank" rel="noopener noreferrer">负数最短阈值段</a>。方法还参考了EPI的连续覆盖／无重复问题、CP4的最大段和与滑动窗口、Codility官方前缀与Caterpillar讲义；代码按本章合同独立编写。</p>
+<p>CSES的部分固定窗口题采用很大的生成式输入，并要求将各窗口结果再做异或聚合；以上是相应区间内核，原题的生成、聚合和存储策略仍须按其约束处理，不能把返回所有结果的接口误认为完整提交。</p>
+<footer class="page-foot">连续片段 · 求职算法总册</footer></main></div></div><script>
+const links=[...document.querySelectorAll('.sidebar a')];
+const targets=links.map(a=>document.getElementById(decodeURIComponent(a.hash.slice(1)))) .filter(Boolean);
+let scheduled=false,last='';
+function mark(){scheduled=false;let current=targets[0];for(const t of targets){if(t.getBoundingClientRect().top<=115)current=t;else break;}if(!current||last===current.id)return;last=current.id;for(const a of links){const active=decodeURIComponent(a.hash.slice(1))===last;a.classList.toggle('active',active);if(active){a.setAttribute('aria-current','location');const s=a.closest('.sidebar'),p=s.getBoundingClientRect(),r=a.getBoundingClientRect();if(r.top<p.top+8)s.scrollTop+=r.top-p.top-8;else if(r.bottom>p.bottom-8)s.scrollTop+=r.bottom-p.bottom+8;}else a.removeAttribute('aria-current');}}
+addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(mark)}},{passive:true});mark();
+document.querySelectorAll('.mobile-toc a').forEach(a=>a.addEventListener('click',()=>{document.querySelector('.mobile-toc').open=false}));
+</script></body></html>

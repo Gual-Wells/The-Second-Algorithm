@@ -106,4 +106,4 @@ node tools/build_handbook.mjs <阅读单元目录> <稿名> [系列名]
 
 C++已有四种教材基座、七份候选稿和实际验证，见[阶段记录](../research/2026-10-26/cpp-full-cycle.md)。它们保留为预研资产，不代表七章已发布；其中已有作者内容与未充分研究分支分别存在。算法二分的三份稿也不是三章。继续时先研究候选问题关系，不能从这些文件名预定下一个章名。
 
-当前纠偏和流程依据见[日志复盘](../research/2026-10-26/workflow-retrospective.md)；上游选题及目标交接职责以[研究部协议](../protocol/RESEARCH_DEPARTMENT.md)为准。下一步由`catalog/scope.json.current_frontier`及对应任务记录恢复；未有具体目标时先进行研究部工作，本次协议接入不冒称下一章目标已研究完成。所有能力以实际文件、命令输出与验证结果为准。新增运行平台、远程数据库或语义搜索应解决真实瓶颈；当前流程不依赖这些服务。
+当前纠偏和流程依据见[日志复盘](../research/2026-10-26/workflow-retrospective.md)；上游选题及目标交接职责以[研究部协议](../protocol/RESEARCH_DEPARTMENT.md)为准。正式版算法与C++各第一章的实际目标、范围修订、代码和验证分别在`work/algorithm-first-chapter/`与`work/cpp-first-chapter/`，旧trial保持隐藏。下一步由`catalog/scope.json.current_frontier`及对应任务记录恢复；第二章尚未选题，不能照搬旧目录或将本次未纳入内容全部强制变为下一章。所有能力以实际文件、命令输出与验证结果为准。新增运行平台、远程数据库或语义搜索应解决真实瓶颈；当前流程不依赖这些服务。

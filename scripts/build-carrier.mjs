@@ -43,6 +43,8 @@ export function validatePublications(publications) {
     collections.add(collection.id);
     if (!['algorithm', 'cpp'].includes(collection.track) || !['trial', 'chapter'].includes(collection.kind))
       throw new Error('Invalid track or publication kind');
+    if (collection.visibility !== undefined && !['published', 'hidden'].includes(collection.visibility))
+      throw new Error('Invalid publication visibility');
     if (!collection.title?.trim() || !Array.isArray(collection.documents) || !collection.documents.length)
       throw new Error('Collection requires a title and documents');
     if (collection.kind === 'trial' && Object.hasOwn(collection, 'chapterNumber'))
@@ -199,6 +201,7 @@ export async function buildLibrary(root, output, publications, gitRevision) {
   validatePublications(publications);
   const rows = [], byPath = new Map();
   for (const collection of publications.collections) {
+    if (collection.visibility === 'hidden') continue;
     const documents = [];
     for (const descriptor of collection.documents) {
       const authority = await readAuthority(root, descriptor);
@@ -250,6 +253,16 @@ export async function buildLibrary(root, output, publications, gitRevision) {
   await fs.mkdir(path.join(output, 'library'), { recursive: true });
   await fs.writeFile(path.join(output, 'library/catalog.json'), JSON.stringify(catalog, null, 2) + '\n', 'utf8');
   return { catalog, documents: rows.reduce((n, row) => n + row.documents.length, 0), codeBlocks };
+}
+
+export function publicationIndex(catalog) {
+  return { version: catalog.version, collections: Object.fromEntries(catalog.collections.map(collection =>
+    [collection.id, Object.fromEntries(collection.documents.map(document => [document.id, document.revision]))])) };
+}
+
+export function libraryPaths(catalog) {
+  return ['/library/catalog.json', ...catalog.collections.flatMap(collection => collection.documents
+    .flatMap(document => [document.url, document.sourceUrl, document.markdownUrl]))];
 }
 
 async function loadEsbuild(modulePath) {
@@ -313,10 +326,18 @@ export async function buildCarrier({ root = process.cwd(), contentOnly = false, 
     let buildID;
     if (!contentOnly) {
       const shellFiles = await copyShell(root, staging);
+      // Disable Pages' implicit SPA fallback for retired library URLs.
+      await fs.writeFile(path.join(staging, '404.html'), '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>未找到内容</title><body><p>未找到内容。</p></body></html>\n');
+      if (!shellFiles.includes('404.html')) shellFiles.push('404.html');
+      shellFiles.sort();
       const sources = await workerSources(root);
       const esbuild = await loadEsbuild(esbuildModule);
       await esbuild.build({ entryPoints: [path.join(root, 'web/app.js')], outfile: path.join(staging, 'app.js'),
-        bundle: true, format: 'esm', platform: 'browser', target: 'es2022', logLevel: 'silent' });
+        bundle: true, format: 'esm', platform: 'browser', target: 'es2022', logLevel: 'silent',
+        define: { __PUBLICATION_INDEX__: JSON.stringify(publicationIndex(result.catalog)) } });
+      const swPath = path.join(staging, 'sw.js');
+      await fs.writeFile(swPath, (await fs.readFile(swPath, 'utf8'))
+        .replaceAll('__LIBRARY_PATHS__', JSON.stringify(libraryPaths(result.catalog))));
       await esbuild.build({ entryPoints: [path.join(root, 'server/worker.mjs')], outfile: path.join(staging, '_worker.js'),
         bundle: true, format: 'esm', platform: 'browser', target: 'es2022', external: ['cloudflare:workers'], logLevel: 'silent' });
       const shell = await Promise.all(shellFiles.map(async file => [file, hash(await fs.readFile(path.join(staging, file)))]));

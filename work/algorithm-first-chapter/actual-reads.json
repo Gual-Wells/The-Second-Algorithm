@@ -1,0 +1,251 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-27",
+  "scope": "Research-department comparison for the first algorithm chapter; original statements and selected methods were actually read. This is not full-site or full-book coverage.",
+  "statements": [
+    {
+      "id": "cses:1660",
+      "url": "https://cses.fi/problemset/task/1660/",
+      "read": "Complete statement, constraints and example",
+      "finding": "Strictly positive values; contiguous sum count"
+    },
+    {
+      "id": "cses:1661",
+      "url": "https://cses.fi/problemset/task/1661/",
+      "read": "Complete statement, constraints and example",
+      "finding": "Negative values allowed; same sum-count goal does not retain ordinary monotone-window premise"
+    },
+    {
+      "id": "cses:1141",
+      "url": "https://cses.fi/problemset/task/1141/",
+      "read": "Complete statement, constraints and example",
+      "finding": "Longest contiguous sequence of distinct ids; ids up to 1e9"
+    },
+    {
+      "id": "cses:2428",
+      "url": "https://cses.fi/problemset/task/2428/",
+      "read": "Complete statement, constraints and example",
+      "finding": "Number of contiguous subarrays with at most K distinct values"
+    },
+    {
+      "id": "cses:1662",
+      "url": "https://cses.fi/problemset/task/1662/",
+      "read": "Complete statement, constraints and example",
+      "finding": "Signed values; subarray sum divisible by n; normalized remainder classes"
+    },
+    {
+      "id": "cses:1084",
+      "url": "https://cses.fi/problemset/task/1084/",
+      "read": "Complete statement, constraints and example",
+      "finding": "Comparison candidate: sorted matching with interval tolerance, not a contiguous-subarray task"
+    },
+    {
+      "id": "cses:1640",
+      "url": "https://cses.fi/problemset/task/1640/",
+      "read": "Complete statement, constraints and example",
+      "finding": "Comparison candidate: two distinct positions with target sum, arbitrary positions rather than contiguous interval"
+    },
+    {
+      "id": "cses:1192",
+      "url": "https://cses.fi/problemset/task/1192/",
+      "read": "Complete statement, constraints and example",
+      "finding": "Comparison candidate: grid connectivity at up to one million cells"
+    },
+    {
+      "id": "cses:1667",
+      "url": "https://cses.fi/problemset/task/1667/",
+      "read": "Complete statement, constraints and example",
+      "finding": "Comparison candidate: unweighted shortest path and route reconstruction"
+    },
+    {
+      "id": "leetcode:76",
+      "url": "https://leetcode.com/problems/minimum-window-substring/",
+      "read": "Complete statement, constraints, examples and linear-time follow-up; no editorial body",
+      "finding": "Coverage includes multiplicity, not only distinct letter membership"
+    },
+    {
+      "id": "leetcode:560",
+      "url": "https://leetcode.com/problems/subarray-sum-equals-k/",
+      "read": "Complete statement, constraints and examples; no editorial body",
+      "finding": "Count nonempty signed target-sum intervals"
+    },
+    {
+      "id": "leetcode:525",
+      "url": "https://leetcode.com/problems/contiguous-array/",
+      "read": "Complete statement, constraints and examples; no editorial body",
+      "finding": "Longest balanced binary interval; earliest matching prefix position"
+    },
+    {
+      "id": "leetcode:209",
+      "url": "https://leetcode.com/problems/minimum-size-subarray-sum/",
+      "read": "Complete statement, constraints, examples and follow-up; no editorial body",
+      "finding": "Positive values; shortest interval reaching lower bound"
+    },
+    {
+      "id": "codility:count-distinct-slices",
+      "url": "https://app.codility.com/programmers/lessons/15-caterpillar_method/count_distinct_slices/",
+      "read": "Original statement and constraints, including repeated language wrappers; counted once",
+      "finding": "Distinct interval count with bounded nonnegative values and capped answer"
+    },
+    {
+      "id": "cses:1643",
+      "url": "https://cses.fi/problemset/task/1643/",
+      "read": "Complete statement, constraints and examples; no editorial body",
+      "finding": "Signed maximum nonempty contiguous sum; all-negative arrays remain nonempty"
+    },
+    {
+      "id": "cses:1646",
+      "url": "https://cses.fi/problemset/task/1646/",
+      "read": "Complete statement, constraints and examples; no editorial body",
+      "finding": "Static range sum, original1-based closed interval converted to half-open boundary"
+    },
+    {
+      "id": "leetcode:438",
+      "url": "https://leetcode.com/problems/find-all-anagrams-in-a-string/",
+      "read": "Complete statement, constraints and examples; no editorial body",
+      "finding": "Fixed length equal-multiset matching"
+    },
+    {
+      "id": "leetcode:992",
+      "url": "https://leetcode.com/problems/subarrays-with-k-different-integers/",
+      "read": "Complete statement, constraints and examples; no editorial body",
+      "finding": "Exactly K distinct subarray counting"
+    },
+    {
+      "id": "leetcode:862",
+      "url": "https://leetcode.com/problems/shortest-subarray-with-sum-at-least-k/",
+      "read": "Complete statement, constraints and examples; no editorial body",
+      "finding": "Root reverse challenge transferred to construction; signed shortest nonempty lower-bound sum"
+    },
+    {
+      "id": "leetcode:713",
+      "url": "https://leetcode.com/problems/subarray-product-less-than-k/",
+      "read": "Complete statement, constraints and examples; no editorial body",
+      "finding": "Strictly positive integers, product strictly below K, K may be0"
+    },
+    {
+      "id": "leetcode:424",
+      "url": "https://leetcode.com/problems/longest-repeating-character-replacement/",
+      "read": "Complete statement, constraints and examples; no editorial body",
+      "finding": "Uppercase alphabet; longest window with replacement budget"
+    }
+  ],
+  "methods": [
+    {
+      "id": "codility:prefix-sums-pdf",
+      "url": "https://codility.com/media/train/3-PrefixSums.pdf",
+      "read": "Both text pages: prefix differences plus mushroom-picker exercise and solution; figures interpreted only to extent text labels make relations explicit",
+      "finding": "Prefix aggregation separates query evaluation from feasible-interval enumeration"
+    },
+    {
+      "id": "codility:caterpillar-pdf",
+      "url": "https://codility.com/media/train/13-CaterpillarMethod.pdf",
+      "read": "Both text pages: positive-sum example and triangle-counting exercise; not copied to public repo",
+      "finding": "Moving boundaries can describe different problems; positive-value premise and amortized forward movement matter"
+    },
+    {
+      "id": "cp-algorithms:max-subarray",
+      "url": "https://cp-algorithms.com/others/maximum_average_segment.html",
+      "read": "Both max-subarray algorithms and index-reconstruction sections; related-tasks text including length/dimension/average boundary read for scope only",
+      "finding": "Minimum historical prefix and Kadane maintain different summaries of the same unrestricted nonempty objective"
+    }
+  ],
+  "book_reads": [
+    {
+      "book_id": "epi-cpp",
+      "edition": "2015 Version2.0.0 C++",
+      "physical_pages": "72-73,218-220",
+      "read": "Array and hash-table introductions including code text as unverified OCR; no code adopted from OCR",
+      "finding": "Book headings contain heterogeneous tasks and cannot directly determine chapter boundaries"
+    },
+    {
+      "book_id": "epi-cpp",
+      "edition": "2015 Version2.0.0 C++",
+      "physical_pages": "229-231",
+      "read": "13.7 problem and main minimal-cover-window argument; beginning of streaming alternative only, not complete alternative",
+      "finding": "Reusing boundary movement and set-cover vs multiplicity distinction"
+    },
+    {
+      "book_id": "epi-cpp",
+      "edition": "2015 Version2.0.0 C++",
+      "physical_pages": "234-235",
+      "read": "13.9 problem and complete longest-distinct-subarray argument/code text; previous13.8 tail read for context only",
+      "finding": "Last occurrence and monotone left boundary"
+    },
+    {
+      "book_id": "competitive-programming-4",
+      "volume": 1,
+      "physical_pages": "203-204",
+      "read": "Max1DRangeSum introduction and full method;204 visually inspected;205two-dimensional text used only to judge scope boundary",
+      "finding": "Example initializes answer0 under empty-allowed contract; nonempty all-negative result needs a different initialization"
+    },
+    {
+      "book_id": "competitive-programming-4",
+      "volume": 2,
+      "physical_pages": "219-220",
+      "read": "Full9.2 text, code, examples and exercise index; both original pages visually inspected",
+      "finding": "Shortest-sum window paragraph omits explicit nonnegative premise; extrema deque retains candidates, not the whole reordered window"
+    },
+    {
+      "book_id": "epi-cpp",
+      "physical_pages": "231",
+      "read": "Original visual page checked against OCR for cover-frequency updates; streaming alternative still not fully read",
+      "finding": "Positive deficit and multiplicity updates checked; no direct OCR code adopted"
+    }
+  ],
+  "indexes_and_access_limits": [
+    {
+      "url": "https://cses.fi/problemset/",
+      "read": "Current entire task index, including sorting/searching, graphs, range queries and sliding-window groups; not all task bodies"
+    },
+    {
+      "url": "https://app.codility.com/programmers/lessons/5-prefix_sums/",
+      "read": "Complete visible index with four task entries"
+    },
+    {
+      "url": "https://app.codility.com/programmers/lessons/15-caterpillar_method/",
+      "read": "Complete visible index with four task entries"
+    },
+    {
+      "url": "https://leetcode.com/studyplan/top-interview-150/",
+      "read": "Introduction only; actual150-question list not returned"
+    },
+    {
+      "url": "https://www.hackerrank.com/interview/preparation-kits",
+      "read": "Index/search-result navigation only; marketing frequency claims not used as hiring evidence"
+    },
+    {
+      "book_id": "epi-cpp",
+      "read": "All303 indexed headings inspected for global comparison, not303 problem bodies"
+    },
+    {
+      "book_id": "competitive-programming-4",
+      "read": "Selected2.2 section index and searches for sliding window/prefix sum, not complete method-page reading"
+    }
+  ],
+  "challenge_separation": {
+    "contamination_disclosed": "A search result described CSES MaximumSubarraySumII length-bound/prefix mechanism. Original statement was not opened, but root was told to replace it as a retained challenge.",
+    "transferred_to_construction": [
+      "leetcode:862",
+      "leetcode:2461",
+      "leetcode:1695"
+    ],
+    "note": "Root initially read held-out cases before construction scope was examined, then shared feedback; 862 was subsequently read here and added to authoring. Details of 2461 and 1695 are root-supplied construction evidence. None remains an unseen challenge."
+  },
+  "root_feedback_readings": [
+    {
+      "id": "leetcode:2461",
+      "url": "https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k/",
+      "reader": "root",
+      "read": "Original statement independently read by root and supplied as reverse-review feedback; not a claim of body reading by author agent",
+      "finding": "Fixed length plus distinct and maximum sum naturally combines current state"
+    },
+    {
+      "id": "leetcode:1695",
+      "url": "https://leetcode.com/problems/maximum-erasure-value/",
+      "reader": "root",
+      "read": "Original statement independently read by root after current authoring; author received the classified construction feedback",
+      "finding": "Positive values justify leftmost legal distinct interval as largest sum for each right boundary; negative values invalidate that goal substitution"
+    }
+  ]
+}

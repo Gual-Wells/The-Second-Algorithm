@@ -6,7 +6,9 @@ import vm from 'node:vm';
 const origin = 'https://second-algorithm.pages.dev';
 const alice = 'a'.repeat(43), bob = 'b'.repeat(43);
 const doc = '/library/chapter/document/0123456789abcdef.json';
-const source = readFileSync(new URL('../web/sw.js', import.meta.url), 'utf8').replaceAll('__BUILD__', 'fixture-build');
+const paths = ['/library/catalog.json', doc, doc.replace('.json', '.cpp'), doc.replace('.json', '.md')];
+const source = readFileSync(new URL('../web/sw.js', import.meta.url), 'utf8').replaceAll('__BUILD__', 'fixture-build')
+  .replaceAll('__LIBRARY_PATHS__', JSON.stringify(paths));
 const absolute = input => new URL(typeof input === 'string' ? input : input.url, origin).href;
 
 function storage() {
@@ -21,6 +23,8 @@ function storage() {
       return {
         async match(key) { return entries.get(absolute(key))?.clone(); },
         async put(key, response) { entries.set(absolute(key), response.clone()); },
+        async keys() { return [...entries.keys()].map(url => new Request(url)); },
+        async delete(key) { return entries.delete(absolute(key)); },
         async addAll(keys) { for (const key of keys) entries.set(absolute(key), new Response('shell:' + key)); }
       };
     }
@@ -84,6 +88,28 @@ test('versioned public shell installs and replaces only old shell caches', async
   assert.equal(await sw.fetch('/api/state'), null);
   assert.equal(await sw.fetch('/sw.js'), null);
   assert.equal(await sw.fetch('/unknown-private-file'), null);
+});
+
+test('upgrade removes old trial documents and catalog without deleting owner or unrelated records', async () => {
+  const sw = worker();
+  await sw.message({ type: 'OWNER', owner: alice });
+  const cache = await sw.caches.open('second-algorithm-private-' + alice);
+  const retired = '/library/binary-search/bs-foundations/retired.json';
+  for (const path of [retired, retired.replace('.json', '.cpp'), '/library/catalog.json', doc])
+    await cache.put(path, new Response(path === '/library/catalog.json' ? JSON.stringify({ collections: [{ id: 'binary-search' }] }) : 'cached'));
+  await sw.caches.open('unrelated-notes-backup');
+  sw.controls.online = false;
+  await sw.lifecycle('activate');
+  assert.equal(await cache.match(retired), undefined);
+  assert.equal(await cache.match(retired.replace('.json', '.cpp')), undefined);
+  assert.equal(await cache.match('/library/catalog.json'), undefined);
+  assert.equal((await cache.match(doc)).status, 200);
+  assert.equal((await sw.fetch(retired)).status, 404);
+  assert.equal((await sw.fetch(retired.replace('.json', '.cpp'))).status, 404);
+  assert.equal((await sw.message({ type: 'CACHE_CONTENT', owner: alice, urls: [retired] })).ok, false);
+  assert.equal((await sw.message({ type: 'OWNER', owner: alice })).ok, true);
+  assert((await sw.caches.keys()).includes('second-algorithm-owner-v1'));
+  assert((await sw.caches.keys()).includes('unrelated-notes-backup'));
 });
 
 test('OWNER must be confirmed by server, ignores forged verifiedAt and foreign-origin messages', async () => {

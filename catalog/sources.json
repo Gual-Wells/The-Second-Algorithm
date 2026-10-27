@@ -101,9 +101,9 @@
         "reason": "与招聘测评形态接近，按lesson枚举的原题适合独立于LC查漏。"
       },
       "verification": {
-        "checked_at": "2026-10-26",
+        "checked_at": "2026-10-27",
         "method": "Direct original-site web reading; GitHub metadata where stated",
-        "read_scope": "17个lesson导航、二分lesson任务列表及NailingPlanks题干／约束。",
+        "read_scope": "17个lesson导航、二分lesson任务列表及NailingPlanks题干／约束。 2026-10-27为算法第一章另读Prefix Sums和Caterpillar入口、讲义及指定题干，见work/algorithm-first-chapter/actual-reads.json；未升级为所有课程题已读。",
         "catalogue_state": "entry_read",
         "statement_scope": "selected_only",
         "limitations": [
@@ -114,7 +114,9 @@
         "evidence_urls": [
           "https://app.codility.com/programmers/lessons/",
           "https://app.codility.com/programmers/lessons/14-binary_search_algorithm/",
-          "https://app.codility.com/programmers/lessons/14-binary_search_algorithm/nailing_planks/"
+          "https://app.codility.com/programmers/lessons/14-binary_search_algorithm/nailing_planks/",
+          "https://app.codility.com/programmers/lessons/5-prefix_sums/",
+          "https://app.codility.com/programmers/lessons/15-caterpillar_method/"
         ]
       },
       "entries": [
@@ -138,6 +140,26 @@
             "state": "implemented",
             "details": "只取当前lesson任务链接；与导航lesson链接区分。",
             "tested_at": "2026-10-26T07:55:10.401686+00:00"
+          }
+        },
+        {
+          "id": "prefix-sums",
+          "url": "https://app.codility.com/programmers/lessons/5-prefix_sums/",
+          "kind": "method_index",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "算法第一章实际读取该入口及官方讲义，目录/讲义/原题分别记录；非新增自动正文适配器。"
+          }
+        },
+        {
+          "id": "caterpillar",
+          "url": "https://app.codility.com/programmers/lessons/15-caterpillar_method/",
+          "kind": "method_index",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "算法第一章读取目录、官方讲义及CountDistinctSlices原题；其计数上限与原创参考接口分别说明。"
           }
         }
       ]
@@ -1440,9 +1462,9 @@
         "reason": "算法库前提与C++机制的规则核验；对应版本及条款独立判断。"
       },
       "verification": {
-        "checked_at": "2026-10-26",
+        "checked_at": "2026-10-27",
         "method": "direct original pages; actual per-page reads recorded in binary research",
-        "read_scope": "二分操作整节，用于标准库分区前提及比较/迭代器复杂度；不作为C++17新增特性的许可。 本轮另读草案目录、滚动版本声明及WG21 2026文档索引。",
+        "read_scope": "二分操作整节，用于标准库分区前提及比较/迭代器复杂度；不作为C++17新增特性的许可。 本轮另读草案目录、滚动版本声明及WG21 2026文档索引。 2026-10-27新增固定N4659条款读件，用于C++第一章；只声称实际列明的节，见work/cpp-first-chapter/actual-reads.json。",
         "catalogue_state": "manual-topic-read",
         "statement_scope": "only individually listed tasks",
         "limitations": [
@@ -1452,7 +1474,9 @@
         "evidence_urls": [
           "https://eel.is/c++draft/alg.binary.search",
           "https://eel.is/c++draft/",
-          "https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2026/"
+          "https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2026/",
+          "https://timsong-cpp.github.io/cppwp/n4659/class.copy",
+          "https://timsong-cpp.github.io/cppwp/n4659/unique.ptr.single.observers"
         ]
       },
       "entries": [
@@ -1484,6 +1508,26 @@
             "adapter": "manual",
             "state": "manual",
             "details": "仅为设计与修订线索；须核查提案是否采纳及所在标准版本。"
+          }
+        },
+        {
+          "id": "n4659-copy-and-move",
+          "url": "https://timsong-cpp.github.io/cppwp/n4659/class.copy",
+          "kind": "mechanism_reference",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "按N4659核对本章复制、移动与delete候选；固定工作草案，不混作滚动草案或全部后续DR已应用标准。"
+          }
+        },
+        {
+          "id": "n4659-unique-observers",
+          "url": "https://timsong-cpp.github.io/cppwp/n4659/unique.ptr.single.observers",
+          "kind": "mechanism_reference",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "实际读取短节，以返回reference/pointer的合同核对const外壳；构造、移动后状态和复制消除另按任务读件定位。"
           }
         }
       ],
@@ -2069,9 +2113,9 @@
         "reason": "2026-10-26 C++实战来源研究；具体角色与边界见本条读取范围。"
       },
       "verification": {
-        "checked_at": "2026-10-26",
+        "checked_at": "2026-10-27",
         "method": "原作者／项目／大学／机构公开页面实际读取；本轮分工研究与主Agent复核",
-        "read_scope": "archive cs106l.1212 HashMap任务正文：模板、const、迭代器、RAII、流操作、特殊成员、自赋值与任务测试说明。",
+        "read_scope": "archive cs106l.1212 HashMap任务正文：模板、const、迭代器、RAII、流操作、特殊成员、自赋值与任务测试说明。 2026-10-27另按固定官方仓库版本读取A5/A7任务相关段及所列骨架；范围和字节身份见work/cpp-first-chapter/actual-reads.json，未读全仓或运行作业测试。",
         "catalogue_state": "selected_entries_read",
         "statement_scope": "selected_only",
         "limitations": [
@@ -2079,7 +2123,9 @@
           "课程宣传的industrial strength不作工程质量认证；不以整项作业为必须完成的学习单位。"
         ],
         "evidence_urls": [
-          "https://web.stanford.edu/class/archive/cs/cs106l/cs106l.1212/hashmap2.html"
+          "https://web.stanford.edu/class/archive/cs/cs106l/cs106l.1212/hashmap2.html",
+          "https://github.com/cs106l/cs106l-assignments/blob/bb14106a0fad2b4cf032d3de1a84576a56fad461/assignment5/README.md",
+          "https://github.com/cs106l/cs106l-assignments/blob/bb14106a0fad2b4cf032d3de1a84576a56fad461/assignment7/README.md"
         ]
       },
       "entries": [
@@ -2091,6 +2137,26 @@
             "adapter": "manual",
             "state": "manual",
             "details": "当前为实际人工读件；未实现或声称全站自动枚举。"
+          }
+        },
+        {
+          "id": "treebook-copy-task",
+          "url": "https://github.com/cs106l/cs106l-assignments/blob/bb14106a0fad2b4cf032d3de1a84576a56fad461/assignment5/README.md",
+          "kind": "implementation_exercise",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "固定官方仓库版本；本轮读任务相关段与User骨架，未运行上游autograder。详见work/cpp-first-chapter/actual-reads.json。"
+          }
+        },
+        {
+          "id": "unique-owner-task",
+          "url": "https://github.com/cs106l/cs106l-assignments/blob/bb14106a0fad2b4cf032d3de1a84576a56fad461/assignment7/README.md",
+          "kind": "implementation_exercise",
+          "enumeration": {
+            "adapter": "manual",
+            "state": "manual",
+            "details": "独占句柄与链表任务及骨架实际读取；课程const合同与标准unique_ptr不同，不能直接作为标准接口。"
           }
         }
       ]

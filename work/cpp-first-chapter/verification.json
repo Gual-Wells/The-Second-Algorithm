@@ -1,0 +1,49 @@
+{
+  "compiler": "GCC16.2.0 w64devkit onWindows",
+  "standard": "C++17",
+  "runtime_test": "cpp_object_interfaces_test.cpp passed with -O2 -Wall -Wextra -Wpedantic -D_GLIBCXX_ASSERTIONS -fno-elide-constructors; no diagnostics",
+  "independent_source_compile": "chapter.cpp compiled separately with strict warnings",
+  "probes": [
+    {
+      "case": "copy-fallback",
+      "expected_compile": "success",
+      "returncode": 0,
+      "passed": true
+    },
+    {
+      "case": "deleted-move",
+      "expected_compile": "failure",
+      "returncode": 1,
+      "passed": true
+    },
+    {
+      "case": "const-unique",
+      "expected_compile": "failure",
+      "returncode": 1,
+      "passed": true
+    },
+    {
+      "case": "named-unique",
+      "expected_compile": "failure",
+      "returncode": 1,
+      "passed": true
+    }
+  ],
+  "limits": [
+    "No UB program executed.",
+    "No MSVC or sanitizer execution this chapter step.",
+    "No upstream university autograder run.",
+    "Allocation-failure checks use an isolated test replacement array allocator; allocation call counts are not used as object lifetime proof."
+  ],
+  "probe_command": "python tests/cpp/verify_object_interfaces.py --compiler <CXX>",
+  "runtime_command": "g++ -std=c++17 -O2 -Wall -Wextra -Wpedantic -D_GLIBCXX_ASSERTIONS -fno-elide-constructors tests/cpp/cpp_object_interfaces_test.cpp -o <D-output>; run output",
+  "content": {
+    "source": "content/cpp-object-interfaces/对象如何传递.source.md",
+    "code": "content/cpp-object-interfaces/对象如何传递.cpp",
+    "code_blocks": 17,
+    "documents": 1,
+    "source_sha256": "3422940db05757dcc644279e2672b89214c2aeea2d7da0aeb1e3b36f8d5c1469",
+    "code_sha256": "d26054b7b68b58f790088d2e3fb24d5a295283f432a8d49d76c9aa9c96d7ef44"
+  },
+  "root_case_review": "Read draft and code; R.37 concrete alias-reset case prompted short local-pin clarification."
+}

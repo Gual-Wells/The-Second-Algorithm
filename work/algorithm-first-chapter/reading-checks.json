@@ -1,0 +1,50 @@
+{
+  "stage": "final local standalone reading check; deployed carrier is root responsibility",
+  "htmlSha256": "547218844009bf516f78133304bad99f65ca28ce6eab8dd28ec9f2e349f2e471",
+  "checks": [
+    {
+      "width": 1440,
+      "pageWidth": 1440,
+      "viewport": 1440,
+      "overflow": false,
+      "headings": 21,
+      "codeBlocks": 21,
+      "localAnchorsValid": true,
+      "externalRequests": [],
+      "errors": []
+    },
+    {
+      "width": 1024,
+      "pageWidth": 1024,
+      "viewport": 1024,
+      "overflow": false,
+      "headings": 21,
+      "codeBlocks": 21,
+      "localAnchorsValid": true,
+      "externalRequests": [],
+      "errors": []
+    },
+    {
+      "width": 768,
+      "pageWidth": 768,
+      "viewport": 768,
+      "overflow": false,
+      "headings": 21,
+      "codeBlocks": 21,
+      "localAnchorsValid": true,
+      "externalRequests": [],
+      "errors": []
+    },
+    {
+      "width": 393,
+      "pageWidth": 393,
+      "viewport": 393,
+      "overflow": false,
+      "headings": 21,
+      "codeBlocks": 21,
+      "localAnchorsValid": true,
+      "externalRequests": [],
+      "errors": []
+    }
+  ]
+}

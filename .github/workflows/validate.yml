@@ -33,6 +33,10 @@ jobs:
         run: npm run test:browser
         env:
           PLAYWRIGHT_BROWSERS_PATH: .local/playwright-browsers
+      - name: Verify installed release upgrades with the actual service worker
+        run: npm run test:upgrade
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: .local/playwright-browsers
       - name: Validate committed catalogues and references
         run: python -m second_algorithm validate
       - name: Verify collectors and recovery without network
@@ -54,5 +58,7 @@ jobs:
               timeout 30s "$output"
             done
           done
+      - name: Verify first C++ chapter copy and ownership compile contracts
+        run: python tests/cpp/verify_object_interfaces.py --compiler g++ --output .local/ci/object-interfaces-probes
       - name: Verify separate translation units and call_once retry
         run: python tools/verify_cpp_systems.py --once-retry --output .local/ci/translation

@@ -14,4 +14,4 @@
 
 命令以实际实现为准，使用 `python -m second_algorithm --help` 查看入口；报告实际执行结果，不将计划、跳过或历史验证称为本次已完成。
 
-阅读载体见 [docs/READER.md](docs/READER.md)。`carrier/publications.json`是展示登记，不代替内容研究；现有2个trial集合不因部署改称10章。前端遵循 [web/DESIGN.md](web/DESIGN.md)，保留代码原生选择、横滚与缩放。正文不入D1，不复制第二语言音频、VIX、IELTS或定时后台。修改身份、缓存、复制或构建时运行 `npm run test:carrier` 和完整构建；发布后验证匿名保护，实机安装单独核实。
+阅读载体见 [docs/READER.md](docs/READER.md)。`carrier/publications.json`是展示登记，不代替内容研究；原2个trial集合保持hidden，正式版不展示或打包试稿。当前正式算法/C++各第一章，恢复分别读`work/algorithm-first-chapter/README.md`、`work/cpp-first-chapter/README.md`；下一章仍需研究部重新形成范围。前端遵循 [web/DESIGN.md](web/DESIGN.md)，保留代码原生选择、横滚与缩放。正文不入D1，不复制第二语言音频、VIX、IELTS或定时后台。修改身份、缓存、复制或构建时运行 `npm run test:carrier` 和完整构建；发布后验证匿名保护，实机安装单独核实。

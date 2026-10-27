@@ -1,5 +1,6 @@
 {
   "name": "the-second-algorithm",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -21,6 +22,7 @@
     "test:carrier": "node --test test/carrier-*.test.mjs",
     "dev": "wrangler pages dev dist --port 8796",
     "deploy": "node scripts/deploy-carrier.mjs",
-    "test:browser": "node scripts/check-carrier-browser.cjs"
+    "test:browser": "node scripts/check-carrier-browser.cjs",
+    "test:upgrade": "node scripts/check-carrier-upgrade.cjs"
   }
 }

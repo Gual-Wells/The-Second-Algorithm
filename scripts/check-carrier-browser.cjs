@@ -4,6 +4,7 @@ const { chromium } = require('playwright');
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const assert = require('node:assert/strict');
+const { execFileSync } = require('node:child_process');
 
 const root = path.resolve(__dirname, '..');
 const origin = 'http://localhost:9876';
@@ -11,6 +12,8 @@ const owner = 'a'.repeat(43);
 const output = path.join(root, '.local/refinement-qa');
 const temporary = path.join(root, '.local/refinement-browser-tmp');
 const chrome = process.env.ALGORITHM_QA_CHROME;
+const qaLibrary = path.join(root, '.local/carrier-qa-library');
+let qaCatalog, deployedCatalog, makeIndex;
 
 async function poll(condition, message, timeout = 6000) {
   const start = Date.now();
@@ -20,13 +23,12 @@ async function poll(condition, message, timeout = 6000) {
   }
 }
 
-async function environment(browser) {
-  const catalog = JSON.parse(await fs.readFile(path.join(root, 'dist/library/catalog.json'), 'utf8'));
+async function environment(browser, { catalog = qaCatalog, policyCatalog = catalog, libraryRoot = qaLibrary } = {}) {
   const context = await browser.newContext({ viewport: { width: 402, height: 874 }, deviceScaleFactor: 3,
     isMobile: true, hasTouch: true, serviceWorkers: 'block' });
   await context.addInitScript(() => { delete Navigator.prototype.serviceWorker; });
   const mock = { catalog, state: {}, errors: [], requests: [], holdNotePage: null, heldNote: null,
-    delayDocument: null, heldDocument: null, unavailable: new Set(), rejectApis: false };
+    delayDocument: null, heldDocument: null, unavailable: new Set(), rejectApis: false, signedOut: false };
   context.on('page', page => page.on('pageerror', error => mock.errors.push(error.message)));
   await context.route('**/*', async route => {
     const request = route.request(), url = new URL(request.url());
@@ -35,7 +37,8 @@ async function environment(browser) {
     const json = (value, status = 200) => route.fulfill({ status, contentType: 'application/json', body: JSON.stringify(value) });
     if (mock.rejectApis && (url.pathname.startsWith('/api/') || url.pathname.startsWith('/auth/')))
       return route.abort('internetdisconnected');
-    if (url.pathname === '/auth/status') return json({ authenticated: true, enrolled: true,
+    if (url.pathname === '/auth/logout') { mock.signedOut = true; return json({ ok: true }); }
+    if (url.pathname === '/auth/status') return json({ authenticated: !mock.signedOut, enrolled: true,
       enrollmentOpen: false, ownerScope: owner });
     if (url.pathname === '/api/library') return json(mock.catalog);
     if (url.pathname === '/api/state') {
@@ -56,13 +59,13 @@ async function environment(browser) {
       mock.delayDocument = null;
       await new Promise(resolve => { mock.heldDocument = resolve; });
     }
-    const file = path.join(root, url.pathname.startsWith('/library/') ? 'dist' : 'web',
+    const file = path.join(url.pathname.startsWith('/library/') ? libraryRoot : path.join(root, 'web'),
       url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname.slice(1)));
     let bytes;
     try { bytes = await fs.readFile(file); } catch { return route.fulfill({ status: 404, body: 'Mock asset not found' }); }
     const types = { '.js': 'text/javascript', '.html': 'text/html', '.css': 'text/css', '.json': 'application/json',
       '.svg': 'image/svg+xml', '.png': 'image/png', '.webmanifest': 'application/manifest+json' };
-    if (url.pathname === '/app.js') bytes = Buffer.from(bytes.toString('utf8')
+    if (url.pathname === '/app.js') bytes = Buffer.from(bytes.toString('utf8').replaceAll('__PUBLICATION_INDEX__', JSON.stringify(makeIndex(policyCatalog)))
       + '\nglobalThis.__refinement = { get state() { return S; }, get journal() { return journal(); } };\n');
     return route.fulfill({ status: 200, contentType: types[path.extname(file)] || 'text/plain', body: bytes });
   });
@@ -80,15 +83,22 @@ async function environment(browser) {
   if (process.platform === 'win32' && !/^D:\\/i.test(physicalRoot))
     throw new Error('Browser QA workspace and its actual temporary data must be on D:');
   await fs.mkdir(output, { recursive: true }); await fs.mkdir(temporary, { recursive: true });
+  const builder = await import('../scripts/build-carrier.mjs'); makeIndex = builder.publicationIndex;
+  const corpus = JSON.parse(await fs.readFile(path.join(root, 'carrier/publications.json'), 'utf8'));
+  corpus.collections = corpus.collections.filter(collection => collection.kind === 'trial');
+  for (const collection of corpus.collections) delete collection.visibility;
+  ({ catalog: qaCatalog } = await builder.buildLibrary(root, qaLibrary, corpus,
+    execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim()));
+  deployedCatalog = JSON.parse(await fs.readFile(path.join(root, 'dist/library/catalog.json'), 'utf8'));
   process.env.TEMP = process.env.TMP = process.env.TMPDIR = temporary;
   const browser = await chromium.launch({ headless: true, executablePath: chrome,
     env: { ...process.env, TEMP: temporary, TMP: temporary, TMPDIR: temporary },
     args: ['--disk-cache-dir=' + path.join(temporary, 'disk-cache')] });
   const results = [], failures = [];
-  async function check(name, action) {
+  async function check(name, action, options) {
     if (process.env.ALGORITHM_QA_CASE && !name.includes(process.env.ALGORITHM_QA_CASE)) return;
     let env;
-    try { env = await environment(browser); await action(env); assert.deepEqual(env.mock.errors, []);
+    try { env = await environment(browser, options); await action(env); assert.deepEqual(env.mock.errors, []);
       results.push({ name, passed: true }); console.log('PASS', name);
     } catch (error) {
       failures.push({ name, error: error.message, stack: error.stack, pageErrors: env?.mock.errors });
@@ -100,6 +110,38 @@ async function environment(browser) {
     } finally { await env?.context.close(); }
   }
   try {
+    await check('formal-release-rejects-stale-trial-catalog-routes-resume-and-search-without-removing-notes', async env => {
+      const page = await env.context.newPage();
+      await page.addInitScript(({ owner, catalog }) => {
+        const key = 'second-algorithm:' + owner + ':';
+        localStorage.setItem('second-algorithm:last-session', JSON.stringify({ owner, verifiedAt: Date.now() }));
+        localStorage.setItem(key + 'catalog', JSON.stringify(catalog));
+        localStorage.setItem(key + 'lastRoute', '#/read/binary-search/bs-foundations');
+        localStorage.setItem(key + 'resume:algorithm', JSON.stringify({ collection: 'binary-search', document: 'bs-foundations', route: '#/read/binary-search/bs-foundations' }));
+        localStorage.setItem(key + 'notes:binary-search', JSON.stringify({ text: 'keep private historical note', revision: 3, dirty: true }));
+      }, { owner, catalog: qaCatalog });
+      env.mock.rejectApis = true;
+      await page.goto(origin + '/#/read/binary-search/bs-foundations');
+      await page.locator('#libraryView').waitFor({ state: 'visible' });
+      assert.equal(await page.locator('#libraryResume').isVisible(), false);
+      assert.doesNotMatch(await page.locator('#bookList').innerText(), /试读|二分专题|C\+\+实战选读/);
+      assert.equal(env.mock.requests.some(request => request.path.startsWith('/library/binary-search/')), false);
+      await page.locator('#librarySearch').fill('lower_bound');
+      await page.waitForTimeout(400);
+      assert.equal(await page.locator('#bookList .search-row').count(), 0);
+      assert.match(await page.evaluate(owner => localStorage.getItem('second-algorithm:' + owner + ':notes:binary-search'), owner), /keep private historical note/);
+      assert(await page.evaluate(() => Boolean(localStorage.getItem('second-algorithm:last-session'))));
+      env.mock.rejectApis = false;
+      env.mock.state['notes:binary-search'] = { value: 'historical cloud note', revision: 2, updatedAt: Date.now() };
+      await page.locator('#settingsButton').click(); await page.locator('[data-check-updates]').click();
+      await page.waitForFunction(() => !document.querySelector('[data-check-updates]')?.disabled);
+      assert.equal((await page.evaluate(() => window.__refinement.state.library.collections)).some(collection => collection.id === 'binary-search'), false);
+      await page.locator('[data-logout]').click();
+      await page.locator('#loginView').waitFor({ state: 'visible' });
+      assert.match(await page.evaluate(owner => localStorage.getItem('second-algorithm:' + owner + ':notes:binary-search'), owner), /keep private historical note/);
+      assert.equal(await page.evaluate(() => localStorage.getItem('second-algorithm:last-session')), null);
+    }, { catalog: qaCatalog, policyCatalog: deployedCatalog, libraryRoot: path.join(root, 'dist') });
+
     await check('same-browser-two-page-late-ACK-and-reload', async env => {
       const a = await env.page(), b = await env.page();
       await a.locator('#notesButton').click(); await b.locator('#notesButton').click();
@@ -167,6 +209,16 @@ async function environment(browser) {
       assert.equal(await page.evaluate(() => window.__refinement.state.notes.get('binary-search').text), 'valuable local conflicting draft');
       assert((await page.evaluate(() => window.__refinement.journal.list('binary-search')))
         .some(note => note.text === 'valuable local conflicting draft'));
+    });
+
+    await check('native-anchor-offset-marks-the-reached-first-heading-current', async env => {
+      const page = await env.page();
+      const heading = page.locator('#readingArticle h2[id]').first();
+      const id = await heading.getAttribute('id');
+      await heading.evaluate(el => el.scrollIntoView({ block: 'start' }));
+      await page.locator('#tocButton').click();
+      await page.locator('#tocResults [aria-current="location"]').waitFor();
+      assert.equal(await page.locator('#tocResults [aria-current="location"]').getAttribute('data-anchor'), id);
     });
 
     await check('TOC-clear-keeps-input-and-keyboard-focus', async env => {

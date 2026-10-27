@@ -2,6 +2,8 @@ const BUILD = '__BUILD__';
 const SHELL_PREFIX = 'second-algorithm-shell-';
 const SHELL = SHELL_PREFIX + BUILD;
 const PRIVATE_PREFIX = 'second-algorithm-private-';
+// Rebuilt from the published catalog, never from an old downloaded catalog.
+const LIBRARY_PATHS = new Set(typeof __LIBRARY_PATHS__ === 'undefined' ? [] : __LIBRARY_PATHS__);
 const CONTEXT = 'second-algorithm-owner-v1';
 const META = new URL('/__offline_owner__', self.location.origin).href;
 const MAX_AGE = 90 * 86400_000;
@@ -55,7 +57,7 @@ function privateUrl(input) {
     const path = decodeURIComponent(url.pathname);
     if (url.origin !== self.location.origin || url.search || url.hash || /[%\\\u0000-\u001f\u007f]/.test(path)
       || path.split('/').some(part => part === '.' || part === '..') || !path.startsWith('/library/')
-      || !/\.(?:json|cpp|md)$/.test(path)) return null;
+      || !/\.(?:json|cpp|md)$/.test(path) || !LIBRARY_PATHS.has(path)) return null;
     url.pathname = path;
     return url.href;
   } catch { return null; }
@@ -86,6 +88,7 @@ async function cacheResponse(url, response, snapshot, start) {
 async function protectedFetch(request) {
   await initialized;
   const snapshot = owner, start = generation, url = privateUrl(request.url);
+  if (!url) return unavailable('内容不存在。', 404);
   try {
     const response = await fetch(request);
     if (response.status === 401 || response.status === 403) {
@@ -175,8 +178,19 @@ self.addEventListener('activate', event => event.waitUntil((async () => {
   await Promise.all((await caches.keys()).filter(name => name.startsWith(SHELL_PREFIX) && name !== SHELL)
     .map(name => caches.delete(name)));
   if (!validOwner(owner)) await clearPrivate();
-  else await Promise.all((await caches.keys()).filter(name => name.startsWith(PRIVATE_PREFIX)
-    && name !== PRIVATE_PREFIX + owner.owner).map(name => caches.delete(name)));
+  else {
+    const activeOwner = owner.owner;
+    await Promise.all((await caches.keys()).filter(name => name.startsWith(PRIVATE_PREFIX)
+      && name !== PRIVATE_PREFIX + owner.owner).map(name => caches.delete(name)));
+    await mutate(async () => {
+      if (owner?.owner !== activeOwner) return;
+      const cache = await caches.open(PRIVATE_PREFIX + activeOwner);
+      for (const request of await cache.keys()) {
+        const path = new URL(request.url).pathname;
+        if (path === '/library/catalog.json' || !LIBRARY_PATHS.has(path)) await cache.delete(request);
+      }
+    });
+  }
   await self.clients.claim();
 })()));
 

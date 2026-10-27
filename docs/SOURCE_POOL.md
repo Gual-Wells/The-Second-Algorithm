@@ -1,6 +1,6 @@
 # 初步来源站点池
 
-本池服务于求职算法与 C++ 实战总册的内容发现、条件核对、归并和查漏。机器可读权威记录在 [`catalog/sources.json`](../catalog/sources.json)，本页解释用途与采集边界。2026-10-26算法研究曾扩至25来源、38入口；本轮新增13个 C++ 来源，并扩充既有草案入口，现为 **38来源、67入口**。其中14个来源服务于 C++（含共享的工作草案），不把规则参考、练习与实验工具混算为题库。
+本池服务于求职算法与 C++ 实战总册的内容发现、条件核对、归并和查漏。机器可读权威记录在 [`catalog/sources.json`](../catalog/sources.json)，本页解释用途与采集边界。2026-10-27登记为 **39来源、78入口**；首章研究补入CS106L固定任务、N4659版本条款和Codility方法入口，既有LLVM libc++固定回归来源保留。来源数不表示读件数，不把规则参考、练习与实验工具混算为题库。
 
 **接受一个来源，不表示已读完整站点；访问一个入口，也不表示已取得完整题单。** `admission` 表示是否采用，`verification` 表示本轮实际读到哪里，`entries.enumeration` 表示清单取得方式及适配器状态。这三个判断独立保存。
 
@@ -12,13 +12,13 @@
 |---|---|---|
 | [GotW](https://herbsutter.com/gotw/) | 分析代码、选择接口、修错与改进 | 已读修订目录及#91智能指针参数的完整问题／解答；部分更新到C++14，不能照搬所有历史建议 |
 | [TDDD38练习](https://www.ida.liu.se/~TDDD38/lecture/index.en.shtml) | 模板、类型萃取、容器与分配等具体实现题 | 已读Static Queue、Specialization和Allocation Tracker题面；Deque只读入口，Variant正文未取得。未运行骨架或答案 |
-| [CS106L HashMap](https://web.stanford.edu/class/archive/cs/cs106l/cs106l.1212/hashmap2.html) | 在给定结构上补const、迭代器、操作符与复制／移动实现 | 已读指定历史学期的任务正文；不混用不同学期版本，不把整项作业视为必须学习单位 |
+| [CS106L任务](https://github.com/cs106l/cs106l-assignments)与[历史HashMap](https://web.stanford.edu/class/archive/cs/cs106l/cs106l.1212/hashmap2.html) | 在给定结构上研究const、迭代器、操作符与复制／移动实现 | 历史HashMap读件保留；首章另固定官方仓库A5/A7任务与骨架，记录课程const合同差异；未运行上游autograder，不混用学期或把整项作业视为必学单位 |
 | [Exercism C++](https://github.com/exercism/cpp) | 具备题干、概念映射、示例解与测试的实现题 | 已读配置、智能指针题、Circular Buffer题干与测试。大量题偏基础，按机制增量筛选；配置不代表全题已处理 |
 | [CERT C++](https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/) | 违规代码到修复的病例与变种 | 已读规则目录、MEM50与CTR57；官方归因仍需核验，CTR57有明确可纠正的解释问题 |
 | [CppQuiz](https://cppquiz.org/quiz/about/) | 短代码行为与语义边界反查 | 当前规则为C++23，已读#179；不作为实战主干。网站源码仓库不包含题目数据 |
 | [cppreference](https://www.cppreference.com/) | 语言／库机制目录、条件、复杂度、失效与版本区别 | 已读总目录及vector失效表；是社区参考而非ISO标准 |
 | [C++草案](https://eel.is/c++draft/)／[WG21文档](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2026/) | 对应版本规则、条款与设计依据 | 既有二分操作读件继续保留；另读目录和文档索引。滚动草案、提案、已采纳标准必须区别 |
-| [Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines) | 接口、所有权、资源、类与并发等设计取舍 | 读介绍和目录；建议不是标准条款，也不是题库 |
+| [Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines) | 接口、所有权、资源、类与并发等设计取舍 | 初轮读介绍和目录；首章另读R.30及指定相关规则，根反查读R.37具体病例；建议不是标准条款，不称整站已读 |
 | [LearnCpp](https://www.learncpp.com/) | 按缺口补机制例子与实现练习 | 读目录与类章节Point2d练习／答案；不要求初学课程顺序 |
 | [Modernes C++](https://www.modernescpp.com/index.php/table-of-content/) | 模板、并发等专题实例扩张 | 本轮只核查目录；具体文章与版本尚待研究 |
 | [Microsoft STL](https://github.com/microsoft/STL) | 标准库实际实现与测试病例 | 本轮读README，后续固定具体commit／release；ABI和实现习惯不是通用保证 |
@@ -27,7 +27,7 @@
 
 算法题库中使用了C++，不等于覆盖C++语言机制；语言谜题能揭示规则，也不等于能写出相应实现。优先围绕实现、诊断和改写发现问题，再由规则资料核验，用实验和必要源码解释实际差异。书籍及其官方源码另见[实战书单](BOOKS.md)，不重复算作独立题目集合。
 
-HackerRank既有来源新增的C++方向只作扩展线索：当前首页大量入门题且存在分页／动态枚举边界，暂未声称取得其完整语言题单。libc++、libstdc++与The Old New Thing已观察到可用扩张方向，具体采用案例时再登记对应入口。BusTub默认不纳入C++主池：领域与框架负担偏大，同名P0跨年内容也不同。
+HackerRank既有来源新增的C++方向只作扩展线索：当前首页大量入门题且存在分页／动态枚举边界，暂未声称取得其完整语言题单。LLVM libc++已按固定版本的具体回归入口登记，不代表全库正文已读；libstdc++与The Old New Thing仍是后续扩张线索，采用具体案例时再登记。BusTub默认不纳入C++主池：领域与框架负担偏大，同名P0跨年内容也不同。
 
 ## 核心原题与测评平台
 

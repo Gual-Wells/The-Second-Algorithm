@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-27",
+  "boundary": "All11 visible links in the current CSES Sliding Window Problems section; each original statement, constraints and example read. This is a finite section, not all sliding-window problems or submissions.",
+  "index": "https://cses.fi/problemset/",
+  "records": [
+    {"id":"cses:3220","title":"Sliding Window Sum","url":"https://cses.fi/problemset/task/3220/","read":"complete original statement/constraints/example","disposition":"current-scope","conditions":"generated n<=1e7; return xor of all window sums, not the list; 64-bit sums"},
+    {"id":"cses:3221","title":"Sliding Window Minimum","url":"https://cses.fi/problemset/task/3221/","read":"complete original statement/constraints/example","disposition":"current-scope","conditions":"generated n<=1e7; fixed K; xor of all minima"},
+    {"id":"cses:3426","title":"Sliding Window Xor","url":"https://cses.fi/problemset/task/3426/","read":"complete original statement/constraints/example","disposition":"current-scope","conditions":"generated n<=1e7; xor aggregation can remove a value by xor again"},
+    {"id":"cses:3405","title":"Sliding Window Or","url":"https://cses.fi/problemset/task/3405/","read":"complete original statement/constraints/example","disposition":"defer-extra-structure","conditions":"generated n<=1e7; OR is not invertible under removal"},
+    {"id":"cses:3222","title":"Sliding Window Distinct Values","url":"https://cses.fi/problemset/task/3222/","read":"complete original statement/constraints/example","disposition":"current-scope","conditions":"n<=2e5; values<=1e9; output all distinct counts"},
+    {"id":"cses:3224","title":"Sliding Window Mode","url":"https://cses.fi/problemset/task/3224/","read":"complete original statement/constraints/example","disposition":"defer-extra-structure","conditions":"most frequent value; ties choose smallest value"},
+    {"id":"cses:3219","title":"Sliding Window Mex","url":"https://cses.fi/problemset/task/3219/","read":"complete original statement/constraints/example","disposition":"defer-extra-structure","conditions":"smallest absent nonnegative value; input may contain0"},
+    {"id":"cses:1076","title":"Sliding Window Median","url":"https://cses.fi/problemset/task/1076/","read":"complete original statement/constraints/example","disposition":"defer-extra-structure","conditions":"even window chooses lower median, not arithmetic average"},
+    {"id":"cses:1077","title":"Sliding Window Cost","url":"https://cses.fi/problemset/task/1077/","read":"complete original statement/constraints/example","disposition":"defer-extra-structure","conditions":"minimum total absolute adjustment cost"},
+    {"id":"cses:3223","title":"Sliding Window Inversions","url":"https://cses.fi/problemset/task/3223/","read":"complete original statement/constraints/example","disposition":"defer-extra-structure","conditions":"strictly greater pair with earlier/later positions; equal values not inversions"},
+    {"id":"cses:3227","title":"Sliding Window Advertisement","url":"https://cses.fi/problemset/task/3227/","read":"complete original statement/constraints/example","disposition":"defer-extra-structure","conditions":"largest histogram rectangle within each window; rectangle may be narrower than window"},
+    {"id":"cp-algorithms:minimum-queue","url":"https://cp-algorithms.com/data_structures/stack_queue_modification.html","read":"complete main method body: stack, three queue methods, fixed-window application; no practice-problem bodies","disposition":"method-support","finding":"distinguish value-only duplicate retention from index-based expiry and amortized bounds"}
+  ],
+  "limits": [
+    "No upstream harness or OJ submissions executed.",
+    "Scope dispositions are research recommendations, not authored coverage claims.",
+    "No full original statements or copyrighted books copied into the public research layer."
+  ]
+}

@@ -4,7 +4,9 @@
 
 ## 内容与权威
 
-`carrier/publications.json`只登记阅读入口，不代替研究部和两条工程线。当前有二分三稿、C++七稿两个 `trial` 集合，没有正式章节。上线、文件数、模板数不表示章范围完成。
+`carrier/publications.json`只登记阅读入口，不代替研究部和两条工程线。正式版1.0.0登记算法第一章《连续片段：前缀状态与滑动边界》及C++第一章《对象如何传递》，各一篇、各自从第1章编号。原二分三稿和C++七稿两个`trial`集合显式`visibility:hidden`，不读取到部署正文、目录、API、检索或续读入口；研究原件及私人记录保留。上线、文件数、模板数不表示范围完备。
+
+客户端按当前构建的ID/revision索引过滤旧本机目录；SW按当前发布路径白名单拒绝撤下资源，并在激活时清旧目录／正文缓存，离线也不能恢复试读。隐藏集合的笔记、待同步槽与备份在退出后仍保留。已运行的旧页面需载入新版才能切换，不强制重载打断编辑。
 
 未来章按既有协议完成研究、实现和核验后，登记 `kind: chapter`、所属 `track`、独立章号、稳定集合ID及组成稿。章可多稿，两线分别编号；修订保留集合与稿ID，避免笔记和读位分叉。研究过程、缺口与制作管理不进入客户页面。
 
@@ -22,11 +24,13 @@
 
 单一sheet承担设置、目录、源码与笔记；二级返回恢复父页滚位，浏览器返回关闭弹窗。弹窗按VisualViewport适应键盘，不把双指缩放当键盘压缩；依据[MDN](https://developer.mozilla.org/en-US/docs/Web/API/VisualViewport)与[Chrome对iOS视口行为的说明](https://developer.chrome.com/blog/viewport-resize-behavior)实现，仍需真机验收。设置支持检查内容更新；新版应用通过明确重新载入入口更新，不自动打断编辑。
 
+新页面可能仍由旧SW控制。正文、源码及整组下载先核对实际controller的VERSION；版本不符时启动更新、有界等接管，失败可重试，不把`registration.update()`返回当作接管完成。同版离线和未受控制首访直接继续。检查更新及手动重载不自动刷新笔记。原生锚点的当前节判断同时计入滚动容器padding与标题margin，避免已经跳到第一节而目录仍无定位。
+
 ## 服务与隔离
 
 Pages Advanced Mode托管壳及版本化正文，所有路径先过Worker，仅明确的壳/图标公共。独立D1只存单读者凭据、会话、读位、偏好和笔记，正文不入D1。独立HttpOnly/Secure会话90天，不复制其他项目凭据、Cookie或数据库。
 
-SW不缓存 `/auth/`、`/api/`；私有缓存按经服务端验证的owner隔离。仅网络异常可离线回退，401/403不回退。退出清除私有缓存及本机状态。首次登记默认关闭，管理员临时开窗并配置初始化密钥，用户亲自完成系统验证。
+SW不缓存 `/auth/`、`/api/`；私有缓存按经服务端验证的owner隔离。仅网络异常可离线回退，401/403不回退。退出清除身份与阅读缓存、处理可见集合的私人状态，隐藏集合的历史笔记保留恢复能力。首次登记默认关闭，管理员临时开窗并配置初始化密钥，用户亲自完成系统验证；现有owner继续使用，不为正式版重新登记。
 
 未新增付费订阅、AI调用、定时轮询、KV写入或音频服务。本次新增一个D1，目前账户共8库，不自动升级计费。按2026-10-27查阅的[官方D1价格](https://developers.cloudflare.com/d1/platform/pricing/)和[上限](https://developers.cloudflare.com/d1/platform/limits/)，免费单库500MB、账户10库/5GB、每日读500万行/写10万行；[Pages Functions](https://developers.cloudflare.com/pages/functions/pricing/)与Workers共享请求额度。账户额度不是本项目独享。正文静态存放、按需同步与粗粒度离线复用控制请求与数据库占用。
 
@@ -41,6 +45,7 @@ npm run test:carrier
 npm run build
 npx playwright install chromium
 npm run test:browser
+npm run test:upgrade
 npm run dev
 ```
 
