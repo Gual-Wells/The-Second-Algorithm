@@ -113,6 +113,33 @@ int main() {
 
 
 class LearningModelTest(LearningFixture):
+    def test_empty_course_requires_explicit_withdrawal_and_empty_registries(self):
+        self.publications["collections"][0]["visibility"] = "hidden"
+        self.model = {"schemaVersion": 1, "questions": [], "tasks": [], "targets": []}
+        self.invalid("requires published documents")
+        self.publications["state"] = "active"
+        self.invalid("requires published documents")
+        self.publications["state"] = "withdrawn"
+        self.save()
+        checked = validate_learning(self.root)
+        self.assertTrue(checked["ok"], checked)
+        self.assertEqual(checked["operation"], "withdrawal")
+        self.assertEqual(course_targets(self.root), [])
+        self.assertEqual(course_snapshot(self.root)["documents"], [])
+        self.publications["state"] = "unknown"
+        self.invalid("expected active or withdrawn")
+
+    def test_withdrawal_rejects_published_authority_and_each_nonempty_registry(self):
+        original = copy.deepcopy(self.model)
+        self.publications["state"] = "withdrawn"
+        self.invalid("Withdrawn publication requires")
+        self.publications["collections"][0]["visibility"] = "hidden"
+        for key in ("questions", "tasks", "targets"):
+            with self.subTest(registry=key):
+                self.model = {"schemaVersion": 1, "questions": [], "tasks": [], "targets": []}
+                self.model[key] = original[key]
+                self.invalid("Withdrawn publication requires")
+
     def test_valid_course_has_separate_coverage_and_search(self):
         result = validate_learning(self.root)
         self.assertTrue(result["ok"], result)
@@ -221,6 +248,46 @@ class LearningModelTest(LearningFixture):
 
 
 class ResearchWorkflowTest(LearningFixture):
+    def test_withdrawal_keeps_evidence_gate_and_never_claims_cpp_compilation(self):
+        self.publications.update(state="withdrawn", collections=[])
+        self.model = {"schemaVersion": 1, "questions": [], "tasks": [], "targets": []}
+        self.save()
+        init_job(self.root, "lesson-job", "Withdraw previous content")
+        with patch("second_algorithm.workflow._process") as process:
+            result = verify_job(self.root, "lesson-job", None)
+        process.assert_not_called()
+        self.assertTrue(result["passed"])
+        self.assertEqual(result["cppVerification"], "not-applicable")
+        self.assertIsNone(result["compiler"])
+        self.assertEqual(result["targets"], [])
+        self.assertFalse(job_status(self.root, "lesson-job")["readyForReleasePreparation"])
+        with self.assertRaisesRegex(ValueError, "Release not ready"):
+            prepare_release(self.root, "lesson-job")
+        self.notes()
+        prepared = prepare_release(self.root, "lesson-job")
+        self.assertEqual(prepared["release"]["operation"], "withdrawal")
+        checked = check_release(self.root, prepared["receipt"]["path"])
+        self.assertEqual(checked["publicationState"], "withdrawn")
+        self.assertEqual(checked["documents"], [])
+        packet_path = self.root / prepared["receipt"]["path"]
+        packet_bytes = packet_path.read_bytes()
+        wrong_operation = read_json(packet_path)
+        wrong_operation["operation"] = "content-release"
+        write_json(packet_path, wrong_operation)
+        with self.assertRaisesRegex(ValueError, "lifecycle"):
+            check_release(self.root, prepared["receipt"]["path"])
+        packet_path.write_bytes(packet_bytes)
+        self.publications["state"] = "active"
+        self.save()
+        with self.assertRaises(ValueError):
+            check_release(self.root, prepared["receipt"]["path"])
+
+    def test_active_verification_still_requires_explicit_compiler(self):
+        with patch("second_algorithm.workflow._process") as process:
+            with self.assertRaisesRegex(ValueError, "explicitly selected C\\+\\+ compiler"):
+                verify_course(self.root, None)
+        process.assert_not_called()
+
     def test_prepare_requires_actual_note_records_and_verification(self):
         init_job(self.root, "lesson-job", "Research this course")
         with self.assertRaisesRegex(ValueError, "Release not ready"):

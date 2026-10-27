@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "withdraw-prior-first-20261028",
+  "goal": "撤销此前正式出版：清空课程目录、Q与正文产物，旧地址及离线缓存失效，保留用户笔记；新第一章另行独立研究",
+  "createdAt": "2026-10-27T22:57:22.113520+00:00",
+  "evidence": [
+    {
+      "id": "3b3a91b2b3904917abed4f839ec37028",
+      "kind": "research",
+      "path": "work/fresh-first-20261028/retirement/research.md",
+      "summary": "实际研究显式撤回生命周期、旧正文和源码路径及缓存移除范围；新内容不承接",
+      "outcome": "accepted",
+      "sha256": "2ecd607740b0addd7c754c0e82b907e9b41e407162c249214db87142d45fa3b2",
+      "inputHash": "cfcacc9f01cc91d5ea197d734fcd804b82cb6316ddb48efc9a7a52580db91080",
+      "recordedAt": "2026-10-27T23:08:31.395378+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "93b9fb60e82c4cd791f6f5f963c134f1",
+      "kind": "review",
+      "path": "work/fresh-first-20261028/retirement/review.md",
+      "summary": "实际审阅active与withdrawn门禁、固定产物、认证API与真实SW缓存清理及笔记保留",
+      "outcome": "accepted",
+      "sha256": "8a37709092d6207414f0f976e2b57e18bc0a8ae153b31cac997155a0217a3d02",
+      "inputHash": "cfcacc9f01cc91d5ea197d734fcd804b82cb6316ddb48efc9a7a52580db91080",
+      "recordedAt": "2026-10-27T23:08:31.742811+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    }
+  ],
+  "lastGoodVerification": {
+    "path": "work/jobs/withdraw-prior-first-20261028/verifications/5f69892e8e784abcb57e273d83614346.json",
+    "sha256": "2dd87c663ba72377161a8d87d5c63b858b53cdeb7ba0b328de22edb06148ec54",
+    "inputHash": "cfcacc9f01cc91d5ea197d734fcd804b82cb6316ddb48efc9a7a52580db91080"
+  },
+  "lastPreparedRelease": {
+    "path": "work/jobs/withdraw-prior-first-20261028/releases/b309efa21e33435d9c39686a6320c6c0.json",
+    "sha256": "c83bd8707f0c123122a239e2b11a718ede3d91ee2b67dd824c3948930eb6f520",
+    "inputHash": "cfcacc9f01cc91d5ea197d734fcd804b82cb6316ddb48efc9a7a52580db91080"
+  },
+  "lastVerificationAttempt": {
+    "path": "work/jobs/withdraw-prior-first-20261028/verifications/5f69892e8e784abcb57e273d83614346.json",
+    "sha256": "2dd87c663ba72377161a8d87d5c63b858b53cdeb7ba0b328de22edb06148ec54",
+    "inputHash": "cfcacc9f01cc91d5ea197d734fcd804b82cb6316ddb48efc9a7a52580db91080"
+  }
+}

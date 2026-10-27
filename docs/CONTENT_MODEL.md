@@ -8,6 +8,10 @@
 
 出版登记采用 `schemaVersion: 2`，不再有 track。collection 的 kind 为 `chapter` 或 `draft`；chapterNumber 为全课程唯一正整数。draft 必须 `visibility: hidden` 且没有章号；不打包为正式正文。document 的 id 全局唯一，path 指向 `content/<unit>/<稿名>`，当前仍配套同名 `.source.md/.cpp` 和构建产物。
 
+根字段 `state` 为 `active`（省略时默认）或 `withdrawn`。active 课程必须有实际发布文档、Q、任务和验证目标。显式撤回只允许没有 published 文档且 learning 的 `questions/tasks/targets` 三数组全部为空；可保留 hidden 登记与原稿，构建不会复制它们。撤回产物有真实空目录、空Q索引和只允许 catalog 的内容路径表，新的构建身份使旧正文/源码/Markdown缓存和旧路由失效。用户笔记和阅读状态仍保留。
+
+撤回是 `operation: withdrawal`，正常内容发布为 `content-release`；校验、验证收据、准备包和构建摘要均明确标记。撤回验证检查上述空集约束，`compiler: null`、`cppVerification: not-applicable`，不调用编译器，不能报告“0个目标编译通过”。它仍需当前撤回依据及真实审阅笔记，并通过载体、浏览器与真实Service Worker升级检查；这些结果不能由结构校验替代。恢复发布须把 state 改回 active，填入真实研究形成的新内容并重新验证/准备，撤回包不授权内容发布。
+
 学习登记采用 `schemaVersion: 1`：
 
 | 集合 | 必要字段与约束 |
@@ -83,7 +87,7 @@ evidence需要真实的仓库Markdown/JSON笔记、非空summary及显式outcome
 
 ## 发布准备包与部署门禁
 
-prepare-release只有在模型有效、research/review证据当前有效、真实验证通过时成功。输出 `receipt.path` 指向：
+prepare-release只有在模型有效、research/review证据当前有效、当前操作的真实验证通过时成功。active 需要实际C++目标成功；withdrawn 只记录撤回结构验证，仍保留完整的研究/审阅及输入冻结门禁。输出 `receipt.path` 指向：
 
 ```text
 work/jobs/<job>/releases/<uuid>.json

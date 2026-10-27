@@ -93,9 +93,22 @@ test('release assets and authenticated API publish only registered current conte
     const cookie = await authenticate(env);
     assert.equal((await put(env, cookie, 'notes:practice-foundations', 'independent private note', 0)).status, 200);
     const catalog = await (await call(env, '/api/library', cookie)).json();
+    const directCatalog = await call(env, '/library/catalog.json', cookie);
+    assert.equal(directCatalog.status, 200);
+    assert.deepEqual(await directCatalog.json(), catalog, 'authenticated API and direct catalog expose the same release');
     assert.deepEqual(catalog.collections.map(collection => collection.id),
       publications.collections.filter(collection => collection.visibility !== 'hidden').map(collection => collection.id));
-    assert.ok(catalog.questions.length > 0);
+    if (publications.state === 'withdrawn') {
+      assert.equal(catalog.state, 'withdrawn');
+      assert.deepEqual(catalog.questions, []);
+      assert.deepEqual(catalog.collections, []);
+      const learning = JSON.parse(await fs.readFile(path.join(ROOT, 'catalog/learning.json'), 'utf8'));
+      for (const key of ['questions', 'tasks', 'targets']) assert.deepEqual(learning[key], [], key);
+      assert.deepEqual(await fs.readdir(path.join(output, 'library')), ['catalog.json'], 'withdrawal emits no body or download assets');
+    } else {
+      assert.equal(catalog.state, 'active');
+      assert.ok(catalog.questions.length > 0);
+    }
     assert.ok(catalog.collections.every(collection => !Object.hasOwn(collection, 'track')));
     for (const extension of ['json', 'cpp', 'md']) {
       for (const location of ['/library/practice-foundations/practice-foundations/retired.' + extension,

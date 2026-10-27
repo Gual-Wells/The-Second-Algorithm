@@ -1,19 +1,5 @@
 {
   "schemaVersion": 2,
-  "collections": [
-    {
-      "id": "practice-foundations",
-      "title": "实战起点：状态、范围与实现选择",
-      "kind": "chapter",
-      "visibility": "published",
-      "chapterNumber": 1,
-      "documents": [
-        {
-          "id": "practice-foundations",
-          "title": "实战起点",
-          "path": "content/practice-foundations/实战起点"
-        }
-      ]
-    }
-  ]
+  "state": "withdrawn",
+  "collections": []
 }

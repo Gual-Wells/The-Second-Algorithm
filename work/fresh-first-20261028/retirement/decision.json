@@ -1,0 +1,30 @@
+{
+  "recordedAt": "2026-10-27T22:57:20.910157+00:00",
+  "baseline": "e38d0f3af38f5e9b35b244139939ac0285336202",
+  "reason": "User explicitly withdrew previously published material and requested independently researched first chapter.",
+  "publicationRemoval": "Remove prior catalog, search, body, source and offline whitelist; retain user private state and Git recovery.",
+  "reservedQuestionIds": [
+    "Q000001",
+    "Q000002",
+    "Q000003",
+    "Q000004",
+    "Q000005",
+    "Q000006",
+    "Q000007",
+    "Q000008",
+    "Q000009",
+    "Q000010",
+    "Q000011",
+    "Q000012",
+    "Q000013",
+    "Q000014",
+    "Q000015",
+    "Q000016",
+    "Q000017",
+    "Q000018"
+  ],
+  "archivedRegistryHashes": {
+    "carrier/publications.json": "c8f708f34a4955182e2003703e621b02bd1fef82785ab89f470353d93966d3f7",
+    "catalog/learning.json": "ab64be7ef0121c6a650be9e589eb185f002af6faf88d4c85e2a97a9cbbda4546"
+  }
+}

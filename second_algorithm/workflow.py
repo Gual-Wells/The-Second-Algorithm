@@ -124,6 +124,7 @@ def job_status(root: Path, job_id: str) -> dict:
     evidence = _evidence_status(root, job, current_hash)
     ready = bool(validation["ok"] and verified and all(row["current"] for row in evidence.values()))
     return {"ok": True, "id": job_id, "goal": job["goal"], "inputHash": current_hash,
+            "publicationState": validation.get("publicationState"), "operation": validation.get("operation"),
             "validation": validation, "evidence": evidence,
             "verification": {"current": verified, "reason": verification_reason,
                              "lastGood": job.get("lastGoodVerification")},
@@ -147,7 +148,8 @@ def resume_job(root: Path, job_id: str) -> dict:
         if not evidence["current"]:
             steps.append("Perform actual " + kind + " for current inputs, save the note, and register accepted evidence.")
     if not result["verification"]["current"]:
-        steps.append("Run research verify with an explicitly selected compiler.")
+        steps.append("Run research verify to validate the explicit withdrawal; no C++ compilation applies."
+                     if result["operation"] == "withdrawal" else "Run research verify with an explicitly selected compiler.")
     if result["readyForReleasePreparation"]:
         steps.append("Run research prepare-release; deployment remains a separate operation.")
     return {**result, "nextActions": steps, "resumedAutomatically": False}
@@ -186,8 +188,11 @@ def _process(command: list[str], root: Path, env: dict[str, str], timeout: int) 
         return {"exit": None, "stdout": "", "stderr": str(error), "timeout": False}
 
 
-def verify_course(root: Path, compiler: str, output: str = ".local/course-verification") -> dict:
+def verify_course(root: Path, compiler: str | None, output: str = ".local/course-verification") -> dict:
     snapshot = course_snapshot(root)
+    withdrawal = snapshot["operation"] == "withdrawal"
+    if not withdrawal and not compiler:
+        raise ValueError("Content verification requires an explicitly selected C++ compiler")
     directory = safe_relative(root, output)
     if not directory.is_relative_to((root / ".local").resolve()):
         raise ValueError("Verification output must be inside the repository .local directory")
@@ -196,12 +201,16 @@ def verify_course(root: Path, compiler: str, output: str = ".local/course-verifi
     temporary = attempt / "tmp"
     temporary.mkdir()
     env = dict(os.environ, TEMP=str(temporary), TMP=str(temporary), TMPDIR=str(temporary))
-    version = _process([compiler, "--version"], root, env, 15)
+    version = None if withdrawal else _process([compiler, "--version"], root, env, 15)
     result = {"schemaVersion": 1, "createdAt": now(), "inputHash": snapshot["inputHash"],
-              "inputs": snapshot["inputs"], "compiler": {"name": Path(compiler).name, **version},
-              "targets": [], "passed": False, "semanticCompletenessCertified": False,
-              "limits": "Real local targets only; no online submission, learning measurement, or automatic semantic review."}
-    if version["exit"] == 0:
+              "inputs": snapshot["inputs"], "publicationState": snapshot["publicationState"],
+              "operation": snapshot["operation"],
+              "compiler": None if withdrawal else {"name": Path(compiler).name, **version},
+              "cppVerification": "not-applicable" if withdrawal else "failed",
+              "targets": [], "passed": withdrawal, "semanticCompletenessCertified": False,
+              "limits": ("Explicit empty withdrawal validated; no C++ target was compiled or run. Carrier, browser and upgrade checks remain separate."
+                         if withdrawal else "Real local targets only; no online submission, learning measurement, or automatic semantic review.")}
+    if not withdrawal and version["exit"] == 0:
         for target in read_json(root / "catalog/learning.json")["targets"]:
             binary = attempt / (target["id"] + (".exe" if os.name == "nt" else ""))
             flags = ["-std=" + target["standard"], "-O2", "-Wall", "-Wextra", "-Wpedantic", "-D_GLIBCXX_ASSERTIONS"]
@@ -224,6 +233,7 @@ def verify_course(root: Path, compiler: str, output: str = ".local/course-verifi
             result["targets"].append({"id": target["id"], "kind": target["kind"], "standard": target["standard"],
                                       "flags": flags, "compile": compiled, "run": executed, "passed": passed})
         result["passed"] = bool(result["targets"]) and all(target["passed"] for target in result["targets"])
+        result["cppVerification"] = "passed" if result["passed"] else "failed"
     try:
         if course_snapshot(root)["inputHash"] != snapshot["inputHash"]:
             result["passed"] = False
@@ -241,7 +251,7 @@ def verify_course(root: Path, compiler: str, output: str = ".local/course-verifi
     return {**result, "receipt": pointer}
 
 
-def verify_job(root: Path, job_id: str, compiler: str) -> dict:
+def verify_job(root: Path, job_id: str, compiler: str | None) -> dict:
     with _lock(root, job_id):
         job = _job(root, job_id)
         result = verify_course(root, compiler, ".local/research-jobs/" + job_id)
@@ -272,6 +282,7 @@ def prepare_release(root: Path, job_id: str) -> dict:
         receipt = {"schemaVersion": 1, "id": uuid.uuid4().hex, "job": job_id, "createdAt": now(),
                    "state": "prepared", "passed": True, "inputHash": snapshot["inputHash"],
                    "inputs": snapshot["inputs"], "documents": snapshot["documents"],
+                   "publicationState": snapshot["publicationState"], "operation": snapshot["operation"],
                    "evidence": evidence, "verification": job["lastGoodVerification"],
                    "automaticSemanticCertification": False, "deployed": False}
         filename = _job_path(root, job_id).parent / "releases" / (receipt["id"] + ".json")
@@ -289,6 +300,8 @@ def check_release(root: Path, packet: str) -> dict:
     if not isinstance(record, dict) or record.get("schemaVersion") != 1 or record.get("state") != "prepared" or record.get("passed") is not True:
         raise ValueError("Invalid release packet")
     snapshot = course_snapshot(root)
+    if record.get("publicationState") != snapshot["publicationState"] or record.get("operation") != snapshot["operation"]:
+        raise ValueError("Release packet publication lifecycle does not match current operation")
     if record.get("inputHash") != snapshot["inputHash"] or record.get("inputs") != snapshot["inputs"]:
         raise ValueError("Release packet is stale: current input hashes differ")
     job_id = record.get("job", "")
@@ -307,5 +320,6 @@ def check_release(root: Path, packet: str) -> dict:
     if course_snapshot(root)["inputHash"] != snapshot["inputHash"]:
         raise ValueError("Inputs changed during release packet check")
     return {"ok": True, "packet": packet, "inputHash": snapshot["inputHash"],
+            "publicationState": snapshot["publicationState"], "operation": snapshot["operation"],
             "documents": snapshot["documents"], "state": "prepared", "deployed": False,
             "automaticSemanticCertification": False}

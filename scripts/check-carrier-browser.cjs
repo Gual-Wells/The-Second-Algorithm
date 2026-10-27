@@ -115,7 +115,8 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
   return { context, mock, async page(hash = '#/read/practice-course/practice-entry') {
     const page = await context.newPage();
     await page.goto(origin + '/' + hash);
-    await page.locator('#readingArticle .code-block').first().waitFor();
+    if (catalog.state === 'withdrawn') await page.locator('#libraryView').waitFor({ state: 'visible' });
+    else await page.locator('#readingArticle .code-block').first().waitFor();
     await page.waitForFunction(() => window.__refinement && !window.__refinement.state.restoring);
     return page;
   } };
@@ -174,12 +175,30 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
       }
     });
 
-    await check('built-current-publication-renders-real-content-and-unique-Q-links', async () => {
+    await check('built-current-publication-renders-content-or-explicit-empty-withdrawal', async () => {
       const catalog = JSON.parse(await fs.readFile(path.join(root, 'dist/library/catalog.json'), 'utf8'));
       assert.equal(catalog.schemaVersion, 2, 'build the current schema before browser QA');
-      assert(catalog.questions.length > 0);
       const real = await environment(browser, { catalog, libraryRoot: path.join(root, 'dist') });
       try {
+        if (catalog.state === 'withdrawn') {
+          assert.deepEqual(catalog.collections, []); assert.deepEqual(catalog.questions, []);
+          const page = await real.page('#/read/retired/retired');
+          await page.waitForURL('**/#/library');
+          assert.match(await page.locator('#bookList').innerText(), /暂无章节/);
+          assert.equal(await page.locator('#bookList .book-row').count(), 0);
+          assert.equal(await page.locator('#readingArticle .code-block').count(), 0);
+          await page.locator('#questionsButton').click();
+          assert.equal(await page.locator('#questionResults .question-row').count(), 0);
+          await page.locator('[data-sheet-close]').click();
+          await page.locator('#librarySearch').fill('retired');
+          await page.waitForFunction(() => document.querySelector('#bookList').textContent.includes('暂无可检索内容'));
+          assert.equal(real.mock.requests.filter(request => request.path.startsWith('/library/')
+            && request.path !== '/library/catalog.json').length, 0);
+          await page.screenshot({ path: path.join(output, 'current-withdrawal.png') });
+          assert.deepEqual(real.mock.errors, []);
+          return;
+        }
+        assert(catalog.questions.length > 0);
         const collection = catalog.collections[0], meta = collection.documents[0];
         const page = await real.page(`#/read/${collection.id}/${meta.id}`);
         assert(await page.locator('#readingArticle .code-block').count() > 0);

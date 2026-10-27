@@ -38,6 +38,8 @@ function contentPath(root, value) {
 export function validatePublications(publications) {
   if (publications?.schemaVersion !== 2 || !Array.isArray(publications.collections))
     throw new Error('Unsupported publication manifest');
+  if (!['active', 'withdrawn'].includes(publications.state === undefined ? 'active' : publications.state))
+    throw new Error('Publication state must be active or withdrawn');
   const collections = new Set(), documents = new Set(), authorities = new Set(), chapterNumbers = new Set();
   for (const collection of publications.collections) {
     if (!ID.test(collection.id) || collections.has(collection.id)) throw new Error('Invalid/duplicate collection ID');
@@ -67,6 +69,9 @@ export function validatePublications(publications) {
       authorities.add(document.path);
     }
   }
+  if (publications.state === 'withdrawn' && publications.collections.some(collection =>
+    collection.visibility !== 'hidden' && collection.documents.length))
+    throw new Error('Withdrawn publication requires no published documents');
   return publications;
 }
 
@@ -75,6 +80,13 @@ export function validateLearning(learning, publications) {
     throw new Error('Unsupported learning manifest');
   const documents = new Map(publications.collections.flatMap(collection => collection.documents.map(document =>
     [document.id, { ...document, published: collection.visibility !== 'hidden' }])));
+  if (publications.state === 'withdrawn') {
+    if ([...documents.values()].some(document => document.published)
+      || ['questions', 'tasks', 'targets'].some(key => learning[key].length))
+      throw new Error('Withdrawn publication requires no published documents and empty questions, tasks and targets');
+  } else if (![...documents.values()].some(document => document.published)
+    || ['questions', 'tasks', 'targets'].some(key => !learning[key].length))
+    throw new Error('Active course requires published documents, questions, tasks and targets');
   const questions = new Map(), targets = new Set(), tasks = new Set(), implementations = new Set();
   for (const question of learning.questions) {
     if (!QUESTION.test(question.id) || questions.has(question.id)) throw new Error('Invalid/duplicate question ID');
@@ -290,7 +302,7 @@ export async function buildLibrary(root, output, publications, gitRevision, lear
     }
     rows.push({ collection, documents });
   }
-  const catalog = { schemaVersion: 2, version: '', collections: [], questions: [] };
+  const catalog = { schemaVersion: 2, state: publications.state ?? 'active', version: '', collections: [], questions: [] };
   const renderedDocuments = new Map();
   let codeBlocks = 0;
   for (const { collection, documents } of rows) {
@@ -365,7 +377,7 @@ export async function buildLibrary(root, output, publications, gitRevision, lear
     const filename = path.resolve(root, target.source);
     if (!inside(path.join(root, 'tests/cpp'), await fs.realpath(filename))) throw new Error('Target escapes tests/cpp');
   }
-  catalog.version = hash(JSON.stringify([gitRevision, catalog.collections, catalog.questions, hash(JSON.stringify(learning)),
+  catalog.version = hash(JSON.stringify([gitRevision, catalog.state, catalog.collections, catalog.questions, hash(JSON.stringify(learning)),
     [...renderedDocuments].map(([id, document]) => [id, hash(JSON.stringify(document))])]));
   await fs.mkdir(path.join(output, 'library'), { recursive: true });
   await fs.writeFile(path.join(output, 'library/catalog.json'), JSON.stringify(catalog, null, 2) + '\n', 'utf8');
@@ -373,7 +385,7 @@ export async function buildLibrary(root, output, publications, gitRevision, lear
 }
 
 export function publicationIndex(catalog) {
-  return { version: catalog.version, questions: catalog.questions, collections: Object.fromEntries(catalog.collections.map(collection =>
+  return { state: catalog.state ?? 'active', version: catalog.version, questions: catalog.questions, collections: Object.fromEntries(catalog.collections.map(collection =>
     [collection.id, Object.fromEntries(collection.documents.map(document => [document.id, document.revision]))])) };
 }
 
@@ -478,12 +490,14 @@ export async function buildCarrier({ root = process.cwd(), contentOnly = false, 
     await fs.writeFile(path.join(staging, '_routes.json'), JSON.stringify({ version: 1, include: ['/*'], exclude: [] }) + '\n');
     await fs.writeFile(path.join(staging, '_headers'), '/*\n  X-Content-Type-Options: nosniff\n  X-Robots-Tag: noindex, nofollow\n/library/*\n  Cache-Control: private, no-store\n  Cross-Origin-Resource-Policy: same-origin\n/api/*\n  Cache-Control: no-store\n');
     await fs.writeFile(path.join(staging, 'carrier-build.json'), JSON.stringify({ version: result.catalog.version, buildID, gitRevision,
+      publicationState: result.catalog.state, operation: result.catalog.state === 'withdrawn' ? 'withdrawal' : 'content-release',
       mode: contentOnly ? 'content-only' : 'full', documents: result.documents, codeBlocks: result.codeBlocks }) + '\n');
     try { await fs.rename(destination, backup); movedPrevious = true; } catch (error) { if (error.code !== 'ENOENT') throw error; }
     try { await fs.rename(staging, destination); }
     catch (error) { if (movedPrevious) await fs.rename(backup, destination); throw error; }
     if (movedPrevious) await fs.rm(backup, { recursive: true });
     return { mode: contentOnly ? 'content-only' : 'full', output: path.relative(root,destination).split(path.sep).join('/'), version: result.catalog.version, buildID,
+      publicationState: result.catalog.state, operation: result.catalog.state === 'withdrawn' ? 'withdrawal' : 'content-release',
       collections: result.catalog.collections.length, documents: result.documents, codeBlocks: result.codeBlocks };
   } catch (error) {
     await fs.rm(staging, { recursive: true, force: true });

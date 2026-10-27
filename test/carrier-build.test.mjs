@@ -5,7 +5,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { validatePublications, validateLearning, readAuthority, createLinkRewriter, renderAuthority, buildLibrary, buildCarrier }
+import { validatePublications, validateLearning, readAuthority, createLinkRewriter, renderAuthority, buildLibrary, buildCarrier, publicationIndex, libraryPaths }
   from '../scripts/build-carrier.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -84,10 +84,53 @@ test('the current publication schema has one course sequence and no track or tri
   assert.ok(publications.collections.every(x => !Object.hasOwn(x, 'track')));
   const ids = publications.collections.flatMap(x => x.documents.map(d => d.id));
   assert.equal(ids.length, new Set(ids).size);
-  const bad = structuredClone(publications); bad.collections[0].track = 'algorithm';
+  const bad = { schemaVersion: 2, collections: [{ id: 'sample', title: 'Sample', kind: 'chapter', chapterNumber: 1,
+    documents: [{ id: 'sample-doc', title: 'Sample', path: 'content/sample/Sample' }] }] }; bad.collections[0].track = 'algorithm';
   assert.throws(() => validatePublications(bad), /no track/);
   delete bad.collections[0].track; bad.collections[0].kind = 'trial';
   assert.throws(() => validatePublications(bad), /chapter\/draft/);
+});
+
+test('empty content requires explicit withdrawal and all current registries empty', () => {
+  const empty = { schemaVersion: 1, questions: [], tasks: [], targets: [] };
+  const withdrawn = { schemaVersion: 2, state: 'withdrawn', collections: [] };
+  assert.doesNotThrow(() => validatePublications(withdrawn));
+  assert.doesNotThrow(() => validateLearning(empty, withdrawn));
+  for (const state of [undefined, 'active'])
+    assert.throws(() => validateLearning(empty, { ...withdrawn, state }), /Active course requires/);
+  assert.throws(() => validatePublications({ ...withdrawn, state: 'unknown' }), /state/);
+  assert.throws(() => validatePublications({ ...withdrawn, state: null }), /state/);
+  for (const key of ['questions', 'tasks', 'targets'])
+    assert.throws(() => validateLearning({ ...empty, [key]: [{}] }, withdrawn), /Withdrawn publication requires/);
+  const published = { schemaVersion: 2, state: 'withdrawn', collections: [{ id: 'sample', title: 'Sample', kind: 'chapter',
+    chapterNumber: 1, documents: [{ id: 'sample-doc', title: 'Sample', path: 'content/sample/Sample' }] }] };
+  assert.throws(() => validatePublications(published), /no published documents/);
+});
+
+test('withdrawal replaces old output with catalog only and an empty immutable route index', async () => {
+  const f = await fixture();
+  try {
+    const previous = await buildCarrier({ root: f.root, contentOnly: true });
+    const oldCatalog = JSON.parse(await fs.readFile(path.join(f.root, 'dist/library/catalog.json'), 'utf8'));
+    const previousPaths = libraryPaths(oldCatalog).filter(url => url !== '/library/catalog.json');
+    assert(previousPaths.length > 0);
+    await fs.writeFile(path.join(f.root, 'carrier/publications.json'), JSON.stringify({ schemaVersion: 2, state: 'withdrawn',
+      collections: [{ ...f.collection, visibility: 'hidden' }] }));
+    await fs.writeFile(path.join(f.root, 'catalog/learning.json'), JSON.stringify({ schemaVersion: 1, questions: [], tasks: [], targets: [] }));
+    const built = await buildCarrier({ root: f.root, contentOnly: true });
+    assert.equal(built.operation, 'withdrawal');
+    assert.equal(built.documents, 0); assert.equal(built.codeBlocks, 0);
+    assert.notEqual(built.version, previous.version);
+    assert.notEqual(built.buildID, previous.buildID);
+    const catalog = JSON.parse(await fs.readFile(path.join(f.root, 'dist/library/catalog.json'), 'utf8'));
+    assert.equal(catalog.state, 'withdrawn');
+    assert.deepEqual(catalog.collections, []); assert.deepEqual(catalog.questions, []);
+    assert.deepEqual(publicationIndex(catalog).collections, {});
+    assert.deepEqual(libraryPaths(catalog), ['/library/catalog.json']);
+    assert.deepEqual(await fs.readdir(path.join(f.root, 'dist/library')), ['catalog.json']);
+    for (const url of previousPaths) await assert.rejects(fs.access(path.join(f.root, 'dist', url.slice(1))), /ENOENT/);
+    assert.equal(await fs.readFile(path.join(f.root, 'content/unit/Fixture.cpp'), 'utf8'), f.cpp);
+  } finally { await dispose(f.root); }
 });
 
 test('an isolated publishing artifact cannot replace the shared build output', async () => {
@@ -109,7 +152,8 @@ test('hidden collections produce neither public catalog entries nor deployed con
   try {
     f.collection.visibility = 'hidden';
     const output = path.join(f.root, '.local/hidden-output');
-    const result = await buildLibrary(f.root, output, { schemaVersion: 2, collections: [f.collection] }, gitRevision);
+    const result = await buildLibrary(f.root, output, { schemaVersion: 2, state: 'withdrawn', collections: [f.collection] }, gitRevision,
+      { schemaVersion: 1, questions: [], tasks: [], targets: [] });
     assert.deepEqual(result.catalog.collections, []);
     assert.equal(result.documents, 0); assert.equal(result.codeBlocks, 0);
     assert.deepEqual(await fs.readdir(path.join(output, 'library')), ['catalog.json']);
@@ -282,6 +326,13 @@ test('current published content preserves every declared source block and the un
   try {
     const result = await buildLibrary(ROOT, output, publications, gitRevision);
     assert.equal(result.catalog.schemaVersion, 2);
+    if (publications.state === 'withdrawn') {
+      assert.equal(result.catalog.state, 'withdrawn');
+      assert.equal(result.documents, 0); assert.equal(result.codeBlocks, 0);
+      assert.deepEqual(result.catalog.collections, []); assert.deepEqual(result.catalog.questions, []);
+      assert.deepEqual(await fs.readdir(path.join(output, 'library')), ['catalog.json']);
+      return;
+    }
     assert.ok(result.documents > 0 && result.codeBlocks > 0);
     assert.ok(result.catalog.questions.length > 0);
     assert.equal(new Set(result.catalog.questions.map(q => q.id)).size, result.catalog.questions.length);

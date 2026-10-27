@@ -53,6 +53,9 @@ def _inspect(root: Path) -> tuple[dict, dict]:
         return {"ok": False, "scope": "current-course", "errors": ["learning: expected schemaVersion 1"]}, {}
     if not isinstance(publications, dict) or publications.get("schemaVersion") != 2:
         return {"ok": False, "scope": "current-course", "errors": ["publications: expected schemaVersion 2"]}, {}
+    publication_state = publications.get("state", "active")
+    if publication_state not in {"active", "withdrawn"}:
+        errors.append("publications.state: expected active or withdrawn")
 
     def rows(parent, key, label):
         value = parent.get(key)
@@ -84,7 +87,7 @@ def _inspect(root: Path) -> tuple[dict, dict]:
         return key
 
     documents, publication_ids, chapter_numbers, authority_paths = {}, set(), set(), set()
-    all_document_ids = set()
+    all_document_ids, published_document_ids = set(), set()
     for collection in rows(publications, "collections", "publications.collections"):
         identity(collection, publication_ids, "collection")
         if "track" in collection:
@@ -112,6 +115,7 @@ def _inspect(root: Path) -> tuple[dict, dict]:
             authority_paths.add(base)
             text(document.get("title"), "document.title")
             if did and collection.get("visibility", "published") == "published":
+                published_document_ids.add(did)
                 try:
                     draft = file_path(root, base + ".source.md").read_text(encoding="utf-8-sig")
                     file_path(root, base + ".cpp")
@@ -287,9 +291,14 @@ def _inspect(root: Path) -> tuple[dict, dict]:
                         errors.append(iid + ": verification standard is older than implementation")
                     if target.get("kind") == "compile-fail":
                         errors.append(iid + ": a reference implementation requires a successful verification target")
-    if not documents or not questions or not tasks or not targets:
+    if publication_state == "withdrawn":
+        if published_document_ids or questions or tasks or targets:
+            errors.append("Withdrawn publication requires no published documents and empty questions, tasks and targets")
+    elif not documents or not questions or not tasks or not targets:
         errors.append("Current course requires published documents, questions, tasks and targets")
     result = {"ok": not errors, "scope": "current-course", "errors": errors,
+              "publicationState": publication_state,
+              "operation": "withdrawal" if publication_state == "withdrawn" else "content-release",
               "counts": {"documents": len(documents), "questions": len(questions), "tasks": len(tasks),
                          "implementations": implementation_count, "targets": len(targets)},
               "semanticCompletenessCertified": False, "userMasteryMeasured": False}
@@ -353,6 +362,7 @@ def course_snapshot(root: Path) -> dict:
             inputs.add(filename)
     hashes = {filename: digest(file_path(root, filename).read_bytes()) for filename in sorted(inputs)}
     return {"inputHash": digest(canonical_bytes(hashes)), "inputs": hashes, "validation": checked,
+            "publicationState": checked["publicationState"], "operation": checked["operation"],
             "documents": sorted(context["documents"])}
 
 

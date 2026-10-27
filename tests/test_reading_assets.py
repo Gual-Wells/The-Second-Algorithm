@@ -46,9 +46,15 @@ class ReadingPage(HTMLParser):
 class ReadingAssetTest(unittest.TestCase):
     def test_reading_build_and_displayed_code_match_authorities(self):
         publications = json.loads((ROOT / "carrier/publications.json").read_text(encoding="utf8"))
-        documents = [d for c in publications["collections"] if c.get("visibility") == "published"
+        documents = [d for c in publications["collections"] if c.get("visibility", "published") == "published"
                      for d in c["documents"]]
-        self.assertTrue(documents, "release needs an actual published document")
+        if publications.get("state", "active") == "withdrawn":
+            self.assertFalse(documents, "withdrawal cannot publish a document")
+            learning = json.loads((ROOT / "catalog/learning.json").read_text(encoding="utf8"))
+            for key in ("questions", "tasks", "targets"):
+                self.assertEqual(learning[key], [], "withdrawal must clear the current learning registry")
+        else:
+            self.assertTrue(documents, "active release needs an actual published document")
         for document in documents:
             source = ROOT / (document["path"] + ".source.md")
             content = source.parent

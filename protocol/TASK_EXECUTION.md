@@ -40,6 +40,8 @@ prepare-release输出receipt.path。它是准备包，不是已部署。缺研�
 
 ## 发布
 
+明确撤回已发布内容时，将 schema2 出版登记根 `state` 设为 `withdrawn`，所有已发布文档撤出 published，learning 的 questions/tasks/targets 三数组全部清空。hidden 登记和权威原稿可保留。不得用普通 active 空课程或假C++目标绕过内容门禁。先构建并审查真实空目录，登记当前撤回理由/边界和审阅笔记，再运行 `research verify <task-id>`（撤回可省略 compiler）、prepare-release 及同一部署流程。收据将声明 `operation: withdrawal`、`cppVerification: not-applicable`；这不代表C++编译或载体验收成功。必须运行载体/浏览器/SW升级检查，证明旧缓存正文、源码、Markdown及旧路由在新版本接管后不能再读，私人未同步笔记保留。恢复 active 后必须以真实新内容重新走研究、C++验证及发布准备。
+
 ```sh
 python -m second_algorithm research check-release work/jobs/task-id/releases/<id>.json
 npm run deploy -- --release work/jobs/task-id/releases/<id>.json

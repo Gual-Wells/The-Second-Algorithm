@@ -1,0 +1,121 @@
+{
+  "scope": "explicit publication withdrawal; no C++ content validation claimed",
+  "pythonTests": 57,
+  "carrierTests": 65,
+  "browser": {
+    "passed": true,
+    "results": [
+      {
+        "name": "viewport-matrix-preserves-paper-code-selection-and-Q-sheet",
+        "passed": true
+      },
+      {
+        "name": "built-current-publication-renders-content-or-explicit-empty-withdrawal",
+        "passed": true
+      },
+      {
+        "name": "unified-course-and-Q-index-link-to-one-explanation-and-return",
+        "passed": true
+      },
+      {
+        "name": "Q-same-document-browser-back-restores-the-original-history-entry",
+        "passed": true
+      },
+      {
+        "name": "question-number-deep-link-resolves-to-the-registered-main-position",
+        "passed": true
+      },
+      {
+        "name": "same-browser-two-page-late-ACK-and-reload",
+        "passed": true
+      },
+      {
+        "name": "note-edited-in-flight-is-rebased-and-saved-again-without-old-pending-slots",
+        "passed": true
+      },
+      {
+        "name": "same-text-older-base-other-tab-draft-is-not-invisible-in-recovery",
+        "passed": true
+      },
+      {
+        "name": "failed-local-backup-cannot-discard-current-note-when-adopting-cloud",
+        "passed": true
+      },
+      {
+        "name": "native-anchor-offset-marks-the-reached-first-heading-current",
+        "passed": true
+      },
+      {
+        "name": "TOC-clear-keeps-input-and-keyboard-focus",
+        "passed": true
+      },
+      {
+        "name": "offline-global-search-reports-unavailable-documents",
+        "passed": true
+      },
+      {
+        "name": "slow-cross-document-keeps-reader-and-can-cancel-without-late-replacement",
+        "passed": true
+      },
+      {
+        "name": "return-button-separate-from-progress-and-restores-reading-place",
+        "passed": true
+      },
+      {
+        "name": "sheet-browser-back-closes-and-source-parent-returns-to-settings",
+        "passed": true
+      },
+      {
+        "name": "sheet-close-and-immediate-reopen-in-same-task-retains-new-dialog",
+        "passed": true
+      },
+      {
+        "name": "visual-viewport-keyboard-fits-sheet-and-pinch-zoom-removes-keyboard-overrides",
+        "passed": true
+      },
+      {
+        "name": "TOC-anchor-consumed-and-later-reading-position-survives-reload",
+        "passed": true
+      },
+      {
+        "name": "pure-code-click-does-not-reveal-controls-and-pointer-hold-keeps-controls-visible",
+        "passed": true
+      },
+      {
+        "name": "library-search-in-flight-completes-after-settings-open-and-close",
+        "passed": true
+      }
+    ],
+    "failures": [],
+    "productionContacted": false,
+    "realDatabaseModified": false,
+    "testedAt": "2026-10-27T23:06:45.489Z"
+  },
+  "upgrade": {
+    "passed": true,
+    "realBrowserAndServiceWorker": true,
+    "heldNewWorkerWhileNewAppRan": true,
+    "prematureRequests": 0,
+    "offlineRestart": true,
+    "unsentNotesPreserved": true,
+    "checkUpdatesWaitsForTakeover": true,
+    "manualReloadOpensFormalChapter": true,
+    "withdrawalPurgedCachedJsonCppMarkdown": true,
+    "withdrawnOldRoutesOffline404": true,
+    "withdrawnEmptyCatalogOfflineRestart": true,
+    "withdrawalUnsentNotesPreserved": true,
+    "automaticReload": false,
+    "productionContacted": false,
+    "databaseModified": false
+  },
+  "artifact": {
+    "version": "b00605dc44d50640500a5e960df7c7c340d0cca2b6443357eb43ed89166a217d",
+    "buildID": "02952f8f60e2ddbcfb5990221093388aa0adf1ce92ae2616128ba4590575fa4e",
+    "gitRevision": "e38d0f3af38f5e9b35b244139939ac0285336202",
+    "publicationState": "withdrawn",
+    "operation": "withdrawal",
+    "mode": "full",
+    "documents": 0,
+    "codeBlocks": 0
+  }
+}
