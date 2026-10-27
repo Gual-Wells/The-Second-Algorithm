@@ -1,15 +1,34 @@
-name: Validate research base
+name: Verify and publish current practice course
 
 on:
   push:
   pull_request:
+  workflow_dispatch:
+    inputs:
+      research_job:
+        description: Existing research job to verify and prepare
+        type: string
+        required: false
+      publish:
+        description: Deploy the verified prepared job to production
+        type: boolean
+        default: false
 
 permissions:
   contents: read
 
+concurrency:
+  group: practice-check-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   check:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CXX: g++
+      PYTHONDONTWRITEBYTECODE: '1'
+      PLAYWRIGHT_BROWSERS_PATH: .local/playwright-browsers
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -19,47 +38,37 @@ jobs:
         with:
           node-version: '24'
           cache: npm
-      - name: Install carrier dependencies
-        run: npm ci
-      - name: Verify owner boundary, content exports and icon compatibility
-        run: npm run test:carrier
-      - name: Build private reader and worker
-        run: npm run build
-      - name: Install isolated browser for reader interaction checks
-        run: npx playwright install --with-deps chromium
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Build and verify actual registered content, reader and service worker
+        run: npm run check
+      - name: Verify and prepare the requested research job
+        if: github.event_name == 'workflow_dispatch' && inputs.research_job != ''
         env:
-          PLAYWRIGHT_BROWSERS_PATH: .local/playwright-browsers
-      - name: Verify reader interactions and multi-page draft recovery
-        run: npm run test:browser
-        env:
-          PLAYWRIGHT_BROWSERS_PATH: .local/playwright-browsers
-      - name: Verify installed release upgrades with the actual service worker
-        run: npm run test:upgrade
-        env:
-          PLAYWRIGHT_BROWSERS_PATH: .local/playwright-browsers
-      - name: Validate committed catalogues and references
-        run: python -m second_algorithm validate
-      - name: Verify collectors and recovery without network
-        run: python -m unittest discover -s tests -v
-      - name: Check C++ references against independent results
+          RESEARCH_JOB: ${{ inputs.research_job }}
         run: |
-          g++ --version
-          mkdir -p .local/ci
-          for source in tests/cpp/*_test.cpp; do
-            output=".local/ci/$(basename "$source" .cpp)"
-            g++ -std=c++17 -pthread -O2 -Wall -Wextra -Wpedantic -D_GLIBCXX_ASSERTIONS "$source" -o "$output"
-            timeout 30s "$output"
-          done
-      - name: Instantiate newer C++ language and range branches
+          python -m second_algorithm research status "$RESEARCH_JOB"
+          python -m second_algorithm research verify "$RESEARCH_JOB" --compiler g++
+          python -m second_algorithm research prepare-release "$RESEARCH_JOB"
+      - name: Publish prepared current inputs
+        if: github.event_name == 'workflow_dispatch' && inputs.publish && github.ref == 'refs/heads/main'
+        env:
+          RESEARCH_JOB: ${{ inputs.research_job }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
-          for standard in c++20 c++23; do
-            for source in tests/cpp/cpp_generic_test.cpp tests/cpp/cpp_library_ranges_test.cpp tests/cpp/cpp_ring_exception_test.cpp; do
-              output=".local/ci/$(basename "$source" .cpp)-$standard"
-              g++ -std="$standard" -pthread -O2 -Wall -Wextra -Wpedantic -D_GLIBCXX_ASSERTIONS "$source" -o "$output"
-              timeout 30s "$output"
-            done
-          done
-      - name: Verify first C++ chapter copy and ownership compile contracts
-        run: python tests/cpp/verify_object_interfaces.py --compiler g++ --output .local/ci/object-interfaces-probes
-      - name: Verify separate translation units and call_once retry
-        run: python tools/verify_cpp_systems.py --once-retry --output .local/ci/translation
+          test -n "$RESEARCH_JOB" && test -n "$CLOUDFLARE_API_TOKEN" && test -n "$CLOUDFLARE_ACCOUNT_ID"
+          PACKET=$(python -c 'import json,os;from pathlib import Path;print(json.loads((Path("work/jobs")/os.environ["RESEARCH_JOB"]/"job.json").read_text())["lastPreparedRelease"]["path"])')
+          npm run deploy -- --release "$PACKET"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: practice-verification-${{ github.sha }}
+          path: |
+            .local/course-verification/
+            .local/refinement-qa/results.json
+            .local/carrier-upgrade-qa/results.json
+            work/jobs/
+            .local/releases/*/carrier-build.json
+          if-no-files-found: ignore
+          retention-days: 14

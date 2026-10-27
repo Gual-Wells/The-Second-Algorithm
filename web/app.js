@@ -5,26 +5,29 @@ import { waitForWorkerRelease } from './worker-release.js';
 const $ = id => document.getElementById(id);
 const esc = text => String(text ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 const S = { owner: null, library: null, records: {}, docs: new Map(), notes: new Map(), active: null,
-  track: 'algorithm', offline: false, sequence: 0, connectionSequence: 0, searchSequence: 0, back: [], pure: false, restoring: false, returnTo: null, pendingRoute: null,
+  offline: false, sequence: 0, connectionSequence: 0, searchSequence: 0, back: [], pure: false, restoring: false, returnTo: null, pendingRoute: null,
   settings: { fontSize: 17, codeSize: 13.5, wrapCode: false, preload: true }, controlsTimer: 0 };
 const SESSION_KEY = 'second-algorithm:last-session';
 const prefix = () => `second-algorithm:${S.owner}:`;
 const readLocal = (key, fallback = null) => { try { return JSON.parse(localStorage.getItem(prefix() + key)) ?? fallback; } catch { return fallback; } };
 const writeLocal = (key, value) => { try { localStorage.setItem(prefix() + key, JSON.stringify(value)); return true; } catch { toast('本机存储空间不足，请导出尚未同步的笔记。'); return false; } };
 const allDocuments = () => S.library?.collections.flatMap(c => c.documents.map(d => ({ collection: c, document: d }))) || [];
-const trackName = track => track === 'cpp' ? 'C++册' : '算法册';
 let positionTimer, toastTimer, sheetView, sheetParent, sheetSequence = 0, reconnectTimer, reconnecting = false;
 let sheetHistory = false, sheetClosing = false, afterSheetClose = null, journalInstance, heldControls = false;
 const CLIENT_ID = crypto.randomUUID();
 const BUILD = new URL(import.meta.url).searchParams.get('v');
 const PUBLICATION_INDEX = typeof __PUBLICATION_INDEX__ === 'undefined' ? { version: '', collections: {} } : __PUBLICATION_INDEX__;
 function publishedLibrary(catalog) {
-  return { version: PUBLICATION_INDEX.version, collections: (catalog?.collections || []).flatMap(collection => {
+  if (catalog?.schemaVersion !== 2) throw Error('课程目录版本与当前应用不符，请联网更新。');
+  const collections = (catalog?.collections || []).flatMap(collection => {
     const allowed = PUBLICATION_INDEX.collections[collection.id];
     if (!allowed) return [];
     const documents = collection.documents.filter(document => allowed[document.id] === document.revision);
     return documents.length ? [{ ...collection, documents }] : [];
-  }) };
+  });
+  const visible = new Set(collections.flatMap(collection => collection.documents.map(document => document.id)));
+  return { schemaVersion: 2, version: PUBLICATION_INDEX.version, collections,
+    questions: (PUBLICATION_INDEX.questions || []).filter(question => visible.has(question.document)) };
 }
 const syncing = new Map(), downloads = new Map();
 let contentController = null, contentReleaseJob = null;
@@ -36,7 +39,7 @@ async function ensureContentRelease() {
     .finally(() => { contentReleaseJob = null; });
   await contentReleaseJob;
 }
-const shelves = { algorithm: { query: '', scroll: 0 }, cpp: { query: '', scroll: 0 } };
+let shelf = { query: '', scroll: 0 };
 const activeHash = () => S.active?.route || location.hash;
 function journal() {
   if (!journalInstance || journalInstance.owner !== S.owner) journalInstance = {
@@ -80,7 +83,7 @@ function lock(message = '使用通行密钥进入阅读室。') {
   S.sequence++; S.searchSequence++; S.connectionSequence++; S.owner = null; S.active = null; S.library = null; S.docs.clear(); S.records = {}; S.notes.clear(); S.returnTo = null; S.restoring = false; S.pendingRoute = null; afterSheetClose = null; downloads.clear(); clearTimeout(reconnectTimer);
   localStorage.removeItem(SESSION_KEY); setPure(false);
   if ($('sheetDialog').open) $('sheetDialog').close();
-  $('headerActions').hidden = $('trackTabs').hidden = $('libraryView').hidden = $('readerView').hidden = true;
+  $('headerActions').hidden = $('libraryView').hidden = $('readerView').hidden = true;
   $('loginView').hidden = false; $('loginMessage').textContent = message; $('retryButton').hidden = false;
   $('loginButton').hidden = false; void swMessage({ type: 'CLEAR_PRIVATE' });
 }
@@ -145,13 +148,13 @@ async function enter(owner, offline, connection) {
   S.settings = { ...S.settings, ...(remotePreferences || readLocal('preferences', {})) };
   S.settings.fontSize = Math.max(15, Math.min(24, Number(S.settings.fontSize) || 17));
   S.settings.codeSize = Math.max(12, Math.min(20, Number(S.settings.codeSize) || 13.5));
-  S.track = readLocal('track', 'algorithm'); applySettings();
-  $('loginView').hidden = true; $('headerActions').hidden = $('trackTabs').hidden = false;
+  applySettings();
+  $('loginView').hidden = true; $('headerActions').hidden = false;
   await swMessage({ type: 'OWNER', owner, verifiedAt: offline ? JSON.parse(localStorage.getItem(SESSION_KEY)).verifiedAt : Date.now() });
   $('connectionLabel').textContent = offline ? '离线' : '';
   if (!location.hash || location.hash === '#/') {
     const route = readLocal('lastRoute');
-    history.replaceState(null, '', route || `#/library/${S.track}`);
+    history.replaceState(null, '', route || '#/library');
   }
   await route();
   if (!offline) void syncPending();
@@ -160,10 +163,10 @@ async function enter(owner, offline, connection) {
 function navigate(hash, { replace = false } = {}) {
   if ($('sheetDialog').open || sheetHistory) { dismissSheet(() => navigate(hash, { replace })); return; }
   savePosition();
-  if (!$('libraryView').hidden) { shelves[S.track] = { query: $('librarySearch').value, scroll: $('libraryView').scrollTop }; writeLocal(`shelf:${S.track}`, shelves[S.track]); }
+  if (!$('libraryView').hidden) { shelf = { query: $('librarySearch').value, scroll: $('libraryView').scrollTop }; writeLocal('shelf', shelf); }
   if (location.hash === hash) { void route(); return; }
   if (replace) { history.replaceState(null, '', hash); void route(); }
-  else location.hash = hash;
+  else { history.pushState(null, '', hash); void route(); }
 }
 
 async function getDocument(meta) {
@@ -177,7 +180,7 @@ async function getDocument(meta) {
   if (!response.ok) throw Error(S.offline ? '此篇尚未下载。' : response.status === 404 ? '内容已更新，请刷新阅读器。' : '此篇暂时无法打开。');
   const document = await response.json();
   if (!owner || S.owner !== owner) throw Error('登录状态已变化。');
-  if (document.revision !== meta.revision) throw Error('内容版本已更新，请重新打开章节册。');
+  if (document.id !== meta.id || document.revision !== meta.revision) throw Error('内容版本已更新，请重新打开章节册。');
   S.docs.set(meta.id, document); return document;
 }
 
@@ -185,23 +188,31 @@ async function route() {
   if (!S.owner || !S.library) return;
   clearTimeout(searchTimer); clearTimeout(tocSearchTimer); S.searchSequence++;
   const sequence = ++S.sequence;
-  const raw = location.hash || `#/library/${S.track}`;
+  const raw = location.hash || '#/library';
   const [pathname, query = ''] = raw.slice(1).split('?');
   const [, section, collectionId, docId] = pathname.split('/');
+  const historyPosition = history.state?.readingPosition;
+  if (section === 'q') {
+    const question = S.library.questions.find(question => question.id === collectionId);
+    const pair = question && allDocuments().find(pair => pair.document.id === question.document);
+    if (!pair) { toast('未找到此问题编号。'); navigate('#/library', { replace: true }); return; }
+    history.replaceState(history.state, '', `#/read/${pair.collection.id}/${question.document}?anchor=${encodeURIComponent(question.anchor)}`);
+    await route(); return;
+  }
   if (section !== 'read') {
-    savePosition(); S.track = collectionId === 'cpp' ? 'cpp' : 'algorithm'; S.active = null; S.pendingRoute = null; S.restoring = false; S.back = []; S.returnTo = null; setPure(false);
+    savePosition(false); S.active = null; S.pendingRoute = null; S.restoring = false; S.back = []; S.returnTo = null; setPure(false);
     $('readingNotice').hidden = true;
     $('readerView').hidden = true; $('libraryView').hidden = false;
-    const shelf = readLocal(`shelf:${S.track}`, shelves[S.track]); shelves[S.track] = shelf;
-    $('libraryTitle').textContent = trackName(S.track); $('librarySearch').value = shelf.query;
-    markTrack(); writeLocal('track', S.track); writeLocal('lastRoute', `#/library/${S.track}`); renderLibrary();
-    if (shelf.query.trim()) await search(shelf.query, $('bookList'), allDocuments().filter(x => x.collection.track === S.track));
+    shelf = readLocal('shelf', shelf);
+    $('libraryTitle').textContent = '算法实战'; $('librarySearch').value = shelf.query;
+    writeLocal('lastRoute', '#/library'); renderLibrary();
+    if (shelf.query.trim()) await search(shelf.query, $('bookList'), allDocuments());
     if (sequence === S.sequence) $('libraryView').scrollTop = shelf.scroll;
     return;
   }
   const collection = S.library.collections.find(c => c.id === collectionId);
   const meta = collection?.documents.find(d => d.id === docId);
-  if (!meta) { navigate(`#/library/${S.track}`, { replace: true }); return; }
+  if (!meta) { navigate('#/library', { replace: true }); return; }
   const previous = S.active;
   S.pendingRoute = raw;
   if (previous) {
@@ -214,7 +225,7 @@ async function route() {
   try {
     const content = await getDocument(meta); if (sequence !== S.sequence) return;
     await document.fonts.ready; if (sequence !== S.sequence) return;
-    savePosition(); S.restoring = true; S.track = collection.track;
+    savePosition(false); S.restoring = true;
     const canonical = `#/read/${collection.id}/${meta.id}`;
     S.active = { collection, meta, content, route: canonical }; S.pendingRoute = null;
     $('currentTitle').textContent = collection.title;
@@ -235,17 +246,17 @@ async function route() {
       if (!node.id) node.dataset.readingAnchor = `part-${index}`; index++;
     }
     applySettings();
-    markTrack(); updateConnection();
+    updateConnection();
     const anchor = new URLSearchParams(query).get('anchor');
     if (S.returnTo?.hash === raw) { restorePosition(S.returnTo.position); S.returnTo = null; }
-    else if (anchor) jumpTo(anchor); else restorePosition(positionFor(meta.id));
-    history.replaceState(history.state, '', canonical);
+    else if (anchor) jumpTo(anchor); else restorePosition(historyPosition || positionFor(meta.id));
+    history.replaceState({ ...history.state, readingPosition: capturePosition() }, '', canonical);
     $('readingNotice').hidden = true;
     updateProgress(); await new Promise(requestAnimationFrame);
     if (sequence !== S.sequence) return;
     S.restoring = false;
-    writeLocal('lastRoute', canonical); writeLocal('track', S.track); writeLocal(`last-document:${collection.id}`, meta.id);
-    writeLocal(`resume:${S.track}`, { collection: collection.id, document: meta.id, route: canonical }); updateProgress();
+    writeLocal('lastRoute', canonical); writeLocal(`last-document:${collection.id}`, meta.id);
+    writeLocal('resume', { collection: collection.id, document: meta.id, route: canonical }); updateProgress();
     if (S.settings.preload && !S.offline) void downloadCollection(collection, false);
   } catch (error) {
     if (sequence !== S.sequence || !S.owner) return;
@@ -264,24 +275,19 @@ function cancelPendingRoute() {
 
 function updateConnection() {
   $('connectionLabel').textContent = S.offline ? '离线' : '';
-  if (S.active) $('currentKind').textContent = (S.active.collection.kind === 'trial' ? '试读' : `第${S.active.collection.chapterNumber}章`) + (S.offline ? ' · 离线' : '');
-}
-
-function markTrack() {
-  for (const button of document.querySelectorAll('[data-track]')) { const selected = button.dataset.track === S.track; button.setAttribute('aria-selected', String(selected)); button.tabIndex = selected ? 0 : -1; }
+  if (S.active) $('currentKind').textContent = `第${S.active.collection.chapterNumber}章` + (S.offline ? ' · 离线' : '');
 }
 
 function renderLibrary() {
-  const entries = S.library.collections.filter(c => c.track === S.track);
+  const entries = S.library.collections;
   const row = c => {
     const last = c.documents.find(d => d.id === readLocal(`last-document:${c.id}`))
       || [...c.documents].sort((a, b) => (S.records[`position:${b.id}`]?.updatedAt || 0) - (S.records[`position:${a.id}`]?.updatedAt || 0))[0];
     return `<button class="book-row" type="button" data-open-collection="${c.id}" data-open-document="${last.id}"><span><strong>${esc(c.kind === 'chapter' ? `第${c.chapterNumber}章　${c.title}` : c.title)}</strong><small>${c.documents.length}篇${c.documents.some(d => positionFor(d.id)) ? ' · 继续阅读' : ''}</small></span><span aria-hidden="true">›</span></button>`;
   };
-  const chapters = entries.filter(c => c.kind === 'chapter'), trials = entries.filter(c => c.kind === 'trial');
-  $('bookList').innerHTML = `<section class="shelf-section"><h3>章节</h3>${chapters.length ? chapters.map(row).join('') : '<p class="empty-state">暂无章节</p>'}</section>`
-    + (trials.length ? `<section class="shelf-section"><h3>试读</h3>${trials.map(row).join('')}</section>` : '');
-  const resume = readLocal(`resume:${S.track}`), collection = entries.find(c => c.id === resume?.collection), meta = collection?.documents.find(d => d.id === resume.document);
+  const chapters = entries.filter(c => c.kind === 'chapter');
+  $('bookList').innerHTML = `<section class="shelf-section"><h3>章节</h3>${chapters.length ? chapters.map(row).join('') : '<p class="empty-state">暂无章节</p>'}</section>`;
+  const resume = readLocal('resume'), collection = entries.find(c => c.id === resume?.collection), meta = collection?.documents.find(d => d.id === resume.document);
   $('libraryResume').hidden = !meta;
   if (meta) { $('libraryResume').innerHTML = `<span><small>继续阅读</small><strong>${esc(collection.title)} · ${esc(meta.title)}</strong></span><span aria-hidden="true">›</span>`; $('libraryResume').dataset.route = resume.route; }
 }
@@ -323,9 +329,10 @@ function jumpTo(anchor) {
   updateProgress();
 }
 
-function savePosition() {
+function savePosition(historyEntry = true) {
   if (!S.active || !S.owner || S.restoring || $('readerView').hidden) return;
   const key = `position:${S.active.meta.id}`, value = capturePosition();
+  if (historyEntry && !sheetHistory) history.replaceState({ ...history.state, readingPosition: value }, '', location.href);
   writeLocal(key, value); S.records[key] = { ...S.records[key], value, dirty: true };
   writeLocal('records', S.records); clearTimeout(positionTimer);
   positionTimer = setTimeout(() => { void syncRecord(key); }, 1400);
@@ -413,6 +420,21 @@ function showToc() {
   if (!S.active) return;
   showSheet('目录', `<div class="sheet-tools"><label class="search-field"><input id="tocSearch" type="search" placeholder="检索本册内容" autocomplete="off" maxlength="200"></label></div><div id="tocResults">${tocMarkup()}</div>`, 'toc');
   requestAnimationFrame(() => { if (sheetView === 'toc') $('tocResults')?.querySelector('[aria-current]')?.scrollIntoView({ block: 'center' }); });
+}
+
+function renderQuestions(query = '') {
+  const terms = query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
+  const questions = S.library.questions.filter(question => terms.every(term =>
+    (question.id + ' ' + question.title).toLocaleLowerCase().includes(term)));
+  $('questionResults').innerHTML = `<p class="search-summary">${questions.length}个问题</p>`
+    + (questions.length ? questions.map(question => `<button type="button" class="question-row" data-go-question="${question.id}"><span class="question-number">${question.id}</span><span>${esc(question.title)}</span><span aria-hidden="true">›</span></button>`).join('')
+      : '<p class="empty-state">未找到匹配的问题编号或标题</p>');
+}
+
+function showQuestions() {
+  if (waitForSheetClose(showQuestions)) return;
+  showSheet('C++问题索引', '<div class="sheet-tools"><label class="search-field"><span class="sr-only">检索问题编号或标题</span><input id="questionSearch" type="search" placeholder="问题编号或标题" autocomplete="off" maxlength="200"></label></div><div id="questionResults"></div>', 'questions');
+  renderQuestions();
 }
 
 function markText(text, terms) {
@@ -622,7 +644,7 @@ async function checkUpdates() {
     updateConnection();
     const active = S.active, current = allDocuments().find(x => x.document.id === active?.meta.id)?.document;
     if (active && current?.revision !== active.meta.revision) dismissSheet(() => navigate(active.route, { replace: true }));
-    else if (!$('libraryView').hidden) { const query = $('librarySearch').value; renderLibrary(); if (query.trim()) void search(query, $('bookList'), allDocuments().filter(x => x.collection.track === S.track)); }
+    else if (!$('libraryView').hidden) { const query = $('librarySearch').value; renderLibrary(); if (query.trim()) void search(query, $('bookList'), allDocuments()); }
     toast(newerRelease ? '有内容更新，请重新载入应用。' : changed ? '内容已更新' : '已是最新内容');
     if ('serviceWorker' in navigator) void navigator.serviceWorker.getRegistration().then(registration => registration?.update()).catch(() => {});
   } catch (error) { if (S.owner === owner) toast(error.code === 'WORKER_RELEASE_PENDING' ? error.message : '暂时无法检查更新，请联网重试。'); }
@@ -653,14 +675,14 @@ function setPure(on) {
 function hideControls() {
   if (!S.pure) return;
   document.body.classList.remove('pure-controls-visible');
-  for (const selector of ['.app-header', '.track-tabs', '.context-bar', '.document-tabs', '.reader-footer']) document.querySelector(selector)?.setAttribute('inert', '');
+  for (const selector of ['.app-header', '.context-bar', '.document-tabs', '.reader-footer']) document.querySelector(selector)?.setAttribute('inert', '');
 }
 
 function revealControls() {
   clearTimeout(S.controlsTimer); document.body.classList.add('pure-controls-visible');
-  for (const selector of ['.app-header', '.track-tabs', '.context-bar', '.document-tabs', '.reader-footer']) document.querySelector(selector)?.removeAttribute('inert');
+  for (const selector of ['.app-header', '.context-bar', '.document-tabs', '.reader-footer']) document.querySelector(selector)?.removeAttribute('inert');
   if (S.pure) S.controlsTimer = setTimeout(() => {
-    if ($('sheetDialog').open || heldControls || (document.activeElement?.matches(':focus-visible') && document.activeElement.closest('.app-header,.track-tabs,.context-bar,.document-tabs,.reader-footer'))) { revealControls(); return; }
+    if ($('sheetDialog').open || heldControls || (document.activeElement?.matches(':focus-visible') && document.activeElement.closest('.app-header,.context-bar,.document-tabs,.reader-footer'))) { revealControls(); return; }
     hideControls();
   }, 3000);
 }
@@ -699,7 +721,10 @@ async function logout(confirmed = false) {
 document.addEventListener('click', event => {
   const button = event.target.closest('button');
   if (button?.matches('[data-sheet-close]')) { dismissSheet(); return; }
-  if (button?.dataset.track) { navigate(`#/library/${button.dataset.track}`); return; }
+  if (button?.dataset.goQuestion) {
+    if (S.active) S.back.push({ hash: activeHash(), position: capturePosition() });
+    navigate('#/q/' + button.dataset.goQuestion); return;
+  }
   if (button?.matches('[data-cancel-route]')) { cancelPendingRoute(); return; }
   if (button?.dataset.retryRoute) { navigate(button.dataset.retryRoute); return; }
   if (button?.dataset.openCollection) { navigate(`#/read/${button.dataset.openCollection}/${button.dataset.openDocument}`); return; }
@@ -764,12 +789,13 @@ document.addEventListener('click', event => {
 
 let searchTimer, tocSearchTimer;
 document.addEventListener('input', event => {
+  if (event.target.id === 'questionSearch') { renderQuestions(event.target.value); return; }
   if (event.target.id === 'librarySearch' || event.target.id === 'tocSearch') {
     const library = event.target.id === 'librarySearch'; clearTimeout(library ? searchTimer : tocSearchTimer); const query = event.target.value;
-    if (event.target.id === 'librarySearch') { shelves[S.track].query = query; shelves[S.track].scroll = 0; writeLocal(`shelf:${S.track}`, shelves[S.track]); }
+    if (event.target.id === 'librarySearch') { shelf.query = query; shelf.scroll = 0; writeLocal('shelf', shelf); }
     if (!query.trim()) { S.searchSequence++; if (event.target.id === 'librarySearch') renderLibrary(); else $('tocResults').innerHTML = tocMarkup(); return; }
     const container = library ? $('bookList') : $('tocResults');
-    const pairs = allDocuments().filter(x => library ? x.collection.track === S.track : x.collection.id === S.active.collection.id);
+    const pairs = allDocuments().filter(x => library || x.collection.id === S.active.collection.id);
     const timer = setTimeout(() => { void search(query, container, pairs); }, 250); if (library) searchTimer = timer; else tocSearchTimer = timer;
   }
   if (event.target.id === 'noteEditor') {
@@ -798,7 +824,8 @@ $('enrollForm').addEventListener('submit', async event => {
   finally { button.disabled = false; }
 });
 $('retryButton').addEventListener('click', () => { void connect(); });
-$('libraryButton').addEventListener('click', () => { navigate(`#/library/${S.track}`); });
+$('libraryButton').addEventListener('click', () => { navigate('#/library'); });
+$('questionsButton').addEventListener('click', showQuestions);
 $('libraryResume').addEventListener('click', event => { navigate(event.currentTarget.dataset.route); });
 $('settingsButton').addEventListener('click', showSettings);
 $('tocButton').addEventListener('click', showToc);
@@ -819,7 +846,7 @@ $('readingPane').addEventListener('dblclick', event => {
 });
 $('readingPane').addEventListener('click', event => { if (S.pure && !event.target.closest('.code-block,pre,code,.table-wrap,table,a,button,input,textarea,select') && getSelection().isCollapsed) revealControls(); });
 
-const controlsSelector = '.app-header,.track-tabs,.context-bar,.document-tabs,.reader-footer';
+const controlsSelector = '.app-header,.context-bar,.document-tabs,.reader-footer';
 document.addEventListener('pointerdown', event => { if (S.pure && event.target.closest(controlsSelector)) { heldControls = true; revealControls(); } });
 document.addEventListener('pointerup', () => { if (heldControls) { heldControls = false; revealControls(); } });
 document.addEventListener('pointercancel', () => { if (heldControls) { heldControls = false; revealControls(); } });
@@ -834,7 +861,10 @@ document.addEventListener('keydown', event => {
 document.addEventListener('keydown', event => { if (event.key === 'Escape' && S.pure && !$('sheetDialog').open) setPure(false); });
 window.addEventListener('hashchange', () => { void route(); });
 window.addEventListener('popstate', () => {
-  if (!sheetHistory) return;
+  if (!sheetHistory) {
+    if (S.back.at(-1)?.hash === location.hash) S.back.pop();
+    void route(); return;
+  }
   sheetHistory = false; sheetClosing = false;
   if ($('sheetDialog').open) $('sheetDialog').close();
   const action = afterSheetClose; afterSheetClose = null; action?.();

@@ -1,0 +1,82 @@
+{
+  "compiler": {
+    "exit": 0,
+    "stdout": "c++ (GCC) 16.2.0\nCopyright (C) 2026 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+    "stderr": ""
+  },
+  "standard": "c++17",
+  "production_source_sha256": "04961fa1167ee95b4f166e6459b12682af82a401ef6d677786096b74d2c3cbac",
+  "compiles": {
+    "implementation-probes": {
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "submission-adapter": {
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "function-adapter": {
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  },
+  "runs": {
+    "implementation-probes": {
+      "exit": 0,
+      "stdout": "lower_bound_random_comparisons=10\nlower_bound_forward_comparisons=10\nlower_bound_forward_increments=2040\nmissing_queries_bracket_size=1001\nmissing_queries_find_size=1\nmultiset_erase_key_remaining=0\nmultiset_erase_iterator_remaining=2\nvector_repeated_erase_assignments=4096\nvector_compact_assignments=64\nrecursive_by_value_element_copies=4160\nrecursive_by_borrow_element_copies=0\nwidened_product=2500000000\nformal_count_n20000=200010000\nformal_count_n200000=20000100000\n",
+      "stderr": ""
+    },
+    "official_sample": {
+      "exit": 0,
+      "stdout": "2\n",
+      "stderr": "",
+      "expected": "2\n",
+      "passed": true
+    },
+    "negative_repetition": {
+      "exit": 0,
+      "stdout": "4\n",
+      "stderr": "",
+      "expected": "4\n",
+      "passed": true
+    },
+    "64_bit_result": {
+      "exit": 0,
+      "stdout": "20000100000\n",
+      "stderr": "",
+      "expected": "20000100000\n",
+      "passed": true
+    },
+    "function-adapter": {
+      "exit": 0,
+      "stdout": "function_adapter_checks=6\n",
+      "stderr": ""
+    }
+  },
+  "limits": [
+    "Local compiler only; no online judge or employer assessment was submitted.",
+    "Operation counts describe this implementation and input, not a timing benchmark.",
+    "No undefined-behavior branch was executed; no sanitizer run is claimed."
+  ],
+  "passed": true,
+  "date": "2026-10-27",
+  "baseline_commit": "90a59c8507f6c17f7aad737317deef011ad6604c",
+  "source_sha256": {
+    "implementation-probes.cpp": "855bda65a811f1f9544cd93b7db127be7c3d73e7169d4c62f8fd392acb1f4d7d",
+    "submission-adapter.cpp": "1eabacec543d4d0f8c1e69b125bd86360fd24d030458120e88737f9b33305214",
+    "function-adapter.cpp": "53ce45d73aef6d28727748dee3989663edc31337b2884f22341b5c443834d9d2",
+    "run_probes.py": "c4a67b9608a8e921c40ad356c265090c3d728ddd1aa7becdb29b365e17943ec5"
+  },
+  "standalone_adapters": true,
+  "flags": [
+    "-std=c++17",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-Wpedantic",
+    "-D_GLIBCXX_ASSERTIONS"
+  ]
+}

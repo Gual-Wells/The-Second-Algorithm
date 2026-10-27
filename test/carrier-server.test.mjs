@@ -77,7 +77,7 @@ test('only public shell paths bypass owner access, while protected content is fe
   env.sql.close();
 });
 
-test('release assets and authenticated API hide retired trial content while retaining historical notes', async () => {
+test('release assets and authenticated API publish only registered current content while retaining independent notes', async () => {
   const directory = path.join(ROOT, '.local/carrier-server-tests');
   await fs.mkdir(directory, { recursive: true });
   const output = await fs.mkdtemp(path.join(directory, 'release-')), env = environment();
@@ -91,20 +91,23 @@ test('release assets and authenticated API hide retired trial content while reta
       catch (error) { if (error.code === 'ENOENT') return new Response('Not found', { status: 404 }); throw error; }
     };
     const cookie = await authenticate(env);
-    assert.equal((await put(env, cookie, 'notes:binary-search', 'historical private note', 0)).status, 200);
+    assert.equal((await put(env, cookie, 'notes:practice-foundations', 'independent private note', 0)).status, 200);
     const catalog = await (await call(env, '/api/library', cookie)).json();
-    assert(!catalog.collections.some(collection => ['binary-search', 'cpp-reference'].includes(collection.id)));
+    assert.deepEqual(catalog.collections.map(collection => collection.id),
+      publications.collections.filter(collection => collection.visibility !== 'hidden').map(collection => collection.id));
+    assert.ok(catalog.questions.length > 0);
+    assert.ok(catalog.collections.every(collection => !Object.hasOwn(collection, 'track')));
     for (const extension of ['json', 'cpp', 'md']) {
-      for (const location of ['/library/binary-search/bs-foundations/retired.' + extension,
-        '/library/cpp-reference/cpp-types/retired.' + extension])
+      for (const location of ['/library/practice-foundations/practice-foundations/retired.' + extension,
+        '/library/unpublished-draft/draft-document/retired.' + extension])
       {
         const response = await call(env, location, cookie);
         assert.equal(response.status, 404, location);
-        assert.doesNotMatch(await response.text(), /<!doctype|app\.js|<html|"html"|historical private note/i);
+        assert.doesNotMatch(await response.text(), /<!doctype|app\.js|<html|"html"|independent private note/i);
       }
     }
     const state = await (await call(env, '/api/state', cookie)).json();
-    assert.equal(state.state['notes:binary-search'].value, 'historical private note');
+    assert.equal(state.state['notes:practice-foundations'].value, 'independent private note');
     assert.equal((await (await call(env, '/auth/status', cookie)).json()).authenticated, true);
   } finally {
     env.sql.close();
@@ -166,21 +169,21 @@ test('authenticated owner scope is stable across sessions, and logout revokes th
 
 test('notes require compare-and-swap and return the current record on conflict', async () => {
   const env = environment(), cookie = await authenticate(env);
-  let response = await put(env, cookie, 'notes:binary-search', 'first note', 0);
+  let response = await put(env, cookie, 'notes:practice-foundations', 'first note', 0);
   assert.equal(response.status, 200);
   assert.equal((await response.json()).revision, 1);
-  response = await put(env, cookie, 'notes:binary-search', 'stale note', 0);
+  response = await put(env, cookie, 'notes:practice-foundations', 'stale note', 0);
   assert.equal(response.status, 409);
   assert.equal((await response.json()).current.value, 'first note');
-  response = await put(env, cookie, 'notes:binary-search', 'updated note', 1);
+  response = await put(env, cookie, 'notes:practice-foundations', 'updated note', 1);
   assert.equal(response.status, 200);
   assert.equal((await response.json()).revision, 2);
   response = await put(env, cookie, 'notes:missing', 'unknown baseline', 8);
   assert.equal(response.status, 409);
   assert.equal((await response.json()).current, null);
   const data = await (await call(env, '/api/state', cookie)).json();
-  assert.equal(data.state['notes:binary-search'].value, 'updated note');
-  assert.equal(data.state['notes:binary-search'].revision, 2);
+  assert.equal(data.state['notes:practice-foundations'].value, 'updated note');
+  assert.equal(data.state['notes:practice-foundations'].revision, 2);
   env.sql.close();
 });
 
@@ -199,7 +202,7 @@ test('positions and preferences accept last write while remaining in current own
 
 test('state rejects cross-origin writes, malformed bodies, invalid keys and oversized values', async () => {
   const env = environment(), cookie = await authenticate(env);
-  assert.equal((await put(env, cookie, 'notes:binary-search', 'note', 0, 'https://other.example')).status, 403);
+  assert.equal((await put(env, cookie, 'notes:practice-foundations', 'note', 0, 'https://other.example')).status, 403);
   for (const data of [
     { key: 'notes:../invalid', value: 'text', baseRevision: 0 },
     { key: 'notes:binary', value: 'x'.repeat(20_001), baseRevision: 0 },

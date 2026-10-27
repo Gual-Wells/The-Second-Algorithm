@@ -12,6 +12,7 @@ hljs.registerLanguage('cpp', cpp);
 const REPOSITORY = 'https://github.com/Gual-Wells/The-Second-Algorithm';
 const ID = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/;
 const SHA = /^[a-f0-9]{64}$/;
+const QUESTION = /^Q[0-9]{6}$/;
 const esc = value => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;')
   .replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;');
 const hash = value => createHash('sha256').update(value).digest('hex');
@@ -35,26 +36,27 @@ function contentPath(root, value) {
 }
 
 export function validatePublications(publications) {
-  if (publications?.schemaVersion !== 1 || !Array.isArray(publications.collections))
+  if (publications?.schemaVersion !== 2 || !Array.isArray(publications.collections))
     throw new Error('Unsupported publication manifest');
   const collections = new Set(), documents = new Set(), authorities = new Set(), chapterNumbers = new Set();
   for (const collection of publications.collections) {
     if (!ID.test(collection.id) || collections.has(collection.id)) throw new Error('Invalid/duplicate collection ID');
     collections.add(collection.id);
-    if (!['algorithm', 'cpp'].includes(collection.track) || !['trial', 'chapter'].includes(collection.kind))
-      throw new Error('Invalid track or publication kind');
+    if (Object.hasOwn(collection, 'track') || !['draft', 'chapter'].includes(collection.kind))
+      throw new Error('Unified publications require chapter/draft kind and no track');
     if (collection.visibility !== undefined && !['published', 'hidden'].includes(collection.visibility))
       throw new Error('Invalid publication visibility');
     if (!collection.title?.trim() || !Array.isArray(collection.documents) || !collection.documents.length)
       throw new Error('Collection requires a title and documents');
-    if (collection.kind === 'trial' && Object.hasOwn(collection, 'chapterNumber'))
-      throw new Error('Trial collections cannot have chapter numbers');
+    if (collection.kind === 'draft' && collection.visibility !== 'hidden')
+      throw new Error('Draft collections must be hidden');
+    if (collection.kind === 'draft' && Object.hasOwn(collection, 'chapterNumber'))
+      throw new Error('Draft collections cannot have chapter numbers');
     if (collection.kind === 'chapter') {
       if (!Number.isSafeInteger(collection.chapterNumber) || collection.chapterNumber < 1)
         throw new Error('Published chapters require a positive integer chapter number');
-      const key = collection.track + ':' + collection.chapterNumber;
-      if (chapterNumbers.has(key)) throw new Error('Duplicate chapter number within track');
-      chapterNumbers.add(key);
+      if (chapterNumbers.has(collection.chapterNumber)) throw new Error('Duplicate chapter number');
+      chapterNumbers.add(collection.chapterNumber);
     }
     for (const document of collection.documents) {
       if (!ID.test(document.id) || documents.has(document.id)) throw new Error('Document IDs must be globally unique');
@@ -66,6 +68,75 @@ export function validatePublications(publications) {
     }
   }
   return publications;
+}
+
+export function validateLearning(learning, publications) {
+  if (learning?.schemaVersion !== 1 || !['questions', 'tasks', 'targets'].every(key => Array.isArray(learning[key])))
+    throw new Error('Unsupported learning manifest');
+  const documents = new Map(publications.collections.flatMap(collection => collection.documents.map(document =>
+    [document.id, { ...document, published: collection.visibility !== 'hidden' }])));
+  const questions = new Map(), targets = new Set(), tasks = new Set(), implementations = new Set();
+  for (const question of learning.questions) {
+    if (!QUESTION.test(question.id) || questions.has(question.id)) throw new Error('Invalid/duplicate question ID');
+    if (!question.title?.trim() || !documents.has(question.document) || question.anchor !== question.id.toLowerCase()
+      || !Array.isArray(question.prerequisites) || !Array.isArray(question.sources) || !question.sources.length)
+      throw new Error('Question requires title, registered document, canonical anchor, prerequisites and sources');
+    if (new Set(question.prerequisites).size !== question.prerequisites.length) throw new Error('Duplicate question prerequisite');
+    for (const source of question.sources) if (!/^https:\/\//.test(source)) throw new Error('Question source must be HTTPS');
+    questions.set(question.id, question);
+  }
+  const visiting = new Set(), visited = new Set();
+  function visit(id) {
+    if (!questions.has(id)) throw new Error('Unknown question prerequisite: ' + id);
+    if (visiting.has(id)) throw new Error('Question prerequisites contain a cycle');
+    if (visited.has(id)) return;
+    visiting.add(id);
+    const question = questions.get(id);
+    for (const prerequisite of question.prerequisites) {
+      if (documents.get(question.document).published && !documents.get(questions.get(prerequisite)?.document)?.published)
+        throw new Error('Published question prerequisite is not published: ' + prerequisite);
+      visit(prerequisite);
+    }
+    visiting.delete(id); visited.add(id);
+  }
+  for (const id of questions.keys()) visit(id);
+  for (const target of learning.targets) {
+    if (!ID.test(target.id) || targets.has(target.id) || typeof target.source !== 'string'
+      || !/^tests\/cpp\/[^/]+\.cpp$/.test(target.source) || !/^c\+\+(?:17|20|23|26)$/.test(target.standard))
+      throw new Error('Invalid/duplicate learning target');
+    targets.add(target.id);
+  }
+  for (const task of learning.tasks) {
+    if (!ID.test(task.id) || tasks.has(task.id) || !task.title?.trim() || !task.contract?.trim()
+      || !documents.has(task.document) || !Array.isArray(task.methods) || !task.methods.length)
+      throw new Error('Invalid/duplicate learning task');
+    tasks.add(task.id);
+    const methods = new Set();
+    for (const method of task.methods) {
+      if (!ID.test(method.id) || methods.has(method.id) || !method.title?.trim() || !method.invariant?.trim()
+        || !Array.isArray(method.implementations) || !method.implementations.length) throw new Error('Invalid learning method');
+      methods.add(method.id);
+      for (const implementation of method.implementations) {
+        if (!ID.test(implementation.id) || implementations.has(implementation.id)
+          || !['manual', 'standard', 'alternative'].includes(implementation.kind)
+          || !implementation.symbol?.trim() || !/^c\+\+(?:17|20|23|26)$/.test(implementation.standard)
+          || !Array.isArray(implementation.regions) || !implementation.regions.length
+          || implementation.regions.some(region => !ID.test(region))
+          || !Array.isArray(implementation.questions) || !implementation.questions.length
+          || !targets.has(implementation.target) || !implementation.complexity?.time?.trim() || !implementation.complexity?.space?.trim())
+          throw new Error('Invalid/duplicate learning implementation');
+        contentPath(process.cwd(), implementation.source);
+        if (!implementation.source.endsWith('.cpp')) throw new Error('Implementation authority must be C++');
+        for (const id of implementation.questions) {
+          if (!questions.has(id)) throw new Error('Implementation refers to unknown question: ' + id);
+          if (documents.get(task.document).published && !documents.get(questions.get(id).document).published)
+            throw new Error('Published implementation question is not published: ' + id);
+        }
+        implementations.add(implementation.id);
+      }
+    }
+  }
+  return learning;
 }
 
 export async function readAuthority(root, descriptor) {
@@ -93,13 +164,18 @@ export async function readAuthority(root, descriptor) {
       || JSON.stringify(used) !== JSON.stringify(manifest.codeBlocks))
     throw new Error('Canonical code placements do not match build manifest');
   if (!Array.isArray(manifest.headings) || !manifest.headings.length) throw new Error('Missing canonical headings');
+  for (const [kind, relative] of [['learning', 'catalog/learning.json'], ['publications', 'carrier/publications.json']]) {
+    const dependency = await fs.readFile(path.join(root, relative));
+    if (!SHA.test(manifest[kind + 'Sha256'] ?? '') || hash(dependency) !== manifest[kind + 'Sha256'])
+      throw new Error(`${descriptor.id}: ${kind} authority hash mismatch; rebuild the reading assets first`);
+  }
   const revision = hash(JSON.stringify([manifest.sourceSha256, manifest.codeSha256, manifest.markdownSha256,
-    manifest.htmlSha256, manifest.builderSha256]));
+    manifest.htmlSha256, manifest.builderSha256, manifest.learningSha256, manifest.publicationsSha256]));
   const inlineExamples = new Set();
   marked.walkTokens(marked.lexer(bytes.source.toString('utf8')), token => {
     if (token.type === 'code') inlineExamples.add(token.text.replace(/\r\n?/g, '\n').trim());
   });
-  return { ...descriptor, manifest, blocks, used, revision, markdown: bytes.markdown.toString('utf8'),
+  return { ...descriptor, manifest, blocks, used, revision, draft: bytes.source.toString('utf8'), markdown: bytes.markdown.toString('utf8'),
     source: bytes.code.toString('utf8'), markdownBytes: bytes.markdown, inlineExamples };
 }
 
@@ -156,7 +232,7 @@ export function renderAuthority(authority, rewriteLink) {
     const inner = this.parser.parseInline(tokens);
     if (firstParagraph) {
       firstParagraph = false;
-      if (/^(?:求职算法总册|求职C\+\+实战总册|C\+\+实战总册)\s*[·・]/u.test(inner)) return '';
+      if (/^(?:算法实战参考|第二算法实战)\s*[·・]/u.test(inner)) return '';
     }
     return '<p>' + inner + '</p>\n';
   };
@@ -197,8 +273,10 @@ export function renderAuthority(authority, rewriteLink) {
   return { html, headings: authority.manifest.headings.filter((x, index) => !(index === 0 && x.depth === 1)) };
 }
 
-export async function buildLibrary(root, output, publications, gitRevision) {
+export async function buildLibrary(root, output, publications, gitRevision, learning) {
   validatePublications(publications);
+  learning ??= JSON.parse(await fs.readFile(path.join(root, 'catalog/learning.json'), 'utf8'));
+  validateLearning(learning, publications);
   const rows = [], byPath = new Map();
   for (const collection of publications.collections) {
     if (collection.visibility === 'hidden') continue;
@@ -212,11 +290,11 @@ export async function buildLibrary(root, output, publications, gitRevision) {
     }
     rows.push({ collection, documents });
   }
-  const catalog = { version: '', collections: [] };
+  const catalog = { schemaVersion: 2, version: '', collections: [], questions: [] };
   const renderedDocuments = new Map();
   let codeBlocks = 0;
   for (const { collection, documents } of rows) {
-    const item = { id: collection.id, track: collection.track, kind: collection.kind, title: collection.title, documents: [] };
+    const item = { id: collection.id, kind: collection.kind, title: collection.title, documents: [] };
     if (collection.kind === 'chapter') item.chapterNumber = collection.chapterNumber;
     for (const { authority, entry } of documents) {
       const rendered = renderAuthority(authority, createLinkRewriter({ collection, document: authority, byPath, gitRevision }));
@@ -248,7 +326,46 @@ export async function buildLibrary(root, output, publications, gitRevision) {
         throw new Error('Internal reader anchor does not exist: ' + decodeURIComponent(match[3]));
     }
   }
-  catalog.version = hash(JSON.stringify([gitRevision, catalog.collections,
+  const byDocument = new Map(rows.flatMap(row => row.documents.map(({ authority }) => [authority.id, authority])));
+  const declared = new Map();
+  for (const authority of byDocument.values()) {
+    marked.walkTokens(marked.lexer(authority.draft), token => {
+      if (token.type !== 'heading') return;
+      const match = token.text.match(/^(Q[0-9]{6})\s*·\s*(.+)$/);
+      if (!match) return;
+      if (token.depth !== 3 || declared.has(match[1])) throw new Error('Question must have exactly one canonical H3 explanation: ' + match[1]);
+      declared.set(match[1], { document: authority.id, title: match[2] });
+    });
+    if (/\[\[Q[0-9]{6}\]\]/.test(authority.markdown)) throw new Error('Unresolved question reference in reading asset');
+  }
+  for (const question of learning.questions) {
+    if (!byDocument.has(question.document)) continue;
+    const declaration = declared.get(question.id);
+    if (!declaration || declaration.document !== question.document || declaration.title !== question.title)
+      throw new Error('Question explanation does not match its unique registration: ' + question.id);
+    const target = [...renderedDocuments.values()].find(document => document.id === question.document);
+    if (!target?.html.includes('id="' + question.anchor + '"')) throw new Error('Question anchor does not exist: ' + question.id);
+    catalog.questions.push(Object.fromEntries(['id', 'title', 'document', 'anchor', 'prerequisites'].map(key => [key, question[key]])));
+    declared.delete(question.id);
+  }
+  if (declared.size) throw new Error('Question explanation is not registered: ' + declared.keys().next().value);
+  const sources = new Map();
+  for (const task of learning.tasks) for (const method of task.methods) for (const implementation of method.implementations) {
+    if (!byDocument.has(task.document)) continue;
+    let source = sources.get(implementation.source);
+    if (!source) {
+      const filename = contentPath(root, implementation.source);
+      if (!inside(path.resolve(root, 'content'), await fs.realpath(filename))) throw new Error('Implementation escapes content/');
+      source = await fs.readFile(filename, 'utf8'); sources.set(implementation.source, source);
+    }
+    if (!source.includes(implementation.symbol)) throw new Error('Implementation symbol is absent: ' + implementation.id);
+    for (const region of implementation.regions) if (!new RegExp('// BEGIN ' + region + '\\r?\\n[\\s\\S]*?// END ' + region + '(?:\\r?\\n|$)').test(source))
+      throw new Error('Implementation region is absent: ' + region);
+    const target = learning.targets.find(target => target.id === implementation.target);
+    const filename = path.resolve(root, target.source);
+    if (!inside(path.join(root, 'tests/cpp'), await fs.realpath(filename))) throw new Error('Target escapes tests/cpp');
+  }
+  catalog.version = hash(JSON.stringify([gitRevision, catalog.collections, catalog.questions, hash(JSON.stringify(learning)),
     [...renderedDocuments].map(([id, document]) => [id, hash(JSON.stringify(document))])]));
   await fs.mkdir(path.join(output, 'library'), { recursive: true });
   await fs.writeFile(path.join(output, 'library/catalog.json'), JSON.stringify(catalog, null, 2) + '\n', 'utf8');
@@ -256,7 +373,7 @@ export async function buildLibrary(root, output, publications, gitRevision) {
 }
 
 export function publicationIndex(catalog) {
-  return { version: catalog.version, collections: Object.fromEntries(catalog.collections.map(collection =>
+  return { version: catalog.version, questions: catalog.questions, collections: Object.fromEntries(catalog.collections.map(collection =>
     [collection.id, Object.fromEntries(collection.documents.map(document => [document.id, document.revision]))])) };
 }
 
@@ -311,14 +428,18 @@ async function workerSources(root) {
     hash(await fs.readFile(file))]));
 }
 
-export async function buildCarrier({ root = process.cwd(), contentOnly = false, esbuildModule = process.env.ESBUILD_MODULE } = {}) {
+export async function buildCarrier({ root = process.cwd(), contentOnly = false, esbuildModule = process.env.ESBUILD_MODULE, outputDirectory = 'dist' } = {}) {
   root = path.resolve(root);
+  if (typeof outputDirectory !== 'string' || (outputDirectory !== 'dist' && !outputDirectory.startsWith('.local/')))
+    throw new Error('Build output must be dist or an isolated .local/ directory');
   const publications = JSON.parse(await fs.readFile(path.join(root, 'carrier/publications.json'), 'utf8'));
   const gitRevision = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
   const local = path.join(root, '.local'); await fs.mkdir(local, { recursive: true });
   const staging = path.join(local, 'carrier-output-' + randomUUID());
-  const destination = path.join(root, 'dist'), backup = path.join(local, 'carrier-previous-' + randomUUID());
+  const destination = path.resolve(root, outputDirectory), backup = path.join(local, 'carrier-previous-' + randomUUID());
   if (![staging, destination, backup].every(x => inside(root, x))) throw new Error('Unsafe build output path');
+  if (outputDirectory !== 'dist' && !inside(local, destination)) throw new Error('Isolated build escapes .local/');
+  await fs.mkdir(path.dirname(destination), { recursive: true });
   await fs.mkdir(staging);
   let movedPrevious = false;
   try {
@@ -362,7 +483,7 @@ export async function buildCarrier({ root = process.cwd(), contentOnly = false, 
     try { await fs.rename(staging, destination); }
     catch (error) { if (movedPrevious) await fs.rename(backup, destination); throw error; }
     if (movedPrevious) await fs.rm(backup, { recursive: true });
-    return { mode: contentOnly ? 'content-only' : 'full', output: 'dist', version: result.catalog.version, buildID,
+    return { mode: contentOnly ? 'content-only' : 'full', output: path.relative(root,destination).split(path.sep).join('/'), version: result.catalog.version, buildID,
       collections: result.catalog.collections.length, documents: result.documents, codeBlocks: result.codeBlocks };
   } catch (error) {
     await fs.rm(staging, { recursive: true, force: true });
@@ -376,6 +497,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     if (process.argv[i] === '--content-only') options.contentOnly = true;
     else if (process.argv[i] === '--esbuild-module') options.esbuildModule = process.argv[++i];
     else if (process.argv[i] === '--root') options.root = process.argv[++i];
+    else if (process.argv[i] === '--output') options.outputDirectory = process.argv[++i];
     else throw new Error('Unknown build argument: ' + process.argv[i]);
   }
   console.log(JSON.stringify(await buildCarrier(options)));

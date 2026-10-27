@@ -7,7 +7,10 @@ from pathlib import Path
 
 from .catalog import report, search, validate
 from .collect import collect
+from .learning import course_targets, search_learning, validate_learning
 from .storage import now, read_json, read_jsonl, sources, valid_id, valid_url, write_json
+from .workflow import (add_evidence, check_release, init_job, job_status, list_jobs, prepare_release,
+                       resume_job, verify_course, verify_job)
 
 
 def emit(value) -> None:
@@ -41,6 +44,37 @@ def main(argv=None) -> int:
     proposal.add_argument("name")
     proposal.add_argument("url")
     proposal.add_argument("--reason", required=True)
+    course = commands.add_parser("course", help="检查当前统一课程，不将旧案例/模式当作覆盖证据")
+    course_commands = course.add_subparsers(dest="course_command", required=True)
+    course_commands.add_parser("validate", help="校验Q主讲、前置、源码区域及验证目标关系")
+    course_commands.add_parser("targets", help="输出当前登记的验证目标供CI使用")
+    course_search = course_commands.add_parser("search", help="检索当前Q、任务及实现记录")
+    course_search.add_argument("query")
+    course_verify = course_commands.add_parser("verify", help="用真实编译器验证所有登记目标")
+    course_verify.add_argument("--compiler", required=True)
+    course_verify.add_argument("--output", default=".local/course-verification")
+    research = commands.add_parser("research", help="显式研究任务与可恢复证据；不自动完成语义研究")
+    research_commands = research.add_subparsers(dest="research_command", required=True)
+    initializing = research_commands.add_parser("init")
+    initializing.add_argument("job")
+    initializing.add_argument("--goal", required=True)
+    status = research_commands.add_parser("status")
+    status.add_argument("job", nargs="?")
+    resuming = research_commands.add_parser("resume")
+    resuming.add_argument("job")
+    evidence = research_commands.add_parser("evidence")
+    evidence.add_argument("job")
+    evidence.add_argument("--kind", choices=["research", "review"], required=True)
+    evidence.add_argument("--path", required=True)
+    evidence.add_argument("--summary", required=True)
+    evidence.add_argument("--outcome", choices=["accepted", "needs-work"], required=True)
+    verifying = research_commands.add_parser("verify")
+    verifying.add_argument("job")
+    verifying.add_argument("--compiler", required=True)
+    preparing = research_commands.add_parser("prepare-release")
+    preparing.add_argument("job")
+    checking = research_commands.add_parser("check-release", help="部署前拒绝缺失、过期或改变的发布准备包")
+    checking.add_argument("packet")
     args = parser.parse_args(argv)
     root = args.root.resolve()
     try:
@@ -65,10 +99,16 @@ def main(argv=None) -> int:
             return 0 if result["state"] in ("captured", "unchanged") else 2
         elif args.command == "validate":
             result = validate(root)
+            result["scope"] = "historical-research-and-sources"
+            if (root / "catalog/learning.json").exists():
+                current = validate_learning(root)
+                result["currentCourse"] = current
+                result["ok"] = result["ok"] and current["ok"]
             emit(result)
             return 0 if result["ok"] else 1
         elif args.command == "report":
-            emit(report(root))
+            result = {"historicalResearch": report(root), "currentCourse": validate_learning(root)}
+            emit(result)
         elif args.command == "search":
             emit(search(root, args.query, args.kind))
         elif args.command == "query-plan":
@@ -91,7 +131,38 @@ def main(argv=None) -> int:
             with path.open("a", encoding="utf-8") as stream:
                 stream.write(json.dumps(item, ensure_ascii=False) + "\n")
             emit(item)
-    except (ValueError, KeyError, OSError, json.JSONDecodeError) as error:
+        elif args.command == "course":
+            if args.course_command == "validate":
+                result = validate_learning(root)
+                emit(result)
+                return 0 if result["ok"] else 1
+            if args.course_command == "targets":
+                emit(course_targets(root))
+            elif args.course_command == "search":
+                emit(search_learning(root, args.query))
+            elif args.course_command == "verify":
+                result = verify_course(root, args.compiler, args.output)
+                emit(result)
+                return 0 if result["passed"] else 1
+        elif args.command == "research":
+            if args.research_command == "init":
+                emit(init_job(root, args.job, args.goal))
+            elif args.research_command == "status":
+                emit(job_status(root, args.job) if args.job else list_jobs(root))
+            elif args.research_command == "resume":
+                emit(resume_job(root, args.job))
+            elif args.research_command == "evidence":
+                emit(add_evidence(root, args.job, kind=args.kind, path=args.path,
+                                  summary=args.summary, outcome=args.outcome))
+            elif args.research_command == "verify":
+                result = verify_job(root, args.job, args.compiler)
+                emit(result)
+                return 0 if result["passed"] else 1
+            elif args.research_command == "prepare-release":
+                emit(prepare_release(root, args.job))
+            elif args.research_command == "check-release":
+                emit(check_release(root, args.packet))
+    except (ValueError, KeyError, OSError, TypeError, json.JSONDecodeError) as error:
         emit({"ok": False, "error": str(error)})
         return 1
     return 0

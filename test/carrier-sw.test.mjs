@@ -90,13 +90,13 @@ test('versioned public shell installs and replaces only old shell caches', async
   assert.equal(await sw.fetch('/unknown-private-file'), null);
 });
 
-test('upgrade removes old trial documents and catalog without deleting owner or unrelated records', async () => {
+test('upgrade removes unregistered content revisions and catalog without deleting owner or unrelated records', async () => {
   const sw = worker();
   await sw.message({ type: 'OWNER', owner: alice });
   const cache = await sw.caches.open('second-algorithm-private-' + alice);
-  const retired = '/library/binary-search/bs-foundations/retired.json';
+  const retired = '/library/course/lesson/obsolete.json';
   for (const path of [retired, retired.replace('.json', '.cpp'), '/library/catalog.json', doc])
-    await cache.put(path, new Response(path === '/library/catalog.json' ? JSON.stringify({ collections: [{ id: 'binary-search' }] }) : 'cached'));
+    await cache.put(path, new Response(path === '/library/catalog.json' ? JSON.stringify({ collections: [{ id: 'unpublished-draft' }] }) : 'cached'));
   await sw.caches.open('unrelated-notes-backup');
   sw.controls.online = false;
   await sw.lifecycle('activate');

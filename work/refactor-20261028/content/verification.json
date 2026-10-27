@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "recordKind": "author-observed-local-execution",
+  "recordedAt": "2026-10-28T02:04:07.5940134+08:00",
+  "document": "practice-foundations",
+  "inputs": [
+    {
+      "path": "content/practice-foundations/实战起点.source.md",
+      "sha256": "cbf198d96e44fdd5ba5042dc4b4c1bdc64f258ba29c13d47b19a8fbc78f56fd3"
+    },
+    {
+      "path": "content/practice-foundations/实战起点.cpp",
+      "sha256": "51304ef87360bac3eeb5410417a370eda7a09ca60c815f83dd0b10315778129f"
+    },
+    {
+      "path": "catalog/learning.json",
+      "sha256": "279eb32eccd043c69fa0362bd025af4e75ffb01167ee3c302aee7826c03c5b86"
+    },
+    {
+      "path": "carrier/publications.json",
+      "sha256": "c4ee39547b456f7cd51e70dd2b800523ebe4c52c59da6de97b974fc638851346"
+    },
+    {
+      "path": "tests/cpp/practice_foundations_test.cpp",
+      "sha256": "b7a5b998bb7781c407fafa3d9360a4a86298ebb1bafbc57c809f2fa3fd3c70df"
+    }
+  ],
+  "compiler": {
+    "name": "c++.exe",
+    "version": "GCC 16.2.0",
+    "standard": "c++17"
+  },
+  "temporaryStorage": ".local/refactor-content/tmp",
+  "checks": {
+    "questions": 18,
+    "tasks": 6,
+    "methods": 8,
+    "implementations": 11,
+    "regions": 17,
+    "placeholders": 17,
+    "targets": 1,
+    "passed": true
+  },
+  "targetExecution": {
+    "command": "c++.exe -std=c++17 -O2 -Wall -Wextra -Wpedantic -D_GLIBCXX_ASSERTIONS tests/cpp/practice_foundations_test.cpp -o .local/refactor-content/practice-foundations-test.exe",
+    "compileExit": 0,
+    "compileDiagnostics": "",
+    "runExit": 0,
+    "stdout": "practice_foundations arrays=3284 checks=587243",
+    "inputsUnchangedSinceExecution": [
+      "content/practice-foundations/实战起点.cpp",
+      "tests/cpp/practice_foundations_test.cpp"
+    ]
+  },
+  "standaloneExecution": {
+    "command": "c++.exe -std=c++17 -O2 -Wall -Wextra -Wpedantic -D_GLIBCXX_ASSERTIONS -DPRACTICE_FOUNDATIONS_STANDALONE content/practice-foundations/实战起点.cpp -o .local/refactor-content/practice-foundations-acm.exe",
+    "compileExit": 0,
+    "compileDiagnostics": "",
+    "cases": [
+      {
+        "stdin": "4 3 4 1 1 -2",
+        "stdout": "-2 1 1",
+        "exit": 0
+      },
+      {
+        "stdin": "0 0",
+        "stdout": "",
+        "exit": 0
+      }
+    ],
+    "bothOutputsEndWithNewline": true
+  },
+  "limitations": [
+    "This durable note records execution observed by its author, not an automatically generated workflow receipt.",
+    "Final prose and metadata were refined after the C++ run; executable source and included test bytes did not change.",
+    "No independent semantic certification, online submission, published-reader validation or deployment is asserted."
+  ],
+  "paidCalls": 0,
+  "onlineSubmissions": 0
+}

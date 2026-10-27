@@ -1,6 +1,6 @@
 {
   "name": "the-second-algorithm",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -17,12 +17,14 @@
     "playwright": "1.62.1"
   },
   "scripts": {
-    "build:binary": "node tools/build_handbook.mjs content/binary-search 二分查找 && node tools/build_handbook.mjs content/binary-search 组合判定 && node tools/build_handbook.mjs content/binary-search 进阶扩展",
     "build": "node scripts/build-carrier.mjs",
     "test:carrier": "node --test test/carrier-*.test.mjs",
     "dev": "wrangler pages dev dist --port 8796",
     "deploy": "node scripts/deploy-carrier.mjs",
     "test:browser": "node scripts/check-carrier-browser.cjs",
-    "test:upgrade": "node scripts/check-carrier-upgrade.cjs"
+    "test:upgrade": "node scripts/check-carrier-upgrade.cjs",
+    "build:content": "node scripts/build-course.mjs",
+    "check": "node scripts/check-project.mjs",
+    "validate:course": "python -m second_algorithm course validate"
   }
 }

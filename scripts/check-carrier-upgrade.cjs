@@ -12,11 +12,11 @@ const documentURL = '/library/formal-first/first-document/new.json';
 const meta = { id: 'first-document', title: '正文', revision: 'new', url: documentURL,
   sourceUrl: documentURL.replace('.json', '.cpp'), markdownUrl: documentURL.replace('.json', '.md'),
   headings: [{ depth: 2, id: 'example', text: '新章例子' }] };
-const catalog = { version: 'formal-new', collections: [{ id: 'formal-first', track: 'algorithm', kind: 'chapter',
+const catalog = { schemaVersion: 2, questions: [], version: 'formal-new', collections: [{ id: 'formal-first', kind: 'chapter',
   chapterNumber: 1, title: '正式章', documents: [meta] }] };
 const payload = { ...meta, html: '<h2 id="example">新章例子</h2><div class="code-block" data-code-id="demo"><pre><code>int answer = 42;</code></pre></div>' };
-const index = { version: catalog.version, collections: { 'formal-first': { 'first-document': meta.revision } } };
-const oldCatalog = { version: 'hidden-old', collections: [] };
+const index = { version: catalog.version, questions: [], collections: { 'formal-first': { 'first-document': meta.revision } } };
+const oldCatalog = { schemaVersion: 2, version: 'previous-release', questions: [], collections: [] };
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 (async () => {
@@ -32,18 +32,19 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
   const app = bundle.outputFiles[0].text + '\nglobalThis.__carrierUpgrade = { get state() { return S; }, get downloading() { return downloads.size; } };\n';
   const oldBundle = await esbuild.build({ entryPoints: [path.join(root, 'web/app.js')], bundle: true, write: false,
     format: 'esm', platform: 'browser', target: 'es2022', logLevel: 'silent',
-    define: { __PUBLICATION_INDEX__: JSON.stringify({ version: oldCatalog.version, collections: {} }) } });
+    define: { __PUBLICATION_INDEX__: JSON.stringify({ version: oldCatalog.version, questions: [], collections: {} }) } });
   const oldApp = oldBundle.outputFiles[0].text;
   const sw = await fs.readFile(path.join(root, 'web/sw.js'), 'utf8');
   const manifest = await fs.readFile(path.join(root, 'web/manifest.webmanifest'));
   let published = false, networkOffline = false, documentRequests = 0;
-  const held = new Set(), errors = [];
+  const held = new Set(), errors = [], requests = [];
   const server = http.createServer(async (request, response) => {
     try {
       // Also close worker-originated connections: context.setOffline alone can
       // leave those requests online in Chromium automation.
       if (networkOffline) { request.socket.destroy(); return; }
       const url = new URL(request.url, 'http://localhost');
+      requests.push(url.pathname + url.search);
       const json = value => { response.writeHead(200, { 'Content-Type': 'application/json' }); response.end(JSON.stringify(value)); };
       if (url.pathname === '/setup') {
         response.writeHead(200, { 'Content-Type': 'text/html' });
@@ -85,13 +86,16 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
   try {
     const context = await browser.newContext({ viewport: { width: 402, height: 874 } });
     await context.addInitScript(owner => {
-      const key = 'second-algorithm:' + owner + ':notes:binary-search';
-      if (!localStorage.getItem(key)) localStorage.setItem(key, JSON.stringify({ text: 'historical unsent note', revision: 2, dirty: true }));
+      const key = 'second-algorithm:' + owner + ':notes:formal-first';
+      if (!localStorage.getItem(key)) localStorage.setItem(key, JSON.stringify({ text: 'unsent lesson note', revision: 2, dirty: true }));
     }, owner);
     const page = await context.newPage(); page.on('pageerror', error => errors.push(error.message));
     await page.goto(origin + '/setup'); await page.waitForFunction(() => document.body.dataset.ready === 'true');
     published = true;
     await page.goto(origin + '/#/read/formal-first/first-document');
+    // Auth/owner confirmation precedes the reader's release gate. Start the
+    // installation deadline only after the app has reached that gate.
+    await page.waitForFunction(() => globalThis.__carrierUpgrade?.state.pendingRoute);
     const deadline = Date.now() + 8000;
     while (!held.size && Date.now() < deadline) await sleep(25);
     assert(held.size, 'replacement worker should still be installing');
@@ -108,7 +112,7 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
     await page.waitForFunction(() => !window.__carrierUpgrade.state.restoring && !window.__carrierUpgrade.downloading);
     assert.match(await page.locator('#readingArticle').innerText(), /answer = 42/);
     assert.equal(documentRequests, 1);
-    assert.match(await page.evaluate(owner => localStorage.getItem('second-algorithm:' + owner + ':notes:binary-search'), owner), /historical unsent note/);
+    assert.match(await page.evaluate(owner => localStorage.getItem('second-algorithm:' + owner + ':notes:formal-first'), owner), /unsent lesson note/);
     assert.equal(await page.evaluate(() => performance.getEntriesByType('navigation')[0].type), 'navigate', 'upgrade must not automatically reload the page');
     networkOffline = true; await context.setOffline(true);
     await page.reload();
@@ -121,7 +125,7 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
     const updateContext = await browser.newContext();
     const updatePage = await updateContext.newPage(); updatePage.on('pageerror', error => errors.push(error.message));
     await updatePage.goto(origin + '/setup'); await updatePage.waitForFunction(() => document.body.dataset.ready === 'true');
-    await updatePage.goto(origin + '/#/library/algorithm');
+    await updatePage.goto(origin + '/#/library');
     await updatePage.locator('#libraryView').waitFor({ state: 'visible' });
     published = true;
     await updatePage.locator('#settingsButton').click();
@@ -143,11 +147,24 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
     assert.match(await updatePage.locator('#readingArticle').innerText(), /answer = 42/);
     assert.deepEqual(errors, []);
     report = { passed: true, realBrowserAndServiceWorker: true, heldNewWorkerWhileNewAppRan: true,
-      prematureRequests: 0, offlineRestart: true, historicalNotesPreserved: true,
+      prematureRequests: 0, offlineRestart: true, unsentNotesPreserved: true,
       checkUpdatesWaitsForTakeover: true, manualReloadOpensFormalChapter: true,
       automaticReload: false, productionContacted: false, databaseModified: false };
     await updateContext.close();
-  } catch (error) { report = { passed: false, error: error.message, errors }; throw error; }
+  } catch (error) {
+    const pages = [];
+    for (const context of browser.contexts()) for (const page of context.pages()) {
+      pages.push({ url: page.url(), text: await page.locator('body').innerText().catch(() => ''),
+        worker: await page.evaluate(async () => {
+          const registration = await navigator.serviceWorker.getRegistration();
+          return { controller: navigator.serviceWorker.controller?.scriptURL, installing: registration?.installing?.state,
+            waiting: registration?.waiting?.state, active: registration?.active?.state,
+            state: globalThis.__carrierUpgrade ? { owner: globalThis.__carrierUpgrade.state.owner,
+              pendingRoute: globalThis.__carrierUpgrade.state.pendingRoute } : null };
+        }).catch(() => null) });
+    }
+    report = { passed: false, error: error.message, errors, requests, pages }; throw error;
+  }
   finally {
     for (const response of held) response.destroy();
     await browser.close(); server.closeAllConnections(); await new Promise(resolve => server.close(resolve));

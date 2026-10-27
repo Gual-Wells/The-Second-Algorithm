@@ -45,14 +45,21 @@ class ReadingPage(HTMLParser):
 
 class ReadingAssetTest(unittest.TestCase):
     def test_reading_build_and_displayed_code_match_authorities(self):
-        for source in CONTENT.glob("*/*.source.md"):
+        publications = json.loads((ROOT / "carrier/publications.json").read_text(encoding="utf8"))
+        documents = [d for c in publications["collections"] if c.get("visibility") == "published"
+                     for d in c["documents"]]
+        self.assertTrue(documents, "release needs an actual published document")
+        for document in documents:
+            source = ROOT / (document["path"] + ".source.md")
             content = source.parent
             name = source.name.removesuffix(".source.md")
             with self.subTest(chapter=name):
                 manifest = json.loads((content / "build" / (name + ".json")).read_text(encoding="utf8"))
                 files = {"source": source, "code": content / (name + ".cpp"),
                          "markdown": content / (name + ".md"), "html": content / (name + ".html"),
-                         "builder": ROOT / "tools/build_handbook.mjs"}
+                         "builder": ROOT / "tools/build_handbook.mjs",
+                         "learning": ROOT / "catalog/learning.json",
+                         "publications": ROOT / "carrier/publications.json"}
                 for kind, path in files.items():
                     self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), manifest[kind + "Sha256"], str(path))
                 cpp = files["code"].read_text(encoding="utf8")

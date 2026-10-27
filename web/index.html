@@ -19,14 +19,11 @@
     <header class="app-header">
       <div class="brand"><h1>第二算法</h1><small>THE SECOND ALGORITHM</small></div>
       <div class="header-actions" id="headerActions" hidden>
-        <button type="button" id="libraryButton">章节册</button>
+        <button type="button" id="libraryButton">课程</button>
+        <button type="button" id="questionsButton" aria-label="C++问题索引">问题</button>
         <button type="button" id="settingsButton">设置</button>
       </div>
     </header>
-    <nav class="track-tabs" id="trackTabs" role="tablist" aria-label="内容线" hidden>
-      <button type="button" role="tab" data-track="algorithm" aria-selected="true">算法</button>
-      <button type="button" role="tab" data-track="cpp" aria-selected="false">C++</button>
-    </nav>
     <section id="loginView" class="login-view">
       <div class="login-card">
         <img class="login-icon" src="/icons/icon-192.png" width="76" height="76" alt="">
@@ -41,8 +38,8 @@
       </div>
     </section>
     <section id="libraryView" class="library-scroll" hidden>
-      <div class="shelf-toolbar"><h2 id="libraryTitle">算法册</h2><span id="connectionLabel" class="muted"></span></div>
-      <label class="search-field"><span class="sr-only">全册检索</span><input id="librarySearch" type="search" placeholder="查找题型、方法、代码" autocomplete="off"></label>
+      <div class="shelf-toolbar"><h2 id="libraryTitle">算法实战</h2><span id="connectionLabel" class="muted"></span></div>
+      <label class="search-field"><span class="sr-only">全课程检索</span><input id="librarySearch" type="search" placeholder="题型、方法、代码或问题编号" autocomplete="off"></label>
       <button id="libraryResume" class="resume-row" type="button" hidden></button>
       <div id="bookList"></div>
     </section>

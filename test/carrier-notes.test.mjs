@@ -9,7 +9,7 @@ function storage() {
     removeItem(key) { entries.delete(key); } };
 }
 const prefix = 'second-algorithm:owner-a:';
-const collection = 'binary-search';
+const collection = 'practice-foundations';
 const journal = (store, client = 'one', namespace = prefix) => new NotesJournal(store, namespace, client);
 
 test('late ACK from another tab cannot overwrite a different pending draft and reload discovers it', () => {

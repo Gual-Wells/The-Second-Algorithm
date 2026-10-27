@@ -1,0 +1,35 @@
+{
+  "source_sha256": "526873af68b6317b33c6b87ada0f87c9093a30b96980bcd6fca65f25164cf2e2",
+  "compiler": {
+    "exit": 0,
+    "stdout": "c++ (GCC) 16.2.0\nCopyright (C) 2026 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+    "stderr": ""
+  },
+  "flags": [
+    "-std=c++17",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-Wpedantic",
+    "-D_GLIBCXX_ASSERTIONS"
+  ],
+  "compile": {
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "run": {
+    "exit": 0,
+    "stdout": "arrays=3282\nbound_checks=45948\nprefix_checks=6564\ntopk_checks=83685\n",
+    "stderr": ""
+  },
+  "passed": true,
+  "date": "2026-10-28",
+  "baseline_commit": "90a59c8507f6c17f7aad737317deef011ad6604c",
+  "runner_sha256": "434a9077ee2e7a658b0051df0c01b20a12b33e23b5880d16e761400cafe41469",
+  "limits": [
+    "Finite local inputs only; no online submission, sanitizer, second compiler, or learning-effect claim.",
+    "Hand-written heap and priority_queue share a strategy; nth_element plus sort is another method.",
+    "Sorted input for bounds; prefix sums fit long long; top-k preserves duplicates and input, returns sorted values."
+  ]
+}

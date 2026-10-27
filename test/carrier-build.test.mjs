@@ -5,7 +5,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { validatePublications, readAuthority, createLinkRewriter, renderAuthority, buildLibrary, buildCarrier }
+import { validatePublications, validateLearning, readAuthority, createLinkRewriter, renderAuthority, buildLibrary, buildCarrier }
   from '../scripts/build-carrier.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -42,17 +42,28 @@ async function dispose(directory) {
 
 async function fixture() {
   const root = await temporary();
-  for (const name of ['tools', 'content/unit/build', 'carrier', 'research', '.local'])
+  for (const name of ['tools', 'content/unit/build', 'carrier', 'catalog', 'tests/cpp', 'research', '.local'])
     await fs.mkdir(path.join(root, name), { recursive: true });
   const descriptor = { id: 'fixture-doc', title: 'Fixture', path: 'content/unit/Fixture' };
-  const source = '# Fixture\n\n求职C++实战总册 · 具体问题、机制与参考实现\n\n<a id="manual"></a>\n\n## Section\n\n{{one}}\n\n```cpp\nint direct = 2;\n```\n\n[记录](../../research/notes.md)\n';
+  const source = '# Fixture\n\n算法实战参考 · 具体问题、机制与参考实现\n\n<a id="manual"></a>\n\n## Section\n\n{{one}}\n\n<a id="q000001"></a>\n\n### Q000001 · Why a range?\n\nOne canonical explanation.\n\n```cpp\nint direct = 2;\n```\n\n[记录](../../research/notes.md)\n';
   const cpp = '#include <string>\n// BEGIN one\nint sum(int a, int b) { return a + b; }\n// END one\n';
   const markdown = source.replace('{{one}}', '```cpp\nint sum(int a, int b) { return a + b; }\n```');
   const html = '<h1>Fixture</h1><h2 id="section">Section</h2>';
   const builder = '// synthetic fixture builder\n';
+  const collection = { id: 'fixture-course', kind: 'chapter', chapterNumber: 1, title: 'Fixture collection', documents: [descriptor] };
+  const publications = JSON.stringify({ schemaVersion: 2, collections: [collection] });
+  const learning = { schemaVersion: 1, questions: [{ id: 'Q000001', title: 'Why a range?', document: descriptor.id,
+    anchor: 'q000001', prerequisites: [], sources: ['https://example.com/contract'] }],
+    tasks: [{ id: 'sum', title: 'Sum', document: descriptor.id, contract: 'Two representable integers',
+      methods: [{ id: 'addition', title: 'Addition', invariant: 'Add once', implementations: [{ id: 'sum-manual',
+        kind: 'manual', symbol: 'sum', source: 'content/unit/Fixture.cpp', standard: 'c++17', regions: ['one'],
+        questions: ['Q000001'], complexity: { time: 'O(1)', space: 'O(1)' }, target: 'fixture-run' }] }] }],
+    targets: [{ id: 'fixture-run', kind: 'run', source: 'tests/cpp/fixture_test.cpp', standard: 'c++17', timeoutSeconds: 30 }] };
+  const learningBytes = JSON.stringify(learning);
   const manifest = { codeBlocks: ['one'], headings: [{ depth: 1, id: 'fixture', text: 'Fixture' },
-    { depth: 2, id: 'section', text: 'Section' }], sourceSha256: hash(source), codeSha256: hash(cpp),
+    { depth: 2, id: 'section', text: 'Section' }, { depth: 3, id: 'question-heading', text: 'Q000001 · Why a range?' }], sourceSha256: hash(source), codeSha256: hash(cpp),
     markdownSha256: hash(markdown), htmlSha256: hash(html), builderSha256: hash(builder) };
+  manifest.learningSha256 = hash(learningBytes); manifest.publicationsSha256 = hash(publications);
   await fs.writeFile(path.join(root, 'content/unit/Fixture.source.md'), source);
   await fs.writeFile(path.join(root, 'content/unit/Fixture.cpp'), cpp);
   await fs.writeFile(path.join(root, 'content/unit/Fixture.md'), markdown);
@@ -61,21 +72,36 @@ async function fixture() {
   await fs.writeFile(path.join(root, 'content/unit/build/Fixture.json'), JSON.stringify(manifest));
   await fs.writeFile(path.join(root, 'research/notes.md'), 'Public research note\n');
   await fs.writeFile(path.join(root, '.local/private.pdf'), 'must not be published');
-  const collection = { id: 'fixture-trial', track: 'cpp', kind: 'trial', title: 'Fixture collection', documents: [descriptor] };
-  await fs.writeFile(path.join(root, 'carrier/publications.json'), JSON.stringify({ schemaVersion: 1, collections: [collection] }));
-  return { root, descriptor, collection, manifest, source, cpp, markdown, html, builder };
+  await fs.writeFile(path.join(root, 'carrier/publications.json'), publications);
+  await fs.writeFile(path.join(root, 'catalog/learning.json'), learningBytes);
+  await fs.writeFile(path.join(root, 'tests/cpp/fixture_test.cpp'), 'int main() {}\n');
+  return { root, descriptor, collection, manifest, source, cpp, markdown, html, builder, learning };
 }
 
-test('legacy trial authorities are retained hidden and never promoted to formal chapters', () => {
+test('the current publication schema has one course sequence and no track or trial compatibility', () => {
   validatePublications(publications);
-  const trials = publications.collections.filter(x => x.kind === 'trial');
-  assert.deepEqual(trials.map(x => [x.id, x.track, x.kind, x.documents.length]),
-    [['binary-search', 'algorithm', 'trial', 3], ['cpp-reference', 'cpp', 'trial', 7]]);
-  assert.ok(trials.every(x => x.visibility === 'hidden' && !Object.hasOwn(x, 'chapterNumber')));
+  assert.equal(publications.schemaVersion, 2);
+  assert.ok(publications.collections.every(x => !Object.hasOwn(x, 'track')));
   const ids = publications.collections.flatMap(x => x.documents.map(d => d.id));
   assert.equal(ids.length, new Set(ids).size);
-  const bad = structuredClone(publications); bad.collections[0].chapterNumber = 1;
-  assert.throws(() => validatePublications(bad), /Trial collections cannot/);
+  const bad = structuredClone(publications); bad.collections[0].track = 'algorithm';
+  assert.throws(() => validatePublications(bad), /no track/);
+  delete bad.collections[0].track; bad.collections[0].kind = 'trial';
+  assert.throws(() => validatePublications(bad), /chapter\/draft/);
+});
+
+test('an isolated publishing artifact cannot replace the shared build output', async () => {
+  const f = await fixture();
+  try {
+    await buildCarrier({ root: f.root, contentOnly: true });
+    const marker = path.join(f.root, 'dist', 'independent-check-marker');
+    await fs.writeFile(marker, 'shared output');
+    const built = await buildCarrier({ root: f.root, contentOnly: true, outputDirectory: '.local/release-isolation' });
+    assert.equal(built.output, '.local/release-isolation');
+    assert.equal(await fs.readFile(marker, 'utf8'), 'shared output');
+    assert.ok(JSON.parse(await fs.readFile(path.join(f.root, built.output, 'carrier-build.json'), 'utf8')));
+    await assert.rejects(buildCarrier({ root: f.root, contentOnly: true, outputDirectory: 'content/bad' }), /Build output/);
+  } finally { await dispose(f.root); }
 });
 
 test('hidden collections produce neither public catalog entries nor deployed content files', async () => {
@@ -83,38 +109,43 @@ test('hidden collections produce neither public catalog entries nor deployed con
   try {
     f.collection.visibility = 'hidden';
     const output = path.join(f.root, '.local/hidden-output');
-    const result = await buildLibrary(f.root, output, { schemaVersion: 1, collections: [f.collection] }, gitRevision);
+    const result = await buildLibrary(f.root, output, { schemaVersion: 2, collections: [f.collection] }, gitRevision);
     assert.deepEqual(result.catalog.collections, []);
     assert.equal(result.documents, 0); assert.equal(result.codeBlocks, 0);
     assert.deepEqual(await fs.readdir(path.join(output, 'library')), ['catalog.json']);
     assert.equal(await fs.readFile(path.join(f.root, 'content/unit/Fixture.cpp'), 'utf8'), f.cpp);
     f.collection.visibility = 'not-valid';
-    assert.throws(() => validatePublications({ schemaVersion: 1, collections: [f.collection] }), /visibility/);
+    assert.throws(() => validatePublications({ schemaVersion: 2, collections: [f.collection] }), /visibility/);
   } finally { await dispose(f.root); }
 });
 
-test('future chapters require valid numbers and uniqueness per independent track', () => {
-  const sample = structuredClone(publications);
-  sample.collections = sample.collections.filter(collection => collection.kind === 'trial');
-  sample.collections[0].kind = sample.collections[1].kind = 'chapter';
+test('chapter numbers are globally unique, while unpublished drafts stay hidden', () => {
+  const sample = { schemaVersion: 2, collections: [
+    { id: 'first', kind: 'chapter', title: 'First', documents: [{ id: 'one', title: 'One', path: 'content/test/One' }] },
+    { id: 'second', kind: 'chapter', title: 'Second', documents: [{ id: 'two', title: 'Two', path: 'content/test/Two' }] }
+  ] };
   assert.throws(() => validatePublications(sample), /positive integer/);
   sample.collections[0].chapterNumber = sample.collections[1].chapterNumber = 1;
-  assert.doesNotThrow(() => validatePublications(sample));
-  sample.collections[1].track = 'algorithm';
   assert.throws(() => validatePublications(sample), /Duplicate chapter number/);
-  sample.collections[1].track = 'cpp'; sample.collections[1].documents[0].id = sample.collections[0].documents[0].id;
+  sample.collections[1].chapterNumber = 2;
+  assert.doesNotThrow(() => validatePublications(sample));
+  sample.collections[1].documents[0].id = sample.collections[0].documents[0].id;
   assert.throws(() => validatePublications(sample), /globally unique/);
-  sample.collections[1].documents[0].id = 'cpp-distinct';
+  sample.collections[1].documents[0].id = 'distinct';
   sample.collections[0].documents[0].path = 'content/../outside';
   assert.throws(() => validatePublications(sample), /traversal/);
+  sample.collections.pop(); sample.collections[0].documents[0].path = 'content/test/One';
+  sample.collections[0].kind = 'draft'; delete sample.collections[0].chapterNumber;
+  assert.throws(() => validatePublications(sample), /must be hidden/);
+  sample.collections[0].visibility = 'hidden'; assert.doesNotThrow(() => validatePublications(sample));
 });
 
 test('all source, C++, Markdown, HTML and builder authorities are hash-checked', async () => {
   const f = await fixture();
   try {
     const files = ['content/unit/Fixture.source.md', 'content/unit/Fixture.cpp', 'content/unit/Fixture.md',
-      'content/unit/Fixture.html', 'tools/build_handbook.mjs'];
-    const kinds = ['source', 'code', 'markdown', 'html', 'builder'];
+      'content/unit/Fixture.html', 'tools/build_handbook.mjs', 'catalog/learning.json', 'carrier/publications.json'];
+    const kinds = ['source', 'code', 'markdown', 'html', 'builder', 'learning', 'publications'];
     const original = await readAuthority(f.root, f.descriptor);
     assert.equal(original.blocks.size, 1);
     for (const [i, file] of files.entries()) {
@@ -123,6 +154,28 @@ test('all source, C++, Markdown, HTML and builder authorities are hash-checked',
       await assert.rejects(readAuthority(f.root, f.descriptor), new RegExp(kinds[i] + ' authority hash mismatch'));
       await fs.writeFile(location, before);
     }
+  } finally { await dispose(f.root); }
+});
+
+test('Q relationships reject duplicate explanations, unknown references and cyclic prerequisites', async () => {
+  const f = await fixture();
+  const manifest = { schemaVersion: 2, collections: [f.collection] };
+  try {
+    assert.doesNotThrow(() => validateLearning(f.learning, manifest));
+    const duplicate = structuredClone(f.learning); duplicate.questions.push(duplicate.questions[0]);
+    assert.throws(() => validateLearning(duplicate, manifest), /duplicate question/);
+    const cycle = structuredClone(f.learning); cycle.questions[0].prerequisites = ['Q000001'];
+    assert.throws(() => validateLearning(cycle, manifest), /cycle/);
+    const missing = structuredClone(f.learning); missing.tasks[0].methods[0].implementations[0].questions = ['Q999999'];
+    assert.throws(() => validateLearning(missing, manifest), /unknown question/);
+    const noTarget = structuredClone(f.learning); noTarget.tasks[0].methods[0].implementations[0].target = 'absent';
+    assert.throws(() => validateLearning(noTarget, manifest), /implementation/);
+    const result = await buildLibrary(f.root, path.join(f.root, '.local/q-output'), manifest, gitRevision);
+    assert.deepEqual(result.catalog.questions, [{ id: 'Q000001', title: 'Why a range?', document: 'fixture-doc', anchor: 'q000001', prerequisites: [] }]);
+    const wrongTitle = structuredClone(f.learning); wrongTitle.questions[0].title = 'Different question';
+    await assert.rejects(buildLibrary(f.root, path.join(f.root, '.local/q-bad'), manifest, gitRevision, wrongTitle), /unique registration/);
+    const absentRegion = structuredClone(f.learning); absentRegion.tasks[0].methods[0].implementations[0].regions = ['absent'];
+    await assert.rejects(buildLibrary(f.root, path.join(f.root, '.local/q-region'), manifest, gitRevision, absentRegion), /region is absent/);
   } finally { await dispose(f.root); }
 });
 
@@ -136,8 +189,8 @@ test('unsafe HTML is escaped; only safe id anchors survive and unsafe schemes ar
     assert.match(rendered.html, /<a id="manual"><\/a>/);
     assert.doesNotMatch(rendered.html, /<script|<a[^>]+onclick=/);
     assert.match(rendered.html, /&lt;script&gt;/);
-    assert.doesNotMatch(rendered.html, /<h1|<p>求职C\+\+实战总册/);
-    assert.deepEqual(rendered.headings, [{ depth: 2, id: 'section', text: 'Section' }]);
+    assert.doesNotMatch(rendered.html, /<h1|<p>算法实战参考/);
+    assert.deepEqual(rendered.headings.map(h => h.id), ['section', 'question-heading']);
     assert.match(rendered.html, new RegExp('/blob/' + gitRevision + '/research/notes\\.md'));
     assert.match(rendered.html, /rel="noopener noreferrer"/);
     for (const href of ['javascript:alert(1)', 'JaVaScRiPt:alert(1)', 'java\nscript:alert(1)',
@@ -147,13 +200,13 @@ test('unsafe HTML is escaped; only safe id anchors survive and unsafe schemes ar
 });
 
 test('content and download links are rewritten without private repository paths', () => {
-  const document = { id: 'bs-foundations', path: 'content/binary-search/二分查找' };
-  const entry = { collection: 'binary-search', document: 'bs-compositions',
-    sourceUrl: '/library/binary-search/bs-compositions/123.cpp', markdownUrl: '/library/binary-search/bs-compositions/123.md' };
-  const byPath = new Map(['.html', '.cpp', '.md'].map(s => ['content/binary-search/组合判定' + s, entry]));
-  const rewrite = createLinkRewriter({ collection: publications.collections[0], document, byPath, gitRevision });
-  assert.equal(rewrite('组合判定.html#some-anchor').href, '#/read/binary-search/bs-compositions?anchor=some-anchor');
-  assert.equal(rewrite('#ordered').href, '#/read/binary-search/bs-foundations?anchor=ordered');
+  const document = { id: 'first-document', path: 'content/course/边界查找' };
+  const entry = { collection: 'course', document: 'other-document',
+    sourceUrl: '/library/course/other-document/123.cpp', markdownUrl: '/library/course/other-document/123.md' };
+  const byPath = new Map(['.html', '.cpp', '.md'].map(s => ['content/course/组合判定' + s, entry]));
+  const rewrite = createLinkRewriter({ collection: { id: 'course' }, document, byPath, gitRevision });
+  assert.equal(rewrite('组合判定.html#some-anchor').href, '#/read/course/other-document?anchor=some-anchor');
+  assert.equal(rewrite('#ordered').href, '#/read/course/first-document?anchor=ordered');
   assert.deepEqual(rewrite('组合判定.cpp'), { href: entry.sourceUrl, external: false, download: true });
   assert.equal(rewrite('组合判定.md').href, entry.markdownUrl);
   assert.match(rewrite('../../work/notes.md').href, new RegExp('/blob/' + gitRevision + '/work/notes\\.md'));
@@ -173,7 +226,7 @@ test('a broken internal anchor prevents publication instead of leaving a dead re
     await fs.writeFile(path.join(f.root, 'content/unit/build/Fixture.json'), JSON.stringify(f.manifest));
     const output = path.join(f.root, '.local/failed-library');
     await assert.rejects(buildLibrary(f.root, output,
-      { schemaVersion: 1, collections: [f.collection] }, gitRevision), /anchor does not exist/);
+      { schemaVersion: 2, collections: [f.collection] }, gitRevision), /anchor does not exist/);
   } finally { await dispose(f.root); }
 });
 
@@ -203,7 +256,7 @@ test('explicit C++ highlighting preserves raw strings, digit separators and actu
 test('immutable reader paths follow rendered bytes while authority downloads remain stable', async () => {
   const f = await fixture();
   try {
-    const manifest = { schemaVersion: 1, collections: [f.collection] };
+    const manifest = { schemaVersion: 2, collections: [f.collection] };
     const build = async (directory, revision) => {
       const output = path.join(f.root, '.local', directory);
       const { catalog } = await buildLibrary(f.root, output, manifest, revision);
@@ -224,56 +277,30 @@ test('immutable reader paths follow rendered bytes while authority downloads rem
   } finally { await dispose(f.root); }
 });
 
-test('isolated QA corpus preserves all 173 legacy canonical copies without publishing hidden trials', async () => {
+test('current published content preserves every declared source block and the unique Q index', async () => {
   const output = await temporary();
   try {
-    const corpus = structuredClone(publications);
-    corpus.collections = corpus.collections.filter(collection => collection.kind === 'trial');
-    for (const collection of corpus.collections) delete collection.visibility;
-    const result = await buildLibrary(ROOT, output, corpus, gitRevision);
-    assert.equal(result.documents, 10); assert.equal(result.codeBlocks, 173);
-    assert.match(result.catalog.version, /^[a-f0-9]{64}$/);
-    let canonicalCopies = 0, inlineExamples = 0;
-    for (const collection of result.catalog.collections) {
-      assert.equal(collection.kind, 'trial'); assert.ok(!Object.hasOwn(collection, 'chapterNumber'));
-      for (const entry of collection.documents) {
-        const descriptor = publications.collections.find(x => x.id === collection.id).documents.find(x => x.id === entry.id);
-        const authority = await readAuthority(ROOT, descriptor);
-        const doc = JSON.parse(await fs.readFile(path.join(output, entry.url.slice(1)), 'utf8'));
-        assert.equal(doc.revision, entry.revision);
-        assert.notEqual(doc.revision, authority.revision);
-        assert.match(entry.url, new RegExp('/' + doc.revision.slice(0, 16) + '\\.json$'));
-        assert.match(entry.sourceUrl, new RegExp('/' + authority.revision.slice(0, 16) + '\\.cpp$'));
-        assert.equal(await fs.readFile(path.join(output, doc.sourceUrl.slice(1)), 'utf8'), authority.source);
-        assert.equal(await fs.readFile(path.join(output, entry.markdownUrl.slice(1)), 'utf8'), authority.markdown);
-        assert.doesNotMatch(doc.html, /<h1[ >]/);
-        const seen = new Set();
-        assert.equal([...doc.html.matchAll(/class="code-toolbar"/g)].length,
-          [...doc.html.matchAll(/class="code-block"/g)].length);
-        for (const match of doc.html.matchAll(/<div class="code-block" data-code-id="([^"]+)">[\s\S]*?<pre><code[^>]*>([\s\S]*?)<\/code><\/pre><\/div>/g)) {
-          const key = match[1], text = codeText(match[2]);
-          assert.ok(!seen.has(key)); seen.add(key);
-          if (authority.blocks.has(key)) { assert.equal(text, authority.blocks.get(key)); ++canonicalCopies; }
-          else { assert.ok(authority.inlineExamples.has(text)); ++inlineExamples; }
-          assert.ok(!text.includes('aria-label="复制代码"'));
-        }
-        for (const key of authority.used) assert.ok(seen.has(key), `${entry.id} omits ${key}`);
-        for (const heading of entry.headings) assert.ok(doc.html.includes('id="' + heading.id + '"'));
-        for (const match of doc.html.matchAll(/href="(#\/read\/[^"?]+)(?:\?anchor=([^"&]*))?"/g)) {
-          const [, , collectionId, documentId] = match[1].split('/');
-          const destination = result.catalog.collections.find(x => x.id === collectionId)?.documents.find(x => x.id === documentId);
-          assert.ok(destination, match[1]);
-          if (match[2]) {
-            const target = JSON.parse(await fs.readFile(path.join(output, destination.url.slice(1)), 'utf8'));
-            assert.ok(target.html.includes('id="' + decodeURIComponent(match[2]) + '"'), match[0]);
-          }
-        }
+    const result = await buildLibrary(ROOT, output, publications, gitRevision);
+    assert.equal(result.catalog.schemaVersion, 2);
+    assert.ok(result.documents > 0 && result.codeBlocks > 0);
+    assert.ok(result.catalog.questions.length > 0);
+    assert.equal(new Set(result.catalog.questions.map(q => q.id)).size, result.catalog.questions.length);
+    for (const question of result.catalog.questions) assert.deepEqual(Object.keys(question).sort(), ['anchor', 'document', 'id', 'prerequisites', 'title']);
+    let canonicalCopies = 0;
+    for (const collection of result.catalog.collections) for (const entry of collection.documents) {
+      assert.equal(Object.hasOwn(collection, 'track'), false);
+      const descriptor = publications.collections.find(c => c.id === collection.id).documents.find(d => d.id === entry.id);
+      const authority = await readAuthority(ROOT, descriptor);
+      const document = JSON.parse(await fs.readFile(path.join(output, entry.url.slice(1)), 'utf8'));
+      for (const block of authority.used) {
+        const match = document.html.match(new RegExp('data-code-id="' + block + '">[\\s\\S]*?<pre><code[^>]*>([\\s\\S]*?)<\\/code>'));
+        assert.ok(match, block); assert.equal(codeText(match[1]), authority.blocks.get(block)); canonicalCopies++;
       }
+      for (const question of result.catalog.questions.filter(q => q.document === entry.id))
+        assert.equal(document.html.split('id="' + question.anchor + '"').length - 1, 1);
     }
-    assert.equal(canonicalCopies, 173);
-    assert.ok(inlineExamples > 0, 'original short examples should not be silently stripped');
-    assert.match(await fs.readFile(path.join(ROOT, 'web/styles.css'), 'utf8'),
-      /@media print\s*\{[\s\S]*?\.code-toolbar[^{}]*\{[^{}]*display:\s*none/);
+    assert.equal(canonicalCopies, result.codeBlocks);
+    assert.match(await fs.readFile(path.join(ROOT, 'web/styles.css'), 'utf8'), /@media print[\s\S]*?code-toolbar/);
     assert.deepEqual((await fs.readdir(output)).sort(), ['library']);
   } finally { await dispose(output); }
 });

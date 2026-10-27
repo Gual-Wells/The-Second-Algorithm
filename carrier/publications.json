@@ -1,54 +1,18 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "collections": [
     {
-      "id": "binary-search",
-      "track": "algorithm",
-      "kind": "trial",
-      "visibility": "hidden",
-      "title": "二分专题",
-      "documents": [
-        {"id": "bs-foundations", "title": "基础查找", "path": "content/binary-search/二分查找"},
-        {"id": "bs-compositions", "title": "组合判定", "path": "content/binary-search/组合判定"},
-        {"id": "bs-advanced", "title": "进阶扩展", "path": "content/binary-search/进阶扩展"}
-      ]
-    },
-    {
-      "id": "cpp-reference",
-      "track": "cpp",
-      "kind": "trial",
-      "visibility": "hidden",
-      "title": "C++实战选读",
-      "documents": [
-        {"id": "cpp-types", "title": "类型与调用", "path": "content/cpp/类型与调用"},
-        {"id": "cpp-objects", "title": "对象与资源", "path": "content/cpp/对象与资源"},
-        {"id": "cpp-generics", "title": "泛型与约束", "path": "content/cpp/泛型与约束"},
-        {"id": "cpp-containers", "title": "容器与范围", "path": "content/cpp/容器与范围"},
-        {"id": "cpp-text", "title": "文本与文件", "path": "content/cpp/文本与文件"},
-        {"id": "cpp-threads", "title": "线程与同步", "path": "content/cpp/线程与同步"},
-        {"id": "cpp-linking", "title": "翻译与链接", "path": "content/cpp/翻译与链接"}
-      ]
-    },
-    {
-      "id": "algorithm-contiguous-ranges",
-      "track": "algorithm",
+      "id": "practice-foundations",
+      "title": "实战起点：状态、范围与实现选择",
       "kind": "chapter",
       "visibility": "published",
       "chapterNumber": 1,
-      "title": "连续片段：前缀状态与滑动边界",
       "documents": [
-        {"id": "algorithm-contiguous", "title": "连续片段", "path": "content/contiguous-ranges/连续片段"}
-      ]
-    },
-    {
-      "id": "cpp-objects-interfaces",
-      "track": "cpp",
-      "kind": "chapter",
-      "visibility": "published",
-      "chapterNumber": 1,
-      "title": "对象如何传递",
-      "documents": [
-        {"id": "cpp-object-transfer", "title": "对象如何传递", "path": "content/cpp-object-interfaces/对象如何传递"}
+        {
+          "id": "practice-foundations",
+          "title": "实战起点",
+          "path": "content/practice-foundations/实战起点"
+        }
       ]
     }
   ]

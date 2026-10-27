@@ -4,7 +4,7 @@ const { chromium } = require('playwright');
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const assert = require('node:assert/strict');
-const { execFileSync } = require('node:child_process');
+const { createHash } = require('node:crypto');
 
 const root = path.resolve(__dirname, '..');
 const origin = 'http://localhost:9876';
@@ -13,7 +13,50 @@ const output = path.join(root, '.local/refinement-qa');
 const temporary = path.join(root, '.local/refinement-browser-tmp');
 const chrome = process.env.ALGORITHM_QA_CHROME;
 const qaLibrary = path.join(root, '.local/carrier-qa-library');
-let qaCatalog, deployedCatalog, makeIndex;
+let qaCatalog, makeIndex;
+
+// A current-schema UI fixture exercises multiple documents without depending on
+// retired chapters or prescribing a production chapter/document count.
+async function createCorpus() {
+  const catalog = { schemaVersion: 2, version: 'qa-course-v2', collections: [], questions: [
+    { id: 'Q000001', title: '怎样表达有效范围', document: 'practice-entry', anchor: 'q000001', prerequisites: [] },
+    { id: 'Q000002', title: '为什么只删除一个重复对象', document: 'practice-composition', anchor: 'q000002', prerequisites: ['Q000001'] }
+  ] };
+  for (const [collectionId, ids] of [['practice-course', ['practice-entry', 'practice-composition', 'practice-alternative']], ['additional-course', ['other-method']]]) {
+    const collection = { id: collectionId, kind: 'chapter', chapterNumber: catalog.collections.length + 1,
+      title: collectionId === 'practice-course' ? '实战方法与实现' : '不同算法的比较', documents: [] };
+    for (const id of ids) {
+      const headings = [], sections = [];
+      const canonical = 'int lower_manual(int value) { return value; }\n// ' + 'long_identifier '.repeat(20);
+      const link = '#/read/practice-course/practice-composition?anchor=q000002';
+      sections.push(`<div class="code-block" data-code-id="example"><div class="code-toolbar"><span>C++</span><button type="button" class="code-copy" data-copy-code="example" aria-label="复制代码">复制</button></div><pre><code>${canonical}</code></pre></div>`);
+      for (let index = 0; index < 16; index++) {
+        const heading = { depth: 2, id: 'section-' + index, text: 'lower_bound 与边界判断 ' + (index + 1) };
+        headings.push(heading);
+        sections.push(`<h2 id="${heading.id}">${heading.text}</h2><p>${'保持状态不变量，比较手写与标准设施的范围、返回值和复杂度。'.repeat(12)}</p>`);
+        if (index === 4) sections.push(`<p><a href="${link}">Q000002 · 为什么只删除一个重复对象</a></p>`);
+        if (index === 8) for (const question of catalog.questions.filter(question => question.document === id)) {
+          headings.push({ depth: 3, id: 'heading-' + question.anchor, text: question.id + ' · ' + question.title });
+          sections.push(`<a id="${question.anchor}"></a><h3 id="heading-${question.anchor}">${question.id} · ${question.title}</h3><p>这一问题的唯一主讲正文，只在此处出现。</p>`);
+        }
+      }
+      sections.push('<div class="table-wrap"><table><tr><th>操作</th><th>条件</th></tr><tr><td><code>std::vector&lt;long_long_identifier&gt;::const_iterator</code></td><td>有效范围与结束位置</td></tr></table></div>');
+      const html = sections.join('\n'), revision = createHash('sha256').update(html).digest('hex');
+      const prefix = `/library/${collectionId}/${id}/${revision.slice(0, 16)}`;
+      const meta = { id, title: id === 'practice-entry' ? '从范围到作答' : '实现与条件 ' + id,
+        revision, url: prefix + '.json', sourceUrl: prefix + '.cpp', markdownUrl: prefix + '.md', headings };
+      const file = path.join(qaLibrary, meta.url.slice(1)); await fs.mkdir(path.dirname(file), { recursive: true });
+      await fs.writeFile(file, JSON.stringify({ ...meta, html }));
+      await fs.writeFile(path.join(qaLibrary, meta.sourceUrl.slice(1)), canonical);
+      await fs.writeFile(path.join(qaLibrary, meta.markdownUrl.slice(1)), '# UI fixture\n');
+      collection.documents.push(meta);
+    }
+    catalog.collections.push(collection);
+  }
+  await fs.mkdir(path.join(qaLibrary, 'library'), { recursive: true });
+  await fs.writeFile(path.join(qaLibrary, 'library/catalog.json'), JSON.stringify(catalog));
+  return catalog;
+}
 
 async function poll(condition, message, timeout = 6000) {
   const start = Date.now();
@@ -69,7 +112,7 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
       + '\nglobalThis.__refinement = { get state() { return S; }, get journal() { return journal(); } };\n');
     return route.fulfill({ status: 200, contentType: types[path.extname(file)] || 'text/plain', body: bytes });
   });
-  return { context, mock, async page(hash = '#/read/binary-search/bs-foundations') {
+  return { context, mock, async page(hash = '#/read/practice-course/practice-entry') {
     const page = await context.newPage();
     await page.goto(origin + '/' + hash);
     await page.locator('#readingArticle .code-block').first().waitFor();
@@ -84,12 +127,7 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
     throw new Error('Browser QA workspace and its actual temporary data must be on D:');
   await fs.mkdir(output, { recursive: true }); await fs.mkdir(temporary, { recursive: true });
   const builder = await import('../scripts/build-carrier.mjs'); makeIndex = builder.publicationIndex;
-  const corpus = JSON.parse(await fs.readFile(path.join(root, 'carrier/publications.json'), 'utf8'));
-  corpus.collections = corpus.collections.filter(collection => collection.kind === 'trial');
-  for (const collection of corpus.collections) delete collection.visibility;
-  ({ catalog: qaCatalog } = await builder.buildLibrary(root, qaLibrary, corpus,
-    execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim()));
-  deployedCatalog = JSON.parse(await fs.readFile(path.join(root, 'dist/library/catalog.json'), 'utf8'));
+  qaCatalog = await createCorpus();
   process.env.TEMP = process.env.TMP = process.env.TMPDIR = temporary;
   const browser = await chromium.launch({ headless: true, executablePath: chrome,
     env: { ...process.env, TEMP: temporary, TMP: temporary, TMPDIR: temporary },
@@ -110,37 +148,107 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
     } finally { await env?.context.close(); }
   }
   try {
-    await check('formal-release-rejects-stale-trial-catalog-routes-resume-and-search-without-removing-notes', async env => {
-      const page = await env.context.newPage();
-      await page.addInitScript(({ owner, catalog }) => {
-        const key = 'second-algorithm:' + owner + ':';
-        localStorage.setItem('second-algorithm:last-session', JSON.stringify({ owner, verifiedAt: Date.now() }));
-        localStorage.setItem(key + 'catalog', JSON.stringify(catalog));
-        localStorage.setItem(key + 'lastRoute', '#/read/binary-search/bs-foundations');
-        localStorage.setItem(key + 'resume:algorithm', JSON.stringify({ collection: 'binary-search', document: 'bs-foundations', route: '#/read/binary-search/bs-foundations' }));
-        localStorage.setItem(key + 'notes:binary-search', JSON.stringify({ text: 'keep private historical note', revision: 3, dirty: true }));
-      }, { owner, catalog: qaCatalog });
-      env.mock.rejectApis = true;
-      await page.goto(origin + '/#/read/binary-search/bs-foundations');
-      await page.locator('#libraryView').waitFor({ state: 'visible' });
-      assert.equal(await page.locator('#libraryResume').isVisible(), false);
-      assert.doesNotMatch(await page.locator('#bookList').innerText(), /试读|二分专题|C\+\+实战选读/);
-      assert.equal(env.mock.requests.some(request => request.path.startsWith('/library/binary-search/')), false);
-      await page.locator('#librarySearch').fill('lower_bound');
-      await page.waitForTimeout(400);
-      assert.equal(await page.locator('#bookList .search-row').count(), 0);
-      assert.match(await page.evaluate(owner => localStorage.getItem('second-algorithm:' + owner + ':notes:binary-search'), owner), /keep private historical note/);
-      assert(await page.evaluate(() => Boolean(localStorage.getItem('second-algorithm:last-session'))));
-      env.mock.rejectApis = false;
-      env.mock.state['notes:binary-search'] = { value: 'historical cloud note', revision: 2, updatedAt: Date.now() };
-      await page.locator('#settingsButton').click(); await page.locator('[data-check-updates]').click();
-      await page.waitForFunction(() => !document.querySelector('[data-check-updates]')?.disabled);
-      assert.equal((await page.evaluate(() => window.__refinement.state.library.collections)).some(collection => collection.id === 'binary-search'), false);
-      await page.locator('[data-logout]').click();
-      await page.locator('#loginView').waitFor({ state: 'visible' });
-      assert.match(await page.evaluate(owner => localStorage.getItem('second-algorithm:' + owner + ':notes:binary-search'), owner), /keep private historical note/);
-      assert.equal(await page.evaluate(() => localStorage.getItem('second-algorithm:last-session')), null);
-    }, { catalog: qaCatalog, policyCatalog: deployedCatalog, libraryRoot: path.join(root, 'dist') });
+    await check('viewport-matrix-preserves-paper-code-selection-and-Q-sheet', async env => {
+      const page = await env.page();
+      for (const viewport of [{ width: 402, height: 874 }, { width: 320, height: 740 }, { width: 1280, height: 800 }, { width: 874, height: 402 }]) {
+        await page.setViewportSize(viewport); await page.waitForTimeout(70);
+        const geometry = await page.evaluate(() => {
+          const pane = document.querySelector('#readingPane'), paper = document.querySelector('#readingArticle');
+          const pre = paper.querySelector('pre'), copy = paper.querySelector('.code-copy');
+          return { outer: document.documentElement.scrollWidth, viewport: innerWidth, pane: pane.clientHeight,
+            paper: paper.getBoundingClientRect().width, width: pane.clientWidth, copy: copy.getBoundingClientRect().height,
+            horizontalCode: pre.scrollWidth > pre.clientWidth };
+        });
+        assert(geometry.outer <= geometry.viewport + 1 && geometry.pane > 100, JSON.stringify({ viewport, geometry }));
+        assert(geometry.paper <= geometry.width + 1 && geometry.copy >= 44 && geometry.horizontalCode, JSON.stringify(geometry));
+        await page.locator('#readingPane').evaluate(node => node.scrollTop = 500); await page.waitForTimeout(70);
+        const before = await page.locator('#readingArticle').evaluate(node => node.getBoundingClientRect().width);
+        await page.locator('#pureButton').click();
+        assert.equal(await page.locator('#readingArticle').evaluate(node => node.getBoundingClientRect().width), before);
+        await page.keyboard.press('Escape');
+        await page.locator('#questionsButton').click();
+        assert(await page.locator('#questionResults .question-row').first().isVisible());
+        const sheet = await page.locator('#sheetBody').boundingBox(); assert(sheet.height > 80);
+        await page.screenshot({ path: path.join(output, `viewport-${viewport.width}x${viewport.height}.png`) });
+        await page.locator('[data-sheet-close]').click(); await page.waitForFunction(() => !document.querySelector('#sheetDialog').open);
+      }
+    });
+
+    await check('built-current-publication-renders-real-content-and-unique-Q-links', async () => {
+      const catalog = JSON.parse(await fs.readFile(path.join(root, 'dist/library/catalog.json'), 'utf8'));
+      assert.equal(catalog.schemaVersion, 2, 'build the current schema before browser QA');
+      assert(catalog.questions.length > 0);
+      const real = await environment(browser, { catalog, libraryRoot: path.join(root, 'dist') });
+      try {
+        const collection = catalog.collections[0], meta = collection.documents[0];
+        const page = await real.page(`#/read/${collection.id}/${meta.id}`);
+        assert(await page.locator('#readingArticle .code-block').count() > 0);
+        for (const question of catalog.questions.filter(q => q.document === meta.id))
+          assert.equal(await page.locator('#' + question.anchor).count(), 1);
+        for (const viewport of [{ width: 402, height: 874 }, { width: 320, height: 740 }, { width: 1280, height: 800 }, { width: 874, height: 402 }]) {
+          await page.setViewportSize(viewport); await page.waitForTimeout(70);
+          const geometry = await page.evaluate(() => {
+            const pane = document.querySelector('#readingPane'), paper = document.querySelector('#readingArticle');
+            return { outer: document.documentElement.scrollWidth, viewport: innerWidth, pane: pane.clientHeight,
+              paper: paper.getBoundingClientRect().width, width: pane.clientWidth };
+          });
+          assert(geometry.outer <= geometry.viewport + 1 && geometry.pane > 100 && geometry.paper <= geometry.width + 1,
+            JSON.stringify({ viewport, geometry }));
+          await page.screenshot({ path: path.join(output, `current-publication-${viewport.width}x${viewport.height}.png`) });
+        }
+        await page.locator('#questionsButton').click();
+        assert.equal(await page.locator('#questionResults .question-row').count(), catalog.questions.length);
+        await page.locator(`[data-go-question="${catalog.questions[0].id}"]`).click();
+        await page.waitForFunction(() => !window.__refinement.state.restoring && !document.querySelector('#sheetDialog').open);
+        assert(await page.locator('#' + catalog.questions[0].anchor).evaluate(node =>
+          Math.abs(node.getBoundingClientRect().top - document.querySelector('#readingPane').getBoundingClientRect().top) < 20));
+        assert.deepEqual(real.mock.errors, []);
+      } finally { await real.context.close(); }
+    });
+
+    await check('unified-course-and-Q-index-link-to-one-explanation-and-return', async env => {
+      const page = await env.page();
+      assert.equal(await page.locator('[data-track],#trackTabs').count(), 0);
+      assert.equal(await page.evaluate(() => Object.hasOwn(window.__refinement.state, 'track')), false);
+      await page.locator('#readingPane').evaluate(node => node.scrollTop = 900); await page.waitForTimeout(250);
+      const before = await page.locator('#readingPane').evaluate(node => node.scrollTop);
+      await page.locator('#questionsButton').click();
+      assert.equal(await page.locator('#questionResults .question-row').count(), 2);
+      assert.doesNotMatch(await page.locator('#questionResults').innerText(), /唯一主讲正文/);
+      await page.locator('#questionSearch').fill('Q000002');
+      assert.equal(await page.locator('#questionResults .question-row').count(), 1);
+      await page.locator('[data-go-question="Q000002"]').click();
+      await page.waitForFunction(() => !window.__refinement.state.restoring && window.__refinement.state.active.meta.id === 'practice-composition');
+      assert(await page.locator('#q000002').evaluate(node => Math.abs(node.getBoundingClientRect().top - document.querySelector('#readingPane').getBoundingClientRect().top) < 20));
+      await page.locator('#returnButton').click();
+      await page.waitForFunction(() => !window.__refinement.state.restoring && window.__refinement.state.active.meta.id === 'practice-entry');
+      assert(Math.abs(await page.locator('#readingPane').evaluate(node => node.scrollTop) - before) < 8);
+      await page.locator('#libraryButton').click();
+      assert.equal(await page.locator('#bookList .book-row').count(), 2);
+      assert.equal(await page.locator('#libraryTitle').innerText(), '算法实战');
+      assert.equal(await page.evaluate(() => location.hash), '#/library');
+      assert(await page.locator('#libraryResume').isVisible());
+    });
+
+    await check('Q-same-document-browser-back-restores-the-original-history-entry', async env => {
+      const page = await env.page();
+      await page.locator('#readingPane').evaluate(node => node.scrollTop = 700); await page.waitForTimeout(250);
+      const before = await page.locator('#readingPane').evaluate(node => node.scrollTop);
+      await page.locator('#questionsButton').click(); await page.locator('[data-go-question="Q000001"]').click();
+      await page.waitForFunction(() => !window.__refinement.state.restoring && !document.querySelector('#sheetDialog').open);
+      await page.waitForTimeout(60);
+      const reached = await page.locator('#readingPane').evaluate(node => node.scrollTop); assert(Math.abs(reached - before) > 100);
+      await page.evaluate(() => history.back());
+      await page.waitForTimeout(150); await page.waitForFunction(() => !window.__refinement.state.restoring);
+      assert(Math.abs(await page.locator('#readingPane').evaluate(node => node.scrollTop) - before) < 8);
+    });
+
+    await check('question-number-deep-link-resolves-to-the-registered-main-position', async env => {
+      const page = await env.page('#/q/Q000002');
+      assert.equal(await page.evaluate(() => window.__refinement.state.active.meta.id), 'practice-composition');
+      assert.equal(await page.locator('#q000002').count(), 1);
+      assert(await page.locator('#q000002').evaluate(node => Math.abs(node.getBoundingClientRect().top - document.querySelector('#readingPane').getBoundingClientRect().top) < 20));
+    });
 
     await check('same-browser-two-page-late-ACK-and-reload', async env => {
       const a = await env.page(), b = await env.page();
@@ -151,7 +259,7 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
       await b.locator('#noteEditor').fill('B: unsent local draft must survive A ACK');
       env.mock.heldNote();
       await a.waitForFunction(() => document.querySelector('#noteStatus')?.textContent.includes('已同步'));
-      const beforeReload = await b.evaluate(() => window.__refinement.journal.list('binary-search'));
+      const beforeReload = await b.evaluate(() => window.__refinement.journal.list('practice-course'));
       assert(beforeReload.some(note => note.text === 'B: unsent local draft must survive A ACK'));
       await b.reload(); await b.locator('#readingArticle .code-block').first().waitFor();
       await b.locator('#notesButton').click();
@@ -165,11 +273,11 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
       await poll(() => env.mock.heldNote, 'Expected first held note save');
       await page.locator('#noteEditor').fill('new text while first response is pending');
       env.mock.heldNote();
-      await poll(() => env.mock.state['notes:binary-search']?.value === 'new text while first response is pending'
-        && env.mock.state['notes:binary-search']?.revision === 2, 'Expected rebased second save');
+      await poll(() => env.mock.state['notes:practice-course']?.value === 'new text while first response is pending'
+        && env.mock.state['notes:practice-course']?.revision === 2, 'Expected rebased second save');
       await page.waitForFunction(() => document.querySelector('#noteStatus')?.textContent.includes('已同步'));
-      assert.deepEqual(await page.evaluate(() => window.__refinement.journal.list('binary-search')), []);
-      const value = await page.evaluate(() => window.__refinement.journal.load('binary-search'));
+      assert.deepEqual(await page.evaluate(() => window.__refinement.journal.list('practice-course')), []);
+      const value = await page.evaluate(() => window.__refinement.journal.load('practice-course'));
       assert.deepEqual(value, { text: 'new text while first response is pending', revision: 2, dirty: false });
     });
 
@@ -180,22 +288,22 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
       await a.waitForFunction(() => document.querySelector('#noteStatus')?.textContent.includes('已同步'));
       await b.locator('#noteEditor').fill('same desired content');
       await a.waitForTimeout(100);
-      const pending = await a.evaluate(() => window.__refinement.journal.list('binary-search'));
+      const pending = await a.evaluate(() => window.__refinement.journal.list('practice-course'));
       assert(pending.some(note => note.text === 'same desired content' && note.revision === 0));
       assert(await a.locator('#draftRecovery [data-load-draft],#draftRecovery [data-confirm-draft]').count() > 0,
         'A clean note still has a same-text older-base pending draft, which blocks logout but is hidden from recovery');
       const confirm = a.locator('#draftRecovery [data-confirm-draft]');
       if (await confirm.count()) {
         await a.locator('#draftRecovery summary').click(); await confirm.click();
-        assert(!(await a.evaluate(() => window.__refinement.journal.list('binary-search')))
+        assert(!(await a.evaluate(() => window.__refinement.journal.list('practice-course')))
           .some(note => note.text === 'same desired content' && note.revision === 0));
       }
     });
 
     await check('failed-local-backup-cannot-discard-current-note-when-adopting-cloud', async env => {
-      env.mock.state['notes:binary-search'] = { value: 'older cloud note', revision: 1, updatedAt: Date.now() };
+      env.mock.state['notes:practice-course'] = { value: 'older cloud note', revision: 1, updatedAt: Date.now() };
       const page = await env.page(); await page.locator('#notesButton').click();
-      env.mock.state['notes:binary-search'] = { value: 'other device latest cloud note', revision: 2, updatedAt: Date.now() };
+      env.mock.state['notes:practice-course'] = { value: 'other device latest cloud note', revision: 2, updatedAt: Date.now() };
       await page.locator('#noteEditor').fill('valuable local conflicting draft');
       await page.locator('[data-notes-cloud]').waitFor();
       await page.evaluate(() => {
@@ -206,8 +314,8 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
         };
       });
       await page.locator('[data-notes-cloud]').click(); await page.locator('[data-adopt-cloud]').click();
-      assert.equal(await page.evaluate(() => window.__refinement.state.notes.get('binary-search').text), 'valuable local conflicting draft');
-      assert((await page.evaluate(() => window.__refinement.journal.list('binary-search')))
+      assert.equal(await page.evaluate(() => window.__refinement.state.notes.get('practice-course').text), 'valuable local conflicting draft');
+      assert((await page.evaluate(() => window.__refinement.journal.list('practice-course')))
         .some(note => note.text === 'valuable local conflicting draft'));
     });
 
@@ -230,10 +338,10 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
       assert(await page.locator('#tocResults .toc-row').count() > 2);
     });
 
-    await check('offline-search-reports-unavailable-scope-and-keeps-track-filter', async env => {
+    await check('offline-global-search-reports-unavailable-documents', async env => {
       const page = await env.page();
-      const collection = env.mock.catalog.collections.find(item => item.id === 'binary-search');
-      for (const doc of collection.documents.filter(item => item.id !== 'bs-foundations'))
+      const collection = env.mock.catalog.collections.find(item => item.id === 'practice-course');
+      for (const doc of env.mock.catalog.collections.flatMap(item => item.documents).filter(item => item.id !== 'practice-entry'))
         env.mock.unavailable.add(new URL(doc.url, origin).pathname);
       await page.evaluate(() => window.dispatchEvent(new Event('offline')));
       await page.locator('#libraryButton').click(); await page.locator('#librarySearch').fill('lower_bound');
@@ -242,7 +350,7 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
       const text = await page.locator('#bookList').innerText();
       assert.match(text, /离线|未下载|未能|不可用|部分|本机/);
       const groups = await page.locator('#bookList .search-row').evaluateAll(rows => rows.map(row => row.dataset.goCollection));
-      assert(groups.length > 0 && groups.every(group => group === 'binary-search'));
+      assert(groups.length > 0 && groups.every(group => group === 'practice-course'));
     });
 
     await check('slow-cross-document-keeps-reader-and-can-cancel-without-late-replacement', async env => {
@@ -253,9 +361,9 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
         scroll: document.querySelector('#readingPane').scrollTop,
         top: document.querySelector('#readingPane').getBoundingClientRect().top,
         title: document.querySelector('#currentTitle').textContent, hash: location.hash }));
-      const next = env.mock.catalog.collections.find(item => item.id === 'binary-search').documents.find(item => item.id === 'bs-compositions');
+      const next = env.mock.catalog.collections.find(item => item.id === 'practice-course').documents.find(item => item.id === 'practice-composition');
       env.mock.delayDocument = new URL(next.url, origin).pathname;
-      await page.locator('[data-document="bs-compositions"]').click();
+      await page.locator('[data-document="practice-composition"]').click();
       await poll(() => env.mock.heldDocument, 'Expected delayed cross-document request');
       assert.equal(await page.locator('#readingArticle').innerHTML(), before.html);
       assert(Math.abs((await page.locator('#readingPane').evaluate(node => node.scrollTop)) - before.scroll) < 3);
@@ -264,7 +372,7 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
       await page.locator('[data-cancel-route]').click();
       assert.equal(await page.evaluate(() => location.hash), before.hash);
       env.mock.heldDocument(); await page.waitForTimeout(120);
-      assert.equal(await page.evaluate(() => window.__refinement.state.active.meta.id), 'bs-foundations');
+      assert.equal(await page.evaluate(() => window.__refinement.state.active.meta.id), 'practice-entry');
       assert.equal(await page.locator('#readingArticle').innerHTML(), before.html);
       assert.equal(await page.locator('#readingNotice').isVisible(), false);
     });
@@ -275,7 +383,7 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
       const before = await page.locator('#readingPane').evaluate(node => node.scrollTop);
       const percentage = await page.locator('#progressLabel').innerText();
       await page.locator('#tocButton').click();
-      const targets = page.locator('[data-go-document="bs-foundations"]');
+      const targets = page.locator('[data-go-document="practice-entry"]');
       await targets.nth(Math.min(7, await targets.count() - 1)).click();
       await page.waitForFunction(() => !document.querySelector('#sheetDialog').open && !window.__refinement.state.restoring);
       assert.match(await page.locator('#progressLabel').innerText(), /%/);
@@ -363,7 +471,7 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
 
     await check('TOC-anchor-consumed-and-later-reading-position-survives-reload', async env => {
       const page = await env.page(); await page.locator('#tocButton').click();
-      const targets = page.locator('[data-go-document="bs-foundations"]');
+      const targets = page.locator('[data-go-document="practice-entry"]');
       await targets.nth(Math.min(7, await targets.count() - 1)).click();
       await page.waitForFunction(() => !document.querySelector('#sheetDialog').open && !window.__refinement.state.restoring);
       assert.doesNotMatch(await page.evaluate(() => location.hash), /[?&]anchor=/);
@@ -399,8 +507,8 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
 
     await check('library-search-in-flight-completes-after-settings-open-and-close', async env => {
       const page = await env.page(); await page.locator('#libraryButton').click();
-      const document = env.mock.catalog.collections.find(item => item.id === 'binary-search').documents
-        .find(item => item.id === 'bs-compositions');
+      const document = env.mock.catalog.collections.find(item => item.id === 'practice-course').documents
+        .find(item => item.id === 'practice-composition');
       env.mock.delayDocument = new URL(document.url, origin).pathname;
       await page.locator('#librarySearch').fill('lower_bound');
       await poll(() => env.mock.heldDocument, 'Expected search to wait for a document');
@@ -413,7 +521,7 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
       assert.doesNotMatch(await page.locator('#bookList').innerText(), /正在检索/);
       assert.equal(await page.locator('#librarySearch').inputValue(), 'lower_bound');
       const groups = await page.locator('#bookList .search-row').evaluateAll(rows => rows.map(row => row.dataset.goCollection));
-      assert(groups.length > 0 && groups.every(group => group === 'binary-search'));
+      assert(groups.includes('practice-course') && groups.includes('additional-course'));
     });
   } finally { await browser.close(); }
   const report = { passed: failures.length === 0, results, failures, productionContacted: false,

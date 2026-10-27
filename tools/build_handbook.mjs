@@ -4,21 +4,43 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { marked } from 'marked';
 
-const ROOT=path.resolve(process.argv[2] || 'content/binary-search');
-const NAME=process.argv[3] || '二分查找';
-const SERIES=process.argv[4] || '求职算法总册';
-const TOC=SERIES === '求职C++实战总册' ? '问题与机制目录' : '题型目录';
+const REPOSITORY=path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const ROOT=path.resolve(process.argv[2] || 'content/practice-foundations');
+const NAME=process.argv[3] || '实战起点';
+const SERIES=process.argv[4] || '第二算法 · 实战与实现';
+const TOC='问题与实现目录';
 const source=await fs.readFile(path.join(ROOT,NAME+'.cpp'),'utf8');
 const draft=await fs.readFile(path.join(ROOT,NAME+'.source.md'),'utf8');
+const learningBytes=await fs.readFile(path.join(REPOSITORY,'catalog/learning.json'));
+const publicationBytes=await fs.readFile(path.join(REPOSITORY,'carrier/publications.json'));
+const learning=JSON.parse(learningBytes), publications=JSON.parse(publicationBytes);
+const documents=new Map(publications.collections.flatMap(c=>c.documents.map(d=>[d.id,d])));
+const questions=new Map();
+for(const q of learning.questions){
+  if(questions.has(q.id))throw new Error('Duplicate question '+q.id);
+  questions.set(q.id,q);
+}
+const questionReferences=[];
+// Expand prose references before injecting C++: generated links must never change code bytes.
+const linkedDraft=draft.replace(/\[\[(Q\d{6})\]\]/g,(_,id)=>{
+  const question=questions.get(id), document=documents.get(question?.document);
+  if(!question||!document)throw new Error('Unresolved question '+id);
+  questionReferences.push(id);
+  const target=path.relative(ROOT,path.join(REPOSITORY,document.path+'.html')).replaceAll('\\','/');
+  return `[${id} · ${question.title.replaceAll('[','\\[').replaceAll(']','\\]')}](${target}#${question.anchor})`;
+});
 const blocks=new Map();
-for(const m of source.matchAll(/\/\/ BEGIN ([\w-]+)\r?\n([\s\S]*?)\/\/ END \1/g))blocks.set(m[1],m[2].trim());
+for(const m of source.matchAll(/\/\/ BEGIN ([\w-]+)\r?\n([\s\S]*?)\/\/ END \1/g)){
+  if(blocks.has(m[1]))throw new Error('Duplicate code region '+m[1]);
+  blocks.set(m[1],m[2].trim());
+}
 let used=[];
-const md=draft.replace(/\{\{(?:(?:code|code-block):)?([\w-]+)\}\}/g,(_,name)=>{
+const md=linkedDraft.replace(/\{\{(?:(?:code|code-block):)?([\w-]+)\}\}/g,(_,name)=>{
   if(!blocks.has(name))throw new Error('Missing code '+name);
   used.push(name);return '```cpp\n'+blocks.get(name)+'\n```';
 });
 if(md.includes('{{'))throw new Error('Unresolved marker');
-if(used.length!==blocks.size)throw new Error('Some code is not in the document');
+if(used.length!==blocks.size||new Set(used).size!==used.length)throw new Error('Each code region needs one authoritative display');
 await fs.writeFile(path.join(ROOT,NAME+'.md'),md,'utf8');
 
 const esc=s=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
@@ -95,6 +117,6 @@ const html='<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta 
 await fs.writeFile(path.join(ROOT,NAME+'.html'),html,'utf8');
 await fs.mkdir(path.join(ROOT,'build'),{recursive:true});
 const sha=s=>createHash('sha256').update(s).digest('hex');
-await fs.writeFile(path.join(ROOT,'build/'+NAME+'.json'),JSON.stringify({codeBlocks:used,headings,sourceSha256:sha(draft),codeSha256:sha(source),markdownSha256:sha(md),htmlSha256:sha(html),builderSha256:sha(await fs.readFile(fileURLToPath(import.meta.url))),markdownBytes:Buffer.byteLength(md),htmlBytes:Buffer.byteLength(html)},null,2)+'\n','utf8');
+await fs.writeFile(path.join(ROOT,'build/'+NAME+'.json'),JSON.stringify({codeBlocks:used,questionReferences,headings,sourceSha256:sha(draft),codeSha256:sha(source),markdownSha256:sha(md),htmlSha256:sha(html),builderSha256:sha(await fs.readFile(fileURLToPath(import.meta.url))),learningSha256:sha(learningBytes),publicationsSha256:sha(publicationBytes),markdownBytes:Buffer.byteLength(md),htmlBytes:Buffer.byteLength(html)},null,2)+'\n','utf8');
 console.log(JSON.stringify({codeBlocks:used.length,sections:headings.filter(h=>h.depth===2).length,topics:headings.filter(h=>h.depth===3).length,markdownBytes:Buffer.byteLength(md)}));
 
