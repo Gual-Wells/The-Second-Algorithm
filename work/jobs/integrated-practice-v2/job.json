@@ -3,7 +3,43 @@
   "id": "integrated-practice-v2",
   "goal": "统一算法实战、手写与标准设施对照、全局Q唯一讲解及可恢复研究发布流程的正式重构交付",
   "createdAt": "2026-10-27T18:20:22.451058+00:00",
-  "evidence": [],
-  "lastGoodVerification": null,
-  "lastPreparedRelease": null
+  "evidence": [
+    {
+      "id": "5e8247f488f54020a754aaeecf813e4d",
+      "kind": "research",
+      "path": "work/refactor-20261028/content/research.md",
+      "summary": "实际复核来源与原题合同、材料读取边界、同方法实现和不同算法及18Q内容范围",
+      "outcome": "accepted",
+      "sha256": "151644c2a8c1204822d02b2ec3c6e2c156b53ac3c2e803266e6d5e1a75dd0cb2",
+      "inputHash": "76ce9046e3f939a0954edc3f3c611d56c97c797865cca01081f8950045fa7e81",
+      "recordedAt": "2026-10-27T18:22:38.569272+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "2f33358209cd44a9b2e0b83cf560f51c",
+      "kind": "review",
+      "path": "work/refactor-20261028/release-review.md",
+      "summary": "独立内容与工程审阅、Q2/Q15实际修订、输入闭包与隔离发布等缺陷关闭及根全量实跑",
+      "outcome": "accepted",
+      "sha256": "ea1fddfc6ebcb264aa962180ffea064a077cdcbf3e01785836ecb5b559a29695",
+      "inputHash": "76ce9046e3f939a0954edc3f3c611d56c97c797865cca01081f8950045fa7e81",
+      "recordedAt": "2026-10-27T18:22:39.001820+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    }
+  ],
+  "lastGoodVerification": {
+    "path": "work/jobs/integrated-practice-v2/verifications/16ddfb3a185e44819b1f0db72c79f07b.json",
+    "sha256": "4694b8d3c4be3e952b608302da32bd09987c98acfd020f92a328bd0bc1963a21",
+    "inputHash": "76ce9046e3f939a0954edc3f3c611d56c97c797865cca01081f8950045fa7e81"
+  },
+  "lastPreparedRelease": {
+    "path": "work/jobs/integrated-practice-v2/releases/2cdf948511414a87828b8f805d087a02.json",
+    "sha256": "f8932a71e8dfc57c2030cba2704a5c2e2e967e0f114038e220a82260ecc4547e",
+    "inputHash": "76ce9046e3f939a0954edc3f3c611d56c97c797865cca01081f8950045fa7e81"
+  },
+  "lastVerificationAttempt": {
+    "path": "work/jobs/integrated-practice-v2/verifications/16ddfb3a185e44819b1f0db72c79f07b.json",
+    "sha256": "4694b8d3c4be3e952b608302da32bd09987c98acfd020f92a328bd0bc1963a21",
+    "inputHash": "76ce9046e3f939a0954edc3f3c611d56c97c797865cca01081f8950045fa7e81"
+  }
 }
