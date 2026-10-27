@@ -43,6 +43,7 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Check C++ references against independent results
         run: |
+          g++ --version
           mkdir -p .local/ci
           for source in tests/cpp/*_test.cpp; do
             output=".local/ci/$(basename "$source" .cpp)"

@@ -1,7 +1,13 @@
 {
   "compiler": "GCC16.2.0 w64devkit onWindows",
   "standard": "C++17",
-  "runtime_test": "cpp_object_interfaces_test.cpp passed with -O2 -Wall -Wextra -Wpedantic -D_GLIBCXX_ASSERTIONS -fno-elide-constructors; no diagnostics",
+  "runtime_test": "After the CI fixture fix, cpp_object_interfaces_test.cpp passed locally with -O2 -Wall -Wextra -Wpedantic -D_GLIBCXX_ASSERTIONS, both with and without -fno-elide-constructors; no diagnostics. Linux outcomes are supplied by the exact Git commit's validate.yml run, not inferred from this local result.",
+  "allocation_failure_regression": {
+    "observed_failure": "Linux CI run 40475402889 at commit 3bc13a577e49e97d5929a616067bdb02ee306e7f did not observe bad_alloc from the direct target = a failure-injection expression; allocation elimination made this fixture unreliable. The existing non-inline helper covered only copy construction, not assignment.",
+    "fixture_fix": "Copy construction and copy assignment now pass through opaque helper functions. GCC uses noipa; Clang/MSVC select noinline. Ownership escapes through the returned IntBuffer or the caller-owned assignment target. The bad_alloc and unchanged-source/target assertions are preserved; production IntBuffer is unchanged.",
+    "verified_here": "Windows GCC16.2.0, C++17, O2 runtime checks with and without -fno-elide-constructors.",
+    "not_yet_verified": "Local Clang/MSVC fallback paths have not been executed. Linux verification is tracked independently in the exact Git commit's CI run."
+  },
   "independent_source_compile": "chapter.cpp compiled separately with strict warnings",
   "probes": [
     {

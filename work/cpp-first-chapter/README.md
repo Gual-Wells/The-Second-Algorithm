@@ -68,6 +68,6 @@ v1交接动作已完成，根Agent接受后进入工程。该阶段停留来自�
 - 自己的实现验证：`tests/cpp/cpp_object_interfaces_test.cpp`，包含真实分配失败注入后目标不变、深复制独立、空／移动后／自赋值状态、ref-qualified getter结果类型、view精确长度、文件资源、shared／weak与alias。
 - 正负编译检查：`tests/cpp/verify_object_interfaces.py`读取同目录`cpp_object_interfaces_compile.cpp`，一个合法回退与三个预期不合式分支分别编译，非法程序不执行。它是可重复执行入口，不将人工历史通过冒称已被CI接入；共享CI由根Agent负责。
 
-本机GCC16.2.0，C++17，严格警告、GLIBCXX断言和禁用可选复制省略下，主测试实跑及源码独立编译均通过且无诊断；四个隔离编译探针符合预期。失败注入初版曾依赖可被编译器消除的分配调用计数；已撤掉该计数断言，使用不内联复制入口验证可观察失败后的对象状态，不把分配次数当作生命期证明。MSVC、sanitizer及上游大学autograder没有运行。
+本机GCC16.2.0，C++17，严格警告、GLIBCXX断言和禁用可选复制省略下，主测试实跑及源码独立编译均通过且无诊断；四个隔离编译探针符合预期。失败注入初版曾依赖可被编译器消除的分配调用计数，后撤掉计数并只为复制构造增加不内联入口；直接复制赋值仍未隔离，首正式提交的Linux CI `40475402889`因此没有观察到预期bad_alloc。这是测试夹具缺口。现将复制构造和复制赋值均经隔离入口执行：GCC用`noipa`，拥有资源分别经返回值和调用方目标对象逃逸，保留异常与失败后原对象状态断言，不修改生产IntBuffer。修复后本机O2、严格警告和GLIBCXX断言下，开启／关闭`-fno-elide-constructors`两组均通过且无诊断；Linux CI由根Agent复跑，不能将本机结果冒称Linux已通过。Clang／MSVC隔离属性分支、sanitizer及上游大学autograder没有运行。不把分配次数当作生命期证明。
 
 本次正式登记：章ID `cpp-objects-interfaces`，篇ID `cpp-object-transfer`，显示题名《对象如何传递》，path `content/cpp-object-interfaces/对象如何传递`。根已接入正负编译探针CI，复跑全部C++17参考、完整载体及两章实际阅读/复制/笔记/断网重启检查；发布结果见[正式版记录](../../research/2026-10-27/first-formal-release.md)。下一章范围尚未确定，不把本章排除清单直接变成下一章。

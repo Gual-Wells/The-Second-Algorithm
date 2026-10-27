@@ -15,6 +15,15 @@ bool fail_next_array = false;
 #else
 #define PROBE_NOINLINE
 #endif
+#if defined(__GNUC__) && !defined(__clang__)
+#define PROBE_OPAQUE __attribute__((noipa))
+#elif defined(__clang__)
+#define PROBE_OPAQUE __attribute__((noinline))
+#elif defined(_MSC_VER)
+#define PROBE_OPAQUE __declspec(noinline)
+#else
+#define PROBE_OPAQUE
+#endif
 PROBE_NOINLINE
 void* operator new[](std::size_t size) {
     if (allocation_probe::fail_next_array) {
@@ -36,8 +45,15 @@ template<class Error, class F> bool throws(F f) {
     try { f(); } catch (const Error&) { return true; }
     return false;
 }
-PROBE_NOINLINE oi::IntBuffer copy_buffer(const oi::IntBuffer& source) {
+// Keep both failure-injected operations opaque to their callers. The owned
+// allocation escapes through the returned value or the caller's target, so
+// caller-side knowledge cannot discard the operation being tested.
+PROBE_OPAQUE oi::IntBuffer copy_buffer(const oi::IntBuffer& source) {
     return oi::IntBuffer(source);
+}
+PROBE_OPAQUE void assign_buffer(oi::IntBuffer& target,
+                                const oi::IntBuffer& source) {
+    target = source;
 }
 
 void value_and_interface_checks() {
@@ -72,7 +88,7 @@ void buffer_checks() {
         oi::IntBuffer target(2);
         target.at(0) = 7; target.at(1) = 8;
         allocation_probe::fail_next_array = true;
-        assert(throws<std::bad_alloc>([&] { target = a; }));
+        assert(throws<std::bad_alloc>([&] { assign_buffer(target, a); }));
         assert(target.size() == 2 && target.at(0) == 7 && target.at(1) == 8);
         assert(a.size() == 3 && a.at(2) == 3);
         allocation_probe::fail_next_array = true;
