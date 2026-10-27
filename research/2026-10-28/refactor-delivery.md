@@ -9,3 +9,7 @@
 有效标准：AGENTS、共同协议、研究部、实现标准、任务执行、模型及恢复/载体说明已一致更新。CI按实际登记目标运行，workflow_dispatch可验证已有job/准备；生产发布需main/显式输入及配置的CF secrets，未配置云端secrets时本机可用已有授权运行同一门禁，不伪称已配置新凭据。没有新增定时、订阅、AI费用、正文数据库或检索服务。
 
 本次研究任务：integrated-practice-v2。发布准备和部署结果将保存到work/jobs/integrated-practice-v2，准备包不可变，线上成功另存receipt。
+
+## 实际发布
+
+已通过有效准备包部署，线上匿名保护与固定artifact的SW build核验成功。构建 `be115fc8ac9c667582d199ffe9a0be485cfc3ade450146f1451d123308aedb3c`，来源 `https://second-algorithm.pages.dev`。实际部署记录：`work/jobs/integrated-practice-v2/deployments/1793125422686.json`。GitHub main代码提交为 `69f5cb339de9ed717dd7fb2865a279cceba574e0`；对应的 [GitHub Actions 运行](https://github.com/Gual-Wells/The-Second-Algorithm/actions/runs/40559431229) 已 completed/success。Ubuntu、Python 3.12、Node 24、系统GCC与实际Chromium完成全套检查；push运行按设计不重复触发发布。
