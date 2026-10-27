@@ -1,0 +1,131 @@
+{
+  "scope": "New first chapter; fresh evidence only",
+  "pythonTests": 57,
+  "carrierTests": 66,
+  "registeredTargets": {
+    "run": 1,
+    "compile": 4
+  },
+  "registeredRunAssertions": 649268,
+  "browser": {
+    "passed": true,
+    "results": [
+      {
+        "name": "viewport-matrix-preserves-paper-code-selection-and-Q-sheet",
+        "passed": true
+      },
+      {
+        "name": "built-current-publication-renders-content-or-explicit-empty-withdrawal",
+        "passed": true
+      },
+      {
+        "name": "unified-course-and-Q-index-link-to-one-explanation-and-return",
+        "passed": true
+      },
+      {
+        "name": "Q-same-document-browser-back-restores-the-original-history-entry",
+        "passed": true
+      },
+      {
+        "name": "question-number-deep-link-resolves-to-the-registered-main-position",
+        "passed": true
+      },
+      {
+        "name": "same-browser-two-page-late-ACK-and-reload",
+        "passed": true
+      },
+      {
+        "name": "note-edited-in-flight-is-rebased-and-saved-again-without-old-pending-slots",
+        "passed": true
+      },
+      {
+        "name": "same-text-older-base-other-tab-draft-is-not-invisible-in-recovery",
+        "passed": true
+      },
+      {
+        "name": "failed-local-backup-cannot-discard-current-note-when-adopting-cloud",
+        "passed": true
+      },
+      {
+        "name": "native-anchor-offset-marks-the-reached-first-heading-current",
+        "passed": true
+      },
+      {
+        "name": "TOC-clear-keeps-input-and-keyboard-focus",
+        "passed": true
+      },
+      {
+        "name": "offline-global-search-reports-unavailable-documents",
+        "passed": true
+      },
+      {
+        "name": "slow-cross-document-keeps-reader-and-can-cancel-without-late-replacement",
+        "passed": true
+      },
+      {
+        "name": "return-button-separate-from-progress-and-restores-reading-place",
+        "passed": true
+      },
+      {
+        "name": "sheet-browser-back-closes-and-source-parent-returns-to-settings",
+        "passed": true
+      },
+      {
+        "name": "sheet-close-and-immediate-reopen-in-same-task-retains-new-dialog",
+        "passed": true
+      },
+      {
+        "name": "visual-viewport-keyboard-fits-sheet-and-pinch-zoom-removes-keyboard-overrides",
+        "passed": true
+      },
+      {
+        "name": "TOC-anchor-consumed-and-later-reading-position-survives-reload",
+        "passed": true
+      },
+      {
+        "name": "pure-code-click-does-not-reveal-controls-and-pointer-hold-keeps-controls-visible",
+        "passed": true
+      },
+      {
+        "name": "library-search-in-flight-completes-after-settings-open-and-close",
+        "passed": true
+      }
+    ],
+    "failures": [],
+    "productionContacted": false,
+    "realDatabaseModified": false,
+    "testedAt": "2026-10-27T23:17:23.686Z"
+  },
+  "upgrade": {
+    "passed": true,
+    "realBrowserAndServiceWorker": true,
+    "heldNewWorkerWhileNewAppRan": true,
+    "prematureRequests": 0,
+    "offlineRestart": true,
+    "unsentNotesPreserved": true,
+    "checkUpdatesWaitsForTakeover": true,
+    "manualReloadOpensFormalChapter": true,
+    "withdrawalPurgedCachedJsonCppMarkdown": true,
+    "withdrawnOldRoutesOffline404": true,
+    "withdrawnEmptyCatalogOfflineRestart": true,
+    "withdrawalUnsentNotesPreserved": true,
+    "automaticReload": false,
+    "productionContacted": false,
+    "databaseModified": false
+  },
+  "artifact": {
+    "version": "fba6f25730df593616edba28e2c318cf2885ed846343b527253a1e5882b33121",
+    "buildID": "10caff9dc7c5ea3109aa6ed58e29eb9cfc6146f9d2fe325320d584ed639db65d",
+    "gitRevision": "879d98f9fa80df80dfd6182e3aaaaecb1d098270",
+    "publicationState": "active",
+    "operation": "content-release",
+    "mode": "full",
+    "documents": 1,
+    "codeBlocks": 15
+  },
+  "authorities": {
+    "content/boundary-feasibility/边界与答案.source.md": "43c1acb807dab80cf952d4b27a7f0fa08f039deaa45e7743ead7e58045c74051",
+    "content/boundary-feasibility/边界与答案.cpp": "d6e524cc40b6c61a053d83284be8717c4aaecde29d04c48a9ade18194281dfa1",
+    "tests/cpp/boundary_feasibility_test.cpp": "0e0483c1461ffb276aed603766a10a871bd2dc672d70dafafe69042b477fd57a"
+  }
+}

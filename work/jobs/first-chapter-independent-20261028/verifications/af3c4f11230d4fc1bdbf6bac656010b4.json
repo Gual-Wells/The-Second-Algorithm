@@ -1,0 +1,202 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-10-27T23:24:51.189066+00:00",
+  "inputHash": "6050edbcdc8071bbde3a549f719e8b500de81ca2a4c6e65ceb6e41086e8641a6",
+  "inputs": {
+    ".github/workflows/validate.yml": "979481c365d31e58d7d54de6c4d98dd672164d61ed7c197ee006a88a4e144f63",
+    "AGENTS.md": "fe0fb580e97e9aa0214cbd8779ab50c5610f0ebe7744befa5fedccbfb13873c9",
+    "carrier/publications.json": "daab160b280e4d35977ac7e3f1090086cd1583bc0bda637c72a64d262e9bb9ac",
+    "catalog/learning.json": "28b82a0b99f279de281a514827e9be6694fb1c70cc622e6a0d978a570812e4a1",
+    "catalog/scope.json": "aa935ae39fa4feda95a839e3277858484ad739b6f7c01adc7ff0d28967658187",
+    "content/boundary-feasibility/build/边界与答案.json": "ee0a9d5d6783ba078397e3b8669f2c90c4e2d3b0e12687e0a33d752e0cfd509e",
+    "content/boundary-feasibility/边界与答案.cpp": "d6e524cc40b6c61a053d83284be8717c4aaecde29d04c48a9ade18194281dfa1",
+    "content/boundary-feasibility/边界与答案.html": "2ca7058a473020f964df7250cb35bd1d7dbfe8544ffe738e4e363e22a3204802",
+    "content/boundary-feasibility/边界与答案.md": "7e9b9c354c391158dd2ad8c9f0216165715771ba6828b48eb7efbf97320edef3",
+    "content/boundary-feasibility/边界与答案.source.md": "43c1acb807dab80cf952d4b27a7f0fa08f039deaa45e7743ead7e58045c74051",
+    "docs/CONTENT_MODEL.md": "17e00ce862b282992dde036ad7674a070a50efa230e6b93863fbb41f0a2476c8",
+    "migrations/0001_owner_state.sql": "52e7527dcc9e0b234ebcd1fdf9968b191f2fe6ec215401753feacc962dfe25a6",
+    "package-lock.json": "255ec1c3e4d5dfdaa21a1e41ea834bba976be2cafd6323ebeca4b82586c276f4",
+    "package.json": "4f94b58d1e1cf4e8cc6cd7f26ce5d2d0d86a7cffee59edf720803bfe37ffe52b",
+    "protocol/CONTENT_PIPELINE.md": "80abad93c498fde79298ffba0f8f4273ec5ccb6a943e7912c40bf679d0b7ebad",
+    "protocol/IMPLEMENTATION_STANDARD.md": "4e8a3606d5defaab862e5dc773cd7ba773a1639b3e3f2c742b8df3fbca523b10",
+    "protocol/RESEARCH_DEPARTMENT.md": "76c4d2c21335b5446369794815fce21e4fa49f22dfaa96e6885c76a0f96ddd93",
+    "protocol/TASK_EXECUTION.md": "bc1503e26782a3a9e2a9bc4ec4bdb1b2477c3e832889a679ed69d38ef6bdd6e6",
+    "scripts/build-carrier.mjs": "37adc349ee13a7c2639f629703b6041d687ce9b59d1c9fadd112382bbaaebaef",
+    "scripts/build-course.mjs": "0af19aaced4aa61a09fe0db74fab926cdee34a63ebc815de6b957dddf8e28408",
+    "scripts/check-carrier-browser.cjs": "6361abaf8f3020dd9dcb718459a0a6034ab482d157ec4049bf5d030e9e341c77",
+    "scripts/check-carrier-upgrade.cjs": "29cdaf83cca622d7ded8b47ff510ca62d8c2d178ee240c2f3aeab5480eef637c",
+    "scripts/check-project.mjs": "c1f196b99203b013b0b46f9f8f67a5c5080cd20a9dfba876f6b97d8a8f0967ee",
+    "scripts/deploy-carrier.mjs": "60e7faf45d4aff3ecd6b7170a691bc2fc414fca41642eedc1c860ea86591a196",
+    "scripts/make-carrier-icons.py": "d5230ae1c92d86016b101f5ad42a43d23c3543653cd0d5e547603d093052fa35",
+    "second_algorithm/__init__.py": "3abd7d41bb08c38ac5f07cd59a8a38c6e67d7cf499f1a5c18e3845556e0be2ab",
+    "second_algorithm/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "second_algorithm/catalog.py": "e184865eea0ff01ae5faefee1d541014136cc71d63836a055b2b62fbc72efaa3",
+    "second_algorithm/cli.py": "673e9f1cce1ce4f6280cff36082775ace1a8d7c9ca4f0878296f31be09d344ce",
+    "second_algorithm/collect.py": "57b327059dcee86689965b813705c03511395242dd9e3cfd603f1f41e06e631a",
+    "second_algorithm/learning.py": "0e0cafc541d83d3d3f4aeec10508334138e571daad574be62d5ce8e3e7ed4f3f",
+    "second_algorithm/storage.py": "dd5c07c94e62d55dd6c71b84d8077058b7cad2ab1150cdf13e0b738b26100f41",
+    "second_algorithm/workflow.py": "a985fcdec26c5fa2dccf60236e44d21db9829865af840b6b59c9a85802e91918",
+    "server/auth.mjs": "6464611e9f358f1ed6184309a86e18890c1b1beb5d43d4091add36379bbb90eb",
+    "server/worker.mjs": "329d51ce22f608a2ee3a0f2abb72df1c2f7b745eccd35a1437c1f766a8e4a894",
+    "test/carrier-build.test.mjs": "09644ef48fa65e3f87e7766b2a9731df00fd620639056d4e9a1a3ce2c6c336c2",
+    "test/carrier-deploy.test.mjs": "ef093a3035ee4e41df6ad6c3923e60f667450018864f1c8886ca208b92edd73b",
+    "test/carrier-icons.test.mjs": "7d06a17b7f89e7e7e1beda7ea9e2ab28cfb1f5d5104d74883fa37ff58f034cd6",
+    "test/carrier-notes.test.mjs": "5809c1f50788579e039b7f2a5b32963e3cbbdd4820fbb5b40c994de98523253b",
+    "test/carrier-server.test.mjs": "758ab8e8110073414dec555a7e8a593982c585ec6c151d5eeaa7a740b858555d",
+    "test/carrier-sw.test.mjs": "0af3ef8a0045f7e4d6c845a00b07b94aec44e3585de1b30d4630582294cb3a13",
+    "test/carrier-worker-release.test.mjs": "f5ea8a08a08d53d2d6c547a2ee809526d823f5bf869ca8863d539fc97d5eeaec",
+    "tests/cpp/boundary_feasibility_entry.cpp": "c768f605c5d2a8f810393e0c3bdc51aec866d43aaffa80e9a5a051487d4e9155",
+    "tests/cpp/boundary_feasibility_test.cpp": "0e0483c1461ffb276aed603766a10a871bd2dc672d70dafafe69042b477fd57a",
+    "tests/cpp/verify_object_interfaces.py": "686c4d4f8191e9b0d65dfd04b3c55cfa1443dece3a7d0506753863e30a2a7a38",
+    "tests/test_learning_workflow.py": "6ce1cecfcb9b3f0d48aceae3a5cf488df8b65099e93ff7daa0336e7996529616",
+    "tests/test_reading_assets.py": "dab58182a1d8960d32a47ba804fffe8a75ab18472667d0361ef0cd4558d298b8",
+    "tests/test_research_tools.py": "757ce7399510ed4bebf29464a7abd1b09e65e2cf3a911ee5efc20d92646a73cc",
+    "tools/build_handbook.mjs": "c19daf7179d3995596ec428120d84cf29c3af99a69821a2f9939f5083d67ea8b",
+    "web/DESIGN.md": "5a0181f35afe6546b2fea35e11c3c3a380f74660531aaeed5ac41e58b86f01b7",
+    "web/app.js": "5a7e849204b0ed3778a0a31f09d37ae3924099b091dafd20187666f7cc08d8b3",
+    "web/auth.js": "9f8db119e19cc7ac887e96aa6cefe8bc153759c316bb611472b91a2507b2fd87",
+    "web/icons/apple-touch-icon-series1.png": "dc478907d0c2866312e8f6cc2db15824c7badff3c6d4f4882438092a00e6e664",
+    "web/icons/apple-touch-icon.png": "dc478907d0c2866312e8f6cc2db15824c7badff3c6d4f4882438092a00e6e664",
+    "web/icons/build.json": "36aae61c67a67af97f2377eb4125663cea2ca0d8950aa646b8644b0cb3e813c9",
+    "web/icons/icon-192.png": "7dc931fd40e3513017a6e3a8f6cce7cbd156f43bfe1ac273858a5e80a1b545aa",
+    "web/icons/icon-512.png": "6e2c002fc0cbe0cd97f560a808be06e24898260b550098848aaeee5fc1240353",
+    "web/icons/icon.svg": "497c4629840c349d1a23d27cb4a2bf9330c7f097974be9ab906a2253a6638ed3",
+    "web/index.html": "86cdb85489918972c60a2b9f46cf7a950be0057506096a8d20566be500e6d6e2",
+    "web/manifest.webmanifest": "7c159b2c915dd26ce30bc5a457c835c6ea23a786c6ceded66930e5443ed74caf",
+    "web/notes-journal.js": "f744ecd13a41cc472ae49de132a4e93bf72b92c6ead06b55734c5c4957afe0a6",
+    "web/robots.txt": "331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1",
+    "web/styles.css": "84781009ab7ee618d5bfcdc76a2cb58f4bdfec65bba7d3946d41229f99304a97",
+    "web/sw.js": "21b231115a5932ebf1e4f2ff57fae1b3170374c2f61c97248f49fe0e990133ee",
+    "web/worker-release.js": "955398614ccfdf7f3e9a663a8eb47813b67e05e43d6d19bac9cd1e4e5ef35d01",
+    "wrangler.jsonc": "04125a5156e82afc9474e7a9cb4b60316fa148c630219b9fa055cb794eaeaa75"
+  },
+  "publicationState": "active",
+  "operation": "content-release",
+  "compiler": {
+    "name": "c++.exe",
+    "exit": 0,
+    "stdout": "c++ (GCC) 16.2.0\nCopyright (C) 2026 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+    "stderr": "",
+    "timeout": false
+  },
+  "cppVerification": "passed",
+  "targets": [
+    {
+      "id": "boundary-feasibility-independent",
+      "kind": "run",
+      "standard": "c++17",
+      "flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-D_GLIBCXX_ASSERTIONS"
+      ],
+      "compile": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false
+      },
+      "run": {
+        "exit": 0,
+        "stdout": "seed=0x6B6F6B6F\nassertions=649268\nboundary_cases=8555\nkoko_arrays=1872\nkoko_minimum_calls=12902\nkoko_predicate_calls=83258\nfactory_arrays=845\nfactory_minimum_calls=4596\nfactory_predicate_calls=119846\ndivision_arrays=3892\ndivision_minimum_calls=25024\ndivision_predicate_calls=343755\nPASS: independent boundary, hour simulation, machine countdown, exact cut sets\n",
+        "stderr": "",
+        "timeout": false
+      },
+      "passed": true
+    },
+    {
+      "id": "boundary-lc34-entry",
+      "kind": "compile",
+      "standard": "c++17",
+      "flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-D_GLIBCXX_ASSERTIONS",
+        "-DSECOND_ALGORITHM_LC34"
+      ],
+      "compile": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false
+      },
+      "run": null,
+      "passed": true
+    },
+    {
+      "id": "boundary-lc875-entry",
+      "kind": "compile",
+      "standard": "c++17",
+      "flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-D_GLIBCXX_ASSERTIONS",
+        "-DSECOND_ALGORITHM_LC875"
+      ],
+      "compile": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false
+      },
+      "run": null,
+      "passed": true
+    },
+    {
+      "id": "boundary-factory-entry",
+      "kind": "compile",
+      "standard": "c++17",
+      "flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-D_GLIBCXX_ASSERTIONS",
+        "-DSECOND_ALGORITHM_FACTORY_MAIN"
+      ],
+      "compile": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false
+      },
+      "run": null,
+      "passed": true
+    },
+    {
+      "id": "boundary-division-entry",
+      "kind": "compile",
+      "standard": "c++17",
+      "flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-D_GLIBCXX_ASSERTIONS",
+        "-DSECOND_ALGORITHM_DIVISION_MAIN"
+      ],
+      "compile": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false
+      },
+      "run": null,
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "semanticCompletenessCertified": false,
+  "limits": "Real local targets only; no online submission, learning measurement, or automatic semantic review."
+}

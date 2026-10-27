@@ -343,7 +343,8 @@ export async function buildLibrary(root, output, publications, gitRevision, lear
   for (const authority of byDocument.values()) {
     marked.walkTokens(marked.lexer(authority.draft), token => {
       if (token.type !== 'heading') return;
-      const match = token.text.match(/^(Q[0-9]{6})\s*·\s*(.+)$/);
+      const visibleHeading = decodeEntities(marked.parseInline(token.text).replace(/<[^>]+>/g, ''));
+      const match = visibleHeading.match(/^(Q[0-9]{6})\s*·\s*(.+)$/);
       if (!match) return;
       if (token.depth !== 3 || declared.has(match[1])) throw new Error('Question must have exactly one canonical H3 explanation: ' + match[1]);
       declared.set(match[1], { document: authority.id, title: match[2] });

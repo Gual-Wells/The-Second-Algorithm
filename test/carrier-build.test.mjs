@@ -40,19 +40,19 @@ async function dispose(directory) {
   await fs.rm(directory, { recursive: true, force: true });
 }
 
-async function fixture() {
+async function fixture({ questionHeading = 'Why a range?', questionTitle = 'Why a range?' } = {}) {
   const root = await temporary();
   for (const name of ['tools', 'content/unit/build', 'carrier', 'catalog', 'tests/cpp', 'research', '.local'])
     await fs.mkdir(path.join(root, name), { recursive: true });
   const descriptor = { id: 'fixture-doc', title: 'Fixture', path: 'content/unit/Fixture' };
-  const source = '# Fixture\n\n算法实战参考 · 具体问题、机制与参考实现\n\n<a id="manual"></a>\n\n## Section\n\n{{one}}\n\n<a id="q000001"></a>\n\n### Q000001 · Why a range?\n\nOne canonical explanation.\n\n```cpp\nint direct = 2;\n```\n\n[记录](../../research/notes.md)\n';
+  const source = '# Fixture\n\n算法实战参考 · 具体问题、机制与参考实现\n\n<a id="manual"></a>\n\n## Section\n\n{{one}}\n\n<a id="q000001"></a>\n\n### Q000001 · ' + questionHeading + '\n\nOne canonical explanation.\n\n```cpp\nint direct = 2;\n```\n\n[记录](../../research/notes.md)\n';
   const cpp = '#include <string>\n// BEGIN one\nint sum(int a, int b) { return a + b; }\n// END one\n';
   const markdown = source.replace('{{one}}', '```cpp\nint sum(int a, int b) { return a + b; }\n```');
   const html = '<h1>Fixture</h1><h2 id="section">Section</h2>';
   const builder = '// synthetic fixture builder\n';
   const collection = { id: 'fixture-course', kind: 'chapter', chapterNumber: 1, title: 'Fixture collection', documents: [descriptor] };
   const publications = JSON.stringify({ schemaVersion: 2, collections: [collection] });
-  const learning = { schemaVersion: 1, questions: [{ id: 'Q000001', title: 'Why a range?', document: descriptor.id,
+  const learning = { schemaVersion: 1, questions: [{ id: 'Q000001', title: questionTitle, document: descriptor.id,
     anchor: 'q000001', prerequisites: [], sources: ['https://example.com/contract'] }],
     tasks: [{ id: 'sum', title: 'Sum', document: descriptor.id, contract: 'Two representable integers',
       methods: [{ id: 'addition', title: 'Addition', invariant: 'Add once', implementations: [{ id: 'sum-manual',
@@ -61,7 +61,7 @@ async function fixture() {
     targets: [{ id: 'fixture-run', kind: 'run', source: 'tests/cpp/fixture_test.cpp', standard: 'c++17', timeoutSeconds: 30 }] };
   const learningBytes = JSON.stringify(learning);
   const manifest = { codeBlocks: ['one'], headings: [{ depth: 1, id: 'fixture', text: 'Fixture' },
-    { depth: 2, id: 'section', text: 'Section' }, { depth: 3, id: 'question-heading', text: 'Q000001 · Why a range?' }], sourceSha256: hash(source), codeSha256: hash(cpp),
+    { depth: 2, id: 'section', text: 'Section' }, { depth: 3, id: 'question-heading', text: 'Q000001 · ' + questionTitle }], sourceSha256: hash(source), codeSha256: hash(cpp),
     markdownSha256: hash(markdown), htmlSha256: hash(html), builderSha256: hash(builder) };
   manifest.learningSha256 = hash(learningBytes); manifest.publicationsSha256 = hash(publications);
   await fs.writeFile(path.join(root, 'content/unit/Fixture.source.md'), source);
@@ -220,6 +220,18 @@ test('Q relationships reject duplicate explanations, unknown references and cycl
     await assert.rejects(buildLibrary(f.root, path.join(f.root, '.local/q-bad'), manifest, gitRevision, wrongTitle), /unique registration/);
     const absentRegion = structuredClone(f.learning); absentRegion.tasks[0].methods[0].implementations[0].regions = ['absent'];
     await assert.rejects(buildLibrary(f.root, path.join(f.root, '.local/q-region'), manifest, gitRevision, absentRegion), /region is absent/);
+  } finally { await dispose(f.root); }
+});
+
+test('Q identity uses the visible heading while retaining inline C++ and emphasis formatting', async () => {
+  const f = await fixture({ questionHeading: 'Use `std::vector<int>&` **without copies**',
+    questionTitle: 'Use std::vector<int>& without copies' });
+  const publications = { schemaVersion: 2, collections: [f.collection] };
+  try {
+    const result = await buildLibrary(f.root, path.join(f.root, '.local/formatted-q'), publications, gitRevision);
+    assert.equal(result.catalog.questions[0].title, 'Use std::vector<int>& without copies');
+    const wrong = structuredClone(f.learning); wrong.questions[0].title = 'Use a different type';
+    await assert.rejects(buildLibrary(f.root, path.join(f.root, '.local/formatted-q-wrong'), publications, gitRevision, wrong), /unique registration/);
   } finally { await dispose(f.root); }
 });
 

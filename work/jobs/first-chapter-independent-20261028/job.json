@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "first-chapter-independent-20261028",
+  "goal": "按修正后指令从零独立研究并发布新的第一章；不继承旧选题、旧稿、旧任务状态或旧验收结论，仅沿用有效协议、资料入口和工具",
+  "createdAt": "2026-10-27T23:04:24.479810+00:00",
+  "evidence": [
+    {
+      "id": "3c739cfc1e2f4c2d9d6cbd0a3fb19c16",
+      "kind": "research",
+      "path": "work/fresh-first-20261028/release-research.md",
+      "summary": "本次从空任务独立比较选题、实际原题与教材方法核对、新稿新源码和必要C++Q；不继承旧内容或验收",
+      "outcome": "accepted",
+      "sha256": "5386a92e8f00e977aab9c78cd878a9e3e28a74d2494be92d2ac3416f3e138e62",
+      "inputHash": "6050edbcdc8071bbde3a549f719e8b500de81ca2a4c6e65ceb6e41086e8641a6",
+      "recordedAt": "2026-10-27T23:24:50.317583+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "63a6a5aea6d745c2b601380cee407514",
+      "kind": "review",
+      "path": "work/fresh-first-20261028/release-review.md",
+      "summary": "本次新稿独立语义与独立oracle修订闭环、真实入口和浏览器核验；仅当前源稿与源码放行",
+      "outcome": "accepted",
+      "sha256": "5a1c705d109603e1bc26e0e0bce719efc407e571bb174cd32280bc8d24c5e6f8",
+      "inputHash": "6050edbcdc8071bbde3a549f719e8b500de81ca2a4c6e65ceb6e41086e8641a6",
+      "recordedAt": "2026-10-27T23:24:50.693234+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    }
+  ],
+  "lastGoodVerification": {
+    "path": "work/jobs/first-chapter-independent-20261028/verifications/af3c4f11230d4fc1bdbf6bac656010b4.json",
+    "sha256": "c3b23f72aabb32fb080a2f2666304d5133bf69e19bb75b39abb481ea5f5debe2",
+    "inputHash": "6050edbcdc8071bbde3a549f719e8b500de81ca2a4c6e65ceb6e41086e8641a6"
+  },
+  "lastPreparedRelease": {
+    "path": "work/jobs/first-chapter-independent-20261028/releases/d9b333d900ed41aba425728973018632.json",
+    "sha256": "dd781e886c6bbad243439312af376cca692ba429aecc1882fa1a705d5887104c",
+    "inputHash": "6050edbcdc8071bbde3a549f719e8b500de81ca2a4c6e65ceb6e41086e8641a6"
+  },
+  "lastVerificationAttempt": {
+    "path": "work/jobs/first-chapter-independent-20261028/verifications/af3c4f11230d4fc1bdbf6bac656010b4.json",
+    "sha256": "c3b23f72aabb32fb080a2f2666304d5133bf69e19bb75b39abb481ea5f5debe2",
+    "inputHash": "6050edbcdc8071bbde3a549f719e8b500de81ca2a4c6e65ceb6e41086e8641a6"
+  }
+}

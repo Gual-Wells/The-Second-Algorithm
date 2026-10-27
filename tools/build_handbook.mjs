@@ -5,8 +5,10 @@ import { fileURLToPath } from 'node:url';
 import { marked } from 'marked';
 
 const REPOSITORY=path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ROOT=path.resolve(process.argv[2] || 'content/practice-foundations');
-const NAME=process.argv[3] || '实战起点';
+if (!process.argv[2] || !process.argv[3])
+  throw new Error('Specify <content-directory> <document-name>, or use npm run build:content for the current publication manifest.');
+const ROOT=path.resolve(process.argv[2]);
+const NAME=process.argv[3];
 const SERIES=process.argv[4] || '第二算法 · 实战与实现';
 const TOC='问题与实现目录';
 const source=await fs.readFile(path.join(ROOT,NAME+'.cpp'),'utf8');

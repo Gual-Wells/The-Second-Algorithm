@@ -1,0 +1,333 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>边界与答案 · 第二算法 · 实战与实现</title><style>
+:root{color-scheme:light;--ink:#202b34;--heading:#193b51;--blue:#1e5b80;--line:#d9e1e7;--paper:#fff;--back:#f2f5f7}
+*{box-sizing:border-box}html{scroll-padding-top:85px}body{margin:0;background:var(--back);font-family:'Noto Sans SC','Microsoft YaHei','Segoe UI',sans-serif;font-size:17px;line-height:1.78;color:var(--ink);font-weight:400}
+a{color:var(--blue);text-underline-offset:3px;text-decoration-thickness:1px}a:hover{color:#0a3b5c;text-decoration-thickness:2px}
+.topbar{height:61px;background:#fafcfd;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:0 max(24px,calc((100vw - 1230px)/2));gap:24px}
+.brand{font-size:16px;font-weight:600;color:var(--heading);white-space:nowrap}.brand span{font-weight:400;color:#5b6975;margin-left:17px;font-size:14px}.files{display:flex;gap:22px;font-size:14px;white-space:nowrap}.files a{text-decoration:none}
+.layout{max-width:1230px;margin:0 auto;display:grid;grid-template-columns:240px minmax(0,1fr);gap:28px;padding:28px 24px 65px}
+.sidebar{position:sticky;top:86px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;padding:2px 11px 24px 0;scrollbar-width:thin}
+.toc-title{font-size:13px;color:#526474;letter-spacing:.08em;margin:0 0 13px 10px;font-weight:600}
+.toc a{display:block;line-height:1.6;text-decoration:none;border-left:2px solid transparent;border-radius:0 3px 3px 0;padding:5px 8px 5px 11px;color:#445766;font-size:13px}
+.toc a.group{font-weight:600;color:#203f55;font-size:14px;margin-top:15px}.toc a.group:first-child{margin-top:0}.toc a.topic{padding-left:20px}.toc a:hover{background:#e5edf3}.toc a.active{color:#104d77;background:#e2ecf3;border-left-color:#2b688e;font-weight:600}
+main{min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:36px 42px 42px;box-shadow:0 2px 7px #1f405006}
+h1,h2,h3,h4{color:var(--heading);line-height:1.45;font-weight:600;scroll-margin-top:85px}h1{font-size:32px;margin:0 0 8px}h2{font-size:25px;margin:48px 0 21px;padding-top:30px;border-top:1px solid var(--line)}h2:first-of-type{margin-top:30px;padding-top:0;border-top:0}h3{font-size:20px;margin:34px 0 13px}h4{font-size:17px;margin:25px 0 12px;color:#253f52}
+p{margin:13px 0 17px}.subtitle{font-size:14px;color:#526878;margin:0 0 24px}strong{font-weight:600}li{margin:5px 0}main p,main li,main h2,main h3,main h4{overflow-wrap:anywhere}
+code{font-family:Consolas,'Cascadia Code','Noto Sans SC',monospace;font-size:.89em;color:#213f55;background:#eef3f6;padding:1px 4px;border-radius:3px}
+pre{background:#f6f8fa;border:1px solid #d9e2e8;border-radius:3px;padding:16px 18px;margin:17px 0 21px;overflow-x:auto;tab-size:4;font-family:Consolas,'Cascadia Code','Noto Sans SC',monospace;font-size:15px;line-height:1.6;color:#172d3c}
+pre code{font:inherit;color:inherit;background:transparent;padding:0;border-radius:0;white-space:pre}.keyword{color:#135aa0;font-weight:500}.type{color:#255d61}.comment{color:#526776}.number{color:#884920}.string{color:#8b3d21}
+.table-wrap{overflow-x:auto;margin:18px 0 24px}table{border-collapse:collapse;width:100%;font-size:15px;line-height:1.65}th,td{border:1px solid #cfdae2;padding:10px 12px;vertical-align:top;text-align:left}th{background:#eef3f7;color:#28485e;font-weight:600}tr:nth-child(even) td{background:#fbfcfd}td:first-child{min-width:122px}td code{font-size:.91em;background:transparent;padding:0}td p{margin:0}
+.mobile-toc{display:none}.page-foot{font-size:13px;color:#526878;border-top:1px solid var(--line);padding-top:18px;margin-top:35px}
+:focus-visible{outline:2px solid #397caa;outline-offset:3px}::selection{background:#cde3f3;color:#142d40}
+@media(min-width:1600px){.layout{max-width:1310px;grid-template-columns:250px minmax(0,1fr);gap:36px}main{padding-left:50px;padding-right:50px}.topbar{padding-left:max(24px,calc((100vw - 1260px)/2));padding-right:max(24px,calc((100vw - 1260px)/2))}}
+@media(max-width:1090px){.layout{grid-template-columns:204px minmax(0,1fr);gap:20px;padding:22px 18px}main{padding:30px 28px}.toc a{font-size:12px}.toc a.group{font-size:13px}pre{font-size:14px;padding:14px 15px}}
+@media(max-width:860px){.topbar{height:55px;padding:0 17px}.brand span{display:none}.files{gap:16px;font-size:13px}.layout{display:block;padding:17px 12px 35px}.sidebar{display:none}main{padding:26px 24px;font-size:16px}.mobile-toc{display:block;margin-bottom:17px;border:1px solid var(--line);background:white;padding:10px 15px}.mobile-toc summary{color:#244a65;font-size:15px;cursor:pointer;font-weight:600}.mobile-toc nav{max-height:55vh;overflow:auto;margin-top:12px}h1{font-size:29px}h2{font-size:23px}h3{font-size:19px}table{font-size:14px}pre{font-size:13px}}
+@media print{.topbar,.sidebar,.mobile-toc{display:none}.layout{display:block;max-width:none;margin:0;padding:0}main{border:0;box-shadow:none;padding:0}body{background:white;color:black;font-size:10.5pt;line-height:1.65}h1{font-size:22pt}h2{font-size:16pt}h3{font-size:13pt}h1,h2,h3,h4{break-after:avoid}pre{white-space:pre-wrap;overflow:visible;break-inside:avoid;font-size:8.5pt}pre code{white-space:pre-wrap}table{font-size:9pt}a{color:inherit}.table-wrap{overflow:visible}}
+</style></head><body><header class="topbar"><div class="brand">第二算法 · 实战与实现<span>边界与答案</span></div><nav class="files" aria-label="文件"><a href="边界与答案.md">Markdown</a><a href="边界与答案.cpp">C++ 源码</a></nav></header><div class="layout"><aside class="sidebar"><div class="toc-title">问题与实现目录</div><nav class="toc" aria-label="问题与实现目录"><a class="group" href="#找到一个相等值-还没有找到出现区间">找到一个相等值，还没有找到出现区间</a><a class="topic" href="#把合同落到c-参数和下标">把合同落到C++参数和下标</a><a class="topic" href="#q000019-const-std-vector-int-怎样借用输入">Q000019 · const std::vector&lt;int&gt;&amp; 怎样借用输入</a><a class="topic" href="#q000020-容器长度为什么要先核对再转成-int">Q000020 · 容器长度为什么要先核对再转成 int</a><a class="topic" href="#q000021-怎样把两个下标作为一个有值的结果返回">Q000021 · 怎样把两个下标作为一个有值的结果返回</a><a class="topic" href="#标准设施直接完成哪一层">标准设施直接完成哪一层</a><a class="topic" href="#q000022-equal-range-的两个迭代器怎样变成答案">Q000022 · equal_range 的两个迭代器怎样变成答案</a><a class="group" href="#koko-没有数组-也能问第一个可行位置">Koko：没有数组，也能问第一个可行位置</a><a class="topic" href="#q000023-范围-for-怎样读取元素-怎样写回元素">Q000023 · 范围 for 怎样读取元素，怎样写回元素</a><a class="topic" href="#q000024-宽结果必须从哪一步开始使用宽整数">Q000024 · 宽结果必须从哪一步开始使用宽整数</a><a class="topic" href="#先给搜索一个确实包含答案的区间">先给搜索一个确实包含答案的区间</a><a class="topic" href="#q000025-取极值和求和时-标准设施返回什么">Q000025 · 取极值和求和时，标准设施返回什么</a><a class="group" href="#factory-machines-并行产量不是逐项耗时">Factory Machines：并行产量不是逐项耗时</a><a class="topic" href="#只累计决策需要的信息">只累计决策需要的信息</a><a class="topic" href="#可行上界从一台机器就能得到">可行上界从一台机器就能得到</a><a class="group" href="#array-division-搜索正确以前-先证明判定正确">Array Division：搜索正确以前，先证明判定正确</a><a class="topic" href="#给定上限-贪心为什么得到最少段数">给定上限，贪心为什么得到最少段数</a><a class="topic" href="#用两项必然界限包住最优值">用两项必然界限包住最优值</a><a class="topic" href="#加入负数时-究竟哪一步失效">加入负数时，究竟哪一步失效</a><a class="group" href="#从参考函数到完整作答">从参考函数到完整作答</a><a class="topic" href="#q000026-函数题与标准输入输出题分别需要什么入口">Q000026 · 函数题与标准输入输出题分别需要什么入口</a><a class="topic" href="#lc34">LC34</a><a class="topic" href="#lc875">LC875</a><a class="topic" href="#cses1620">CSES1620</a><a class="topic" href="#cses1085">CSES1085</a><a class="group" href="#用结果检查条件-避免只检查循环相像">用结果检查条件，避免只检查循环相像</a></nav></aside><div><details class="mobile-toc"><summary>问题与实现目录</summary><nav class="toc"><a class="group" href="#找到一个相等值-还没有找到出现区间">找到一个相等值，还没有找到出现区间</a><a class="topic" href="#把合同落到c-参数和下标">把合同落到C++参数和下标</a><a class="topic" href="#q000019-const-std-vector-int-怎样借用输入">Q000019 · const std::vector&lt;int&gt;&amp; 怎样借用输入</a><a class="topic" href="#q000020-容器长度为什么要先核对再转成-int">Q000020 · 容器长度为什么要先核对再转成 int</a><a class="topic" href="#q000021-怎样把两个下标作为一个有值的结果返回">Q000021 · 怎样把两个下标作为一个有值的结果返回</a><a class="topic" href="#标准设施直接完成哪一层">标准设施直接完成哪一层</a><a class="topic" href="#q000022-equal-range-的两个迭代器怎样变成答案">Q000022 · equal_range 的两个迭代器怎样变成答案</a><a class="group" href="#koko-没有数组-也能问第一个可行位置">Koko：没有数组，也能问第一个可行位置</a><a class="topic" href="#q000023-范围-for-怎样读取元素-怎样写回元素">Q000023 · 范围 for 怎样读取元素，怎样写回元素</a><a class="topic" href="#q000024-宽结果必须从哪一步开始使用宽整数">Q000024 · 宽结果必须从哪一步开始使用宽整数</a><a class="topic" href="#先给搜索一个确实包含答案的区间">先给搜索一个确实包含答案的区间</a><a class="topic" href="#q000025-取极值和求和时-标准设施返回什么">Q000025 · 取极值和求和时，标准设施返回什么</a><a class="group" href="#factory-machines-并行产量不是逐项耗时">Factory Machines：并行产量不是逐项耗时</a><a class="topic" href="#只累计决策需要的信息">只累计决策需要的信息</a><a class="topic" href="#可行上界从一台机器就能得到">可行上界从一台机器就能得到</a><a class="group" href="#array-division-搜索正确以前-先证明判定正确">Array Division：搜索正确以前，先证明判定正确</a><a class="topic" href="#给定上限-贪心为什么得到最少段数">给定上限，贪心为什么得到最少段数</a><a class="topic" href="#用两项必然界限包住最优值">用两项必然界限包住最优值</a><a class="topic" href="#加入负数时-究竟哪一步失效">加入负数时，究竟哪一步失效</a><a class="group" href="#从参考函数到完整作答">从参考函数到完整作答</a><a class="topic" href="#q000026-函数题与标准输入输出题分别需要什么入口">Q000026 · 函数题与标准输入输出题分别需要什么入口</a><a class="topic" href="#lc34">LC34</a><a class="topic" href="#lc875">LC875</a><a class="topic" href="#cses1620">CSES1620</a><a class="topic" href="#cses1085">CSES1085</a><a class="group" href="#用结果检查条件-避免只检查循环相像">用结果检查条件，避免只检查循环相像</a></nav></details><main><h1 id="边界与答案-把搜索条件写进代码">边界与答案：把搜索条件写进代码</h1>
+<p>在有序数组中找到一个值，和找到“所有相等值到哪里结束”，是两个不同的任务。生产需要多久、把数组切成几段才合适，看上去又没有可供查找的数组。本章把这些任务连成一条路线：先确定要找的边界，再证明一次判断能排除哪一段，最后检查这个判断有没有正确表达原题。</p>
+<p>我们依次解决四个实际任务。它们需要的C++设施就在相邻实现处解释；同一知识问题后面只引用Q编号。代码使用C++17，函数位于参考源码的 <code>boundary_feasibility</code> 命名空间；平台作答入口见末节。算法函数均只读取输入，不排序、不修改数组。它们接受各原题给出的合法输入；这份参考接口没有额外承诺如何处理非法 <code>k</code>、零机器周期、负香蕉数或损坏的输入流。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>任务</th>
+<th>要找的边界</th>
+<th>一次判断的工作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LC34，出现位置</td>
+<td>第一个不小于目标的位置；第一个大于目标的位置</td>
+<td>查看中间元素</td>
+</tr>
+<tr>
+<td>LC875，Koko</td>
+<td>第一个能在限时内完成的速度</td>
+<td>累计每堆所需整小时</td>
+</tr>
+<tr>
+<td>CSES1620，Factory Machines</td>
+<td>第一个达到目标产量的时间</td>
+<td>累计同时工作的机器产量</td>
+</tr>
+<tr>
+<td>CSES1085，Array Division</td>
+<td>第一个允许分成恰好k个非空段的和上限</td>
+<td>贪心计算最少需要几段</td>
+</tr>
+</tbody></table></div>
+<h2 id="找到一个相等值-还没有找到出现区间">找到一个相等值，还没有找到出现区间</h2>
+<p><a href="https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/" target="_blank" rel="noopener noreferrer">LC34原题</a>给出非降序整数数组和目标值，返回其第一次、最后一次出现的下标；不存在时返回 <code>[-1,-1]</code>。数组可以为空，长度至100000，元素和目标在±10^9内，要求O(log n)时间。下标从0开始。</p>
+<p>例如 <code>[5,7,7,8,8,10]</code> 中目标8的答案是 <code>[3,4]</code>。第一次碰到8就返回，只能说明找到了一个见证；它不能排除这个8左边和右边还有其他8。从找到的位置线性扩散，在全部相等时又会退回O(n)。</p>
+<p>把问题改成两个位置：<code>first</code> 是第一个满足 <code>value &gt;= target</code> 的位置，<code>after</code> 是第一个满足 <code>value &gt; target</code> 的位置。不存在这样的位置时，位置取数组长度n。于是等于目标的元素恰占 <code>[first, after)</code>；非空时原题的答案是 <code>[first, after-1]</code>，空时返回缺失标记。这里n是一个合法边界，但不是合法元素下标。</p>
+<p>对第一个边界，非降序性使条件按顺序只能是“假……假，真……真”。维护 <code>[left,right)</code> 这段还需要检查的元素，并保留两条已经知道的事实：<code>[0,left)</code> 都小于目标，<code>[right,n)</code> 都不小于目标。因此所求边界在位置区间 <code>[left,right]</code> 内，允许等于right。</p>
+<p>设 <code>middle = left + (right-left)/2</code>。如果 <code>values[middle] &lt; target</code>，它以及左边的候选都不可能是首个不小于目标的位置，令 <code>left=middle+1</code>。否则middle可能恰是答案，不能跳过它，令 <code>right=middle</code>。每步使剩余元素数严格减少；当left等于right，两条已知事实夹出唯一边界。空数组一开始就满足这个停止条件，不需要访问任何元素。</p>
+<h3 id="把合同落到c-参数和下标">把合同落到C++参数和下标</h3>
+<p>以下是这份源码使用的头文件。<code>&lt;algorithm&gt;</code>提供本章的查找与极值设施，<code>&lt;array&gt;</code>与<code>&lt;vector&gt;</code>提供结果和输入容器，<code>&lt;numeric&gt;</code>提供累计，<code>&lt;iostream&gt;</code>用于末尾的完整标准输入输出程序。使用哪个设施就包含它声明所在的头文件，避免依赖某个头文件顺带包含另一个头文件。</p>
+<pre class="cpp"><code>#include &lt;algorithm&gt;
+#include &lt;array&gt;
+#include &lt;iostream&gt;
+#include &lt;numeric&gt;
+#include &lt;vector&gt;</code></pre>
+<p><a id="q000019"></a></p>
+<h3 id="q000019-const-std-vector-int-怎样借用输入">Q000019 · <code>const std::vector&lt;int&gt;&amp;</code> 怎样借用输入</h3>
+<p><code>std::vector&lt;int&gt;</code>是元素类型为int、长度可以变化的标准容器；<code>std::</code>说明这个名字来自标准库。函数参数写成 <code>const std::vector&lt;int&gt;&amp; values</code>，其中 <code>&amp;</code>使values引用调用者已有的容器，而不为本次调用复制全部元素；<code>const</code>使函数通过这个参数只能观察容器，不能给元素赋新值或改变长度。若去掉 <code>&amp;</code>，参数成为独立的按值副本，读取n个元素前就可能多出O(n)复制与存储；若只去掉 <code>const</code>，引用仍不复制，但接口允许修改调用者的内容。</p>
+<p>引用本身不拥有输入，也不会替调用者长期保存数据。本章函数只在调用期间读取它，既不返回输入引用，也不把引用留给后续调用，因而没有让借用超过输入寿命的需求。平台给出的非const引用参数可以传给这里的只读引用参数；“平台允许修改”不要求实现必须修改。C++引用规则可定位到<a href="https://eel.is/c++draft/dcl.ref" target="_blank" rel="noopener noreferrer">工作草案的引用条款</a>；这里仅使用C++17已有的左值引用机制。</p>
+<p><a id="q000020"></a></p>
+<h3 id="q000020-容器长度为什么要先核对再转成-int">Q000020 · 容器长度为什么要先核对再转成 <code>int</code></h3>
+<p><code>values.size()</code>返回容器的无符号长度类型，并不保证就是int。直接把它与可能为负的有符号下标混算，会触发类型转换，不能凭数学直觉判断比较结果。本任务已经证明 <code>0 &lt;= n &lt;= 100000</code>，在目标平台的int范围内，于是用 <code>static_cast&lt;int&gt;(values.size())</code> 显式转为同一种下标类型。这个转换表达“范围已核对”，不负责自动检查或修复一个过大的长度。<a href="https://eel.is/c++draft/container.requirements.general" target="_blank" rel="noopener noreferrer">容器长度与差值类型</a>的区别不能靠省略类型声明消失。</p>
+<p><code>values[i]</code>读取第i项，只在 <code>0 &lt;= i &lt; n</code> 时有效；它不是自动返回空值的越界查询。循环中只有 <code>left &lt; right</code> 才计算并读取middle，这保证 <code>left &lt;= middle &lt; right &lt;= n</code>，所以不会读取 <code>values[n]</code>。返回值允许为n的承诺属于边界函数；调用者不能把这个承诺误读成n处也有一个元素。</p>
+<pre class="cpp"><code><span class="type">int</span> lower_bound_manual(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; values, <span class="type">int</span> target) {
+    <span class="type">int</span> left = <span class="number">0</span>;
+    <span class="type">int</span> right = static_cast&lt;<span class="type">int</span>&gt;(values.size());
+    <span class="keyword">while</span> (left &lt; right) {
+        <span class="keyword">const</span> <span class="type">int</span> middle = left + (right - left) / <span class="number">2</span>;
+        <span class="keyword">if</span> (values[middle] &lt; target) {
+            left = middle + <span class="number">1</span>;
+        } <span class="keyword">else</span> {
+            right = middle;
+        }
+    }
+    <span class="keyword">return</span> left;
+}</code></pre>
+<p>第二个边界沿用同一论证，只把“还在左侧”的判断换成 <code>&lt;= target</code>。有序性此时保证 <code>[0,left)</code> 不大于目标，<code>[right,n)</code> 大于目标。这里直接表达 <code>&gt; target</code> 的边界，不把查询改写成 <code>target+1</code>；后者会额外依赖目标的整数范围。</p>
+<pre class="cpp"><code><span class="type">int</span> upper_bound_manual(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; values, <span class="type">int</span> target) {
+    <span class="type">int</span> left = <span class="number">0</span>;
+    <span class="type">int</span> right = static_cast&lt;<span class="type">int</span>&gt;(values.size());
+    <span class="keyword">while</span> (left &lt; right) {
+        <span class="keyword">const</span> <span class="type">int</span> middle = left + (right - left) / <span class="number">2</span>;
+        <span class="keyword">if</span> (values[middle] &lt;= target) {
+            left = middle + <span class="number">1</span>;
+        } <span class="keyword">else</span> {
+            right = middle;
+        }
+    }
+    <span class="keyword">return</span> left;
+}</code></pre>
+<p><a id="q000021"></a></p>
+<h3 id="q000021-怎样把两个下标作为一个有值的结果返回">Q000021 · 怎样把两个下标作为一个有值的结果返回</h3>
+<p>本参考接口返回 <code>std::array&lt;int,2&gt;</code>：类型中同时写明元素为int、数量恒为2。<code>return {first, after-1};</code> 按两个位置初始化返回对象；调用者得到自己的结果值，不会引用已经离开函数的局部变量。结果的两项用 <code>[0]</code> 和 <code>[1]</code> 访问。<code>return {-1,-1};</code>同样是一个两项结果，而不是两个独立返回值。<a href="https://eel.is/c++draft/array.overview" target="_blank" rel="noopener noreferrer">array的定长与初始化合同</a>说明了这里选择它的理由。</p>
+<p>花括号的意义还取决于目标类型。稍后的平台适配返回 <code>std::vector&lt;int&gt;</code>，<code>return {a,b};</code>会建立含这两个元素的容器。建立有n个元素的输入容器则写 <code>std::vector&lt;int&gt; values(n)</code>；不能替换成 <code>values{n}</code>，后者会选择列表初始化并建立只含n这一个数的容器。不要让表面相似的括号改变题目输入规模。</p>
+<pre class="cpp"><code>std::array&lt;<span class="type">int</span>, <span class="number">2</span>&gt; occurrence_range_manual(
+        <span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; values, <span class="type">int</span> target) {
+    <span class="keyword">const</span> <span class="type">int</span> first = lower_bound_manual(values, target);
+    <span class="keyword">const</span> <span class="type">int</span> after = upper_bound_manual(values, target);
+    <span class="keyword">if</span> (first == after) {
+        <span class="keyword">return</span> {-<span class="number">1</span>, -<span class="number">1</span>};
+    }
+    <span class="keyword">return</span> {first, after - <span class="number">1</span>};
+}</code></pre>
+<p><code>first==after</code>正是出现区间为空，不必为检查缺失而解引用first。两个边界查找各O(log n)，合起来仍是O(log n)；几个下标和两项返回值占O(1)额外空间。输入长度转换见 <a href="边界与答案.html#q000020">Q000020 · 容器长度为什么要先核对再转成 int</a>，结果形式见 <a href="边界与答案.html#q000021">Q000021 · 怎样把两个下标作为一个有值的结果返回</a>。</p>
+<h3 id="标准设施直接完成哪一层">标准设施直接完成哪一层</h3>
+<p><a id="q000022"></a></p>
+<h3 id="q000022-equal-range-的两个迭代器怎样变成答案">Q000022 · <code>equal_range</code> 的两个迭代器怎样变成答案</h3>
+<p>标准算法用一对迭代器表达半开范围：<code>values.begin()</code>指向首项，<code>values.end()</code>表示末项之后的位置；空容器两者相等。迭代器是定位元素和边界的对象，<code>*it</code>才是取出它所定位的元素。end能参与比较和边界计算，但不能解引用。</p>
+<p>在本题的非降序int范围上，<code>std::lower_bound(begin,end,target)</code>返回首个不小于目标的位置，<code>std::upper_bound</code>返回首个大于目标的位置；找不到则返回end。<code>std::equal_range</code>一次返回包含这两个边界的pair对象，<code>.first</code>和<code>.second</code>分别取它们。代码中的 <code>const auto bounds</code>让编译器从调用结果推导这个局部对象的类型，并使bounds不能被重新赋值；auto并没有把它变成可装任意类型的动态变量。</p>
+<p>vector的迭代器支持相减。<code>bounds.first-values.begin()</code>是从首项到边界的元素个数，不是字节数；其有符号差值类型在已证明的规模内才能转换为int，见 <a href="边界与答案.html#q000020">Q000020 · 容器长度为什么要先核对再转成 int</a>。本函数未更改容器，迭代器一直在本次调用里使用；如果在取得它们后让容器重新分配存储，再继续使用旧迭代器，就不能沿用这里的有效性判断。</p>
+<p>这个库合同最弱的条件是相对于相应比较表达式已经分区，非降序是本题直接提供的充分条件；它不会先替你排序一个乱序数组。非执行策略版equal_range的比较次数为对数级；对于vector，定位移动也是对数级，不能把结论不加分析地移到只有顺序移动的迭代器上。可核对<a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4659.pdf" target="_blank" rel="noopener noreferrer">N4659的28.7.3</a>与<a href="https://eel.is/c++draft/equal.range" target="_blank" rel="noopener noreferrer">当前草案equal_range条款</a>；这里不使用ranges或新版本重载。</p>
+<pre class="cpp"><code>std::array&lt;<span class="type">int</span>, <span class="number">2</span>&gt; occurrence_range_standard(
+        <span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; values, <span class="type">int</span> target) {
+    <span class="keyword">const</span> <span class="keyword">auto</span> bounds = std::equal_range(values.begin(), values.end(), target);
+    <span class="keyword">if</span> (bounds.first == bounds.second) {
+        <span class="keyword">return</span> {-<span class="number">1</span>, -<span class="number">1</span>};
+    }
+    <span class="keyword">const</span> <span class="type">int</span> first = static_cast&lt;<span class="type">int</span>&gt;(bounds.first - values.begin());
+    <span class="keyword">const</span> <span class="type">int</span> after = static_cast&lt;<span class="type">int</span>&gt;(bounds.second - values.begin());
+    <span class="keyword">return</span> {first, after - <span class="number">1</span>};
+}</code></pre>
+<p>这和手写版实现的是同一对边界的合同。库设施取代的是边界搜索本身；把半开范围变成原题输出仍由调用者完成。<code>binary_search</code>只回答是否存在，不能替代本题所需的两个位置。这个标准设施版本在本题仍为O(log n)时间、O(1)额外空间。</p>
+<p>先用几种输入检查自己的边界解释：空数组；目标比所有元素小或大；只有一个元素且相等或不等；所有元素相等；目标缺失但插入点在中间。它们分别检查“边界可取n”“末端不是元素”“重复值不能提前返回”等不同事实。</p>
+<h2 id="koko-没有数组-也能问第一个可行位置">Koko：没有数组，也能问第一个可行位置</h2>
+<p><a href="https://leetcode.com/problems/koko-eating-bananas/description/" target="_blank" rel="noopener noreferrer">LC875原题</a>给出若干堆香蕉。每小时只能选择一堆，以整数速度s吃最多s根；这一堆提前吃完后，该小时不能继续吃另一堆。求h小时内吃完的最小正整数速度。原题保证 <code>1 &lt;= n &lt;= 10000</code>、<code>n &lt;= h &lt;= 10^9</code>、每堆数量在 <code>[1,10^9]</code>。输入不变，返回一个速度；原题条件保证存在答案。</p>
+<p>在 <code>[3,6,7,11]</code>、h=8的情况下，速度3需要 <code>1+2+3+4=10</code>小时，速度4需要 <code>1+2+2+3=8</code>小时。不能把所有香蕉先求和再向上整除：速度4下总量27似乎只需7小时，却忽略了不能把一小时剩余能力转移到另一堆。</p>
+<p>对一堆p，所需小时是 <code>ceil(p/s)</code>。p和s都是正整数，写成整数计算即 <code>(p+s-1)/s</code>。把各堆小时相加得到H(s)。若s增加，每项都不会增加，所以 <code>H(s)&lt;=h</code> 的可行性只能从假变真。现在边界不是输入下标，而是速度轴上的第一个真值。</p>
+<p><a id="q000023"></a></p>
+<h3 id="q000023-范围-for-怎样读取元素-怎样写回元素">Q000023 · 范围 <code>for</code> 怎样读取元素，怎样写回元素</h3>
+<p><code>for (int pile : piles)</code>依次从容器取得元素，每次用该元素的值初始化一个局部int变量pile。它不复制整个容器，但pile是当前元素的副本；给pile赋值不会修改容器。这里元素很小且只需读取其数值，按值循环变量足够。</p>
+<p>如果目的是读入数据到容器，稍后的 <code>for (int&amp; value : values)</code>使用元素的引用，每次输入写进真正的元素。只读较大对象时可以选择 <code>const T&amp;</code> 避免复制，而本章的int不需要为这个目的增加引用。引用的借用规则见 <a href="边界与答案.html#q000019">Q000019 · const std::vector<int>&amp; 怎样借用输入</a>。这些循环只遍历已有容器，不在循环中改变容器长度，也不借此取得修改期间迭代器仍有效的保证。<a href="https://eel.is/c++draft/stmt.ranged" target="_blank" rel="noopener noreferrer">范围for的展开规则</a>可用来理解这种按值与按引用的区别；本章没有临时范围的寿命扩展需求。</p>
+<p><a id="q000024"></a></p>
+<h3 id="q000024-宽结果必须从哪一步开始使用宽整数">Q000024 · 宽结果必须从哪一步开始使用宽整数</h3>
+<p>先根据输入推导范围，再选择类型。本章单个输入和小规模下标使用平台至少32位的int；C++并不保证所有实现的int恰为32位。<code>long long</code>至少能提供64位有符号整数范围，足以容纳本章推导出的10^18上界。它不是任意精度数；有符号整数计算溢出不能当作可靠的循环取模。类型范围可核对<a href="https://eel.is/c++draft/basic.fundamental" target="_blank" rel="noopener noreferrer">整数类型条款</a>。</p>
+<p>赋值目标很宽，不会自动让之前的窄表达式变宽。例如两个int相乘后才赋给long long，乘法已经按操作数类型计算。<code>1LL</code>是long long字面量；<code>1LL * a * b</code>从第一个乘法就用宽类型。中点写 <code>left+(right-left)/2</code>，还要证明本章的非负left/right及其差均可表示；不能将这行当作覆盖任意正负端点的万能防溢出公式。</p>
+<p>Koko的完整小时总和理论上可达10^13，使用宽累计更直接。原题搜索范围中 <code>p+s-1</code>最多1999999999，并未超过32位有符号范围；不要把单项公式必溢出当成选宽类型的理由。但公开判定函数允许任意正的int速度，调用者不一定把速度限制在10^9内，因此实现写 <code>1LL*pile+speed-1</code>，在第一次相加前就已经提升类型。若只在末尾写<code>-1LL</code>，前面的<code>pile+speed</code>仍先按int计算，不能满足这个更宽的helper合同。整数除法对正数截去小数部分，这正是向上整除变形所需的条件。</p>
+<pre class="cpp"><code><span class="type">bool</span> koko_can_finish(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; piles, <span class="type">int</span> hours, <span class="type">int</span> speed) {
+    <span class="type">long</span> <span class="type">long</span> used_hours = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="type">int</span> pile : piles) {
+        used_hours += (<span class="number">1LL</span> * pile + speed - <span class="number">1</span>) / speed;
+        <span class="keyword">if</span> (used_hours &gt; hours) {
+            <span class="keyword">return</span> <span class="keyword">false</span>;
+        }
+    }
+    <span class="keyword">return</span> <span class="keyword">true</span>;
+}</code></pre>
+<p>累计一旦超过h就可以返回false，剩余各堆只会增加小时数。这是判定内部的提前结束，不会改变H(s)是否达标。函数返回bool；搜索层只使用这一个“候选能否完成”的答案，不需要得到精确的超时总量。</p>
+<h3 id="先给搜索一个确实包含答案的区间">先给搜索一个确实包含答案的区间</h3>
+<p>速度至少1。令上界为最大堆大小：这个速度下每堆只占一小时，共n小时，而原题给出 <code>n&lt;=h</code>，所以该上界确实可行。不能只因为某个常数“看起来很大”就跳过这一证明。</p>
+<p>维护闭的候选位置区间 <code>[left,right]</code>，始终包含最小可行速度，并且right可行。中点可行时，最小可行速度不大于它，保留middle，令right=middle；中点不可行时，所有不更大的速度也不可行，令left=middle+1。剩下一个候选时它就是最小可行值。这里同样使用middle和middle+1，却依赖速度判定的单调性，不能从数组下标版只抄循环外形。</p>
+<p><a id="q000025"></a></p>
+<h3 id="q000025-取极值和求和时-标准设施返回什么">Q000025 · 取极值和求和时，标准设施返回什么</h3>
+<p><code>std::max_element(first,last)</code>返回最大元素所在的迭代器，<code>std::min_element</code>返回最小元素所在的迭代器；它们不把输入排序或改写。非空时用 <code>*</code>取该位置的值；空范围则返回last，不能解引用。本章三个优化任务都保证非空，因而这些使用成立。遍历查找极值需要O(n)时间、O(1)额外空间。迭代器的定位与末端规则见 <a href="边界与答案.html#q000022">Q000022 · equal_range 的两个迭代器怎样变成答案</a>，极值设施可核对<a href="https://eel.is/c++draft/alg.min.max" target="_blank" rel="noopener noreferrer">最小最大元素合同</a>。</p>
+<p>稍后的 <code>std::accumulate(first,last,0LL)</code>来自 <code>&lt;numeric&gt;</code>，从给定初值开始逐项累加，返回累计值。初值同时确定累计类型：<code>0</code>会使这里的类型成为int，最后再赋给long long也来不及修复已经发生的窄累计；<code>0LL</code>使本章需要的累计在long long中进行。类型与中间结果见 <a href="边界与答案.html#q000024">Q000024 · 宽结果必须从哪一步开始使用宽整数</a>。<a href="https://eel.is/c++draft/accumulate" target="_blank" rel="noopener noreferrer">accumulate合同</a>中的新版本细节不用于扩展本章C++17接口。</p>
+<pre class="cpp"><code><span class="type">int</span> koko_min_speed(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; piles, <span class="type">int</span> hours) {
+    <span class="type">int</span> left = <span class="number">1</span>;
+    <span class="type">int</span> right = *std::max_element(piles.begin(), piles.end());
+    <span class="keyword">while</span> (left &lt; right) {
+        <span class="keyword">const</span> <span class="type">int</span> middle = left + (right - left) / <span class="number">2</span>;
+        <span class="keyword">if</span> (koko_can_finish(piles, hours, middle)) {
+            right = middle;
+        } <span class="keyword">else</span> {
+            left = middle + <span class="number">1</span>;
+        }
+    }
+    <span class="keyword">return</span> left;
+}</code></pre>
+<p>单次判定O(n)，答案范围是1到P（最大堆），总时间O(n log(P+1))，额外空间O(1)。<code>max_element</code>取上界也花O(n)，应计入但不改变总量级。没有C++17标准函数会替你推导H(s)、合法速度范围并直接给出这个答案；库在这里承担取上界，搜索和题目判定仍是真实手写算法。</p>
+<h2 id="factory-machines-并行产量不是逐项耗时">Factory Machines：并行产量不是逐项耗时</h2>
+<p><a href="https://cses.fi/problemset/task/1620/" target="_blank" rel="noopener noreferrer">CSES1620原题</a>给出n台可同时工作的机器，第i台每生产一个产品耗时 <code>period[i]</code> 秒，求生产至少t个产品所需的最短整数时间。原题 <code>1&lt;=n&lt;=200000</code>、<code>1&lt;=t&lt;=10^9</code>、<code>1&lt;=period[i]&lt;=10^9</code>。程序读取n/t和机器周期，输出一个时间；参考函数返回long long且不修改输入。</p>
+<p>例如周期 <code>[3,2,5]</code>、目标7。在时间8时，三台机器分别完成2、4、1个，共7个。判断时间T能否达标，应算 <code>floor(T/period[i])</code> 的和；机器并行，不是先等一台做完再累计它的工作时长。这与Koko逐堆占用整小时的向上整除恰好不同。</p>
+<p>每个机器产量随T非降，因此总产量到达t后不会因为延长时间而失效。先正确建立这个判定，再沿用“找第一个真”的区间缩减。类型、遍历和借用只需回看 <a href="边界与答案.html#q000024">Q000024 · 宽结果必须从哪一步开始使用宽整数</a>、<a href="边界与答案.html#q000023">Q000023 · 范围 for 怎样读取元素，怎样写回元素</a>、<a href="边界与答案.html#q000019">Q000019 · const std::vector<int>&amp; 怎样借用输入</a>。</p>
+<h3 id="只累计决策需要的信息">只累计决策需要的信息</h3>
+<p>答案不需要知道所有机器在一个极大候选时间下精确生产了多少。令 <code>produced</code>是尚未达标的累计量，因此始终满足 <code>0&lt;=produced&lt;t</code>。新机器产量为made；若它已经达到缺口 <code>t-produced</code>，立即返回true；否则再相加。这样累计值始终小于t，也避免“先把所有产量加到溢出，再与t比较”。</p>
+<p>这里要分清搜索器和公开判定函数的范围。稍后搜索器只检查 <code>T&lt;=m*t</code>（m为最快周期），且每台周期均不小于m，所以每台产量至多t，总产量至多 <code>n*t&lt;=2*10^14</code>；在这个紧搜索范围内，使用long long精确加完也不会溢出。提前返回仍能少算不影响决策的信息。</p>
+<p>公开的 <code>factory_can_produce</code> 则接受任意非负long long时间，调用者可以脱离这个搜索区间使用它。例如周期都是1而时间为10^18，各台结果能表示，所有结果直接相加却可能超出64位范围。先与剩余缺口比较再相加，使这个较宽的helper合同也成立。不能把脱离搜索的极大候选当作紧界搜索实际必然遇到的溢出。</p>
+<pre class="cpp"><code><span class="type">bool</span> factory_can_produce(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; periods,
+                         <span class="type">long</span> <span class="type">long</span> target, <span class="type">long</span> <span class="type">long</span> time) {
+    <span class="type">long</span> <span class="type">long</span> produced = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="type">int</span> period : periods) {
+        <span class="keyword">const</span> <span class="type">long</span> <span class="type">long</span> made = time / period;
+        <span class="keyword">if</span> (made &gt;= target - produced) {
+            <span class="keyword">return</span> <span class="keyword">true</span>;
+        }
+        produced += made;
+    }
+    <span class="keyword">return</span> <span class="keyword">false</span>;
+}</code></pre>
+<h3 id="可行上界从一台机器就能得到">可行上界从一台机器就能得到</h3>
+<p>设最快机器周期为m。即使其他机器都不用，它在 <code>m*t</code> 秒也能完成t个产品，所以 <code>[0,m*t]</code>一定包含答案，右端可行。原题 <code>m&lt;=10^9,t&lt;=10^9</code>，乘积至10^18；用 <a href="边界与答案.html#q000024">Q000024 · 宽结果必须从哪一步开始使用宽整数</a>中的宽表达式计算。这个上界利用了实际输入，通常比固定写10^18更紧，也保留了明确的可行证据。</p>
+<pre class="cpp"><code><span class="type">long</span> <span class="type">long</span> factory_min_time(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; periods, <span class="type">long</span> <span class="type">long</span> target) {
+    <span class="keyword">const</span> <span class="type">int</span> fastest = *std::min_element(periods.begin(), periods.end());
+    <span class="type">long</span> <span class="type">long</span> left = <span class="number">0</span>;
+    <span class="type">long</span> <span class="type">long</span> right = <span class="number">1LL</span> * fastest * target;
+    <span class="keyword">while</span> (left &lt; right) {
+        <span class="keyword">const</span> <span class="type">long</span> <span class="type">long</span> middle = left + (right - left) / <span class="number">2</span>;
+        <span class="keyword">if</span> (factory_can_produce(periods, target, middle)) {
+            right = middle;
+        } <span class="keyword">else</span> {
+            left = middle + <span class="number">1</span>;
+        }
+    }
+    <span class="keyword">return</span> left;
+}</code></pre>
+<p>搜索期间right始终可行；middle可行便收右端，否则排除它及其左侧。时间0在本题目标为正时不可行，但它可以作为候选区间的左端；循环不会对周期0做除法，因为原题已排除该输入。总时间O(n log(m*t+1))，额外空间O(1)。取最快周期用到的设施见 <a href="边界与答案.html#q000025">Q000025 · 取极值和求和时，标准设施返回什么</a>。</p>
+<p>两个具有区分力的检查是：仅一台周期10^9、目标10^9，答案应为10^18；大量周期1的机器、目标很小，在较大候选时间下应迅速返回true而无需精确加完总产量。前者检查乘法和答案宽度，后者检查判定只需保留的量。</p>
+<h2 id="array-division-搜索正确以前-先证明判定正确">Array Division：搜索正确以前，先证明判定正确</h2>
+<p><a href="https://cses.fi/problemset/task/1085/" target="_blank" rel="noopener noreferrer">CSES1085原题</a>给出正整数数组，分成恰好k个连续、非空子数组，最小化其中最大的段和。原题 <code>1&lt;=n&lt;=200000</code>、<code>1&lt;=k&lt;=n</code>、<code>1&lt;=x[i]&lt;=10^9</code>。所有元素都必须使用且保留原顺序，不能排序。返回最优的最大段和，参考函数不修改输入。</p>
+<p>样例 <code>[2,4,7,3,5]</code>、k=3，可以分成 <code>[2,4] [7] [3,5]</code>，最大段和8。为了判定一个候选上限L是否可行，不必先寻找最优分割：只需要回答是否存在一种恰k段、每段和均不超过L的分法。</p>
+<p>如果L可行，任何更大的上限也可行，直接沿用原分法即可。这个单调性来自任务定义，本身还没有证明某段贪心代码能回答判定。二分搜索不能替错误的判定补救。</p>
+<h3 id="给定上限-贪心为什么得到最少段数">给定上限，贪心为什么得到最少段数</h3>
+<p>首先任何单个元素大于L都不可能安排进任何段。其余情况下，从左到右尽量延长当前段；如果再加入一个元素就超过L，才在它前面切开新段。正数使得段一旦超出上限，继续往右加元素也不能使它重新达标。</p>
+<p>比较任意合法分法和贪心分法：贪心第一段是从开头出发、和不超过L的最长前缀，所以它的终点不会早于另一分法第一段的终点。假设贪心前r段至少覆盖到另一分法前r段的终点。对下一段，若贪心已覆盖另一分法第r+1段终点，结论已成立；否则，从贪心当前起点到那个终点，是另一分法第r+1段的一个后缀。移掉前面的正元素只会减小和，所以这个后缀仍不超过L，贪心下一段至少也能延伸到那里。归纳可知，同样段数下贪心覆盖得不会更短，因此它需要的段数最少。</p>
+<p>但原题要求恰k段，而这个过程计算最少段数。二者如何接上？若最少段数超过k，当然无法使用k段。若只用了b段且b&lt;k，由于k&lt;=n，至少有一个多元素段可继续切开；正数使切开后的两个段和都不大于原段和。反复切开直到恰k个非空段，每段依旧不超过L。因此在本题中，<strong>最少段数不超过k</strong>恰好等价于所需的存在性判定。</p>
+<p>这也解释了为什么不能要求贪心自己“刚好切出k段”。例如 <code>[1,1,1,1]</code>、k=3、L=2，贪心只需两段，但切成 <code>[1] [1] [1,1]</code>仍然合法。反过来，也不能依靠空段补数量；本题不允许空段，证明用的是拆分已有多元素段。</p>
+<pre class="cpp"><code><span class="type">bool</span> division_can_split(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; values,
+                        <span class="type">int</span> max_blocks, <span class="type">long</span> <span class="type">long</span> limit) {
+    <span class="type">int</span> blocks = <span class="number">1</span>;
+    <span class="type">long</span> <span class="type">long</span> current_sum = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="type">int</span> value : values) {
+        <span class="keyword">if</span> (value &gt; limit) {
+            <span class="keyword">return</span> <span class="keyword">false</span>;
+        }
+        <span class="keyword">if</span> (current_sum + value &gt; limit) {
+            ++blocks;
+            current_sum = value;
+            <span class="keyword">if</span> (blocks &gt; max_blocks) {
+                <span class="keyword">return</span> <span class="keyword">false</span>;
+            }
+        } <span class="keyword">else</span> {
+            current_sum += value;
+        }
+    }
+    <span class="keyword">return</span> <span class="keyword">true</span>;
+}</code></pre>
+<p>代码将当前段和保存在long long，段数使用至多n的int；相加上界不超过原数组总和，至 <code>2*10^14</code>，符合 <a href="边界与答案.html#q000024">Q000024 · 宽结果必须从哪一步开始使用宽整数</a>。单项超限检查在构造段之前完成；当前段容纳不下才新增一段，所以不会制造空的开头段。遍历方式见 <a href="边界与答案.html#q000023">Q000023 · 范围 for 怎样读取元素，怎样写回元素</a>。</p>
+<h3 id="用两项必然界限包住最优值">用两项必然界限包住最优值</h3>
+<p>最优上限至少是最大元素M，因为每个元素必须属于某一段；全部元素总和S是可行上界，因为先取整段，再按上述拆分证明分成恰k段即可。由原题推导 <code>S&lt;=2*10^14</code>，不能用int累计。最大值和宽累计的设施选择见 <a href="边界与答案.html#q000025">Q000025 · 取极值和求和时，标准设施返回什么</a>。</p>
+<pre class="cpp"><code><span class="type">long</span> <span class="type">long</span> division_min_largest_sum(<span class="keyword">const</span> std::vector&lt;<span class="type">int</span>&gt;&amp; values,
+                                   <span class="type">int</span> exact_blocks) {
+    <span class="type">long</span> <span class="type">long</span> left = *std::max_element(values.begin(), values.end());
+    <span class="type">long</span> <span class="type">long</span> right = std::accumulate(values.begin(), values.end(), <span class="number">0LL</span>);
+    <span class="keyword">while</span> (left &lt; right) {
+        <span class="keyword">const</span> <span class="type">long</span> <span class="type">long</span> middle = left + (right - left) / <span class="number">2</span>;
+        <span class="keyword">if</span> (division_can_split(values, exact_blocks, middle)) {
+            right = middle;
+        } <span class="keyword">else</span> {
+            left = middle + <span class="number">1</span>;
+        }
+    }
+    <span class="keyword">return</span> left;
+}</code></pre>
+<p>每次判定O(n)，在整数范围 <code>[M,S]</code>中找首个可行值，总时间O(n log(S-M+2))、额外空间O(1)。k=1返回S，k=n返回M，两种极端不必另写算法分支；它们可以直接验证整套合同是否闭合。</p>
+<h3 id="加入负数时-究竟哪一步失效">加入负数时，究竟哪一步失效</h3>
+<p>若允许负数，“上限L存在合法分割”仍会随着L增大而保持可行；沿用原分法的论证没有消失。失效的是本章这个正数贪心及其界限证明。例如 <code>[4,-3]</code>、k=1、L=1，整段和为1，实际可行，但“单个4超过L便失败”的判定给出false；最大元素4也不再是答案的必要下界。不能把修复它理解成换一个二分模板。需要为新合同重新研究判定和边界，本章不扩展到负数分割优化。</p>
+<h2 id="从参考函数到完整作答">从参考函数到完整作答</h2>
+<p>每份任务的算法函数都可以直接独立测试；平台接口只适配数据形状，不改变算法合同。下面的类和main分别来自同一份权威cpp的独立区域，不能把两个同名Solution类或两个main直接同时放进同一次提交。</p>
+<p><a id="q000026"></a></p>
+<h3 id="q000026-函数题与标准输入输出题分别需要什么入口">Q000026 · 函数题与标准输入输出题分别需要什么入口</h3>
+<p>LeetCode由平台构造输入、调用 <code>class Solution</code>的public成员函数；这里的public使平台能够调用接口，成员函数名、参数与返回类型要与题目一致。外层类只负责转发，不需要自己读取控制台。LC34平台要求vector结果，我们将两项array值转换成它需要的返回形状，见 <a href="边界与答案.html#q000021">Q000021 · 怎样把两个下标作为一个有值的结果返回</a>。</p>
+<p>CSES则需要自己的 <code>int main()</code>。<code>std::cin &gt;&gt; a &gt;&gt; b</code>按输入顺序读取数字，通常跳过数字前的空白，分别写入变量a和b；<code>std::cout &lt;&lt; answer &lt;&lt; &#39;\n&#39;</code>输出结果与换行。这里按原题合法输入工作，没有为截断或格式错误的外部流增加恢复协议。先以题目给出的n建立已有n个元素的vector，再用引用循环逐项写入，容器构造和引用区别分别见 <a href="边界与答案.html#q000021">Q000021 · 怎样把两个下标作为一个有值的结果返回</a>、<a href="边界与答案.html#q000023">Q000023 · 范围 for 怎样读取元素，怎样写回元素</a>。<a href="https://eel.is/c++draft/istream.formatted.arithmetic" target="_blank" rel="noopener noreferrer">标准输入</a>和<a href="https://eel.is/c++draft/ostream.inserters.arithmetic" target="_blank" rel="noopener noreferrer">标准输出</a>承载的是数据交换，不代替题目的搜索或判定。</p>
+<p>完整参考cpp保留所有函数，默认不定义平台入口，便于独立测试。使用整文件作答时，在第一行加入本题对应的 <code>#define SECOND_ALGORITHM_LC34</code>、<code>#define SECOND_ALGORITHM_LC875</code>、<code>#define SECOND_ALGORITHM_FACTORY_MAIN</code>或<code>#define SECOND_ALGORITHM_DIVISION_MAIN</code>，每次只选一个。<code>#define</code>定义一个宏名，文件末尾的 <code>#if defined(...)</code>/<code>#elif</code>在编译前选择相应入口，其余分支被跳过，最后由<code>#endif</code>结束选择；它不会在程序运行时依次执行四道题。这是<a href="https://eel.is/c++draft/cpp.cond" target="_blank" rel="noopener noreferrer">条件包含</a>在本参考文件中的作用。</p>
+<p>更小的独立提交可以保留所用头文件、对应算法函数及其 <code>namespace boundary_feasibility { ... }</code> 外层，再附上下面本题的适配。调用依赖必须一起保留：LC34手写版依赖lower/upper两函数，其他三题的search函数各依赖自己的check函数。命名空间把这些函数组织在同一个名字之下，所以适配用 <code>boundary_feasibility::函数名</code>调用它们；去掉这层外壳时也必须一致调整调用限定。</p>
+<h3 id="lc34">LC34</h3>
+<p>适配默认调用标准设施版本；若考察手写边界，将转发目标改为 <code>occurrence_range_manual</code>，其余接口不变。</p>
+<pre class="cpp"><code><span class="keyword">class</span> Solution {
+public:
+    std::vector&lt;<span class="type">int</span>&gt; searchRange(std::vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> target) {
+        <span class="keyword">const</span> <span class="keyword">auto</span> answer = boundary_feasibility::occurrence_range_standard(
+            nums, target);
+        <span class="keyword">return</span> {answer[<span class="number">0</span>], answer[<span class="number">1</span>]};
+    }
+};</code></pre>
+<h3 id="lc875">LC875</h3>
+<pre class="cpp"><code><span class="keyword">class</span> Solution {
+public:
+    <span class="type">int</span> minEatingSpeed(std::vector&lt;<span class="type">int</span>&gt;&amp; piles, <span class="type">int</span> h) {
+        <span class="keyword">return</span> boundary_feasibility::koko_min_speed(piles, h);
+    }
+};</code></pre>
+<h3 id="cses1620">CSES1620</h3>
+<pre class="cpp"><code><span class="type">int</span> main() {
+    <span class="type">int</span> machine_count;
+    <span class="type">long</span> <span class="type">long</span> target;
+    std::cin &gt;&gt; machine_count &gt;&gt; target;
+    std::vector&lt;<span class="type">int</span>&gt; periods(machine_count);
+    <span class="keyword">for</span> (<span class="type">int</span>&amp; period : periods) {
+        std::cin &gt;&gt; period;
+    }
+    std::cout &lt;&lt; boundary_feasibility::factory_min_time(periods, target) &lt;&lt; <span class="string">'\n'</span>;
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</code></pre>
+<h3 id="cses1085">CSES1085</h3>
+<pre class="cpp"><code><span class="type">int</span> main() {
+    <span class="type">int</span> count;
+    <span class="type">int</span> blocks;
+    std::cin &gt;&gt; count &gt;&gt; blocks;
+    std::vector&lt;<span class="type">int</span>&gt; values(count);
+    <span class="keyword">for</span> (<span class="type">int</span>&amp; value : values) {
+        std::cin &gt;&gt; value;
+    }
+    std::cout &lt;&lt; boundary_feasibility::division_min_largest_sum(values, blocks)
+              &lt;&lt; <span class="string">'\n'</span>;
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</code></pre>
+<p>上面的四个入口分别适用于相应题目，整文件选择或独立整理的规则统一见 <a href="边界与答案.html#q000026">Q000026 · 函数题与标准输入输出题分别需要什么入口</a>。</p>
+<h2 id="用结果检查条件-避免只检查循环相像">用结果检查条件，避免只检查循环相像</h2>
+<p>边界搜索值得独立检查的是：返回的位置左侧是否全部不满足、右侧是否全部满足；优化任务还要检查返回值确实可行，若它大于合法下界，前一个整数值确实不可行。只有“两个版本给出同一个数”仍可能共享同一错误条件。</p>
+<p>LC34可用线性扫描作为独立参考；Koko小输入可逐小时吃香蕉并枚举速度；Factory小输入可逐秒推动每台机器的倒计时；Array Division小输入可枚举n-1个相邻间隙中的k-1个切点，直接比较每种合法分法的最大段和。这些模型故意避开了被测算法的二分循环及贪心判定。</p>
+<p>本章四题不覆盖所有二分问题：它们依赖的是单调谓词及可证明的判定。旋转数组、浮点精度停止、动态前驱删除等任务需要另立合同。上机时先写下原题的输入、输出、范围与修改政策，再写出“某候选为什么可行”的独立函数；当这句话和代码都成立，边界缩减才有依据。</p>
+<p>方法阅读补充：<a href="https://codility.com/media/train/12-BinarySearch.pdf" target="_blank" rel="noopener noreferrer">Codility官方二分讲义</a>展示数组查询与结果二分的联系；本章的原题合同、C++实现、数值推导与正数分割证明均按上面的具体任务重新形成。C++链接中的实时工作草案只作机制定位，C++17接口以<a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4659.pdf" target="_blank" rel="noopener noreferrer">N4659</a>相关条款交叉核对；没有采用新标准重载，也没有把编译通过等同于算法或教学完备。</p>
+<footer class="page-foot">边界与答案 · 第二算法 · 实战与实现</footer></main></div></div><script>
+const links=[...document.querySelectorAll('.sidebar a')];
+const targets=links.map(a=>document.getElementById(decodeURIComponent(a.hash.slice(1)))) .filter(Boolean);
+let scheduled=false,last='';
+function mark(){scheduled=false;let current=targets[0];for(const t of targets){if(t.getBoundingClientRect().top<=115)current=t;else break;}if(!current||last===current.id)return;last=current.id;for(const a of links){const active=decodeURIComponent(a.hash.slice(1))===last;a.classList.toggle('active',active);if(active){a.setAttribute('aria-current','location');const s=a.closest('.sidebar'),p=s.getBoundingClientRect(),r=a.getBoundingClientRect();if(r.top<p.top+8)s.scrollTop+=r.top-p.top-8;else if(r.bottom>p.bottom-8)s.scrollTop+=r.bottom-p.bottom+8;}else a.removeAttribute('aria-current');}}
+addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(mark)}},{passive:true});mark();
+document.querySelectorAll('.mobile-toc a').forEach(a=>a.addEventListener('click',()=>{document.querySelector('.mobile-toc').open=false}));
+</script></body></html>

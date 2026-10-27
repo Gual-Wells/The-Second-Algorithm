@@ -25,7 +25,7 @@
     "旧版本无兼容义务；历史cases/patterns不证明当前覆盖。",
     "实际阅读、分析、已讲、验证和用户掌握分开；没有自动语义认证。"
   ],
-  "current_frontier": "schema2统一课程；learning.json为任务/方法/实现/Q/target关系。旧两线与版本不兼容；旧稿仅研究测试素材。当前第一章practice-foundations，研究与发布由research任务CLI绑定当前证据与实际验证。下一章由研究形成，不按旧目录。",
+  "current_frontier": "schema2统一课程；此前出版已撤回。当前新首章boundary-feasibility由本轮独立原题研究从零形成，first-chapter-independent-20261028不继承旧任务/验收。learning.json为任务/方法/实现/Q/target关系；研究与发布绑定新当前证据与实际验证。后续章界继续由研究形成，不按旧目录。",
   "cpp_discovery_entries": [
     "类型、表达式、推导、转换与初始化",
     "对象生命周期、值类别、复制与移动",

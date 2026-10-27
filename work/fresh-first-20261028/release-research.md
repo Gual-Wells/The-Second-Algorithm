@@ -1,0 +1,22 @@
+# 本次独立研究整合
+
+当前任务first-chapter-independent-20261028从空状态启动，不迁移旧任务证据、旧稿或旧验收。未执行的先行空任务记录已移至superseded-empty-start/，不在work/jobs执行入口；撤回是另一独立操作，已先上线空目录。用户修正后的原始目标与不继承边界在task-baseline.md。
+
+两个未读取旧content的研究者实际比较有序边界/答案可行性、排序后扫描、top-k候选维护，从原题与大学资料形成范围。初步偏好的top-k被重新比较后收敛，不能因为库设施丰富就把quickselect、堆、哈希塞成一章。最终首章四任务为本轮真实研究结果，不按旧章或旧目录重命名；作者也独立论证LC875与Factory不是同名重复，ArrayDivision必须承担独立的判定证明。
+
+根Agent实际核对了LC34、LC875、CSES1620、CSES1085原题及CSES1084/1090等被比较任务，读取Stanford Data Sagas的候选维护目标与N4659二分/极值条文。另定向读取本地CP4 Book1物理178–181页，对普通查询与答案二分的关系核对；树上查询、浮点二分等材料未因读到而纳入本章。商业教材不复制入库或公开，未声称全书精读。实际读件与获取失败分别见作者和两个研究者记录。
+
+新稿/新源码/独立模型从空文件形成，旧Q1–18仅保留撤回身份，新正文不假定旧章已学。新Q19–26完整主讲一次；五实现分别为手写/标准出现区间及三个独立可行性任务；四个入口宏由五个实际target覆盖，不把compile声明冒充运行I/O。独立外部runner现已持久化，可重新执行90次ACM与8项LC检查。
+
+研究和复审实质纠正了Koko中间窄加法与Factory不相容最大值的论证，最终源稿和源码的身份分别为43c1acb807dab80cf952d4b27a7f0fa08f039deaa45e7743ead7e58045c74051及d6e524cc40b6c61a053d83284be8717c4aaecde29d04c48a9ade18194281dfa1。方法范围、C++合同、实际验证与未测项以当前记录为准。
+
+本次支持记录字节身份：
+
+- task-baseline.md: `2999a1d002eb495bead478213e39639c0d26ec01c889358f80a1699896c68663`
+- scope-research.md: `1b605ecbf2ac99993215f8796cad2d222cb94e34184890202d43aa295615bc43`
+- practice-evidence.md: `deaa70e4593005222669bea0f5b7114109ceea7b89fdddf8eae94047d906f580`
+- author-research.md: `733f3e078c8af9f2e44bfab92d772bdc2dd7ed965e51d111e1cb0f24c08d398c`
+- independent-content-review.md: `b99d787c1574571701f6b1a3845a0b42818a4105000375869061ddbd344e7e05`
+- independent-verification.md: `a96f9f71363b4f42700bc290d9ead007e37842c4cdb6bb1295b2620a0c8de914`
+- verify_platform_entries.py: `ee30c7cf71699502bea83ee2fa5fa2690f5b20b7888baa6ff15d1dd321bf4c86`
+- validation.json: `cbf4602b03b328e9cff9a8a9b5272fb10696026ec118946dae40099f1ffdec01`
