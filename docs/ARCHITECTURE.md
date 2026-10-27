@@ -1,5 +1,7 @@
 # 工程组织与数据关系
 
+客户阅读载体见 [READER.md](READER.md)：Pages壳/版本化正文、独立Worker/D1身份与状态，展示登记共享原有作者稿，不另造内容权威。
+
 第二算法把全局研究、内容工程与参考总册分开组织。共同规则以 [CONTENT_PIPELINE](../protocol/CONTENT_PIPELINE.md) 为准，上游判断见[研究部协议](../protocol/RESEARCH_DEPARTMENT.md)，分线执行见[算法协议](../protocol/ALGORITHM_TRACK.md)和[C++协议](../protocol/CPP_TRACK.md)；本文说明现有工程怎样承接这些职责，不代替内容协议。
 
 ## 数据流

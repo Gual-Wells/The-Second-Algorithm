@@ -1,0 +1,31 @@
+{
+  "series": 1,
+  "geometry_source": "scripts/make-carrier-icons.py",
+  "geometry_sha256": "d5230ae1c92d86016b101f5ad42a43d23c3543653cd0d5e547603d093052fa35",
+  "svg_sha256": "497c4629840c349d1a23d27cb4a2bf9330c7f097974be9ab906a2253a6638ed3",
+  "reference_repository": "Gual-Wells/The-Second-Language",
+  "reference_commit": "5573946b10023df3c9b83f0d02a139860afef2bc",
+  "files": [
+    {
+      "name": "apple-touch-icon.png",
+      "size": 180,
+      "mode": "RGBA",
+      "alpha_sha256": "e66d29d635915136427604f35317b9a6457c9caed7a92908e5ded47d0862f1bd",
+      "sha256": "dc478907d0c2866312e8f6cc2db15824c7badff3c6d4f4882438092a00e6e664"
+    },
+    {
+      "name": "icon-192.png",
+      "size": 192,
+      "mode": "RGBA",
+      "alpha_sha256": "e660f49767a5288acadcf9d7aa0e98c9768875c52ec57499a8719170c194cb54",
+      "sha256": "7dc931fd40e3513017a6e3a8f6cce7cbd156f43bfe1ac273858a5e80a1b545aa"
+    },
+    {
+      "name": "icon-512.png",
+      "size": 512,
+      "mode": "RGBA",
+      "alpha_sha256": "3b874d3ba46c638fc3094f8e92fb744ca974893873f8885f54e23760f9b6311b",
+      "sha256": "6e2c002fc0cbe0cd97f560a808be06e24898260b550098848aaeee5fc1240353"
+    }
+  ]
+}

@@ -13,3 +13,5 @@
 - 公共仓库不上传用户教材原件、商业题库全文、个人旧手册、凭据、机器专用路径或本地依赖联接。引用、独立研究笔记和原创教学内容与原件分开保存。
 
 命令以实际实现为准，使用 `python -m second_algorithm --help` 查看入口；报告实际执行结果，不将计划、跳过或历史验证称为本次已完成。
+
+阅读载体见 [docs/READER.md](docs/READER.md)。`carrier/publications.json`是展示登记，不代替内容研究；现有2个trial集合不因部署改称10章。前端遵循 [web/DESIGN.md](web/DESIGN.md)，保留代码原生选择、横滚与缩放。正文不入D1，不复制第二语言音频、VIX、IELTS或定时后台。修改身份、缓存、复制或构建时运行 `npm run test:carrier` 和完整构建；发布后验证匿名保护，实机安装单独核实。

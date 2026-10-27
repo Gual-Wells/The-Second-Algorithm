@@ -15,6 +15,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install carrier dependencies
+        run: npm ci
+      - name: Verify owner boundary, content exports and icon compatibility
+        run: npm run test:carrier
+      - name: Build private reader and worker
+        run: npm run build
       - name: Validate committed catalogues and references
         run: python -m second_algorithm validate
       - name: Verify collectors and recovery without network

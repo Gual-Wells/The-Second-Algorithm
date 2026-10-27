@@ -1,0 +1,34 @@
+{
+  "repository": "Gual-Wells/The-Second-Language",
+  "commit": "5573946b10023df3c9b83f0d02a139860afef2bc",
+  "purpose": "Verified per-size edge alpha only; reference glyph is not reused",
+  "files": {
+    "apple-touch-icon.png": {
+      "path": "web/apple-touch-icon.png",
+      "sha256": "c70473432d6a36917f4ccf256a08a3843d972c4f71bd939e4233aaaa84a840e2",
+      "alpha_sha256": "e66d29d635915136427604f35317b9a6457c9caed7a92908e5ded47d0862f1bd",
+      "dimensions": [
+        180,
+        180
+      ]
+    },
+    "icon-192.png": {
+      "path": "web/icon-192.png",
+      "sha256": "32373b0edaab98b53f5ac5827bb2c4b4c5cdeba053d5612b2fd74f2c3b78d15b",
+      "alpha_sha256": "e660f49767a5288acadcf9d7aa0e98c9768875c52ec57499a8719170c194cb54",
+      "dimensions": [
+        192,
+        192
+      ]
+    },
+    "icon-512.png": {
+      "path": "web/icon-512.png",
+      "sha256": "92b439ae13c5170735bbe50ebd85c6896ce7a327c25dd80d37c3c17bc30189c7",
+      "alpha_sha256": "3b874d3ba46c638fc3094f8e92fb744ca974893873f8885f54e23760f9b6311b",
+      "dimensions": [
+        512,
+        512
+      ]
+    }
+  }
+}

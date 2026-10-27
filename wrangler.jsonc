@@ -1,0 +1,12 @@
+{
+  "name": "second-algorithm",
+  "pages_build_output_dir": "./dist",
+  "compatibility_date": "2026-09-30",
+  "vars": { "APP_ORIGIN": "https://second-algorithm.pages.dev" },
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "second-algorithm",
+    "database_id": "c396b1ca-43fb-4a77-b9b2-c90c7f436b41",
+    "migrations_dir": "migrations"
+  }]
+}

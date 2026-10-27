@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#2264a5">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="第二算法">
+  <title>第二算法</title>
+  <link rel="manifest" href="/manifest.webmanifest?v=__BUILD__">
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon-series1.png?v=__BUILD__">
+  <link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+  <link rel="stylesheet" href="/styles.css?v=__BUILD__">
+  <script type="module" src="/app.js?v=__BUILD__"></script>
+</head>
+<body>
+  <div class="app-frame">
+    <header class="app-header">
+      <div class="brand"><h1>第二算法</h1><small>THE SECOND ALGORITHM</small></div>
+      <div class="header-actions" id="headerActions" hidden>
+        <button type="button" id="libraryButton">章节册</button>
+        <button type="button" id="settingsButton">设置</button>
+      </div>
+    </header>
+    <nav class="track-tabs" id="trackTabs" role="tablist" aria-label="内容线" hidden>
+      <button type="button" role="tab" data-track="algorithm" aria-selected="true">算法</button>
+      <button type="button" role="tab" data-track="cpp" aria-selected="false">C++</button>
+    </nav>
+    <section id="loginView" class="login-view">
+      <div class="login-card">
+        <img class="login-icon" src="/icons/icon-192.png" width="76" height="76" alt="">
+        <h2>第二算法</h2><p id="loginMessage" role="status">正在连接…</p>
+        <form id="enrollForm" hidden>
+          <label for="setupKey">初始化密钥</label>
+          <input id="setupKey" type="password" autocomplete="off" autocapitalize="none" spellcheck="false">
+          <button type="submit">创建通行密钥</button>
+        </form>
+        <button type="button" id="loginButton" hidden>通行密钥登录</button>
+        <button type="button" id="retryButton" hidden>重新连接</button>
+      </div>
+    </section>
+    <section id="libraryView" class="library-scroll" hidden>
+      <div class="shelf-toolbar"><h2 id="libraryTitle">算法册</h2><span id="connectionLabel" class="muted"></span></div>
+      <label class="search-field"><span class="sr-only">全册检索</span><input id="librarySearch" type="search" placeholder="查找题型、方法、代码" autocomplete="off"></label>
+      <div id="bookList"></div>
+    </section>
+    <section id="readerView" class="reader-view" hidden>
+      <div class="context-bar"><span id="currentTitle"></span><span id="currentKind" class="kind-label"></span><button type="button" id="pureButton" aria-pressed="false">纯净</button></div>
+      <nav id="documentTabs" class="document-tabs" role="tablist" aria-label="本篇组成"></nav>
+      <main id="readingPane" class="reader-scroll" tabindex="-1"><article id="readingArticle" class="paper"></article></main>
+      <footer class="reader-footer"><button type="button" id="tocButton">目录</button><button type="button" id="progressLabel" aria-label="阅读位置">0%</button><button type="button" id="notesButton">笔记</button></footer>
+    </section>
+  </div>
+  <dialog id="sheetDialog" class="sheet" aria-labelledby="sheetTitle">
+    <div class="sheet-header"><button type="button" id="sheetBack" hidden>返回</button><h2 id="sheetTitle"></h2><button type="button" data-sheet-close>完成</button></div>
+    <div class="sheet-body" id="sheetBody"></div>
+  </dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <noscript>请启用JavaScript以使用阅读器。</noscript>
+</body>
+</html>
