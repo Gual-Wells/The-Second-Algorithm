@@ -50,6 +50,6 @@ node scripts/deploy-carrier.mjs
 
 脚本使用当前Cloudflare授权，应用独立库增量迁移、上传Pages并核实匿名正文/状态返回401。库ID不是秘密；`ENROLLMENT_KEY`只作为Cloudflare secret配置。支持 `ALGORITHM_WRANGLER` 指定入口。不得将本地QA虚拟通行密钥登记到生产。
 
-首次登记仅在站点就绪后设置secret，临时将 `auth_control.enrollment_until` 更新为未来毫秒时间戳并告知用户；登记成功自动关闭。不开永久窗口，不复制其他项目owner。备份使用D1只读导出/平台恢复，不用本地测试库覆盖生产。
+首次登记先设置secret并重新部署，使新绑定进入实际部署；再临时将 `auth_control.enrollment_until` 更新为未来毫秒时间戳。用真实 `/auth/enroll/options` 核实初始化密钥有效后才告知用户，不能仅凭status中的开窗状态认定密钥已生效。登记成功自动关闭。不开永久窗口，不复制其他项目owner。备份使用D1只读导出/平台恢复，不用本地测试库覆盖生产。
 
 CI保留原研究/Python/C++检查，新增载体测试与完整构建。测试不证明内容语义完整；浏览器模拟不能代替iPhone安装、触摸和键盘实测。
