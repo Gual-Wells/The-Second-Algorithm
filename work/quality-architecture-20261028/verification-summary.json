@@ -1,0 +1,53 @@
+{
+  "baseline": "4d9fe9024b80fd6abf1ad45e94a966f6d36e2600",
+  "checks": {
+    "pythonTests": 76,
+    "carrierTests": 66,
+    "cppTargets": 5,
+    "cppAssertions": 649268,
+    "browserChecks": 20,
+    "realServiceWorkerChecksPassed": true
+  },
+  "job": "chapter-architecture-20261028",
+  "inputHash": "3929825e1dab5be3a4d75192b9917082301d7d05092ef6df54ee4c32e82ea3f6",
+  "verification": {
+    "path": "work/jobs/chapter-architecture-20261028/verifications/abdf3c3be2ed4456ab987bebb7f010c8.json",
+    "sha256": "a326021cc01954fa01e1c5cc232fd9a822eec6076ac2ceb45124972e52cb68b2",
+    "inputHash": "3929825e1dab5be3a4d75192b9917082301d7d05092ef6df54ee4c32e82ea3f6"
+  },
+  "genericResearchAndEngineeringEvidenceCurrent": true,
+  "chapterQuality": {
+    "ok": false,
+    "operation": "content-release",
+    "inputHash": "9d7d1e30abad3565cbb7c2d743ce001139e9e0f5fd380696030039979529dde9",
+    "chapters": [
+      {
+        "id": "boundary-feasibility",
+        "title": "边界与答案：章级整改合同",
+        "ok": false,
+        "errors": [
+          "direction-and-result: open promise — 当前优化任务全为有已知可行右界的首真；缺实际末真/最大可行和空可行集的建模与政策。",
+          "boundary-reuse: open promise — 现稿主要使用出现区间，未把已有边界结果组织成关键查询复用关系。",
+          "finite-scope-closure: open promise — 已发现低前置查询与方向/结果缺口；现稿未形成完整方法选择网络，需返工后新一轮外部反查。负数完整解不强制纳入。",
+          "reader-route: open promise — 现有开篇四题表和章末验证说明不足以承担关系导览与选择地图。",
+          "cpp-support-layer: open promise — 当前Q与工程接口细节占主线，尚未按真实阅读顺序重新组织。不能仅加标签或默认折叠声称已修复。",
+          "reading structure is open — 现存部分问题簇位置可定位，但未按整改目标完成整体阅读组织；方法选择/查询复用地图缺失，主线与Q支撑分层待重构。此路径是恢复入口，不宣称各标题目标均已实现。",
+          "chapter review has not accepted this edition",
+          "direction-and-result: review records an unresolved gap",
+          "boundary-reuse: review records an unresolved gap",
+          "finite-scope-closure: review records an unresolved gap",
+          "reader-route: review records an unresolved gap",
+          "cpp-support-layer: review records an unresolved gap"
+        ],
+        "contract": "content/boundary-feasibility/chapter.contract.json",
+        "review": "content/boundary-feasibility/chapter.review.json",
+        "reviewSha256": "79be2974c56f337f53964deae1840c1f6a7bbc7ff22d02b9df23388d7ec6e7c4"
+      }
+    ],
+    "semanticCompletenessCertified": false,
+    "claim": "Current caller-written assessments and locations checked; no automatic difficulty or completeness score."
+  },
+  "prepareReleaseRefused": true,
+  "deployed": false,
+  "newRecurringCost": 0
+}

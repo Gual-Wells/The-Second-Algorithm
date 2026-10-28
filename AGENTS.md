@@ -1,6 +1,6 @@
 # 第二算法工作入口
 
-本项目为求职算法上机建立统一实战参考：实际任务、方法与变种、手写实现、C++标准设施和可运行作答。先读 `protocol/CONTENT_PIPELINE.md`，再读 `protocol/RESEARCH_DEPARTMENT.md`、`protocol/IMPLEMENTATION_STANDARD.md`、`protocol/TASK_EXECUTION.md`。当前模型见 `docs/CONTENT_MODEL.md`，恢复见 `docs/RECOVERY.md`。
+本项目为求职算法上机建立统一实战参考：实际任务、方法与变种、手写实现、C++标准设施和可运行作答。先读 `protocol/CONTENT_PIPELINE.md`、`protocol/CHAPTER_STANDARD.md`、`protocol/QUALITY_WORKFLOW.md`，再按研究、实现、发布职责读其余协议。当前模型见 `docs/CONTENT_MODEL.md`，恢复见 `docs/RECOVERY.md`。
 
 ## 用户确定的产品要求
 
@@ -9,6 +9,8 @@
 - Q编号不绑定章号/路径。当前 `catalog/learning.json` 是关系登记，`carrier/publications.json` 是统一出版登记；原稿与C++源码是正文/代码权威，Q登记不复制解释。编号存在、验证通过、阅读进度和用户掌握分别是不同事实。
 - 旧版本无需兼容。旧稿/旧cases/patterns是历史研究或测试素材，不作为当前正式覆盖或下一章顺序。用户教材、凭据与原件不删除、不公开。
 - 章主题、边界、体量和顺序由研究形成，不预设整册目录或以文件数当章数。逐章推进，不机械复制旧稿，也不把新发现全变成必修。
+- 读者有计算机基础，C++设施缺口不等于算法初学；首章不得据此降算法高度。正式章须兑现难度、范围、系统完备和人类可读性的具体合同，不能先缩小到方便的题单再自证完整。关键条件/方法对照与低前置的有用复用不能仅为短稿、易测或回避新结构而删除。
+- 作者结构按读者的问题关系推进，清楚区分算法主线、实际任务与C++支撑；章入口和方法选择地图服务实际理解与回查，不将工程审计表灌入正文。合同及材料/正文映射见 `catalog/chapters.json`，`course chapters` 可人读；open/needs-work必须影响后续发布，不能补字段追认合格。
 
 ## 工程职责
 
@@ -24,6 +26,8 @@
 ```sh
 python -m second_algorithm research status
 python -m second_algorithm course validate
+python -m second_algorithm course chapters
+python -m second_algorithm course quality
 python -m second_algorithm course search Q000001
 npm run check
 ```

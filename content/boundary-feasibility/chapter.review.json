@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "chapter": "boundary-feasibility",
+  "inputHash": "9d7d1e30abad3565cbb7c2d743ce001139e9e0f5fd380696030039979529dde9",
+  "assessments": [
+    {
+      "commitment": "predicate-proof",
+      "outcome": "pass",
+      "reason": "实读division-proof：有贪心领先归纳、至多k到恰k拆分及负数反例，分别论证判定与单调性。保留这个真实认知台阶，不把范围不足误说成全无深度。",
+      "locations": [
+        {
+          "document": "boundary-feasibility",
+          "anchor": "division-proof"
+        }
+      ]
+    },
+    {
+      "commitment": "direction-and-result",
+      "outcome": "gap",
+      "reason": "本章优化任务仍全部首真、有已知可行右界；没有最大可行与空可行集的真实问题/返回政策。",
+      "locations": []
+    },
+    {
+      "commitment": "boundary-reuse",
+      "outcome": "gap",
+      "reason": "当前lower/upper结果只主要服务出现区间；次数、严格性前后继和闭值域计数未形成实际复用参考面。",
+      "locations": [
+        {
+          "document": "boundary-feasibility",
+          "anchor": "occurrence-boundaries"
+        }
+      ]
+    },
+    {
+      "commitment": "different-predicates",
+      "outcome": "pass",
+      "reason": "分别读Koko逐堆整小时、Factory并行产量及正数分段：ceil/floor/贪心的原题语义、边界与数值解释有实际增量，非仅更换故事。",
+      "locations": [
+        {
+          "document": "boundary-feasibility",
+          "anchor": "speed-feasibility"
+        },
+        {
+          "document": "boundary-feasibility",
+          "anchor": "production-feasibility"
+        },
+        {
+          "document": "boundary-feasibility",
+          "anchor": "division-proof"
+        }
+      ]
+    },
+    {
+      "commitment": "finite-scope-closure",
+      "outcome": "gap",
+      "reason": "原件反查已揭示查询复用和方向/结果缺失；现章仍不能从正文恢复完整选择网络。负数完整DP可合理排除，但不能视为替代机制已教。",
+      "locations": []
+    },
+    {
+      "commitment": "real-cpp-and-entries",
+      "outcome": "pass",
+      "reason": "核learning五实现/五target、Q唯一及正文入口，独立运行和四个平台编译分支均有真实成果。此pass只确认这一承诺，不认证全章产品充分性。",
+      "locations": [
+        {
+          "document": "boundary-feasibility",
+          "anchor": "occurrence-boundaries"
+        },
+        {
+          "document": "boundary-feasibility",
+          "anchor": "platform-entries"
+        },
+        {
+          "document": "boundary-feasibility",
+          "anchor": "independent-checks"
+        }
+      ]
+    },
+    {
+      "commitment": "reader-route",
+      "outcome": "gap",
+      "reason": "现有四题表和章末验证说明不等于方法选择/复用地图；阅读结构selectionMap仍缺，能力导览与关系路径待编纂。",
+      "locations": []
+    },
+    {
+      "commitment": "cpp-support-layer",
+      "outcome": "gap",
+      "reason": "必要Q和包装/更宽helper合同仍与算法主线混排；不能用补锚点或登记reading追认可读性整改完成。",
+      "locations": []
+    }
+  ],
+  "comparison": {
+    "baseline": "当前完整作者稿与旧二分1.1/4节、旧连续片段的关系组织；实际证据见scope-countercheck和craft-baseline，不以旧代码正确/题多作为全章优越证据。",
+    "findings": "新稿证明与C++支撑有真实进步，范围/方法迁移和阅读组织收缩。保留分段证明与实际作答，须补关键低前置关系并重组；本轮仅完成架构，不声称成稿质量已改好。"
+  },
+  "outsideChallenge": {
+    "materialIds": [
+      "scope-countercheck"
+    ],
+    "findings": "原作者分类之外的旧材料揭示查询复用、末真/空解及条件触发方法替换。证据已用于本轮合同，此后是建设材料，不能冒充未来改稿的未见独立探针。当前反查结论为需要返工，并未因为有countercheck角色便通过。"
+  },
+  "verdict": "needs-work"
+}

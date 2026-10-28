@@ -122,10 +122,12 @@ def job_status(root: Path, job_id: str) -> dict:
             verified, verification_reason = False, "latest-attempt-" + latest_reason
     prepared, preparation_reason = _receipt_current(root, job.get("lastPreparedRelease"), current_hash)
     evidence = _evidence_status(root, job, current_hash)
-    ready = bool(validation["ok"] and verified and all(row["current"] for row in evidence.values()))
+    from .chapters import chapter_quality
+    quality = chapter_quality(root)
+    ready = bool(validation["ok"] and quality["ok"] and verified and all(row["current"] for row in evidence.values()))
     return {"ok": True, "id": job_id, "goal": job["goal"], "inputHash": current_hash,
             "publicationState": validation.get("publicationState"), "operation": validation.get("operation"),
-            "validation": validation, "evidence": evidence,
+            "validation": validation, "chapterQuality": quality, "evidence": evidence,
             "verification": {"current": verified, "reason": verification_reason,
                              "lastGood": job.get("lastGoodVerification")},
             "release": {"current": prepared and ready, "reason": preparation_reason if ready else "requirements-not-current",
@@ -144,6 +146,8 @@ def resume_job(root: Path, job_id: str) -> dict:
     steps = []
     if not result["validation"]["ok"]:
         steps.append("Fix current-course structural errors before registering new evidence.")
+    if not result["chapterQuality"]["ok"]:
+        steps.append("Resolve chapter contract gaps and perform current per-promise editorial review; inspect course quality.")
     for kind, evidence in result["evidence"].items():
         if not evidence["current"]:
             steps.append("Perform actual " + kind + " for current inputs, save the note, and register accepted evidence.")
@@ -274,7 +278,7 @@ def prepare_release(root: Path, job_id: str) -> dict:
         job = _job(root, job_id)
         status = job_status(root, job_id)
         if not status["readyForReleasePreparation"]:
-            raise ValueError("Release not ready: current model, accepted research/review notes and successful current verification are required; inspect research status")
+            raise ValueError("Release not ready: current model, chapter-quality reviews, accepted research/review notes and successful current verification are required; inspect research status")
         snapshot = course_snapshot(root)
         if snapshot["inputHash"] != status["inputHash"]:
             raise ValueError("Course inputs changed during release preparation")
@@ -283,7 +287,7 @@ def prepare_release(root: Path, job_id: str) -> dict:
                    "state": "prepared", "passed": True, "inputHash": snapshot["inputHash"],
                    "inputs": snapshot["inputs"], "documents": snapshot["documents"],
                    "publicationState": snapshot["publicationState"], "operation": snapshot["operation"],
-                   "evidence": evidence, "verification": job["lastGoodVerification"],
+                   "evidence": evidence, "chapterQuality": status["chapterQuality"], "verification": job["lastGoodVerification"],
                    "automaticSemanticCertification": False, "deployed": False}
         filename = _job_path(root, job_id).parent / "releases" / (receipt["id"] + ".json")
         write_json(filename, receipt, immutable=True)
@@ -317,6 +321,8 @@ def check_release(root: Path, packet: str) -> dict:
     expected_evidence = [status["evidence"][kind]["record"] for kind in ("research", "review")]
     if record.get("evidence") != expected_evidence or record.get("documents") != snapshot["documents"]:
         raise ValueError("Release packet evidence or document scope is no longer current")
+    if record.get("chapterQuality") != status["chapterQuality"]:
+        raise ValueError("Release packet chapter reviews are no longer current")
     if course_snapshot(root)["inputHash"] != snapshot["inputHash"]:
         raise ValueError("Inputs changed during release packet check")
     return {"ok": True, "packet": packet, "inputHash": snapshot["inputHash"],

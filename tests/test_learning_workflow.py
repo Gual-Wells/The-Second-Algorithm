@@ -13,6 +13,7 @@ import unittest
 from unittest.mock import patch
 
 from second_algorithm.cli import main
+from second_algorithm.chapters import chapter_inputs
 from second_algorithm.learning import course_snapshot, course_targets, search_learning, validate_learning
 from second_algorithm.storage import read_json, write_json
 from second_algorithm.workflow import (add_evidence, check_release, init_job, job_status, prepare_release,
@@ -72,6 +73,26 @@ int main() {
                      "standard": "c++17", "regions": ["standard"], "questions": ["Q000001"], "complexity": {"time": "O(log n)", "space": "O(1)"}, "target": "boundaries"}]}]}],
             "targets": [{"id": "boundaries", "kind": "run", "source": "tests/cpp/check.cpp", "standard": "c++17", "timeoutSeconds": 30}]}
         self.save()
+        self.put("work/material.md", "Actual fixture material read: sorted boundary contract and method choices.\n")
+        self.chapter_index = {"schemaVersion": 1, "chapters": [{"id": "unit", "collection": "unit",
+            "contract": "content/unit/chapter.contract.json", "review": "content/unit/chapter.review.json"}]}
+        self.contract = {"schemaVersion": 1, "chapter": "unit", "title": "Unit contract",
+            "reader": {"startingPoint": "Basic programming, limited C++ facility knowledge",
+                       "targetCapability": "Recognize and implement sorted boundaries", "supportPolicy": "One canonical Q explanation"},
+            "scope": {"core": "Sorted boundary queries", "extensions": "Manual and standard implementation choice",
+                      "completenessArgument": "Compare task conditions and method roles", "exclusions": []},
+            "reading": {"status": "addressed", "entry": [{"document": "lesson", "anchor": "q000001"}],
+                "units": [{"id": "boundary-unit", "title": "Sorted boundary problems", "taskIds": ["boundary"],
+                           "locations": [{"document": "lesson", "anchor": "q000001"}]}],
+                "selectionMap": [{"document": "lesson", "anchor": "q000001"}], "gap": ""},
+            "materials": [{"id": "outside", "kind": "countercheck", "locator": "Independent boundary task",
+                           "evidence": "work/material.md", "sourcePaths": []}],
+            "commitments": [{"id": dimension, "dimension": dimension, "claim": "Explain " + dimension,
+                "acceptance": "Reader can locate the reasoning", "status": "addressed", "taskIds": ["boundary"],
+                "locations": [{"document": "lesson", "anchor": "q000001"}], "materialIds": ["outside"], "gap": ""}
+                for dimension in ("difficulty", "breadth", "completeness", "readability")]}
+        write_json(self.root / "catalog/chapters.json", self.chapter_index)
+        write_json(self.root / "content/unit/chapter.contract.json", self.contract)
 
     def tearDown(self):
         self.temporary.cleanup()
@@ -95,6 +116,13 @@ int main() {
         self.assertIn(phrase, "\n".join(checked["errors"]))
 
     def notes(self):
+        if self.publications.get("state") != "withdrawn":
+            review = {"schemaVersion": 1, "chapter": "unit", "inputHash": chapter_inputs(self.root, "unit")["inputHash"],
+                "verdict": "accepted", "comparison": {"baseline": "Actual fixture source", "findings": "Both implementations preserve the sorted contract"},
+                "outsideChallenge": {"materialIds": ["outside"], "findings": "Checked empty and absent-value task conditions"},
+                "assessments": [{"commitment": promise["id"], "outcome": "pass", "reason": "Reasoned fixture assessment",
+                    "locations": [{"document": "lesson", "anchor": "q000001"}]} for promise in self.contract["commitments"]]}
+            write_json(self.root / "content/unit/chapter.review.json", review)
         self.put("work/research.md", "Actually read the fixture task and library contract; scope is this fixture.\n")
         self.put("work/review.md", "Actually reviewed both source variants, Q placement and finite boundary oracle.\n")
         for kind in ("research", "review"):

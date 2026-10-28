@@ -23,6 +23,7 @@ pre code{font:inherit;color:inherit;background:transparent;padding:0;border-radi
 @media(max-width:860px){.topbar{height:55px;padding:0 17px}.brand span{display:none}.files{gap:16px;font-size:13px}.layout{display:block;padding:17px 12px 35px}.sidebar{display:none}main{padding:26px 24px;font-size:16px}.mobile-toc{display:block;margin-bottom:17px;border:1px solid var(--line);background:white;padding:10px 15px}.mobile-toc summary{color:#244a65;font-size:15px;cursor:pointer;font-weight:600}.mobile-toc nav{max-height:55vh;overflow:auto;margin-top:12px}h1{font-size:29px}h2{font-size:23px}h3{font-size:19px}table{font-size:14px}pre{font-size:13px}}
 @media print{.topbar,.sidebar,.mobile-toc{display:none}.layout{display:block;max-width:none;margin:0;padding:0}main{border:0;box-shadow:none;padding:0}body{background:white;color:black;font-size:10.5pt;line-height:1.65}h1{font-size:22pt}h2{font-size:16pt}h3{font-size:13pt}h1,h2,h3,h4{break-after:avoid}pre{white-space:pre-wrap;overflow:visible;break-inside:avoid;font-size:8.5pt}pre code{white-space:pre-wrap}table{font-size:9pt}a{color:inherit}.table-wrap{overflow:visible}}
 </style></head><body><header class="topbar"><div class="brand">第二算法 · 实战与实现<span>边界与答案</span></div><nav class="files" aria-label="文件"><a href="边界与答案.md">Markdown</a><a href="边界与答案.cpp">C++ 源码</a></nav></header><div class="layout"><aside class="sidebar"><div class="toc-title">问题与实现目录</div><nav class="toc" aria-label="问题与实现目录"><a class="group" href="#找到一个相等值-还没有找到出现区间">找到一个相等值，还没有找到出现区间</a><a class="topic" href="#把合同落到c-参数和下标">把合同落到C++参数和下标</a><a class="topic" href="#q000019-const-std-vector-int-怎样借用输入">Q000019 · const std::vector&lt;int&gt;&amp; 怎样借用输入</a><a class="topic" href="#q000020-容器长度为什么要先核对再转成-int">Q000020 · 容器长度为什么要先核对再转成 int</a><a class="topic" href="#q000021-怎样把两个下标作为一个有值的结果返回">Q000021 · 怎样把两个下标作为一个有值的结果返回</a><a class="topic" href="#标准设施直接完成哪一层">标准设施直接完成哪一层</a><a class="topic" href="#q000022-equal-range-的两个迭代器怎样变成答案">Q000022 · equal_range 的两个迭代器怎样变成答案</a><a class="group" href="#koko-没有数组-也能问第一个可行位置">Koko：没有数组，也能问第一个可行位置</a><a class="topic" href="#q000023-范围-for-怎样读取元素-怎样写回元素">Q000023 · 范围 for 怎样读取元素，怎样写回元素</a><a class="topic" href="#q000024-宽结果必须从哪一步开始使用宽整数">Q000024 · 宽结果必须从哪一步开始使用宽整数</a><a class="topic" href="#先给搜索一个确实包含答案的区间">先给搜索一个确实包含答案的区间</a><a class="topic" href="#q000025-取极值和求和时-标准设施返回什么">Q000025 · 取极值和求和时，标准设施返回什么</a><a class="group" href="#factory-machines-并行产量不是逐项耗时">Factory Machines：并行产量不是逐项耗时</a><a class="topic" href="#只累计决策需要的信息">只累计决策需要的信息</a><a class="topic" href="#可行上界从一台机器就能得到">可行上界从一台机器就能得到</a><a class="group" href="#array-division-搜索正确以前-先证明判定正确">Array Division：搜索正确以前，先证明判定正确</a><a class="topic" href="#给定上限-贪心为什么得到最少段数">给定上限，贪心为什么得到最少段数</a><a class="topic" href="#用两项必然界限包住最优值">用两项必然界限包住最优值</a><a class="topic" href="#加入负数时-究竟哪一步失效">加入负数时，究竟哪一步失效</a><a class="group" href="#从参考函数到完整作答">从参考函数到完整作答</a><a class="topic" href="#q000026-函数题与标准输入输出题分别需要什么入口">Q000026 · 函数题与标准输入输出题分别需要什么入口</a><a class="topic" href="#lc34">LC34</a><a class="topic" href="#lc875">LC875</a><a class="topic" href="#cses1620">CSES1620</a><a class="topic" href="#cses1085">CSES1085</a><a class="group" href="#用结果检查条件-避免只检查循环相像">用结果检查条件，避免只检查循环相像</a></nav></aside><div><details class="mobile-toc"><summary>问题与实现目录</summary><nav class="toc"><a class="group" href="#找到一个相等值-还没有找到出现区间">找到一个相等值，还没有找到出现区间</a><a class="topic" href="#把合同落到c-参数和下标">把合同落到C++参数和下标</a><a class="topic" href="#q000019-const-std-vector-int-怎样借用输入">Q000019 · const std::vector&lt;int&gt;&amp; 怎样借用输入</a><a class="topic" href="#q000020-容器长度为什么要先核对再转成-int">Q000020 · 容器长度为什么要先核对再转成 int</a><a class="topic" href="#q000021-怎样把两个下标作为一个有值的结果返回">Q000021 · 怎样把两个下标作为一个有值的结果返回</a><a class="topic" href="#标准设施直接完成哪一层">标准设施直接完成哪一层</a><a class="topic" href="#q000022-equal-range-的两个迭代器怎样变成答案">Q000022 · equal_range 的两个迭代器怎样变成答案</a><a class="group" href="#koko-没有数组-也能问第一个可行位置">Koko：没有数组，也能问第一个可行位置</a><a class="topic" href="#q000023-范围-for-怎样读取元素-怎样写回元素">Q000023 · 范围 for 怎样读取元素，怎样写回元素</a><a class="topic" href="#q000024-宽结果必须从哪一步开始使用宽整数">Q000024 · 宽结果必须从哪一步开始使用宽整数</a><a class="topic" href="#先给搜索一个确实包含答案的区间">先给搜索一个确实包含答案的区间</a><a class="topic" href="#q000025-取极值和求和时-标准设施返回什么">Q000025 · 取极值和求和时，标准设施返回什么</a><a class="group" href="#factory-machines-并行产量不是逐项耗时">Factory Machines：并行产量不是逐项耗时</a><a class="topic" href="#只累计决策需要的信息">只累计决策需要的信息</a><a class="topic" href="#可行上界从一台机器就能得到">可行上界从一台机器就能得到</a><a class="group" href="#array-division-搜索正确以前-先证明判定正确">Array Division：搜索正确以前，先证明判定正确</a><a class="topic" href="#给定上限-贪心为什么得到最少段数">给定上限，贪心为什么得到最少段数</a><a class="topic" href="#用两项必然界限包住最优值">用两项必然界限包住最优值</a><a class="topic" href="#加入负数时-究竟哪一步失效">加入负数时，究竟哪一步失效</a><a class="group" href="#从参考函数到完整作答">从参考函数到完整作答</a><a class="topic" href="#q000026-函数题与标准输入输出题分别需要什么入口">Q000026 · 函数题与标准输入输出题分别需要什么入口</a><a class="topic" href="#lc34">LC34</a><a class="topic" href="#lc875">LC875</a><a class="topic" href="#cses1620">CSES1620</a><a class="topic" href="#cses1085">CSES1085</a><a class="group" href="#用结果检查条件-避免只检查循环相像">用结果检查条件，避免只检查循环相像</a></nav></details><main><h1 id="边界与答案-把搜索条件写进代码">边界与答案：把搜索条件写进代码</h1>
+<p><a id="chapter-entry"></a></p>
 <p>在有序数组中找到一个值，和找到“所有相等值到哪里结束”，是两个不同的任务。生产需要多久、把数组切成几段才合适，看上去又没有可供查找的数组。本章把这些任务连成一条路线：先确定要找的边界，再证明一次判断能排除哪一段，最后检查这个判断有没有正确表达原题。</p>
 <p>我们依次解决四个实际任务。它们需要的C++设施就在相邻实现处解释；同一知识问题后面只引用Q编号。代码使用C++17，函数位于参考源码的 <code>boundary_feasibility</code> 命名空间；平台作答入口见末节。算法函数均只读取输入，不排序、不修改数组。它们接受各原题给出的合法输入；这份参考接口没有额外承诺如何处理非法 <code>k</code>、零机器周期、负香蕉数或损坏的输入流。</p>
 <div class="table-wrap"><table>
@@ -54,6 +55,7 @@ pre code{font:inherit;color:inherit;background:transparent;padding:0;border-radi
 <td>贪心计算最少需要几段</td>
 </tr>
 </tbody></table></div>
+<p><a id="occurrence-boundaries"></a></p>
 <h2 id="找到一个相等值-还没有找到出现区间">找到一个相等值，还没有找到出现区间</h2>
 <p><a href="https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/" target="_blank" rel="noopener noreferrer">LC34原题</a>给出非降序整数数组和目标值，返回其第一次、最后一次出现的下标；不存在时返回 <code>[-1,-1]</code>。数组可以为空，长度至100000，元素和目标在±10^9内，要求O(log n)时间。下标从0开始。</p>
 <p>例如 <code>[5,7,7,8,8,10]</code> 中目标8的答案是 <code>[3,4]</code>。第一次碰到8就返回，只能说明找到了一个见证；它不能排除这个8左边和右边还有其他8。从找到的位置线性扩散，在全部相等时又会退回O(n)。</p>
@@ -135,6 +137,7 @@ pre code{font:inherit;color:inherit;background:transparent;padding:0;border-radi
 }</code></pre>
 <p>这和手写版实现的是同一对边界的合同。库设施取代的是边界搜索本身；把半开范围变成原题输出仍由调用者完成。<code>binary_search</code>只回答是否存在，不能替代本题所需的两个位置。这个标准设施版本在本题仍为O(log n)时间、O(1)额外空间。</p>
 <p>先用几种输入检查自己的边界解释：空数组；目标比所有元素小或大；只有一个元素且相等或不等；所有元素相等；目标缺失但插入点在中间。它们分别检查“边界可取n”“末端不是元素”“重复值不能提前返回”等不同事实。</p>
+<p><a id="speed-feasibility"></a></p>
 <h2 id="koko-没有数组-也能问第一个可行位置">Koko：没有数组，也能问第一个可行位置</h2>
 <p><a href="https://leetcode.com/problems/koko-eating-bananas/description/" target="_blank" rel="noopener noreferrer">LC875原题</a>给出若干堆香蕉。每小时只能选择一堆，以整数速度s吃最多s根；这一堆提前吃完后，该小时不能继续吃另一堆。求h小时内吃完的最小正整数速度。原题保证 <code>1 &lt;= n &lt;= 10000</code>、<code>n &lt;= h &lt;= 10^9</code>、每堆数量在 <code>[1,10^9]</code>。输入不变，返回一个速度；原题条件保证存在答案。</p>
 <p>在 <code>[3,6,7,11]</code>、h=8的情况下，速度3需要 <code>1+2+3+4=10</code>小时，速度4需要 <code>1+2+2+3=8</code>小时。不能把所有香蕉先求和再向上整除：速度4下总量27似乎只需7小时，却忽略了不能把一小时剩余能力转移到另一堆。</p>
@@ -180,6 +183,7 @@ pre code{font:inherit;color:inherit;background:transparent;padding:0;border-radi
     <span class="keyword">return</span> left;
 }</code></pre>
 <p>单次判定O(n)，答案范围是1到P（最大堆），总时间O(n log(P+1))，额外空间O(1)。<code>max_element</code>取上界也花O(n)，应计入但不改变总量级。没有C++17标准函数会替你推导H(s)、合法速度范围并直接给出这个答案；库在这里承担取上界，搜索和题目判定仍是真实手写算法。</p>
+<p><a id="production-feasibility"></a></p>
 <h2 id="factory-machines-并行产量不是逐项耗时">Factory Machines：并行产量不是逐项耗时</h2>
 <p><a href="https://cses.fi/problemset/task/1620/" target="_blank" rel="noopener noreferrer">CSES1620原题</a>给出n台可同时工作的机器，第i台每生产一个产品耗时 <code>period[i]</code> 秒，求生产至少t个产品所需的最短整数时间。原题 <code>1&lt;=n&lt;=200000</code>、<code>1&lt;=t&lt;=10^9</code>、<code>1&lt;=period[i]&lt;=10^9</code>。程序读取n/t和机器周期，输出一个时间；参考函数返回long long且不修改输入。</p>
 <p>例如周期 <code>[3,2,5]</code>、目标7。在时间8时，三台机器分别完成2、4、1个，共7个。判断时间T能否达标，应算 <code>floor(T/period[i])</code> 的和；机器并行，不是先等一台做完再累计它的工作时长。这与Koko逐堆占用整小时的向上整除恰好不同。</p>
@@ -218,6 +222,7 @@ pre code{font:inherit;color:inherit;background:transparent;padding:0;border-radi
 }</code></pre>
 <p>搜索期间right始终可行；middle可行便收右端，否则排除它及其左侧。时间0在本题目标为正时不可行，但它可以作为候选区间的左端；循环不会对周期0做除法，因为原题已排除该输入。总时间O(n log(m*t+1))，额外空间O(1)。取最快周期用到的设施见 <a href="边界与答案.html#q000025">Q000025 · 取极值和求和时，标准设施返回什么</a>。</p>
 <p>两个具有区分力的检查是：仅一台周期10^9、目标10^9，答案应为10^18；大量周期1的机器、目标很小，在较大候选时间下应迅速返回true而无需精确加完总产量。前者检查乘法和答案宽度，后者检查判定只需保留的量。</p>
+<p><a id="division-proof"></a></p>
 <h2 id="array-division-搜索正确以前-先证明判定正确">Array Division：搜索正确以前，先证明判定正确</h2>
 <p><a href="https://cses.fi/problemset/task/1085/" target="_blank" rel="noopener noreferrer">CSES1085原题</a>给出正整数数组，分成恰好k个连续、非空子数组，最小化其中最大的段和。原题 <code>1&lt;=n&lt;=200000</code>、<code>1&lt;=k&lt;=n</code>、<code>1&lt;=x[i]&lt;=10^9</code>。所有元素都必须使用且保留原顺序，不能排序。返回最优的最大段和，参考函数不修改输入。</p>
 <p>样例 <code>[2,4,7,3,5]</code>、k=3，可以分成 <code>[2,4] [7] [3,5]</code>，最大段和8。为了判定一个候选上限L是否可行，不必先寻找最优分割：只需要回答是否存在一种恰k段、每段和均不超过L的分法。</p>
@@ -267,6 +272,7 @@ pre code{font:inherit;color:inherit;background:transparent;padding:0;border-radi
 <p>每次判定O(n)，在整数范围 <code>[M,S]</code>中找首个可行值，总时间O(n log(S-M+2))、额外空间O(1)。k=1返回S，k=n返回M，两种极端不必另写算法分支；它们可以直接验证整套合同是否闭合。</p>
 <h3 id="加入负数时-究竟哪一步失效">加入负数时，究竟哪一步失效</h3>
 <p>若允许负数，“上限L存在合法分割”仍会随着L增大而保持可行；沿用原分法的论证没有消失。失效的是本章这个正数贪心及其界限证明。例如 <code>[4,-3]</code>、k=1、L=1，整段和为1，实际可行，但“单个4超过L便失败”的判定给出false；最大元素4也不再是答案的必要下界。不能把修复它理解成换一个二分模板。需要为新合同重新研究判定和边界，本章不扩展到负数分割优化。</p>
+<p><a id="platform-entries"></a></p>
 <h2 id="从参考函数到完整作答">从参考函数到完整作答</h2>
 <p>每份任务的算法函数都可以直接独立测试；平台接口只适配数据形状，不改变算法合同。下面的类和main分别来自同一份权威cpp的独立区域，不能把两个同名Solution类或两个main直接同时放进同一次提交。</p>
 <p><a id="q000026"></a></p>
@@ -318,6 +324,7 @@ public:
     <span class="keyword">return</span> <span class="number">0</span>;
 }</code></pre>
 <p>上面的四个入口分别适用于相应题目，整文件选择或独立整理的规则统一见 <a href="边界与答案.html#q000026">Q000026 · 函数题与标准输入输出题分别需要什么入口</a>。</p>
+<p><a id="independent-checks"></a></p>
 <h2 id="用结果检查条件-避免只检查循环相像">用结果检查条件，避免只检查循环相像</h2>
 <p>边界搜索值得独立检查的是：返回的位置左侧是否全部不满足、右侧是否全部满足；优化任务还要检查返回值确实可行，若它大于合法下界，前一个整数值确实不可行。只有“两个版本给出同一个数”仍可能共享同一错误条件。</p>
 <p>LC34可用线性扫描作为独立参考；Koko小输入可逐小时吃香蕉并枚举速度；Factory小输入可逐秒推动每台机器的倒计时；Array Division小输入可枚举n-1个相邻间隙中的k-1个切点，直接比较每种合法分法的最大段和。这些模型故意避开了被测算法的二分循环及贪心判定。</p>

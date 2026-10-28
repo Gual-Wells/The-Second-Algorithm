@@ -173,13 +173,13 @@
       "text": "用结果检查条件，避免只检查循环相像"
     }
   ],
-  "sourceSha256": "43c1acb807dab80cf952d4b27a7f0fa08f039deaa45e7743ead7e58045c74051",
+  "sourceSha256": "7684f3ac89e342bbb47fa44824db54e528d9bd667d1204692b06c19eddfccd70",
   "codeSha256": "d6e524cc40b6c61a053d83284be8717c4aaecde29d04c48a9ade18194281dfa1",
-  "markdownSha256": "7e9b9c354c391158dd2ad8c9f0216165715771ba6828b48eb7efbf97320edef3",
-  "htmlSha256": "2ca7058a473020f964df7250cb35bd1d7dbfe8544ffe738e4e363e22a3204802",
+  "markdownSha256": "9808228c77ebdcf65b69c6401e269dc60ad88776bb5dd0d720282c4e1aef2090",
+  "htmlSha256": "f3d40e762c82a9d3d2ec1705b945b795da5aacbddf39e3c331592231a6f41ac6",
   "builderSha256": "c19daf7179d3995596ec428120d84cf29c3af99a69821a2f9939f5083d67ea8b",
   "learningSha256": "28b82a0b99f279de281a514827e9be6694fb1c70cc622e6a0d978a570812e4a1",
   "publicationsSha256": "daab160b280e4d35977ac7e3f1090086cd1583bc0bda637c72a64d262e9bb9ac",
-  "markdownBytes": 33814,
-  "htmlBytes": 58409
+  "markdownBytes": 34040,
+  "htmlBytes": 58677
 }

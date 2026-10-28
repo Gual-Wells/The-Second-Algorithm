@@ -296,13 +296,18 @@ def _inspect(root: Path) -> tuple[dict, dict]:
             errors.append("Withdrawn publication requires no published documents and empty questions, tasks and targets")
     elif not documents or not questions or not tasks or not targets:
         errors.append("Current course requires published documents, questions, tasks and targets")
+    from .chapters import inspect_chapters
+    chapter_validation, chapter_context = inspect_chapters(root, publications, model, documents)
+    errors.extend(chapter_validation["errors"])
     result = {"ok": not errors, "scope": "current-course", "errors": errors,
               "publicationState": publication_state,
               "operation": "withdrawal" if publication_state == "withdrawn" else "content-release",
               "counts": {"documents": len(documents), "questions": len(questions), "tasks": len(tasks),
                          "implementations": implementation_count, "targets": len(targets)},
+              "chapters": chapter_validation,
               "semanticCompletenessCertified": False, "userMasteryMeasured": False}
-    return result, {"model": model, "documents": documents, "dependencies": target_dependencies}
+    return result, {"model": model, "documents": documents, "dependencies": target_dependencies,
+                    "chapters": chapter_context}
 
 
 def validate_learning(root: Path) -> dict:
@@ -312,12 +317,16 @@ def validate_learning(root: Path) -> dict:
         return {"ok": False, "scope": "current-course", "errors": [str(error)]}
 
 
-def course_snapshot(root: Path) -> dict:
+def course_snapshot(root: Path, *, include_reviews: bool = True) -> dict:
     root = root.resolve()
     checked, context = _inspect(root)
     if not checked["ok"]:
         raise ValueError("Current course invalid: " + "; ".join(checked["errors"]))
     inputs = {"catalog/learning.json", "carrier/publications.json"}
+    inputs.update(context["chapters"]["dependencies"])
+    review_paths = context["chapters"]["reviewPaths"]
+    if include_reviews:
+        inputs.update(name for name in review_paths if (root / name).is_file())
     for document in context["documents"].values():
         base = document["path"]
         inputs.update([base + ".source.md", base + ".cpp"])
@@ -360,6 +369,10 @@ def course_snapshot(root: Path) -> dict:
                      "protocol/CONTENT_PIPELINE.md", "protocol/RESEARCH_DEPARTMENT.md", "catalog/scope.json", "docs/CONTENT_MODEL.md"):
         if (root / filename).is_file():
             inputs.add(filename)
+    # Review content binds the final publication packet, while the hash recorded
+    # inside that review excludes all review bytes, avoiding a self-reference.
+    if not include_reviews:
+        inputs.difference_update(review_paths)
     hashes = {filename: digest(file_path(root, filename).read_bytes()) for filename in sorted(inputs)}
     return {"inputHash": digest(canonical_bytes(hashes)), "inputs": hashes, "validation": checked,
             "publicationState": checked["publicationState"], "operation": checked["operation"],

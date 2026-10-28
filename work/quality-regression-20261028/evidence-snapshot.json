@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-28",
+  "algorithmHead": "4d9fe9024b80fd6abf1ad45e94a966f6d36e2600",
+  "languageReferenceHead": "6fc3a272155f78d8c7cc440bce883f4a126e4d30",
+  "scope": "Research and discussion only. No production content, protocol, registry, source or release changed.",
+  "inputs": {
+    "AGENTS.md": "fe0fb580e97e9aa0214cbd8779ab50c5610f0ebe7744befa5fedccbfb13873c9",
+    "protocol/CONTENT_PIPELINE.md": "80abad93c498fde79298ffba0f8f4273ec5ccb6a943e7912c40bf679d0b7ebad",
+    "protocol/RESEARCH_DEPARTMENT.md": "76c4d2c21335b5446369794815fce21e4fa49f22dfaa96e6885c76a0f96ddd93",
+    "protocol/IMPLEMENTATION_STANDARD.md": "4e8a3606d5defaab862e5dc773cd7ba773a1639b3e3f2c742b8df3fbca523b10",
+    "content/boundary-feasibility/边界与答案.source.md": "43c1acb807dab80cf952d4b27a7f0fa08f039deaa45e7743ead7e58045c74051",
+    "content/practice-foundations/实战起点.source.md": "9fbb60f16aa178ca9efcad11d491184ff31f80640b0e91ba3d2a6179ba793f46",
+    "content/contiguous-ranges/连续片段.source.md": "e1e3cd256612f99c522c787fc57706e194005afa5b7dd9211264c6ffd46c8715",
+    "content/binary-search/二分查找.source.md": "10bc5b2411da8349c0ebf8d7ac392eeaf06f1dae2a4d9972df2531369aec145f",
+    "content/binary-search/组合判定.source.md": "77eeeea0c4c11963d4a96c53e26272dc51a0d3f0f7273cf76bf91356c1d4966b",
+    "content/binary-search/进阶扩展.source.md": "c48b505caeb0a5983ecd47f63dd739a49f7858fbc41a7b8b210198240266e494",
+    "second_algorithm/workflow.py": "a985fcdec26c5fa2dccf60236e44d21db9829865af840b6b59c9a85802e91918"
+  }
+}

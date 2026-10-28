@@ -2,7 +2,9 @@
 
 统一算法实战主线。`catalog/learning.json`区分任务、方法、实现、全局Q及实际验证目标；`carrier/publications.json` schema2登记单课程章节与文档，不存在algorithm/cpp track。详细字段见 `CONTENT_MODEL.md`。
 
-数据流：来源/实际读件 → 研究目标 → 题目合同/方法/实现/Q → 作者稿和权威cpp → 确定性装配 → 模型与独立结果检查 → 真实语义审阅 → 当前输入绑定的准备包 → 串行部署及线上核验。研究部和Agent承担判断，CLI不替代阅读或证明。
+数据流：目标/实际原件 → 章级合同与独立范围反查 → 题目合同/方法/实现/Q → 唯一作者稿和权威cpp → 确定性装配 → 范围/承诺/连续读件及独立结果检查 → 当前版逐承诺采用 → 当前输入绑定的准备包 → 串行部署及线上核验。研究部和Agent承担判断，CLI不替代阅读或证明。
+
+新增 `catalog/chapters.json` 连接每个正式章的合同与审阅；`second_algorithm/chapters.py` 核四维承诺、真实任务/材料/正文锚点、当前逐项审阅，并提供人可读合同/缺口。允许诚实施工open而不破坏结构验证，发布必须无open/gap并有当前真实采用。合同/材料及生产输入固定审阅身份，审阅字节再进最终包，避免自引用。CHAPTER_STANDARD与QUALITY_WORKFLOW规定实际质量，不把JSON视为教学评分。
 
 原稿和cpp同名保存于content的单层主题目录；BEGIN/END定位显示代码，一份代码权威。Q主讲在正文唯一位置，其他地方只编号链接。构建摘要同时绑定作者稿、源码、构建器、learning和publication字节，关系改变需重建。
 

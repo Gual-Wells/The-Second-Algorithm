@@ -10,17 +10,21 @@
 
 撤回前的登记及身份单独留在 `work/fresh-first-20261028/retirement/` 供恢复核查，不参与新章选题或当前覆盖。旧Q1—18保留历史身份，新稿不把旧正文视作已学前置。旧稿/版本仅作历史研究素材，无生产兼容义务。
 
+2026-10-28质量回归复盘后已建立章级编纂合同与采用门禁，详见[章节标准](protocol/CHAPTER_STANDARD.md)和[质量工艺](protocol/QUALITY_WORKFLOW.md)。当前第一章按新标准如实登记为待整改：查询复用、方向/空解政策、章级选择关系和阅读组织仍有缺口；不是补登记即追认通过。本轮更新生产架构，未把未完成整改的正文部署为合格新版。线上仍为上一次正式读件。
+
 ## 可恢复研究与发布
 
 ```sh
 python -m second_algorithm research init task-id --goal "实际研究目标"
 python -m second_algorithm research status task-id
 python -m second_algorithm course validate
+python -m second_algorithm course chapters
+python -m second_algorithm course quality
 python -m second_algorithm course search Q000001
 npm run check
 ```
 
-研究/语义审阅由Agent实际完成；CLI核验Q/关系/引用、输入字节、真实编译运行及证据新鲜度。记录当前研究和审阅后，research verify/prepare-release生成准备包；deploy必须check-release通过，再串行上传并核验线上版本与匿名保护。详见 [任务运行手册](protocol/TASK_EXECUTION.md) 和 [模型](docs/CONTENT_MODEL.md)。
+研究/语义审阅由Agent实际完成；CLI核验章合同/逐承诺审阅、Q/关系/引用、输入字节、真实编译运行及证据新鲜度。章质量open/gap或审阅缺失/过期会阻止准备，普通accepted笔记不能绕过。当前章级采用与研究/审阅有效后，research verify/prepare-release生成准备包；deploy必须check-release通过，再串行上传并核验线上版本与匿名保护。详见 [任务运行手册](protocol/TASK_EXECUTION.md) 和 [模型](docs/CONTENT_MODEL.md)。
 
 ```sh
 npm run deploy -- --release work/jobs/task-id/releases/<id>.json

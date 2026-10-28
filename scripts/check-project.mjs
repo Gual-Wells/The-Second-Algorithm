@@ -1,4 +1,4 @@
-import { mkdirSync, readdirSync, existsSync } from 'node:fs';
+import { mkdirSync, readdirSync, existsSync, writeFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -29,4 +29,14 @@ if (!process.argv.includes('--without-browser')) {
   run(process.execPath, ['scripts/check-carrier-browser.cjs']);
   run(process.execPath, ['scripts/check-carrier-upgrade.cjs']);
 }
-console.log('Current course and publishing checks passed.');
+const quality = spawnSync(python, ['-m', 'second_algorithm', 'course', 'quality', '--json'],
+  { cwd: root, env, encoding: 'utf8', windowsHide: true });
+if (![0, 1].includes(quality.status)) throw Error('Chapter quality inspection did not complete.');
+const editorial = JSON.parse(quality.stdout);
+if (typeof editorial.ok !== 'boolean' || !Array.isArray(editorial.chapters)) {
+  throw Error('Invalid chapter quality inspection response.');
+}
+writeFileSync(path.join(root, '.local/chapter-quality.json'), JSON.stringify(editorial, null, 2) + '\n');
+console.log('Technical course, carrier and release-mechanism checks passed.');
+console.log(editorial.ok ? 'Chapter review records are current; release still requires the research preparation gate.'
+  : 'Editorial release blocked: inspect course quality. Technical checks do not accept the chapter.');

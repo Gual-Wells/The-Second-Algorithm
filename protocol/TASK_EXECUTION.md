@@ -16,6 +16,8 @@ job在 `work/jobs/<id>/`，不可重复init覆盖；状态返回真实缺失/过
 
 遵循研究部和实现标准，更新当前learning关系、Q唯一主讲、原稿和源码。研究与审阅笔记需要实际完成，可由不同Agent检查。全部代码/主题/Q/目标稳定后：
 
+先按CHAPTER_STANDARD/QUALITY_WORKFLOW在 `catalog/chapters.json` 登记每个正式章的合同与审阅路径。形成读者目标、难度/范围/完备/可读性承诺和真实材料；已完成承诺用正文稳定显式锚点定位，未完保留open/gap。合同结构可以有效而质量尚未通过；不得临时删登记来关闭门禁。
+
 ```sh
 npm run build:content
 python -m second_algorithm course validate
@@ -25,7 +27,23 @@ npm run check
 
 CXX可指向已有编译器，ALGORITHM_PYTHON可指向已有Python；本机TEMP/TMP与所有输出D盘，脚本不自动安装编译器。check默认包含Python、登记C++目标、carrier、完整构建、浏览器和SW检查。只有调试确定性部分时可 `node scripts/check-project.mjs --without-browser`，不能把它冒称完整验收。
 
-## 留证与准备
+## 章级采用、留证与准备
+
+完成正文、代码、构建、合同、材料和规则修订后，先查看人可读合同和当前输入：
+
+```sh
+python -m second_algorithm course chapters
+python -m second_algorithm course chapter-inputs chapter-id
+```
+
+按QUALITY_WORKFLOW真实审阅，在登记的JSON审阅文件保存 `inputHash`、逐承诺reason/pass或gap及正文locations、真实基准比较、外部countercheck材料和结论，最终verdict为accepted或needs-work。字段见CONTENT_MODEL；不因能生成JSON而声称审阅完成。
+
+```sh
+python -m second_algorithm course quality
+python -m second_algorithm course quality chapter-id --json
+```
+
+quality非0表示缺口/缺失/过期等阻塞；所有承诺addressed且真实逐项审阅当前有效才可准备。`course validate`/编译/技术CI仍可检查施工版本，不把绿灯等同可发布。审阅文件自身不进它的inputHash，但实际发布快照会固定审阅字节。更换路径、合同、材料或生产输入须重新判断相关影响，不仅替换hash。
 
 在最终有效输入上登记实际研究与审阅记录：
 
@@ -36,7 +54,7 @@ python -m second_algorithm research verify task-id --compiler c++
 python -m second_algorithm research prepare-release task-id
 ```
 
-prepare-release输出receipt.path。它是准备包，不是已部署。缺研究/审阅、needs-work、输入变化、证据文件变化、验证失败/过期均阻止准备；最新失败不能被last-good掩盖。accepted是Agent对真实工作的记录，不是通过填表自动证明内容质量。
+prepare-release输出receipt.path。它是准备包，不是已部署。章级质量未通过、缺研究/审阅、needs-work、输入变化、证据文件变化、验证失败/过期均阻止准备；最新失败不能被last-good掩盖。普通accepted证据不能覆盖章级gap。accepted是Agent对真实工作的记录，不是通过填表自动证明内容质量。
 
 ## 发布
 

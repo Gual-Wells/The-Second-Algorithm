@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "id": "chapter-architecture-20261028",
+  "goal": "建立可执行章节质量合同、读者结构与实际发布门禁；现第一章如实保留待整改状态，不发布",
+  "createdAt": "2026-10-28T02:05:58.044975+00:00",
+  "evidence": [
+    {
+      "id": "b0394ff5e5cf42d8bb11e85d265254fb",
+      "kind": "research",
+      "path": "work/quality-architecture-20261028/README.md",
+      "summary": "实际深读第二语言现行流程与实现，形成四维章级规范并完成接入",
+      "outcome": "accepted",
+      "sha256": "0fd6ec11046ba81becc97082e4ffcaf0e0eab836acda549ece870a378adf0af2",
+      "inputHash": "35dfebe5b7c3b4f4d2e1b4ed1cb181a1e07e158b30af6b48fe51d6ab21f46177",
+      "recordedAt": "2026-10-28T02:05:58.452818+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "fd524dee27d042dfac806762ace4c16f",
+      "kind": "review",
+      "path": "work/quality-architecture-20261028/engineering-review.md",
+      "summary": "实际工程和协议采用审阅；不代表当前第一章内容通过",
+      "outcome": "accepted",
+      "sha256": "f3f10e80a7c4b33085bf7a7c089231479acf08d37b5de7a597a183be4c691082",
+      "inputHash": "35dfebe5b7c3b4f4d2e1b4ed1cb181a1e07e158b30af6b48fe51d6ab21f46177",
+      "recordedAt": "2026-10-28T02:05:58.851199+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "1b4bc7372d534513bfe26a9d696cca17",
+      "kind": "research",
+      "path": "work/quality-architecture-20261028/README.md",
+      "summary": "最终架构、阅读结构、流程与CI质量报告均接入；材料与难度范围准则实际研究",
+      "outcome": "accepted",
+      "sha256": "635a8aafb3082bc340b97b6ee14fe09813c08edfabec090b0b7f1b1a8215c860",
+      "inputHash": "3929825e1dab5be3a4d75192b9917082301d7d05092ef6df54ee4c32e82ea3f6",
+      "recordedAt": "2026-10-28T02:11:56.123296+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "b23e1d9307b64333960067abeed82838",
+      "kind": "review",
+      "path": "work/quality-architecture-20261028/engineering-review.md",
+      "summary": "最终工具与CI变更已检查，完整工程验证通过；现章逐项审阅仍needs-work",
+      "outcome": "accepted",
+      "sha256": "f3f10e80a7c4b33085bf7a7c089231479acf08d37b5de7a597a183be4c691082",
+      "inputHash": "3929825e1dab5be3a4d75192b9917082301d7d05092ef6df54ee4c32e82ea3f6",
+      "recordedAt": "2026-10-28T02:11:56.553623+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    }
+  ],
+  "lastGoodVerification": {
+    "path": "work/jobs/chapter-architecture-20261028/verifications/abdf3c3be2ed4456ab987bebb7f010c8.json",
+    "sha256": "a326021cc01954fa01e1c5cc232fd9a822eec6076ac2ceb45124972e52cb68b2",
+    "inputHash": "3929825e1dab5be3a4d75192b9917082301d7d05092ef6df54ee4c32e82ea3f6"
+  },
+  "lastPreparedRelease": null,
+  "lastVerificationAttempt": {
+    "path": "work/jobs/chapter-architecture-20261028/verifications/abdf3c3be2ed4456ab987bebb7f010c8.json",
+    "sha256": "a326021cc01954fa01e1c5cc232fd9a822eec6076ac2ceb45124972e52cb68b2",
+    "inputHash": "3929825e1dab5be3a4d75192b9917082301d7d05092ef6df54ee4c32e82ea3f6"
+  }
+}

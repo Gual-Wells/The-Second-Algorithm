@@ -66,6 +66,7 @@ jobs:
           name: practice-verification-${{ github.sha }}
           path: |
             .local/course-verification/
+            .local/chapter-quality.json
             .local/refinement-qa/results.json
             .local/carrier-upgrade-qa/results.json
             work/jobs/

@@ -7,6 +7,7 @@ from pathlib import Path
 
 from .catalog import report, search, validate
 from .collect import collect
+from .chapters import chapter_inputs, chapter_quality, render_chapters
 from .learning import course_targets, search_learning, validate_learning
 from .storage import now, read_json, read_jsonl, sources, valid_id, valid_url, write_json
 from .workflow import (add_evidence, check_release, init_job, job_status, list_jobs, prepare_release,
@@ -48,6 +49,13 @@ def main(argv=None) -> int:
     course_commands = course.add_subparsers(dest="course_command", required=True)
     course_commands.add_parser("validate", help="校验Q主讲、前置、源码区域及验证目标关系")
     course_commands.add_parser("targets", help="输出当前登记的验证目标供CI使用")
+    chapter_list = course_commands.add_parser("chapters", help="按人可读方式查看章节合同、承诺与真实缺口")
+    chapter_list.add_argument("chapter", nargs="?")
+    quality = course_commands.add_parser("quality", help="检查逐承诺审阅与当前输入身份，不自动评定教学质量")
+    quality.add_argument("chapter", nargs="?")
+    quality.add_argument("--json", action="store_true", dest="json_output")
+    chapter_hash = course_commands.add_parser("chapter-inputs", help="供真实审阅绑定的当前输入摘要，排除审阅文件自身")
+    chapter_hash.add_argument("chapter")
     course_search = course_commands.add_parser("search", help="检索当前Q、任务及实现记录")
     course_search.add_argument("query")
     course_verify = course_commands.add_parser("verify", help="用真实编译器验证所有登记目标")
@@ -138,6 +146,25 @@ def main(argv=None) -> int:
                 return 0 if result["ok"] else 1
             if args.course_command == "targets":
                 emit(course_targets(root))
+            elif args.course_command == "chapters":
+                print(render_chapters(root, args.chapter))
+            elif args.course_command == "chapter-inputs":
+                emit(chapter_inputs(root, args.chapter))
+            elif args.course_command == "quality":
+                result = chapter_quality(root, args.chapter)
+                if args.json_output:
+                    emit(result)
+                else:
+                    for chapter in result["chapters"]:
+                        print(chapter["title"] + "：" + ("审阅记录当前有效" if chapter["ok"] else "阻止发布"))
+                        for error in chapter["errors"]:
+                            print("- " + error)
+                    for error in result.get("errors", []):
+                        print("- " + error)
+                    if result.get("operation") == "withdrawal":
+                        print("显式撤回：不要求章节质量审阅。")
+                    print("结构与审阅身份核验；不自动认证难度、完备性或用户掌握。")
+                return 0 if result["ok"] else 1
             elif args.course_command == "search":
                 emit(search_learning(root, args.query))
             elif args.course_command == "verify":

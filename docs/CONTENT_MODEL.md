@@ -4,6 +4,39 @@
 
 本文件说明实际实现，不宣称程序能够自动做题意研究、语义归并、证明讲解完备或测量用户掌握。当前模型由 `python -m second_algorithm course validate` 核查；修改契约时同时改实现和有区分力的测试。
 
+## 章级编纂合同与实际采用
+
+`catalog/chapters.json` schema1 的 `chapters[]` 含 `id/collection/contract/review`。每个published chapter collection恰对应一项；contract指向唯一JSON权威，review为独立JSON路径或null。active课程不能删除该登记来回退旧门禁；withdrawn没有正式章时豁免。title/章号仍由出版登记负责，合同标题可以标明整改语境，不改读者章名。
+
+合同字段如下，实际校验见 `second_algorithm/chapters.py`：
+
+| 字段 | 真实职责 |
+|---|---|
+| schemaVersion/chapter/title | schema1与登记身份，实际合同名 |
+| reader | startingPoint、targetCapability、supportPolicy非空；用户基础/目标/C++支撑的明确判断 |
+| scope | core、extensions、completenessArgument；exclusions逐项topic/reason，可有destination。深化/线索不自动算本版必达 |
+| reading | status、entry位置数组、units问题簇、selectionMap位置数组、gap；unit有id/title/taskIds/locations。addressed须入口/问题簇/地图真实且承载全部本章任务；open保存真实缺口，已有引用也必须有效 |
+| materials | 局部唯一id、kind、locator、evidence相对文件、sourcePaths数组；固定实际读件笔记及可公开原件，非网页目录即已读 |
+| commitments | 局部唯一id、dimension、claim、acceptance、status、taskIds、locations、materialIds；status为open/ addressed，open必须有gap，addressed不得残存gap且须实际材料与正文位置 |
+
+四维为difficulty、breadth、completeness、readability，每维必须有具体承诺。任务引用须属于本章；正文位置是 `{document,anchor}`，只接受本章真实显式 `<a id="稳定id"></a>`，不接受注释/围栏中的假锚点、未知/重复锚点。材料为实际仓库持久文件，不允许.local/.git/node_modules，文件进入输入摘要。商业原件继续按LOCAL_MATERIALS留本地，只把原创读件证据公开。
+
+这些是结构约束，不声称四项非空或路径存在就达到质量。产品强约束和排除否决来自CHAPTER_STANDARD，实际回查来自QUALITY_WORKFLOW。reading不是固定题数/标题/六栏目模板，核验的是读者入口→真实问题簇→选择地图的可定位结构，语义仍须通读。当前第一章有真实open，validate可以通过以便继续工程，但quality和发布准备会拒绝。
+
+审阅JSON包含schemaVersion/chapter/inputHash、assessments、comparison、outsideChallenge、verdict。每个承诺恰一份assessment：commitment、outcome(pass/gap)、reason、locations；pass必须有真实本章位置。comparison给baseline/findings；outsideChallenge给materialIds/findings，材料须有countercheck角色；verdict仅实际采用时accepted。角色/理由字段不能证明已研究，后续改稿不把已用反查继续冒充未见材料。
+
+`course chapter-inputs <id>` 计算全课程生产输入身份，排除所有审阅文件字节，避免自引用。`course quality` 检查各项真实记录的结构/当前性、全部承诺已addressed且无gap、最终accepted。审阅文件再进入最终course_snapshot及发布包，修改审阅也使通用证据/验证/准备过期。路径、正文、合同、材料、有效规则/工具变化同样失效；不是保存hash后任意改稿。
+
+当前为全课程保守失效，并非细粒度影响分析。恢复时按实际变更复核相关判断、保留未受影响的真实依据，不能仅批量改hash冒称重新审过。多章后的精细影响范围是后续可优化点，不借本轮架构新增依赖服务。
+
+```sh
+python -m second_algorithm course chapters [chapter-id]
+python -m second_algorithm course chapter-inputs chapter-id
+python -m second_algorithm course quality [chapter-id] --json
+```
+
+chapters默认中文人读；quality默认显示阻塞，`--json`便于工具使用。无机器难度分数/完备百分比。research status/resume暴露chapterQuality及下一步，prepare-release和check-release均重查。技术CI仍检查施工版本，显式发布才要求当前章级采用；不为上线上一版自动豁免。
+
 ## 关系和字段
 
 出版登记采用 `schemaVersion: 2`，不再有 track。collection 的 kind 为 `chapter` 或 `draft`；chapterNumber 为全课程唯一正整数。draft 必须 `visibility: hidden` 且没有章号；不打包为正式正文。document 的 id 全局唯一，path 指向 `content/<unit>/<稿名>`，当前仍配套同名 `.source.md/.cpp` 和构建产物。
@@ -87,7 +120,7 @@ evidence需要真实的仓库Markdown/JSON笔记、非空summary及显式outcome
 
 ## 发布准备包与部署门禁
 
-prepare-release只有在模型有效、research/review证据当前有效、当前操作的真实验证通过时成功。active 需要实际C++目标成功；withdrawn 只记录撤回结构验证，仍保留完整的研究/审阅及输入冻结门禁。输出 `receipt.path` 指向：
+prepare-release只有在模型有效、chapterQuality和research/review证据当前有效、当前操作的真实验证通过时成功。active 需要实际C++目标成功；withdrawn 无正式章不需章级采用，只记录撤回结构验证，仍保留完整的研究/审阅及输入冻结门禁。输出 `receipt.path` 指向：
 
 ```text
 work/jobs/<job>/releases/<uuid>.json
