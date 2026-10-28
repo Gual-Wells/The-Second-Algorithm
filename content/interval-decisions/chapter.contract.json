@@ -35,7 +35,7 @@
     ]
   },
   "reading": {
-    "status": "addressed",
+    "status": "open",
     "entry": [
       {
         "document": "interval-decisions",
@@ -185,7 +185,8 @@
         "document": "interval-decisions",
         "anchor": "choice-map"
       }
-    ]
+    ],
+    "gap": "新硬协议下，此稿仍是多思想的区间对象专题；正式题型与证明/实现步骤同级，未完成大思想前置与领域覆盖组织。知识抽取是本轮工程改造，不据此追认新题型阅读结构通过。"
   },
   "materials": [
     {
@@ -232,6 +233,13 @@
         "work/first-independent-20261028-v3/verification/platform-validation.md",
         "work/first-independent-20261028-v3/verification/verify_platform_entries.py"
       ]
+    },
+    {
+      "id": "paradigm-protocol-review",
+      "kind": "product-protocol-review",
+      "locator": "2026-10-28用户大算法思想硬协议及五份正式内容逐项复盘",
+      "evidence": "research/2026-10-28/paradigm-led-chapter-design.md",
+      "sourcePaths": []
     }
   ],
   "commitments": [
@@ -524,7 +532,7 @@
       "dimension": "readability",
       "claim": "C++支架解决真实实现障碍且只主讲一次，保持算法主线高度与阅读连续性。",
       "acceptance": "前置/Q安排、引用返回和源码选择清楚，设施解释不被删也不统治算法导航；包装细节集中参考，不用新宏填充学习主线。",
-      "status": "addressed",
+      "status": "open",
       "taskIds": [
         "room-allocation",
         "fixed-resources",
@@ -533,7 +541,7 @@
       "locations": [
         {
           "document": "interval-decisions",
-          "anchor": "q000027"
+          "anchor": "endpoint-model"
         },
         {
           "document": "interval-decisions",
@@ -545,11 +553,11 @@
         },
         {
           "document": "interval-decisions",
-          "anchor": "q000037"
+          "anchor": "predecessor-search"
         },
         {
           "document": "interval-decisions",
-          "anchor": "q000038"
+          "anchor": "fixed-resources"
         },
         {
           "document": "interval-decisions",
@@ -558,7 +566,47 @@
       ],
       "materialIds": [
         "author-materials"
-      ]
+      ],
+      "gap": "现有知识已从正文抽取为唯一静态条目，但按新题型结构就近使用、场景差异与真实双实现的采用仍未完成。旧正文位置仅保留复盘定位，不认定新标准已通过。"
+    },
+    {
+      "id": "paradigm-domain-adoption",
+      "dimension": "breadth",
+      "claim": "以有代表性的大算法思想统领领域并归并相关教材与来源。",
+      "acceptance": "形成真实的大思想分支—题型覆盖及必要前置，不能只把旧区间稿改名。",
+      "status": "open",
+      "taskIds": [],
+      "locations": [],
+      "materialIds": [
+        "paradigm-protocol-review"
+      ],
+      "gap": "当前按静态区间对象成章，尚未完成任何一个大思想领域的全景提取、归并和采用。"
+    },
+    {
+      "id": "problem-type-route",
+      "dimension": "readability",
+      "claim": "前置理论后按题型从标准到变型组织，各节完整承载讲解与对应练习。",
+      "acceptance": "正式一级节为题型；证明、实现、C++支撑从属；每节1–5份真实练习。",
+      "status": "open",
+      "taskIds": [],
+      "locations": [],
+      "materialIds": [
+        "paradigm-protocol-review"
+      ],
+      "gap": "现有28个同级标题混合题型和讲解步骤；未形成新规定的正式题型节及逐节练习组织。"
+    },
+    {
+      "id": "implementation-knowledge-adoption",
+      "dimension": "completeness",
+      "claim": "每题型有注释手写与真实标准设施路径，必要C++知识透明唯一主讲。",
+      "acceptance": "两条实现路径与解析真实定位；内部ID不向用户展示，复用术语可打开唯一知识解释。",
+      "status": "open",
+      "taskIds": [],
+      "locations": [],
+      "materialIds": [
+        "paradigm-protocol-review"
+      ],
+      "gap": "当前部分任务只有一种登记路径，手写代码缺关键注释；本轮虽已抽取唯一知识资产，逐题型的双实现与场景适配讲解仍未按新结构采用。"
     }
   ]
 }

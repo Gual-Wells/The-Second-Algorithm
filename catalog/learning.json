@@ -1,85 +1,77 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "questions": [
     {
       "id": "Q000027",
       "title": "怎样把端点和结果组成有名字的值",
-      "document": "interval-decisions",
-      "anchor": "q000027",
       "prerequisites": [],
       "sources": [
         "https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4659.pdf"
-      ]
+      ],
+      "source": "content/knowledge/Q000027.md"
     },
     {
       "id": "Q000028",
       "title": "vector的元素、大小和预留空间有什么区别",
-      "document": "interval-decisions",
-      "anchor": "q000028",
       "prerequisites": [
         "Q000027"
       ],
       "sources": [
         "https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4659.pdf"
-      ]
+      ],
+      "source": "content/knowledge/Q000028.md"
     },
     {
       "id": "Q000029",
       "title": "参数按值和const引用，怎样影响修改与寿命",
-      "document": "interval-decisions",
-      "anchor": "q000029",
       "prerequisites": [
         "Q000027",
         "Q000028"
       ],
       "sources": [
         "https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4659.pdf"
-      ]
+      ],
+      "source": "content/knowledge/Q000029.md"
     },
     {
       "id": "Q000030",
       "title": "迭代器为何把范围写成左闭右开",
-      "document": "interval-decisions",
-      "anchor": "q000030",
       "prerequisites": [
         "Q000028",
         "Q000029"
       ],
       "sources": [
         "https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4659.pdf"
-      ]
+      ],
+      "source": "content/knowledge/Q000030.md"
     },
     {
       "id": "Q000031",
       "title": "排序比较器怎样表达顺序，而不制造错误",
-      "document": "interval-decisions",
-      "anchor": "q000031",
       "prerequisites": [
         "Q000029",
         "Q000030"
       ],
       "sources": [
         "https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4659.pdf"
-      ]
+      ],
+      "source": "content/knowledge/Q000031.md"
     },
     {
       "id": "Q000032",
       "title": "先确定运算类型，再计算长度和总量",
-      "document": "interval-decisions",
-      "anchor": "q000032",
       "prerequisites": [
         "Q000027",
         "Q000028"
       ],
       "sources": [
         "https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4659.pdf"
-      ]
+      ],
+      "source": "content/knowledge/Q000032.md"
     },
     {
       "id": "Q000033",
       "title": "pair、auto和类型别名怎样表达一份状态",
-      "document": "interval-decisions",
-      "anchor": "q000033",
       "prerequisites": [
         "Q000027",
         "Q000029",
@@ -87,13 +79,12 @@
       ],
       "sources": [
         "https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4659.pdf"
-      ]
+      ],
+      "source": "content/knowledge/Q000033.md"
     },
     {
       "id": "Q000034",
       "title": "class怎样守住一份结构的不变量",
-      "document": "interval-decisions",
-      "anchor": "q000034",
       "prerequisites": [
         "Q000028",
         "Q000029",
@@ -101,13 +92,12 @@
       ],
       "sources": [
         "https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4659.pdf"
-      ]
+      ],
+      "source": "content/knowledge/Q000034.md"
     },
     {
       "id": "Q000035",
       "title": "priority_queue的比较方向、top与pop怎样配合",
-      "document": "interval-decisions",
-      "anchor": "q000035",
       "prerequisites": [
         "Q000028",
         "Q000029",
@@ -117,13 +107,12 @@
       ],
       "sources": [
         "https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4659.pdf"
-      ]
+      ],
+      "source": "content/knowledge/Q000035.md"
     },
     {
       "id": "Q000036",
       "title": "堆算法为何还需要push_back和pop_back",
-      "document": "interval-decisions",
-      "anchor": "q000036",
       "prerequisites": [
         "Q000028",
         "Q000030",
@@ -132,26 +121,24 @@
       ],
       "sources": [
         "https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4659.pdf"
-      ]
+      ],
+      "source": "content/knowledge/Q000036.md"
     },
     {
       "id": "Q000037",
       "title": "lower_bound与upper_bound怎样给出查询边界",
-      "document": "interval-decisions",
-      "anchor": "q000037",
       "prerequisites": [
         "Q000030",
         "Q000031"
       ],
       "sources": [
         "https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4659.pdf"
-      ]
+      ],
+      "source": "content/knowledge/Q000037.md"
     },
     {
       "id": "Q000038",
       "title": "multiset怎样保留重复状态并只删除一个",
-      "document": "interval-decisions",
-      "anchor": "q000038",
       "prerequisites": [
         "Q000029",
         "Q000030",
@@ -160,13 +147,12 @@
       ],
       "sources": [
         "https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4659.pdf"
-      ]
+      ],
+      "source": "content/knowledge/Q000038.md"
     },
     {
       "id": "Q000039",
       "title": "怎样把参考函数组成真实的平台提交",
-      "document": "interval-decisions",
-      "anchor": "q000039",
       "prerequisites": [
         "Q000027",
         "Q000028",
@@ -175,7 +161,8 @@
       ],
       "sources": [
         "https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4659.pdf"
-      ]
+      ],
+      "source": "content/knowledge/Q000039.md"
     }
   ],
   "tasks": [

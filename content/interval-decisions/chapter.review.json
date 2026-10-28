@@ -182,12 +182,12 @@
     },
     {
       "commitment": "cpp-support-not-ceiling",
-      "outcome": "pass",
-      "reason": "Q000027至39各一次完整主讲并就近支撑，后续定位而不重复解释；实际算法仍进入多资源交换、收益及预算DP。reserve、priority_queue和push代价发现问题均修正复核，没有以支架缺口降低算法高度。",
+      "outcome": "gap",
+      "reason": "知识资产抽取属于工程实现，当前多思想区间专题尚未按新硬协议重编，不能用抽取后的引用位置追认教材结构合格。",
       "locations": [
         {
           "document": "interval-decisions",
-          "anchor": "q000027"
+          "anchor": "endpoint-model"
         },
         {
           "document": "interval-decisions",
@@ -199,22 +199,40 @@
         },
         {
           "document": "interval-decisions",
-          "anchor": "q000037"
+          "anchor": "predecessor-search"
         },
         {
           "document": "interval-decisions",
-          "anchor": "q000038"
+          "anchor": "fixed-resources"
         },
         {
           "document": "interval-decisions",
           "anchor": "submission-reference"
         }
       ]
+    },
+    {
+      "commitment": "paradigm-domain-adoption",
+      "outcome": "gap",
+      "reason": "当前按静态区间对象成章，尚未完成任何一个大思想领域的全景提取、归并和采用。",
+      "locations": []
+    },
+    {
+      "commitment": "problem-type-route",
+      "outcome": "gap",
+      "reason": "现有28个同级标题混合题型和讲解步骤；未形成新规定的正式题型节及逐节练习组织。",
+      "locations": []
+    },
+    {
+      "commitment": "implementation-knowledge-adoption",
+      "outcome": "gap",
+      "reason": "当前部分任务只有一种登记路径，手写代码缺关键注释；本轮虽已抽取唯一知识资产，逐题型的双实现与场景适配讲解仍未按新结构采用。",
+      "locations": []
     }
   ],
   "comparison": {
     "baseline": "本轮独立读取的EPI/CP4相关原始章节、CSES/LeetCode官方题面及大学讲义方法合同；以两路独立候选/问题空间研究为范围基准，不继承被撤回章的题单或采用记录。",
-    "findings": "原材料中的条件/目标分叉均被映射或有解释的排除；独立反查促成实际预算DP而非仅提示，并细化前驱非单调、可移动窗口和费用覆盖。两份真实语义审阅与独立模型/平台测试合并后无剩余阻断，有限章界、方法关系和阅读路线成立。合同最后只追加证据依赖；源稿/代码/承诺不变，差异由整合者核对并记录adoption。"
+    "findings": "原材料中的条件/目标分叉均被映射或有解释的排除；独立反查促成实际预算DP而非仅提示，并细化前驱非单调、可移动窗口和费用覆盖。两份真实语义审阅与独立模型/平台测试合并后无剩余阻断，有限章界、方法关系和阅读路线成立。合同最后只追加证据依赖；源稿/代码/承诺不变，差异由整合者核对并记录adoption。 新硬协议复盘：旧采用仅对应原区间专题合同；领域身份、题型层级、双实现及透明知识复用尚未按新规定采用。本轮不更新旧inputHash冒称重新审阅通过。"
   },
   "outsideChallenge": {
     "materialIds": [
@@ -222,5 +240,5 @@
     ],
     "findings": "该挑战在未见作者分类/草稿时先独立固定；稿成后整合读取并逐项比较。预算模型的真实扩充与边界反例是实际改动。采用后挑战转为建设材料，本轮最终审阅不再假称其未见。"
   },
-  "verdict": "accepted"
+  "verdict": "needs-work"
 }

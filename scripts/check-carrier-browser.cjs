@@ -18,33 +18,36 @@ let qaCatalog, makeIndex;
 // A current-schema UI fixture exercises multiple documents without depending on
 // retired chapters or prescribing a production chapter/document count.
 async function createCorpus() {
-  const catalog = { schemaVersion: 2, version: 'qa-course-v2', collections: [], questions: [
-    { id: 'Q000001', title: '怎样表达有效范围', document: 'practice-entry', anchor: 'q000001', prerequisites: [] },
-    { id: 'Q000002', title: '为什么只删除一个重复对象', document: 'practice-composition', anchor: 'q000002', prerequisites: ['Q000001'] }
+  const catalog = { schemaVersion: 2, version: 'qa-course-v3', collections: [], questions: [
+    { id: 'Q000001', title: '有效范围', prerequisites: [] },
+    { id: 'Q000002', title: '删除一个重复对象', prerequisites: ['Q000001'] }
   ] };
+  for (const question of catalog.questions) {
+    const html = question.id === 'Q000001' ? '<a id="lifetime"></a><p>范围的寿命和有效性。</p><p>' + '知识正文。'.repeat(250) + '</p>'
+      : '<p>删除一份需要保留其他重复对象。</p><p><a href="#knowledge-Q000001" data-knowledge="Q000001" data-knowledge-anchor="lifetime">范围寿命</a></p>';
+    question.revision = createHash('sha256').update(html).digest('hex');
+    question.url = `/library/knowledge/${question.id}/${question.revision.slice(0, 16)}.json`;
+    const file = path.join(qaLibrary, question.url.slice(1)); await fs.mkdir(path.dirname(file), { recursive: true });
+    await fs.writeFile(file, JSON.stringify({ ...question, html, anchors: question.id === 'Q000001' ? ['lifetime'] : [] }));
+  }
   for (const [collectionId, ids] of [['practice-course', ['practice-entry', 'practice-composition', 'practice-alternative']], ['additional-course', ['other-method']]]) {
     const collection = { id: collectionId, kind: 'chapter', chapterNumber: catalog.collections.length + 1,
       title: collectionId === 'practice-course' ? '实战方法与实现' : '不同算法的比较', documents: [] };
     for (const id of ids) {
       const headings = [], sections = [];
       const canonical = 'int lower_manual(int value) { return value; }\n// ' + 'long_identifier '.repeat(20);
-      const link = '#/read/practice-course/practice-composition?anchor=q000002';
       sections.push(`<div class="code-block" data-code-id="example"><div class="code-toolbar"><span>C++</span><button type="button" class="code-copy" data-copy-code="example" aria-label="复制代码">复制</button></div><pre><code>${canonical}</code></pre></div>`);
       for (let index = 0; index < 16; index++) {
         const heading = { depth: 2, id: 'section-' + index, text: 'lower_bound 与边界判断 ' + (index + 1) };
         headings.push(heading);
         sections.push(`<h2 id="${heading.id}">${heading.text}</h2><p>${'保持状态不变量，比较手写与标准设施的范围、返回值和复杂度。'.repeat(12)}</p>`);
-        if (index === 4) sections.push(`<p><a href="${link}">Q000002 · 为什么只删除一个重复对象</a></p>`);
-        if (index === 8) for (const question of catalog.questions.filter(question => question.document === id)) {
-          headings.push({ depth: 3, id: 'heading-' + question.anchor, text: question.id + ' · ' + question.title });
-          sections.push(`<a id="${question.anchor}"></a><h3 id="heading-${question.anchor}">${question.id} · ${question.title}</h3><p>这一问题的唯一主讲正文，只在此处出现。</p>`);
-        }
+        if (index === 0) sections.push('<p><a href="#knowledge-Q000002" data-knowledge="Q000002">删除一个重复对象</a></p>');
       }
       sections.push('<div class="table-wrap"><table><tr><th>操作</th><th>条件</th></tr><tr><td><code>std::vector&lt;long_long_identifier&gt;::const_iterator</code></td><td>有效范围与结束位置</td></tr></table></div>');
       const html = sections.join('\n'), revision = createHash('sha256').update(html).digest('hex');
       const prefix = `/library/${collectionId}/${id}/${revision.slice(0, 16)}`;
       const meta = { id, title: id === 'practice-entry' ? '从范围到作答' : '实现与条件 ' + id,
-        revision, url: prefix + '.json', sourceUrl: prefix + '.cpp', markdownUrl: prefix + '.md', headings };
+        revision, url: prefix + '.json', sourceUrl: prefix + '.cpp', markdownUrl: prefix + '.md', headings, knowledgeIds: ['Q000001', 'Q000002'] };
       const file = path.join(qaLibrary, meta.url.slice(1)); await fs.mkdir(path.dirname(file), { recursive: true });
       await fs.writeFile(file, JSON.stringify({ ...meta, html }));
       await fs.writeFile(path.join(qaLibrary, meta.sourceUrl.slice(1)), canonical);
@@ -167,8 +170,8 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
         await page.locator('#pureButton').click();
         assert.equal(await page.locator('#readingArticle').evaluate(node => node.getBoundingClientRect().width), before);
         await page.keyboard.press('Escape');
-        await page.locator('#questionsButton').click();
-        assert(await page.locator('#questionResults .question-row').first().isVisible());
+        await page.locator('#readingArticle [data-knowledge]').first().click();
+        await page.locator('.knowledge-paper').waitFor();
         const sheet = await page.locator('#sheetBody').boundingBox(); assert(sheet.height > 80);
         await page.screenshot({ path: path.join(output, `viewport-${viewport.width}x${viewport.height}.png`) });
         await page.locator('[data-sheet-close]').click(); await page.waitForFunction(() => !document.querySelector('#sheetDialog').open);
@@ -187,9 +190,7 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
           assert.match(await page.locator('#bookList').innerText(), /暂无章节/);
           assert.equal(await page.locator('#bookList .book-row').count(), 0);
           assert.equal(await page.locator('#readingArticle .code-block').count(), 0);
-          await page.locator('#questionsButton').click();
-          assert.equal(await page.locator('#questionResults .question-row').count(), 0);
-          await page.locator('[data-sheet-close]').click();
+          assert.equal(await page.locator('#questionsButton').count(), 0);
           await page.locator('#librarySearch').fill('retired');
           await page.waitForFunction(() => document.querySelector('#bookList').textContent.includes('暂无可检索内容'));
           assert.equal(real.mock.requests.filter(request => request.path.startsWith('/library/')
@@ -202,8 +203,7 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
         const collection = catalog.collections[0], meta = collection.documents[0];
         const page = await real.page(`#/read/${collection.id}/${meta.id}`);
         assert(await page.locator('#readingArticle .code-block').count() > 0);
-        for (const question of catalog.questions.filter(q => q.document === meta.id))
-          assert.equal(await page.locator('#' + question.anchor).count(), 1);
+        assert.doesNotMatch(await page.locator('#readingArticle').innerText(), /Q\d{6}/);
         for (const viewport of [{ width: 402, height: 874 }, { width: 320, height: 740 }, { width: 1280, height: 800 }, { width: 874, height: 402 }]) {
           await page.setViewportSize(viewport); await page.waitForTimeout(70);
           const geometry = await page.evaluate(() => {
@@ -215,58 +215,72 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
             JSON.stringify({ viewport, geometry }));
           await page.screenshot({ path: path.join(output, `current-publication-${viewport.width}x${viewport.height}.png`) });
         }
-        await page.locator('#questionsButton').click();
-        assert.equal(await page.locator('#questionResults .question-row').count(), catalog.questions.length);
-        await page.locator(`[data-go-question="${catalog.questions[0].id}"]`).click();
-        await page.waitForFunction(() => !window.__refinement.state.restoring && !document.querySelector('#sheetDialog').open);
-        assert(await page.locator('#' + catalog.questions[0].anchor).evaluate(node =>
-          Math.abs(node.getBoundingClientRect().top - document.querySelector('#readingPane').getBoundingClientRect().top) < 20));
+        await page.setViewportSize({ width: 402, height: 874 });
+        await page.locator('#readingArticle [data-knowledge]').first().click();
+        await page.locator('.knowledge-paper').waitFor();
+        assert.doesNotMatch(await page.locator('#sheetTitle').innerText(), /Q\d{6}/);
+        await page.screenshot({ path: path.join(output, 'current-knowledge-402x874.png') });
+        await page.locator('[data-sheet-close]').click();
         assert.deepEqual(real.mock.errors, []);
       } finally { await real.context.close(); }
     });
 
-    await check('unified-course-and-Q-index-link-to-one-explanation-and-return', async env => {
+    await check('semantic-knowledge-opens-in-place-with-hidden-identity-and-restores-focus', async env => {
       const page = await env.page();
-      assert.equal(await page.locator('[data-track],#trackTabs').count(), 0);
-      assert.equal(await page.evaluate(() => Object.hasOwn(window.__refinement.state, 'track')), false);
-      await page.locator('#readingPane').evaluate(node => node.scrollTop = 900); await page.waitForTimeout(250);
-      const before = await page.locator('#readingPane').evaluate(node => node.scrollTop);
-      await page.locator('#questionsButton').click();
-      assert.equal(await page.locator('#questionResults .question-row').count(), 2);
-      assert.doesNotMatch(await page.locator('#questionResults').innerText(), /唯一主讲正文/);
-      await page.locator('#questionSearch').fill('Q000002');
-      assert.equal(await page.locator('#questionResults .question-row').count(), 1);
-      await page.locator('[data-go-question="Q000002"]').click();
-      await page.waitForFunction(() => !window.__refinement.state.restoring && window.__refinement.state.active.meta.id === 'practice-composition');
-      assert(await page.locator('#q000002').evaluate(node => Math.abs(node.getBoundingClientRect().top - document.querySelector('#readingPane').getBoundingClientRect().top) < 20));
-      await page.locator('#returnButton').click();
-      await page.waitForFunction(() => !window.__refinement.state.restoring && window.__refinement.state.active.meta.id === 'practice-entry');
-      assert(Math.abs(await page.locator('#readingPane').evaluate(node => node.scrollTop) - before) < 8);
-      await page.locator('#libraryButton').click();
-      assert.equal(await page.locator('#bookList .book-row').count(), 2);
-      assert.equal(await page.locator('#libraryTitle').innerText(), '算法实战');
-      assert.equal(await page.evaluate(() => location.hash), '#/library');
-      assert(await page.locator('#libraryResume').isVisible());
+      assert.equal(await page.locator('#questionsButton,[data-track],#trackTabs').count(), 0);
+      assert.doesNotMatch(await page.locator('#readingArticle').innerText(), /Q[0-9]{6}/);
+      const link = page.locator('#readingArticle [data-knowledge]').first();
+      await link.scrollIntoViewIfNeeded(); await link.focus();
+      const before = await page.locator('#readingPane').evaluate(node => node.scrollTop), hash = await page.evaluate(() => location.hash);
+      await link.click(); await page.locator('.knowledge-paper').waitFor();
+      assert.equal(await page.locator('#sheetTitle').innerText(), '删除一个重复对象');
+      assert.equal(await page.evaluate(() => location.hash), hash);
+      assert.equal(await page.locator('#readingPane').evaluate(node => node.scrollTop), before);
+      await page.locator('[data-sheet-close]').click();
+      await page.waitForFunction(() => !document.querySelector('#sheetDialog').open);
+      assert.equal(await page.locator('#readingPane').evaluate(node => node.scrollTop), before);
+      assert(await link.evaluate(node => node === document.activeElement));
     });
 
-    await check('Q-same-document-browser-back-restores-the-original-history-entry', async env => {
+    await check('knowledge-prerequisite-navigation-and-browser-back-preserve-the-reader', async env => {
       const page = await env.page();
-      await page.locator('#readingPane').evaluate(node => node.scrollTop = 700); await page.waitForTimeout(250);
-      const before = await page.locator('#readingPane').evaluate(node => node.scrollTop);
-      await page.locator('#questionsButton').click(); await page.locator('[data-go-question="Q000001"]').click();
-      await page.waitForFunction(() => !window.__refinement.state.restoring && !document.querySelector('#sheetDialog').open);
-      await page.waitForTimeout(60);
-      const reached = await page.locator('#readingPane').evaluate(node => node.scrollTop); assert(Math.abs(reached - before) > 100);
+      const link = page.locator('#readingArticle [data-knowledge]').first();
+      await link.click(); await page.locator('.knowledge-paper').waitFor();
+      await page.locator('#sheetBody [data-knowledge]').click();
+      await page.waitForFunction(() => document.querySelector('#sheetTitle').textContent === '有效范围' && !!document.querySelector('.knowledge-paper'));
+      assert.equal(await page.locator('#sheetBody #lifetime').count(), 1);
+      await page.locator('#sheetBack').click();
+      assert.equal(await page.locator('#sheetTitle').innerText(), '删除一个重复对象');
       await page.evaluate(() => history.back());
-      await page.waitForTimeout(150); await page.waitForFunction(() => !window.__refinement.state.restoring);
-      assert(Math.abs(await page.locator('#readingPane').evaluate(node => node.scrollTop) - before) < 8);
+      await page.waitForFunction(() => !document.querySelector('#sheetDialog').open);
+      assert.equal(await page.evaluate(() => window.__refinement.state.active.meta.id), 'practice-entry');
     });
 
-    await check('question-number-deep-link-resolves-to-the-registered-main-position', async env => {
-      const page = await env.page('#/q/Q000002');
-      assert.equal(await page.evaluate(() => window.__refinement.state.active.meta.id), 'practice-composition');
-      assert.equal(await page.locator('#q000002').count(), 1);
-      assert(await page.locator('#q000002').evaluate(node => Math.abs(node.getBoundingClientRect().top - document.querySelector('#readingPane').getBoundingClientRect().top) < 20));
+    await check('knowledge-close-and-immediate-reopen-keeps-the-new-sheet', async env => {
+      const page = await env.page();
+      await page.locator('#readingArticle [data-knowledge]').first().click(); await page.locator('.knowledge-paper').waitFor();
+      await page.evaluate(() => {
+        document.querySelector('[data-sheet-close]').click();
+        document.querySelector('#readingArticle [data-knowledge]').click();
+      });
+      await page.waitForTimeout(200); await page.locator('.knowledge-paper').waitFor();
+      assert(await page.locator('#sheetDialog').evaluate(node => node.open));
+      await page.keyboard.press('Escape'); await page.waitForFunction(() => !document.querySelector('#sheetDialog').open);
+    });
+
+    await check('knowledge-loading-failure-and-late-response-do-not-reopen-a-closed-sheet', async env => {
+      const page = await env.page(), card = qaCatalog.questions[1];
+      env.mock.unavailable.add(card.url);
+      await page.locator('#readingArticle [data-knowledge]').first().click();
+      await page.waitForFunction(() => document.querySelector('#sheetBody').textContent.includes('未下载'));
+      await page.locator('[data-sheet-close]').click(); await page.waitForFunction(() => !document.querySelector('#sheetDialog').open);
+      env.mock.unavailable.delete(card.url); env.mock.delayDocument = card.url;
+      await page.locator('#readingArticle [data-knowledge]').first().click();
+      await poll(() => env.mock.heldDocument, 'Expected delayed knowledge request');
+      await page.locator('[data-sheet-close]').click(); await page.waitForFunction(() => !document.querySelector('#sheetDialog').open);
+      env.mock.heldDocument(); await page.waitForTimeout(100);
+      assert.equal(await page.locator('#sheetDialog').evaluate(node => node.open), false);
+      assert.equal(await page.evaluate(() => window.__refinement.state.knowledge.has('Q000002')), false);
     });
 
     await check('same-browser-two-page-late-ACK-and-reload', async env => {

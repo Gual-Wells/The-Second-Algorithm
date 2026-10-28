@@ -49,7 +49,9 @@ int lower_standard(const std::vector<int>& a, int x) {
 }
 // END standard
 ''')
-        self.put(self.draft, '# Lesson\n\n<a id="q000001"></a>\n\n### Q000001 · 边界在哪里\n\n实际解释。\n\n{{manual}}\n\n{{standard}}\n')
+        self.put(self.draft, '# Lesson\n\n<a id="prelude"></a>\n## 二分思想\n\n维护分区并折半排除候选。\n\n<a id="boundary-type"></a>\n## 定位有序范围边界\n\n<a id="q000001"></a>\n\n{{knowledge:Q000001}}\n\n{{manual}}\n\n{{standard}}\n\n[Boundary](https://example.com/task)\n')
+        self.knowledge_source = "content/knowledge/boundary.md"
+        self.put(self.knowledge_source, "# 边界在哪里\n\n半开范围表示未排除的候选；终点可比较，不能解引用。\n")
         self.put("tests/cpp/check.cpp", '''#include "../../content/unit/Lesson.cpp"
 #include <cassert>
 int main() {
@@ -62,8 +64,8 @@ int main() {
 ''')
         self.publications = {"schemaVersion": 2, "collections": [{"id": "unit", "title": "Unit", "kind": "chapter",
             "chapterNumber": 1, "visibility": "published", "documents": [{"id": "lesson", "title": "Lesson", "path": "content/unit/Lesson"}]}]}
-        self.model = {"schemaVersion": 1,
-            "questions": [{"id": "Q000001", "title": "边界在哪里", "document": "lesson", "anchor": "q000001",
+        self.model = {"schemaVersion": 2,
+            "questions": [{"id": "Q000001", "title": "边界在哪里", "source": self.knowledge_source,
                            "prerequisites": [], "sources": ["https://eel.is/c++draft/lower.bound"]}],
             "tasks": [{"id": "boundary", "title": "边界", "document": "lesson", "contract": "Sorted input; unchanged; first >= x or size.",
                 "sourceUrls": ["https://example.com/task"], "methods": [{"id": "binary", "title": "二分", "invariant": "[l,r) contains boundary",
@@ -76,15 +78,25 @@ int main() {
         self.put("work/material.md", "Actual fixture material read: sorted boundary contract and method choices.\n")
         self.chapter_index = {"schemaVersion": 1, "chapters": [{"id": "unit", "collection": "unit",
             "contract": "content/unit/chapter.contract.json", "review": "content/unit/chapter.review.json"}]}
-        self.contract = {"schemaVersion": 1, "chapter": "unit", "title": "Unit contract",
+        self.contract = {"schemaVersion": 2, "chapter": "unit", "title": "Unit contract",
             "reader": {"startingPoint": "Basic programming, limited C++ facility knowledge",
                        "targetCapability": "Recognize and implement sorted boundaries", "supportPolicy": "One canonical Q explanation"},
             "scope": {"core": "Sorted boundary queries", "extensions": "Manual and standard implementation choice",
                       "completenessArgument": "Compare task conditions and method roles", "exclusions": []},
-            "reading": {"status": "addressed", "entry": [{"document": "lesson", "anchor": "q000001"}],
+            "paradigm": {"status": "addressed", "name": "Binary search", "mechanism": "Halve a partitioned search space",
+                "coverageArgument": "Fixture only; not a real full chapter", "corpusEvidence": ["outside"],
+                "branches": [{"id": "ordered", "title": "Ordered boundary", "status": "addressed",
+                    "materialIds": ["outside"], "sectionIds": ["boundary-unit"], "crossParadigms": []}]},
+            "prelude": {"status": "addressed", "locations": [{"document": "lesson", "anchor": "prelude"}]},
+            "reading": {"status": "addressed", "entry": [{"document": "lesson", "anchor": "prelude"}],
                 "units": [{"id": "boundary-unit", "title": "Sorted boundary problems", "taskIds": ["boundary"],
-                           "locations": [{"document": "lesson", "anchor": "q000001"}]}],
-                "selectionMap": [{"document": "lesson", "anchor": "q000001"}], "gap": ""},
+                    "locations": [{"document": "lesson", "anchor": "boundary-type"}],
+                    "facets": {key: [{"document": "lesson", "anchor": "boundary-type"}] for key in
+                        ("problem", "fit", "variation", "manual", "manualExplanation", "standard", "standardExplanation", "engineering")},
+                    "manualImplementationIds": ["manual-boundary"], "standardImplementationIds": ["standard-boundary"],
+                    "standardRole": {"kind": "algorithm", "explanation": "std::lower_bound replaces the boundary search"},
+                    "exercises": [{"title": "Boundary", "url": "https://example.com/task"}], "dependsOn": []}],
+                "selectionMap": [{"document": "lesson", "anchor": "boundary-type"}], "gap": ""},
             "materials": [{"id": "outside", "kind": "countercheck", "locator": "Independent boundary task",
                            "evidence": "work/material.md", "sourcePaths": []}],
             "commitments": [{"id": dimension, "dimension": dimension, "claim": "Explain " + dimension,
@@ -143,7 +155,7 @@ int main() {
 class LearningModelTest(LearningFixture):
     def test_empty_course_requires_explicit_withdrawal_and_empty_registries(self):
         self.publications["collections"][0]["visibility"] = "hidden"
-        self.model = {"schemaVersion": 1, "questions": [], "tasks": [], "targets": []}
+        self.model = {"schemaVersion": 2, "questions": [], "tasks": [], "targets": []}
         self.invalid("requires published documents")
         self.publications["state"] = "active"
         self.invalid("requires published documents")
@@ -164,7 +176,7 @@ class LearningModelTest(LearningFixture):
         self.publications["collections"][0]["visibility"] = "hidden"
         for key in ("questions", "tasks", "targets"):
             with self.subTest(registry=key):
-                self.model = {"schemaVersion": 1, "questions": [], "tasks": [], "targets": []}
+                self.model = {"schemaVersion": 2, "questions": [], "tasks": [], "targets": []}
                 self.model[key] = original[key]
                 self.invalid("Withdrawn publication requires")
 
@@ -183,20 +195,21 @@ class LearningModelTest(LearningFixture):
         self.model["questions"].append(copy.deepcopy(self.model["questions"][0]))
         self.invalid("duplicate ID")
 
-    def test_second_complete_heading_is_rejected_but_numbered_reference_is_valid(self):
+    def test_visible_numbered_heading_is_rejected_but_internal_reference_is_valid(self):
         self.put(self.draft, (self.root/self.draft).read_text(encoding="utf-8") + "\n[[Q000001]]\n")
         self.assertTrue(validate_learning(self.root)["ok"])
         self.put(self.draft, (self.root/self.draft).read_text(encoding="utf-8") + "\n### Q000001 · 重讲\n")
-        self.assertIn("exactly one", " ".join(validate_learning(self.root)["errors"]))
+        self.assertIn("must not be visible headings", " ".join(validate_learning(self.root)["errors"]))
 
     def test_code_example_does_not_create_a_second_main_heading(self):
         self.put(self.draft, (self.root/self.draft).read_text(encoding="utf-8") + "\n```text\n### Q000001 · 示例字符串\n```\n")
         self.assertTrue(validate_learning(self.root)["ok"])
 
-    def test_missing_main_and_unknown_reference_are_rejected(self):
+    def test_empty_authority_and_unknown_reference_are_rejected(self):
         self.put(self.draft, "# Missing\n\n[[Q999999]]\n")
+        self.put(self.knowledge_source, "# 边界在哪里\n\n")
         errors = " ".join(validate_learning(self.root)["errors"])
-        self.assertIn("main heading", errors)
+        self.assertIn("empty knowledge explanation", errors)
         self.assertIn("unknown question", errors)
 
     def test_hidden_document_cannot_satisfy_a_published_question(self):
@@ -211,10 +224,11 @@ class LearningModelTest(LearningFixture):
         self.invalid("track is not part")
 
     def test_prerequisites_must_exist_and_be_acyclic(self):
-        second = {**self.model["questions"][0], "id": "Q000002", "anchor": "q000002", "prerequisites": ["Q000001"]}
+        second = {**self.model["questions"][0], "id": "Q000002", "title": "第二问", "source": "content/knowledge/other.md", "prerequisites": ["Q000001"]}
         self.model["questions"].append(second)
         self.model["questions"][0]["prerequisites"] = ["Q000002"]
-        self.put(self.draft, (self.root/self.draft).read_text(encoding="utf-8") + '\n<a id="q000002"></a>\n\n### Q000002 · 第二问\n\n解释\n')
+        self.put(second["source"], '# 第二问\n\n保留另一份真实解释。\n')
+        self.put(self.draft, (self.root/self.draft).read_text(encoding="utf-8") + '\n{{knowledge:Q000002}}\n')
         self.invalid("cycle")
         self.model["questions"][0]["prerequisites"] = ["Q999999"]
         self.invalid("unknown prerequisite")
@@ -275,10 +289,88 @@ class LearningModelTest(LearningFixture):
         self.assertIn("temporary question", " ".join(validate_learning(self.root)["errors"]))
 
 
+class IndependentKnowledgeTest(LearningFixture):
+    def setUp(self):
+        super().setUp()
+        self.model["schemaVersion"] = 2
+        self.knowledge_source = "content/knowledge/boundary.md"
+        question = self.model["questions"][0]
+        question.pop("document", None)
+        question.pop("anchor", None)
+        question["source"] = self.knowledge_source
+        self.put(self.knowledge_source, '# 边界在哪里\n\n<a id="range"></a>\n\n范围含起点而不含终点；终点可比较，不能解引用。\n')
+        self.put(self.draft, '# Lesson\n\n<a id="prelude"></a>\n## 二分思想\n\n维护分区。\n\n<a id="boundary-type"></a>\n## 定位有序范围边界\n\n{{knowledge:Q000001}}\n\n[[Q000001#range|半开范围]]\n\n{{manual}}\n\n{{standard}}\n\n[Boundary](https://example.com/task)\n')
+        for promise in self.contract["commitments"]:
+            promise["locations"] = [{"document": "lesson", "anchor": "boundary-type"}]
+        write_json(self.root / "content/unit/chapter.contract.json", self.contract)
+        self.save()
+
+    def test_independent_authority_is_valid_and_bound_to_input_identity(self):
+        checked = validate_learning(self.root)
+        self.assertTrue(checked["ok"], checked)
+        first = course_snapshot(self.root)
+        self.assertIn(self.knowledge_source, first["inputs"])
+        self.put(self.knowledge_source, (self.root/self.knowledge_source).read_text(encoding="utf-8") + '\n返回end时需要单独处理。\n')
+        self.assertNotEqual(first["inputHash"], course_snapshot(self.root)["inputHash"])
+
+    def test_utf8_bom_is_accepted_but_raw_authority_bytes_are_frozen(self):
+        before = course_snapshot(self.root)
+        source = self.root/self.knowledge_source
+        source.write_bytes(b"\xef\xbb\xbf" + source.read_bytes())
+        self.assertTrue(validate_learning(self.root)["ok"])
+        after = course_snapshot(self.root)
+        self.assertNotEqual(before["inputHash"], after["inputHash"])
+        self.assertNotEqual(before["inputs"][self.knowledge_source], after["inputs"][self.knowledge_source])
+
+    def test_reuse_without_inline_introduction_does_not_require_original_chapter(self):
+        self.put(self.draft, (self.root/self.draft).read_text(encoding="utf-8").replace('{{knowledge:Q000001}}', '沿用[[Q000001|边界规则]]。'))
+        self.assertTrue(validate_learning(self.root)["ok"])
+        self.model["questions"][0]["document"] = "old-retired-chapter"
+        self.invalid("cannot bind its authority")
+
+    def test_second_full_introduction_and_visible_identifier_are_rejected(self):
+        self.put(self.draft, (self.root/self.draft).read_text(encoding="utf-8") + '\n{{knowledge:Q000001}}\n')
+        self.assertIn("only once", " ".join(validate_learning(self.root)["errors"]))
+        self.put(self.draft, (self.root/self.draft).read_text(encoding="utf-8").replace('\n{{knowledge:Q000001}}\n', '\n[[Q000001|Q000001]]\n'))
+        self.assertIn("semantic label", " ".join(validate_learning(self.root)["errors"]))
+
+    def test_literal_examples_do_not_create_references_or_introductions(self):
+        self.put(self.draft, (self.root/self.draft).read_text(encoding="utf-8") + '\n`[[Q999999]]`\n\n```text\n{{knowledge:Q000001}}\n[[Q999999]]\n```\n<!-- [[Q999999]] -->\n')
+        self.assertTrue(validate_learning(self.root)["ok"])
+
+    def test_precise_subsection_anchor_must_exist(self):
+        self.put(self.draft, (self.root/self.draft).read_text(encoding="utf-8").replace('#range|', '#missing|'))
+        self.assertIn("missing knowledge anchor", " ".join(validate_learning(self.root)["errors"]))
+
+    def test_each_knowledge_source_and_complete_explanation_has_one_identity(self):
+        other = {**self.model["questions"][0], "id": "Q000002"}
+        self.model["questions"].append(other)
+        self.invalid("source registered more than once")
+        other["source"] = "content/knowledge/duplicate.md"
+        self.put(other["source"], (self.root/self.knowledge_source).read_text(encoding="utf-8"))
+        self.invalid("duplicate complete knowledge explanation")
+
+    def test_card_references_must_resolve_and_cannot_inline_other_cards(self):
+        self.put(self.knowledge_source, '# 边界在哪里\n\n[[Q999999|未知规则]]\n')
+        self.assertIn("unknown knowledge reference", " ".join(validate_learning(self.root)["errors"]))
+        self.put(self.knowledge_source, '# 边界在哪里\n\n{{knowledge:Q000001}}\n')
+        self.assertIn("recursively introduce", " ".join(validate_learning(self.root)["errors"]))
+
+    def test_source_title_path_and_prerequisite_identity_are_checked(self):
+        self.model["questions"][0]["source"] = "../outside.md"
+        self.invalid("knowledge source must")
+        self.model["questions"][0]["source"] = self.knowledge_source
+        self.put(self.knowledge_source, '# 错误标题\n\n解释。\n')
+        self.invalid("source title differs")
+        self.put(self.knowledge_source, '# 边界在哪里\n\n解释。\n')
+        self.model["questions"][0]["prerequisites"] = ["Q000001"]
+        self.invalid("cycle")
+
+
 class ResearchWorkflowTest(LearningFixture):
     def test_withdrawal_keeps_evidence_gate_and_never_claims_cpp_compilation(self):
         self.publications.update(state="withdrawn", collections=[])
-        self.model = {"schemaVersion": 1, "questions": [], "tasks": [], "targets": []}
+        self.model = {"schemaVersion": 2, "questions": [], "tasks": [], "targets": []}
         self.save()
         init_job(self.root, "lesson-job", "Withdraw previous content")
         with patch("second_algorithm.workflow._process") as process:
@@ -376,6 +468,15 @@ class ResearchWorkflowTest(LearningFixture):
         with self.assertRaises(ValueError):
             check_release(self.root, "work/jobs/lesson-job/releases/missing.json")
         self.put(self.source, (self.root/self.source).read_text(encoding="utf-8") + "\n// changed source\n")
+        with self.assertRaisesRegex(ValueError, "stale"):
+            check_release(self.root, packet)
+
+    def test_knowledge_revision_invalidates_prepared_packet_without_touching_chapter(self):
+        self.verified_job()
+        packet = prepare_release(self.root, "lesson-job")["receipt"]["path"]
+        original_chapter = (self.root/self.draft).read_bytes()
+        self.put(self.knowledge_source, (self.root/self.knowledge_source).read_text(encoding="utf-8") + '\n另一个必要的边界条件。\n')
+        self.assertEqual(original_chapter, (self.root/self.draft).read_bytes())
         with self.assertRaisesRegex(ValueError, "stale"):
             check_release(self.root, packet)
 

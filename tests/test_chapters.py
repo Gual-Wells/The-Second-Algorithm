@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import contextlib
+import copy
 import io
 import json
 from unittest.mock import patch
@@ -13,7 +14,7 @@ from second_algorithm.storage import read_json, write_json
 from second_algorithm.workflow import add_evidence, init_job, job_status, prepare_release, verify_job
 
 
-class ChapterContractTest(LearningFixture):
+class ChapterHelpers:
     def save_contract(self):
         write_json(self.root / "content/unit/chapter.contract.json", self.contract)
 
@@ -27,6 +28,8 @@ class ChapterContractTest(LearningFixture):
         init_job(self.root, "lesson-job", "Fixture editorial review")
         self.notes()
 
+
+class ChapterContractTest(ChapterHelpers, LearningFixture):
     def test_missing_chapter_index_cannot_disable_quality_gate(self):
         (self.root / "catalog/chapters.json").unlink()
         self.assertFalse(validate_learning(self.root)["ok"])
@@ -130,6 +133,8 @@ class ChapterContractTest(LearningFixture):
 
     def test_reading_path_open_is_legal_but_missing_route_blocks_release(self):
         self.contract["reading"] = {"status": "open", "gap": "No coherent reader route yet"}
+        if self.contract.get("schemaVersion") == 2:
+            self.contract["paradigm"].update(status="open", gap="The type map is still being formed", branches=[])
         self.save_contract()
         self.accepted_fixture()
         self.assertTrue(validate_learning(self.root)["ok"])
@@ -231,3 +236,192 @@ class ChapterContractTest(LearningFixture):
         self.put("catalog/chapters.json", "retired invalid catalogue")
         self.assertTrue(validate_learning(self.root)["ok"])
         self.assertTrue(chapter_quality(self.root)["ok"])
+
+
+class ParadigmContractTest(ChapterHelpers, LearningFixture):
+    """Synthetic fixtures exercise relationships, never certify a real chapter."""
+
+    def setUp(self):
+        super().setUp()
+        # A complete but intentionally tiny test corpus is not a production
+        # recommendation for how broadly a real binary-search chapter should be.
+        self.put(self.draft, '# Lesson\n\n<a id="prelude"></a>\n\n## Thought and scope\n\nFixture theory.\n'
+                 '\n<a id="boundary-type"></a>\n\n## Ordered boundaries\n'
+                 '\n<a id="q000001"></a>\n\n{{knowledge:Q000001}}\n'
+                 '\n{{manual}}\n\n{{standard}}\n\n[Boundary](https://example.com/task)\n')
+        self.model["schemaVersion"] = 2
+        question = self.model["questions"][0]
+        question.pop("document", None)
+        question.pop("anchor", None)
+        question["source"] = "content/knowledge/boundary.md"
+        self.put(question["source"], "# 边界在哪里\n\n实际解释。\n")
+        self.save()
+        loc = [{"document": "lesson", "anchor": "boundary-type"}]
+        self.contract.update(schemaVersion=2,
+            paradigm={"status": "addressed", "name": "Binary search", "mechanism": "Halve a partitioned space",
+                "coverageArgument": "Synthetic fixture only; not a claim of real domain completeness", "corpusEvidence": ["outside"],
+                "branches": [{"id": "ordered", "title": "Ordered boundaries", "status": "addressed", "materialIds": ["outside"],
+                              "sectionIds": ["boundary-unit"], "crossParadigms": []}]},
+            prelude={"status": "addressed", "locations": [{"document": "lesson", "anchor": "prelude"}]})
+        self.contract["reading"].update(entry=copy.deepcopy(self.contract["prelude"]["locations"]), selectionMap=copy.deepcopy(loc))
+        self.contract["reading"]["units"] = [{"id": "boundary-unit", "title": "Ordered boundary problems", "taskIds": ["boundary"],
+            "locations": copy.deepcopy(loc), "facets": {key: copy.deepcopy(loc) for key in
+                ("problem", "fit", "variation", "manual", "manualExplanation", "standard", "standardExplanation", "engineering")},
+            "manualImplementationIds": ["manual-boundary"], "standardImplementationIds": ["standard-boundary"],
+            "standardRole": {"kind": "algorithm", "explanation": "The standard algorithm performs the boundary search"},
+            "exercises": [{"title": "Boundary", "url": "https://example.com/task"}], "dependsOn": []}]
+        self.save_contract()
+
+    def test_complete_schema2_relationships_can_be_reviewed_and_prepared(self):
+        self.assertTrue(validate_learning(self.root)["ok"], validate_learning(self.root))
+        self.accepted_fixture()
+        self.assertTrue(chapter_quality(self.root)["ok"], chapter_quality(self.root))
+        with patch("second_algorithm.workflow._process", side_effect=self.process_success):
+            verify_job(self.root, "lesson-job", "fixture-c++")
+        self.assertTrue(prepare_release(self.root, "lesson-job")["release"]["passed"])
+
+    def test_legacy_contract_is_readable_but_not_eligible_for_new_publication(self):
+        self.contract["schemaVersion"] = 1
+        self.save_contract()
+        self.accepted_fixture()
+        self.assertTrue(validate_learning(self.root)["ok"])
+        self.assertIn("legacy chapter contract", " ".join(chapter_quality(self.root)["chapters"][0]["errors"]))
+        self.assertIn("旧问题专题", render_chapters(self.root))
+
+    def test_new_contract_cannot_publish_legacy_visible_question_registry(self):
+        self.model["schemaVersion"] = 1
+        question = self.model["questions"][0]
+        question.pop("source", None)
+        question.update(document="lesson", anchor="q000001")
+        self.put(self.draft, (self.root/self.draft).read_text(encoding="utf-8").replace(
+            '{{knowledge:Q000001}}', '### Q000001 · 边界在哪里\n\n实际解释。'))
+        self.save()
+        self.accepted_fixture()
+        self.assertTrue(validate_learning(self.root)["ok"])
+        errors = " ".join(chapter_quality(self.root)["chapters"][0]["errors"])
+        self.assertIn("transparent knowledge registry requires learning schemaVersion 2", errors)
+        with patch("second_algorithm.workflow._process", side_effect=self.process_success):
+            verify_job(self.root, "lesson-job", "fixture-c++")
+        with self.assertRaisesRegex(ValueError, "chapter-quality"):
+            prepare_release(self.root, "lesson-job")
+
+    def test_open_domain_branch_and_prelude_are_honest_release_blockers(self):
+        self.contract["paradigm"].update(status="open", gap="Known main domain still unorganized")
+        self.contract["prelude"].update(status="open", gap="The common mechanism is not yet explained")
+        self.contract["paradigm"]["branches"][0].update(status="open", gap="Important variation not taught")
+        self.save_contract()
+        self.accepted_fixture()
+        self.assertTrue(validate_learning(self.root)["ok"])
+        errors = " ".join(chapter_quality(self.root)["chapters"][0]["errors"])
+        for phrase in ("paradigm is open", "prelude is open", "branch is open"):
+            self.assertIn(phrase, errors)
+
+    def test_addressed_domain_requires_corpus_and_real_branch_coverage(self):
+        self.contract["paradigm"].update(corpusEvidence=[], branches=[])
+        self.save_contract()
+        errors = " ".join(validate_learning(self.root)["errors"])
+        self.assertIn("corpus extraction/merging evidence", errors)
+        self.assertIn("actual coverage branches", errors)
+
+    def test_branch_cannot_claim_imaginary_material_or_section(self):
+        self.contract["paradigm"]["branches"][0].update(materialIds=["unread"], sectionIds=["missing-type"])
+        self.save_contract()
+        errors = " ".join(validate_learning(self.root)["errors"])
+        self.assertIn("unknown material reference", errors)
+        self.assertIn("unknown problem-type section", errors)
+
+    def test_formal_section_requires_actual_h2_not_an_arbitrary_anchor(self):
+        self.contract["reading"]["units"][0]["locations"] = [{"document": "lesson", "anchor": "q000001"}]
+        self.save_contract()
+        self.assertIn("actual H2 heading", " ".join(validate_learning(self.root)["errors"]))
+
+    def test_extra_h2_cannot_compete_with_type_navigation(self):
+        self.put(self.draft, (self.root/self.draft).read_text(encoding="utf-8") + '\n## An unrelated proof promoted to a section\n')
+        self.assertIn("unassigned H2", " ".join(validate_learning(self.root)["errors"]))
+
+    def test_theory_must_be_before_formal_sections(self):
+        draft = (self.root/self.draft).read_text(encoding="utf-8")
+        before, section = draft.split('<a id="boundary-type"></a>')
+        self.put(self.draft, '# Lesson\n\n<a id="boundary-type"></a>' + section + '\n' + before.replace('# Lesson\n', '', 1))
+        self.assertIn("prelude must precede", " ".join(validate_learning(self.root)["errors"]))
+
+    def test_facet_cannot_point_to_another_part_of_the_chapter(self):
+        self.contract["reading"]["units"][0]["facets"]["fit"] = [{"document": "lesson", "anchor": "prelude"}]
+        self.save_contract()
+        self.assertIn("within its own problem-type section", " ".join(validate_learning(self.root)["errors"]))
+
+    def test_exercises_need_one_to_five_real_visible_task_links(self):
+        unit = self.contract["reading"]["units"][0]
+        unit["exercises"] = []
+        self.save_contract()
+        self.assertIn("1 to 5 exercises", " ".join(validate_learning(self.root)["errors"]))
+        unit["exercises"] = [{"title": "Unrelated", "url": "https://example.com/unrelated"}]
+        self.save_contract()
+        self.assertIn("actual task sourceUrls", " ".join(validate_learning(self.root)["errors"]))
+        unit["exercises"] = [{"title": "Boundary", "url": "https://example.com/task"}]
+        self.put(self.draft, (self.root/self.draft).read_text(encoding="utf-8").replace('[Boundary](https://example.com/task)', ''))
+        self.save_contract()
+        self.assertIn("actual visible link", " ".join(validate_learning(self.root)["errors"]))
+
+    def test_six_valid_exercises_still_exceed_the_per_type_limit(self):
+        unit = self.contract["reading"]["units"][0]
+        urls = ["https://example.com/task" + str(i) for i in range(6)]
+        self.model["tasks"][0]["sourceUrls"] = urls
+        unit["exercises"] = [{"title": "Variant " + str(i), "url": url} for i, url in enumerate(urls)]
+        self.put(self.draft, (self.root/self.draft).read_text(encoding="utf-8") + '\n' +
+                 '\n'.join('[Variant](' + url + ')' for url in urls))
+        self.save()
+        self.save_contract()
+        self.assertIn("1 to 5 exercises", " ".join(validate_learning(self.root)["errors"]))
+
+    def test_type_order_and_duplicate_h2_ownership_are_checked(self):
+        original = self.contract["reading"]["units"][0]
+        second = copy.deepcopy(original)
+        second.update(id="second-type", title="A harder variant")
+        self.contract["reading"]["units"].append(second)
+        self.contract["paradigm"]["branches"][0]["sectionIds"].append("second-type")
+        self.save_contract()
+        self.assertIn("multiple problem-type sections", " ".join(validate_learning(self.root)["errors"]))
+        self.put(self.draft, (self.root/self.draft).read_text(encoding="utf-8") +
+                 '\n<a id="harder-type"></a>\n\n## Harder variant\n\n[Boundary](https://example.com/task)\n')
+        loc = [{"document": "lesson", "anchor": "harder-type"}]
+        second.update(locations=loc, facets={key: copy.deepcopy(loc) for key in second["facets"]})
+        self.contract["reading"]["units"].reverse()
+        self.save_contract()
+        self.assertIn("author prose order", " ".join(validate_learning(self.root)["errors"]))
+
+    def test_entry_cannot_hide_an_unassigned_proof_heading(self):
+        self.put(self.draft, (self.root/self.draft).read_text(encoding="utf-8") + '\n<a id="extra-proof"></a>\n\n## Separate proof\n')
+        self.contract["reading"]["entry"].append({"document": "lesson", "anchor": "extra-proof"})
+        self.save_contract()
+        self.assertIn("entry must identify its theory prelude", " ".join(validate_learning(self.root)["errors"]))
+
+    def test_implementation_paths_must_reference_real_section_tasks_and_roles(self):
+        unit = self.contract["reading"]["units"][0]
+        unit["manualImplementationIds"] = ["not-an-implementation"]
+        unit["standardImplementationIds"] = ["manual-boundary"]
+        self.save_contract()
+        errors = " ".join(validate_learning(self.root)["errors"])
+        self.assertIn("actual tasks", errors)
+        self.assertIn("standard algorithm/structure", errors)
+        unit["manualImplementationIds"] = ["manual-boundary"]
+        unit["standardRole"] = {"kind": "shared-core", "explanation": "The handwritten core already uses the actual standard facility"}
+        self.save_contract()
+        self.assertTrue(validate_learning(self.root)["ok"], validate_learning(self.root))
+
+    def test_known_corpus_changes_invalidate_the_bound_review(self):
+        self.put("catalog/sources.json", '{"sources": []}')
+        self.accepted_fixture()
+        self.put("catalog/sources.json", '{"sources": [{"id": "new-site"}]}')
+        self.assertIn("stale", " ".join(chapter_quality(self.root)["chapters"][0]["errors"]))
+
+    def test_malformed_new_objects_fail_as_validation_not_exceptions(self):
+        for key in ("paradigm", "prelude", "reading"):
+            with self.subTest(key=key):
+                original = self.contract[key]
+                self.contract[key] = []
+                self.save_contract()
+                checked = validate_learning(self.root)
+                self.assertFalse(checked["ok"])
+                self.assertIn("expected", " ".join(checked["errors"]))
+                self.contract[key] = original

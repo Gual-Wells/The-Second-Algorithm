@@ -14,9 +14,9 @@ job在 `work/jobs/<id>/`，不可重复init覆盖；状态返回真实缺失/过
 
 ## 内容生产与检查
 
-遵循研究部和实现标准，更新当前learning关系、Q唯一主讲、原稿和源码。研究与审阅笔记需要实际完成，可由不同Agent检查。全部代码/主题/Q/目标稳定后：
+遵循研究部和实现标准，先复盘出版、提取归并相关材料并研究大思想全景，再更新章合同、题型顺序、learning关系、独立知识源、原稿和源码。研究与审阅须真实完成，全部输入稳定后才留证。内部知识身份不外显给读者；引用/首次内嵌语法见CONTENT_MODEL。
 
-先按CHAPTER_STANDARD/QUALITY_WORKFLOW在 `catalog/chapters.json` 登记每个正式章的合同与审阅路径。形成读者目标、难度/范围/完备/可读性承诺和真实材料；已完成承诺用正文稳定显式锚点定位，未完保留open/gap。合同结构可以有效而质量尚未通过；不得临时删登记来关闭门禁。
+先按CHAPTER_STANDARD/QUALITY_WORKFLOW在 `catalog/chapters.json` 登记每章合同与审阅路径。新合同schema2保存思想机制与主要分支、真实材料归并证据、理论前置和正式题型节；每节有完整链条位置、真实双实现层次、依赖及1–5份在研究阶段取得且正文可见的练习。前置/题型须对应实际H2，机制/证明从属于题型。已有承诺用真实显式锚点定位，未完保留open/gap。结构可以有效而质量未通过；旧schema只供恢复，不得删除登记或追认旧通过来关闭门禁。
 
 ```sh
 npm run build:content
@@ -43,7 +43,7 @@ python -m second_algorithm course quality
 python -m second_algorithm course quality chapter-id --json
 ```
 
-quality非0表示缺口/缺失/过期等阻塞；所有承诺addressed且真实逐项审阅当前有效才可准备。`course validate`/编译/技术CI仍可检查施工版本，不把绿灯等同可发布。审阅文件自身不进它的inputHash，但实际发布快照会固定审阅字节。更换路径、合同、材料或生产输入须重新判断相关影响，不仅替换hash。
+quality非0表示旧合同、领域/分支/前置/题型缺口、审阅缺失/过期等阻塞；符合新硬协议、各项addressed且真实逐项审阅当前有效才可准备。`course validate`/编译/技术CI仍可检查施工版本，不把绿灯等同可发布。审阅文件自身不进它的inputHash，但实际发布快照会固定审阅字节。更换路径、合同、材料或生产输入须重新判断相关影响，不仅替换hash。
 
 在最终有效输入上登记实际研究与审阅记录：
 

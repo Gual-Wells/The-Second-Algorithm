@@ -9,13 +9,14 @@ const esbuild = require(process.env.ALGORITHM_QA_ESBUILD || 'esbuild');
 const root = path.resolve(__dirname, '..');
 const owner = 'a'.repeat(43), oldBuild = 'upgrade-old', newBuild = 'upgrade-new', withdrawnBuild = 'upgrade-withdrawn';
 const documentURL = '/library/formal-first/first-document/new.json';
+const knowledge = { id: 'Q000001', title: '有效范围', url: '/library/knowledge/Q000001/new.json', revision: 'knowledge-new', prerequisites: [] };
 const meta = { id: 'first-document', title: '正文', revision: 'new', url: documentURL,
   sourceUrl: documentURL.replace('.json', '.cpp'), markdownUrl: documentURL.replace('.json', '.md'),
-  headings: [{ depth: 2, id: 'example', text: '新章例子' }] };
-const catalog = { schemaVersion: 2, questions: [], version: 'formal-new', collections: [{ id: 'formal-first', kind: 'chapter',
+  headings: [{ depth: 2, id: 'example', text: '新章例子' }], knowledgeIds: ['Q000001'] };
+const catalog = { schemaVersion: 2, questions: [knowledge], version: 'formal-new', collections: [{ id: 'formal-first', kind: 'chapter',
   chapterNumber: 1, title: '正式章', documents: [meta] }] };
-const payload = { ...meta, html: '<h2 id="example">新章例子</h2><div class="code-block" data-code-id="demo"><pre><code>int answer = 42;</code></pre></div>' };
-const index = { version: catalog.version, questions: [], collections: { 'formal-first': { 'first-document': meta.revision } } };
+const payload = { ...meta, html: '<h2 id="example">新章例子</h2><div class="code-block" data-code-id="demo"><pre><code>int answer = 42;</code></pre></div><p><a href="#knowledge-Q000001" data-knowledge="Q000001">有效范围</a></p>' };
+const index = { version: catalog.version, questions: [knowledge], collections: { 'formal-first': { 'first-document': meta.revision } } };
 const oldCatalog = { schemaVersion: 2, version: 'previous-release', questions: [], collections: [] };
 const withdrawnCatalog = { schemaVersion: 2, state: 'withdrawn', version: 'withdrawn-release', questions: [], collections: [] };
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -62,7 +63,7 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
         response.writeHead(200, { 'Content-Type': 'text/javascript', 'Cache-Control': 'no-store' });
         response.end(sw.replaceAll('__BUILD__', currentBuild())
           .replaceAll('__LIBRARY_PATHS__', JSON.stringify(published && !withdrawn
-            ? ['/library/catalog.json', documentURL, meta.sourceUrl, meta.markdownUrl] : ['/library/catalog.json']))); return;
+            ? ['/library/catalog.json', documentURL, meta.sourceUrl, meta.markdownUrl, knowledge.url] : ['/library/catalog.json']))); return;
       }
       if (url.pathname === '/manifest.webmanifest' && url.searchParams.get('v') === newBuild) {
         // Keep the replacement installing while the new app is already running.
@@ -71,10 +72,11 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
       if (url.pathname === '/auth/status') return json({ authenticated: true, enrolled: true, enrollmentOpen: false, ownerScope: owner });
       if (url.pathname === '/api/library' || url.pathname === '/library/catalog.json') return json(withdrawn ? withdrawnCatalog : published ? catalog : oldCatalog);
       if (url.pathname === '/api/state') return json({ state: {} });
-      if ([documentURL, meta.sourceUrl, meta.markdownUrl].includes(url.pathname) && withdrawn) {
+      if ([documentURL, meta.sourceUrl, meta.markdownUrl, knowledge.url].includes(url.pathname) && withdrawn) {
         response.writeHead(404); response.end('Withdrawn'); return;
       }
       if (url.pathname === documentURL) { ++documentRequests; return json(payload); }
+      if (url.pathname === knowledge.url) return json({ ...knowledge, html: '<p>离线也可以查看的唯一知识解释。</p>', anchors: [] });
       if (url.pathname === meta.sourceUrl || url.pathname === meta.markdownUrl) { response.end('int answer = 42;'); return; }
       if (url.pathname === '/app.js') {
         response.writeHead(200, { 'Content-Type': 'text/javascript' });
@@ -129,6 +131,10 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
     await page.locator('#readingArticle .code-block').first().waitFor();
     assert.match(await page.locator('#readingArticle').innerText(), /answer = 42/);
     assert.equal(documentRequests, 1, 'same-version offline restart reuses downloaded content');
+    await page.locator('[data-knowledge]').click();
+    await page.locator('.knowledge-paper').waitFor();
+    assert.match(await page.locator('.knowledge-paper').innerText(), /离线也可以查看/);
+    await page.locator('[data-sheet-close]').click();
     assert.deepEqual(errors, []);
     await context.close();
     networkOffline = false; published = false; documentRequests = 0;
@@ -159,14 +165,14 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
     // Upgrade a genuinely cached publication to the empty withdrawal. The new
     // policy must purge all three payload forms without clearing private notes.
     await updatePage.waitForFunction(() => !globalThis.__carrierUpgrade.downloading);
-    const retiredPaths = [documentURL, meta.sourceUrl, meta.markdownUrl];
+    const retiredPaths = [documentURL, meta.sourceUrl, meta.markdownUrl, knowledge.url];
     const beforeWithdrawal = await updatePage.evaluate(async ({ owner, retiredPaths }) => {
       localStorage.setItem('second-algorithm:' + owner + ':notes:formal-first', JSON.stringify({ text: 'withdrawal unsent note', revision: 3, dirty: true }));
       for (const url of retiredPaths) { const response = await fetch(url); if (!response.ok) throw Error('Old fixture not readable'); await response.text(); }
       const cache = await caches.open('second-algorithm-private-' + owner);
       return Promise.all(retiredPaths.map(async url => Boolean(await cache.match(url))));
     }, { owner, retiredPaths });
-    assert.deepEqual(beforeWithdrawal, [true, true, true], 'all retired payloads were cached by the real old worker');
+    assert.deepEqual(beforeWithdrawal, [true, true, true, true], 'all retired payloads were cached by the real old worker');
     withdrawn = true;
     await updatePage.reload();
     await updatePage.locator('#libraryView').waitFor({ state: 'visible' });
@@ -196,8 +202,8 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
         notes: localStorage.getItem('second-algorithm:' + owner + ':notes:formal-first'),
         statuses: await Promise.all(retiredPaths.map(async url => (await fetch(url)).status)) };
     }, { owner, retiredPaths });
-    assert.deepEqual(afterWithdrawal.cached, [false, false, false], JSON.stringify(afterWithdrawal));
-    assert.deepEqual(afterWithdrawal.statuses, [404, 404, 404]);
+    assert.deepEqual(afterWithdrawal.cached, [false, false, false, false], JSON.stringify(afterWithdrawal));
+    assert.deepEqual(afterWithdrawal.statuses, [404, 404, 404, 404]);
     assert.match(afterWithdrawal.notes, /withdrawal unsent note/);
     // Cache the new empty catalog, then restart with no network at all.
     assert.equal(await updatePage.evaluate(async () => (await fetch('/library/catalog.json')).status), 200);
@@ -208,7 +214,7 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
     await updatePage.evaluate(() => { location.hash = '#/read/formal-first/first-document'; });
     await updatePage.waitForURL('**/#/library');
     assert.equal(await updatePage.locator('#readingArticle .code-block').count(), 0);
-    assert.deepEqual(await updatePage.evaluate(async urls => Promise.all(urls.map(async url => (await fetch(url)).status)), retiredPaths), [404, 404, 404]);
+    assert.deepEqual(await updatePage.evaluate(async urls => Promise.all(urls.map(async url => (await fetch(url)).status)), retiredPaths), [404, 404, 404, 404]);
     assert.match(await updatePage.evaluate(owner => localStorage.getItem('second-algorithm:' + owner + ':notes:formal-first'), owner), /withdrawal unsent note/);
     assert.deepEqual(errors, []);
     report = { passed: true, realBrowserAndServiceWorker: true, heldNewWorkerWhileNewAppRan: true,

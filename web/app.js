@@ -4,7 +4,7 @@ import { waitForWorkerRelease } from './worker-release.js';
 
 const $ = id => document.getElementById(id);
 const esc = text => String(text ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
-const S = { owner: null, library: null, records: {}, docs: new Map(), notes: new Map(), active: null,
+const S = { owner: null, library: null, records: {}, docs: new Map(), knowledge: new Map(), notes: new Map(), active: null,
   offline: false, sequence: 0, connectionSequence: 0, searchSequence: 0, back: [], pure: false, restoring: false, returnTo: null, pendingRoute: null,
   settings: { fontSize: 17, codeSize: 13.5, wrapCode: false, preload: true }, controlsTimer: 0 };
 const SESSION_KEY = 'second-algorithm:last-session';
@@ -13,7 +13,7 @@ const readLocal = (key, fallback = null) => { try { return JSON.parse(localStora
 const writeLocal = (key, value) => { try { localStorage.setItem(prefix() + key, JSON.stringify(value)); return true; } catch { toast('本机存储空间不足，请导出尚未同步的笔记。'); return false; } };
 const allDocuments = () => S.library?.collections.flatMap(c => c.documents.map(d => ({ collection: c, document: d }))) || [];
 let positionTimer, toastTimer, sheetView, sheetParent, sheetSequence = 0, reconnectTimer, reconnecting = false;
-let sheetHistory = false, sheetClosing = false, afterSheetClose = null, journalInstance, heldControls = false;
+let sheetHistory = false, sheetClosing = false, afterSheetClose = null, sheetOpener = null, journalInstance, heldControls = false;
 const CLIENT_ID = crypto.randomUUID();
 const BUILD = new URL(import.meta.url).searchParams.get('v');
 const PUBLICATION_INDEX = typeof __PUBLICATION_INDEX__ === 'undefined' ? { version: '', collections: {} } : __PUBLICATION_INDEX__;
@@ -27,7 +27,7 @@ function publishedLibrary(catalog) {
   });
   const visible = new Set(collections.flatMap(collection => collection.documents.map(document => document.id)));
   return { schemaVersion: 2, version: PUBLICATION_INDEX.version, collections,
-    questions: (PUBLICATION_INDEX.questions || []).filter(question => visible.has(question.document)) };
+    questions: (PUBLICATION_INDEX.questions || []).filter(question => question.url && question.revision || visible.has(question.document)) };
 }
 const syncing = new Map(), downloads = new Map();
 let contentController = null, contentReleaseJob = null;
@@ -80,7 +80,7 @@ async function swMessage(message) {
 }
 
 function lock(message = '使用通行密钥进入阅读室。') {
-  S.sequence++; S.searchSequence++; S.connectionSequence++; S.owner = null; S.active = null; S.library = null; S.docs.clear(); S.records = {}; S.notes.clear(); S.returnTo = null; S.restoring = false; S.pendingRoute = null; afterSheetClose = null; downloads.clear(); clearTimeout(reconnectTimer);
+  S.sequence++; S.searchSequence++; S.connectionSequence++; S.owner = null; S.active = null; S.library = null; S.docs.clear(); S.knowledge.clear(); S.records = {}; S.notes.clear(); S.returnTo = null; S.restoring = false; S.pendingRoute = null; afterSheetClose = null; sheetOpener = null; downloads.clear(); clearTimeout(reconnectTimer);
   localStorage.removeItem(SESSION_KEY); setPure(false);
   if ($('sheetDialog').open) $('sheetDialog').close();
   $('headerActions').hidden = $('libraryView').hidden = $('readerView').hidden = true;
@@ -193,11 +193,7 @@ async function route() {
   const [, section, collectionId, docId] = pathname.split('/');
   const historyPosition = history.state?.readingPosition;
   if (section === 'q') {
-    const question = S.library.questions.find(question => question.id === collectionId);
-    const pair = question && allDocuments().find(pair => pair.document.id === question.document);
-    if (!pair) { toast('未找到此问题编号。'); navigate('#/library', { replace: true }); return; }
-    history.replaceState(history.state, '', `#/read/${pair.collection.id}/${question.document}?anchor=${encodeURIComponent(question.anchor)}`);
-    await route(); return;
+    navigate('#/library', { replace: true }); return;
   }
   if (section !== 'read') {
     savePosition(false); S.active = null; S.pendingRoute = null; S.restoring = false; S.back = []; S.returnTo = null; setPure(false);
@@ -380,6 +376,7 @@ function showSheet(title, html, view, parent = null) {
   sheetView = view; sheetParent = parent; $('sheetTitle').textContent = title;
   $('sheetBody').innerHTML = html; $('sheetBack').hidden = !parent;
   if (!$('sheetDialog').open) {
+    sheetOpener = document.activeElement;
     history.pushState({ ...history.state, algorithmSheet: true }, '', location.href); sheetHistory = true; sheetClosing = false;
     $('sheetDialog').showModal();
   }
@@ -388,6 +385,7 @@ function showSheet(title, html, view, parent = null) {
 }
 
 function dismissSheet(after = null) {
+  sheetSequence++;
   if (after) afterSheetClose = after;
   if ($('sheetDialog').open) { $('sheetDialog').close(); if (sheetHistory && !sheetClosing) { sheetClosing = true; history.back(); } }
   else if (sheetHistory && !sheetClosing) { sheetClosing = true; history.back(); }
@@ -422,19 +420,44 @@ function showToc() {
   requestAnimationFrame(() => { if (sheetView === 'toc') $('tocResults')?.querySelector('[aria-current]')?.scrollIntoView({ block: 'center' }); });
 }
 
-function renderQuestions(query = '') {
-  const terms = query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
-  const questions = S.library.questions.filter(question => terms.every(term =>
-    (question.id + ' ' + question.title).toLocaleLowerCase().includes(term)));
-  $('questionResults').innerHTML = `<p class="search-summary">${questions.length}个问题</p>`
-    + (questions.length ? questions.map(question => `<button type="button" class="question-row" data-go-question="${question.id}"><span class="question-number">${question.id}</span><span>${esc(question.title)}</span><span aria-hidden="true">›</span></button>`).join('')
-      : '<p class="empty-state">未找到匹配的问题编号或标题</p>');
-}
-
-function showQuestions() {
-  if (waitForSheetClose(showQuestions)) return;
-  showSheet('C++问题索引', '<div class="sheet-tools"><label class="search-field"><span class="sr-only">检索问题编号或标题</span><input id="questionSearch" type="search" placeholder="问题编号或标题" autocomplete="off" maxlength="200"></label></div><div id="questionResults"></div>', 'questions');
-  renderQuestions();
+async function showKnowledge(id, anchor = '', retry = false) {
+  if (sheetClosing || (!$('sheetDialog').open && sheetHistory)) {
+    afterSheetClose = () => { void showKnowledge(id, anchor, retry); }; return;
+  }
+  const meta = S.library?.questions.find(item => item.id === id);
+  if (!meta?.url) { toast('此知识暂时无法打开。'); return; }
+  const owner = S.owner;
+  const parent = retry ? sheetParent : $('sheetDialog').open ? rememberSheet((() => {
+    const title = $('sheetTitle').textContent, html = $('sheetBody').innerHTML, view = sheetView, previous = sheetParent;
+    return () => showSheet(title, html, view, previous);
+  })()) : null;
+  showSheet(meta.title, '<p role="status">正在打开…</p>', 'knowledge', parent);
+  const sequence = sheetSequence;
+  try {
+    await ensureContentRelease();
+    if (owner !== S.owner || sequence !== sheetSequence) return;
+    let card = S.knowledge.get(id);
+    if (!card) {
+      const response = await fetch(meta.url, { credentials: 'same-origin' });
+      if (response.status === 401) { if (owner === S.owner) lock(); return; }
+      if (!response.ok) throw Error('此知识尚未下载，请联网重试。');
+      card = await response.json();
+      if (card.id !== id || card.revision !== meta.revision) throw Error('知识版本已更新，请重新打开章节。');
+      if (owner !== S.owner || sequence !== sheetSequence) return;
+      S.knowledge.set(id, card);
+    }
+    if (owner !== S.owner || sequence !== sheetSequence) return;
+    $('sheetBody').innerHTML = `<article class="paper knowledge-paper">${card.html}</article>`;
+    if (anchor) {
+      const target = $('sheetBody').querySelector('#' + CSS.escape(anchor));
+      target?.scrollIntoView({ block: 'start' });
+    }
+  } catch (error) {
+    if (owner === S.owner && sequence === sheetSequence && sheetView === 'knowledge') {
+      const message = error instanceof TypeError ? '此知识尚未下载，请联网重试。' : error.message;
+      $('sheetBody').innerHTML = `<p role="status">${esc(message)}</p><button type="button" data-knowledge="${esc(id)}" data-knowledge-anchor="${esc(anchor)}" data-knowledge-retry>重试</button>`;
+    }
+  }
 }
 
 function markText(text, terms) {
@@ -612,7 +635,9 @@ async function downloadCollection(collection, show = true) {
   catch (error) { if (show) toast(error.message); return; }
   if (!S.owner) return;
   const key = `${S.owner}:${collection.id}:${S.library.version}`;
-  const urls = ['/library/catalog.json', ...collection.documents.flatMap(d => [d.url, d.sourceUrl])];
+  const ids = new Set(collection.documents.flatMap(d => d.knowledgeIds || []));
+  const urls = ['/library/catalog.json', ...collection.documents.flatMap(d => [d.url, d.sourceUrl]),
+    ...S.library.questions.filter(q => ids.has(q.id) && q.url).map(q => q.url)];
   if (!downloads.has(key)) downloads.set(key, swMessage({ type: 'CACHE_CONTENT', owner: S.owner, urls }));
   const job = downloads.get(key), result = await job;
   if (downloads.get(key) === job) downloads.delete(key);
@@ -719,12 +744,15 @@ async function logout(confirmed = false) {
 }
 
 document.addEventListener('click', event => {
+  const knowledge = event.target.closest('[data-knowledge]');
+  if (knowledge) { event.preventDefault(); void showKnowledge(knowledge.dataset.knowledge, knowledge.dataset.knowledgeAnchor || '', knowledge.hasAttribute('data-knowledge-retry')); return; }
+  const cardAnchor = sheetView === 'knowledge' && event.target.closest('a[href^="#"]');
+  if (cardAnchor && !cardAnchor.getAttribute('href').startsWith('#/')) {
+    event.preventDefault();
+    $('sheetBody').querySelector('#' + CSS.escape(decodeURIComponent(cardAnchor.hash.slice(1))))?.scrollIntoView({ block: 'start' }); return;
+  }
   const button = event.target.closest('button');
   if (button?.matches('[data-sheet-close]')) { dismissSheet(); return; }
-  if (button?.dataset.goQuestion) {
-    if (S.active) S.back.push({ hash: activeHash(), position: capturePosition() });
-    navigate('#/q/' + button.dataset.goQuestion); return;
-  }
   if (button?.matches('[data-cancel-route]')) { cancelPendingRoute(); return; }
   if (button?.dataset.retryRoute) { navigate(button.dataset.retryRoute); return; }
   if (button?.dataset.openCollection) { navigate(`#/read/${button.dataset.openCollection}/${button.dataset.openDocument}`); return; }
@@ -789,7 +817,6 @@ document.addEventListener('click', event => {
 
 let searchTimer, tocSearchTimer;
 document.addEventListener('input', event => {
-  if (event.target.id === 'questionSearch') { renderQuestions(event.target.value); return; }
   if (event.target.id === 'librarySearch' || event.target.id === 'tocSearch') {
     const library = event.target.id === 'librarySearch'; clearTimeout(library ? searchTimer : tocSearchTimer); const query = event.target.value;
     if (event.target.id === 'librarySearch') { shelf.query = query; shelf.scroll = 0; writeLocal('shelf', shelf); }
@@ -825,7 +852,6 @@ $('enrollForm').addEventListener('submit', async event => {
 });
 $('retryButton').addEventListener('click', () => { void connect(); });
 $('libraryButton').addEventListener('click', () => { navigate('#/library'); });
-$('questionsButton').addEventListener('click', showQuestions);
 $('libraryResume').addEventListener('click', event => { navigate(event.currentTarget.dataset.route); });
 $('settingsButton').addEventListener('click', showSettings);
 $('tocButton').addEventListener('click', showToc);
@@ -866,7 +892,10 @@ window.addEventListener('popstate', () => {
     void route(); return;
   }
   sheetHistory = false; sheetClosing = false;
+  sheetSequence++;
   if ($('sheetDialog').open) $('sheetDialog').close();
+  const opener = sheetOpener; sheetOpener = null;
+  if (opener?.isConnected) opener.focus({ preventScroll: true });
   const action = afterSheetClose; afterSheetClose = null; action?.();
 });
 async function reconnect(attempt = 0) {

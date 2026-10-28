@@ -14,6 +14,14 @@ STANDARDS = {"c++17": 17, "c++20": 20, "c++23": 23}
 KINDS = {"run", "compile", "compile-fail"}
 REGION = re.compile(r"^// BEGIN ([\w-]+)\r?\n([\s\S]*?)^// END \1\s*$", re.M)
 INCLUDE = re.compile(r'^\s*#\s*include\s*"([^"\n]+)"', re.M)
+KNOWLEDGE_REFERENCE = re.compile(r"\[\[(Q[0-9]{6,})(?:#([a-z][a-z0-9]*(?:-[a-z0-9]+)*))?(?:\|([^\]\n]+))?\]\]")
+KNOWLEDGE_INTRODUCTION = re.compile(r"\{\{knowledge:(Q[0-9]{6,})\}\}")
+
+
+def prose_only(text: str) -> str:
+    text = re.sub(r"(?ms)^(`{3,}|~{3,})[^\n]*\n.*?^\1\s*$", "", text)
+    text = re.sub(r"(?s)<!--.*?-->", "", text)
+    return re.sub(r"(`+)[^\n]*?\1", "", text)
 
 
 def file_path(root: Path, value: str) -> Path:
@@ -49,8 +57,9 @@ def _inspect(root: Path) -> tuple[dict, dict]:
     errors: list[str] = []
     model = read_json(root / "catalog/learning.json")
     publications = read_json(root / "carrier/publications.json")
-    if not isinstance(model, dict) or model.get("schemaVersion") != 1:
-        return {"ok": False, "scope": "current-course", "errors": ["learning: expected schemaVersion 1"]}, {}
+    if not isinstance(model, dict) or model.get("schemaVersion") not in {1, 2}:
+        return {"ok": False, "scope": "current-course", "errors": ["learning: expected schemaVersion 1 or 2"]}, {}
+    independent_knowledge = model["schemaVersion"] == 2
     if not isinstance(publications, dict) or publications.get("schemaVersion") != 2:
         return {"ok": False, "scope": "current-course", "errors": ["publications: expected schemaVersion 2"]}, {}
     publication_state = publications.get("state", "active")
@@ -127,16 +136,30 @@ def _inspect(root: Path) -> tuple[dict, dict]:
     tasks = rows(model, "tasks", "learning.tasks")
     targets = rows(model, "targets", "learning.targets")
     qids, question_map, target_map, target_ids = set(), {}, {}, set()
-    lectures, references = {}, {}
+    lectures, references, precise_references = {}, {}, {}
+    knowledge_dependencies, knowledge_sources, knowledge_bodies, knowledge_anchors = set(), set(), {}, {}
     for did, document in documents.items():
-        prose = re.sub(r"(?ms)^(`{3,}|~{3,})[^\n]*\n.*?^\1\s*$", "", document["draft"])
-        prose = re.sub(r"(?s)<!--.*?-->", "", prose)
+        prose = prose_only(document["draft"])
         document["prose"] = prose
         if "draftq:" in prose:
             errors.append(did + ": unresolved temporary question ID")
         for qid in re.findall(r"(?m)^#{1,6}\s+(Q[0-9]{6,})\b", prose):
             lectures.setdefault(qid, []).append(did)
-        references[did] = re.findall(r"\[\[(Q[0-9]{6,})\]\]", prose)
+        if independent_knowledge:
+            old_headings = re.findall(r"(?m)^#{1,6}\s+(Q[0-9]{6,})\b", prose)
+            if old_headings:
+                errors.append(did + ": internal knowledge IDs must not be visible headings")
+            for qid in KNOWLEDGE_INTRODUCTION.findall(prose):
+                lectures.setdefault(qid, []).append(did)
+            precise_references[did] = [(match[1], match[2]) for match in KNOWLEDGE_REFERENCE.finditer(prose)]
+            for match in KNOWLEDGE_REFERENCE.finditer(prose):
+                if match[3] is not None and (not match[3].strip() or re.search(r"\bQ[0-9]{6,}\b", match[3])):
+                    errors.append(did + ": knowledge reference needs a semantic label")
+            references[did] = [qid for qid, _ in precise_references[did]] + KNOWLEDGE_INTRODUCTION.findall(prose)
+            if re.search(r"\[\[Q|\{\{knowledge:", KNOWLEDGE_INTRODUCTION.sub("", KNOWLEDGE_REFERENCE.sub("", prose))):
+                errors.append(did + ": malformed knowledge reference or introduction")
+        else:
+            references[did] = re.findall(r"\[\[(Q[0-9]{6,})\]\]", prose)
     for question in questions:
         qid = identity(question, qids, "question", QUESTION)
         if not qid:
@@ -145,17 +168,54 @@ def _inspect(root: Path) -> tuple[dict, dict]:
         if int(qid[1:]) < 1:
             errors.append(qid + ": question numbering starts at 1")
         text(question.get("title"), qid + ".title")
-        did, anchor = question.get("document"), question.get("anchor")
-        if did not in documents:
-            errors.append(qid + ": main explanation must belong to a published document")
-        if anchor != qid.lower():
-            errors.append(qid + ": anchor must match the lowercase question ID")
-        if lectures.get(qid) != [did]:
-            errors.append(qid + ": requires exactly one full main heading in its registered document")
-        if did in documents:
-            marker = r'<a\s+id=["\']' + re.escape(str(anchor)) + r'["\']\s*>\s*</a>\s*\n+###\s+' + qid + r"\s*·\s*\S"
-            if not re.search(marker, documents[did]["prose"]):
-                errors.append(qid + ": missing adjacent explicit anchor and canonical main heading")
+        if independent_knowledge:
+            if "document" in question or "anchor" in question:
+                errors.append(qid + ": independent knowledge cannot bind its authority to a published document")
+            name = question.get("source")
+            try:
+                if not isinstance(name, str) or not re.fullmatch(r"content/knowledge/[A-Za-z0-9][A-Za-z0-9_.-]*\.md", name) or ".." in name:
+                    raise ValueError("knowledge source must be content/knowledge/<name>.md")
+                if name in knowledge_sources:
+                    errors.append(qid + ": knowledge source registered more than once")
+                knowledge_sources.add(name)
+                knowledge_dependencies.add(name)
+                body = file_path(root, name).read_text(encoding="utf-8-sig")
+                heading = re.match(r"# ([^\n]+)\r?\n", body)
+                if not heading or heading[1].strip() != question.get("title"):
+                    errors.append(qid + ": source title differs from registered semantic title")
+                content = body[heading.end():].strip() if heading else body.strip()
+                if not content:
+                    errors.append(qid + ": empty knowledge explanation")
+                prose = prose_only(content)
+                if KNOWLEDGE_INTRODUCTION.search(prose):
+                    errors.append(qid + ": knowledge cannot recursively introduce another full explanation")
+                if re.search(r"(?m)^#{1,6}\s+Q[0-9]{6,}\b", prose) or re.match(r"Q[0-9]{6,}\b", str(question.get("title", ""))):
+                    errors.append(qid + ": internal knowledge ID must not be a reader title")
+                anchors = re.findall(r'<a\s+id=["\']([^"\']+)["\']\s*>\s*</a>', prose)
+                if len(set(anchors)) != len(anchors) or any(not ID.fullmatch(anchor) for anchor in anchors):
+                    errors.append(qid + ": invalid/duplicate knowledge anchor")
+                knowledge_bodies[qid] = prose
+                knowledge_anchors[qid] = set(anchors)
+                precise_references[qid] = [(match[1], match[2]) for match in KNOWLEDGE_REFERENCE.finditer(prose)]
+                for match in KNOWLEDGE_REFERENCE.finditer(prose):
+                    if match[3] is not None and (not match[3].strip() or re.search(r"\bQ[0-9]{6,}\b", match[3])):
+                        errors.append(qid + ": knowledge reference needs a semantic label")
+            except (ValueError, OSError) as error:
+                errors.append(qid + ": " + str(error))
+            if len(lectures.get(qid, [])) > 1:
+                errors.append(qid + ": complete introduction may appear only once across published documents")
+        else:
+            did, anchor = question.get("document"), question.get("anchor")
+            if did not in documents:
+                errors.append(qid + ": main explanation must belong to a published document")
+            if anchor != qid.lower():
+                errors.append(qid + ": anchor must match the lowercase question ID")
+            if lectures.get(qid) != [did]:
+                errors.append(qid + ": requires exactly one full main heading in its registered document")
+            if did in documents:
+                marker = r'<a\s+id=["\']' + re.escape(str(anchor)) + r'["\']\s*>\s*</a>\s*\n+###\s+' + qid + r"\s*·\s*\S"
+                if not re.search(marker, documents[did]["prose"]):
+                    errors.append(qid + ": missing adjacent explicit anchor and canonical main heading")
         prerequisites = strings(question.get("prerequisites"), qid + ".prerequisites")
         urls = strings(question.get("sources"), qid + ".sources", required=True)
         if any(not valid_url(url) for url in urls):
@@ -168,6 +228,19 @@ def _inspect(root: Path) -> tuple[dict, dict]:
         for qid in refs:
             if qid not in qids:
                 errors.append(did + ": unknown question reference " + qid)
+    if independent_knowledge:
+        seen_bodies = {}
+        for qid, body in knowledge_bodies.items():
+            normalized = re.sub(r"\s+", " ", body).strip()
+            if normalized in seen_bodies:
+                errors.append(qid + ": duplicate complete knowledge explanation with " + seen_bodies[normalized])
+            seen_bodies[normalized] = qid
+        for owner, refs in precise_references.items():
+            for qid, anchor in refs:
+                if qid not in question_map:
+                    errors.append(owner + ": unknown knowledge reference " + qid)
+                elif anchor and anchor not in knowledge_anchors.get(qid, set()):
+                    errors.append(owner + ": missing knowledge anchor " + qid + "#" + anchor)
     unresolved = {qid: set(question.get("prerequisites", [])) for qid, question in question_map.items()}
     followers = {qid: set() for qid in question_map}
     for qid, prerequisites in unresolved.items():
@@ -307,6 +380,7 @@ def _inspect(root: Path) -> tuple[dict, dict]:
               "chapters": chapter_validation,
               "semanticCompletenessCertified": False, "userMasteryMeasured": False}
     return result, {"model": model, "documents": documents, "dependencies": target_dependencies,
+                    "knowledgeDependencies": knowledge_dependencies,
                     "chapters": chapter_context}
 
 
@@ -323,6 +397,7 @@ def course_snapshot(root: Path, *, include_reviews: bool = True) -> dict:
     if not checked["ok"]:
         raise ValueError("Current course invalid: " + "; ".join(checked["errors"]))
     inputs = {"catalog/learning.json", "carrier/publications.json"}
+    inputs.update(context["knowledgeDependencies"])
     inputs.update(context["chapters"]["dependencies"])
     review_paths = context["chapters"]["reviewPaths"]
     if include_reviews:
@@ -364,7 +439,7 @@ def course_snapshot(root: Path, *, include_reviews: bool = True) -> dict:
                 if name.startswith(".") or (extensions is not None and Path(name).suffix.lower() not in extensions):
                     continue
                 inputs.add((Path(current) / name).relative_to(root).as_posix())
-    for filename in ("tools/build_handbook.mjs", "scripts/build-carrier.mjs", "package.json", "package-lock.json", "wrangler.jsonc",
+    for filename in ("tools/build_handbook.mjs", "tools/knowledge.mjs", "scripts/build-carrier.mjs", "package.json", "package-lock.json", "wrangler.jsonc",
                      "second_algorithm/learning.py", "second_algorithm/workflow.py", "AGENTS.md",
                      "protocol/CONTENT_PIPELINE.md", "protocol/RESEARCH_DEPARTMENT.md", "catalog/scope.json", "docs/CONTENT_MODEL.md"):
         if (root / filename).is_file():

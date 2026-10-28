@@ -29,24 +29,45 @@
   ],
   "questionReferences": [
     "Q000037",
-    "Q000029",
-    "Q000037",
     "Q000038",
-    "Q000029",
     "Q000032",
     "Q000028",
-    "Q000033",
-    "Q000031",
-    "Q000030",
-    "Q000037",
     "Q000037",
     "Q000032",
     "Q000032",
-    "Q000035",
-    "Q000027",
-    "Q000029",
-    "Q000032"
+    "Q000035"
   ],
+  "knowledgeIntroductions": [
+    "Q000027",
+    "Q000028",
+    "Q000029",
+    "Q000030",
+    "Q000031",
+    "Q000032",
+    "Q000033",
+    "Q000034",
+    "Q000035",
+    "Q000036",
+    "Q000037",
+    "Q000038",
+    "Q000039"
+  ],
+  "knowledgeDependencies": {
+    "content/knowledge/Q000037.md": "058e3a7807c993f921c44ed2c77caece4f3a63ef4894f80a88b0cf4c57059075",
+    "content/knowledge/Q000038.md": "6aaa506b911bdc0b4c2887a759dc9cd00392643727811afe86564f3cbfcd0395",
+    "content/knowledge/Q000032.md": "702ffd947d21397ceb116314b04927690e838c8b199704d62e51f57957893439",
+    "content/knowledge/Q000028.md": "c9e32dae88d44b3621ddd483565fb88151002815c942add09ba55651e332b31d",
+    "content/knowledge/Q000035.md": "1402b1eb1a713b13c9ce80ce8c3f5dde48bd8a506d1ca12955df2e42c2d6aa4e",
+    "content/knowledge/Q000027.md": "0abcd7ac967ffa5350e3b4fc88ced8751c1febdc7f6e12c80ee22718c3010c64",
+    "content/knowledge/Q000029.md": "c62db08d8d914cd0504810b6345ef9bd0e75f975f60f33832d2407162bfa7a55",
+    "content/knowledge/Q000030.md": "c9e689e5c5af4428e07375b1f877790b09238d9305270736ae7f5f909f75e48b",
+    "content/knowledge/Q000031.md": "aaa8aabf9a302a561efd0a23a714ec9c7d7a6a595ac1f9310288067266b13aae",
+    "content/knowledge/Q000033.md": "a7561df0fdd3ca9b366f1e1c2d426953dfffe24b68948223e3651d8f9859e2ef",
+    "content/knowledge/Q000034.md": "7d90f859deeacb682bd9f0682b6ff62b56f089d546eae9f304fce296aaa0a972",
+    "content/knowledge/Q000036.md": "4d979bb85e489908b404902dd93ee1bdff7784d65a550262dc5379694ceec861",
+    "content/knowledge/Q000039.md": "3ef88ab2e125b9f53b87594395cbd2fdad2bca7a026258830e548e7761df4bc4"
+  },
+  "knowledgeHelperSha256": "25c097f043c8361f3d9c98d39556c4c70b1858ed1e074d23f1d39185caa49055",
   "headings": [
     {
       "depth": 1,
@@ -64,11 +85,6 @@
       "text": "相接的两个端点，是否冲突"
     },
     {
-      "depth": 3,
-      "id": "q000027-怎样把端点和结果组成有名字的值",
-      "text": "Q000027 · 怎样把端点和结果组成有名字的值"
-    },
-    {
       "depth": 2,
       "id": "只关心覆盖位置-一个还没有封口的并集",
       "text": "只关心覆盖位置：一个还没有封口的并集"
@@ -79,31 +95,6 @@
       "text": "为什么只需看最后一段"
     },
     {
-      "depth": 3,
-      "id": "q000028-vector的元素-大小和预留空间有什么区别",
-      "text": "Q000028 · vector的元素、大小和预留空间有什么区别"
-    },
-    {
-      "depth": 3,
-      "id": "q000029-参数按值和const引用-怎样影响修改与寿命",
-      "text": "Q000029 · 参数按值和const引用，怎样影响修改与寿命"
-    },
-    {
-      "depth": 3,
-      "id": "q000030-迭代器为何把范围写成左闭右开",
-      "text": "Q000030 · 迭代器为何把范围写成左闭右开"
-    },
-    {
-      "depth": 3,
-      "id": "q000031-排序比较器怎样表达顺序-而不制造错误",
-      "text": "Q000031 · 排序比较器怎样表达顺序，而不制造错误"
-    },
-    {
-      "depth": 3,
-      "id": "q000032-先确定运算类型-再计算长度和总量",
-      "text": "Q000032 · 先确定运算类型，再计算长度和总量"
-    },
-    {
       "depth": 2,
       "id": "输入已经整理好-就利用已有结构",
       "text": "输入已经整理好，就利用已有结构"
@@ -112,11 +103,6 @@
       "depth": 2,
       "id": "保留身份时-怎样判断包含关系",
       "text": "保留身份时，怎样判断包含关系"
-    },
-    {
-      "depth": 3,
-      "id": "q000033-pair-auto和类型别名怎样表达一份状态",
-      "text": "Q000033 · pair、auto和类型别名怎样表达一份状态"
     },
     {
       "depth": 2,
@@ -144,24 +130,9 @@
       "text": "手写堆：真正修复父子关系"
     },
     {
-      "depth": 3,
-      "id": "q000034-class怎样守住一份结构的不变量",
-      "text": "Q000034 · class怎样守住一份结构的不变量"
-    },
-    {
       "depth": 2,
       "id": "标准设施替换了哪一层",
       "text": "标准设施替换了哪一层"
-    },
-    {
-      "depth": 3,
-      "id": "q000035-priority-queue的比较方向-top与pop怎样配合",
-      "text": "Q000035 · priority_queue的比较方向、top与pop怎样配合"
-    },
-    {
-      "depth": 3,
-      "id": "q000036-堆算法为何还需要push-back和pop-back",
-      "text": "Q000036 · 堆算法为何还需要push_back和pop_back"
     },
     {
       "depth": 2,
@@ -197,16 +168,6 @@
       "depth": 2,
       "id": "把整个后续安排换过去-才完成多资源证明",
       "text": "把整个后续安排换过去，才完成多资源证明"
-    },
-    {
-      "depth": 3,
-      "id": "q000037-lower-bound与upper-bound怎样给出查询边界",
-      "text": "Q000037 · lower_bound与upper_bound怎样给出查询边界"
-    },
-    {
-      "depth": 3,
-      "id": "q000038-multiset怎样保留重复状态并只删除一个",
-      "text": "Q000038 · multiset怎样保留重复状态并只删除一个"
     },
     {
       "depth": 2,
@@ -252,20 +213,15 @@
       "depth": 2,
       "id": "取出作答时-保留原题入口和合同",
       "text": "取出作答时，保留原题入口和合同"
-    },
-    {
-      "depth": 3,
-      "id": "q000039-怎样把参考函数组成真实的平台提交",
-      "text": "Q000039 · 怎样把参考函数组成真实的平台提交"
     }
   ],
-  "sourceSha256": "a4b7175e89f563e3b6566ea583e0b161276385e1716582b4890f1a404d488653",
+  "sourceSha256": "d5de4b8d850587444a6bdbb2843c78d05dfa4f3d9e5ab17115b3111683635e6c",
   "codeSha256": "eb7d6c3f4e20a9f862bf8daa2e8e8be508289d45457b0ef4f3395222c88aeb03",
-  "markdownSha256": "1a140dc869de210eece92d618b5899dc55bec87dea39a2bd1914ba8e3e7180d3",
-  "htmlSha256": "1242f7eedbdafc52f8fd8ab895f2423a1034f7b83cdebf83b036a3ae0459acb8",
-  "builderSha256": "c19daf7179d3995596ec428120d84cf29c3af99a69821a2f9939f5083d67ea8b",
-  "learningSha256": "b6783fb186360dc4859bcf5b8a9943a4fd7ced9cae937bf125feb261dfc18a22",
+  "markdownSha256": "d931194f97bfaaae502caef3db4c446a6defd377b66740c9df17585cbbcf3b74",
+  "htmlSha256": "e902f507a75d780c856b5b81e1e75128f0f452cda80d070cf53896c957d04b1c",
+  "builderSha256": "c91fe0cd27960324e2e62a4016d8367da67775818e8b991d0d224e0ac1f92f9d",
+  "learningSha256": "66d22cde3664499ed99116d23b99ad216f49c0ab9d921cf8a6d3228decd83f13",
   "publicationsSha256": "1a5c7f196ce410e2f275181633eccac4402a3c663af0de7483a4d802a40e8354",
-  "markdownBytes": 73587,
-  "htmlBytes": 115396
+  "markdownBytes": 77453,
+  "htmlBytes": 137504
 }

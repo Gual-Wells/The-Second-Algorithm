@@ -6,6 +6,7 @@ import { pathToFileURL, fileURLToPath } from 'node:url';
 import { marked } from 'marked';
 import hljs from 'highlight.js/lib/core';
 import cpp from 'highlight.js/lib/languages/cpp';
+import { readKnowledge, knowledgeTokens, expandKnowledgeReferences } from '../tools/knowledge.mjs';
 
 hljs.registerLanguage('cpp', cpp);
 
@@ -77,7 +78,7 @@ export function validatePublications(publications) {
 }
 
 export function validateLearning(learning, publications) {
-  if (learning?.schemaVersion !== 1 || !['questions', 'tasks', 'targets'].every(key => Array.isArray(learning[key])))
+  if (![1, 2].includes(learning?.schemaVersion) || !['questions', 'tasks', 'targets'].every(key => Array.isArray(learning[key])))
     throw new Error('Unsupported learning manifest');
   const documents = new Map(publications.collections.flatMap(collection => collection.documents.map(document =>
     [document.id, { ...document, published: collection.visibility !== 'hidden' }])));
@@ -91,7 +92,10 @@ export function validateLearning(learning, publications) {
   const questions = new Map(), targets = new Set(), tasks = new Set(), implementations = new Set();
   for (const question of learning.questions) {
     if (!QUESTION.test(question.id) || questions.has(question.id)) throw new Error('Invalid/duplicate question ID');
-    if (!question.title?.trim() || !documents.has(question.document) || question.anchor !== question.id.toLowerCase()
+    const locationValid = learning.schemaVersion === 2
+      ? typeof question.source === 'string' && /^content\/knowledge\/[A-Za-z0-9][A-Za-z0-9_.-]*\.md$/.test(question.source) && !question.source.includes('..')
+      : documents.has(question.document) && question.anchor === question.id.toLowerCase();
+    if (!question.title?.trim() || !locationValid
       || !Array.isArray(question.prerequisites) || !Array.isArray(question.sources) || !question.sources.length)
       throw new Error('Question requires title, registered document, canonical anchor, prerequisites and sources');
     if (new Set(question.prerequisites).size !== question.prerequisites.length) throw new Error('Duplicate question prerequisite');
@@ -106,7 +110,7 @@ export function validateLearning(learning, publications) {
     visiting.add(id);
     const question = questions.get(id);
     for (const prerequisite of question.prerequisites) {
-      if (documents.get(question.document).published && !documents.get(questions.get(prerequisite)?.document)?.published)
+      if (learning.schemaVersion === 1 && documents.get(question.document).published && !documents.get(questions.get(prerequisite)?.document)?.published)
         throw new Error('Published question prerequisite is not published: ' + prerequisite);
       visit(prerequisite);
     }
@@ -142,7 +146,7 @@ export function validateLearning(learning, publications) {
         if (!implementation.source.endsWith('.cpp')) throw new Error('Implementation authority must be C++');
         for (const id of implementation.questions) {
           if (!questions.has(id)) throw new Error('Implementation refers to unknown question: ' + id);
-          if (documents.get(task.document).published && !documents.get(questions.get(id).document).published)
+          if (learning.schemaVersion === 1 && documents.get(task.document).published && !documents.get(questions.get(id).document).published)
             throw new Error('Published implementation question is not published: ' + id);
         }
         implementations.add(implementation.id);
@@ -157,6 +161,15 @@ export async function readAuthority(root, descriptor) {
   const manifestPath = path.join(path.dirname(base), 'build', name + '.json');
   if (!inside(path.resolve(root, 'content'), await fs.realpath(manifestPath))) throw new Error('Manifest escapes content/');
   const manifest = JSON.parse(await fs.readFile(manifestPath, 'utf8'));
+  for (const [relative, expected] of Object.entries(manifest.knowledgeDependencies || {})) {
+    if (!/^content\/knowledge\/[^/]+\.md$/.test(relative) && relative !== 'tools/knowledge.mjs')
+      throw new Error('Unexpected knowledge dependency');
+    const filename = await fs.realpath(path.resolve(root, relative));
+    if (!inside(await fs.realpath(root), filename) || hash(await fs.readFile(filename)) !== expected)
+      throw new Error('Knowledge dependency hash mismatch; rebuild reading assets');
+  }
+  if (manifest.knowledgeHelperSha256 && hash(await fs.readFile(path.join(root, 'tools/knowledge.mjs'))) !== manifest.knowledgeHelperSha256)
+    throw new Error('Knowledge helper hash mismatch; rebuild reading assets');
   const files = { source: base + '.source.md', code: base + '.cpp', markdown: base + '.md', html: base + '.html',
     builder: path.join(root, 'tools/build_handbook.mjs') };
   const bytes = {};
@@ -183,7 +196,8 @@ export async function readAuthority(root, descriptor) {
       throw new Error(`${descriptor.id}: ${kind} authority hash mismatch; rebuild the reading assets first`);
   }
   const revision = hash(JSON.stringify([manifest.sourceSha256, manifest.codeSha256, manifest.markdownSha256,
-    manifest.htmlSha256, manifest.builderSha256, manifest.learningSha256, manifest.publicationsSha256]));
+    manifest.htmlSha256, manifest.builderSha256, manifest.learningSha256, manifest.publicationsSha256,
+    manifest.knowledgeDependencies, manifest.knowledgeHelperSha256]));
   const inlineExamples = new Set();
   marked.walkTokens(marked.lexer(bytes.source.toString('utf8')), token => {
     if (token.type === 'code') inlineExamples.add(token.text.replace(/\r\n?/g, '\n').trim());
@@ -229,7 +243,50 @@ export function createLinkRewriter({ collection, document, byPath, gitRevision }
   };
 }
 
-export function renderAuthority(authority, rewriteLink) {
+function knowledgeLinkHTML(text, knowledge) {
+  const match = text.match(/^<a class="knowledge-link" href="#knowledge-(Q[0-9]{6,})" data-knowledge="\1"(?: data-knowledge-anchor="([a-z][a-z0-9-]*)")?>([\s\S]*?)(<\/a>)?$/);
+  if (!match) return null;
+  const card = knowledge.get(match[1]);
+  if (!card || match[2] && !card.anchors.includes(match[2])) throw new Error('Unresolved knowledge link');
+  const label = match[3].replace(/<\/a>$/, '');
+  if (/<[^>]+>/.test(label)) throw new Error('Knowledge link label must be text');
+  return `<a class="knowledge-link" href="#knowledge-${card.id}" data-knowledge="${card.id}"`
+    + (match[2] ? ` data-knowledge-anchor="${match[2]}"` : '') + '>' + label + (match[4] ? '</a>' : '');
+}
+
+export function renderKnowledge(record, knowledge) {
+  const renderer = new marked.Renderer(); let code = 0;
+  renderer.heading = function ({ tokens, depth }) {
+    const level = Math.min(4, Math.max(3, depth));
+    return `<h${level}>${this.parser.parseInline(tokens)}</h${level}>`;
+  };
+  renderer.code = function ({ text, lang }) {
+    const id = 'knowledge-' + record.id + '-' + (++code);
+    return `<div class="code-block" data-code-id="${id}"><div class="code-toolbar"><span>${esc(lang || '代码')}</span><button type="button" class="code-copy" data-copy-code="${id}" aria-label="复制代码">复制</button></div><pre><code>`
+      + (lang === 'cpp' ? hljs.highlight(text, { language: 'cpp', ignoreIllegals: true }).value : esc(text)) + '</code></pre></div>';
+  };
+  renderer.link = function ({ href, tokens }) {
+    const label = this.parser.parseInline(tokens);
+    if (href.startsWith('#')) {
+      if (!record.anchors.includes(decodeURIComponent(href.slice(1)))) throw new Error('Unknown knowledge section');
+      return `<a href="${esc(href)}">${label}</a>`;
+    }
+    let url; try { url = new URL(decodeEntities(href)); } catch { throw new Error('Knowledge links must be external HTTPS or local sections'); }
+    if (!['https:', 'http:'].includes(url.protocol)) throw new Error('Unsafe knowledge source link');
+    return `<a href="${esc(url.href)}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+  };
+  renderer.html = function ({ text }) {
+    const link = knowledgeLinkHTML(text.trim(), knowledge); if (link !== null) return link;
+    if (/^\s*<\/a>\s*$/.test(text)) return '</a>';
+    const anchor = text.match(/^\s*<a id="([a-z][a-z0-9-]*)">(<\/a>)?\s*$/);
+    return anchor ? `<a id="${anchor[1]}">` + (anchor[2] || '') : esc(text);
+  };
+  renderer.image = () => { throw new Error('Knowledge images need registered assets'); };
+  return marked.parse(expandKnowledgeReferences(record.body, knowledge), { renderer, gfm: true })
+    .replace(/<table>/g, '<div class="table-wrap"><table>').replace(/<\/table>/g, '</table></div>');
+}
+
+export function renderAuthority(authority, rewriteLink, knowledge = new Map()) {
   const renderer = new marked.Renderer();
   let heading = 0, codeIndex = 0, inlineIndex = 0, firstParagraph = true, strippedH1 = false;
   renderer.heading = function ({ tokens, depth }) {
@@ -271,6 +328,15 @@ export function renderAuthority(authority, rewriteLink) {
       + '>' + this.parser.parseInline(tokens) + '</a>';
   };
   renderer.html = function ({ text }) {
+    const introduction = text.match(/^\s*<aside class="knowledge-introduction" id="knowledge-(Q[0-9]{6,})" data-knowledge-introduction="\1">[\s\S]*<\/aside>\s*$/);
+    if (introduction) {
+      const record = knowledge.get(introduction[1]);
+      if (!record) throw new Error('Unknown knowledge introduction');
+      const content = renderKnowledge(record, knowledge).replace(/ id="([^"]+)"/g, (_, id) => ` id="knowledge-${record.id}-${id}"`)
+        .replace(/href="#(?!knowledge-Q[0-9])([^"]+)"/g, (_, id) => `href="#knowledge-${record.id}-${id}"`);
+      return `<aside class="knowledge-introduction" id="knowledge-${record.id}" data-knowledge-introduction="${record.id}"><p class="knowledge-title">${esc(record.title)}</p>${content}</aside>`;
+    }
+    const link = knowledgeLinkHTML(text.trim(), knowledge); if (link !== null) return link;
     const anchor = text.match(/^\s*<a\s+id=(["'])([\p{L}\p{N}_.:\-]+)\1\s*>\s*(?:<\/a>\s*)?$/iu);
     if (anchor) return '<a id="' + esc(anchor[2]) + '"></a>';
     if (/^\s*<\/a>\s*$/i.test(text)) return '';
@@ -290,6 +356,7 @@ export async function buildLibrary(root, output, publications, gitRevision, lear
   validatePublications(publications);
   learning ??= JSON.parse(await fs.readFile(path.join(root, 'catalog/learning.json'), 'utf8'));
   validateLearning(learning, publications);
+  const knowledge = await readKnowledge(root, learning);
   const rows = [], byPath = new Map();
   for (const collection of publications.collections) {
     if (collection.visibility === 'hidden') continue;
@@ -310,15 +377,29 @@ export async function buildLibrary(root, output, publications, gitRevision, lear
     const item = { id: collection.id, kind: collection.kind, title: collection.title, documents: [] };
     if (collection.kind === 'chapter') item.chapterNumber = collection.chapterNumber;
     for (const { authority, entry } of documents) {
-      const rendered = renderAuthority(authority, createLinkRewriter({ collection, document: authority, byPath, gitRevision }));
+      const rendered = renderAuthority(authority, createLinkRewriter({ collection, document: authority, byPath, gitRevision }), knowledge);
+      const tokens = knowledgeTokens(authority.draft);
+      const knowledgeIds = new Set([...tokens.introductions, ...tokens.references.map(item => item.id)]);
+      function include(id) {
+        const card = knowledge.get(id); if (!card) throw new Error('Missing referenced knowledge ' + id);
+        for (const next of [...card.prerequisites, ...knowledgeTokens(card.body).references.map(item => item.id)]) {
+          if (!knowledgeIds.has(next)) { knowledgeIds.add(next); include(next); }
+        }
+      }
+      if (learning.schemaVersion === 2) for (const id of knowledgeIds) include(id);
+      if (learning.schemaVersion === 2) {
+        if (!authority.manifest.knowledgeHelperSha256) throw new Error('Knowledge helper is not bound to reading build');
+        for (const id of knowledgeIds) if (!authority.manifest.knowledgeDependencies?.[knowledge.get(id).source])
+          throw new Error('Knowledge source is not bound to reading build: ' + id);
+      }
       // A source-only revision would overwrite an immutable URL whenever the
       // renderer/highlighter changes. Fingerprint the actual reader payload too.
       const payload = { id: authority.id, title: authority.title, html: rendered.html,
-        sourceUrl: entry.sourceUrl, headings: rendered.headings };
+        sourceUrl: entry.sourceUrl, headings: rendered.headings, knowledgeIds: [...knowledgeIds].sort() };
       const revision = hash(JSON.stringify({ authorityRevision: authority.revision, ...payload }));
       const url = `/library/${collection.id}/${authority.id}/${revision.slice(0, 16)}.json`;
       const document = { id: payload.id, title: payload.title, revision, html: payload.html,
-        sourceUrl: payload.sourceUrl, headings: payload.headings };
+        sourceUrl: payload.sourceUrl, headings: payload.headings, knowledgeIds: payload.knowledgeIds };
       renderedDocuments.set(collection.id + '/' + authority.id, document);
       const filename = path.join(output, url.slice(1));
       await fs.mkdir(path.dirname(filename), { recursive: true });
@@ -326,7 +407,7 @@ export async function buildLibrary(root, output, publications, gitRevision, lear
       await fs.writeFile(path.join(output, entry.sourceUrl.slice(1)), authority.source, 'utf8');
       await fs.writeFile(path.join(output, entry.markdownUrl.slice(1)), authority.markdownBytes);
       item.documents.push({ id: authority.id, title: authority.title, revision, url,
-        sourceUrl: entry.sourceUrl, markdownUrl: entry.markdownUrl, headings: rendered.headings });
+        sourceUrl: entry.sourceUrl, markdownUrl: entry.markdownUrl, headings: rendered.headings, knowledgeIds: payload.knowledgeIds });
       codeBlocks += authority.blocks.size;
     }
     catalog.collections.push(item);
@@ -341,7 +422,7 @@ export async function buildLibrary(root, output, publications, gitRevision, lear
   }
   const byDocument = new Map(rows.flatMap(row => row.documents.map(({ authority }) => [authority.id, authority])));
   const declared = new Map();
-  for (const authority of byDocument.values()) {
+  for (const authority of learning.schemaVersion === 1 ? byDocument.values() : []) {
     marked.walkTokens(marked.lexer(authority.draft), token => {
       if (token.type !== 'heading') return;
       const visibleHeading = decodeEntities(marked.parseInline(token.text).replace(/<[^>]+>/g, ''));
@@ -353,6 +434,18 @@ export async function buildLibrary(root, output, publications, gitRevision, lear
     if (/\[\[Q[0-9]{6}\]\]/.test(authority.markdown)) throw new Error('Unresolved question reference in reading asset');
   }
   for (const question of learning.questions) {
+    if (learning.schemaVersion === 2) {
+      if (![...renderedDocuments.values()].some(document => document.knowledgeIds.includes(question.id))) continue;
+      const record = knowledge.get(question.id);
+      const html = renderKnowledge(record, knowledge);
+      const payload = { id: record.id, title: record.title, html, anchors: record.anchors, prerequisites: record.prerequisites };
+      const revision = hash(JSON.stringify(payload));
+      const url = `/library/knowledge/${record.id}/${revision.slice(0, 16)}.json`;
+      await fs.mkdir(path.dirname(path.join(output, url.slice(1))), { recursive: true });
+      await fs.writeFile(path.join(output, url.slice(1)), JSON.stringify({ ...payload, revision }) + '\n');
+      catalog.questions.push({ id: record.id, title: record.title, revision, url, prerequisites: record.prerequisites });
+      continue;
+    }
     if (!byDocument.has(question.document)) continue;
     const declaration = declared.get(question.id);
     if (!declaration || declaration.document !== question.document || declaration.title !== question.title)
@@ -393,7 +486,8 @@ export function publicationIndex(catalog) {
 
 export function libraryPaths(catalog) {
   return ['/library/catalog.json', ...catalog.collections.flatMap(collection => collection.documents
-    .flatMap(document => [document.url, document.sourceUrl, document.markdownUrl]))];
+    .flatMap(document => [document.url, document.sourceUrl, document.markdownUrl])),
+    ...(catalog.questions || []).filter(item => item.url).map(item => item.url)];
 }
 
 async function loadEsbuild(modulePath) {

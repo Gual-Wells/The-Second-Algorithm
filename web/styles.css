@@ -54,9 +54,10 @@ a { color: #174f84; text-underline-offset: 3px; }
 [hidden], .is-hidden { display: none !important; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 .muted { color: var(--muted); }
-.question-row { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 52px; padding: 12px 8px; white-space: normal; text-align: left; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; box-shadow: none; background: transparent; }
-.question-row > :nth-child(2) { flex: 1; min-width: 0; line-height: 1.55; }
-.question-number { flex: none; color: var(--blue); font-family: monospace; font-size: 13px; }
+.knowledge-link { color: #245e94; text-decoration: underline; text-decoration-color: #88a9c7; text-underline-offset: .18em; }
+.knowledge-link:focus-visible { outline: 2px solid #367cba; outline-offset: 3px; }
+.knowledge-introduction { margin: 19px 0; padding: 2px 13px; border-left: 3px solid #aec5d9; background: #f6f9fc; }
+.knowledge-title { color: #234f76; font-weight: 650; }
 ::selection { background: #c7dff4; color: #142e49; }
 .app-frame {
   position: relative; display: flex; flex-direction: column;
@@ -293,6 +294,9 @@ pre.source-view { max-width: 100%; overflow: auto; padding: 13px; border: 1px so
 .sheet-body h3 { margin: 16px 0 8px; font-size: 17px; color: #214e79; }
 .sheet-body h3:first-child { margin-top: 0; }
 .sheet-body p { margin: 9px 0 13px; }
+.sheet-body .knowledge-paper { min-height: 0; width: 100%; max-width: none; margin: 0; padding: 0; border: 0; box-shadow: none; background: transparent; font-size: var(--reading-size, 17px); color: #172b3d; }
+.sheet-body .knowledge-paper h3:first-child { margin-top: 0; }
+.sheet-body .knowledge-paper pre { max-width: 100%; }
 .sheet-tools { position: sticky; top: -17px; z-index: 3; margin: -17px -18px 13px; padding: 12px 18px 11px; border-bottom: 1px solid #bfcede; background: #f3f8fc; box-shadow: 0 2px 3px #45617e13; }
 .sheet-tools .search-field { margin: 0; }
 .sheet-tools .search-summary { margin: 7px 0 0; }

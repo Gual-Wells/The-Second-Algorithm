@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from .storage import digest, read_json, safe_relative
 
@@ -18,9 +19,10 @@ DIMENSIONS = {
 }
 IDENTITY = re.compile(r"[a-z][a-z0-9]*(?:-[a-z0-9]+)*\Z")
 ANCHOR = re.compile(r' {0,3}<a\s+id=["\']([^"\']+)["\']\s*>[ \t]*</a>[ \t]*')
+FACETS = ("problem", "fit", "variation", "manual", "manualExplanation", "standard", "standardExplanation", "engineering")
 
 
-def _prose_anchors(draft: str) -> list[str]:
+def _prose_lines(draft: str):
     """Accept the project's standalone anchors, conservatively outside code.
 
     This is deliberately not a general Markdown renderer: an identity used for
@@ -28,8 +30,8 @@ def _prose_anchors(draft: str) -> list[str]:
     Fences and comments are excluded using the original draft's line context.
     """
     draft = re.sub(r"<!--[\s\S]*?(?:-->|\Z)", "", draft)
-    found, fence, fence_length, inline_ticks = [], None, 0, None
-    for line in draft.splitlines():
+    fence, fence_length, inline_ticks = None, 0, None
+    for number, line in enumerate(draft.splitlines()):
         marker = re.fullmatch(r" {0,3}(`{3,}|~{3,})(.*)", line)
         if fence is not None:
             if marker and marker[1][0] == fence and len(marker[1]) >= fence_length and not marker[2].strip():
@@ -46,10 +48,246 @@ def _prose_anchors(draft: str) -> list[str]:
                 inline_ticks = len(run[0])
             elif len(run[0]) == inline_ticks:
                 inline_ticks = None
-        matched = ANCHOR.fullmatch(line)
-        if matched and not in_inline and inline_ticks is None:
-            found.append(matched[1])
-    return found
+        if not in_inline and inline_ticks is None and not line.startswith(("    ", "\t")):
+            yield number, line
+
+
+def _prose_anchors(draft: str) -> list[str]:
+    return [matched[1] for _, line in _prose_lines(draft) if (matched := ANCHOR.fullmatch(line))]
+
+
+def _prose_outline(draft: str) -> dict:
+    """Locate real headings adjacent to explicit anchors, not arbitrary ids.
+
+    A source anchor in a code example/comment, or one separated from its heading
+    by another paragraph, cannot satisfy a formal-section location.
+    """
+    pending, headings, locations, anchor_lines = [], [], {}, {}
+    for number, line in _prose_lines(draft):
+        anchor = ANCHOR.fullmatch(line)
+        if anchor:
+            pending.append(anchor[1])
+            anchor_lines[anchor[1]] = number
+            continue
+        heading = re.match(r" {0,3}(#{1,6})[ \t]+(.+?)\s*#*\s*$", line)
+        if heading:
+            item = {"line": number, "level": len(heading[1]), "title": heading[2], "anchors": list(pending)}
+            headings.append(item)
+            for identity in pending:
+                locations[identity] = item
+        if line.strip():
+            pending = []
+    return {"headings": headings, "locations": locations, "anchorLines": anchor_lines}
+
+
+def _state(value, label: str, errors: list[str]) -> str | None:
+    if not isinstance(value, dict):
+        errors.append(label + ": expected a status object")
+        return None
+    state = value.get("status")
+    if state not in {"open", "addressed"}:
+        errors.append(label + ": status must be open or addressed")
+    elif state == "open":
+        _text(value.get("gap"), label + ".gap", errors)
+    elif value.get("gap"):
+        errors.append(label + ": addressed item cannot conceal a gap")
+    return state
+
+
+def _paradigm_contract(contract, cid, model, documents, permitted, material_ids, errors):
+    """Schema 2 deterministic relationships; no automatic taxonomy judgement."""
+    if contract.get("schemaVersion") != 2:
+        return
+    paradigm = contract.get("paradigm", {})
+    state = _state(paradigm, cid + ".paradigm", errors)
+    if not isinstance(paradigm, dict):
+        paradigm = {}
+    for key in ("name", "mechanism", "coverageArgument"):
+        _text(paradigm.get(key), cid + ".paradigm." + key, errors)
+    evidence = _strings(paradigm.get("corpusEvidence", []), cid + ".paradigm.corpusEvidence", errors)
+    if state == "addressed" and not evidence:
+        errors.append(cid + ": addressed paradigm needs actual corpus extraction/merging evidence")
+    if any(mid not in material_ids for mid in evidence):
+        errors.append(cid + ": unknown paradigm corpus material")
+    prelude = contract.get("prelude", {})
+    prelude_state = _state(prelude, cid + ".prelude", errors)
+    if not isinstance(prelude, dict):
+        prelude = {}
+    prelude_locations = _locations(prelude.get("locations", []), cid + ".prelude.locations", documents, permitted, errors,
+                                   required=prelude_state == "addressed")
+    reading = contract.get("reading", {})
+    if not isinstance(reading, dict):
+        reading = {}
+    complete = reading.get("status") == "addressed"
+    units = _rows(reading.get("units", []), cid + ".reading.units", errors)
+    unit_ids = {unit.get("id") for unit in units if isinstance(unit.get("id"), str)}
+    outlines = {did: _prose_outline(documents[did].get("draft", "")) for did in permitted if did in documents}
+    document_order = {did: i for i, did in enumerate(documents) if did in permitted}
+    h2_owners, unit_positions, unit_headings = {}, [], set()
+
+    def major(locations, label):
+        result = []
+        for location in _rows(locations, label + ".locations", errors):
+            did, anchor = location.get("document"), location.get("anchor")
+            heading = outlines.get(did, {}).get("locations", {}).get(anchor)
+            if not heading or heading["level"] != 2:
+                errors.append(label + ": location must identify an actual H2 heading")
+            else:
+                result.append((document_order[did], heading["line"]))
+                h2_owners[(did, heading["line"])] = label
+        return result
+
+    prelude_positions = major(prelude_locations, cid + ".prelude")
+    # Entry and the final selection map may have their own chapter-level H2;
+    # other H2s must belong to actual problem-type sections.
+    for name in ("entry", "selectionMap"):
+        major(reading.get(name, []), cid + ".reading." + name)
+    if complete:
+        prelude_keys = {(point.get("document"), point.get("anchor")) for point in prelude_locations}
+        if any((point.get("document"), point.get("anchor")) not in prelude_keys
+               for point in _rows(reading.get("entry", []), cid + ".reading.entry", errors)):
+            errors.append(cid + ": chapter entry must identify its theory prelude, not unrelated H2s")
+    implementations, task_urls = {}, {}
+    for task in model.get("tasks", []):
+        if not isinstance(task, dict) or task.get("document") not in permitted:
+            continue
+        if not isinstance(task.get("id"), str):
+            continue
+        task_urls[task["id"]] = set(_strings(task.get("sourceUrls", []), cid + ".task.sourceUrls", errors))
+        for method in _rows(task.get("methods", []), cid + ".task.methods", errors):
+            for implementation in _rows(method.get("implementations", []), cid + ".task.implementations", errors):
+                if isinstance(implementation.get("id"), str):
+                    implementations[implementation["id"]] = (task["id"], implementation)
+    preceding = set()
+    for unit in units:
+        uid, label = unit.get("id"), cid + ".section." + str(unit.get("id"))
+        locations = _rows(unit.get("locations", []), label + ".locations", errors)
+        positions = major(locations, label)
+        if positions:
+            unit_positions.append(min(positions))
+            if unit_headings & set(positions):
+                errors.append(label + ": formal H2 cannot belong to multiple problem-type sections")
+            unit_headings.update(positions)
+        depends = _strings(unit.get("dependsOn", []), label + ".dependsOn", errors)
+        if any(dependency not in preceding for dependency in depends):
+            errors.append(label + ": dependencies must be earlier problem-type sections")
+        if isinstance(uid, str):
+            preceding.add(uid)
+        facets = unit.get("facets", {})
+        if not isinstance(facets, dict):
+            errors.append(label + ".facets: expected an object")
+            facets = {}
+        for facet in FACETS:
+            actual = _locations(facets.get(facet, []), label + ".facets." + facet, documents, permitted, errors, required=complete)
+            for location in actual:
+                did, anchor = location.get("document"), location.get("anchor")
+                line = outlines.get(did, {}).get("anchorLines", {}).get(anchor)
+                starts = [outlines.get(did, {}).get("locations", {}).get(point.get("anchor"))
+                          for point in locations if point.get("document") == did]
+                valid_span = False
+                for start in starts:
+                    if not start or line is None:
+                        continue
+                    following = [heading["line"] for heading in outlines[did]["headings"]
+                                 if heading["level"] <= 2 and heading["line"] > start["line"]]
+                    end = min(following, default=float("inf"))
+                    # Explicit anchors immediately precede their H2, so allow
+                    # the section's own primary anchor as its complete location.
+                    valid_span |= anchor in start["anchors"] or start["line"] < line < end
+                if not valid_span:
+                    errors.append(label + ": facet must lie within its own problem-type section: " + facet)
+        manual = _strings(unit.get("manualImplementationIds", []), label + ".manualImplementationIds", errors)
+        standard = _strings(unit.get("standardImplementationIds", []), label + ".standardImplementationIds", errors)
+        role = unit.get("standardRole", {})
+        if not isinstance(role, dict):
+            role = {}
+        if complete and (not manual or not standard):
+            errors.append(label + ": both manual and standard-facility implementation paths are required")
+        if complete or role:
+            if role.get("kind") not in {"algorithm", "structure", "support", "shared-core"}:
+                errors.append(label + ": unknown standard-facility role")
+            _text(role.get("explanation"), label + ".standardRole.explanation", errors)
+        unit_tasks = set(_strings(unit.get("taskIds", []), label + ".taskIds", errors))
+        for kind, references in (("manual", manual), ("standard", standard)):
+            for iid in references:
+                entry = implementations.get(iid)
+                if entry is None or entry[0] not in unit_tasks:
+                    errors.append(label + ": implementation must belong to this section's actual tasks: " + str(iid))
+                elif kind == "manual" and entry[1].get("kind") != "manual":
+                    errors.append(label + ": manual path must reference a manual implementation")
+                elif kind == "standard" and role.get("kind") in {"algorithm", "structure"} and entry[1].get("kind") != "standard":
+                    errors.append(label + ": standard algorithm/structure path must reference a standard implementation")
+        exercises = _rows(unit.get("exercises", []), label + ".exercises", errors)
+        if complete and not 1 <= len(exercises) <= 5:
+            errors.append(label + ": each formal problem-type section needs 1 to 5 exercises")
+        available = set().union(*(task_urls.get(tid, set()) for tid in unit_tasks))
+        seen_urls = set()
+        section_prose = []
+        for point in locations:
+            did = point.get("document")
+            outline = outlines.get(did, {})
+            start = outline.get("locations", {}).get(point.get("anchor"))
+            if start:
+                end = min((heading["line"] for heading in outline["headings"]
+                           if heading["level"] <= 2 and heading["line"] > start["line"]), default=float("inf"))
+                section_prose.extend(line for number, line in _prose_lines(documents[did].get("draft", ""))
+                                     if start["line"] <= number < end)
+        visible_prose = "\n".join(section_prose)
+        for exercise in exercises:
+            _text(exercise.get("title"), label + ".exercise.title", errors)
+            url = exercise.get("url")
+            try:
+                parsed = urlsplit(url)
+                valid_url = parsed.scheme in {"http", "https"} and bool(parsed.netloc) and not parsed.username and not parsed.password
+            except (ValueError, TypeError, AttributeError):
+                valid_url = False
+            if not valid_url or url not in available:
+                errors.append(label + ": exercise URL must come from this section's actual task sourceUrls")
+            if isinstance(url, str):
+                if not re.search(r"\]\(\s*<?" + re.escape(url) + r">?(?:\s+[\"'][^\n]*?[\"'])?\s*\)", visible_prose):
+                    errors.append(label + ": exercise needs an actual visible link in this problem-type section")
+                if url in seen_urls:
+                    errors.append(label + ": duplicate exercise URL")
+                seen_urls.add(url)
+    if unit_positions != sorted(unit_positions) or len(set(unit_positions)) != len(unit_positions):
+        errors.append(cid + ": problem-type sections must follow distinct author prose order")
+    if prelude_positions and unit_positions and max(prelude_positions) >= min(unit_positions):
+        errors.append(cid + ": the theory prelude must precede all formal problem-type sections")
+    if complete and unit_positions:
+        for point in _rows(reading.get("selectionMap", []), cid + ".reading.selectionMap", errors):
+            did, anchor = point.get("document"), point.get("anchor")
+            heading = outlines.get(did, {}).get("locations", {}).get(anchor)
+            if heading:
+                position = (document_order[did], heading["line"])
+                if position not in unit_headings and position < max(unit_positions):
+                    errors.append(cid + ": final selection map cannot disguise earlier non-type H2s")
+    if complete:
+        for did, outline in outlines.items():
+            for heading in outline["headings"]:
+                if heading["level"] == 2 and (did, heading["line"]) not in h2_owners:
+                    errors.append(cid + ": unassigned H2 competes with problem-type navigation: " + heading["title"])
+    branch_ids = set()
+    branches = _rows(paradigm.get("branches", []), cid + ".paradigm.branches", errors)
+    if state == "addressed" and not branches:
+        errors.append(cid + ": addressed paradigm must have actual coverage branches")
+    covered_units = set()
+    for branch in branches:
+        label = cid + ".branch." + str(branch.get("id"))
+        _identity(branch.get("id"), branch_ids, label, errors)
+        _text(branch.get("title"), label + ".title", errors)
+        branch_state = _state(branch, label, errors)
+        mids = _strings(branch.get("materialIds", []), label + ".materialIds", errors)
+        if any(mid not in material_ids for mid in mids):
+            errors.append(label + ": unknown material reference")
+        sections = _strings(branch.get("sectionIds", []), label + ".sectionIds", errors)
+        if any(section not in unit_ids for section in sections):
+            errors.append(label + ": unknown problem-type section")
+        if branch_state == "addressed" and (not mids or not sections):
+            errors.append(label + ": addressed branch needs material and actual section coverage")
+        covered_units.update(sections)
+        _strings(branch.get("crossParadigms", []), label + ".crossParadigms", errors)
+    if state == "addressed" and unit_ids - covered_units:
+        errors.append(cid + ": every formal section must belong to the paradigm coverage map")
 
 
 def _relative(root: Path, value: str) -> Path:
@@ -131,6 +369,12 @@ def inspect_chapters(root: Path, publications: dict, model: dict, documents: dic
     except (ValueError, OSError) as error:
         return {"ok": False, "errors": [str(error)], "chapters": []}, {"chapters": [], "dependencies": set(), "reviewPaths": set()}
     dependencies.add(index_path)
+    # The surveyed corpus is part of the editorial input. Adding a textbook or
+    # source can reopen the domain investigation instead of silently retaining
+    # an old claim about the known material base.
+    for name in ("catalog/books.json", "catalog/sources.json"):
+        if (root / name).is_file():
+            dependencies.add(name)
     if not isinstance(index, dict) or index.get("schemaVersion") != 1:
         return {"ok": False, "errors": ["chapters: expected schemaVersion 1"], "chapters": []}, {"chapters": [], "dependencies": dependencies, "reviewPaths": set()}
     registry = _rows(index.get("chapters"), "chapters", errors)
@@ -166,7 +410,7 @@ def inspect_chapters(root: Path, publications: dict, model: dict, documents: dic
             authority_paths.add(contract_path)
             dependencies.add(contract_path)
             contract = read_json(filename)
-            if not isinstance(contract, dict) or contract.get("schemaVersion") != 1 or contract.get("chapter") != cid:
+            if not isinstance(contract, dict) or contract.get("schemaVersion") not in {1, 2} or contract.get("chapter") != cid:
                 raise ValueError(cid + ": invalid chapter contract identity/version")
         except (ValueError, OSError, TypeError) as error:
             errors.append(str(error))
@@ -271,6 +515,7 @@ def inspect_chapters(root: Path, publications: dict, model: dict, documents: dic
         expected_tasks = {tid for tid, did in task_documents.items() if did in permitted}
         if reading_state == "addressed" and not expected_tasks.issubset(unit_tasks):
             errors.append(cid + ".reading: every chapter task needs an actual reading unit")
+        _paradigm_contract(contract, cid, model, documents, permitted, material_ids, errors)
         chapters.append({"id": cid, "collection": collection, "contractPath": contract_path,
                          "reviewPath": review_path, "contract": contract, "documents": permitted, "promises": commitments})
     if collections != set(published):
@@ -303,6 +548,18 @@ def chapter_quality(root: Path, chapter_id: str | None = None) -> dict:
         raise ValueError("Unknown chapter: " + str(chapter_id))
     for chapter in selected:
         cid, contract, errors = chapter["id"], chapter["contract"], []
+        if contract.get("schemaVersion") != 2:
+            errors.append("legacy chapter contract: not adopted under the paradigm-led hard protocol (schemaVersion 2 required)")
+        else:
+            if context["model"].get("schemaVersion") != 2:
+                errors.append("transparent knowledge registry requires learning schemaVersion 2; legacy visible-Q main explanations cannot qualify")
+            for name in ("paradigm", "prelude"):
+                item = contract[name]
+                if item["status"] != "addressed":
+                    errors.append(name + " is open — " + item["gap"])
+            for branch in contract["paradigm"]["branches"]:
+                if branch["status"] != "addressed":
+                    errors.append("paradigm branch is open — " + branch["id"] + ": " + branch["gap"])
         for promise in contract["commitments"]:
             if promise["status"] != "addressed":
                 errors.append(promise["id"] + ": open promise — " + promise["gap"])
@@ -379,6 +636,22 @@ def render_chapters(root: Path, chapter_id: str | None = None) -> str:
                       "读者起点：" + contract["reader"]["startingPoint"], "能力目标：" + contract["reader"]["targetCapability"],
                       "实现支撑：" + contract["reader"]["supportPolicy"], "核心范围：" + contract["scope"]["core"],
                       "扩展关系：" + contract["scope"]["extensions"], "完备性论据：" + contract["scope"]["completenessArgument"]])
+        if contract.get("schemaVersion") != 2:
+            lines.append("新硬协议：旧问题专题合同，尚未完成大思想领域/正式题型结构采用；阻止重新发布。")
+        else:
+            paradigm = contract["paradigm"]
+            lines.append("算法思想领域：" + paradigm["name"] + " [" + paradigm["status"] + "]")
+            lines.append("共同机制：" + paradigm["mechanism"])
+            lines.append("领域覆盖依据：" + paradigm["coverageArgument"])
+            if paradigm.get("gap"):
+                lines.append("  领域缺口：" + paradigm["gap"])
+            for branch in paradigm["branches"]:
+                lines.append("  分支：" + branch["title"] + " [" + branch["status"] + "]；题型节：" + ", ".join(branch.get("sectionIds", [])))
+                if branch.get("gap"):
+                    lines.append("    缺口：" + branch["gap"])
+            lines.append("思想前置节 [" + contract["prelude"]["status"] + "]")
+            if contract["prelude"].get("gap"):
+                lines.append("  缺口：" + contract["prelude"]["gap"])
         for promise in contract["commitments"]:
             lines.append("- " + DIMENSIONS[promise["dimension"]] + " / " + promise["id"] + " [" + promise["status"] + "]：" + promise["claim"])
             lines.append("  验收：" + promise["acceptance"])
@@ -393,7 +666,8 @@ def render_chapters(root: Path, chapter_id: str | None = None) -> str:
         for location in reading.get("entry", []):
             lines.append("  入口：" + location["document"] + "#" + location["anchor"])
         for unit in reading.get("units", []):
-            lines.append("  问题簇：" + unit["title"] + " [" + unit["id"] + "]；任务：" + ", ".join(unit.get("taskIds", [])))
+            lines.append(("  正式题型节：" if contract.get("schemaVersion") == 2 else "  问题簇：")
+                         + unit["title"] + " [" + unit["id"] + "]；任务：" + ", ".join(unit.get("taskIds", [])))
             for location in unit.get("locations", []):
                 lines.append("    正文：" + location["document"] + "#" + location["anchor"])
         for location in reading.get("selectionMap", []):

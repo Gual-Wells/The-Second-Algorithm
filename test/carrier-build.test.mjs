@@ -364,13 +364,22 @@ test('current published content preserves every declared source block and the un
     assert.ok(result.documents > 0 && result.codeBlocks > 0);
     assert.ok(result.catalog.questions.length > 0);
     assert.equal(new Set(result.catalog.questions.map(q => q.id)).size, result.catalog.questions.length);
-    for (const question of result.catalog.questions) assert.deepEqual(Object.keys(question).sort(), ['anchor', 'document', 'id', 'prerequisites', 'title']);
+    for (const question of result.catalog.questions) {
+      assert.deepEqual(Object.keys(question).sort(), ['id', 'prerequisites', 'revision', 'title', 'url']);
+      const card = JSON.parse(await fs.readFile(path.join(output, question.url.slice(1)), 'utf8'));
+      assert.equal(card.revision, question.revision);
+      assert.equal(card.title, question.title);
+      assert.doesNotMatch(codeText(card.html), /Q\d{6}\s*·/);
+    }
     let canonicalCopies = 0;
     for (const collection of result.catalog.collections) for (const entry of collection.documents) {
       assert.equal(Object.hasOwn(collection, 'track'), false);
       const descriptor = publications.collections.find(c => c.id === collection.id).documents.find(d => d.id === entry.id);
       const authority = await readAuthority(ROOT, descriptor);
       const document = JSON.parse(await fs.readFile(path.join(output, entry.url.slice(1)), 'utf8'));
+      assert.doesNotMatch(codeText(document.html), /Q\d{6}\s*·/);
+      assert(document.knowledgeIds.length > 0);
+      assert(document.headings.every(heading => !/^Q\d/.test(heading.text)));
       for (const block of authority.used) {
         const match = document.html.match(new RegExp('data-code-id="' + block + '">[\\s\\S]*?<pre><code[^>]*>([\\s\\S]*?)<\\/code>'));
         assert.ok(match, block); assert.equal(codeText(match[1]), authority.blocks.get(block)); canonicalCopies++;

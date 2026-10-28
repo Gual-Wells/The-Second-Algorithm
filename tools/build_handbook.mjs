@@ -3,6 +3,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { marked } from 'marked';
+import { readKnowledge, knowledgeTokens, expandKnowledgeReferences, expandKnowledgeIntroductions } from './knowledge.mjs';
 
 const REPOSITORY=path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 if (!process.argv[2] || !process.argv[3])
@@ -22,15 +23,29 @@ for(const q of learning.questions){
   if(questions.has(q.id))throw new Error('Duplicate question '+q.id);
   questions.set(q.id,q);
 }
+const knowledge=await readKnowledge(REPOSITORY,learning);
 const questionReferences=[];
+const tokens=knowledgeTokens(draft);
+const knowledgeIntroductions=learning.schemaVersion===2?tokens.introductions:[];
 // Expand prose references before injecting C++: generated links must never change code bytes.
-const linkedDraft=draft.replace(/\[\[(Q\d{6})\]\]/g,(_,id)=>{
+const linkedDraft=learning.schemaVersion===2?expandKnowledgeIntroductions(expandKnowledgeReferences(draft,knowledge),knowledge,text=>marked.parse(text,{gfm:true})):draft.replace(/\[\[(Q\d{6})\]\]/g,(_,id)=>{
   const question=questions.get(id), document=documents.get(question?.document);
   if(!question||!document)throw new Error('Unresolved question '+id);
   questionReferences.push(id);
   const target=path.relative(ROOT,path.join(REPOSITORY,document.path+'.html')).replaceAll('\\','/');
   return `[${id} · ${question.title.replaceAll('[','\\[').replaceAll(']','\\]')}](${target}#${question.anchor})`;
 });
+if(learning.schemaVersion===2)questionReferences.push(...tokens.references.map(reference=>reference.id));
+const knowledgeIds=new Set([...questionReferences,...knowledgeIntroductions]);
+const knowledgePending=[...knowledgeIds];
+while(knowledgePending.length){
+  const id=knowledgePending.pop(), record=knowledge.get(id);
+  if(!record)continue;
+  const dependencies=[...record.prerequisites,...knowledgeTokens(record.body).references.map(reference=>reference.id)];
+  for(const next of dependencies)if(!knowledgeIds.has(next)){knowledgeIds.add(next);knowledgePending.push(next);}
+}
+const knowledgeRecords=[...knowledgeIds].filter(id=>knowledge.has(id)).map(id=>knowledge.get(id));
+const knowledgeDependencies=Object.fromEntries(knowledgeRecords.map(record=>[record.source,record.sourceSha256]));
 const blocks=new Map();
 for(const m of source.matchAll(/\/\/ BEGIN ([\w-]+)\r?\n([\s\S]*?)\/\/ END \1/g)){
   if(blocks.has(m[1]))throw new Error('Duplicate code region '+m[1]);
@@ -101,6 +116,7 @@ pre{background:#f6f8fa;border:1px solid #d9e2e8;border-radius:3px;padding:16px 1
 pre code{font:inherit;color:inherit;background:transparent;padding:0;border-radius:0;white-space:pre}.keyword{color:#135aa0;font-weight:500}.type{color:#255d61}.comment{color:#526776}.number{color:#884920}.string{color:#8b3d21}
 .table-wrap{overflow-x:auto;margin:18px 0 24px}table{border-collapse:collapse;width:100%;font-size:15px;line-height:1.65}th,td{border:1px solid #cfdae2;padding:10px 12px;vertical-align:top;text-align:left}th{background:#eef3f7;color:#28485e;font-weight:600}tr:nth-child(even) td{background:#fbfcfd}td:first-child{min-width:122px}td code{font-size:.91em;background:transparent;padding:0}td p{margin:0}
 .mobile-toc{display:none}.page-foot{font-size:13px;color:#526878;border-top:1px solid var(--line);padding-top:18px;margin-top:35px}
+.knowledge-introduction{border-left:3px solid #9bb4c7;padding:8px 16px;margin:20px 0;background:#f7fafc}.knowledge-title{font-weight:600;color:#193b51}.knowledge-dialog{max-width:680px;width:calc(100vw - 30px);max-height:85vh;overflow:auto;border:1px solid #829cb0;border-radius:4px;padding:20px;color:var(--ink);background:white}.knowledge-dialog::backdrop{background:#193b514d}.knowledge-dialog header{display:flex;align-items:center;justify-content:space-between;gap:16px}.knowledge-dialog button{font:inherit;padding:6px 14px}.knowledge-dialog h2{border:0;margin:0;padding:0;font-size:22px}
 :focus-visible{outline:2px solid #397caa;outline-offset:3px}::selection{background:#cde3f3;color:#142d40}
 @media(min-width:1600px){.layout{max-width:1310px;grid-template-columns:250px minmax(0,1fr);gap:36px}main{padding-left:50px;padding-right:50px}.topbar{padding-left:max(24px,calc((100vw - 1260px)/2));padding-right:max(24px,calc((100vw - 1260px)/2))}}
 @media(max-width:1090px){.layout{grid-template-columns:204px minmax(0,1fr);gap:20px;padding:22px 18px}main{padding:30px 28px}.toc a{font-size:12px}.toc a.group{font-size:13px}pre{font-size:14px;padding:14px 15px}}
@@ -114,11 +130,19 @@ let scheduled=false,last='';
 function mark(){scheduled=false;let current=targets[0];for(const t of targets){if(t.getBoundingClientRect().top<=115)current=t;else break;}if(!current||last===current.id)return;last=current.id;for(const a of links){const active=decodeURIComponent(a.hash.slice(1))===last;a.classList.toggle('active',active);if(active){a.setAttribute('aria-current','location');const s=a.closest('.sidebar'),p=s.getBoundingClientRect(),r=a.getBoundingClientRect();if(r.top<p.top+8)s.scrollTop+=r.top-p.top-8;else if(r.bottom>p.bottom-8)s.scrollTop+=r.bottom-p.bottom+8;}else a.removeAttribute('aria-current');}}
 addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(mark)}},{passive:true});mark();
 document.querySelectorAll('.mobile-toc a').forEach(a=>a.addEventListener('click',()=>{document.querySelector('.mobile-toc').open=false}));
+const knowledgeData=${JSON.stringify(Object.fromEntries(knowledgeRecords.map(record=>[record.id,{title:record.title,html:marked.parse(expandKnowledgeReferences(record.body,knowledge),{gfm:true})}]))).replaceAll('<','\\u003c')};
+const knowledgeDialog=document.getElementById('knowledgeDialog');
+let knowledgeReturn,knowledgeHistory=[];
+function openKnowledge(id,anchor='',push=true){const item=knowledgeData[id];if(!item)return;if(push&&knowledgeDialog.open)knowledgeHistory.push({id:knowledgeDialog.dataset.current,top:knowledgeDialog.scrollTop});if(!knowledgeDialog.open){knowledgeReturn=document.activeElement;knowledgeHistory=[];knowledgeDialog.showModal();}knowledgeDialog.dataset.current=id;document.getElementById('knowledgeTitle').textContent=item.title;document.getElementById('knowledgeBody').innerHTML=item.html;document.getElementById('knowledgeBack').hidden=!knowledgeHistory.length;knowledgeDialog.scrollTop=0;if(anchor){const target=[...knowledgeDialog.querySelectorAll('[id]')].find(node=>node.id===anchor);target?.scrollIntoView({block:'start'});}document.getElementById('knowledgeClose').focus({preventScroll:true});}
+document.addEventListener('click',event=>{const link=event.target.closest('[data-knowledge]');if(link){event.preventDefault();openKnowledge(link.dataset.knowledge,link.dataset.knowledgeAnchor||'');}});
+document.getElementById('knowledgeClose').addEventListener('click',()=>knowledgeDialog.close());
+document.getElementById('knowledgeBack').addEventListener('click',()=>{const item=knowledgeHistory.pop();if(item){openKnowledge(item.id,'',false);knowledgeDialog.scrollTop=item.top;}});
+knowledgeDialog.addEventListener('close',()=>{knowledgeHistory=[];knowledgeReturn?.focus({preventScroll:true});});
 `;
-const html='<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(NAME)+' · '+esc(SERIES)+'</title><style>'+css+'</style></head><body><header class="topbar"><div class="brand">'+esc(SERIES)+'<span>'+esc(NAME)+'</span></div><nav class="files" aria-label="文件"><a href="'+esc(NAME)+'.md">Markdown</a><a href="'+esc(NAME)+'.cpp">C++ 源码</a></nav></header><div class="layout"><aside class="sidebar"><div class="toc-title">'+TOC+'</div><nav class="toc" aria-label="'+TOC+'">'+nav+'</nav></aside><div><details class="mobile-toc"><summary>'+TOC+'</summary><nav class="toc">'+nav+'</nav></details><main>'+body+'<footer class="page-foot">'+esc(NAME)+' · '+esc(SERIES)+'</footer></main></div></div><script>'+script+'</script></body></html>';
+const html='<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(NAME)+' · '+esc(SERIES)+'</title><style>'+css+'</style></head><body><header class="topbar"><div class="brand">'+esc(SERIES)+'<span>'+esc(NAME)+'</span></div><nav class="files" aria-label="文件"><a href="'+esc(NAME)+'.md">Markdown</a><a href="'+esc(NAME)+'.cpp">C++ 源码</a></nav></header><div class="layout"><aside class="sidebar"><div class="toc-title">'+TOC+'</div><nav class="toc" aria-label="'+TOC+'">'+nav+'</nav></aside><div><details class="mobile-toc"><summary>'+TOC+'</summary><nav class="toc">'+nav+'</nav></details><main>'+body+'<footer class="page-foot">'+esc(NAME)+' · '+esc(SERIES)+'</footer></main></div></div><dialog class="knowledge-dialog" id="knowledgeDialog" aria-labelledby="knowledgeTitle"><header><button id="knowledgeBack" type="button" hidden>返回</button><h2 id="knowledgeTitle"></h2><button id="knowledgeClose" type="button">完成</button></header><div id="knowledgeBody"></div></dialog><script>'+script+'</script></body></html>';
 await fs.writeFile(path.join(ROOT,NAME+'.html'),html,'utf8');
 await fs.mkdir(path.join(ROOT,'build'),{recursive:true});
 const sha=s=>createHash('sha256').update(s).digest('hex');
-await fs.writeFile(path.join(ROOT,'build/'+NAME+'.json'),JSON.stringify({codeBlocks:used,questionReferences,headings,sourceSha256:sha(draft),codeSha256:sha(source),markdownSha256:sha(md),htmlSha256:sha(html),builderSha256:sha(await fs.readFile(fileURLToPath(import.meta.url))),learningSha256:sha(learningBytes),publicationsSha256:sha(publicationBytes),markdownBytes:Buffer.byteLength(md),htmlBytes:Buffer.byteLength(html)},null,2)+'\n','utf8');
+await fs.writeFile(path.join(ROOT,'build/'+NAME+'.json'),JSON.stringify({codeBlocks:used,questionReferences,knowledgeIntroductions,knowledgeDependencies,knowledgeHelperSha256:sha(await fs.readFile(new URL('./knowledge.mjs',import.meta.url))),headings,sourceSha256:sha(draft),codeSha256:sha(source),markdownSha256:sha(md),htmlSha256:sha(html),builderSha256:sha(await fs.readFile(fileURLToPath(import.meta.url))),learningSha256:sha(learningBytes),publicationsSha256:sha(publicationBytes),markdownBytes:Buffer.byteLength(md),htmlBytes:Buffer.byteLength(html)},null,2)+'\n','utf8');
 console.log(JSON.stringify({codeBlocks:used.length,sections:headings.filter(h=>h.depth===2).length,topics:headings.filter(h=>h.depth===3).length,markdownBytes:Buffer.byteLength(md)}));
 

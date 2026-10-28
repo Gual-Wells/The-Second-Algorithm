@@ -1,13 +1,13 @@
 # 工作恢复
 
-先看Git分支/HEAD/dirty状态、AGENTS和有效共同协议，然后执行 `python -m second_algorithm research status`，选当前job执行resume。核对目标、证据/验证是否过期、实际权威源码及下一步，不从聊天或旧目录重建流程。
+先核对Git分支/HEAD/dirty、AGENTS和有效共同协议，再执行 `python -m second_algorithm research status`，选当前job执行resume。恢复真实目标、当前输入、材料/合同/作者/知识/源码和缺口，不从旧聊天、旧题单或accepted日志推断完成。
 
-当前学习与发布依据为catalog/chapters.json的章合同/当前逐承诺审阅、catalog/learning.json及schema2的carrier/publications.json。先运行 `course chapters` 恢复读者/目标/范围/阅读路线和实际缺口，再用 `course quality` 查看本版采用阻塞；旧通用accepted或线上已存在不代表新合同已通过。章级标准和实际工艺见CHAPTER_STANDARD/QUALITY_WORKFLOW。
+当前硬协议是大思想领域为章、前置思想理论、正式节为题型；手写与真实标准设施、必要C++和每节1–5题共同承载。先用`course chapters`恢复领域/分支/题型及真实缺口，再用`course quality`查看本版采用。旧schema合同、线上已存在或旧采用不构成新标准通过；当前区间专题不得仅改名追认。
 
-原双线/旧trial/旧稿不构成当前范围或兼容要求。资料目录、原题已读、方法分析、作者完成、验证、部署与读者掌握分别判断。
+权威关系为catalog/chapters.json、catalog/learning.json和schema2出版登记。正文/代码/独立知识源各自唯一；知识内部身份不外显，后续术语浮窗复用，不把C++去重扩成算法跨章内容只能讲一次。旧双线、trial、原稿和cases/patterns是素材，不是当前范围或兼容义务。
 
-输入变化时status会指出stale；只重做受影响的实际研究/审阅和验证，不能机械重填accepted。保留失败尝试、last-good与具体日志，失败不能回退成空清单或偷偷使用旧成功。
+输入改变使status指出stale；按实际影响重做研究/审阅和验证，不机械重填accepted或只换hash。保留失败、last-good和具体日志；未取得材料、未分析分支与尚未编纂分别记录。
 
-任务锁 `.local/research-<id>.lock` 与部署锁 `.local/deploy.lock`出现时先核对其中pid和真实进程，不能强杀其他任务或删活锁。确认进程已结束后才清本任务残留。部署失败先查Cloudflare当前版本和线上匿名边界，分清未上传、已上传未核验与完整成功。
+任务锁 `.local/research-<id>.lock` 和部署锁 `.local/deploy.lock`出现时先核pid与真实进程，不强杀其他任务或删活锁。确认进程结束才清本任务残留。部署失败先查平台当前版本与匿名边界，分清未上传、已上传待核与完整成功。
 
-环境恢复按TASK_EXECUTION和CONTENT_MODEL的实际命令。新依赖/模型/日志/临时文件全部实际落D；原书不公开、不移动活动数据库、不为整理目录破坏共享运行时。脚本输出才是本次检查，旧报告不冒充实跑。
+环境与命令见 TASK_EXECUTION/CONTENT_MODEL。新增数据、依赖、缓存、临时文件、日志、QA和构建实际存D；不公开原书/凭据，不移动活动数据库，不为整理目录破坏共享运行时。脚本当前输出才是本次检查，模拟浏览器不能冒称iPhone真机。
