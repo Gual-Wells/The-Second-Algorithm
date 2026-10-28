@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "first-independent-20261028-v3",
+  "goal": "从空出版开始，基于原始材料独立研究新第一章，以难度、范围、完备、可读性合同完成原创教材和实战C++后发布，不承接旧题单或旧通过",
+  "createdAt": "2026-10-28T03:52:59.632199+00:00",
+  "evidence": [
+    {
+      "id": "25ace086c11040b6b04d5e3ad90f875e",
+      "kind": "research",
+      "path": "work/first-independent-20261028-v3/research/scope.md",
+      "summary": "独立原件研究、候选比较与问题关系确定；稿成后吸收先固定的独立范围挑战，实际补入预算收益模型，未继承被撤章主题或通过",
+      "outcome": "accepted",
+      "sha256": "01f97c8a9f6c5fcc5ff406a0e7308da53fe7e5b18471e211edce9c0b5f1f5313",
+      "inputHash": "b10a9dd5056b830d052ca077965c0e0f73a2a063813c693e3a7cbd7aec5fc409",
+      "recordedAt": "2026-10-28T04:50:36.595001+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "50764919eee14ebfbb963be827238425",
+      "kind": "review",
+      "path": "work/first-independent-20261028-v3/review/adoption.md",
+      "summary": "合并方法范围与读者C++真实审阅、独立模型和15平台入口结果，逐八承诺采用；最后仅追加溯源依赖，无未关闭语义阻断",
+      "outcome": "accepted",
+      "sha256": "565ded9b5fea44a385e360f53f072eecc13d952de3aa134da24bcba5dbb61041",
+      "inputHash": "b10a9dd5056b830d052ca077965c0e0f73a2a063813c693e3a7cbd7aec5fc409",
+      "recordedAt": "2026-10-28T04:50:38.031072+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    }
+  ],
+  "lastGoodVerification": {
+    "path": "work/jobs/first-independent-20261028-v3/verifications/e32470c39f574156b36e7461bb40d353.json",
+    "sha256": "9d88bcb00ddc7bb1b70980d1749f06d052875a438f12948ebc6435def5da3780",
+    "inputHash": "b10a9dd5056b830d052ca077965c0e0f73a2a063813c693e3a7cbd7aec5fc409"
+  },
+  "lastPreparedRelease": {
+    "path": "work/jobs/first-independent-20261028-v3/releases/ad2bade82e024a96b222f17f7d36adf9.json",
+    "sha256": "e66249bf7cc7a739dba8f8a24036d1836eacb5568e03461de723fc2285aa41fc",
+    "inputHash": "b10a9dd5056b830d052ca077965c0e0f73a2a063813c693e3a7cbd7aec5fc409"
+  },
+  "lastVerificationAttempt": {
+    "path": "work/jobs/first-independent-20261028-v3/verifications/e32470c39f574156b36e7461bb40d353.json",
+    "sha256": "9d88bcb00ddc7bb1b70980d1749f06d052875a438f12948ebc6435def5da3780",
+    "inputHash": "b10a9dd5056b830d052ca077965c0e0f73a2a063813c693e3a7cbd7aec5fc409"
+  }
+}

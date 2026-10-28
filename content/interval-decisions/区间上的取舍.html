@@ -1,0 +1,798 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>区间上的取舍 · 第二算法 · 实战与实现</title><style>
+:root{color-scheme:light;--ink:#202b34;--heading:#193b51;--blue:#1e5b80;--line:#d9e1e7;--paper:#fff;--back:#f2f5f7}
+*{box-sizing:border-box}html{scroll-padding-top:85px}body{margin:0;background:var(--back);font-family:'Noto Sans SC','Microsoft YaHei','Segoe UI',sans-serif;font-size:17px;line-height:1.78;color:var(--ink);font-weight:400}
+a{color:var(--blue);text-underline-offset:3px;text-decoration-thickness:1px}a:hover{color:#0a3b5c;text-decoration-thickness:2px}
+.topbar{height:61px;background:#fafcfd;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:0 max(24px,calc((100vw - 1230px)/2));gap:24px}
+.brand{font-size:16px;font-weight:600;color:var(--heading);white-space:nowrap}.brand span{font-weight:400;color:#5b6975;margin-left:17px;font-size:14px}.files{display:flex;gap:22px;font-size:14px;white-space:nowrap}.files a{text-decoration:none}
+.layout{max-width:1230px;margin:0 auto;display:grid;grid-template-columns:240px minmax(0,1fr);gap:28px;padding:28px 24px 65px}
+.sidebar{position:sticky;top:86px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;padding:2px 11px 24px 0;scrollbar-width:thin}
+.toc-title{font-size:13px;color:#526474;letter-spacing:.08em;margin:0 0 13px 10px;font-weight:600}
+.toc a{display:block;line-height:1.6;text-decoration:none;border-left:2px solid transparent;border-radius:0 3px 3px 0;padding:5px 8px 5px 11px;color:#445766;font-size:13px}
+.toc a.group{font-weight:600;color:#203f55;font-size:14px;margin-top:15px}.toc a.group:first-child{margin-top:0}.toc a.topic{padding-left:20px}.toc a:hover{background:#e5edf3}.toc a.active{color:#104d77;background:#e2ecf3;border-left-color:#2b688e;font-weight:600}
+main{min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:36px 42px 42px;box-shadow:0 2px 7px #1f405006}
+h1,h2,h3,h4{color:var(--heading);line-height:1.45;font-weight:600;scroll-margin-top:85px}h1{font-size:32px;margin:0 0 8px}h2{font-size:25px;margin:48px 0 21px;padding-top:30px;border-top:1px solid var(--line)}h2:first-of-type{margin-top:30px;padding-top:0;border-top:0}h3{font-size:20px;margin:34px 0 13px}h4{font-size:17px;margin:25px 0 12px;color:#253f52}
+p{margin:13px 0 17px}.subtitle{font-size:14px;color:#526878;margin:0 0 24px}strong{font-weight:600}li{margin:5px 0}main p,main li,main h2,main h3,main h4{overflow-wrap:anywhere}
+code{font-family:Consolas,'Cascadia Code','Noto Sans SC',monospace;font-size:.89em;color:#213f55;background:#eef3f6;padding:1px 4px;border-radius:3px}
+pre{background:#f6f8fa;border:1px solid #d9e2e8;border-radius:3px;padding:16px 18px;margin:17px 0 21px;overflow-x:auto;tab-size:4;font-family:Consolas,'Cascadia Code','Noto Sans SC',monospace;font-size:15px;line-height:1.6;color:#172d3c}
+pre code{font:inherit;color:inherit;background:transparent;padding:0;border-radius:0;white-space:pre}.keyword{color:#135aa0;font-weight:500}.type{color:#255d61}.comment{color:#526776}.number{color:#884920}.string{color:#8b3d21}
+.table-wrap{overflow-x:auto;margin:18px 0 24px}table{border-collapse:collapse;width:100%;font-size:15px;line-height:1.65}th,td{border:1px solid #cfdae2;padding:10px 12px;vertical-align:top;text-align:left}th{background:#eef3f7;color:#28485e;font-weight:600}tr:nth-child(even) td{background:#fbfcfd}td:first-child{min-width:122px}td code{font-size:.91em;background:transparent;padding:0}td p{margin:0}
+.mobile-toc{display:none}.page-foot{font-size:13px;color:#526878;border-top:1px solid var(--line);padding-top:18px;margin-top:35px}
+:focus-visible{outline:2px solid #397caa;outline-offset:3px}::selection{background:#cde3f3;color:#142d40}
+@media(min-width:1600px){.layout{max-width:1310px;grid-template-columns:250px minmax(0,1fr);gap:36px}main{padding-left:50px;padding-right:50px}.topbar{padding-left:max(24px,calc((100vw - 1260px)/2));padding-right:max(24px,calc((100vw - 1260px)/2))}}
+@media(max-width:1090px){.layout{grid-template-columns:204px minmax(0,1fr);gap:20px;padding:22px 18px}main{padding:30px 28px}.toc a{font-size:12px}.toc a.group{font-size:13px}pre{font-size:14px;padding:14px 15px}}
+@media(max-width:860px){.topbar{height:55px;padding:0 17px}.brand span{display:none}.files{gap:16px;font-size:13px}.layout{display:block;padding:17px 12px 35px}.sidebar{display:none}main{padding:26px 24px;font-size:16px}.mobile-toc{display:block;margin-bottom:17px;border:1px solid var(--line);background:white;padding:10px 15px}.mobile-toc summary{color:#244a65;font-size:15px;cursor:pointer;font-weight:600}.mobile-toc nav{max-height:55vh;overflow:auto;margin-top:12px}h1{font-size:29px}h2{font-size:23px}h3{font-size:19px}table{font-size:14px}pre{font-size:13px}}
+@media print{.topbar,.sidebar,.mobile-toc{display:none}.layout{display:block;max-width:none;margin:0;padding:0}main{border:0;box-shadow:none;padding:0}body{background:white;color:black;font-size:10.5pt;line-height:1.65}h1{font-size:22pt}h2{font-size:16pt}h3{font-size:13pt}h1,h2,h3,h4{break-after:avoid}pre{white-space:pre-wrap;overflow:visible;break-inside:avoid;font-size:8.5pt}pre code{white-space:pre-wrap}table{font-size:9pt}a{color:inherit}.table-wrap{overflow:visible}}
+</style></head><body><header class="topbar"><div class="brand">第二算法 · 实战与实现<span>区间上的取舍</span></div><nav class="files" aria-label="文件"><a href="区间上的取舍.md">Markdown</a><a href="区间上的取舍.cpp">C++ 源码</a></nav></header><div class="layout"><aside class="sidebar"><div class="toc-title">问题与实现目录</div><nav class="toc" aria-label="问题与实现目录"><a class="group" href="#先决定保留什么-再决定怎样排序">先决定保留什么，再决定怎样排序</a><a class="group" href="#相接的两个端点-是否冲突">相接的两个端点，是否冲突</a><a class="topic" href="#q000027-怎样把端点和结果组成有名字的值">Q000027 · 怎样把端点和结果组成有名字的值</a><a class="group" href="#只关心覆盖位置-一个还没有封口的并集">只关心覆盖位置：一个还没有封口的并集</a><a class="group" href="#为什么只需看最后一段">为什么只需看最后一段</a><a class="topic" href="#q000028-vector的元素-大小和预留空间有什么区别">Q000028 · vector的元素、大小和预留空间有什么区别</a><a class="topic" href="#q000029-参数按值和const引用-怎样影响修改与寿命">Q000029 · 参数按值和const引用，怎样影响修改与寿命</a><a class="topic" href="#q000030-迭代器为何把范围写成左闭右开">Q000030 · 迭代器为何把范围写成左闭右开</a><a class="topic" href="#q000031-排序比较器怎样表达顺序-而不制造错误">Q000031 · 排序比较器怎样表达顺序，而不制造错误</a><a class="topic" href="#q000032-先确定运算类型-再计算长度和总量">Q000032 · 先确定运算类型，再计算长度和总量</a><a class="group" href="#输入已经整理好-就利用已有结构">输入已经整理好，就利用已有结构</a><a class="group" href="#保留身份时-怎样判断包含关系">保留身份时，怎样判断包含关系</a><a class="topic" href="#q000033-pair-auto和类型别名怎样表达一份状态">Q000033 · pair、auto和类型别名怎样表达一份状态</a><a class="group" href="#所有请求都保留-只在端点更新占用">所有请求都保留：只在端点更新占用</a><a class="group" href="#同一坐标的事件-先加还是先减">同一坐标的事件，先加还是先减</a><a class="group" href="#从峰值数值-走到一份实际房间安排">从峰值数值，走到一份实际房间安排</a><a class="group" href="#为什么新开的每一个房间都不可避免">为什么新开的每一个房间都不可避免</a><a class="group" href="#手写堆-真正修复父子关系">手写堆：真正修复父子关系</a><a class="topic" href="#q000034-class怎样守住一份结构的不变量">Q000034 · class怎样守住一份结构的不变量</a><a class="group" href="#标准设施替换了哪一层">标准设施替换了哪一层</a><a class="topic" href="#q000035-priority-queue的比较方向-top与pop怎样配合">Q000035 · priority_queue的比较方向、top与pop怎样配合</a><a class="topic" href="#q000036-堆算法为何还需要push-back和pop-back">Q000036 · 堆算法为何还需要push_back和pop_back</a><a class="group" href="#只保留一部分-最早结束的请求先选">只保留一部分：最早结束的请求先选</a><a class="group" href="#交换证明真正需要保住什么">交换证明真正需要保住什么</a><a class="group" href="#用点命中每一段-为什么也看右端">用点命中每一段，为什么也看右端</a><a class="group" href="#用片段覆盖整段目标-要改成最远推进">用片段覆盖整段目标，要改成最远推进</a><a class="group" href="#一轮内全部看完候选-才提交选择">一轮内全部看完候选，才提交选择</a><a class="group" href="#固定k个资源-为什么不能继续只取最早释放">固定k个资源，为什么不能继续只取最早释放</a><a class="group" href="#把整个后续安排换过去-才完成多资源证明">把整个后续安排换过去，才完成多资源证明</a><a class="topic" href="#q000037-lower-bound与upper-bound怎样给出查询边界">Q000037 · lower_bound与upper_bound怎样给出查询边界</a><a class="topic" href="#q000038-multiset怎样保留重复状态并只删除一个">Q000038 · multiset怎样保留重复状态并只删除一个</a><a class="group" href="#数量换成收益-为什么必须保存多个最优前缀">数量换成收益：为什么必须保存多个最优前缀</a><a class="group" href="#为什么只剩取与不取两类-而不是遗漏其他安排">为什么只剩取与不取两类，而不是遗漏其他安排</a><a class="group" href="#前驱长度-既可以手写边界-也可以用标准算法">前驱长度，既可以手写边界，也可以用标准算法</a><a class="group" href="#表里存值-沿决定恢复一份计划">表里存值，沿决定恢复一份计划</a><a class="group" href="#再限制总项数-k个名额不是k个资源">再限制总项数：k个名额不是k个资源</a><a class="group" href="#反复问一个点-保留最短的仍有效候选">反复问一个点：保留最短的仍有效候选</a><a class="group" href="#为什么只清理堆顶-不清理整个堆">为什么只清理堆顶，不清理整个堆</a><a class="group" href="#回查-目标改变后-哪些信息必须留下">回查：目标改变后，哪些信息必须留下</a><a class="group" href="#取出作答时-保留原题入口和合同">取出作答时，保留原题入口和合同</a><a class="topic" href="#q000039-怎样把参考函数组成真实的平台提交">Q000039 · 怎样把参考函数组成真实的平台提交</a></nav></aside><div><details class="mobile-toc"><summary>问题与实现目录</summary><nav class="toc"><a class="group" href="#先决定保留什么-再决定怎样排序">先决定保留什么，再决定怎样排序</a><a class="group" href="#相接的两个端点-是否冲突">相接的两个端点，是否冲突</a><a class="topic" href="#q000027-怎样把端点和结果组成有名字的值">Q000027 · 怎样把端点和结果组成有名字的值</a><a class="group" href="#只关心覆盖位置-一个还没有封口的并集">只关心覆盖位置：一个还没有封口的并集</a><a class="group" href="#为什么只需看最后一段">为什么只需看最后一段</a><a class="topic" href="#q000028-vector的元素-大小和预留空间有什么区别">Q000028 · vector的元素、大小和预留空间有什么区别</a><a class="topic" href="#q000029-参数按值和const引用-怎样影响修改与寿命">Q000029 · 参数按值和const引用，怎样影响修改与寿命</a><a class="topic" href="#q000030-迭代器为何把范围写成左闭右开">Q000030 · 迭代器为何把范围写成左闭右开</a><a class="topic" href="#q000031-排序比较器怎样表达顺序-而不制造错误">Q000031 · 排序比较器怎样表达顺序，而不制造错误</a><a class="topic" href="#q000032-先确定运算类型-再计算长度和总量">Q000032 · 先确定运算类型，再计算长度和总量</a><a class="group" href="#输入已经整理好-就利用已有结构">输入已经整理好，就利用已有结构</a><a class="group" href="#保留身份时-怎样判断包含关系">保留身份时，怎样判断包含关系</a><a class="topic" href="#q000033-pair-auto和类型别名怎样表达一份状态">Q000033 · pair、auto和类型别名怎样表达一份状态</a><a class="group" href="#所有请求都保留-只在端点更新占用">所有请求都保留：只在端点更新占用</a><a class="group" href="#同一坐标的事件-先加还是先减">同一坐标的事件，先加还是先减</a><a class="group" href="#从峰值数值-走到一份实际房间安排">从峰值数值，走到一份实际房间安排</a><a class="group" href="#为什么新开的每一个房间都不可避免">为什么新开的每一个房间都不可避免</a><a class="group" href="#手写堆-真正修复父子关系">手写堆：真正修复父子关系</a><a class="topic" href="#q000034-class怎样守住一份结构的不变量">Q000034 · class怎样守住一份结构的不变量</a><a class="group" href="#标准设施替换了哪一层">标准设施替换了哪一层</a><a class="topic" href="#q000035-priority-queue的比较方向-top与pop怎样配合">Q000035 · priority_queue的比较方向、top与pop怎样配合</a><a class="topic" href="#q000036-堆算法为何还需要push-back和pop-back">Q000036 · 堆算法为何还需要push_back和pop_back</a><a class="group" href="#只保留一部分-最早结束的请求先选">只保留一部分：最早结束的请求先选</a><a class="group" href="#交换证明真正需要保住什么">交换证明真正需要保住什么</a><a class="group" href="#用点命中每一段-为什么也看右端">用点命中每一段，为什么也看右端</a><a class="group" href="#用片段覆盖整段目标-要改成最远推进">用片段覆盖整段目标，要改成最远推进</a><a class="group" href="#一轮内全部看完候选-才提交选择">一轮内全部看完候选，才提交选择</a><a class="group" href="#固定k个资源-为什么不能继续只取最早释放">固定k个资源，为什么不能继续只取最早释放</a><a class="group" href="#把整个后续安排换过去-才完成多资源证明">把整个后续安排换过去，才完成多资源证明</a><a class="topic" href="#q000037-lower-bound与upper-bound怎样给出查询边界">Q000037 · lower_bound与upper_bound怎样给出查询边界</a><a class="topic" href="#q000038-multiset怎样保留重复状态并只删除一个">Q000038 · multiset怎样保留重复状态并只删除一个</a><a class="group" href="#数量换成收益-为什么必须保存多个最优前缀">数量换成收益：为什么必须保存多个最优前缀</a><a class="group" href="#为什么只剩取与不取两类-而不是遗漏其他安排">为什么只剩取与不取两类，而不是遗漏其他安排</a><a class="group" href="#前驱长度-既可以手写边界-也可以用标准算法">前驱长度，既可以手写边界，也可以用标准算法</a><a class="group" href="#表里存值-沿决定恢复一份计划">表里存值，沿决定恢复一份计划</a><a class="group" href="#再限制总项数-k个名额不是k个资源">再限制总项数：k个名额不是k个资源</a><a class="group" href="#反复问一个点-保留最短的仍有效候选">反复问一个点：保留最短的仍有效候选</a><a class="group" href="#为什么只清理堆顶-不清理整个堆">为什么只清理堆顶，不清理整个堆</a><a class="group" href="#回查-目标改变后-哪些信息必须留下">回查：目标改变后，哪些信息必须留下</a><a class="group" href="#取出作答时-保留原题入口和合同">取出作答时，保留原题入口和合同</a><a class="topic" href="#q000039-怎样把参考函数组成真实的平台提交">Q000039 · 怎样把参考函数组成真实的平台提交</a></nav></details><main><h1 id="区间上的取舍-覆盖-冲突与收益">区间上的取舍：覆盖、冲突与收益</h1>
+<p><a id="chapter-entry"></a></p>
+<h2 id="先决定保留什么-再决定怎样排序">先决定保留什么，再决定怎样排序</h2>
+<p>两份日程都写着起点和终点，你却可能在回答完全不同的问题：合并忙碌时间，要保留的是覆盖位置；安排所有住客，要保留每个请求；只看尽可能多场电影，可以舍弃请求；项目各有收益，则“多选一个”未必更好。端点对只是表示，不能替你决定目标。</p>
+<p>本章面向已经能读循环、理解数组和基本复杂度，但还不熟悉C++容器与算法接口的读者。我们从具体任务建立需要保存的信息，在同一条推理旁边读实现。第一次遇到的C++知识用Q编号主讲；后续引用可以返回原处，算法的新理由仍在当前位置讲清。</p>
+<p>行进路线分成四步：先把覆盖位置整理成有序并集；再让所有请求同时存在，计算峰值并构造资源分配；然后限制资源，在数量、命中、连续覆盖和收益之间选择方法；最后把已经会用的候选堆用于离线点查询。读完后，应能说出为什么某个状态足够、哪个条件改变会使它不够，以及该换哪种状态。</p>
+<p>本章处理预先取得的静态一维区间。任意在线取消、逐区间包含计数、不同资格的资源、多资源加权收益等问题会改变需要维护的信息，章末会标出边界。</p>
+<p><a id="endpoint-model"></a></p>
+<h2 id="相接的两个端点-是否冲突">相接的两个端点，是否冲突</h2>
+<p>先比较 <code>[1,2]</code> 与 <code>[2,3]</code>：</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>任务如何解释端点</th>
+<th>时刻2发生什么</th>
+<th>同一资源能否连续接受</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>半开占用 <code>[start,end)</code></td>
+<td>前者已结束，后者刚开始</td>
+<td>可以，条件是前者 <code>end &lt;=</code> 后者 <code>start</code></td>
+</tr>
+<tr>
+<td>闭占用 <code>[start,end]</code></td>
+<td>两者都占用时刻2</td>
+<td>不可以，条件必须是前者 <code>end &lt;</code> 后者 <code>start</code></td>
+</tr>
+</tbody></table></div>
+<p><a href="https://cses.fi/problemset/task/1629/" target="_blank" rel="noopener noreferrer">Movie Festival</a>允许结束后立即观看下一场；<a href="https://cses.fi/problemset/task/1164/" target="_blank" rel="noopener noreferrer">Room Allocation</a>按整天入住，前一人离店日必须严格早于后一人入住日。<a href="https://cses.fi/problemset/task/1140/" target="_blank" rel="noopener noreferrer">Projects</a>也按整天占用。不能把“区间通常写成方括号”当作题目的真实政策。<a href="https://leetcode.com/problems/non-overlapping-intervals/" target="_blank" rel="noopener noreferrer">LC435</a>甚至明确约定只接触一个端点不算冲突。</p>
+<p>还要区分两种长度。连续线段 <code>[3,3]</code> 的长度为0；它包含一个整数3，因此整数点数为1。闭区间允许这样的单点或单日请求；半开活动必须满足 <code>start &lt; end</code>，本章不把空半开区间当作需要资源的活动。</p>
+<p>下面的类型保存端点、负载和收益。返回的 <code>chosen</code> 是原输入的0基下标；<code>room_for</code> 按原输入顺序给出从1开始的房号。我们用一个明确的端点政策，使兼容关系贯穿分配、选择与加权计划。</p>
+<pre class="cpp"><code>enum <span class="keyword">class</span> EndpointPolicy { HalfOpen, Closed };
+struct Interval { <span class="type">long</span> <span class="type">long</span> start, end; };
+struct LoadInterval { <span class="type">long</span> <span class="type">long</span> start, end, load; };
+struct Job { <span class="type">long</span> <span class="type">long</span> start, end, reward; };
+struct Allocation { <span class="type">int</span> rooms; std::vector&lt;<span class="type">int</span>&gt; room_for; };
+struct CoverResult { <span class="type">bool</span> possible; std::vector&lt;<span class="type">int</span>&gt; chosen; };
+struct Plan { <span class="type">long</span> <span class="type">long</span> reward; std::vector&lt;<span class="type">int</span>&gt; chosen; };
+struct Containment { std::vector&lt;<span class="type">int</span>&gt; contains, contained; };</code></pre>
+<p><a id="q000027"></a></p>
+<h3 id="q000027-怎样把端点和结果组成有名字的值">Q000027 · 怎样把端点和结果组成有名字的值</h3>
+<p><code>struct Interval { long long start, end; };</code> 定义一种有两个成员的类型。<code>Interval{1, 4}</code> 按成员声明顺序初始化出一个值；<code>range.start</code> 取其起点。把它写进 <code>std::vector&lt;Interval&gt;</code>，每个元素就是一份区间值，不再靠“第0列一定是起点”的默契。这里的简单结构没有用户自定义构造函数，可以采用这种聚合初始化。</p>
+<p><code>Allocation{rooms, room_for}</code> 把房数与分配数组一起返回；<code>CoverResult{false, {}}</code> 把“无解”和空方案组合成一个清楚的结果。布尔状态与方案内容各有意义，调用者不能仅看空数组判断失败，因为有些任务的空输入本来就有空答案。</p>
+<p><code>enum class EndpointPolicy { HalfOpen, Closed };</code> 定义一个独立类型。调用时写 <code>EndpointPolicy::Closed</code>，避免把记不住含义的 <code>true</code> 当作公共政策。它不会自动替算法选择比较符号，后面的兼容函数才落实这条规则。代码置于 <code>interval_decisions</code> 命名空间中；外部可写 <code>interval_decisions::Interval</code> 明确名字来自哪里。C++17规则参见WG21公开草案<a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4659.pdf" target="_blank" rel="noopener noreferrer">N4659，聚合初始化与枚举声明</a>。</p>
+<p><a id="coverage-cluster"></a></p>
+<h2 id="只关心覆盖位置-一个还没有封口的并集">只关心覆盖位置：一个还没有封口的并集</h2>
+<p><a href="https://leetcode.com/problems/merge-intervals/" target="_blank" rel="noopener noreferrer">LC56</a>要求把所有有重叠的闭区间合并。<code>[1,4]</code> 和 <code>[4,5]</code> 共享点4，应得到 <code>[1,5]</code>；<code>[1,4]</code> 和 <code>[5,6]</code> 之间却有连续实数空隙，不能因为端点是整数就合成一段。</p>
+<p>最直接的做法是逐点标记，但端点很大时，坐标跨度和区间数量完全不是一回事。我们真正需要处理的是端点改变覆盖的地方。</p>
+<p><a id="merge-frontier-proof"></a></p>
+<h2 id="为什么只需看最后一段">为什么只需看最后一段</h2>
+<p>按起点升序排列。扫描时，结果中除了最后一段以外，其余段都已封口：它们与后面的输入之间已经出现空隙。以后输入的起点只会更靠右，不可能再回来填上那个空隙。最后一段保存当前连通覆盖的起点和最远右端。</p>
+<p>读入下一段 <code>[s,e]</code> 时只有两种情况：</p>
+<ul>
+<li><code>s</code> 大于最后一段的右端：空隙出现，原来最后一段可以封口，把当前段作为新的未封口部分。</li>
+<li><code>s</code> 不大于最后一段的右端：两段相接或重叠，左边界已经最小，只需把右端更新为两者的较大值。</li>
+</ul>
+<p>这不是“与前一个原始区间重叠就合并”。输入 <code>[1,10]、[2,3]、[9,12]</code> 中，第三段与第二段不重叠，却与尚未封口的并集 <code>[1,10]</code> 重叠。状态必须保存累计右端，不能只保存上一次读到的右端。</p>
+<p>每段只处理一次；代价主要是排序，为 <code>O(n log n)</code>，扫描为 <code>O(n)</code>。结果最多有n段。函数按值接收输入，因此排序的是自己的副本，调用者原来的次序保留。</p>
+<pre class="cpp"><code>std::vector&lt;Interval&gt; merge_closed(std::vector&lt;Interval&gt; ranges) {
+    std::sort(ranges.begin(), ranges.end(), [](<span class="keyword">const</span> Interval&amp; a, <span class="keyword">const</span> Interval&amp; b) {
+        <span class="keyword">if</span> (a.start != b.start) <span class="keyword">return</span> a.start &lt; b.start;
+        <span class="keyword">return</span> a.end &lt; b.end;
+    });
+    std::vector&lt;Interval&gt; result;
+    <span class="keyword">for</span> (<span class="keyword">const</span> Interval&amp; current : ranges) {
+        <span class="keyword">if</span> (result.empty() || result.back().end &lt; current.start)
+            result.push_back(current);
+        <span class="keyword">else</span>
+            result.back().end = std::max(result.back().end, current.end);
+    }
+    <span class="keyword">return</span> result;
+}</code></pre>
+<p>这里的标准设施是 <code>std::sort</code>、<code>std::vector</code> 和取较大边界的 <code>std::max</code>；合并的状态与判断仍由我们写。<code>std::set_union</code> 合并的是已经排序的元素序列，不能把“两个端点值属于集合”解释成“两个时间区间的几何并集”。</p>
+<p><a id="q000028"></a></p>
+<h3 id="q000028-vector的元素-大小和预留空间有什么区别">Q000028 · vector的元素、大小和预留空间有什么区别</h3>
+<p><code>std::vector&lt;T&gt;</code> 保存一段连续的T元素。<code>size()</code> 是已存在的元素数，合法下标为 <code>0</code> 到 <code>size()-1</code>；<code>capacity()</code> 是不重新分配存储可容纳的元素总数，额外还能追加的是 <code>capacity()-size()</code>。<code>reserve(n)</code> 只预留容量，不创建或移除元素：原本空的vector调用后仍为空，不能直接写 <code>v[0]</code>；原本已有的元素则仍然存在。需要创建n个初始为0的整数时，用 <code>std::vector&lt;int&gt; v(n, 0)</code>；需要逐个追加时，用 <code>push_back(value)</code>。</p>
+<p>两个本章这样使用默认分配器的vector，可以用成员 <code>a.swap(b)</code> 交换各自持有的序列，操作为常数时间，不是逐个复制元素。后面的滚动DP据此让上一层和当前层交换角色；交换后名字a、b所指的两份序列已经互换，不能继续按交换前的角色理解。</p>
+<p><code>empty()</code> 判断有没有元素；<code>back()</code> 取最后一个元素，调用前必须非空。表达式 <code>result.empty() || ... result.back() ...</code> 利用 <code>||</code> 从左到右的短路：左边已为真时不会求右边，从而不访问空容器。<code>operator[]</code> 不做越界检查；它适合已经由循环边界和算法不变量证明合法的位置，不能把一次运行没有崩溃当作下标正确。</p>
+<p><code>size()</code> 返回无符号的大小类型。空vector的 <code>size()-1</code> 不是−1，而是无符号回绕后的大数。需要倒序时，可以先把已证明处于目标int可表示范围的大小转换为 <code>int</code>，再从 <code>n-1</code> 开始；或使用不会先减空大小的循环形式。这里的规模保证是转换成立的原因，不能推广为任意大容器都可转成int。</p>
+<p><a id="q000029"></a></p>
+<h3 id="q000029-参数按值和const引用-怎样影响修改与寿命">Q000029 · 参数按值和const引用，怎样影响修改与寿命</h3>
+<p>参数 <code>std::vector&lt;Interval&gt; ranges</code> 是函数拥有的局部vector。传入一个普通变量会复制元素；函数可以重排这份副本。参数 <code>const std::vector&lt;Interval&gt;&amp; ranges</code> 借用调用者的vector，省掉整份复制；<code>const</code> 禁止通过该引用修改元素。它不表示整个程序里永远没有别的途径修改那个对象。</p>
+<p><code>for (const auto&amp; range : ranges)</code> 逐个借用元素用于读取，避免每次复制。若写成 <code>auto range</code>，则每次得到元素副本；修改副本不会修改原数组。需要独立保存一个值时复制反而正合适，例如先复制堆顶、再删除堆顶。</p>
+<p>借用不能超过被借用对象的寿命。尤其不能返回指向函数局部vector元素的引用。vector因增长而重新分配后，原来指向元素的引用、指针和迭代器都会失效；即使没有重新分配，插入和删除也可能使操作位置及其后的位置失效。代码因此不在保存元素引用的同时追加到同一个vector；需要跨操作保留的信息用值或原id保存。本章返回vector和结果结构本身，调用者得到自己的值，不依赖已经销毁的局部存储。</p>
+<p><a id="q000030"></a></p>
+<h3 id="q000030-迭代器为何把范围写成左闭右开">Q000030 · 迭代器为何把范围写成左闭右开</h3>
+<p><code>v.begin()</code> 指向第一个元素，<code>v.end()</code> 指向最后一个元素之后的位置。<code>[first,last)</code> 包含first、不包含last；空范围正好有 <code>first == last</code>。end可以用于比较和表示边界，不能用 <code>*end</code> 读取元素。</p>
+<p>vector迭代器支持随机访问：<code>begin()+i</code> 定位到下标i，两个同一vector的迭代器相减得到距离。因此 <code>sort(v.begin(),v.end())</code> 恰好处理全部元素。后面二分返回end时，可以用差值取得“所有元素都在边界之前”的数量，不能先解引用它。</p>
+<p><code>++it</code>、<code>--it</code> 移动一个元素位置；<code>--begin()</code> 同样不合法。有序集合的迭代器是双向的，支持前后走一步，却不支持 <code>it+5</code> 或 <code>it1-it2</code>。这会影响通用二分算法的实际移动代价，见后面的 <a href="区间上的取舍.html#q000037">Q000037 · lower_bound与upper_bound怎样给出查询边界</a>。<code>std::reverse(first,last)</code> 则交换范围两端并向中间推进，反转元素次序；它修改范围内的值，不是产生一份新的容器。</p>
+<p><a id="q000031"></a></p>
+<h3 id="q000031-排序比较器怎样表达顺序-而不制造错误">Q000031 · 排序比较器怎样表达顺序，而不制造错误</h3>
+<p><code>std::sort(first,last,comp)</code> 用 <code>comp(a,b)</code> 回答“a是否严格排在b之前”。本章常用lambda写一个就近的比较函数：<code>[](const Interval&amp; a, const Interval&amp; b) { return a.start &lt; b.start; }</code>。<code>[]</code> 表示不捕获外部变量；事件比较器中的 <code>[policy]</code> 按值保存这一政策，函数体可以读取这份副本。参数用const引用读取，见 <a href="区间上的取舍.html#q000029">Q000029 · 参数按值和const引用，怎样影响修改与寿命</a>；写成 <code>const auto&amp;</code> 的泛型lambda让编译器从传入元素推导参数类型，本章仍然比较同一种事件值。</p>
+<p>比较器必须形成严格弱序：对象不能严格小于自己；前后关系应可传递；被比较器视为等价的关系也应可传递。把 <code>&lt;</code> 写成 <code>&lt;=</code> 会让相等对象也“小于自己”，违背要求。若要“起点升序，同起点终点降序”，应先比较起点，不同时返回起点比较；相同才返回终点的反向比较。两项完全相同可以互不排在对方前面。</p>
+<p>不要写 <code>a.start-b.start &lt; 0</code>。减法可能先溢出，直接比较不需要承担这种风险。<code>sort</code> 不保证比较器等价元素保持原顺序；只有确实需要稳定性时才用 <code>stable_sort</code>。本章多解允许任意合法顺序的地方，不靠偶然排序次序制造唯一答案。<a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4659.pdf" target="_blank" rel="noopener noreferrer">C++17草案的排序要求</a>见 <code>[alg.sorting]</code> 与 <code>[sort]</code>。</p>
+<p><a id="q000032"></a></p>
+<h3 id="q000032-先确定运算类型-再计算长度和总量">Q000032 · 先确定运算类型，再计算长度和总量</h3>
+<p>存到 <code>long long</code> 不会让已经发生的int运算自动变宽。若a、b是int，<code>long long x = a+b;</code> 先以int相加，再转换结果；需要在运算前写 <code>static_cast&lt;long long&gt;(a)+b</code> 或 <code>1LL*a</code>。本章把端点、负载和收益本身存成long long，使后续差值与累计在该类型里进行。</p>
+<p>本章面向这些题站通常提供的int至少32位、long long至少64位的环境。C++17并不保证int一定为32位；它的最低范围只有16位，不能在那样的实现上仍把200000个下标装进int。</p>
+<p>参考接口通常限定端点绝对值不超过 <code>10^9</code>，区间或查询不超过200000，单项负载和收益不超过 <code>10^9</code>。所以连续跨度最多 <code>2×10^9</code>，闭整数区间点数最多 <code>2×10^9+1</code>，累计负载或收益最多 <code>2×10^14</code>，均在至少64位的long long范围内。房数与原id不超过200000，在目标环境中可用int。两个原题例外另有清楚上界：LC452允许完整32位有符号端点，<code>stabbing_points</code> 只比较和保存提升为long long的端点，没有对两个32位极端值做减法；LC1751按n与预算的乘积限制规模，项目数可超过200000，具体数值推导在预算选择一节。不能用统一的便利界限缩小原题合同。</p>
+<p><code>static_cast&lt;int&gt;(value)</code> 明确请求转换，不证明数值一定可表示。LC1235最多50000个项目、单项收益最多10000，总收益不超过 <code>5×10^8</code>，所以它的入口可以把核心long long结果转回int；CSES Projects的收益上界则为 <code>2×10^14</code>，应保留long long。两种平台签名不同，不能仅因都叫“项目选择”复制转换。</p>
+<p><code>std::max(a,b)</code> 与 <code>std::min(a,b)</code> 根据比较返回两者之一；用于更新 <code>end = std::max(end, next.end)</code> 时，读取比较结果并赋回端点。它们不会改变两个实参。不同整数类型混用可能使模板推导失败，也可能在别处触发有符号/无符号转换；统一表达式类型比事后强转结果更清楚。有符号溢出不是可依赖的回绕算法。</p>
+<p><a id="insert-reuse"></a></p>
+<h2 id="输入已经整理好-就利用已有结构">输入已经整理好，就利用已有结构</h2>
+<p><a href="https://leetcode.com/problems/insert-interval/" target="_blank" rel="noopener noreferrer">LC57</a>的既有区间已经按起点排序，彼此没有公共点。加入一段 <code>[s,e]</code> 后，不需要把所有区间重新排序。</p>
+<p>先复制右端严格小于s的那些段；它们完全在新段左边。然后连续读取与正在扩展的新段相接的区间，更新两端，直到下一段起点大于当前右端。把扩展后的新段加入结果，最后复制右侧其余区间。三段处理顺序对应三个连续的输入区域，总共只扫一遍，为 <code>O(n)</code>。</p>
+<pre class="cpp"><code>std::vector&lt;Interval&gt; insert_closed(<span class="keyword">const</span> std::vector&lt;Interval&gt;&amp; disjoint, Interval added) {
+    std::vector&lt;Interval&gt; result;
+    <span class="type">int</span> i = <span class="number">0</span>, n = static_cast&lt;<span class="type">int</span>&gt;(disjoint.size());
+    <span class="keyword">while</span> (i &lt; n &amp;&amp; disjoint[i].end &lt; added.start) result.push_back(disjoint[i++]);
+    <span class="keyword">while</span> (i &lt; n &amp;&amp; disjoint[i].start &lt;= added.end) {
+        added.start = std::min(added.start, disjoint[i].start);
+        added.end = std::max(added.end, disjoint[i].end);
+        ++i;
+    }
+    result.push_back(added);
+    <span class="keyword">while</span> (i &lt; n) result.push_back(disjoint[i++]);
+    <span class="keyword">return</span> result;
+}</code></pre>
+<p>已有的互斥性是这个算法能只合成一个中间区间的理由。如果既有输入内部本来还有重叠，直接套这个入口不一定得到规范并集，应先用上一节的完整整理。</p>
+<p>得到规范并集后，可以继续利用它，而不必重新对原区间做两两检查：</p>
+<ul>
+<li>连续覆盖长度：累加每段 <code>end-start</code>。若任务问整数点数，闭区间改为 <code>end-start+1</code>；这是不同的度量。</li>
+<li>点是否被覆盖：在并集里找最后一个起点不大于查询点的段，再检查查询点是否不大于该段右端。找不到这样的段即未覆盖。前驱的安全取得会在 <a href="区间上的取舍.html#q000037">Q000037 · lower_bound与upper_bound怎样给出查询边界</a>、<a href="区间上的取舍.html#q000038">Q000038 · multiset怎样保留重复状态并只删除一个</a> 讲清。</li>
+<li>哪些位置空闲：相邻并集段之间的空隙就是候选空闲段；给定查询窗口时还要裁剪窗口两端。连续闭区间 <code>[a,b]</code> 与 <code>[c,d]</code> 之间的空隙是开区间 <code>(b,c)</code>，不能把b和c也报为空闲。</li>
+<li>一段目标是否全部被覆盖：若起点落在某个规范并集段内，只需再检查该段右端能否达到目标终点。目标若跨过两个不同并集段，必然经过中间空隙。</li>
+</ul>
+<p>这些查询复用了并集已经完成的工作。它们不能回答“原来有几个人同时占用”，因为合并已经丢掉了重数。</p>
+<p><a id="containment"></a></p>
+<h2 id="保留身份时-怎样判断包含关系">保留身份时，怎样判断包含关系</h2>
+<p><a href="https://cses.fi/problemset/task/2168/" target="_blank" rel="noopener noreferrer">Nested Ranges Check</a>问的是每条原区间是否包含别的区间、是否被别的区间包含。答案必须回到原输入位置，不能先合并。</p>
+<p>将区间按起点升序、同起点按右端降序排列。当前段之前的所有段，起点都不晚于当前起点；因此当前是否被包含，只差“之前是否存在一个足够大的右端”。一个前缀最大右端就足够回答。相同起点时让长段排在前面，正是为了让它能包含后面的短段。</p>
+<p>反过来，从右往左扫描。当前之后的所有段起点都不早于当前起点；若后缀中最小右端不大于当前右端，就存在被当前段包含的区间。两遍扫描都不需要保存所有历史端点：存在性问题由一个极值概括即可。</p>
+<pre class="cpp"><code><span class="type">bool</span> compatible(<span class="type">long</span> <span class="type">long</span> end, <span class="type">long</span> <span class="type">long</span> start, EndpointPolicy policy) {
+    <span class="keyword">return</span> policy == EndpointPolicy::HalfOpen ? end &lt;= start : end &lt; start;
+}
+struct IndexedInterval { Interval range; <span class="type">int</span> id; };
+std::vector&lt;IndexedInterval&gt; indexed_ranges(<span class="keyword">const</span> std::vector&lt;Interval&gt;&amp; ranges) {
+    std::vector&lt;IndexedInterval&gt; result;
+    result.reserve(ranges.size());
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; static_cast&lt;<span class="type">int</span>&gt;(ranges.size()); ++i)
+        result.push_back({ranges[i], i});
+    <span class="keyword">return</span> result;
+}
+<span class="type">bool</span> by_start(<span class="keyword">const</span> IndexedInterval&amp; a, <span class="keyword">const</span> IndexedInterval&amp; b) {
+    <span class="keyword">if</span> (a.range.start != b.range.start) <span class="keyword">return</span> a.range.start &lt; b.range.start;
+    <span class="keyword">if</span> (a.range.end != b.range.end) <span class="keyword">return</span> a.range.end &gt; b.range.end;
+    <span class="keyword">return</span> a.id &lt; b.id;
+}
+<span class="type">bool</span> by_end(<span class="keyword">const</span> IndexedInterval&amp; a, <span class="keyword">const</span> IndexedInterval&amp; b) {
+    <span class="keyword">if</span> (a.range.end != b.range.end) <span class="keyword">return</span> a.range.end &lt; b.range.end;
+    <span class="keyword">if</span> (a.range.start != b.range.start) <span class="keyword">return</span> a.range.start &lt; b.range.start;
+    <span class="keyword">return</span> a.id &lt; b.id;
+}</code></pre>
+<p>这些小工具给区间补上原id、表达端点兼容，并建立按起点或终点的顺序。它们没有替我们决定应保存并集、极值还是候选集合。</p>
+<pre class="cpp"><code>Containment containment_flags(<span class="keyword">const</span> std::vector&lt;Interval&gt;&amp; ranges) {
+    <span class="keyword">auto</span> ordered = indexed_ranges(ranges);
+    std::sort(ordered.begin(), ordered.end(), by_start);
+    <span class="keyword">const</span> <span class="type">int</span> n = static_cast&lt;<span class="type">int</span>&gt;(ordered.size());
+    Containment result{std::vector&lt;<span class="type">int</span>&gt;(n, <span class="number">0</span>), std::vector&lt;<span class="type">int</span>&gt;(n, <span class="number">0</span>)};
+    <span class="keyword">if</span> (n == <span class="number">0</span>) <span class="keyword">return</span> result;
+    <span class="type">long</span> <span class="type">long</span> largest = ordered.front().range.end;
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; n; ++i) {
+        result.contained[ordered[i].id] = ordered[i].range.end &lt;= largest;
+        largest = std::max(largest, ordered[i].range.end);
+    }
+    <span class="type">long</span> <span class="type">long</span> smallest = ordered.back().range.end;
+    <span class="keyword">for</span> (<span class="type">int</span> i = n - <span class="number">2</span>; i &gt;= <span class="number">0</span>; --i) {
+        result.contains[ordered[i].id] = ordered[i].range.end &gt;= smallest;
+        smallest = std::min(smallest, ordered[i].range.end);
+    }
+    <span class="keyword">return</span> result;
+}</code></pre>
+<p>排序为 <code>O(n log n)</code>，两遍扫描为 <code>O(n)</code>，索引与输出需要 <code>O(n)</code> 空间。这里按原题保证，没有两条完全相同的区间。若允许完全重复，副本互相包含，按单条顺序扫描会让组内首尾得到不对称答案；应把相同端点分组处理，不能直接声称当前接口已支持。</p>
+<p>“有几个”又是新的问题。一个最大右端只能告诉你至少有一个，不知道有三个还是三十个。<a href="https://cses.fi/problemset/task/2169/" target="_blank" rel="noopener noreferrer">Nested Ranges Count</a>需要保留端点分布，可以进一步研究压缩坐标后的频数与秩查询；本章实现的是包含存在性。</p>
+<p><a id="q000033"></a></p>
+<h3 id="q000033-pair-auto和类型别名怎样表达一份状态">Q000033 · pair、auto和类型别名怎样表达一份状态</h3>
+<p><code>std::pair&lt;A,B&gt;</code> 把两个值放在一起，用 <code>.first</code> 和 <code>.second</code> 访问。默认比较是字典序：先比first，first等价才比second。堆里保存 <code>(释放时刻,房号)</code>，就能在时刻相同的情况下继续按房号比较；算法只要求找到一个最早释放房间，并不要求这种平局选择才正确。</p>
+<p><code>auto</code> 根据初始化表达式推导类型，不能据它判断是引用。<code>auto item = heap.top();</code> 得到一份值副本；<code>const auto&amp; item = heap.top();</code> 借用原元素，后面若删除堆顶，借用不能继续使用。跨越容器修改要保存哪些信息，仍遵守 <a href="区间上的取舍.html#q000029">Q000029 · 参数按值和const引用，怎样影响修改与寿命</a>。</p>
+<p><code>using Release = std::pair&lt;long long,int&gt;;</code> 为这个类型取一个别名，没有创建对象，也没有产生一种不同于pair的新类型。实际释放状态仍按pair的规则比较。离线查询中的 <code>Candidate</code> 则把“整数长度、右端点”两项组合，含义不同，所需字典序相同。</p>
+<p><a id="occupancy-cluster"></a></p>
+<h2 id="所有请求都保留-只在端点更新占用">所有请求都保留：只在端点更新占用</h2>
+<p><a href="https://cses.fi/problemset/task/1619/" target="_blank" rel="noopener noreferrer">Restaurant Customers</a>要求最大同时在场人数。每次进入令计数加1，每次离开减1；两个相邻事件之间没有任何变化，因此不需要访问中间的每个时刻。</p>
+<p>将所有事件按坐标排序，扫描累计量并记录最大值。它保留的是重数，故 <code>[1,5]</code> 与 <code>[2,4]</code> 不能预先合成一条 <code>[1,5]</code>。合并仍知道哪里有人，却不知道中间曾有两个人。</p>
+<p><a id="peak-endpoint-proof"></a></p>
+<h2 id="同一坐标的事件-先加还是先减">同一坐标的事件，先加还是先减</h2>
+<p>对闭占用，时刻x结束的请求与时刻x开始的请求同时在场：先加入开始量、记录峰值，再移除结束量。单点 <code>[x,x]</code> 也必须贡献一次占用。对半开占用，结束者已经释放：先减后加。若把闭区间同坐标的增减合成一个净变化再记录最大值，就可能把仅在这个点发生的峰值消掉。</p>
+<p>从单位人数换成带宽或乘客数，只需把增减量换成正负负载w，活动量仍是之前事件的累计和。<a href="https://leetcode.com/problems/car-pooling/" target="_blank" rel="noopener noreferrer">Car Pooling</a>规定同地点先下客后上客，应采用半开政策；计算峰值后，比较是否超过容量即可。带权负载必须全部接纳，和后面“选择哪些带收益项目”是不同目标。</p>
+<pre class="cpp"><code><span class="type">long</span> <span class="type">long</span> peak_load(<span class="keyword">const</span> std::vector&lt;LoadInterval&gt;&amp; ranges, EndpointPolicy policy) {
+    std::vector&lt;std::pair&lt;<span class="type">long</span> <span class="type">long</span>, <span class="type">long</span> <span class="type">long</span>&gt;&gt; events;
+    events.reserve(<span class="number">2</span> * ranges.size());
+    <span class="keyword">for</span> (<span class="keyword">const</span> LoadInterval&amp; range : ranges) {
+        events.push_back({range.start, range.load});
+        events.push_back({range.end, -range.load});
+    }
+    std::sort(events.begin(), events.end(), [policy](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; a, <span class="keyword">const</span> <span class="keyword">auto</span>&amp; b) {
+        <span class="keyword">if</span> (a.first != b.first) <span class="keyword">return</span> a.first &lt; b.first;
+        <span class="keyword">return</span> policy == EndpointPolicy::Closed ? a.second &gt; b.second : a.second &lt; b.second;
+    });
+    <span class="type">long</span> <span class="type">long</span> current = <span class="number">0</span>, peak = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; event : events) {
+        current += event.second;
+        peak = std::max(peak, current);
+    }
+    <span class="keyword">return</span> peak;
+}</code></pre>
+<p>总共2n个事件，时间 <code>O(n log n)</code>、额外空间 <code>O(n)</code>。负载与累计类型见 <a href="区间上的取舍.html#q000032">Q000032 · 先确定运算类型，再计算长度和总量</a>。原Restaurant Customers保证所有到离时间互不相同，所以其样例不能替我们检验重复端点政策；重复端点由上面的占用模型决定。</p>
+<p>如果只需单位峰值，还可以分别排序全部起点和终点，用两个指针按相同事件顺序扫描；它保存同一个计数不变量。若坐标范围很小，可以在每个坐标累计差分再做前缀和，代价变成 <code>O(n+U)</code>，U是坐标域大小。闭离散日程常在 <code>end+1</code> 撤销负载，但必须确认这个坐标存在且加1不会溢出；不能将这一技巧无条件用于连续时间。坐标可达十亿时，按域长分配数组通常比按事件排序更浪费。</p>
+<p><a id="room-allocation"></a></p>
+<h2 id="从峰值数值-走到一份实际房间安排">从峰值数值，走到一份实际房间安排</h2>
+<p><a href="https://cses.fi/problemset/task/1164/" target="_blank" rel="noopener noreferrer">Room Allocation</a>不仅问最少房数，还要求按原输入顺序输出每个住客的房号。只算出峰值，尚未完成分配。</p>
+<p>先按入住时间排序。每个已使用房间只需记录最后一位住客的离店时间：更早的住客都排在他之前，不影响下一次是否可接。每次查看释放最早的房间。若它与当前请求兼容，就重用这个房号、更新释放时间；若连它都不兼容，其他房间只会释放得更晚，只能开新房。</p>
+<p><a id="room-optimality"></a></p>
+<h2 id="为什么新开的每一个房间都不可避免">为什么新开的每一个房间都不可避免</h2>
+<p>设当前将第r个房间第一次打开。前r−1个房间的最后请求都未释放，因为连最早释放者也不兼容；这些请求又都已经开始，因为我们按起点处理。所以在当前起点上，至少r个请求同时占用，任何安排都需要r个房间。</p>
+<p>算法确实只在这个情形开新房，因此它用的房数既不小于峰值下界，也没有超过任何可行安排必须支付的数量。它同时给出合法构造：同房连续请求都通过了端点兼容判断。这里“取最早释放”用于判断是否存在可重用房间；后面固定资源选择的目标会要求另一种取法。</p>
+<p>需要动态取最小释放时刻，反复全排序每个房间会浪费工作。二叉小堆让最小值始终在根；入堆与出堆只修复一条祖先或后代路径。</p>
+<p><a id="manual-heap"></a></p>
+<h2 id="手写堆-真正修复父子关系">手写堆：真正修复父子关系</h2>
+<p>把堆放在vector里，下标i的父亲为 <code>(i-1)/2</code>，左右孩子为 <code>2*i+1</code> 和 <code>2*i+2</code>。小堆的不变量是每个父亲都不大于孩子，并不要求整段数组已经排序。这个局部关系足以推出根是全局最小：沿任何点到根的路径，值只会不增。</p>
+<p>插入先追加在最后，只有新点到根的路径可能破坏关系。只要它小于父亲就交换并上移，其余父子关系不变。删除根时，先用末尾元素填根并移除末尾；现在只可能在根向下破坏。每次与两个孩子中较小者比较，必要时交换，再继续向下。先选较小孩子，才能保证交换后留在上面的值也不大于另一个孩子。</p>
+<pre class="cpp"><code><span class="keyword">using</span> Release = std::pair&lt;<span class="type">long</span> <span class="type">long</span>, <span class="type">int</span>&gt;;
+<span class="keyword">class</span> ReleaseMinHeap {
+    std::vector&lt;Release&gt; data;
+public:
+    <span class="type">bool</span> empty() <span class="keyword">const</span> { <span class="keyword">return</span> data.empty(); }
+    Release top() <span class="keyword">const</span> { <span class="keyword">return</span> data.front(); } <span class="comment">// requires !empty()</span>
+    <span class="type">void</span> push(Release value) {
+        data.push_back(value);
+        <span class="type">int</span> child = static_cast&lt;<span class="type">int</span>&gt;(data.size()) - <span class="number">1</span>;
+        <span class="keyword">while</span> (child &gt; <span class="number">0</span>) {
+            <span class="type">int</span> parent = (child - <span class="number">1</span>) / <span class="number">2</span>;
+            <span class="keyword">if</span> (!(data[child] &lt; data[parent])) break;
+            std::swap(data[child], data[parent]);
+            child = parent;
+        }
+    }
+    <span class="type">void</span> pop() { <span class="comment">// requires !empty()</span>
+        data.front() = data.back();
+        data.pop_back();
+        <span class="type">int</span> parent = <span class="number">0</span>, n = static_cast&lt;<span class="type">int</span>&gt;(data.size());
+        <span class="keyword">while</span> (<span class="number">2</span> * parent + <span class="number">1</span> &lt; n) {
+            <span class="type">int</span> child = <span class="number">2</span> * parent + <span class="number">1</span>;
+            <span class="keyword">if</span> (child + <span class="number">1</span> &lt; n &amp;&amp; data[child + <span class="number">1</span>] &lt; data[child]) ++child;
+            <span class="keyword">if</span> (!(data[child] &lt; data[parent])) break;
+            std::swap(data[child], data[parent]);
+            parent = child;
+        }
+    }
+};</code></pre>
+<p>树高为 <code>O(log(r+1))</code>，因此上浮或下沉的堆序修复最坏只走这么多层，取根为 <code>O(1)</code>。但这份push还先调用vector的push_back：某次扩容会搬移已有的r项，使那一次完整push花到 <code>O(r)</code>；把一串追加共同计算，push_back为摊销常数，故完整push为摊销 <code>O(log(r+1))</code>。pop不扩容，为最坏 <code>O(log(r+1))</code>。全部n次房间更新的总代价仍为 <code>O(n log(n+1))</code>，不能把它误写成每次vector追加都有最坏常数保证。空堆不能取根或删除根；调用者先检查。索引运算和循环边界的合法性来自当前元素数，不来自vector容量，参见 <a href="区间上的取舍.html#q000028">Q000028 · vector的元素、大小和预留空间有什么区别</a>。</p>
+<pre class="cpp"><code>Allocation allocate_manual(<span class="keyword">const</span> std::vector&lt;Interval&gt;&amp; ranges, EndpointPolicy policy) {
+    <span class="keyword">auto</span> ordered = indexed_ranges(ranges);
+    std::sort(ordered.begin(), ordered.end(), by_start);
+    Allocation result{<span class="number">0</span>, std::vector&lt;<span class="type">int</span>&gt;(ranges.size())};
+    ReleaseMinHeap releases;
+    <span class="keyword">for</span> (<span class="keyword">const</span> IndexedInterval&amp; current : ordered) {
+        <span class="type">int</span> room;
+        <span class="keyword">if</span> (!releases.empty() &amp;&amp; compatible(releases.top().first, current.range.start, policy)) {
+            room = releases.top().second;
+            releases.pop();
+        } <span class="keyword">else</span> room = ++result.rooms;
+        result.room_for[current.id] = room;
+        releases.push({current.range.end, room});
+    }
+    <span class="keyword">return</span> result;
+}</code></pre>
+<p>排序加n次堆操作使总时间为 <code>O(n log n)</code>，堆最多r≤n个房间。输出保存原id，因此排序并不改变最终房号数组的输入顺序。下面两版使用同一个分配算法，只替换堆操作的实现层。</p>
+<p><a id="q000034"></a></p>
+<h3 id="q000034-class怎样守住一份结构的不变量">Q000034 · class怎样守住一份结构的不变量</h3>
+<p>手写堆的class把存储数组放在private区域，只让public操作访问。class中未写访问标签前默认private，struct则默认public；本章类型表用struct公开成员，堆用class限制存储访问。调用者可以push、top、pop，却不能任意修改中间元素，使“父亲不大于孩子”在类外被破坏。这种封装把算法证明的边界变清楚：每个公开操作接收合法堆，并返回合法堆。</p>
+<p>成员函数后面的 <code>const</code>，例如 <code>bool empty() const</code>，表示通过该对象执行这个函数时不修改它的非mutable成员；所以可从const对象调用。函数中的局部下标仍然能变化，它与对象的存储状态不同。<code>std::swap(a,b)</code> 交换两个值；堆在交换后移动下标，不会把一个已经改变位置的元素引用一直留着使用。</p>
+<p>这里手写的 <code>top()</code> 返回Release值副本，直接读取其中字段不会借出内部元素。这个类只承担当前需要的堆，不是通用容器课程。它没有承诺任意删除、迭代器或自动检查所有误用；本章调用方式负责满足非空前置。只剩根时pop后数组为空，下滤循环不进入，也不会访问空数组的根。</p>
+<p><a id="standard-heaps"></a></p>
+<h2 id="标准设施替换了哪一层">标准设施替换了哪一层</h2>
+<p><code>std::priority_queue</code> 把堆与存储封装成适配器。我们仍然按起点处理、决定何时开房并恢复原id；标准库承担动态优先级维护。</p>
+<pre class="cpp"><code>Allocation allocate_standard(<span class="keyword">const</span> std::vector&lt;Interval&gt;&amp; ranges, EndpointPolicy policy) {
+    <span class="keyword">auto</span> ordered = indexed_ranges(ranges);
+    std::sort(ordered.begin(), ordered.end(), by_start);
+    Allocation result{<span class="number">0</span>, std::vector&lt;<span class="type">int</span>&gt;(ranges.size())};
+    std::priority_queue&lt;Release, std::vector&lt;Release&gt;, std::greater&lt;Release&gt;&gt; releases;
+    <span class="keyword">for</span> (<span class="keyword">const</span> IndexedInterval&amp; current : ordered) {
+        <span class="type">int</span> room;
+        <span class="keyword">if</span> (!releases.empty() &amp;&amp; compatible(releases.top().first, current.range.start, policy)) {
+            room = releases.top().second;
+            releases.pop();
+        } <span class="keyword">else</span> room = ++result.rooms;
+        result.room_for[current.id] = room;
+        releases.push({current.range.end, room});
+    }
+    <span class="keyword">return</span> result;
+}</code></pre>
+<p><a id="q000035"></a></p>
+<h3 id="q000035-priority-queue的比较方向-top与pop怎样配合">Q000035 · priority_queue的比较方向、top与pop怎样配合</h3>
+<p>模板参数 <code>std::priority_queue&lt;T, std::vector&lt;T&gt;, std::greater&lt;T&gt;&gt;</code> 依次指定元素、底层存储和比较器。默认 <code>std::less&lt;T&gt;</code> 会让较大的值在top；换成 <code>std::greater&lt;T&gt;</code> 才让较小的值在top。若T为pair，字典序行为见 <a href="区间上的取舍.html#q000033">Q000033 · pair、auto和类型别名怎样表达一份状态</a>。比较器必须符合 <a href="区间上的取舍.html#q000031">Q000031 · 排序比较器怎样表达顺序，而不制造错误</a> 的严格弱序要求。</p>
+<p><code>top()</code> 返回堆顶的const引用，不能直接修改它；修改优先级可能破坏堆。<code>pop()</code> 只删除，不返回被删值。需要保留房号或结束时刻时，先 <code>auto item = heap.top();</code> 复制，再pop，然后按新时刻push。不要把引用绑定到top后pop，再读取那个引用。</p>
+<p>适配器只开放堆顶、增删、size和empty等操作，没有vector的capacity接口，也不提供随意遍历、按值删除或任意前驱查询。它非常适合此处反复取最小值，却不会自动满足后来固定k资源的问题。C++17接口见WG21 <a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4659.pdf" target="_blank" rel="noopener noreferrer">N4659，priority_queue</a>的 <code>[priority.queue]</code>。</p>
+<p>若希望自己持有vector，而只让标准库维护堆序，可以使用堆算法：</p>
+<pre class="cpp"><code>Allocation allocate_heap_algorithms(<span class="keyword">const</span> std::vector&lt;Interval&gt;&amp; ranges, EndpointPolicy policy) {
+    <span class="keyword">auto</span> ordered = indexed_ranges(ranges);
+    std::sort(ordered.begin(), ordered.end(), by_start);
+    Allocation result{<span class="number">0</span>, std::vector&lt;<span class="type">int</span>&gt;(ranges.size())};
+    std::vector&lt;Release&gt; releases;
+    <span class="keyword">const</span> std::greater&lt;Release&gt; later;
+    <span class="keyword">for</span> (<span class="keyword">const</span> IndexedInterval&amp; current : ordered) {
+        <span class="type">int</span> room;
+        <span class="keyword">if</span> (!releases.empty() &amp;&amp; compatible(releases.front().first, current.range.start, policy)) {
+            room = releases.front().second;
+            std::pop_heap(releases.begin(), releases.end(), later);
+            releases.pop_back();
+        } <span class="keyword">else</span> room = ++result.rooms;
+        result.room_for[current.id] = room;
+        releases.push_back({current.range.end, room});
+        std::push_heap(releases.begin(), releases.end(), later);
+    }
+    <span class="keyword">return</span> result;
+}</code></pre>
+<p><a id="q000036"></a></p>
+<h3 id="q000036-堆算法为何还需要push-back和pop-back">Q000036 · 堆算法为何还需要push_back和pop_back</h3>
+<p><code>std::push_heap(first,last,comp)</code> 假定 <code>[first,last-1)</code> 已是合法堆，把最后一个新元素加入堆。它不替vector追加元素，因此先push_back，再对扩大后的范围调用push_heap。</p>
+<p><code>std::pop_heap(first,last,comp)</code> 假定范围非空且为堆，把根移到 <code>last-1</code>，并修复 <code>[first,last-1)</code>。它不缩小vector；要真正删除，再调用pop_back。若需要根的值，应在删除前保存。前后操作的比较器必须一致，不能构造小堆后按默认大堆比较弹出。</p>
+<p><code>std::make_heap</code> 可把已有整段元素一次建堆，比较次数为线性；从空堆逐个加入的上界则为 <code>O(n log n)</code>。此处分配随扫描逐个产生新状态，push_heap/pop_heap恰好对应这种更新。它们是标准库实现的堆操作，和前面的手写上浮/下滤有清楚分工。规则见N4659的 <code>[alg.heap.operations]</code>。</p>
+<p><a id="selection-cluster"></a></p>
+<h2 id="只保留一部分-最早结束的请求先选">只保留一部分：最早结束的请求先选</h2>
+<p>现在资源只有一个，任务也可以不接。<a href="https://cses.fi/problemset/task/1629/" target="_blank" rel="noopener noreferrer">Movie Festival</a>要求看尽可能多场完整电影，时间长短不带额外收益。</p>
+<p>“最早开始”可能先拿一场跨越整天的电影，挡住几场短片；“最短时长”可能选一段跨在两场可连续观看的电影之间，也挡住两场。局部看起来节省时间，不等于给后续留下的可行集合更好。</p>
+<p>按结束时刻升序考虑：若当前电影与已选最后一场兼容就选，否则跳过。第一次选最早结束者，后面不断重复这个决定。</p>
+<p><a id="activity-exchange"></a></p>
+<h2 id="交换证明真正需要保住什么">交换证明真正需要保住什么</h2>
+<p>取任意一个最多场次的最优计划，设它的第一场为o，贪心的第一场为g。因为g全局结束最早，<code>end(g) &lt;= end(o)</code>。把最优计划第一场换成g，其余场次仍可接在g后面：它们原来接在o后面，而g没有更晚结束。数量没少、可行性没坏，所以至少存在一个最优计划以g开头。</p>
+<p>固定g后，剩下的候选正是能接在g后面的电影，问题形式没有改变。对余下部分重复同样交换，最终得到贪心计划同样达到最优数量。证明保住的是“数量相同且结束不更晚”，没有说g的时长最短或收益最高。</p>
+<pre class="cpp"><code>std::vector&lt;<span class="type">int</span>&gt; choose_activities(<span class="keyword">const</span> std::vector&lt;Interval&gt;&amp; ranges, EndpointPolicy policy) {
+    <span class="keyword">auto</span> ordered = indexed_ranges(ranges);
+    std::sort(ordered.begin(), ordered.end(), by_end);
+    std::vector&lt;<span class="type">int</span>&gt; chosen;
+    <span class="type">long</span> <span class="type">long</span> last_end = <span class="number">0</span>; <span class="comment">// read only after chosen becomes nonempty</span>
+    <span class="keyword">for</span> (<span class="keyword">const</span> IndexedInterval&amp; current : ordered) {
+        <span class="keyword">if</span> (chosen.empty() || compatible(last_end, current.range.start, policy)) {
+            chosen.push_back(current.id);
+            last_end = current.range.end;
+        }
+    }
+    <span class="keyword">return</span> chosen;
+}</code></pre>
+<p>时间 <code>O(n log n)</code>，选择数组最多n项。初始 <code>last_end=0</code> 不是断言第一个请求从0以后开始；它只在chosen非空后才读取，首个请求由短路条件直接接受。返回的是实际计划；最少删除数直接是 <code>n-chosen.size()</code>，不必重造一种“删除算法”。如果原题已经按结束时间排序，如<a href="https://app.codility.com/programmers/lessons/16-greedy_algorithms/max_nonoverlapping_segments/" target="_blank" rel="noopener noreferrer">Codility MaxNonoverlappingSegments</a>，扫描本身只需 <code>O(n)</code>。</p>
+<p>接触政策仍必须一致。电影或LC435按 <code>end&lt;=next.start</code> 接续；闭区间互斥选择用严格 <code>&lt;</code>。下面的点命中问题使用闭区间，不能把两种数量直接混算。</p>
+<p><a id="stabbing"></a></p>
+<h2 id="用点命中每一段-为什么也看右端">用点命中每一段，为什么也看右端</h2>
+<p><a href="https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/" target="_blank" rel="noopener noreferrer">LC452</a>让一支竖直箭命中所有包含其横坐标的气球区间。要选的是点，要覆盖的是每条闭区间；这既不是合并，也不是保留最多任务。</p>
+<p>取最早结束的尚未命中区间 <code>[s,e]</code>，在e放一个点。为什么可以把这一点永久定下来？任何完整方案都必须在 <code>[s,e]</code> 内放某点p。考虑所有尚未处理区间：它们的右端都不小于e。若某条原来包含p，那么其左端不大于p≤e，右端又不小于e，因此它仍包含e。把p移到e，不会丢失它原来负责的剩余区间，还可能命中更多。</p>
+<p>删去被e命中的区间，继续处理。排序后只要当前左端大于最后选点，才需要新点；若等于，闭端点仍算命中。</p>
+<pre class="cpp"><code>std::vector&lt;<span class="type">long</span> <span class="type">long</span>&gt; stabbing_points(std::vector&lt;Interval&gt; ranges) {
+    std::sort(ranges.begin(), ranges.end(), [](<span class="keyword">const</span> Interval&amp; a, <span class="keyword">const</span> Interval&amp; b) {
+        <span class="keyword">return</span> a.end &lt; b.end;
+    });
+    std::vector&lt;<span class="type">long</span> <span class="type">long</span>&gt; points;
+    <span class="keyword">for</span> (<span class="keyword">const</span> Interval&amp; current : ranges)
+        <span class="keyword">if</span> (points.empty() || points.back() &lt; current.start) points.push_back(current.end);
+    <span class="keyword">return</span> points;
+}</code></pre>
+<p>总时间 <code>O(n log n)</code>，输出即命中见证。每次迫使我们新选一点的那条区间，与此前这些“迫使新点”的区间两两无公共点；一个点不可能同时命中其中两条，所以它们的数量给出下界。算法恰好使用同样多的点，因而达到最少。</p>
+<p>这也说明：采用相同闭区间相交政策时，最大两两不相交区间数等于最少命中点数。但 <code>[1,2]</code> 与 <code>[2,3]</code> 在电影式接续里可以选两场，在闭区间命中里一点2就够；政策不同，不能把两个答案强行认作相同。</p>
+<p><a id="continuous-cover"></a></p>
+<h2 id="用片段覆盖整段目标-要改成最远推进">用片段覆盖整段目标，要改成最远推进</h2>
+<p><a href="https://leetcode.com/problems/video-stitching/" target="_blank" rel="noopener noreferrer">Video Stitching</a>允许把片段剪开，要求覆盖 <code>[0,T]</code> 的全部时间。这里选的是区间，必须覆盖的是整个连续目标。假设已有连续覆盖 <code>[0,covered]</code>，所有起点不大于covered的片段都可以与它接上；下一次应从这些候选中选右端最大的片段。</p>
+<p>例如目标 <code>[0,5]</code>，片段 <code>[0,1]、[0,4]、[1,2]、[2,3]、[3,5]</code>。按最早结束选会先耗费 <code>[0,1]</code>，接着仍要继续补；直接选 <code>[0,4]</code> 再接 <code>[3,5]</code> 只用两段。“早点结束给后面让路”在这里没有价值，因为重叠不构成冲突，我们要的是更远的覆盖。</p>
+<p><a id="cover-dominance"></a></p>
+<h2 id="一轮内全部看完候选-才提交选择">一轮内全部看完候选，才提交选择</h2>
+<p>设本轮能接上的最远右端为f。任何完成目标的方案，其下一段也必须从当前连续覆盖接出去，不然covered右侧会留下空隙。若它下一段只到r≤f，用我们选的片段替换，不会缩短本轮能覆盖到的位置。原方案后续每段若有助于继续向右，都仍可从更远前沿接上；已经被f覆盖的片段可以直接省掉。因此存在一个不比最优方案更差的方案，先走到f。</p>
+<p>按起点排序后，用指针读完 <code>start&lt;=covered</code> 的全部候选，并取其中最大end。不能读到第一条可接片段就立即提交，因为同一轮后面可能有更远的。提交后，所有本轮候选都已被f支配，不必回头。若f没有严格大于covered，就没有任何片段能跨过当前边界，目标无解。单点片段不能推进连续覆盖。</p>
+<pre class="cpp"><code>CoverResult minimum_cover(<span class="keyword">const</span> std::vector&lt;Interval&gt;&amp; ranges, <span class="type">long</span> <span class="type">long</span> target) {
+    <span class="keyword">auto</span> ordered = indexed_ranges(ranges);
+    std::sort(ordered.begin(), ordered.end(), by_start);
+    std::vector&lt;<span class="type">int</span>&gt; chosen;
+    <span class="type">long</span> <span class="type">long</span> covered = <span class="number">0</span>;
+    <span class="type">int</span> next = <span class="number">0</span>, n = static_cast&lt;<span class="type">int</span>&gt;(ordered.size());
+    <span class="keyword">while</span> (covered &lt; target) {
+        <span class="type">long</span> <span class="type">long</span> farthest = covered;
+        <span class="type">int</span> selected = -<span class="number">1</span>;
+        <span class="keyword">while</span> (next &lt; n &amp;&amp; ordered[next].range.start &lt;= covered) {
+            <span class="keyword">if</span> (ordered[next].range.end &gt; farthest) {
+                farthest = ordered[next].range.end;
+                selected = ordered[next].id;
+            }
+            ++next;
+        }
+        <span class="keyword">if</span> (selected == -<span class="number">1</span>) <span class="keyword">return</span> {<span class="keyword">false</span>, {}};
+        chosen.push_back(selected);
+        covered = farthest;
+    }
+    <span class="keyword">return</span> {<span class="keyword">true</span>, chosen};
+}</code></pre>
+<p>函数返回最少片段的一组原id；失败时 <code>possible=false</code> 且不返回一份看似完整的局部方案。排序 <code>O(n log n)</code>，扫描 <code>O(n)</code>。它只承诺 <code>T&gt;0</code>；若目标本身长度为0，应先按具体任务决定是否需要一个命中点或根本不需片段，不能沿用正长度问题的无解分支。</p>
+<p><a href="https://leetcode.com/problems/minimum-number-of-taps-to-open-to-water-a-garden/" target="_blank" rel="noopener noreferrer">LC1326</a>可把第i个水龙头转成 <code>[i-ranges[i],i+ranges[i]]</code>，再用同一机制覆盖 <code>[0,n]</code>。其端点为有界整数时，可先对每个左端保存最远右端，再按坐标推进，得到线性于坐标域的实现；这只是同一个最远推进的另一种候选整理方式。一般坐标仍适合排序。草带喷头等几何任务还需要先证明圆的哪一段真正覆盖整条带宽，不能只把圆的左右极点当作有效区间。</p>
+<p><a id="fixed-resources"></a></p>
+<h2 id="固定k个资源-为什么不能继续只取最早释放">固定k个资源，为什么不能继续只取最早释放</h2>
+<p><a href="https://cses.fi/problemset/task/1632/" target="_blank" rel="noopener noreferrer">Movie Festival II</a>有k个人，要最大化总观看场数。与最少房间问题相比，所有电影不必被接受，人数却不能无限增加。</p>
+<p>仍按电影结束时间处理。每个已使用的人只记录其最后一场的结束时刻。当前电影开始于s：在所有能接它的人中，找<strong>释放最晚</strong>的人，把他的释放时刻替换为当前结束。这样保留更早空闲的人，给后面可能开始更早、却结束更晚的电影。</p>
+<p>以k=2和电影 <code>(1,2)、(1,5)、(6,7)、(3,8)</code> 为例。先接前两场后，两人分别在2和5空闲。接 <code>(6,7)</code> 时，两人都可用；若消费释放2的人，剩下的释放5者无法接 <code>(3,8)</code>。若先消费释放5者，释放2者仍能接 <code>(3,8)</code>，四场全部保留。结束顺序不代表开始顺序，不能把“后处理的电影”误认为“一定更晚开始”。</p>
+<p>若没有兼容的人，但已使用人数还小于k，可以启用一个新的人；否则跳过当前电影。只存已经使用者，便不需要虚构负无穷结束时刻来代表尚未使用的人。</p>
+<p><a id="fixed-resource-exchange"></a></p>
+<h2 id="把整个后续安排换过去-才完成多资源证明">把整个后续安排换过去，才完成多资源证明</h2>
+<p>我们逐场维护这样一个事实：存在某个全局最多场次的计划，它在已经处理的电影上，与贪心的接受、拒绝和人员分配一致。开始时前缀为空，显然可以找到一个最优计划。</p>
+<p>设当前电影为j，开始s、结束e。所有尚未处理电影的结束都不早于e，而半开电影有s&lt;e。因此在任何一个人的后续安排里，j之前都不可能再塞进一场尚未处理的电影：那场若先结束才能接j，其结束应不晚于s&lt;e，与处理顺序矛盾。若使用闭占用政策，即使允许s=e的单日任务，前驱也必须结束严格早于s，仍然严格早于e，同一论证继续成立。</p>
+<p><strong>有兼容旧人员时。</strong> 贪心选其中释放最晚者r，记释放时刻为 <code>t_r</code>。考虑与当前前缀一致的一个最优后续计划：</p>
+<ul>
+<li>若它没有选j，看r上第一场未来电影x。如果r后面为空，直接加入j就能增加总场数，与最优矛盾；因此必有x。将x替换为j：j能接在 <code>t_r</code> 后面，且e不晚于x的结束，所以x后面的整条安排仍能接上。总场数不变。</li>
+<li>若它已将j分给r，就不用改。</li>
+<li>若它把j分给另一个旧人员q，j必是q的第一场未来电影。q也兼容j，而r选的是最晚兼容者，所以 <code>t_q&lt;=t_r</code>。将q从j开始的整条未来安排，与r的整条未来安排互换。j可以接在r后面；r原来的第一场若存在，本来就与 <code>t_r</code> 兼容：半开时起点 <code>&gt;=t_r</code>，闭占用时起点 <code>&gt;t_r</code>。因为 <code>t_q&lt;=t_r</code>，同一兼容关系在q上仍然成立。两条链内部次序都没有改，所有电影和场数都保留。</li>
+<li>若最优计划把j分给一个尚未使用的人，也可交换两人的未来安排：尚未使用者没有前缀限制，能接r原来的尾链，j则能接r。</li>
+</ul>
+<p><strong>没有兼容旧人员，但还能启用新人员时。</strong> 把新人员记为r，视为没有前缀约束。若最优计划没选j，用同样的“替换r的首场未来电影”操作；若已选j，它不可能接在任何不兼容的旧人员之后，因此只能分给一个尚未使用者，将人员名字交换即可。</p>
+<p><strong>没有兼容人员且k人已全部使用时。</strong> 在任何与前缀一致的计划中，j都不能成为某人的第一场未来电影；前面又证明不能先加别的未来电影再接j，所以只能拒绝它。</p>
+<p>三种情形都能把贪心当前决策纳入某个同样好的全局最优计划，归纳便贯穿全部电影。这个证明用到了同质资源、半开活动的正时长或闭活动的严格接续、完整接受和数量目标。收益不同、人员有资格限制、在线到达后不能重排，都不能直接引用它。</p>
+<pre class="cpp"><code>std::vector&lt;<span class="type">int</span>&gt; choose_k_resources(<span class="keyword">const</span> std::vector&lt;Interval&gt;&amp; ranges, <span class="type">int</span> k, EndpointPolicy policy) {
+    <span class="keyword">auto</span> ordered = indexed_ranges(ranges);
+    std::sort(ordered.begin(), ordered.end(), by_end);
+    std::multiset&lt;<span class="type">long</span> <span class="type">long</span>&gt; releases;
+    std::vector&lt;<span class="type">int</span>&gt; chosen;
+    <span class="keyword">for</span> (<span class="keyword">const</span> IndexedInterval&amp; current : ordered) {
+        <span class="keyword">auto</span> after = policy == EndpointPolicy::HalfOpen
+            ? releases.upper_bound(current.range.start) : releases.lower_bound(current.range.start);
+        <span class="keyword">if</span> (after != releases.begin()) {
+            --after;
+            releases.erase(after);
+        } <span class="keyword">else</span> <span class="keyword">if</span> (static_cast&lt;<span class="type">int</span>&gt;(releases.size()) &gt;= k) continue;
+        releases.insert(current.range.end);
+        chosen.push_back(current.id);
+    }
+    <span class="keyword">return</span> chosen;
+}</code></pre>
+<p>这里需要“最大兼容前驱”，所以使用有序多重集合。总时间为排序加n次有序查询与更新，即 <code>O(n log(n+1)+n log(k+1))</code>，存储 <code>O(n+k)</code> 包括排序副本和选择结果。用 <code>k+1</code> 写法也涵盖k=0：此时不选任何电影，不会尝试取得空集合前驱。</p>
+<p><a id="q000037"></a></p>
+<h3 id="q000037-lower-bound与upper-bound怎样给出查询边界">Q000037 · lower_bound与upper_bound怎样给出查询边界</h3>
+<p>在默认升序范围中，<code>lower_bound(first,last,x)</code> 返回第一个不小于x的位置，<code>upper_bound(first,last,x)</code> 返回第一个严格大于x的位置。前者之前全部 <code>&lt;x</code>，后者之前全部 <code>&lt;=x</code>。范围中可以没有x，也可以有多个x；找不到这样的后缀元素时返回last。空范围也返回last，不能解引用。</p>
+<p>若要最后一个 <code>&lt;x</code> 或 <code>&lt;=x</code> 的元素，分别从上述边界取前驱；只有边界不等于begin时才能先减一。若只要边界之前的数量，vector中直接与begin相减即可；数量可以为0或整个范围长度，不必先取得一个元素。</p>
+<p>通用二分的真正前提是范围对当前比较表达式已分区；整体升序是本章足以保证它的条件。自定义比较器下，lower_bound调用形如 <code>comp(element,value)</code>，upper_bound调用形如 <code>comp(value,element)</code>，方向不能随意换。C++17保证对数次比较；vector的随机访问又使移动保持对数，而双向迭代器不自动拥有这个移动复杂度。成员 <code>available.upper_bound(x)</code> 可利用关联容器的有序结构以对数复杂度定位，不应改成通用 <code>std::upper_bound(available.begin(),available.end(),x)</code> 后仍声称总步数对数。范围和差值见 <a href="区间上的取舍.html#q000030">Q000030 · 迭代器为何把范围写成左闭右开</a>。</p>
+<p><a id="q000038"></a></p>
+<h3 id="q000038-multiset怎样保留重复状态并只删除一个">Q000038 · multiset怎样保留重复状态并只删除一个</h3>
+<p>两个不同的人可能同时在5空闲，所以必须保存两个5。<code>std::set</code> 只留一个等价键，<code>std::multiset</code> 允许多个。“等价”按比较器定义：a不严格小于b，b也不严格小于a；本章默认整数比较下，它就是数值相等。边界和前驱按 <a href="区间上的取舍.html#q000037">Q000037 · lower_bound与upper_bound怎样给出查询边界</a> 取得，闭占用与半开接续对应不同的边界。</p>
+<p>找到一个释放时刻后，用 <code>erase(it)</code> 删除这一个副本；<code>erase(value)</code> 会删除所有等价键，可能把其他人的状态也删掉。插入新的结束时刻再交给容器重新排序，不能原地修改迭代器指向的键。关联容器插入不使既有迭代器失效，删除只使被删元素的迭代器和引用失效；删除后的it不能继续读取。</p>
+<p>插入和成员边界查询为 <code>O(log k)</code>；按迭代器删除单个元素为摊销常数。容器的存储实现由标准库负责，我们手写的是资源选择与更新逻辑，不是在此实现平衡树。重复键与成员接口见N4659的 <code>[associative.reqmts]</code>、<code>[multiset.overview]</code>。</p>
+<p><a id="weighted-jobs"></a></p>
+<h2 id="数量换成收益-为什么必须保存多个最优前缀">数量换成收益：为什么必须保存多个最优前缀</h2>
+<p>现在每个项目有收益。两段连续短项目各收益1，一段同时覆盖它们的长项目收益3，最早结束的数量贪心只得到2。若改成先选最高收益，也会被“一段收益3长项目，对上两段各收益2的短项目”击败。固定一个局部排名，无法判断今天放弃一点收益能换来多少后续机会。</p>
+<p><a href="https://cses.fi/problemset/task/1140/" target="_blank" rel="noopener noreferrer">Projects</a>问最大总收益，按闭日程只可在结束日严格早于下一开始日时相接；<a href="https://leetcode.com/problems/maximum-profit-in-job-scheduling/" target="_blank" rel="noopener noreferrer">LC1235</a>允许结束即开始。我们在同一个前缀模型里保留这项差异。</p>
+<p>按结束时刻排序，给前i个项目定义 <code>dp[i]</code>：只使用这i个项目，能取得的最大收益。<code>dp[0]=0</code>，表示没有项目可选。设当前是排序后的第i个项目，收益w，开始s；在之前i−1个项目中，与它兼容者恰好构成一个前缀，长度记为p。</p>
+<p><a id="weighted-recurrence"></a></p>
+<h2 id="为什么只剩取与不取两类-而不是遗漏其他安排">为什么只剩取与不取两类，而不是遗漏其他安排</h2>
+<p>任何最优计划都要么不选当前项目，要么选它。</p>
+<p>不选时，全部选择来自前i−1个，最好值就是 <code>dp[i-1]</code>。选它时，所有先前项目的结束都必须与s兼容；结束已排序，因此合法候选恰好是前p个。它们之间的最佳选择为 <code>dp[p]</code>，加上当前收益得到 <code>w+dp[p]</code>。反过来，前p个的最优计划确实能与当前项目拼接，所以这个值不仅是上界，也真实可达到。</p>
+<p>于是 <code>dp[i]=max(dp[i-1],w+dp[p])</code>。从小到大计算，所需前缀都已算好；不再枚举指数多的完整子集。难点是证明“剩下的合法集合恰好是一个前缀”，而非仅把取/不取写成一个max。</p>
+<p>看一组闭日程：A为 <code>[1,2]</code> 收益4，B为 <code>[2,4]</code> 收益7，C为 <code>[3,5]</code> 收益5，D为 <code>[6,7]</code> 收益3。它们已经按结束日排序：</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>当前项目</th>
+<th align="right">兼容前缀长度p</th>
+<th align="right">不取当前项目</th>
+<th align="right">取当前项目</th>
+<th align="right">最佳前缀收益</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">4+0</td>
+<td align="right">4</td>
+</tr>
+<tr>
+<td>B</td>
+<td align="right">0</td>
+<td align="right">4</td>
+<td align="right">7+0</td>
+<td align="right">7</td>
+</tr>
+<tr>
+<td>C</td>
+<td align="right">1</td>
+<td align="right">7</td>
+<td align="right">5+4</td>
+<td align="right">9</td>
+</tr>
+<tr>
+<td>D</td>
+<td align="right">3</td>
+<td align="right">9</td>
+<td align="right">3+9</td>
+<td align="right">12</td>
+</tr>
+</tbody></table></div>
+<p>B不能接A，因为两者都占用第2天；C能接A，D再接上A和C，得到12。若同样四对数字改为允许结束即开始，B的兼容前缀变为1，A接B就有11，再接D得到14。只改接触政策，前驱与最优方案都可能改变，外层递推却不用改。</p>
+<p><a id="predecessor-search"></a></p>
+<h2 id="前驱长度-既可以手写边界-也可以用标准算法">前驱长度，既可以手写边界，也可以用标准算法</h2>
+<p>若每次从当前项目往左找兼容者，单次最坏 <code>O(n)</code>，总共 <code>O(n²)</code>。结束数组有序，可以用边界搜索把单次压成 <code>O(log n)</code>。</p>
+<p>不能因为结束时刻递增，就用一个只前进的指针依次生成全部p。闭区间 <code>(1,3)、(5,6)、(2,7)</code> 已按结束排序，它们的兼容前缀长度却为 <code>0、1、0</code>：第三项开始得更早，前驱又退回去了。有序的是被查询的结束数组，不是查询阈值start；每项单独做边界查询没有这个错误假设。</p>
+<p>这里直接返回兼容前缀长度p，范围为 <code>[0,count]</code>，不使用“找不到返回−1”的索引。维护半开未决范围 <code>[lo,hi)</code>：lo之前都兼容，hi及以后都不兼容；mid兼容时把lo推到mid+1，否则把hi缩到mid。每次严格缩短，结束时lo=hi正好是第一个不兼容位置，也是兼容项数。</p>
+<pre class="cpp"><code><span class="type">int</span> compatible_prefix_manual(<span class="keyword">const</span> std::vector&lt;<span class="type">long</span> <span class="type">long</span>&gt;&amp; ends, <span class="type">int</span> count,
+                             <span class="type">long</span> <span class="type">long</span> start, EndpointPolicy policy) {
+    <span class="type">int</span> left = <span class="number">0</span>, right = count;
+    <span class="keyword">while</span> (left &lt; right) {
+        <span class="type">int</span> middle = left + (right - left) / <span class="number">2</span>;
+        <span class="keyword">if</span> (compatible(ends[middle], start, policy)) left = middle + <span class="number">1</span>;
+        <span class="keyword">else</span> right = middle;
+    }
+    <span class="keyword">return</span> left;
+}</code></pre>
+<p>端点政策决定判定：半开接续把 <code>end&lt;=start</code> 放入兼容前缀，闭占用只允许 <code>end&lt;start</code>。这种差别在标准函数中体现为upper_bound与lower_bound：</p>
+<pre class="cpp"><code><span class="type">int</span> compatible_prefix_standard(<span class="keyword">const</span> std::vector&lt;<span class="type">long</span> <span class="type">long</span>&gt;&amp; ends, <span class="type">int</span> count,
+                               <span class="type">long</span> <span class="type">long</span> start, EndpointPolicy policy) {
+    <span class="keyword">auto</span> after = policy == EndpointPolicy::HalfOpen
+        ? std::upper_bound(ends.begin(), ends.begin() + count, start)
+        : std::lower_bound(ends.begin(), ends.begin() + count, start);
+    <span class="keyword">return</span> static_cast&lt;<span class="type">int</span>&gt;(after - ends.begin());
+}</code></pre>
+<p>这两种边界的设施合同已在 <a href="区间上的取舍.html#q000037">Q000037 · lower_bound与upper_bound怎样给出查询边界</a> 主讲。这里新增的算法事实是：闭日程把lower_bound之前的项作为前驱前缀，半开接续把upper_bound之前的项作为前驱前缀；范围只限当前项目之前，不把当前或未来项目混进自身前驱。</p>
+<p><a id="weighted-implementation"></a></p>
+<h2 id="表里存值-沿决定恢复一份计划">表里存值，沿决定恢复一份计划</h2>
+<p>两种前驱子程序接入同一份DP：</p>
+<p>正文的dp在源码中名为 <code>best</code>；前i个项目对应 <code>best[i]</code>，当前项目本身位于 <code>ordered[i-1]</code>。<code>predecessor[i]</code> 保存兼容前缀长度，<code>take[i]</code> 记录这一格是否严格通过选当前项目得到更大收益；平局保留跳过。</p>
+<pre class="cpp"><code>Plan weighted_core(<span class="keyword">const</span> std::vector&lt;Job&gt;&amp; jobs, EndpointPolicy policy, <span class="type">bool</span> library_search) {
+    struct IndexedJob { Job job; <span class="type">int</span> id; };
+    std::vector&lt;IndexedJob&gt; ordered;
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; static_cast&lt;<span class="type">int</span>&gt;(jobs.size()); ++i) ordered.push_back({jobs[i], i});
+    std::sort(ordered.begin(), ordered.end(), [](<span class="keyword">const</span> IndexedJob&amp; a, <span class="keyword">const</span> IndexedJob&amp; b) {
+        <span class="keyword">if</span> (a.job.end != b.job.end) <span class="keyword">return</span> a.job.end &lt; b.job.end;
+        <span class="keyword">if</span> (a.job.start != b.job.start) <span class="keyword">return</span> a.job.start &lt; b.job.start;
+        <span class="keyword">return</span> a.id &lt; b.id;
+    });
+    <span class="keyword">const</span> <span class="type">int</span> n = static_cast&lt;<span class="type">int</span>&gt;(ordered.size());
+    std::vector&lt;<span class="type">long</span> <span class="type">long</span>&gt; ends;
+    <span class="keyword">for</span> (<span class="keyword">const</span> IndexedJob&amp; current : ordered) ends.push_back(current.job.end);
+    std::vector&lt;<span class="type">long</span> <span class="type">long</span>&gt; best(n + <span class="number">1</span>, <span class="number">0</span>);
+    std::vector&lt;<span class="type">int</span>&gt; predecessor(n + <span class="number">1</span>, <span class="number">0</span>), take(n + <span class="number">1</span>, <span class="number">0</span>);
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) {
+        <span class="keyword">const</span> Job&amp; current = ordered[i - <span class="number">1</span>].job;
+        <span class="keyword">const</span> <span class="type">int</span> p = library_search
+            ? compatible_prefix_standard(ends, i - <span class="number">1</span>, current.start, policy)
+            : compatible_prefix_manual(ends, i - <span class="number">1</span>, current.start, policy);
+        predecessor[i] = p;
+        <span class="keyword">const</span> <span class="type">long</span> <span class="type">long</span> with_current = best[p] + current.reward;
+        best[i] = best[i - <span class="number">1</span>];
+        <span class="keyword">if</span> (with_current &gt; best[i]) {
+            best[i] = with_current;
+            take[i] = <span class="number">1</span>;
+        }
+    }
+    std::vector&lt;<span class="type">int</span>&gt; chosen;
+    <span class="keyword">for</span> (<span class="type">int</span> i = n; i &gt; <span class="number">0</span>; ) {
+        <span class="keyword">if</span> (take[i]) {
+            chosen.push_back(ordered[i - <span class="number">1</span>].id);
+            i = predecessor[i];
+        } <span class="keyword">else</span> --i;
+    }
+    std::reverse(chosen.begin(), chosen.end());
+    <span class="keyword">return</span> {best[n], chosen};
+}</code></pre>
+<pre class="cpp"><code>Plan weighted_manual(<span class="keyword">const</span> std::vector&lt;Job&gt;&amp; jobs, EndpointPolicy policy) {
+    <span class="keyword">return</span> weighted_core(jobs, policy, <span class="keyword">false</span>);
+}</code></pre>
+<pre class="cpp"><code>Plan weighted_standard(<span class="keyword">const</span> std::vector&lt;Job&gt;&amp; jobs, EndpointPolicy policy) {
+    <span class="keyword">return</span> weighted_core(jobs, policy, <span class="keyword">true</span>);
+}</code></pre>
+<p><code>weighted_manual</code> 与 <code>weighted_standard</code> 是同一算法的两种前驱实现，不是两种动态规划，也没有标准库替我们推导整题。布尔选择只切换查找子程序；取/不取的状态含义、转移与回溯完全共享。</p>
+<p>恢复从i=n开始：若当前dp值来自跳过，就令i减一；若选择当前项目能得到当前最优值，就把其原id记入计划，再跳到它的兼容前缀p。每次i都变小，最终到0。回溯首先遇到晚项目，所以最后反转结果，得到时间顺序。平局时可以固定偏向跳过或选择，只要得到同样收益的合法计划；题目并没有唯一的下标序列。</p>
+<p>排序和全部前驱查询为 <code>O(n log n)</code>，DP和回溯为 <code>O(n)</code>，存储 <code>O(n)</code>。收益累积需要 <a href="区间上的取舍.html#q000032">Q000032 · 先确定运算类型，再计算长度和总量</a> 的64位上界；0收益项目可以被跳过，最优值仍正确。若增加“最多选k个项目”，状态还要表达已经使用多少名额；这里的一维dp不能直接回答。</p>
+<p><a id="budgeted-value"></a></p>
+<h2 id="再限制总项数-k个名额不是k个资源">再限制总项数：k个名额不是k个资源</h2>
+<p><a href="https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended-ii/" target="_blank" rel="noopener noreferrer">LC1751</a>要求一个人完整参加活动，最多选k项，最大化总收益；结束日仍然占用。这与Movie Festival II的k个同时可用资源完全不同：名额限制的是整个方案的总项数，不会在活动结束时恢复。三个互不相交活动用一个人就都能参加，但预算k=2时最多只能挑两个。</p>
+<p>上面的前驱关系继续适用，新增的只有预算状态。定义 <code>value[c][i]</code>：在前i个项目中，最多取c项的最大收益。无项目或预算为0时答案都为0。对当前项目，仍按是否选它分类：</p>
+<ul>
+<li>不选：<code>value[c][i-1]</code>，预算不变。</li>
+<li>选：获得当前w，余下只能从兼容前缀p里最多取c−1项，得到 <code>w+value[c-1][p]</code>。</li>
+</ul>
+<p>取两者较大就是完整转移。这里是“最多”，不必选满k；一项高收益活动可能比好几项互相冲突的活动更好，0预算也不代表无解。</p>
+<p>先预计算所有项目的前驱p，再让c从1递增，每层让i从1递增。当前层需要它左侧的值，以及上一预算层的任意前缀值。两条vector已经够用：<code>previous[p]</code> 保存上一预算层，<code>current[i-1]</code> 保存本层左侧；一层算完，交换两条vector的内容，继续下一层。每一层都从0列开始并覆盖其他各列，所以不必把旧数组逐格清零。</p>
+<pre class="cpp"><code><span class="type">long</span> <span class="type">long</span> bounded_weighted(<span class="keyword">const</span> std::vector&lt;Job&gt;&amp; jobs, <span class="type">int</span> max_jobs, EndpointPolicy policy) {
+    std::vector&lt;Job&gt; ordered = jobs;
+    std::sort(ordered.begin(), ordered.end(), [](<span class="keyword">const</span> Job&amp; a, <span class="keyword">const</span> Job&amp; b) {
+        <span class="keyword">if</span> (a.end != b.end) <span class="keyword">return</span> a.end &lt; b.end;
+        <span class="keyword">return</span> a.start &lt; b.start;
+    });
+    <span class="keyword">const</span> <span class="type">int</span> n = static_cast&lt;<span class="type">int</span>&gt;(ordered.size());
+    std::vector&lt;<span class="type">long</span> <span class="type">long</span>&gt; ends;
+    <span class="keyword">for</span> (<span class="keyword">const</span> Job&amp; job : ordered) ends.push_back(job.end);
+    std::vector&lt;<span class="type">int</span>&gt; predecessor(n, <span class="number">0</span>);
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i)
+        predecessor[i] = compatible_prefix_standard(ends, i, ordered[i].start, policy);
+    std::vector&lt;<span class="type">long</span> <span class="type">long</span>&gt; previous(n + <span class="number">1</span>, <span class="number">0</span>), current(n + <span class="number">1</span>, <span class="number">0</span>);
+    <span class="keyword">const</span> <span class="type">int</span> limit = std::min(max_jobs, n);
+    <span class="keyword">for</span> (<span class="type">int</span> budget = <span class="number">1</span>; budget &lt;= limit; ++budget) {
+        current[<span class="number">0</span>] = <span class="number">0</span>;
+        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++i)
+            current[i] = std::max(current[i - <span class="number">1</span>], ordered[i - <span class="number">1</span>].reward + previous[predecessor[i - <span class="number">1</span>]]);
+        previous.swap(current);
+    }
+    <span class="keyword">return</span> previous[n];
+}</code></pre>
+<p>为什么不能让选当前项目时也读取本预算层的p？因为那样没有支付这一个名额。两条兼容单日活动收益4和5，预算1应得到5；若用 <code>w+current[p]</code>，就会错误得到9。也不能只保留前缀i的相邻两行：p可以跳到很远的前缀，上一预算层的那些值仍然需要。预算外层的滚动安排，正好保留了这些依赖；完整二维表也能按合法依赖顺序计算，只是占更多空间。</p>
+<p>时间为 <code>O(n log n+nk)</code>，滚动表与前驱等辅助存储为 <code>O(n)</code>。LC1751给出 <code>1&lt;=k&lt;=n</code> 且 <code>nk&lt;=10^6</code>，所以n本身可到 <code>10^6</code>，不能错误假定它也只到200000。另一方面 <code>k²&lt;=nk&lt;=10^6</code> 推出k≤1000，单项收益≤ <code>10^6</code>，最多取k项使答案≤ <code>10^9</code>，原题int返回值在 <a href="区间上的取舍.html#q000032">Q000032 · 先确定运算类型，再计算长度和总量</a> 的目标环境内可表示；核心依然用long long计算。这个滚动接口只返回收益，没有保留前面完整DP用于恢复方案的全部决定，因此不承诺返回一组下标。</p>
+<p><a id="offline-query-cluster"></a></p>
+<h2 id="反复问一个点-保留最短的仍有效候选">反复问一个点：保留最短的仍有效候选</h2>
+<p><a href="https://leetcode.com/problems/minimum-interval-to-include-each-query/" target="_blank" rel="noopener noreferrer">LC1851</a>给很多查询点q，每次求包含q的原区间中，整数点数 <code>end-start+1</code> 最少者；没有则返回−1。注意要找原区间，不是并集中的最短段。合并会丢掉 <code>[4,4]</code> 这样的好答案。</p>
+<p>每次把所有区间扫一遍，需要 <code>O(nm)</code>。所有查询预先给出时，可以先按点值升序处理，并带上查询原id。区间也按起点排序；查询点走到q，就把所有 <code>start&lt;=q</code> 的区间加入候选。这样不必每次重新检查左端。</p>
+<p>候选按 <code>(整数长度,右端)</code> 放入小堆。加入只保证左端已到达，右端还可能已过期。回答前不断删除 <code>end&lt;q</code> 的堆顶，直到堆空或堆顶仍覆盖q。</p>
+<p><a id="offline-expiration-proof"></a></p>
+<h2 id="为什么只清理堆顶-不清理整个堆">为什么只清理堆顶，不清理整个堆</h2>
+<p>堆里可能埋着已经过期的长区间，但它排在当前堆顶后面，不可能提供更短答案。只要堆顶有效，它就是所有已加入区间中长度最小的有效候选；任何更短元素都应排到它前面，已被检查并删除或就是它自身。</p>
+<p>一个区间右端小于当前q后，对所有后续不减的查询点也都会过期，所以删除是永久安全的。若不先排序查询，删除给较大点无效的区间后，再处理较小点就可能丢掉正确答案；“离线重排”正是这次状态简化成立的条件。</p>
+<pre class="cpp"><code>std::vector&lt;<span class="type">long</span> <span class="type">long</span>&gt; minimum_query_lengths(<span class="keyword">const</span> std::vector&lt;Interval&gt;&amp; ranges,
+                                           <span class="keyword">const</span> std::vector&lt;<span class="type">long</span> <span class="type">long</span>&gt;&amp; queries) {
+    <span class="keyword">auto</span> ordered = indexed_ranges(ranges);
+    std::sort(ordered.begin(), ordered.end(), by_start);
+    std::vector&lt;std::pair&lt;<span class="type">long</span> <span class="type">long</span>, <span class="type">int</span>&gt;&gt; points;
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; static_cast&lt;<span class="type">int</span>&gt;(queries.size()); ++i) points.push_back({queries[i], i});
+    std::sort(points.begin(), points.end());
+    <span class="keyword">using</span> Candidate = std::pair&lt;<span class="type">long</span> <span class="type">long</span>, <span class="type">long</span> <span class="type">long</span>&gt;; <span class="comment">// (integer length, right endpoint)</span>
+    std::priority_queue&lt;Candidate, std::vector&lt;Candidate&gt;, std::greater&lt;Candidate&gt;&gt; candidates;
+    std::vector&lt;<span class="type">long</span> <span class="type">long</span>&gt; answer(queries.size(), -<span class="number">1</span>);
+    <span class="type">int</span> next = <span class="number">0</span>, n = static_cast&lt;<span class="type">int</span>&gt;(ordered.size());
+    <span class="keyword">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; point : points) {
+        <span class="keyword">while</span> (next &lt; n &amp;&amp; ordered[next].range.start &lt;= point.first) {
+            <span class="keyword">const</span> Interval&amp; range = ordered[next++].range;
+            candidates.push({range.end - range.start + <span class="number">1</span>, range.end});
+        }
+        <span class="keyword">while</span> (!candidates.empty() &amp;&amp; candidates.top().second &lt; point.first) candidates.pop();
+        <span class="keyword">if</span> (!candidates.empty()) answer[point.second] = candidates.top().first;
+    }
+    <span class="keyword">return</span> answer;
+}</code></pre>
+<p>每个区间最多入堆一次、出堆一次，查询排序为 <code>O(m log m)</code>，总时间 <code>O(n log n+m log m+(n+m)log n)</code>，额外空间 <code>O(n+m)</code>。同一个查询值重复出现可以各自恢复到原位置，算法不要求查询互异。堆设施复用 <a href="区间上的取舍.html#q000035">Q000035 · priority_queue的比较方向、top与pop怎样配合</a>；这里的新依据是候选进入、永久过期与目标最小值，并不是房间分配的最优性证明。</p>
+<p><a id="choice-map"></a></p>
+<h2 id="回查-目标改变后-哪些信息必须留下">回查：目标改变后，哪些信息必须留下</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>现在要回答什么</th>
+<th>关键条件</th>
+<th>保留的信息与方法</th>
+<th>代价与边界</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>覆盖哪些位置、总覆盖长度、哪里空闲</td>
+<td>静态并集；重数与身份可舍弃</td>
+<td>起点排序，保留当前未封口的累计右端</td>
+<td><code>O(n log n)</code>；不能据并集恢复原请求数量或收益</td>
+</tr>
+<tr>
+<td>向规范并集加入一段</td>
+<td>既有序且互不相交</td>
+<td>左侧复制、中间扩展、右侧复制</td>
+<td><code>O(n)</code>；不是任意原始区间输入</td>
+</tr>
+<tr>
+<td>每条是否包含或被包含</td>
+<td>原身份保留，无完全重复</td>
+<td>同左端长段先；前缀max与后缀min</td>
+<td><code>O(n log n)</code>；只能回答存在，不能回答个数</td>
+</tr>
+<tr>
+<td>峰值占用、负载是否超容量</td>
+<td>全部请求保留；端点政策明确</td>
+<td>事件增减与活动量</td>
+<td><code>O(n log n)</code>；小坐标域才考虑按域差分</td>
+</tr>
+<tr>
+<td>最少资源以及每条的分配</td>
+<td>同质可复用资源，所有请求必接</td>
+<td>起点扫描，最早释放小堆，深度下界</td>
+<td><code>O(n log n)</code>；手写堆/适配器/堆算法是同方法的实现层</td>
+</tr>
+<tr>
+<td>一个资源最多接几条、最少删几条</td>
+<td>完整请求，等权数量</td>
+<td>最早结束的兼容选择及原id</td>
+<td><code>O(n log n)</code>；收益不同不能照搬</td>
+</tr>
+<tr>
+<td>最少点命中每条区间</td>
+<td>闭区间，点可以共用</td>
+<td>最早结束的未命中段，选其右端</td>
+<td><code>O(n log n)</code>；相同相交政策下才与最大互斥数联系</td>
+</tr>
+<tr>
+<td>最少片段覆盖整段连续目标</td>
+<td>可重叠、可剪切，每片代价相同</td>
+<td>当前可接候选的最远右端，严格推进</td>
+<td><code>O(n log n)</code>；没有推进即无解，不用最早结束</td>
+</tr>
+<tr>
+<td>固定k资源最大总数量</td>
+<td>同质资源，半开正时长或闭占用严格接续，离线</td>
+<td>结束排序，最大兼容释放前驱</td>
+<td><code>O(n log(n+1)+n log(k+1))</code>；不是只取小堆顶，也未解决带权多资源</td>
+</tr>
+<tr>
+<td>一个资源最大总收益及计划</td>
+<td>结束排序后兼容集合成前缀</td>
+<td>前驱边界、选择/跳过dp、回溯</td>
+<td><code>O(n log n)</code>、<code>O(n)</code>空间；增加总项数限制时见下一行</td>
+</tr>
+<tr>
+<td>一个资源最多k项的最大收益</td>
+<td>k是全局项数预算，接触政策明确</td>
+<td>复用前驱，预算×前缀dp，按预算层滚动</td>
+<td><code>O(n log n+nk)</code>、<code>O(n)</code>空间；接口只返回值，不是k资源算法</td>
+</tr>
+<tr>
+<td>每个点的最短原区间</td>
+<td>查询可离线重排</td>
+<td>起点纳入、长度小堆、右端永久过期</td>
+<td>排序与堆更新；不适用于任意顺序在线撤销后仍要回查</td>
+</tr>
+</tbody></table></div>
+<p>这些方法共享排序、边界与容器，却各自保存不同的信息。开始做一道新题时，先写清结果对象、必须保留的身份、接触政策和允许舍弃什么，再从表中选择机制。</p>
+<p>还有两条容易因端点外形相同而误套的边界。<a href="https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended/" target="_blank" rel="noopener noreferrer">LC1353</a>只需在活动允许的日期中任选一天参加，不是完整占用整个区间。三项都可在 <code>[1,3]</code> 内任选一天的活动，逐日安排能参加三项；若当作三个完整闭区间，单资源只能选一项，模型已经变了。本文的完整区间选择不直接解决它。</p>
+<p>连续覆盖也只在每个片段代价相同、目标最少片段数时比较最远推进。若 <code>[0,10]</code> 费用100，而 <code>[0,5]</code>、<code>[5,10]</code> 各费用1，伸得最远并不代表费用最小。需要保留费用与可达位置之间的取舍，不能把上文的最少片段贪心改一个累计变量就当作最低费用覆盖。</p>
+<p><a id="submission-reference"></a></p>
+<h2 id="取出作答时-保留原题入口和合同">取出作答时，保留原题入口和合同</h2>
+<p>参考实现采用C++17。以下头文件提供本章使用的标准设施：</p>
+<pre class="cpp"><code>#include &lt;algorithm&gt;
+#include &lt;functional&gt;
+#include &lt;iostream&gt;
+#include &lt;queue&gt;
+#include &lt;set&gt;
+#include &lt;utility&gt;
+#include &lt;vector&gt;</code></pre>
+<p><a id="q000039"></a></p>
+<h3 id="q000039-怎样把参考函数组成真实的平台提交">Q000039 · 怎样把参考函数组成真实的平台提交</h3>
+<p><code>#include</code> 引入设施的声明：<code>&lt;vector&gt;</code>、<code>&lt;queue&gt;</code>、<code>&lt;set&gt;</code> 分别提供对应容器；<code>&lt;algorithm&gt;</code> 提供排序、边界与堆算法；<code>&lt;functional&gt;</code> 提供greater；<code>&lt;utility&gt;</code> 提供pair和swap；<code>&lt;iostream&gt;</code> 提供本章CSES入口使用的输入输出流。不要靠另一头文件恰好间接引入而省略所需头文件。<code>std::</code> 表明名字来自标准库；自定义命名空间的限定见 <a href="区间上的取舍.html#q000027">Q000027 · 怎样把端点和结果组成有名字的值</a>。</p>
+<p>CSES交付的是完整程序，需要一个全局 <code>int main()</code>。<code>std::cin &gt;&gt; n &gt;&gt; k</code> 按顺序读到两个已声明变量，<code>std::cout &lt;&lt; value &lt;&lt; &#39;\n&#39;</code> 写出值并换行。<code>for(auto&amp; movie : movies)</code> 用可修改引用逐个填入端点，与 <a href="区间上的取舍.html#q000029">Q000029 · 参数按值和const引用，怎样影响修改与寿命</a> 的只读循环区别在于这里确实要写元素。输入按原题合法合同读取，本章入口没有损坏输入的恢复协议。</p>
+<p>LeetCode交付的是 <code>class Solution</code> 中指定的public成员，平台负责创建对象和调用，没有自己再写main。适配器把平台的二维int数组转成核心Interval，调用后按平台要求返回数量、数组或收益；二维vector的每一行仍是一个vector，<code>row[0]</code> 等下标由原题固定列数保证合法。转换数值前先用 <a href="区间上的取舍.html#q000032">Q000032 · 先确定运算类型，再计算长度和总量</a> 的原题上界判断是否安全。</p>
+<p>完整参考文件保留全部核心函数，末尾通过 <code>#if defined(...)</code> 等条件编译选一个入口。要提交Movie Festival II，可在整份文件开头定义 <code>INTERVAL_MOVIE_II</code>；Projects定义 <code>INTERVAL_PROJECTS</code>；酒店定义 <code>INTERVAL_ROOMS</code>；LC1235定义 <code>INTERVAL_LC1235</code>。每次只选一个入口。命令行也可用 <code>-DINTERVAL_MOVIE_II</code> 并启用 <code>-std=c++17</code>。这些选择只控制哪一个平台入口参加编译，不改变核心函数；从正文只复制某一局部区域，还须带上它依赖的类型、工具和函数。</p>
+<p>下面选取四个有交付差别的入口：Movie Festival II用固定资源选择数；酒店输出实际分配；Projects保留闭日程的64位收益；LC1235按平台成员签名返回半开接续收益。其他适配入口与核心源码放在同一参考文件中，可按题名定位；算法推理仍以上文为准。</p>
+<pre class="cpp"><code><span class="type">int</span> main() {
+    <span class="type">int</span> n, k; std::cin &gt;&gt; n &gt;&gt; k;
+    std::vector&lt;interval_decisions::Interval&gt; movies(n);
+    <span class="keyword">for</span> (<span class="keyword">auto</span>&amp; movie : movies) std::cin &gt;&gt; movie.start &gt;&gt; movie.end;
+    std::cout &lt;&lt; interval_decisions::choose_k_resources(movies, k, interval_decisions::EndpointPolicy::HalfOpen).size() &lt;&lt; <span class="string">'\n'</span>;
+}</code></pre>
+<pre class="cpp"><code><span class="type">int</span> main() {
+    <span class="type">int</span> n; std::cin &gt;&gt; n;
+    std::vector&lt;interval_decisions::Interval&gt; stays(n);
+    <span class="keyword">for</span> (<span class="keyword">auto</span>&amp; stay : stays) std::cin &gt;&gt; stay.start &gt;&gt; stay.end;
+    <span class="keyword">const</span> <span class="keyword">auto</span> result = interval_decisions::allocate_standard(stays, interval_decisions::EndpointPolicy::Closed);
+    std::cout &lt;&lt; result.rooms &lt;&lt; <span class="string">'\n'</span>;
+    <span class="keyword">for</span> (<span class="type">int</span> room : result.room_for) std::cout &lt;&lt; room &lt;&lt; <span class="string">' '</span>;
+    std::cout &lt;&lt; <span class="string">'\n'</span>;
+}</code></pre>
+<pre class="cpp"><code><span class="type">int</span> main() {
+    <span class="type">int</span> n; std::cin &gt;&gt; n;
+    std::vector&lt;interval_decisions::Job&gt; projects(n);
+    <span class="keyword">for</span> (<span class="keyword">auto</span>&amp; project : projects) std::cin &gt;&gt; project.start &gt;&gt; project.end &gt;&gt; project.reward;
+    std::cout &lt;&lt; interval_decisions::weighted_standard(projects, interval_decisions::EndpointPolicy::Closed).reward &lt;&lt; <span class="string">'\n'</span>;
+}</code></pre>
+<pre class="cpp"><code><span class="keyword">class</span> Solution {
+public:
+    <span class="type">int</span> jobScheduling(std::vector&lt;<span class="type">int</span>&gt;&amp; startTime, std::vector&lt;<span class="type">int</span>&gt;&amp; endTime, std::vector&lt;<span class="type">int</span>&gt;&amp; profit) {
+        std::vector&lt;interval_decisions::Job&gt; jobs;
+        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; static_cast&lt;<span class="type">int</span>&gt;(profit.size()); ++i)
+            jobs.push_back({startTime[i], endTime[i], profit[i]});
+        <span class="keyword">return</span> static_cast&lt;<span class="type">int</span>&gt;(interval_decisions::weighted_standard(jobs, interval_decisions::EndpointPolicy::HalfOpen).reward);
+    }
+};</code></pre>
+<footer class="page-foot">区间上的取舍 · 第二算法 · 实战与实现</footer></main></div></div><script>
+const links=[...document.querySelectorAll('.sidebar a')];
+const targets=links.map(a=>document.getElementById(decodeURIComponent(a.hash.slice(1)))) .filter(Boolean);
+let scheduled=false,last='';
+function mark(){scheduled=false;let current=targets[0];for(const t of targets){if(t.getBoundingClientRect().top<=115)current=t;else break;}if(!current||last===current.id)return;last=current.id;for(const a of links){const active=decodeURIComponent(a.hash.slice(1))===last;a.classList.toggle('active',active);if(active){a.setAttribute('aria-current','location');const s=a.closest('.sidebar'),p=s.getBoundingClientRect(),r=a.getBoundingClientRect();if(r.top<p.top+8)s.scrollTop+=r.top-p.top-8;else if(r.bottom>p.bottom-8)s.scrollTop+=r.bottom-p.bottom+8;}else a.removeAttribute('aria-current');}}
+addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(mark)}},{passive:true});mark();
+document.querySelectorAll('.mobile-toc a').forEach(a=>a.addEventListener('click',()=>{document.querySelector('.mobile-toc').open=false}));
+</script></body></html>

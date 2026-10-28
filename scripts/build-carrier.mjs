@@ -11,6 +11,7 @@ hljs.registerLanguage('cpp', cpp);
 
 const REPOSITORY = 'https://github.com/Gual-Wells/The-Second-Algorithm';
 const ID = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/;
+const REGION_ID = /^[a-z][a-z0-9]*(?:[-_][a-z0-9]+)*$/;
 const SHA = /^[a-f0-9]{64}$/;
 const QUESTION = /^Q[0-9]{6}$/;
 const esc = value => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;')
@@ -133,7 +134,7 @@ export function validateLearning(learning, publications) {
           || !['manual', 'standard', 'alternative'].includes(implementation.kind)
           || !implementation.symbol?.trim() || !/^c\+\+(?:17|20|23|26)$/.test(implementation.standard)
           || !Array.isArray(implementation.regions) || !implementation.regions.length
-          || implementation.regions.some(region => !ID.test(region))
+          || implementation.regions.some(region => !REGION_ID.test(region))
           || !Array.isArray(implementation.questions) || !implementation.questions.length
           || !targets.has(implementation.target) || !implementation.complexity?.time?.trim() || !implementation.complexity?.space?.trim())
           throw new Error('Invalid/duplicate learning implementation');

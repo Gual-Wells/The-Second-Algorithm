@@ -286,6 +286,22 @@ test('a broken internal anchor prevents publication instead of leaving a dead re
   } finally { await dispose(f.root); }
 });
 
+test('C++ source region names may use underscores without relaxing entity identities or paths', async () => {
+  const f = await fixture();
+  try {
+    const publications = { schemaVersion: 2, collections: [f.collection] };
+    const valid = structuredClone(f.learning);
+    valid.tasks[0].methods[0].implementations[0].regions = ['lower_bound_manual'];
+    assert.doesNotThrow(() => validateLearning(valid, publications));
+    const unsafe = structuredClone(valid);
+    unsafe.tasks[0].methods[0].implementations[0].regions = ['../lower_bound_manual'];
+    assert.throws(() => validateLearning(unsafe, publications), /implementation/);
+    const entity = structuredClone(valid);
+    entity.tasks[0].methods[0].implementations[0].id = 'lower_bound_manual';
+    assert.throws(() => validateLearning(entity, publications), /implementation/);
+  } finally { await dispose(f.root); }
+});
+
 test('explicit C++ highlighting preserves raw strings, digit separators and actual comment tokens', async () => {
   const f = await fixture();
   try {

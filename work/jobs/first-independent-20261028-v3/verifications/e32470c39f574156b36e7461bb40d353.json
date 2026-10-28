@@ -1,0 +1,509 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-10-28T04:51:41.455105+00:00",
+  "inputHash": "b10a9dd5056b830d052ca077965c0e0f73a2a063813c693e3a7cbd7aec5fc409",
+  "inputs": {
+    ".github/workflows/validate.yml": "12d008f747c6f8860c000bc115a9e3623d731004132a6a44aee475a7b2fdb90d",
+    "AGENTS.md": "6ce2627d948bc2d4c808b4a3ae97ef858db4a6171aa0a327b7453361f74fe9f5",
+    "carrier/publications.json": "1a5c7f196ce410e2f275181633eccac4402a3c663af0de7483a4d802a40e8354",
+    "catalog/chapters.json": "ffc5d2933e1b4240b2fe94ed2886ea6b74595ac3afc714a99d07338e0b34c4ed",
+    "catalog/learning.json": "b6783fb186360dc4859bcf5b8a9943a4fd7ced9cae937bf125feb261dfc18a22",
+    "catalog/scope.json": "aa935ae39fa4feda95a839e3277858484ad739b6f7c01adc7ff0d28967658187",
+    "content/interval-decisions/build/区间上的取舍.json": "8cd46e01866dbc36c03c35702c656c31abc8495f60162fef1adab0dc08d28c26",
+    "content/interval-decisions/chapter.contract.json": "7cafb1895002ccc09f2ba740e54b0f7355be806dfd66861333bcb14c73406e20",
+    "content/interval-decisions/chapter.review.json": "26f00e94493f033c269aa8db2be6d082457ce6e1a9aed4fc72946449c7c90e7d",
+    "content/interval-decisions/区间上的取舍.cpp": "eb7d6c3f4e20a9f862bf8daa2e8e8be508289d45457b0ef4f3395222c88aeb03",
+    "content/interval-decisions/区间上的取舍.html": "1242f7eedbdafc52f8fd8ab895f2423a1034f7b83cdebf83b036a3ae0459acb8",
+    "content/interval-decisions/区间上的取舍.md": "1a140dc869de210eece92d618b5899dc55bec87dea39a2bd1914ba8e3e7180d3",
+    "content/interval-decisions/区间上的取舍.source.md": "a4b7175e89f563e3b6566ea583e0b161276385e1716582b4890f1a404d488653",
+    "docs/CONTENT_MODEL.md": "45d9df789e6c425294b913b90b6d3797e5283b378e51aa2d55f6c7074b229ce2",
+    "migrations/0001_owner_state.sql": "52e7527dcc9e0b234ebcd1fdf9968b191f2fe6ec215401753feacc962dfe25a6",
+    "package-lock.json": "255ec1c3e4d5dfdaa21a1e41ea834bba976be2cafd6323ebeca4b82586c276f4",
+    "package.json": "4f94b58d1e1cf4e8cc6cd7f26ce5d2d0d86a7cffee59edf720803bfe37ffe52b",
+    "protocol/CHAPTER_STANDARD.md": "80a043b49ffbf188a7a1c844733cabbb6ba980b7d4592fdb4a7488fd9f9627e9",
+    "protocol/CONTENT_PIPELINE.md": "debaa253d9506748fb4089a2b94e11c371b12cb2fb4d596e1a0ff069353fff9b",
+    "protocol/IMPLEMENTATION_STANDARD.md": "3c00977bc69400554f7bb1bff5ff7cc00547d4e283af478ce5f99748647ec6ae",
+    "protocol/QUALITY_WORKFLOW.md": "fdad28a494d6864d89860dacea070dfc706d9076b57e0b1294f092049b211c13",
+    "protocol/RESEARCH_DEPARTMENT.md": "bde06a104d08c595b2ca5a706a0db28f47b0d27b3593230cfce797b4f2ee1db4",
+    "protocol/TASK_EXECUTION.md": "e2ff04e73c4754ff7dfcef9e28ad26211fbe4aba1bbcb1b565db398ce043c206",
+    "scripts/build-carrier.mjs": "e2591e14943bc65e987dd29b20e7f62618d46c36948e16eada03461681220ee9",
+    "scripts/build-course.mjs": "0af19aaced4aa61a09fe0db74fab926cdee34a63ebc815de6b957dddf8e28408",
+    "scripts/check-carrier-browser.cjs": "6361abaf8f3020dd9dcb718459a0a6034ab482d157ec4049bf5d030e9e341c77",
+    "scripts/check-carrier-upgrade.cjs": "29cdaf83cca622d7ded8b47ff510ca62d8c2d178ee240c2f3aeab5480eef637c",
+    "scripts/check-project.mjs": "d4e2ffd35f0b977a51827d2aa47a6f3a41021b33e93aa765274b88267b77a775",
+    "scripts/deploy-carrier.mjs": "60e7faf45d4aff3ecd6b7170a691bc2fc414fca41642eedc1c860ea86591a196",
+    "scripts/make-carrier-icons.py": "d5230ae1c92d86016b101f5ad42a43d23c3543653cd0d5e547603d093052fa35",
+    "second_algorithm/__init__.py": "3abd7d41bb08c38ac5f07cd59a8a38c6e67d7cf499f1a5c18e3845556e0be2ab",
+    "second_algorithm/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "second_algorithm/catalog.py": "e184865eea0ff01ae5faefee1d541014136cc71d63836a055b2b62fbc72efaa3",
+    "second_algorithm/chapters.py": "1cf28443845585e4aa917307f7870fd292b30f1647f921a76fe353e2e43e1977",
+    "second_algorithm/cli.py": "d9ce5d2a7ca06689e37c39128ea8e5a5a0fae8755ecdc708ac40da86f0ffad9f",
+    "second_algorithm/collect.py": "57b327059dcee86689965b813705c03511395242dd9e3cfd603f1f41e06e631a",
+    "second_algorithm/learning.py": "fb4887b3d9527902b43ac0f7a09a61289d46308fb004dd62fc37434355d69a59",
+    "second_algorithm/storage.py": "dd5c07c94e62d55dd6c71b84d8077058b7cad2ab1150cdf13e0b738b26100f41",
+    "second_algorithm/workflow.py": "c0c33158a10cd684f6a8f7bc7b91efa578be63330b37bb7c09bc442c338ef893",
+    "server/auth.mjs": "6464611e9f358f1ed6184309a86e18890c1b1beb5d43d4091add36379bbb90eb",
+    "server/worker.mjs": "329d51ce22f608a2ee3a0f2abb72df1c2f7b745eccd35a1437c1f766a8e4a894",
+    "test/carrier-build.test.mjs": "5bc3927a669a8b2852eddb2e19245671eddd9a5715969875629ff504b1308868",
+    "test/carrier-deploy.test.mjs": "ef093a3035ee4e41df6ad6c3923e60f667450018864f1c8886ca208b92edd73b",
+    "test/carrier-icons.test.mjs": "7d06a17b7f89e7e7e1beda7ea9e2ab28cfb1f5d5104d74883fa37ff58f034cd6",
+    "test/carrier-notes.test.mjs": "5809c1f50788579e039b7f2a5b32963e3cbbdd4820fbb5b40c994de98523253b",
+    "test/carrier-server.test.mjs": "758ab8e8110073414dec555a7e8a593982c585ec6c151d5eeaa7a740b858555d",
+    "test/carrier-sw.test.mjs": "0af3ef8a0045f7e4d6c845a00b07b94aec44e3585de1b30d4630582294cb3a13",
+    "test/carrier-worker-release.test.mjs": "f5ea8a08a08d53d2d6c547a2ee809526d823f5bf869ca8863d539fc97d5eeaec",
+    "tests/cpp/interval_adapter_test.cpp": "caf50ed9931bb57309ae8e634c33b7cc43de898207dd105ee9ffadd9be98732c",
+    "tests/cpp/interval_decisions_test.cpp": "d7cbeee89f4206707a6b8f8405554e51e761a5ebde1138c0c11cc1fd38e7d90d",
+    "tests/cpp/interval_entry.cpp": "6142e0208a8b423966dc6eb505e716dd319600eaf222aee92ab533499d9ec92c",
+    "tests/cpp/verify_object_interfaces.py": "686c4d4f8191e9b0d65dfd04b3c55cfa1443dece3a7d0506753863e30a2a7a38",
+    "tests/test_chapters.py": "0897a231a1d3112134548fd23098d15a3c940f6127586ed756e490b1e61dc81b",
+    "tests/test_learning_workflow.py": "ba5aeff860cdd94ef56bed052fc1ec069584c5572821bde599b19ff41f24ffea",
+    "tests/test_reading_assets.py": "dab58182a1d8960d32a47ba804fffe8a75ab18472667d0361ef0cd4558d298b8",
+    "tests/test_research_tools.py": "757ce7399510ed4bebf29464a7abd1b09e65e2cf3a911ee5efc20d92646a73cc",
+    "tools/build_handbook.mjs": "c19daf7179d3995596ec428120d84cf29c3af99a69821a2f9939f5083d67ea8b",
+    "web/DESIGN.md": "5a0181f35afe6546b2fea35e11c3c3a380f74660531aaeed5ac41e58b86f01b7",
+    "web/app.js": "5a7e849204b0ed3778a0a31f09d37ae3924099b091dafd20187666f7cc08d8b3",
+    "web/auth.js": "9f8db119e19cc7ac887e96aa6cefe8bc153759c316bb611472b91a2507b2fd87",
+    "web/icons/apple-touch-icon-series1.png": "dc478907d0c2866312e8f6cc2db15824c7badff3c6d4f4882438092a00e6e664",
+    "web/icons/apple-touch-icon.png": "dc478907d0c2866312e8f6cc2db15824c7badff3c6d4f4882438092a00e6e664",
+    "web/icons/build.json": "36aae61c67a67af97f2377eb4125663cea2ca0d8950aa646b8644b0cb3e813c9",
+    "web/icons/icon-192.png": "7dc931fd40e3513017a6e3a8f6cce7cbd156f43bfe1ac273858a5e80a1b545aa",
+    "web/icons/icon-512.png": "6e2c002fc0cbe0cd97f560a808be06e24898260b550098848aaeee5fc1240353",
+    "web/icons/icon.svg": "497c4629840c349d1a23d27cb4a2bf9330c7f097974be9ab906a2253a6638ed3",
+    "web/index.html": "86cdb85489918972c60a2b9f46cf7a950be0057506096a8d20566be500e6d6e2",
+    "web/manifest.webmanifest": "7c159b2c915dd26ce30bc5a457c835c6ea23a786c6ceded66930e5443ed74caf",
+    "web/notes-journal.js": "f744ecd13a41cc472ae49de132a4e93bf72b92c6ead06b55734c5c4957afe0a6",
+    "web/robots.txt": "331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1",
+    "web/styles.css": "84781009ab7ee618d5bfcdc76a2cb58f4bdfec65bba7d3946d41229f99304a97",
+    "web/sw.js": "21b231115a5932ebf1e4f2ff57fae1b3170374c2f61c97248f49fe0e990133ee",
+    "web/worker-release.js": "955398614ccfdf7f3e9a663a8eb47813b67e05e43d6d19bac9cd1e4e5ef35d01",
+    "work/first-independent-20261028-v3/research/authoring-decisions.md": "5316f4698b7533d7de320bab338d1cf845d65620ab113243836ef8440b15e10f",
+    "work/first-independent-20261028-v3/research/implementation-contract.md": "fa0ebfbaa81b51ba22dfaa8f3004c4676f517b76b61fce15c4dedb7c396c3c4d",
+    "work/first-independent-20261028-v3/research/problem-space.md": "aa3669758d209dbcbeb537bb28dd496444e86489eb80eef1556256f5d181f906",
+    "work/first-independent-20261028-v3/research/scope.md": "01f97c8a9f6c5fcc5ff406a0e7308da53fe7e5b18471e211edce9c0b5f1f5313",
+    "work/first-independent-20261028-v3/review/adoption.md": "565ded9b5fea44a385e360f53f072eecc13d952de3aa134da24bcba5dbb61041",
+    "work/first-independent-20261028-v3/review/independent-scope-probe.md": "abd2d6b982f33b318adb19fe0402c658d4dd31bbac274fc5447b425a6f80599d",
+    "work/first-independent-20261028-v3/review/method-and-scope-review.md": "8efa388e91370134c619918563b1e4561f08fbe20b876036c89532677d7e0e09",
+    "work/first-independent-20261028-v3/review/range-probe-comparison.md": "c811ad0dd943303013d69d44d4b76589862cf543bba149766b5019a24f3cf6c7",
+    "work/first-independent-20261028-v3/review/reader-and-cpp-review.md": "ac8ea6d2cab172634f19841ec2b2c70023dd725ff2d980938f798d6c63cc30f3",
+    "work/first-independent-20261028-v3/verification/independent-test-design.md": "ba44c3653bfd3d2f721c052a06956307097ce663da42807a737c17df0faff0f6",
+    "work/first-independent-20261028-v3/verification/platform-validation.md": "3c3fb054e754faeafae4a46489955d0e9adff572858666f985db6ea90ea7264d",
+    "work/first-independent-20261028-v3/verification/verify_platform_entries.py": "9b3d79ab0b243800bd01a6824ebd72cb70303eb097440b5597324830b8fa87df",
+    "wrangler.jsonc": "04125a5156e82afc9474e7a9cb4b60316fa148c630219b9fa055cb794eaeaa75"
+  },
+  "publicationState": "active",
+  "operation": "content-release",
+  "compiler": {
+    "name": "g++",
+    "exit": 0,
+    "stdout": "g++ (GCC) 16.2.0\nCopyright (C) 2026 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+    "stderr": "",
+    "timeout": false
+  },
+  "cppVerification": "passed",
+  "targets": [
+    {
+      "id": "interval-independent",
+      "kind": "run",
+      "standard": "c++17",
+      "flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-D_GLIBCXX_ASSERTIONS"
+      ],
+      "compile": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false
+      },
+      "run": {
+        "exit": 0,
+        "stdout": "PASS interval_decisions: 5278 small-model cases (3465 exhaustive multisets, 1800 seeded random, 13 targeted); all APIs checked; n=200000 scale families passed.\nStandalone empty-query and LC452 full int32 endpoint checks passed.\nbounded_weighted: every small-case budget, empty/k=0, and n*k=1000000 scale families passed.\nSmall-model time: 0.462534 s; scale time: 0.675246 s.\n",
+        "stderr": "",
+        "timeout": false
+      },
+      "passed": true
+    },
+    {
+      "id": "interval-movie-entry",
+      "kind": "compile",
+      "standard": "c++17",
+      "flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-D_GLIBCXX_ASSERTIONS",
+        "-DINTERVAL_MOVIE"
+      ],
+      "compile": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false
+      },
+      "run": null,
+      "passed": true
+    },
+    {
+      "id": "interval-rooms-entry",
+      "kind": "compile",
+      "standard": "c++17",
+      "flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-D_GLIBCXX_ASSERTIONS",
+        "-DINTERVAL_ROOMS"
+      ],
+      "compile": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false
+      },
+      "run": null,
+      "passed": true
+    },
+    {
+      "id": "interval-projects-entry",
+      "kind": "compile",
+      "standard": "c++17",
+      "flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-D_GLIBCXX_ASSERTIONS",
+        "-DINTERVAL_PROJECTS"
+      ],
+      "compile": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false
+      },
+      "run": null,
+      "passed": true
+    },
+    {
+      "id": "interval-customers-entry",
+      "kind": "compile",
+      "standard": "c++17",
+      "flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-D_GLIBCXX_ASSERTIONS",
+        "-DINTERVAL_CUSTOMERS"
+      ],
+      "compile": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false
+      },
+      "run": null,
+      "passed": true
+    },
+    {
+      "id": "interval-movie-ii-entry",
+      "kind": "compile",
+      "standard": "c++17",
+      "flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-D_GLIBCXX_ASSERTIONS",
+        "-DINTERVAL_MOVIE_II"
+      ],
+      "compile": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false
+      },
+      "run": null,
+      "passed": true
+    },
+    {
+      "id": "interval-nested-entry",
+      "kind": "compile",
+      "standard": "c++17",
+      "flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-D_GLIBCXX_ASSERTIONS",
+        "-DINTERVAL_NESTED"
+      ],
+      "compile": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false
+      },
+      "run": null,
+      "passed": true
+    },
+    {
+      "id": "interval-lc56-adapter",
+      "kind": "run",
+      "standard": "c++17",
+      "flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-D_GLIBCXX_ASSERTIONS",
+        "-DINTERVAL_LC56"
+      ],
+      "compile": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false
+      },
+      "run": {
+        "exit": 0,
+        "stdout": "adapter checks passed: 12\n",
+        "stderr": "",
+        "timeout": false
+      },
+      "passed": true
+    },
+    {
+      "id": "interval-lc57-adapter",
+      "kind": "run",
+      "standard": "c++17",
+      "flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-D_GLIBCXX_ASSERTIONS",
+        "-DINTERVAL_LC57"
+      ],
+      "compile": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false
+      },
+      "run": {
+        "exit": 0,
+        "stdout": "adapter checks passed: 24\n",
+        "stderr": "",
+        "timeout": false
+      },
+      "passed": true
+    },
+    {
+      "id": "interval-lc435-adapter",
+      "kind": "run",
+      "standard": "c++17",
+      "flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-D_GLIBCXX_ASSERTIONS",
+        "-DINTERVAL_LC435"
+      ],
+      "compile": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false
+      },
+      "run": {
+        "exit": 0,
+        "stdout": "adapter checks passed: 12\n",
+        "stderr": "",
+        "timeout": false
+      },
+      "passed": true
+    },
+    {
+      "id": "interval-lc452-adapter",
+      "kind": "run",
+      "standard": "c++17",
+      "flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-D_GLIBCXX_ASSERTIONS",
+        "-DINTERVAL_LC452"
+      ],
+      "compile": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false
+      },
+      "run": {
+        "exit": 0,
+        "stdout": "adapter checks passed: 14\n",
+        "stderr": "",
+        "timeout": false
+      },
+      "passed": true
+    },
+    {
+      "id": "interval-lc1024-adapter",
+      "kind": "run",
+      "standard": "c++17",
+      "flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-D_GLIBCXX_ASSERTIONS",
+        "-DINTERVAL_LC1024"
+      ],
+      "compile": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false
+      },
+      "run": {
+        "exit": 0,
+        "stdout": "adapter checks passed: 14\n",
+        "stderr": "",
+        "timeout": false
+      },
+      "passed": true
+    },
+    {
+      "id": "interval-lc1235-adapter",
+      "kind": "run",
+      "standard": "c++17",
+      "flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-D_GLIBCXX_ASSERTIONS",
+        "-DINTERVAL_LC1235"
+      ],
+      "compile": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false
+      },
+      "run": {
+        "exit": 0,
+        "stdout": "adapter checks passed: 32\n",
+        "stderr": "",
+        "timeout": false
+      },
+      "passed": true
+    },
+    {
+      "id": "interval-lc1851-adapter",
+      "kind": "run",
+      "standard": "c++17",
+      "flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-D_GLIBCXX_ASSERTIONS",
+        "-DINTERVAL_LC1851"
+      ],
+      "compile": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false
+      },
+      "run": {
+        "exit": 0,
+        "stdout": "adapter checks passed: 15\n",
+        "stderr": "",
+        "timeout": false
+      },
+      "passed": true
+    },
+    {
+      "id": "interval-lc1094-adapter",
+      "kind": "run",
+      "standard": "c++17",
+      "flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-D_GLIBCXX_ASSERTIONS",
+        "-DINTERVAL_LC1094"
+      ],
+      "compile": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false
+      },
+      "run": {
+        "exit": 0,
+        "stdout": "adapter checks passed: 14\n",
+        "stderr": "",
+        "timeout": false
+      },
+      "passed": true
+    },
+    {
+      "id": "interval-lc1751-adapter",
+      "kind": "run",
+      "standard": "c++17",
+      "flags": [
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-D_GLIBCXX_ASSERTIONS",
+        "-DINTERVAL_LC1751"
+      ],
+      "compile": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "timeout": false
+      },
+      "run": {
+        "exit": 0,
+        "stdout": "adapter checks passed: 16\n",
+        "stderr": "",
+        "timeout": false
+      },
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "semanticCompletenessCertified": false,
+  "limits": "Real local targets only; no online submission, learning measurement, or automatic semantic review."
+}

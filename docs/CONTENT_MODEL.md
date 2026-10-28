@@ -21,7 +21,7 @@
 
 四维为difficulty、breadth、completeness、readability，每维必须有具体承诺。任务引用须属于本章；正文位置是 `{document,anchor}`，只接受本章真实显式 `<a id="稳定id"></a>`，不接受注释/围栏中的假锚点、未知/重复锚点。材料为实际仓库持久文件，不允许.local/.git/node_modules，文件进入输入摘要。商业原件继续按LOCAL_MATERIALS留本地，只把原创读件证据公开。
 
-这些是结构约束，不声称四项非空或路径存在就达到质量。产品强约束和排除否决来自CHAPTER_STANDARD，实际回查来自QUALITY_WORKFLOW。reading不是固定题数/标题/六栏目模板，核验的是读者入口→真实问题簇→选择地图的可定位结构，语义仍须通读。当前第一章有真实open，validate可以通过以便继续工程，但quality和发布准备会拒绝。
+这些是结构约束，不声称四项非空或路径存在就达到质量。产品强约束和排除否决来自CHAPTER_STANDARD，实际回查来自QUALITY_WORKFLOW。reading不是固定题数/标题/六栏目模板，核验的是读者入口→真实问题簇→选择地图的可定位结构，语义仍须通读。施工章有真实open时，validate可以通过以便继续工程，但quality和发布准备会拒绝；未审、已审、已发布是不同状态。
 
 审阅JSON包含schemaVersion/chapter/inputHash、assessments、comparison、outsideChallenge、verdict。每个承诺恰一份assessment：commitment、outcome(pass/gap)、reason、locations；pass必须有真实本章位置。comparison给baseline/findings；outsideChallenge给materialIds/findings，材料须有countercheck角色；verdict仅实际采用时accepted。角色/理由字段不能证明已研究，后续改稿不把已用反查继续冒充未见材料。
 
@@ -57,7 +57,7 @@ chapters默认中文人读；quality默认显示阻塞，`--json`便于工具使
 
 target 可按需声明 `additionalSources`（一起编译的其他翻译单元）、`dependencies`（必须计入输入的显式依赖）、`defines`（标识符或简单 `NAME=value`）。普通目标只有一个source即可，不需要为简单算法建立复杂工程。
 
-实现 source 必须真实存在，regions 对应它的 `// BEGIN id`／`// END id`，重复或不闭合标记失败。symbol 必须在声明的区域中有函数式出现；target 必须通过其本地引用闭包实际依赖这份 source，验证标准不得早于实现标准。参考实现不能仅关联一个预期编译失败目标。
+实现 source 必须真实存在，regions 对应它的 `// BEGIN id`／`// END id`，区域名可用连字符或下划线（如lower_bound_manual），不含路径分隔或跳转；任务/实现等实体ID仍使用连字符形式。重复或不闭合标记失败。symbol 必须在声明的区域中有函数式出现；target 必须通过其本地引用闭包实际依赖这份 source，验证标准不得早于实现标准。参考实现不能仅关联一个预期编译失败目标。
 
 这个 symbol 检查是文本定位，编译是实际工具链检查；二者不等于机器证明测试已经覆盖该函数的所有行为。测试驱动必须实际调用要核验的实现，Agent 在语义审阅中核对。复杂度文字也不因字段非空得到数学认证。
 

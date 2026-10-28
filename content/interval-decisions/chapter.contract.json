@@ -1,0 +1,564 @@
+{
+  "schemaVersion": 1,
+  "chapter": "interval-decisions",
+  "title": "区间上的取舍：覆盖、冲突与收益",
+  "reader": {
+    "startingPoint": "已有计算机基础，能理解数组/循环/基本复杂度，但C++设施运用缺少系统实战经验；不把历史撤回章节或旧Q视为已学。",
+    "targetCapability": "面对同类端点输入，先辨认对象、必须保留的请求、目标和相接政策，再选择充分状态与算法，证明选择成立，取得合法最优见证并写成真实上机作答。",
+    "supportPolicy": "算法主线按表示、全保留、选择取舍推进；必要C++知识就近唯一主讲，后续编号定位。真实手写堆/边界/扫描/贪心/DP与标准设施各自承担其层次，不重造整套容器，也不因设施支架删算法挑战。"
+  },
+  "scope": {
+    "core": "静态一维区间：闭并集及有序插入、并集查询与包含存在性；事件/带权负载峰值与最少资源构造；最大数量/最少删除、点命中、目标段最少覆盖；固定同质资源选最多任务；单资源最大收益的前驱DP与方案恢复；离线最短覆盖区间查询。每种方法完成条件、状态、证明、代码、代价与结果政策，不止列失败提示。 至多k项的单资源预算收益也实际承载，与k资源数量明确区分。",
+    "extensions": "闭与半开端点、接触/单点、重复端点与原序、计数值到见证、单位到带权负载、数量到收益、无限资源到固定资源及离线查询的关系均实际承载。三种房间堆是同一算法的机制对照；两种DP只替换前驱搜索层。低前置复用自然就地说明，不为每个推论另造OJ题。",
+    "completenessArgument": "已从独立原件对照回查初稿：预算维度原先仅提示，现已实际纳入递推、滚动依赖、C++和平台入口；前驱非单调与可移动窗口等边界得到具体化。既定12类实际任务关系均有正文和实现，计数/动态/多资源带权等排除有模型依据，不宣称穷尽全部区间。最终采用仍需独立方法/读者审阅与载体验证。",
+    "exclusions": [
+      {
+        "topic": "逐区间包含计数",
+        "reason": "极值只支持是否存在，计数需保存端点秩/频数分布。本章没有为固定k前驱另行支付Fenwick/平衡树机制前置，主张仍是覆盖、冲突与资源选择；不能称已经教授成对支配统计。",
+        "destination": "明确存在性与计数分界；计数结构未教授，后续由实际研究决定，不设未来空章。"
+      },
+      {
+        "topic": "动态增删预约及在线取消后的峰值",
+        "reason": "本章排序扫描/离线查询要求预知输入；任意更新会改变状态维护方式，不能将排序技巧冒充在线维护。",
+        "destination": "保留操作模型边界；未教授动态方案。"
+      },
+      {
+        "topic": "k资源带权选择、圆周/二维覆盖和可移动截止期任务",
+        "reason": "分别改变最优化结构、几何对象或任务可移动性，当前最早结束与单前缀DP不自动成立，不能以同含端点归并。",
+        "destination": "明确未覆盖，不声明完整调度/全部区间问题已解决。"
+      },
+      {
+        "topic": "完整排序教材与手写平衡搜索树",
+        "reason": "本章实质手写堆、前驱边界、状态扫描、贪心和DP；使用vector/sort/multiset并实际解释合同，不为每次设施调用重造无新增教学收益的底层结构。",
+        "destination": "所需设施就地讲解，底层全体系不计当前课程覆盖。"
+      }
+    ]
+  },
+  "reading": {
+    "status": "addressed",
+    "entry": [
+      {
+        "document": "interval-decisions",
+        "anchor": "chapter-entry"
+      }
+    ],
+    "units": [
+      {
+        "id": "coverage",
+        "title": "覆盖表示与原身份：并集、插入、包含",
+        "taskIds": [
+          "closed-union",
+          "insert-union",
+          "containment-existence"
+        ],
+        "locations": [
+          {
+            "document": "interval-decisions",
+            "anchor": "endpoint-model"
+          },
+          {
+            "document": "interval-decisions",
+            "anchor": "coverage-cluster"
+          },
+          {
+            "document": "interval-decisions",
+            "anchor": "insert-reuse"
+          },
+          {
+            "document": "interval-decisions",
+            "anchor": "containment"
+          }
+        ]
+      },
+      {
+        "id": "all-requests",
+        "title": "全部必接：峰值到最少房间构造",
+        "taskIds": [
+          "occupancy-load",
+          "room-allocation"
+        ],
+        "locations": [
+          {
+            "document": "interval-decisions",
+            "anchor": "occupancy-cluster"
+          },
+          {
+            "document": "interval-decisions",
+            "anchor": "room-allocation"
+          },
+          {
+            "document": "interval-decisions",
+            "anchor": "manual-heap"
+          },
+          {
+            "document": "interval-decisions",
+            "anchor": "standard-heaps"
+          }
+        ]
+      },
+      {
+        "id": "different-choices",
+        "title": "选任务、选点、选覆盖段的不同取舍",
+        "taskIds": [
+          "activity-selection",
+          "interval-stabbing",
+          "continuous-cover"
+        ],
+        "locations": [
+          {
+            "document": "interval-decisions",
+            "anchor": "selection-cluster"
+          },
+          {
+            "document": "interval-decisions",
+            "anchor": "stabbing"
+          },
+          {
+            "document": "interval-decisions",
+            "anchor": "continuous-cover"
+          }
+        ]
+      },
+      {
+        "id": "limited-resources",
+        "title": "固定资源的前驱选择和完整交换",
+        "taskIds": [
+          "fixed-resources"
+        ],
+        "locations": [
+          {
+            "document": "interval-decisions",
+            "anchor": "fixed-resources"
+          },
+          {
+            "document": "interval-decisions",
+            "anchor": "fixed-resource-exchange"
+          }
+        ]
+      },
+      {
+        "id": "value-and-budget",
+        "title": "收益前缀、方案恢复与项数预算",
+        "taskIds": [
+          "weighted-intervals",
+          "budgeted-value"
+        ],
+        "locations": [
+          {
+            "document": "interval-decisions",
+            "anchor": "weighted-jobs"
+          },
+          {
+            "document": "interval-decisions",
+            "anchor": "predecessor-search"
+          },
+          {
+            "document": "interval-decisions",
+            "anchor": "weighted-implementation"
+          },
+          {
+            "document": "interval-decisions",
+            "anchor": "budgeted-value"
+          }
+        ]
+      },
+      {
+        "id": "offline-queries",
+        "title": "离线点查询及永久过期候选",
+        "taskIds": [
+          "offline-interval-query"
+        ],
+        "locations": [
+          {
+            "document": "interval-decisions",
+            "anchor": "offline-query-cluster"
+          },
+          {
+            "document": "interval-decisions",
+            "anchor": "offline-expiration-proof"
+          }
+        ]
+      }
+    ],
+    "selectionMap": [
+      {
+        "document": "interval-decisions",
+        "anchor": "choice-map"
+      }
+    ]
+  },
+  "materials": [
+    {
+      "id": "fresh-scope",
+      "kind": "original-scope-research",
+      "locator": "本轮独立候选比较，EPI2015/CP4-2020实际相关页与官方区间、二分、图原题；未读旧稿",
+      "evidence": "work/first-independent-20261028-v3/research/scope.md",
+      "sourcePaths": []
+    },
+    {
+      "id": "fresh-problem-space",
+      "kind": "original-method-research",
+      "locator": "本轮独立问题空间，16个原题；EPI/CP4和Cornell/UIUC相关正式方法原文及实际视觉读件范围",
+      "evidence": "work/first-independent-20261028-v3/research/problem-space.md",
+      "sourcePaths": []
+    },
+    {
+      "id": "author-materials",
+      "kind": "authoring-and-cpp-contract",
+      "locator": "本轮唯一作者稿与官方C++17/原题合同核对；记录真实采用/排除与读件边界",
+      "evidence": "work/first-independent-20261028-v3/research/authoring-decisions.md",
+      "sourcePaths": [
+        "work/first-independent-20261028-v3/research/implementation-contract.md"
+      ]
+    },
+    {
+      "id": "independent-range-probe",
+      "kind": "countercheck",
+      "locator": "初稿分类形成前独立分析真实材料，未看两份作者分类/稿件，待初稿后对照；采用后转为建设材料",
+      "evidence": "work/first-independent-20261028-v3/review/independent-scope-probe.md",
+      "sourcePaths": [
+        "work/first-independent-20261028-v3/review/range-probe-comparison.md"
+      ]
+    },
+    {
+      "id": "final-adoption-evidence",
+      "kind": "final-review-and-verification",
+      "locator": "本轮最终语义审阅、独立模型和真实平台入口验证；此项只固定证据，不改变章界与承诺",
+      "evidence": "work/first-independent-20261028-v3/review/adoption.md",
+      "sourcePaths": [
+        "work/first-independent-20261028-v3/review/method-and-scope-review.md",
+        "work/first-independent-20261028-v3/review/reader-and-cpp-review.md",
+        "work/first-independent-20261028-v3/verification/independent-test-design.md",
+        "work/first-independent-20261028-v3/verification/platform-validation.md",
+        "work/first-independent-20261028-v3/verification/verify_platform_entries.py"
+      ]
+    }
+  ],
+  "commitments": [
+    {
+      "id": "objective-selects-state",
+      "dimension": "difficulty",
+      "claim": "从原题目标推导可丢弃与必须保留的信息，给交换、支配、并发下界和DP分类的完整推理。",
+      "acceptance": "能据正文重建最早结束交换、最远覆盖支配、房间数下界与带权选择/跳过穷尽分类，不靠算法名或库调用代替证明。",
+      "status": "addressed",
+      "taskIds": [
+        "closed-union",
+        "room-allocation",
+        "activity-selection",
+        "continuous-cover",
+        "weighted-intervals"
+      ],
+      "locations": [
+        {
+          "document": "interval-decisions",
+          "anchor": "merge-frontier-proof"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "room-optimality"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "activity-exchange"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "cover-dominance"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "weighted-recurrence"
+        }
+      ],
+      "materialIds": [
+        "fresh-scope",
+        "fresh-problem-space"
+      ]
+    },
+    {
+      "id": "fixed-resource-exchange",
+      "dimension": "difficulty",
+      "claim": "固定k资源选择真正采用最大兼容前驱并证明尾链交换，不能仅把最早释放堆改名。",
+      "acceptance": "包含当前任务/未含当前任务两种最优延续均可换成贪心前缀；空资源无伪无穷哨兵；反例解释为何最小堆贪心不足。",
+      "status": "addressed",
+      "taskIds": [
+        "fixed-resources"
+      ],
+      "locations": [
+        {
+          "document": "interval-decisions",
+          "anchor": "fixed-resources"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "fixed-resource-exchange"
+        }
+      ],
+      "materialIds": [
+        "fresh-scope",
+        "fresh-problem-space"
+      ]
+    },
+    {
+      "id": "goal-condition-spectrum",
+      "dimension": "breadth",
+      "claim": "并集、全部接受资源、最大数量、点命中、连续覆盖、固定资源、收益与离线查询的关键差异有真实方法承载。",
+      "acceptance": "条件轴与结果政策决定状态和比较符号；资源/权重分叉不是只报失败后推给未来，原题端点差异与零长度对象明确。",
+      "status": "addressed",
+      "taskIds": [
+        "closed-union",
+        "insert-union",
+        "containment-existence",
+        "occupancy-load",
+        "room-allocation",
+        "activity-selection",
+        "interval-stabbing",
+        "continuous-cover",
+        "fixed-resources",
+        "weighted-intervals",
+        "budgeted-value",
+        "offline-interval-query"
+      ],
+      "locations": [
+        {
+          "document": "interval-decisions",
+          "anchor": "endpoint-model"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "peak-endpoint-proof"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "stabbing"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "continuous-cover"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "fixed-resources"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "budgeted-value"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "offline-query-cluster"
+        }
+      ],
+      "materialIds": [
+        "fresh-scope",
+        "fresh-problem-space"
+      ]
+    },
+    {
+      "id": "low-cost-reuse",
+      "dimension": "breadth",
+      "claim": "并集长度/空白、最少删除、合法见证与恢复方案等已有结果的低前置复用就地形成参考面。",
+      "acceptance": "复用能直接定位条件/表达式/结果，不另抄完整模板；不把保留几道原题冒称这一层已经覆盖。",
+      "status": "addressed",
+      "taskIds": [
+        "closed-union",
+        "insert-union",
+        "activity-selection",
+        "weighted-intervals"
+      ],
+      "locations": [
+        {
+          "document": "interval-decisions",
+          "anchor": "insert-reuse"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "selection-cluster"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "weighted-implementation"
+        }
+      ],
+      "materialIds": [
+        "fresh-scope",
+        "fresh-problem-space"
+      ]
+    },
+    {
+      "id": "mechanism-and-library",
+      "dimension": "completeness",
+      "claim": "真实手写关键堆/边界及核心算法，与priority_queue/heap算法/有序前驱设施在同一合同下对照，必要C++问题唯一充分。",
+      "acceptance": "层次不混淆，不宣称multiset或lower_bound是整题库解；所有实现有权威区域、真实核验和必要知识主讲/引用。",
+      "status": "addressed",
+      "taskIds": [
+        "room-allocation",
+        "fixed-resources",
+        "weighted-intervals",
+        "budgeted-value",
+        "offline-interval-query"
+      ],
+      "locations": [
+        {
+          "document": "interval-decisions",
+          "anchor": "manual-heap"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "standard-heaps"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "predecessor-search"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "weighted-implementation"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "budgeted-value"
+        }
+      ],
+      "materialIds": [
+        "author-materials"
+      ]
+    },
+    {
+      "id": "finite-scope-and-entries",
+      "dimension": "completeness",
+      "claim": "有限范围和必要前置闭合，经独立外部材料反查；实际平台输入输出、无解与多解、数值范围可用。",
+      "acceptance": "独立材料影响纳入/排除有具体理由，CSES/LC入口真实编译/运行；见证按合法最优验，不要求唯一文本。",
+      "status": "addressed",
+      "taskIds": [
+        "closed-union",
+        "insert-union",
+        "containment-existence",
+        "occupancy-load",
+        "room-allocation",
+        "activity-selection",
+        "interval-stabbing",
+        "continuous-cover",
+        "fixed-resources",
+        "weighted-intervals",
+        "budgeted-value",
+        "offline-interval-query"
+      ],
+      "locations": [
+        {
+          "document": "interval-decisions",
+          "anchor": "choice-map"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "submission-reference"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "budgeted-value"
+        }
+      ],
+      "materialIds": [
+        "independent-range-probe",
+        "fresh-scope",
+        "fresh-problem-space"
+      ]
+    },
+    {
+      "id": "continuous-reading-route",
+      "dimension": "readability",
+      "claim": "有能力入口、按对象/目标递进的问题簇、邻近代码与最终方法选择地图，读者能读也能查。",
+      "acceptance": "按真实学习顺序连续通读，每次新机制有前提/例子/推理，方法联系和误用边界可定位；不把内部合同或一题一模板题库灌入正文。",
+      "status": "addressed",
+      "taskIds": [
+        "closed-union",
+        "insert-union",
+        "containment-existence",
+        "occupancy-load",
+        "room-allocation",
+        "activity-selection",
+        "interval-stabbing",
+        "continuous-cover",
+        "fixed-resources",
+        "weighted-intervals",
+        "budgeted-value",
+        "offline-interval-query"
+      ],
+      "locations": [
+        {
+          "document": "interval-decisions",
+          "anchor": "chapter-entry"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "coverage-cluster"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "occupancy-cluster"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "selection-cluster"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "weighted-jobs"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "offline-query-cluster"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "choice-map"
+        }
+      ],
+      "materialIds": [
+        "author-materials",
+        "fresh-scope"
+      ]
+    },
+    {
+      "id": "cpp-support-not-ceiling",
+      "dimension": "readability",
+      "claim": "C++支架解决真实实现障碍且只主讲一次，保持算法主线高度与阅读连续性。",
+      "acceptance": "前置/Q安排、引用返回和源码选择清楚，设施解释不被删也不统治算法导航；包装细节集中参考，不用新宏填充学习主线。",
+      "status": "addressed",
+      "taskIds": [
+        "room-allocation",
+        "fixed-resources",
+        "weighted-intervals"
+      ],
+      "locations": [
+        {
+          "document": "interval-decisions",
+          "anchor": "q000027"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "manual-heap"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "standard-heaps"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "q000037"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "q000038"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "submission-reference"
+        }
+      ],
+      "materialIds": [
+        "author-materials"
+      ]
+    }
+  ]
+}

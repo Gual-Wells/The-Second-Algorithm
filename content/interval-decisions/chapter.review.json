@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 1,
+  "chapter": "interval-decisions",
+  "inputHash": "14bf6c14d7260536d4408be3ea37a1db3e464cc68b9035e0cd87168a9d4d27ab",
+  "assessments": [
+    {
+      "commitment": "objective-selects-state",
+      "outcome": "pass",
+      "reason": "已逐项核对目标如何决定信息保留：并集累计前沿、负载事件、资源尾状态、数量交换、收益前驱DP与离线候选均有成立条件/证明和相邻代码；不是同一排序模板的换题。",
+      "locations": [
+        {
+          "document": "interval-decisions",
+          "anchor": "merge-frontier-proof"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "room-optimality"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "activity-exchange"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "cover-dominance"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "weighted-recurrence"
+        }
+      ]
+    },
+    {
+      "commitment": "fixed-resource-exchange",
+      "outcome": "pass",
+      "reason": "k资源实际给出选择最大兼容尾的完整尾链交换；处理已在别链、未选、空链与不能接受，并保留闭端点严格性。错误选最早尾有具体反例与独立测试。",
+      "locations": [
+        {
+          "document": "interval-decisions",
+          "anchor": "fixed-resources"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "fixed-resource-exchange"
+        }
+      ]
+    },
+    {
+      "commitment": "goal-condition-spectrum",
+      "outcome": "pass",
+      "reason": "既定12任务均有实质承载，含包含存在性、带权峰值、构造、点命中、连续覆盖、固定资源、收益、至多k项预算及离线查询；预算版已从提示扩为真实递推/代码/入口，不只覆盖易写贪心。",
+      "locations": [
+        {
+          "document": "interval-decisions",
+          "anchor": "endpoint-model"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "peak-endpoint-proof"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "stabbing"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "continuous-cover"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "fixed-resources"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "budgeted-value"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "offline-query-cluster"
+        }
+      ]
+    },
+    {
+      "commitment": "low-cost-reuse",
+      "outcome": "pass",
+      "reason": "并集长度/点数/空隙/点查、删除=n减最大保留、方案原序恢复等低前置关系在实际位置说明；不为每个推论堆模板，也未因篇幅删除有用迁移。",
+      "locations": [
+        {
+          "document": "interval-decisions",
+          "anchor": "insert-reuse"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "selection-cluster"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "weighted-implementation"
+        }
+      ]
+    },
+    {
+      "commitment": "mechanism-and-library",
+      "outcome": "pass",
+      "reason": "真实手写堆、边界搜索与状态算法可读且有独立实现；priority_queue/heap算法/multiset/边界库调用准确区分替代层。手写push扩容及三个登记代价已同步修正，库包装未冒称整题新算法。",
+      "locations": [
+        {
+          "document": "interval-decisions",
+          "anchor": "manual-heap"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "standard-heaps"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "predecessor-search"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "weighted-implementation"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "budgeted-value"
+        }
+      ]
+    },
+    {
+      "commitment": "finite-scope-and-entries",
+      "outcome": "pass",
+      "reason": "原题端点、单点/相接、原序、多解、无解、数值与结果合同已核验；15实际入口本地编译运行，Projects与两项LC返回界已测。包含计数/在线更新/多资源收益等明确排除且有模型理由，未宣称穷尽或OJ提交。",
+      "locations": [
+        {
+          "document": "interval-decisions",
+          "anchor": "choice-map"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "submission-reference"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "budgeted-value"
+        }
+      ]
+    },
+    {
+      "commitment": "continuous-reading-route",
+      "outcome": "pass",
+      "reason": "整稿及生成MD/HTML实际通读；六问题簇覆盖12任务，入口解释阅读因果，末尾按目标/状态/边界回查。26区域代码对应、100片段链接和唯一ID经检查，402×874实际载体截图已查看，非真机声明。",
+      "locations": [
+        {
+          "document": "interval-decisions",
+          "anchor": "chapter-entry"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "coverage-cluster"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "occupancy-cluster"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "selection-cluster"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "weighted-jobs"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "offline-query-cluster"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "choice-map"
+        }
+      ]
+    },
+    {
+      "commitment": "cpp-support-not-ceiling",
+      "outcome": "pass",
+      "reason": "Q000027至39各一次完整主讲并就近支撑，后续定位而不重复解释；实际算法仍进入多资源交换、收益及预算DP。reserve、priority_queue和push代价发现问题均修正复核，没有以支架缺口降低算法高度。",
+      "locations": [
+        {
+          "document": "interval-decisions",
+          "anchor": "q000027"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "manual-heap"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "standard-heaps"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "q000037"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "q000038"
+        },
+        {
+          "document": "interval-decisions",
+          "anchor": "submission-reference"
+        }
+      ]
+    }
+  ],
+  "comparison": {
+    "baseline": "本轮独立读取的EPI/CP4相关原始章节、CSES/LeetCode官方题面及大学讲义方法合同；以两路独立候选/问题空间研究为范围基准，不继承被撤回章的题单或采用记录。",
+    "findings": "原材料中的条件/目标分叉均被映射或有解释的排除；独立反查促成实际预算DP而非仅提示，并细化前驱非单调、可移动窗口和费用覆盖。两份真实语义审阅与独立模型/平台测试合并后无剩余阻断，有限章界、方法关系和阅读路线成立。合同最后只追加证据依赖；源稿/代码/承诺不变，差异由整合者核对并记录adoption。"
+  },
+  "outsideChallenge": {
+    "materialIds": [
+      "independent-range-probe"
+    ],
+    "findings": "该挑战在未见作者分类/草稿时先独立固定；稿成后整合读取并逐项比较。预算模型的真实扩充与边界反例是实际改动。采用后挑战转为建设材料，本轮最终审阅不再假称其未见。"
+  },
+  "verdict": "accepted"
+}

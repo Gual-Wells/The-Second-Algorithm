@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "packet": "work/jobs/withdraw-first-20261028-v3/releases/2e87cf5a257846f690c8c225dd5cdb43.json",
+  "inputHash": "977ef72cc9eae901bbf302e22707b1ed7970ba63f40d14f802d463d0e0219968",
+  "artifact": ".local/releases/f6fb7a98-6aec-4d87-82a9-db89a7e3a684",
+  "origin": "https://second-algorithm.pages.dev",
+  "deployedAt": "2026-10-28T03:49:53.447Z",
+  "build": "b342e22fe8226d14b71ab73a3366bb8d085872a6bdda2a3e323ec1a2ef2c2bc7",
+  "anonymousBoundaryVerified": true,
+  "passed": true
+}
