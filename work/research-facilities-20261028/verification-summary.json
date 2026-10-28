@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-10-28T10:43:24.711958+00:00",
+  "sourceCommit": "877e93fe3fd7cf23d7fa13a7cecb2b3af3f70fff",
+  "inputHash": "7a8a708ced3906e3841243f943c5225b3a3f6f8bd6db157a74d737b0502a8542",
+  "localFullCheck": {
+    "passed": true,
+    "command": "node scripts/check-project.mjs",
+    "log": ".local/research-facilities-check/attempt-1.log",
+    "logSha256": "64cd5f0abaff058f4a8e51fb973350bdc6077db964de0cfe9cd77277cbd1f33b",
+    "pythonTests": 139,
+    "nodeTests": 70,
+    "browserCases": 21,
+    "browserPassed": true,
+    "serviceWorkerUpgradePassed": true
+  },
+  "additionalFocusedCheck": {
+    "passed": true,
+    "test": "test_chapters.ResearchAdoptionTest.test_second_actual_chapter_can_publish_without_rebuilding_first_research",
+    "seconds": 62.042,
+    "scope": "Real two-chapter fixture; no actual curriculum published"
+  },
+  "ci": {
+    "run": 40673713128,
+    "status": "completed",
+    "conclusion": "success",
+    "url": "https://github.com/Gual-Wells/The-Second-Algorithm/actions/runs/40673713128",
+    "scope": "Fresh Linux complete suite, including the additional two-chapter lifecycle case"
+  },
+  "live": {
+    "origin": "https://second-algorithm.pages.dev",
+    "deployment": "https://712d0ecb.second-algorithm.pages.dev",
+    "receipt": "work/jobs/research-facilities-20261028/deployments/1793184141933.json",
+    "swExactBytes": true,
+    "ownerEnrolled": true,
+    "enrollmentOpen": false,
+    "anonymousLibraryHTTP": 401,
+    "libraryFiles": [
+      "catalog.json"
+    ],
+    "collections": 0
+  },
+  "deploymentRetry": {
+    "initialD1Error": 7403,
+    "existingOAuthIdentityAndScopesChecked": true,
+    "D1MetadataReadSucceeded": true,
+    "retrySucceeded": true,
+    "newLoginRequired": false,
+    "migrationsApplied": 0,
+    "underlyingCause": "Not established; preserved error log locally"
+  },
+  "cppProductionVerification": "not-applicable: explicit withdrawn empty curriculum; real C++ fixture tooling covered by tests",
+  "newRecurringServices": 0,
+  "newRecurringCost": 0,
+  "privateStateReset": false,
+  "realNewChapterResearched": false
+}

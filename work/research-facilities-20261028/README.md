@@ -27,4 +27,21 @@
 
 ## 完成记录
 
-待实际验证后补充。本记录不宣称已研究新章、已验收或已发布。
+已完成并发布。正式设施入口是 [RESEARCH_FACILITIES](../../protocol/RESEARCH_FACILITIES.md)，
+具体研究档案字段与CLI见 [CONTENT_MODEL](../../docs/CONTENT_MODEL.md) 和 [TASK_EXECUTION](../../protocol/TASK_EXECUTION.md)。
+
+- 代码提交：`877e93fe3fd7cf23d7fa13a7cecb2b3af3f70fff`，已推送 main。
+- 完整本机检查通过：139项Python、70项Node、21项浏览器场景、真实SW接管/离线/撤回检查；随后新增的真实双章生命周期测试也独立通过。
+- [Linux CI](https://github.com/Gual-Wells/The-Second-Algorithm/actions/runs/40673713128) 在同一代码提交上完整通过，包含新增双章节测试。
+- 准备包：`work/jobs/research-facilities-20261028/releases/4e1e38eba53d434bbcdcddb399bbeab2.json`。
+- 发布输入：`7a8a708ced3906e3841243f943c5225b3a3f6f8bd6db157a74d737b0502a8542`。
+- 线上：[正式入口](https://second-algorithm.pages.dev/)；[本次部署](https://712d0ecb.second-algorithm.pages.dev)。
+- 部署收据：`work/jobs/research-facilities-20261028/deployments/1793184141933.json`。
+- build：`815184d5373493575c82f62c34df39c363fedbaf364cc97065012b8e7e3feb2a`，线上SW与隔离产物字节完全一致。
+- owner已登记、登记窗口关闭，匿名library返回401；实际静态library只有catalog.json，collections为0。身份和私人数据未重置。
+
+最初部署的D1步骤返回7403。核对现有OAuth身份/权限和目标数据库只读元数据后，沿同一准备包重试成功；没有重新登录或改动授权，实际原因未确定。无待执行数据库迁移，未修改数据库结构。
+
+设施采用“动态档案＋不可变阶段＋冻结研究交接”，出版核领域、分支、材料、题型及预先取得的练习。已发布研究凭精确部署证明保留历史基座，自己的材料/范围/笔记变化仍严格核验，避免后续章节迫使全部旧研究重跑。
+
+完整机器摘要见 [verification-summary.json](verification-summary.json)。没有选择或研究真实新章，没有恢复旧稿，没有新增服务或持续费用。本次更新保持现有阅读界面；正式设施成立和算法内容已完成是不同事实。
