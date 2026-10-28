@@ -3,8 +3,9 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
-from second_algorithm.learning import composition_inputs
+from second_algorithm.learning import composition_inputs, course_snapshot
 from second_algorithm.storage import digest
 
 
@@ -89,6 +90,36 @@ class CompositionInputsTest(unittest.TestCase):
         self.write('content/unit/build/chapter.json', '[]')
         with self.assertRaisesRegex(ValueError, 'author inputs changed'):
             composition_inputs(self.root, self.doc)
+
+    def test_reader_boundary_implementation_is_bound_to_review_and_release(self):
+        self.write('catalog/learning.json', '{}')
+        self.write('carrier/publications.json', '{}')
+        self.write('tools/reader-boundary.mjs', '// current reader projection\n')
+        checked = dict(ok=True, publicationState='active', operation='content-release')
+        context = dict(knowledgeDependencies=[], chapters=dict(dependencies=[], reviewPaths=[]),
+                       documents={}, model=dict(tasks=[]), dependencies={})
+        with patch('second_algorithm.learning._inspect', return_value=(checked, context)):
+            before = course_snapshot(self.root, include_reviews=False)
+            self.assertIn('tools/reader-boundary.mjs', before['inputs'])
+            self.write('tools/reader-boundary.mjs', '// changed projection and detector\n')
+            after = course_snapshot(self.root, include_reviews=False)
+        self.assertNotEqual(before['inputHash'], after['inputHash'])
+
+    def test_delivered_cpp_view_is_bound_without_becoming_an_author_source(self):
+        self.write('catalog/learning.json', '{}')
+        self.write('carrier/publications.json', '{}')
+        self.write('content/unit/chapter.reader.cpp', 'int value() { return 1; }\n')
+        checked = dict(ok=True, publicationState='active', operation='content-release')
+        context = dict(knowledgeDependencies=[], chapters=dict(dependencies=[], reviewPaths=[]),
+                       documents={'chapter': dict(path='content/unit/chapter')},
+                       model=dict(tasks=[]), dependencies={})
+        with patch('second_algorithm.learning._inspect', return_value=(checked, context)):
+            before = course_snapshot(self.root, include_reviews=False)
+            self.assertIn('content/unit/chapter.reader.cpp', before['inputs'])
+            self.write('content/unit/chapter.reader.cpp', 'int value() { return 2; }\n')
+            after = course_snapshot(self.root, include_reviews=False)
+        self.assertNotEqual(before['inputHash'], after['inputHash'])
+        self.assertNotIn('content/unit/chapter.reader.cpp', self.plan['codeSources'])
 
 
 if __name__ == '__main__':

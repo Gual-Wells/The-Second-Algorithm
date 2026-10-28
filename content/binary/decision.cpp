@@ -496,7 +496,7 @@ long double max_average_standard(const std::vector<i64>& a, int shortest, int lo
     return real_last_true(*limits.first, *limits.second, feasible);
 }
 
-// Sabotage 的设施层只展示“减去阈值”；它不代替非空 Kadane 证明。
+// 将各项减去同一阈值；合法删段仍由非空 Kadane 检查。
 std::vector<long double> shifted_values_standard(const std::vector<i64>& a,
                                                  long double guess) {
     std::vector<long double> result(a.size());

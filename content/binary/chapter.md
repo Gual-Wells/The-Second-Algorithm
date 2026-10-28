@@ -236,7 +236,7 @@ find_unknown_at(const std::vector<int>& hidden, int key, std::uint64_t cap) {
 }
 ```
 
-这里没有C++17标准函数能直接遍历无限整数域。示例要求hidden按值非降；在此前提下保留同一二分核心，`vector::at`与`optional`只实现题定访问器：有效下标返回值，**指定的越界**表示域结束，在“找首个>=key”时可视为正无穷；随后还须检查结果是否真的等于key。它是访问层的设施写法，不是第二套伪造的一键求解算法。
+这里没有C++17标准函数能直接遍历无限整数域。示例要求hidden按值非降；在此前提下保留同一二分核心，`vector::at`与`optional`只实现题定访问器：有效下标返回值，**指定的越界**表示域结束，在“找首个>=key”时可视为正无穷；随后还须检查结果是否真的等于key。访问器负责取值与域结束，区间扩张和二分仍由搜索算法完成。
 
 <a id="predicate-access-engineering"></a>
 若真实接口用状态码、网络异常或空值表示不同失败，应分别映射，不能把内存不足、权限错误、I/O失败都吞成“没找到”。谓词要在搜索期间保持同一含义，捕获的key、版本快照和外部状态不能偷偷变化，见<a class="knowledge-link" href="#knowledge-Q100003" data-knowledge="Q100003">判定器与lambda捕获</a>。交互题还必须按协议刷新输出、处理结束响应；换行本身不保证flush。
@@ -455,7 +455,7 @@ int paired_unique_standard(const std::vector<int>& a) {
 }
 ```
 
-`accumulate`与`bit_xor`让成对值抵消，返回孤立值。这是**另一种O(n)算法**，不利用排序，也不满足原题的O(log n)目标。标准库没有“一次调用找配对相位断点”的整题函数；保留手写二分才是本题的高效实现，不能为了印两份循环而伪造库版。
+`accumulate`与`bit_xor`让成对值抵消，返回孤立值。这是**另一种O(n)算法**，不利用排序，也不满足原题的O(log n)目标。C++17标准库不提供配对相位断点搜索；满足本题对数复杂度要求仍需利用配对结构进行二分。
 
 <a id="paired-break-engineering"></a>
 两种二分都要求非空奇数长、唯一单次值、其余恰两次；代码不先花O(n)校验这个合同。若改成三次/多种频次、多个异常或无序，奇偶证书就不成立；XOR也只在适当的奇偶频数合同下有意义。位运算用于配偶下标，不表示数组值必须非负。
@@ -677,7 +677,7 @@ i64 capacity_manual(const std::vector<i64>& a, int k) {
 `used` 是当前未封口段的和，`blocks` 是已经开出的段数；超过 k 就可立即拒绝。搜索每次只扫描一次，时间 `O(n log(sum−max+1))`、额外空间 `O(1)`。原题有零时，上下界可能同为 0，此时不需要执行循环。
 
 <a id="capacity-partition-standard"></a>
-### 标准设施：只接管统计，不虚构划分算法
+### 标准设施：计算搜索上下界
 
 ```cpp
 // 库只接管边界统计；它没有接管“为何贪心段数可作判定”。
@@ -2078,7 +2078,7 @@ long double max_average_standard(const std::vector<i64>& a, int shortest, int lo
     return real_last_true(*limits.first, *limits.second, feasible);
 }
 
-// Sabotage 的设施层只展示“减去阈值”；它不代替非空 Kadane 证明。
+// 将各项减去同一阈值；合法删段仍由非空 Kadane 检查。
 std::vector<long double> shifted_values_standard(const std::vector<i64>& a,
                                                  long double guess) {
     std::vector<long double> result(a.size());
@@ -2095,7 +2095,7 @@ std::vector<long double> shifted_values_standard(const std::vector<i64>& a,
 
 P1419 允许负数，不能用正数数组“和超限就收缩”的滑窗。Sabotage 原平均在 `[1,10000]` 内；保留首尾让分母始终为正。官方解析文字有方向混淆，附代码 `best>=total−guess*N` 实际对应剩余平均≤guess，上面的推导明确了这一方向。
 
-原始范围宽度不超过 20000；80 次理想折半远小于三位输出所需分辨率，但累计运算还有舍入误差，使用 long double 降低影响，并以独立枚举核小规模。<a class="knowledge-link" href="#knowledge-Q100006" data-knowledge="Q100006">浮点夹逼与误差</a>不能被 `setprecision(3)` 替代；本代码返回数值，最后一层才格式化。若需严格精确的有理答案，或者要判断恰好位于舍入中点的输出，需另设精度合同，不能宣称固定轮数等于任意精度证明。
+原始范围宽度不超过 20000；80 次理想折半远小于三位输出所需分辨率，但累计运算还有舍入误差，使用 long double 降低影响；小规模可枚举所有合法子段，比较搜索结果与精确候选值。<a class="knowledge-link" href="#knowledge-Q100006" data-knowledge="Q100006">浮点夹逼与误差</a>不能被 `setprecision(3)` 替代；本代码返回数值，最后一层才格式化。若需严格精确的有理答案，或者要判断恰好位于舍入中点的输出，需另设精度合同，不能宣称固定轮数等于任意精度证明。
 
 练习：[寻找段落](https://www.luogu.com.cn/problem/P1419)；[Sabotage](https://usaco.org/index.php?page=viewproblem2&cpid=419)。前者要同时处理 S/T，后者要保留端点和非空删除。
 
@@ -2134,7 +2134,7 @@ long double ratio_manual(const std::vector<Ingredient>& items, int choose) {
 }
 ```
 
-手写插入排序让 top m 的来源一目了然；原题 n≤200，因此 `O(80n²)` 可接受。手写重点是如何从比值推导检查器，不必为了展示高级选择算法掩盖这个建模。检查随 λ 非增，保留最后可行值，原题给出最优比值≤1000。
+插入排序将变换分数按降序排列，再累加前 m 项；原题 n≤200，80轮检查的时间上界为 `O(80n²)`。检查随 λ 非增，保留最后可行值，原题给出最优比值≤1000。
 
 <a id="ratio-selection-standard"></a>
 ### 标准设施：nth_element 只隔出 top m
@@ -2339,7 +2339,7 @@ MatchAnswer matching_standard(const std::vector<std::vector<int>>& a, int k) {
 <a id="matching-threshold-engineering"></a>
 ### 性能与回调
 
-这里只承诺可理解且有测量的朴素匹配，没有冒充已在 OJ 获得通过；250 阶压力测试的本机结果另有验证记录。更大的图可能需要更强匹配算法，但那是判定器性能升级，不改变阈值建模。<a class="knowledge-link" href="#knowledge-Q100009" data-knowledge="Q100009">递归回调与调用栈</a>解释 `self(self,...)`；这里 visited/owner 借用本次检查状态，不跨不同阈值保留。候选的<a class="knowledge-link" href="#knowledge-Q100004" data-knowledge="Q100004">排序去重</a>和算法证明各负责不同层。
+这里使用朴素增广路匹配；每次阈值检查最坏为 O(n²m)，另乘候选值二分的轮数。更大规模可用 Hopcroft–Karp 等算法加速匹配判定，阈值建模保持不变。<a class="knowledge-link" href="#knowledge-Q100009" data-knowledge="Q100009">递归回调与调用栈</a>解释 `self(self,...)`；这里 visited/owner 借用本次检查状态，不跨不同阈值保留。候选的<a class="knowledge-link" href="#knowledge-Q100004" data-knowledge="Q100004">排序去重</a>和算法证明各负责不同层。
 
 <aside class="knowledge-introduction" id="knowledge-Q100009" data-knowledge-introduction="Q100009"><p class="knowledge-title">递归回调与调用栈</p><p>C++17可用命名函数、成员函数、<code>std::function</code>或显式self参数的泛型lambda表达递归。<code>std::function</code>提供类型擦除，可能引入间接调用和分配；泛型lambda不必先做这种擦除，但所有借用仍须满足 <a class="knowledge-link" href="#knowledge-Q100003" data-knowledge="Q100003">lambda捕获寿命</a>。</p>
 <p><code>auto dfs=[&amp;](auto&amp;&amp; self,int u)-&gt;bool { … self(self,v); … };</code> 的self传入当前闭包，返回类型必要时显式给出。不要把持有局部引用的递归回调保存到局部作用域之外，也不要在修改容器导致重分配后继续用旧引用。</p>
@@ -2510,7 +2510,7 @@ int first_at_least_linear(const std::vector<i64>& values, int start, i64 target)
 <a id="summary-descent-engineering"></a>
 ### 当前实现的边界
 
-这里专门实现max，没有冒称一份通用monoid模板；空区间`range_max`返回最低整数。`set`与起点须合法，改变数组大小需要重建。建树复制输入值，之后修改原数组不会自动改变树，须通过set维护摘要；这对应<a class="knowledge-link" href="#knowledge-Q100005" data-knowledge="Q100005">借用与复制所有权</a>。返回n后再访问数组属于调用方越界，不是算法会自动抛异常。下降递归仅沿对数层高，见<a class="knowledge-link" href="#knowledge-Q100009" data-knowledge="Q100009">递归与调用栈</a>；结点和摘要的<a class="knowledge-link" href="#knowledge-Q100002" data-knowledge="Q100002">类型范围</a>仍按本题上界选择。
+此实现的摘要运算固定为max；空区间`range_max`返回最低整数。`set`与起点须合法，改变数组大小需要重建。建树复制输入值，之后修改原数组不会自动改变树，须通过set维护摘要；这对应<a class="knowledge-link" href="#knowledge-Q100005" data-knowledge="Q100005">借用与复制所有权</a>。返回n后再访问数组属于调用方越界，不是算法会自动抛异常。下降递归仅沿对数层高，见<a class="knowledge-link" href="#knowledge-Q100009" data-knowledge="Q100009">递归与调用栈</a>；结点和摘要的<a class="knowledge-link" href="#knowledge-Q100002" data-knowledge="Q100002">类型范围</a>仍按本题上界选择。
 
 练习：[AtCoder practice2 J — Segment Tree](https://atcoder.jp/contests/practice2/tasks/practice2_j)。它还包含点赋值、区间最大值；原题用1基且无解输出N+1，需在入口出口转换。
 
@@ -2693,7 +2693,7 @@ int min_cyclic_parts_with_bounds(const std::vector<i64>& values, i64 capacity) {
 }
 ```
 
-另一种建立next的方法利用正数前缀和非降，对 `prefix[i]+C`调用 `std::upper_bound`，减一得到最后可行的半开终点。它与滑窗复用**同一提升核心**，没有重复写一份完整跳表。next构造从O(n)变O(n log n)，总体仍由O(n log n)界定。使用upper而非lower是因为段和恰好等于容量仍合法。
+另一种建立next的方法利用正数前缀和非降，对 `prefix[i]+C`调用 `std::upper_bound`，减一得到最后可行的半开终点。它与滑窗复用**同一提升核心**，差别仅在next的构造方法。next构造从O(n)变O(n log n)，总体仍由O(n log n)界定。使用upper而非lower是因为段和恰好等于容量仍合法。
 
 <a id="cyclic-jump-engineering"></a>
 ### 当前实现的边界
@@ -2772,7 +2772,7 @@ std::vector<int> first_connection_days(int n, const std::vector<std::pair<int,in
 <a id="time-parallel-search-standard"></a>
 ### 标准设施的职责与共享扫描的代价
 
-标准库没有DSU或并行二分。这里 `std::vector`承担查询桶和父数组，`std::iota`建立0..n−1的父结点，`std::swap`支撑按规模合并；并查集的路径压缩和合并规则仍然手写。正文两个代码块组成同一实现，不是两份重复算法。
+标准库没有DSU或并行二分。这里 `std::vector`承担查询桶和父数组，`std::iota`建立0..n−1的父结点，`std::swap`支撑按规模合并；并查集的路径压缩和合并规则仍然手写。DSU维护当前日的连通状态，日期分桶搜索调用它回答查询。
 
 例如道路依次是`(0,1),(1,2),(2,3)`，查询A=(0,2)、B=(0,3)，初始各自`low=-1,high=4`。第一轮两问mid=1，共同检查只有第一条边的状态，均假，于是low=1；第二轮两问mid=2，加入第二条边后A真、B假，分别改为`high_A=2,low_B=2`。A边界相邻已结束，B再问day=3得到真。答案为2、3；每轮扫描一条时间线，并没有为A、B各重建一次前缀。若额外查询(2,2)，它最终继续缩到day=0，空图时自己与自己已连通。
 
@@ -2781,7 +2781,7 @@ std::vector<int> first_connection_days(int n, const std::vector<std::pair<int,in
 <a id="time-parallel-search-engineering"></a>
 ### 当前实现的边界
 
-路径压缩只在一轮内部有效；桶每轮新建，不能残留上一轮查询。重复边和自环不影响正确性，不连通无需报异常。若加入删边，谓词可能真假反复，当前时间轴二分失效，不能仅替换一种DSU蒙混。`low=-1`而mid非负依赖此处的哨兵范围，通用极大整数域应重新核<a class="knowledge-link" href="#knowledge-Q100002" data-knowledge="Q100002">差值与中点预算</a>；<a class="knowledge-link" href="#knowledge-Q100013" data-knowledge="Q100013">vector扩容与引用失效</a>须避免扩容后复用失效引用。
+路径压缩只在一轮内部有效；桶每轮新建，不能残留上一轮查询。重复边和自环不影响正确性，不连通无需报异常。若加入删边，谓词可能真假反复，当前时间轴二分失效；换用另一种DSU并不能恢复查询的时间单调性。`low=-1`而mid非负依赖此处的哨兵范围，通用极大整数域应重新核<a class="knowledge-link" href="#knowledge-Q100002" data-knowledge="Q100002">差值与中点预算</a>；<a class="knowledge-link" href="#knowledge-Q100013" data-knowledge="Q100013">vector扩容与引用失效</a>须避免扩容后复用失效引用。
 
 练习：[New Roads Queries](https://cses.fi/problemset/task/2101)。这是一套多问共享状态算法；只有一个钉木板前缀查询时，不必为术语而引入它。
 
@@ -3006,7 +3006,7 @@ i64 fun_with_priority_queue(const std::vector<i64>& initial, i64 budget) {
 
 一般最小化问题写作 `G(λ)=min_k(F(k)+λk)`，最优数量随惩罚增加非增，但它可能跳过目标数量。反例F(0)=0、F(1)=1、F(2)=0：任何惩罚都不会让数量1独立最优，搜到分界也不能把其真实值1恢复成0。相反，F=(4,2,0)在λ=2共线，固定同值政策可能只返回0或2，目标1仍能由 `G(2)−2×1=2`恢复。
 
-所以WQS/拉格朗日类应用必须另证离散凸/凹价值或其他无间隙条件，并处理同值最优的计数范围。这里的可分离递减边际给出了直接证明；一般DP还须建立自己的状态与高效惩罚oracle。[IOI2016 Aliens官方解答](https://ioinformatics.org/files/ioi2016solutions.pdf)满分方案另需区间预处理、交叠成本和CHT，其末页列出的凸性定理也不能当成通用模板证明。本章展示一维参数机制，不冒称已教完整Aliens或高维对偶优化。
+所以WQS/拉格朗日类应用必须另证离散凸/凹价值或其他无间隙条件，并处理同值最优的计数范围。这里的可分离递减边际给出了直接证明；一般DP还须建立自己的状态与高效惩罚oracle。[IOI2016 Aliens官方解答](https://ioinformatics.org/files/ioi2016solutions.pdf)满分方案另需区间预处理、交叠成本和CHT，其末页列出的凸性定理也不能当成通用模板证明。当前可分离收益的惩罚恢复依赖递减边际；Aliens的区间DP与高维对偶问题还需分别建立目标结构和无间隙条件。
 
 <a id="marginal-penalty-engineering"></a>
 ### 当前实现的边界

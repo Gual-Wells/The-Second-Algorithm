@@ -126,6 +126,7 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
 }
 
 (async () => {
+  const boundary = await import('../tools/reader-boundary.mjs');
   const physicalRoot = await fs.realpath(root);
   if (process.platform === 'win32' && !/^D:\\/i.test(physicalRoot))
     throw new Error('Browser QA workspace and its actual temporary data must be on D:');
@@ -231,7 +232,17 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
           assert(current.outer <= current.viewport + 1, document.id + ': outer overflow');
           assert.equal(current.headings, document.headings.filter(h => h.depth === 2).length);
           assert.doesNotMatch(current.text, /Q\d{6}/, document.id + ': exposed knowledge identity');
+          boundary.assertReaderText(current.text, document.id + ': displayed article');
           await page.screenshot({ path: path.join(output, `current-${document.id}-402x874.png`) });
+          await page.locator('#settingsButton').click();
+          await page.locator('[data-show-source]').click();
+          await page.locator('.source-view code').waitFor();
+          const delivered = await fs.readFile(path.join(root, 'dist', document.sourceUrl.slice(1)), 'utf8');
+          const shown = await page.locator('.source-view code').textContent();
+          assert.equal(shown, delivered, document.id + ': source UI must show the delivered source view');
+          boundary.assertReaderSource(shown, document.id + ': displayed source');
+          await page.locator('[data-sheet-close]').click();
+          await page.waitForFunction(() => !document.querySelector('#sheetDialog').open);
         }
         const binary = catalog.collections.find(chapter => chapter.id === 'chapter-01');
         assert.equal(binary.documents.length, 1, 'the current binary chapter has one logical reader document');
@@ -307,11 +318,13 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
         const knowledge = catalog.questions.find(question => question.id === knowledgeId);
         assert(knowledge, 'a knowledge result must resolve to an actually published knowledge card');
         assert.equal(await knowledgeHit.locator('strong').innerText(), knowledge.title);
+        boundary.assertReaderText(await page.locator('#tocResults').innerText(), 'displayed search results');
         assert.doesNotMatch(await knowledgeHit.innerText(), /Q\d{6}/);
         await page.screenshot({ path: path.join(output, 'current-knowledge-search.png') });
         assert((await page.locator('#sheetBody').evaluate(node => node.scrollTop)) < 3,
           'knowledge results must be visible from their start before any automated click scrolls them into view');
         await knowledgeHit.click(); await page.locator('.knowledge-paper').waitFor();
+        boundary.assertReaderText(await page.locator('.knowledge-paper').innerText(), 'displayed knowledge');
         assert.equal(await page.locator('#sheetTitle').innerText(), knowledge.title);
         await page.locator('[data-sheet-close]').click();
         await page.waitForFunction(() => !document.querySelector('#sheetDialog').open);

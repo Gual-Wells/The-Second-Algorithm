@@ -5,6 +5,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { readerSourceView } from '../tools/reader-boundary.mjs';
 import { validatePublications, validateLearning, readAuthority, createLinkRewriter, renderAuthority, buildLibrary, buildCarrier, publicationIndex, libraryPaths }
   from '../scripts/build-carrier.mjs';
 
@@ -45,7 +46,7 @@ async function fixture({ questionHeading = 'Why a range?', questionTitle = 'Why 
   for (const name of ['tools', 'content/unit/build', 'carrier', 'catalog', 'tests/cpp', 'research', '.local'])
     await fs.mkdir(path.join(root, name), { recursive: true });
   const descriptor = { id: 'fixture-doc', title: 'Fixture', path: 'content/unit/Fixture' };
-  const source = '# Fixture\n\n算法实战参考 · 具体问题、机制与参考实现\n\n<a id="manual"></a>\n\n## Section\n\n{{one}}\n\n<a id="q000001"></a>\n\n### Q000001 · ' + questionHeading + '\n\nOne canonical explanation.\n\n```cpp\nint direct = 2;\n```\n\n[记录](../../research/notes.md)\n';
+  const source = '# Fixture\n\n算法实战参考 · 具体问题、机制与参考实现\n\n<a id="manual"></a>\n\n## Section\n\n{{one}}\n\n<a id="q000001"></a>\n\n### Q000001 · ' + questionHeading + '\n\nOne canonical explanation.\n\n```cpp\nint direct = 2;\n```\n\n[标准资料](https://example.com/standard)\n';
   const cpp = '#include <string>\n// BEGIN one\nint sum(int a, int b) { return a + b; }\n// END one\n';
   const markdown = source.replace('{{one}}', '```cpp\nint sum(int a, int b) { return a + b; }\n```');
   const html = '<h1>Fixture</h1><h2 id="section">Section</h2>';
@@ -60,12 +61,14 @@ async function fixture({ questionHeading = 'Why a range?', questionTitle = 'Why 
         questions: ['Q000001'], complexity: { time: 'O(1)', space: 'O(1)' }, target: 'fixture-run' }] }] }],
     targets: [{ id: 'fixture-run', kind: 'run', source: 'tests/cpp/fixture_test.cpp', standard: 'c++17', timeoutSeconds: 30 }] };
   const learningBytes = JSON.stringify(learning);
-  const manifest = { codeBlocks: ['one'], headings: [{ depth: 1, id: 'fixture', text: 'Fixture' },
+  const manifest = { readerBoundaryHelperSha256:hash(await fs.readFile(path.join(ROOT,'tools/reader-boundary.mjs'))),readerSourceSha256:hash(readerSourceView(cpp)),codeBlocks: ['one'], headings: [{ depth: 1, id: 'fixture', text: 'Fixture' },
     { depth: 2, id: 'section', text: 'Section' }, { depth: 3, id: 'question-heading', text: 'Q000001 · ' + questionTitle }], sourceSha256: hash(source), codeSha256: hash(cpp),
     markdownSha256: hash(markdown), htmlSha256: hash(html), builderSha256: hash(builder) };
   manifest.learningSha256 = hash(learningBytes); manifest.publicationsSha256 = hash(publications);
   await fs.writeFile(path.join(root, 'content/unit/Fixture.source.md'), source);
   await fs.writeFile(path.join(root, 'content/unit/Fixture.cpp'), cpp);
+  await fs.writeFile(path.join(root, 'content/unit/Fixture.reader.cpp'),readerSourceView(cpp));
+  await fs.copyFile(path.join(ROOT,'tools/reader-boundary.mjs'),path.join(root,'tools/reader-boundary.mjs'));
   await fs.writeFile(path.join(root, 'content/unit/Fixture.md'), markdown);
   await fs.writeFile(path.join(root, 'content/unit/Fixture.html'), html);
   await fs.writeFile(path.join(root, 'tools/build_handbook.mjs'), builder);
@@ -201,6 +204,44 @@ test('all source, C++, Markdown, HTML and builder authorities are hash-checked',
   } finally { await dispose(f.root); }
 });
 
+test('reader source is a verified projection, never the author-marked C++ authority', async () => {
+  const f = await fixture();
+  try {
+    const output = path.join(f.root, '.local/source-projection');
+    const built = await buildLibrary(f.root, output, {schemaVersion:2,collections:[f.collection]},gitRevision);
+    const entry=built.catalog.collections[0].documents[0];
+    const shipped=await fs.readFile(path.join(output,entry.sourceUrl.slice(1)),'utf8');
+    assert.equal(shipped,readerSourceView(f.cpp,['one']));
+    assert.doesNotMatch(shipped,/\/\/ (?:BEGIN|END) /);
+    assert.equal(await fs.readFile(path.join(f.root,'content/unit/Fixture.cpp'),'utf8'),f.cpp);
+    const projected=path.join(f.root,'content/unit/Fixture.reader.cpp');
+    await fs.appendFile(projected,'// BEGIN one\n');
+    await assert.rejects(readAuthority(f.root,f.descriptor),/readerSource authority hash mismatch/);
+    f.manifest.readerSourceSha256=hash(await fs.readFile(projected));
+    await fs.writeFile(path.join(f.root,'content/unit/build/Fixture.json'),JSON.stringify(f.manifest));
+    await assert.rejects(readAuthority(f.root,f.descriptor),/projection differs/);
+    await fs.writeFile(projected,readerSourceView(f.cpp));
+    f.manifest.readerSourceSha256=hash(readerSourceView(f.cpp));
+    await fs.writeFile(path.join(f.root,'content/unit/build/Fixture.json'),JSON.stringify(f.manifest));
+    await fs.appendFile(path.join(f.root,'tools/reader-boundary.mjs'),'\n// changed\n');
+    await assert.rejects(readAuthority(f.root,f.descriptor),/Reader boundary helper hash mismatch/);
+  } finally { await dispose(f.root); }
+});
+
+test('carrier rechecks publication text even when ordinary source/build hashes were refreshed', async () => {
+  const f=await fixture();
+  try {
+    const leak='\n本机结果另有验证记录。\n';
+    f.source+=leak;f.markdown+=leak;
+    f.manifest.sourceSha256=hash(f.source);f.manifest.markdownSha256=hash(f.markdown);
+    await fs.writeFile(path.join(f.root,'content/unit/Fixture.source.md'),f.source);
+    await fs.writeFile(path.join(f.root,'content/unit/Fixture.md'),f.markdown);
+    await fs.writeFile(path.join(f.root,'content/unit/build/Fixture.json'),JSON.stringify(f.manifest));
+    await assert.rejects(buildLibrary(f.root,path.join(f.root,'.local/leak-output'),
+      {schemaVersion:2,collections:[f.collection]},gitRevision),/reader boundary/);
+  } finally { await dispose(f.root); }
+});
+
 test('reader anchors distinguish real id attributes from equal data-code-id values', async () => {
   const f = await fixture();
   const manifest = { schemaVersion: 2, collections: [f.collection] };
@@ -245,8 +286,9 @@ test('qualified implementation symbols resolve inside namespaces only in their d
     f.learning.tasks[0].methods[0].implementations[0].symbol = 'fixture::sum';
     const learning = JSON.stringify(f.learning);
     Object.assign(f.manifest, { codeBlocks: ['one', 'helper'], codeSha256: hash(cpp),
-      sourceSha256: hash(source), markdownSha256: hash(markdown), learningSha256: hash(learning) });
+      sourceSha256: hash(source), markdownSha256: hash(markdown), learningSha256: hash(learning), readerSourceSha256:hash(readerSourceView(cpp)) });
     await fs.writeFile(path.join(f.root, 'content/unit/Fixture.cpp'), cpp);
+    await fs.writeFile(path.join(f.root,'content/unit/Fixture.reader.cpp'),readerSourceView(cpp));
     await fs.writeFile(path.join(f.root, 'content/unit/Fixture.source.md'), source);
     await fs.writeFile(path.join(f.root, 'content/unit/Fixture.md'), markdown);
     await fs.writeFile(path.join(f.root, 'catalog/learning.json'), learning);
@@ -314,7 +356,7 @@ test('unsafe HTML is escaped; only safe id anchors survive and unsafe schemes ar
     assert.match(rendered.html, /&lt;script&gt;/);
     assert.doesNotMatch(rendered.html, /<h1|<p>算法实战参考/);
     assert.deepEqual(rendered.headings.map(h => h.id), ['section', 'question-heading']);
-    assert.match(rendered.html, new RegExp('/blob/' + gitRevision + '/research/notes\\.md'));
+    assert.match(rendered.html, /https:\/\/example\.com\/standard/);
     assert.match(rendered.html, /rel="noopener noreferrer"/);
     for (const href of ['javascript:alert(1)', 'JaVaScRiPt:alert(1)', 'java\nscript:alert(1)',
       'javascript&#58;alert(1)', '&#x6a;avascript:alert(1)', 'data:text/html,hello', 'file:///secret'])
@@ -332,7 +374,7 @@ test('content and download links are rewritten without private repository paths'
   assert.equal(rewrite('#ordered').href, '#/read/course/first-document?anchor=ordered');
   assert.deepEqual(rewrite('组合判定.cpp'), { href: entry.sourceUrl, external: false, download: true });
   assert.equal(rewrite('组合判定.md').href, entry.markdownUrl);
-  assert.match(rewrite('../../work/notes.md').href, new RegExp('/blob/' + gitRevision + '/work/notes\\.md'));
+  assert.throws(() => rewrite('../../work/notes.md'), /Internal production reference/);
   assert.throws(() => rewrite('../../.local/private.pdf'), /Private/);
   assert.throws(() => rewrite('../../../outside.md'), /outside/);
   assert.throws(() => rewrite('unpublished.html'), /not registered/);
@@ -395,6 +437,14 @@ test('explicit C++ highlighting preserves raw strings, digit separators and actu
 test('immutable reader paths follow rendered bytes while authority downloads remain stable', async () => {
   const f = await fixture();
   try {
+    // A deliberately public repository reference is pinned. Internal research
+    // and production records are rejected and cannot serve as this fixture.
+    f.source = f.source.replace('https://example.com/standard', '../../references/article.md');
+    f.markdown = f.markdown.replace('https://example.com/standard', '../../references/article.md');
+    f.manifest.sourceSha256 = hash(f.source); f.manifest.markdownSha256 = hash(f.markdown);
+    await fs.writeFile(path.join(f.root,'content/unit/Fixture.source.md'),f.source);
+    await fs.writeFile(path.join(f.root,'content/unit/Fixture.md'),f.markdown);
+    await fs.writeFile(path.join(f.root,'content/unit/build/Fixture.json'),JSON.stringify(f.manifest));
     const manifest = { schemaVersion: 2, collections: [f.collection] };
     const build = async (directory, revision) => {
       const output = path.join(f.root, '.local', directory);
@@ -406,7 +456,7 @@ test('immutable reader paths follow rendered bytes while authority downloads rem
     const first = await build('first', gitRevision), repeat = await build('repeat', gitRevision);
     assert.deepEqual(repeat, first, 'identical authority and rendering must be deterministic');
     const changed = await build('changed', gitRevision === 'a'.repeat(40) ? 'b'.repeat(40) : 'a'.repeat(40));
-    assert.notEqual(changed.document.html, first.document.html, 'fixed public research link changes rendered bytes');
+    assert.notEqual(changed.document.html, first.document.html, 'fixed public reference changes rendered bytes');
     assert.notEqual(changed.entry.revision, first.entry.revision);
     assert.notEqual(changed.entry.url, first.entry.url);
     assert.equal(changed.document.revision, changed.entry.revision);

@@ -8,6 +8,7 @@ import hljs from 'highlight.js/lib/core';
 import cpp from 'highlight.js/lib/languages/cpp';
 import { readKnowledge, knowledgeTokens, expandKnowledgeReferences } from '../tools/knowledge.mjs';
 import { composeDocument, compositionPath } from '../tools/compose-chapter.mjs';
+import { assertReaderMarkdown, assertReaderHtml, assertReaderText, assertMainHeadings, assertRenderedMainHeadings, readerSourceView, assertReaderSource } from '../tools/reader-boundary.mjs';
 
 hljs.registerLanguage('cpp', cpp);
 
@@ -182,7 +183,10 @@ export async function readAuthority(root, descriptor) {
   }
   if (manifest.knowledgeHelperSha256 && hash(await fs.readFile(path.join(root, 'tools/knowledge.mjs'))) !== manifest.knowledgeHelperSha256)
     throw new Error('Knowledge helper hash mismatch; rebuild reading assets');
-  const files = { source: base + '.source.md', code: base + '.cpp', markdown: base + '.md', html: base + '.html',
+  if (!SHA.test(manifest.readerBoundaryHelperSha256 ?? '')
+    || hash(await fs.readFile(path.join(root, 'tools/reader-boundary.mjs'))) !== manifest.readerBoundaryHelperSha256)
+    throw new Error('Reader boundary helper hash mismatch; rebuild reading assets');
+  const files = { source: base + '.source.md', code: base + '.cpp', readerSource: base + '.reader.cpp', markdown: base + '.md', html: base + '.html',
     builder: path.join(root, 'tools/build_handbook.mjs') };
   const bytes = {};
   for (const [kind, filename] of Object.entries(files)) {
@@ -209,15 +213,20 @@ export async function readAuthority(root, descriptor) {
     if (!SHA.test(manifest[kind + 'Sha256'] ?? '') || hash(dependency) !== manifest[kind + 'Sha256'])
       throw new Error(`${descriptor.id}: ${kind} authority hash mismatch; rebuild the reading assets first`);
   }
+  const readerSource = readerSourceView(bytes.code.toString('utf8'), blocks.keys());
+  if (!bytes.readerSource.equals(Buffer.from(readerSource)))
+    throw new Error('Reader source projection differs from canonical code; rebuild reading assets');
+  assertReaderSource(readerSource, descriptor.id + ' downloadable source');
   const revision = hash(JSON.stringify([manifest.sourceSha256, manifest.codeSha256, manifest.markdownSha256,
     manifest.htmlSha256, manifest.builderSha256, manifest.learningSha256, manifest.publicationsSha256,
-    manifest.knowledgeDependencies, manifest.knowledgeHelperSha256, manifest.authoringDependencies]));
+    manifest.knowledgeDependencies, manifest.knowledgeHelperSha256, manifest.authoringDependencies,
+    hash(readerSource), hash(await fs.readFile(new URL('../tools/reader-boundary.mjs', import.meta.url)))]));
   const inlineExamples = new Set();
   marked.walkTokens(marked.lexer(bytes.source.toString('utf8')), token => {
     if (token.type === 'code') inlineExamples.add(token.text.replace(/\r\n?/g, '\n').trim());
   });
   return { ...descriptor, manifest, blocks, used, revision, draft: bytes.source.toString('utf8'), markdown: bytes.markdown.toString('utf8'),
-    source: bytes.code.toString('utf8'), markdownBytes: bytes.markdown, inlineExamples };
+    source: bytes.code.toString('utf8'), readerSource, markdownBytes: bytes.markdown, inlineExamples };
 }
 
 export function createLinkRewriter({ collection, document, byPath, gitRevision }) {
@@ -251,7 +260,10 @@ export function createLinkRewriter({ collection, document, byPath, gitRevision }
     }
     if (target.startsWith('content/') && /\.(?:html|cpp|md)$/.test(target) && !target.endsWith('.source.md'))
       throw new Error('Content link is not registered for this carrier: ' + target);
-    // Research, protocol and other repository records remain references, not app assets.
+    if (/^(?:work|research|protocol|catalog|carrier|tests|tools|scripts|second_algorithm|\.github)(?:\/|$)/.test(target)
+      || /(?:^|\/)(?:AGENTS|SKILL)\.md$|\.source\.md$|\.authoring\.json$|chapter-(?:contract|review)\.json$/.test(target))
+      throw new Error('Internal production reference is not reader content');
+    // Only references outside the production facilities can become repository links.
     return { href: `${REPOSITORY}/blob/${gitRevision}/${target.split('/').map(encodeURIComponent).join('/')}`
       + (anchor ? '#' + encodeURIComponent(anchor) : ''), external: true };
   };
@@ -269,6 +281,8 @@ function knowledgeLinkHTML(text, knowledge) {
 }
 
 export function renderKnowledge(record, knowledge) {
+  assertReaderText(record.title, 'knowledge title');
+  assertReaderMarkdown(expandKnowledgeReferences(record.body, knowledge), 'knowledge body');
   const renderer = new marked.Renderer(); let code = 0;
   renderer.heading = function ({ tokens, depth }) {
     const level = Math.min(4, Math.max(3, depth));
@@ -296,11 +310,14 @@ export function renderKnowledge(record, knowledge) {
     return anchor ? `<a id="${anchor[1]}">` + (anchor[2] || '') : esc(text);
   };
   renderer.image = () => { throw new Error('Knowledge images need registered assets'); };
-  return marked.parse(expandKnowledgeReferences(record.body, knowledge), { renderer, gfm: true })
+  const html = marked.parse(expandKnowledgeReferences(record.body, knowledge), { renderer, gfm: true })
     .replace(/<table>/g, '<div class="table-wrap"><table>').replace(/<\/table>/g, '</table></div>');
+  assertReaderHtml(html, 'knowledge HTML');
+  return html;
 }
 
 export function renderAuthority(authority, rewriteLink, knowledge = new Map()) {
+  assertMainHeadings(authority.markdown, authority.id);
   const renderer = new marked.Renderer();
   let heading = 0, codeIndex = 0, inlineIndex = 0, firstParagraph = true, strippedH1 = false;
   renderer.heading = function ({ tokens, depth }) {
@@ -361,6 +378,8 @@ export function renderAuthority(authority, rewriteLink, knowledge = new Map()) {
   if (heading !== authority.manifest.headings.length || codeIndex !== authority.blocks.size)
     throw new Error('Reading content omitted a canonical heading or code block');
   html = html.replace(/<table>/g, '<div class="table-wrap"><table>').replace(/<\/table>/g, '</table></div>');
+  assertReaderHtml(html, authority.id + ' reader HTML', { allowKnowledgeIds: !authority.manifest.knowledgeHelperSha256 });
+  assertRenderedMainHeadings(html, authority.manifest.headings.filter((x,index)=>!(index===0&&x.depth===1)), authority.id + ' reader HTML');
   const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map(x => x[1]);
   if (new Set(ids).size !== ids.length)
     throw new Error(`${authority.id}: duplicate reading anchors: ${[...new Set(ids.filter((id, index) => ids.indexOf(id) !== index))].join(', ')}`);
@@ -389,9 +408,12 @@ export async function buildLibrary(root, output, publications, gitRevision, lear
   const renderedDocuments = new Map();
   let codeBlocks = 0;
   for (const { collection, documents } of rows) {
+    assertReaderText(collection.title, 'collection title');
     const item = { id: collection.id, kind: collection.kind, title: collection.title, documents: [] };
     if (collection.kind === 'chapter') item.chapterNumber = collection.chapterNumber;
     for (const { authority, entry } of documents) {
+      assertReaderText(authority.title, 'document title');
+      assertReaderMarkdown(authority.markdown, authority.id + ' downloadable Markdown', {allowKnowledgeIds:learning.schemaVersion===1});
       const rendered = renderAuthority(authority, createLinkRewriter({ collection, document: authority, byPath, gitRevision }), knowledge);
       const tokens = knowledgeTokens(authority.draft);
       const knowledgeIds = new Set([...tokens.introductions, ...tokens.references.map(item => item.id)]);
@@ -419,7 +441,7 @@ export async function buildLibrary(root, output, publications, gitRevision, lear
       const filename = path.join(output, url.slice(1));
       await fs.mkdir(path.dirname(filename), { recursive: true });
       await fs.writeFile(filename, JSON.stringify(document) + '\n', 'utf8');
-      await fs.writeFile(path.join(output, entry.sourceUrl.slice(1)), authority.source, 'utf8');
+      await fs.writeFile(path.join(output, entry.sourceUrl.slice(1)), authority.readerSource, 'utf8');
       await fs.writeFile(path.join(output, entry.markdownUrl.slice(1)), authority.markdownBytes);
       item.documents.push({ id: authority.id, title: authority.title, revision, url,
         sourceUrl: entry.sourceUrl, markdownUrl: entry.markdownUrl, headings: rendered.headings, knowledgeIds: payload.knowledgeIds });

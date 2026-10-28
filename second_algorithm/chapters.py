@@ -772,6 +772,19 @@ def chapter_quality(root: Path, chapter_id: str | None = None) -> dict:
                 errors.append("review is stale: editorial input hashes differ")
             if review.get("verdict") != "accepted":
                 errors.append("chapter review has not accepted this edition")
+            if contract.get("schemaVersion") == 3:
+                boundary = review.get("readerBoundary")
+                if not isinstance(boundary, dict):
+                    errors.append("reader boundary review is required for schemaVersion 3")
+                else:
+                    outcome = boundary.get("outcome")
+                    if not isinstance(outcome, str) or outcome not in {"pass", "gap"}:
+                        errors.append("reader boundary outcome must be pass or gap")
+                    elif outcome == "gap":
+                        errors.append("reader boundary review records an unresolved gap")
+                    _text(boundary.get("findings"), cid + ".readerBoundary.findings", errors)
+                    _locations(boundary.get("locations"), cid + ".readerBoundary.locations", context["documents"],
+                               chapter["documents"], errors, required=outcome == "pass")
             for name in ("baseline", "findings"):
                 _text(review.get("comparison", {}).get(name), cid + ".comparison." + name, errors)
             outside = review.get("outsideChallenge", {})

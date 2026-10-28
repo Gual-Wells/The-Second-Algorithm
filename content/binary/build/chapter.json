@@ -1,12 +1,14 @@
 {
+  "readerBoundaryHelperSha256": "74ea33a6e5bd6152b116889823390664c458c863215abb5f9d7b11d81b7fdc95",
+  "readerSourceSha256": "979b63e50271fcb7e6a80ed55ec05ce4663754dcbe3858e300155ea7707ecb42",
   "authoringDependencies": {
     "content/binary/advanced.cpp": "6bd17b582f1ac1eea42dd360b73ee10e870a7e01cf4334168fb5c7c05b546988",
-    "content/binary/advanced.source.md": "6f90cc1e226e5cfe34fa89bd94d9075d939c1b9375ad1a1c1ad31e19b142916d",
+    "content/binary/advanced.source.md": "bd80f2251319cf8aa148ed00c99c3e6c1166491c107bfbc4aac6ba2060db2000",
     "content/binary/boundary.cpp": "d33ebf32477c6fc0ce93a39269866c97c762b7c339e755b828923feb5b0a3475",
-    "content/binary/boundary.source.md": "87c0ee6a8823c43117ef797911242543054e864627b21061ee0162df7646c67c",
+    "content/binary/boundary.source.md": "19d5e6f91a602bc4cfb70c30552085d15b5b4dc33ef5b43dfc149eb5191a0cf2",
     "content/binary/chapter.authoring.json": "2b53d44bc04423bd68bc546f52e7100244fc37a85e9c5bd9e5c55a9041f6fe68",
-    "content/binary/decision.cpp": "1952f87d644b49c754a71285ad437a67629db79c6dc64c294a6ad8208c30618d",
-    "content/binary/decision.source.md": "d990ec7969fa205d0bc507fc7fd353c75107916535fbb547fe57084e45df9078",
+    "content/binary/decision.cpp": "576fd6fd6c0b2b22be12562debe1728c026f814522a6871b11ac5e5e947767fd",
+    "content/binary/decision.source.md": "c734c0f6229d97837f032899867fc8b33c1d02bd35f04a5285f1b3c598b4fdda",
     "content/binary/selection.cpp": "ff819911911e1ef6666f6597d3b8ea9ada0e4f6126bfee5116537a2cea3aa37f",
     "content/binary/selection.source.md": "7d7b9aa2b940512287db126aacf0515f9da61696454d8fdb50fa0b536c411a0f",
     "tools/compose-chapter.mjs": "f27dd3ec0b3236608091b4fb5ccb0eca56755eb6f4b243d5ee217434f0c2b20c"
@@ -381,8 +383,8 @@
     },
     {
       "depth": 3,
-      "id": "标准设施-只接管统计-不虚构划分算法",
-      "text": "标准设施：只接管统计，不虚构划分算法"
+      "id": "标准设施-计算搜索上下界",
+      "text": "标准设施：计算搜索上下界"
     },
     {
       "depth": 3,
@@ -910,13 +912,13 @@
       "text": "当前实现的边界"
     }
   ],
-  "sourceSha256": "dfcb095aa13f64f9ed83a01d44acd5f1cd650a0cdc07611350371b1ee176d822",
-  "codeSha256": "c690754419ca36d171c0d6ccdda731c47418b941b3d732df01820e696b6a537a",
-  "markdownSha256": "49ff4dd8e75b4e05384230781911cc1ed270c8bf04dc0f02d00d5df6c7bb1366",
-  "htmlSha256": "0c0f85084245d1bbce12ec63e9deb95afe4a91f5f9b68ee8459ba6e2edfb501a",
-  "builderSha256": "a855aa5a4e108dc523e19260f2b17ffd65f8a57af601ca33c6e774b31c6e16e0",
+  "sourceSha256": "7f698f91d784701d20b0cc6899c45b7a6777f42f87e7477a30de502d754e2742",
+  "codeSha256": "75fff25f5192947b4b0cd10b184eb82fd1dc20d57268ce1d70909e952b367d5f",
+  "markdownSha256": "e2d642c9762f9ed24aa7726f642054dbad177829646ade7d7f863cbe46535680",
+  "htmlSha256": "16a7f5b419ed13f64562282fb254333c32481bc5fd9139c47a45b250ddc3a6a0",
+  "builderSha256": "75dbb90af87716cc0df0e6feef25a33a1060549a7d2937f1c985a7bee1940c12",
   "learningSha256": "f7481a83eb8249ecabdcb21f67f7afc5ae44d23fa6ccd1e8aabf09470e68da6f",
   "publicationsSha256": "7a0f9e012fcbe71228443287536ea4e8af7a0544acba697adf70cf159cf9ce5b",
-  "markdownBytes": 194273,
-  "htmlBytes": 341896
+  "markdownBytes": 194193,
+  "htmlBytes": 341736
 }

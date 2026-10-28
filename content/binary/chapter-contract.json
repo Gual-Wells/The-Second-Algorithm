@@ -850,6 +850,13 @@
       "locator": "本轮从读者顺序检查统一生成教材",
       "evidence": "work/editorial-rebuild-20261028/independent-review.md",
       "sourcePaths": []
+    },
+    {
+      "id": "reader-boundary-audit",
+      "kind": "countercheck",
+      "locator": "2026-10-29 current reader surface and delivery audit",
+      "evidence": "work/reader-boundary-20261029/content-audit.md",
+      "sourcePaths": []
     }
   ],
   "paradigm": {

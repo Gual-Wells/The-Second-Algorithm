@@ -464,7 +464,7 @@ def course_snapshot(root: Path, *, include_reviews: bool = True) -> dict:
         base = document["path"]
         inputs.update(document.get("authoringDependencies", {}))
         inputs.update([base + ".source.md", base + ".cpp"])
-        for suffix in (".md", ".html"):
+        for suffix in (".md", ".html", ".reader.cpp"):
             if (root / (base + suffix)).is_file():
                 inputs.add(base + suffix)
         manifest = str(Path(base).parent / "build" / (Path(base).name + ".json")).replace("\\", "/")
@@ -498,7 +498,7 @@ def course_snapshot(root: Path, *, include_reviews: bool = True) -> dict:
                 if name.startswith(".") or (extensions is not None and Path(name).suffix.lower() not in extensions):
                     continue
                 inputs.add((Path(current) / name).relative_to(root).as_posix())
-    for filename in ("tools/build_handbook.mjs", "tools/knowledge.mjs", "scripts/build-carrier.mjs", "package.json", "package-lock.json", "wrangler.jsonc",
+    for filename in ("tools/build_handbook.mjs", "tools/knowledge.mjs", "tools/reader-boundary.mjs", "scripts/build-carrier.mjs", "package.json", "package-lock.json", "wrangler.jsonc",
                      "second_algorithm/learning.py", "second_algorithm/workflow.py", "AGENTS.md",
                      "protocol/CONTENT_PIPELINE.md", "protocol/RESEARCH_DEPARTMENT.md", "catalog/scope.json", "docs/CONTENT_MODEL.md"):
         if (root / filename).is_file():

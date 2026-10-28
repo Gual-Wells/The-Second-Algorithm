@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "chapter": "chapter-01",
-  "inputHash": "d16ea5d4de7ec338c4b348e6fdabcde99bd2bd83c3e738b54e0a6939ce8ef8c7",
+  "inputHash": "1dcf91d45e982082315d47fc69cf5419a97182ef4f625dde84abfae7da2d0ea0",
   "verdict": "accepted",
   "comparison": {
-    "baseline": "基线d1fe0ba的二分已实际出版为四读件。此次保真采用其精确研究交接并重新编纂，旧accepted不继承；对照用户仅前置/正式题型的硬结构，以及第二语言实际唯一作者源和确定性成品经验。",
-    "findings": "编纂、装配、合同、发布输入和阅读器同步改变，而非只合并页面。关键实质改动与连续通读见work/editorial-rebuild-20261028/edition-review.md；作者、前置审读、独立困难节抽查各有真实范围，未以schema/计数自证教学完成。"
+    "baseline": "c9c93c2的统一二分章已发布。本轮针对读者表面与下载边界打补丁，37型/九分支未变；未改算法的范围与完整链条采用依据承接前版实际审阅，不声称再做全章证明。",
+    "findings": "实际修正内部OJ/本机测试话术、制作辩护及源码界标外流；将其改为客观方法/复杂度/设施职责。增加当前readerBoundary人工审阅与正式输出检查，具体发现、保护条件和验证边界见work/reader-boundary-20261029/edition-review.md。"
   },
   "outsideChallenge": {
     "materialIds": [
@@ -13,9 +13,10 @@
       "editorial-prelude-review",
       "editorial-independent-review",
       "challenge-aliens-official-method",
-      "challenge-abc216e-official-editorial"
+      "challenge-abc216e-official-editorial",
+      "reader-boundary-audit"
     ],
-    "findings": "保留已采用研究的独立范围挑战；本轮新审读发现并修复重复旋转不能保证对半、浮点helper过早和困难结构解释缺口。非作者对生成读件另查前置/LIS/秩/根/结构与离线法，未发现阻断所查理解的缺口；具体证据和未查边界保留。"
+    "findings": "保留已采用研究的独立范围挑战；本轮新审读发现并修复重复旋转不能保证对半、浮点helper过早和困难结构解释缺口。非作者对生成读件另查前置/LIS/秩/根/结构与离线法，未发现阻断所查理解的缺口；具体证据和未查边界保留。 本轮另检查全部交付种类的受众边界，修掉生产自述和编纂标记，原反查记录不改写。"
   },
   "assessments": [
     {
@@ -394,5 +395,43 @@
         }
       ]
     }
-  ]
+  ],
+  "readerBoundary": {
+    "outcome": "pass",
+    "findings": "实际核正文、13份知识源、目录/搜索、代码注释、预览和Markdown/CPP交付。修复匹配节本机/OJ状态与多节作者辩护；清洁源码只去178条编纂界标，UI/下载一致。内部生产链接/隐藏注释/可见Q由最终投影门禁重核，DOM路由保留。真实技术条件、复杂度、库职责和功能文本未按词表泛删；扫描与本字段均不自证全部语义无污染。",
+    "locations": [
+      {
+        "document": "binary-search",
+        "anchor": "prelude"
+      },
+      {
+        "document": "binary-search",
+        "anchor": "predicate-access"
+      },
+      {
+        "document": "binary-search",
+        "anchor": "paired-break"
+      },
+      {
+        "document": "binary-search",
+        "anchor": "matching-threshold"
+      },
+      {
+        "document": "binary-search",
+        "anchor": "ratio-selection"
+      },
+      {
+        "document": "binary-search",
+        "anchor": "summary-descent"
+      },
+      {
+        "document": "binary-search",
+        "anchor": "time-parallel-search"
+      },
+      {
+        "document": "binary-search",
+        "anchor": "marginal-penalty"
+      }
+    ]
+  }
 }

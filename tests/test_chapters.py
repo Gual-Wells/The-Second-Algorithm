@@ -496,6 +496,59 @@ class ParadigmContractTest(ChapterHelpers, LearningFixture):
             verify_job(self.root, "lesson-job", "fixture-c++")
         self.assertTrue(prepare_release(self.root, "lesson-job")["release"]["passed"])
 
+    def test_schema3_requires_current_reader_boundary_review_without_invalidating_draft(self):
+        self.accepted_fixture()
+        review = self.review()
+        review.pop("readerBoundary")
+        self.put_review(review)
+        self.assertTrue(validate_learning(self.root)["ok"], validate_learning(self.root))
+        self.assertIn("reader boundary review is required", " ".join(chapter_quality(self.root)["chapters"][0]["errors"]))
+        with patch("second_algorithm.workflow._process", side_effect=self.process_success):
+            verify_job(self.root, "lesson-job", "fixture-c++")
+        with self.assertRaisesRegex(ValueError, "chapter-quality"):
+            prepare_release(self.root, "lesson-job")
+
+    def test_reader_boundary_needs_pass_findings_and_actual_chapter_location(self):
+        self.accepted_fixture()
+        accepted = self.review()
+        for boundary, phrase in (
+            ([], "reader boundary review is required"),
+            ({"outcome": "gap", "findings": "Production process remains visible", "locations": []}, "unresolved gap"),
+            ({"outcome": "accepted", "findings": "Reviewed", "locations": []}, "outcome must be pass or gap"),
+            ({"outcome": [], "findings": "Reviewed", "locations": []}, "outcome must be pass or gap"),
+            ({"outcome": "pass", "findings": "  ", "locations": [{"document": "lesson", "anchor": "boundary-type"}]}, "nonempty text"),
+            ({"outcome": "pass", "findings": "Reviewed", "locations": []}, "actual prose location"),
+            ({"outcome": "pass", "findings": "Reviewed", "locations": [{"document": "lesson", "anchor": "invented"}]}, "missing explicit prose anchor"),
+            ({"outcome": "pass", "findings": "Reviewed", "locations": [{"document": "work-note", "anchor": "boundary-type"}]}, "belong to this published chapter"),
+        ):
+            with self.subTest(boundary=boundary):
+                review = copy.deepcopy(accepted)
+                review["readerBoundary"] = boundary
+                self.put_review(review)
+                self.assertTrue(validate_learning(self.root)["ok"], validate_learning(self.root))
+                self.assertIn(phrase, " ".join(chapter_quality(self.root)["chapters"][0]["errors"]))
+        self.put_review(accepted)
+        self.assertTrue(chapter_quality(self.root)["ok"], chapter_quality(self.root))
+
+    def test_reader_boundary_review_cannot_inherit_another_input_version(self):
+        self.accepted_fixture()
+        self.put(self.draft, (self.root / self.draft).read_text(encoding="utf-8") + "\nA changed reader paragraph.\n")
+        errors = " ".join(chapter_quality(self.root)["chapters"][0]["errors"])
+        self.assertIn("review is stale", errors)
+
+    def test_legacy_review_can_still_be_inspected_without_reader_boundary(self):
+        self.contract["schemaVersion"] = 2
+        self.contract["reading"]["selectionMap"] = copy.deepcopy(self.contract["reading"]["units"][0]["locations"])
+        self.save_contract()
+        self.accepted_fixture()
+        review = self.review()
+        review.pop("readerBoundary")
+        self.put_review(review)
+        self.assertTrue(validate_learning(self.root)["ok"], validate_learning(self.root))
+        errors = " ".join(chapter_quality(self.root)["chapters"][0]["errors"])
+        self.assertIn("legacy chapter contract", errors)
+        self.assertNotIn("reader boundary", errors)
+
     def test_schema2_is_technically_readable_but_cannot_be_formally_adopted(self):
         self.contract["schemaVersion"] = 2
         self.contract["reading"]["selectionMap"] = copy.deepcopy(self.contract["reading"]["units"][0]["locations"])

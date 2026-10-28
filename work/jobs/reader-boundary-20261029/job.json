@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "reader-boundary-20261029",
+  "goal": "隔离内部研究编纂验证与读者出版表面，修当前泄漏并对协议、语义采用、装配和发布导出打补丁",
+  "createdAt": "2026-10-28T16:26:36.269735+00:00",
+  "evidence": [
+    {
+      "id": "48fb448249e24b4f825ff76bbdd41e63",
+      "kind": "research",
+      "path": "work/reader-boundary-20261029/content-audit.md",
+      "summary": "按真实读件/知识/源码定位生产话术、作者辩护与编纂界标，区分应保留技术条件并确定职责隔离补丁",
+      "outcome": "accepted",
+      "sha256": "4c326d81a77c599b2211e504a5be3474064e117a9153f564bf101aaa7ae09f80",
+      "inputHash": "6e7d4ac5da6004af5bfee709d67dae322c6e5a772c19fa9fd51c84832ebcdc5e",
+      "recordedAt": "2026-10-28T16:36:17.267155+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "b3ae29740ffa4b6082e584c6535b5780",
+      "kind": "review",
+      "path": "work/reader-boundary-20261029/edition-review.md",
+      "summary": "当前读者表面定点语义回读、协议/机器门禁分工、真实导出与浏览器/升级验证，保留审阅和工具识别边界",
+      "outcome": "accepted",
+      "sha256": "9f6d4da42a4a891881a5b5c9dbe8153b69bdbe11d3278ab90f91f30689b861c5",
+      "inputHash": "6e7d4ac5da6004af5bfee709d67dae322c6e5a772c19fa9fd51c84832ebcdc5e",
+      "recordedAt": "2026-10-28T16:36:19.617326+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    }
+  ],
+  "lastGoodVerification": {
+    "path": "work/jobs/reader-boundary-20261029/verifications/03c204cc922e43a5a9616b46a251e430.json",
+    "sha256": "39e0fb0801ddf32338b96680075dd5bf81fac6a72819708b59d2e4a9bf9b4031",
+    "inputHash": "6e7d4ac5da6004af5bfee709d67dae322c6e5a772c19fa9fd51c84832ebcdc5e"
+  },
+  "lastPreparedRelease": {
+    "path": "work/jobs/reader-boundary-20261029/releases/a39fcd15be804cc58deeddb584e5344d.json",
+    "sha256": "d0692ea77e0a20a7af9e78887d02eff1e9312f10fe2a5861263a9d3514367fda",
+    "inputHash": "6e7d4ac5da6004af5bfee709d67dae322c6e5a772c19fa9fd51c84832ebcdc5e"
+  },
+  "lastVerificationAttempt": {
+    "path": "work/jobs/reader-boundary-20261029/verifications/03c204cc922e43a5a9616b46a251e430.json",
+    "sha256": "39e0fb0801ddf32338b96680075dd5bf81fac6a72819708b59d2e4a9bf9b4031",
+    "inputHash": "6e7d4ac5da6004af5bfee709d67dae322c6e5a772c19fa9fd51c84832ebcdc5e"
+  }
+}

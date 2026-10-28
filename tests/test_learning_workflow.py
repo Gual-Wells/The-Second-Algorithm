@@ -133,6 +133,9 @@ int main() {
             review = {"schemaVersion": 1, "chapter": "unit", "inputHash": chapter_inputs(self.root, "unit")["inputHash"],
                 "verdict": "accepted", "comparison": {"baseline": "Actual fixture source", "findings": "Both implementations preserve the sorted contract"},
                 "outsideChallenge": {"materialIds": ["outside"], "findings": "Checked empty and absent-value task conditions"},
+                "readerBoundary": {"outcome": "pass",
+                    "findings": "Synthetic fixture review of reader prose, knowledge, headings/search, visible code comments and source download; not a real chapter acceptance",
+                    "locations": [{"document": "lesson", "anchor": "boundary-type"}]},
                 "assessments": [{"commitment": promise["id"], "outcome": "pass", "reason": "Reasoned fixture assessment",
                     "locations": [{"document": "lesson", "anchor": "q000001"}]} for promise in self.contract["commitments"]]}
             write_json(self.root / "content/unit/chapter.review.json", review)

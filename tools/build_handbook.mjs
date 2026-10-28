@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { marked } from 'marked';
 import { readKnowledge, knowledgeTokens, expandKnowledgeReferences, expandKnowledgeIntroductions } from './knowledge.mjs';
 import { composeDocument } from './compose-chapter.mjs';
+import { assertReaderMarkdown, assertReaderHtml, assertReaderText, assertMainHeadings, assertRenderedMainHeadings, readerSourceView, assertReaderSource } from './reader-boundary.mjs';
 
 const REPOSITORY=path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 if (!process.argv[2] || !process.argv[3])
@@ -19,6 +20,7 @@ const learning=JSON.parse(learningBytes), publications=JSON.parse(publicationByt
 const documents=new Map(publications.collections.flatMap(c=>c.documents.map(d=>[d.id,d])));
 const relativeBase=path.relative(REPOSITORY,path.join(ROOT,NAME)).replaceAll('\\','/');
 const descriptor=[...documents.values()].find(document=>document.path===relativeBase);
+const DISPLAY_NAME=descriptor?.title || NAME;
 let authoringDependencies;
 if(descriptor && descriptor.composition!==undefined){
   const composed=await composeDocument(REPOSITORY,descriptor);
@@ -26,7 +28,7 @@ if(descriptor && descriptor.composition!==undefined){
   const realDirectory=await fs.realpath(ROOT);
   const within=filename=>{const relative=path.relative(contentRoot,filename);return relative!==''&&relative!=='..'&&!relative.startsWith('..'+path.sep)&&!path.isAbsolute(relative);};
   if(!within(realDirectory))throw new Error('Generated chapter directory escapes content/');
-  for(const extension of ['.source.md','.cpp']){
+  for(const extension of ['.source.md','.cpp','.reader.cpp']){
     const filename=path.join(ROOT,NAME+extension);
     try{
       if((await fs.lstat(filename)).isSymbolicLink())throw new Error('Generated chapter authority cannot be a symlink');
@@ -67,6 +69,12 @@ while(knowledgePending.length){
   for(const next of dependencies)if(!knowledgeIds.has(next)){knowledgeIds.add(next);knowledgePending.push(next);}
 }
 const knowledgeRecords=[...knowledgeIds].filter(id=>knowledge.has(id)).map(id=>knowledge.get(id));
+assertReaderText(DISPLAY_NAME, 'document name');
+assertReaderText(SERIES, 'series name');
+for(const record of knowledgeRecords){
+  assertReaderText(record.title, 'knowledge title');
+  assertReaderMarkdown(expandKnowledgeReferences(record.body,knowledge), 'knowledge content');
+}
 const knowledgeDependencies=Object.fromEntries(knowledgeRecords.map(record=>[record.source,record.sourceSha256]));
 const blocks=new Map();
 for(const m of source.matchAll(/\/\/ BEGIN ([\w-]+)\r?\n([\s\S]*?)\/\/ END \1/g)){
@@ -83,6 +91,11 @@ const md=linkedDraft.replace(/\{\{(?:(?:code|code-block):)?([\w-]+)\}\}/g,(_,nam
   used.push(name);return '```cpp\n'+blocks.get(name)+'\n```';
 });
 if(used.length!==blocks.size||new Set(used).size!==used.length)throw new Error('Each code region needs one authoritative display');
+assertMainHeadings(md, 'generated chapter');
+assertReaderMarkdown(md, 'generated chapter', {allowKnowledgeIds:learning.schemaVersion===1});
+const readerSource=readerSourceView(source, blocks.keys());
+assertReaderSource(readerSource, 'downloadable chapter source');
+await fs.writeFile(path.join(ROOT,NAME+'.reader.cpp'),readerSource,'utf8');
 await fs.writeFile(path.join(ROOT,NAME+'.md'),md,'utf8');
 
 const esc=s=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
@@ -116,6 +129,8 @@ renderer.link=function({href,title,tokens}){
   return '<a href="'+esc(href)+'"'+(/^https?:/.test(href)?' target="_blank" rel="noopener noreferrer"':'')+(title?' title="'+esc(title)+'"':'')+'>'+this.parser.parseInline(tokens)+'</a>';
 };
 let body=marked.parse(md,{renderer,gfm:true});
+assertReaderHtml(body, 'generated chapter HTML', {allowKnowledgeIds:learning.schemaVersion===1});
+assertRenderedMainHeadings(body, headings, 'generated chapter HTML');
 body=body.replace(/<table>/g,'<div class="table-wrap"><table>').replace(/<\/table>/g,'</table></div>');
 body=body.replace(/<p>(求职(?:算法总册 · 题型与 C\+\+ 模板|C\+\+实战总册[^<]*))<\/p>/,'<p class="subtitle">$1</p>');
 let nav='';
@@ -164,10 +179,10 @@ document.getElementById('knowledgeClose').addEventListener('click',()=>knowledge
 document.getElementById('knowledgeBack').addEventListener('click',()=>{const item=knowledgeHistory.pop();if(item){openKnowledge(item.id,'',false);knowledgeDialog.scrollTop=item.top;}});
 knowledgeDialog.addEventListener('close',()=>{knowledgeHistory=[];knowledgeReturn?.focus({preventScroll:true});});
 `;
-const html='<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(NAME)+' · '+esc(SERIES)+'</title><style>'+css+'</style></head><body><header class="topbar"><div class="brand">'+esc(SERIES)+'<span>'+esc(NAME)+'</span></div><nav class="files" aria-label="文件"><a href="'+esc(NAME)+'.md">Markdown</a><a href="'+esc(NAME)+'.cpp">C++ 源码</a></nav></header><div class="layout"><aside class="sidebar"><div class="toc-title">'+TOC+'</div><nav class="toc" aria-label="'+TOC+'">'+nav+'</nav></aside><div><details class="mobile-toc"><summary>'+TOC+'</summary><nav class="toc">'+nav+'</nav></details><main>'+body+'<footer class="page-foot">'+esc(NAME)+' · '+esc(SERIES)+'</footer></main></div></div><dialog class="knowledge-dialog" id="knowledgeDialog" aria-labelledby="knowledgeTitle"><header><button id="knowledgeBack" type="button" hidden>返回</button><h2 id="knowledgeTitle"></h2><button id="knowledgeClose" type="button">完成</button></header><div id="knowledgeBody"></div></dialog><script>'+script+'</script></body></html>';
+const html='<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(DISPLAY_NAME)+' · '+esc(SERIES)+'</title><style>'+css+'</style></head><body><header class="topbar"><div class="brand">'+esc(SERIES)+'<span>'+esc(DISPLAY_NAME)+'</span></div><nav class="files" aria-label="文件"><a href="'+esc(NAME)+'.md">Markdown</a><a href="'+esc(NAME)+'.reader.cpp">C++ 源码</a></nav></header><div class="layout"><aside class="sidebar"><div class="toc-title">'+TOC+'</div><nav class="toc" aria-label="'+TOC+'">'+nav+'</nav></aside><div><details class="mobile-toc"><summary>'+TOC+'</summary><nav class="toc">'+nav+'</nav></details><main>'+body+'<footer class="page-foot">'+esc(DISPLAY_NAME)+' · '+esc(SERIES)+'</footer></main></div></div><dialog class="knowledge-dialog" id="knowledgeDialog" aria-labelledby="knowledgeTitle"><header><button id="knowledgeBack" type="button" hidden>返回</button><h2 id="knowledgeTitle"></h2><button id="knowledgeClose" type="button">完成</button></header><div id="knowledgeBody"></div></dialog><script>'+script+'</script></body></html>';
 await fs.writeFile(path.join(ROOT,NAME+'.html'),html,'utf8');
 await fs.mkdir(path.join(ROOT,'build'),{recursive:true});
 const sha=s=>createHash('sha256').update(s).digest('hex');
-await fs.writeFile(path.join(ROOT,'build/'+NAME+'.json'),JSON.stringify({authoringDependencies,codeBlocks:used,questionReferences,knowledgeIntroductions,knowledgeDependencies,knowledgeHelperSha256:sha(await fs.readFile(new URL('./knowledge.mjs',import.meta.url))),headings,sourceSha256:sha(draft),codeSha256:sha(source),markdownSha256:sha(md),htmlSha256:sha(html),builderSha256:sha(await fs.readFile(fileURLToPath(import.meta.url))),learningSha256:sha(learningBytes),publicationsSha256:sha(publicationBytes),markdownBytes:Buffer.byteLength(md),htmlBytes:Buffer.byteLength(html)},null,2)+'\n','utf8');
+await fs.writeFile(path.join(ROOT,'build/'+NAME+'.json'),JSON.stringify({readerBoundaryHelperSha256:sha(await fs.readFile(new URL('./reader-boundary.mjs',import.meta.url))),readerSourceSha256:sha(readerSource),authoringDependencies,codeBlocks:used,questionReferences,knowledgeIntroductions,knowledgeDependencies,knowledgeHelperSha256:sha(await fs.readFile(new URL('./knowledge.mjs',import.meta.url))),headings,sourceSha256:sha(draft),codeSha256:sha(source),markdownSha256:sha(md),htmlSha256:sha(html),builderSha256:sha(await fs.readFile(fileURLToPath(import.meta.url))),learningSha256:sha(learningBytes),publicationsSha256:sha(publicationBytes),markdownBytes:Buffer.byteLength(md),htmlBytes:Buffer.byteLength(html)},null,2)+'\n','utf8');
 console.log(JSON.stringify({codeBlocks:used.length,sections:headings.filter(h=>h.depth===2).length,topics:headings.filter(h=>h.depth===3).length,markdownBytes:Buffer.byteLength(md)}));
 

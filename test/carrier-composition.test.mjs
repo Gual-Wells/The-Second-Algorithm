@@ -17,7 +17,7 @@ async function fixture() {
   const root = await fs.mkdtemp(path.join(PARENT, 'case-'));
   for (const directory of ['tools', 'content/unit', 'carrier', 'catalog'])
     await fs.mkdir(path.join(root, directory), { recursive: true });
-  for (const filename of ['compose-chapter.mjs', 'build_handbook.mjs', 'knowledge.mjs'])
+  for (const filename of ['compose-chapter.mjs', 'build_handbook.mjs', 'knowledge.mjs', 'reader-boundary.mjs'])
     await fs.copyFile(path.join(ROOT, 'tools', filename), path.join(root, 'tools', filename));
   const descriptor = { id: 'composed', title: '二分', path: 'content/unit/chapter', composition: 'content/unit/chapter.authoring.json' };
   const first = '# Internal one\r\n\r\n<a id="prelude"></a>\r\n## 前置\r\n\r\n前置原文。\r\n\r\n'
@@ -169,6 +169,19 @@ test('changes to any original author input or composer invalidate existing readi
     await assert.rejects(readAuthority(f.root, f.descriptor), /Composed author sources differ/,
       'updating only generated hashes cannot create a second author authority');
   } finally { await dispose(f.root); }
+});
+
+test('real author build rejects Setext main headings and publishes semantic preview titles', async () => {
+  const f=await fixture();try {
+    f.rebuild();
+    const html=await fs.readFile(path.join(f.root,'content/unit/chapter.html'),'utf8');
+    assert.match(html,/<title>二分 · /);
+    assert.match(html,/<span>二分<\/span>/);
+    assert.match(html,/href="chapter\.reader\.cpp"/);
+    assert.doesNotMatch(await fs.readFile(path.join(f.root,'content/unit/chapter.reader.cpp'),'utf8'),/^\/\/ (?:BEGIN|END) /m);
+    await fs.appendFile(path.join(f.root,'content/unit/two.source.md'),'\n意外的H1\n===\n');
+    assert.throws(f.rebuild,/main headings require explicit ATX/);
+  }finally{await dispose(f.root);}
 });
 
 test('composition paths reject traversal and symlinks outside content', async () => {

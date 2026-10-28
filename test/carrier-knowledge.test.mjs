@@ -4,6 +4,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { createHash } from 'node:crypto';
 import { buildLibrary, libraryPaths } from '../scripts/build-carrier.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -12,7 +13,7 @@ async function fixture() {
   const root = await fs.mkdtemp(path.join(parent, 'case-'));
   for (const dir of ['tools', 'catalog', 'carrier', 'content/unit', 'content/knowledge', 'tests/cpp'])
     await fs.mkdir(path.join(root, dir), { recursive: true });
-  for (const filename of ['build_handbook.mjs', 'knowledge.mjs', 'compose-chapter.mjs'])
+  for (const filename of ['build_handbook.mjs', 'knowledge.mjs', 'compose-chapter.mjs', 'reader-boundary.mjs'])
     await fs.copyFile(path.join(ROOT, 'tools', filename), path.join(root, 'tools', filename));
   const descriptor = { id: 'fixture', title: '题型', path: 'content/unit/Fixture' };
   const publications = { schemaVersion: 2, collections: [{ id: 'chapter', title: '领域', kind: 'chapter', chapterNumber: 1, documents: [descriptor] }] };
@@ -78,4 +79,18 @@ test('unknown precise knowledge sections fail the author build', async () => {
     await fs.appendFile(path.join(f.root, 'content/unit/Fixture.source.md'), '\n[[Q000001#missing|寿命]]\n');
     assert.throws(f.rebuild, /Unresolved knowledge reference/);
   } finally { await dispose(f.root); }
+});
+
+test('production text injected through knowledge is rejected by authoring and final popup construction', async () => {
+  const f=await fixture();try {
+    const filename=path.join(f.root,'content/knowledge/Q000001.md');
+    await fs.appendFile(filename,'\n本机结果另有验证记录。\n');
+    assert.throws(f.rebuild,/reader boundary/);
+    // Refreshing a dependency digest cannot turn the new body into reader text.
+    const buildPath=path.join(f.root,'content/unit/build/Fixture.json');
+    const manifest=JSON.parse(await fs.readFile(buildPath,'utf8'));
+    manifest.knowledgeDependencies['content/knowledge/Q000001.md']=createHash('sha256').update(await fs.readFile(filename)).digest('hex');
+    await fs.writeFile(buildPath,JSON.stringify(manifest));
+    await assert.rejects(buildLibrary(f.root,f.output,f.publications,'a'.repeat(40)),/reader boundary/);
+  }finally{await dispose(f.root);}
 });

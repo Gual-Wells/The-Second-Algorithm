@@ -122,6 +122,8 @@ reading.units保留id/title/taskIds/locations，并声明：
 
 schema3正式章只登记一个逻辑document，可在文档描述中以`composition`指向内部装配JSON。装配声明`title`、显式`sourceFiles`、`prelude:{source,anchor}`、`sections:[{id,source,anchor}]`和`codeSources`；所有作者源H2必须恰采用一次，代码区域仍来自唯一源码。工具按声明确定性装配，不决定题型语义，也不把物理作者稿暴露成四篇。manifest的`authoringDependencies`固定composition、sourceFiles、codeSources及装配工具的SHA；Python核对真实依赖闭包和装配结果，编辑审阅/发布快照绑定实际来源字节，不能沿用陈旧生成件。
 
+研究档案、章合同、审阅、验证/发布记录与learning的任务/实现关系属于内部控制面，不能自动投成教学文字。读者catalog/payload只投影加载与导航所需字段；知识/代码内部身份可以保留在传输属性中，不能显示为作者管理要求。正文、知识、目录/搜索文案、代码注释及Markdown/CPP下载都属于读者表面，不能夹带生产过程、内部记录路径或门禁自述。真实算法条件、复杂度、库/版本、所有权与失效等工程知识及必要产品功能说明继续保留，内容职责由实际语义判断。
+
 根state为active或withdrawn。active有真实发布文档、知识、任务和验证目标；withdrawn无published文档且learning.questions/tasks/targets为空。原稿、hidden登记和私人状态可保留，不能用空active或假目标绕门禁。withdrawal验证明确不适用C++编译，但仍要载体/浏览器/真实SW检查；恢复active后重新走实际研究与验证。
 
 learning.schemaVersion=2：
@@ -169,6 +171,10 @@ python -m second_algorithm course verify --compiler <已有编译器>
 输入快照覆盖登记、当前作者/源码/生成件、知识源、材料/合同/审阅依赖、实际实现/target闭包、来源池/书目、有效AGENTS/protocol/model及reader/worker/builder/验证/依赖锁/迁移等生产输入，排除node_modules/.local。系统头与宏include不能自动推导，须按实际声明与工具链判断。
 
 `chapter-inputs`排除审阅文件自身避免自引用；最终course_snapshot/发布包仍固定其字节。修改知识、正文、代码、规则或工具使旧证据过期，不能只换hash冒充重新审过。当前是全课程保守失效，不是细粒度影响分析。
+
+审阅文件仍为schemaVersion1；针对schema3章合同增加必需`readerBoundary`对象：`outcome`仅为pass/gap，`findings`为非空实际发现，`locations`为本章真实`{document,anchor}`数组。quality要求pass与至少一个有效正文定位；字段缺失、gap或无效位置都不通过。审阅须覆盖正文、知识、可见目录/搜索、代码注释和下载件；定位可指它们在本章的实际承载处，不能用work记录或虚构生成锚点充数。该字段沿用review的当前inputHash及最终字节绑定，是人工语义审阅证据，不是Python自动认定无污染。结构validate可在无review时检查施工稿，旧schema历史读取不加此要求。
+
+正式载体构建另检查最终读者表面的确定性边界与marked实际主标题；源码导出只移除精确BEGIN/END制作标记，保留可编译上下文和教学注释，原源码及导出字节各自核身份。门禁helper由build manifest的`readerBoundaryHelperSha256`及生产快照固定；扫描通过不代替人工语义判断，人工pass也不旁路上传前的构建检查。
 
 ## 可恢复研究与发布
 
