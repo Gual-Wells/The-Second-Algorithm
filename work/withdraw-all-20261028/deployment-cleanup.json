@@ -1,0 +1,70 @@
+{
+  "verifiedAt": "2026-10-28T08:59:33.361Z",
+  "project": "second-algorithm",
+  "kept": {
+    "id": "fff164aa-2ead-43db-8e20-4aece4ebbc86",
+    "url": "https://fff164aa.second-algorithm.pages.dev",
+    "source": "ab59123"
+  },
+  "deleted": [
+    {
+      "id": "bf786410-3d43-416e-8901-d1e0bd07e2b2",
+      "url": "https://bf786410.second-algorithm.pages.dev",
+      "source": "625513a"
+    },
+    {
+      "id": "694e36b8-bd21-42c4-86fc-88e25fc6e92b",
+      "url": "https://694e36b8.second-algorithm.pages.dev",
+      "source": "bb4246a"
+    },
+    {
+      "id": "a15e0938-db2f-4cd7-bf8e-202aaf36d9a1",
+      "url": "https://a15e0938.second-algorithm.pages.dev",
+      "source": "92044c5"
+    },
+    {
+      "id": "7002c83e-fb53-4b06-9ac5-b198ff0e4556",
+      "url": "https://7002c83e.second-algorithm.pages.dev",
+      "source": "879d98f"
+    },
+    {
+      "id": "5af07276-8681-4ac3-8846-a43e97bcc472",
+      "url": "https://5af07276.second-algorithm.pages.dev",
+      "source": "69f5cb3"
+    },
+    {
+      "id": "cd93b902-81ee-43e3-88be-571d473c63a9",
+      "url": "https://cd93b902.second-algorithm.pages.dev",
+      "source": "90a59c8"
+    },
+    {
+      "id": "53ee6cea-757f-4345-b320-79fb8b1667a7",
+      "url": "https://53ee6cea.second-algorithm.pages.dev",
+      "source": "3bc13a5"
+    },
+    {
+      "id": "51788189-b51e-494d-ae4c-26c642ef16db",
+      "url": "https://51788189.second-algorithm.pages.dev",
+      "source": "23a0630"
+    },
+    {
+      "id": "f19c69d8-800e-432d-8084-f759d5730979",
+      "url": "https://f19c69d8.second-algorithm.pages.dev",
+      "source": "23a0630"
+    },
+    {
+      "id": "b322a6b6-4698-4a1f-b8ff-e3dd7807c1f8",
+      "url": "https://b322a6b6.second-algorithm.pages.dev",
+      "source": "a45665b"
+    },
+    {
+      "id": "644ebb6c-17c4-41ae-a0bd-98fdafc2f7b6",
+      "url": "https://644ebb6c.second-algorithm.pages.dev",
+      "source": "a45665b"
+    }
+  ],
+  "remaining": 1,
+  "method": "Delete only non-kept deployments; re-list after each drained page until only the verified empty production deployment remains.",
+  "ownerAndD1Unchanged": true,
+  "passed": true
+}
