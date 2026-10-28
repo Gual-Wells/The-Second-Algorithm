@@ -6,7 +6,6 @@ import { readWorkerBuild, waitForWorkerRelease } from '../web/worker-release.js'
 
 const origin = 'https://second-algorithm.pages.dev';
 const path = '/library/first-chapter/first-document/new.json';
-const tick = () => new Promise(resolve => setTimeout(resolve, 15));
 
 function actualWorker(build, paths) {
   const handlers = new Map(), calls = [];
@@ -34,13 +33,28 @@ function actualWorker(build, paths) {
 
 function serviceWorker(controller, active = controller) {
   const value = new EventTarget();
+  const started = Promise.withResolvers();
   value.controller = controller; value.updates = 0;
-  value.getRegistration = async () => ({ active, async update() { ++value.updates; } });
+  value.updateStarted = started.promise;
+  value.registration = { active, update() {
+    ++value.updates;
+    const completed = Promise.resolve();
+    started.resolve({ completed });
+    return completed;
+  } };
+  value.getRegistration = async () => value.registration;
   value.takeOver = next => { value.controller = next; value.dispatchEvent(new Event('controllerchange')); };
   return value;
 }
 
-test('an actual hidden-release worker rejects the new route, but the gate prevents a premature read', async () => {
+function cleanUpPending(t, sw, current, pending) {
+  // Preserve the assertion's failure without leaving an unhandled timed-out
+  // gate behind when the test exits before the intended controller takeover.
+  pending.catch(() => {});
+  t.after(async () => { sw.takeOver(current); await Promise.allSettled([pending]); });
+}
+
+test('an actual hidden-release worker rejects the new route, but the gate prevents a premature read', { timeout: 2000 }, async t => {
   const old = actualWorker('old-build', ['/library/catalog.json']);
   const current = actualWorker('new-build', ['/library/catalog.json', path]);
   assert.equal((await old.read(path)).status, 404);
@@ -50,7 +64,8 @@ test('an actual hidden-release worker rejects the new route, but the gate preven
   let requested = false;
   const reading = waitForWorkerRelease({ serviceWorker: sw, build: 'new-build', timeoutMs: 1000 })
     .then(() => { requested = true; return sw.controller.read(path); });
-  await tick();
+  cleanUpPending(t, sw, current, reading);
+  await sw.updateStarted;
   assert.equal(requested, false);
   assert.equal(sw.updates, 1);
   assert.equal(current.calls.length, 0);
@@ -61,14 +76,16 @@ test('an actual hidden-release worker rejects the new route, but the gate preven
   assert.equal(old.calls.length, 0);
 });
 
-test('an update is not ready merely because registration.update resolved', async () => {
+test('an update is not ready merely because registration.update resolved', { timeout: 2000 }, async t => {
   const old = actualWorker('old-build', ['/library/catalog.json']);
   const current = actualWorker('new-build', ['/library/catalog.json', path]);
   const sw = serviceWorker(old, current);
   let ready = false;
   const release = waitForWorkerRelease({ serviceWorker: sw, build: 'old-build', different: true, timeoutMs: 1000 })
     .then(result => { ready = true; return result; });
-  await tick();
+  cleanUpPending(t, sw, current, release);
+  const { completed } = await sw.updateStarted;
+  await completed;
   assert.equal(ready, false);
   sw.takeOver(current);
   assert.equal((await release).build, 'new-build');
@@ -82,16 +99,19 @@ test('same-version offline content does not require a network update', async () 
   assert.equal(sw.updates, 0);
 });
 
-test('a controller older than the page cannot masquerade as a completed newer update', async () => {
+test('a controller older than the page cannot masquerade as a completed newer update', { timeout: 2000 }, async t => {
   const old = actualWorker('older-than-page', ['/library/catalog.json']);
   const current = actualWorker('new-release', ['/library/catalog.json', path]);
   const sw = serviceWorker(old);
-  const registration = { active: old, installing: {}, async update() {} };
-  sw.getRegistration = async () => registration;
+  const registration = sw.registration;
+  registration.installing = {};
   let ready = false;
   const update = waitForWorkerRelease({ serviceWorker: sw, build: 'page-release', different: true, timeoutMs: 1000 })
     .then(result => { ready = true; return result; });
-  await tick(); assert.equal(ready, false);
+  cleanUpPending(t, sw, current, update);
+  const { completed } = await sw.updateStarted;
+  await completed;
+  assert.equal(ready, false);
   registration.installing = null; registration.active = current; sw.takeOver(current);
   assert.equal((await update).build, 'new-release');
 });
