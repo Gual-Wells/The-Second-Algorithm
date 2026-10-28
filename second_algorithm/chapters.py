@@ -6,10 +6,11 @@ requires a current, reasoned assessment of every promise in the chapter contract
 from __future__ import annotations
 
 import re
+from datetime import datetime
 from pathlib import Path
 from urllib.parse import urlsplit
 
-from .storage import digest, read_json, safe_relative
+from .storage import canonical_bytes, digest, read_json, safe_relative
 
 DIMENSIONS = {
     "difficulty": "难度高度",
@@ -358,6 +359,128 @@ def _locations(value, label, documents, permitted, errors, *, required=False):
     return locations
 
 
+def _adoption_proof(root: Path, chapter_id: str, handoff_path: str, handoff_sha: str) -> dict | None:
+    """Find the first verified publication of this exact handoff.
+
+    A local deployment receipt is an operational fact, not a signature or a
+    semantic quality certificate. Its prepared packet and exact bytes must
+    agree. Merely adding `adopted: true` to an author contract has no effect.
+    No current course snapshot is read here: that would make provenance depend
+    circularly on the adoption decision it is meant to substantiate.
+    """
+    try:
+        origin = read_json(_file(root, "wrangler.jsonc"))["vars"]["APP_ORIGIN"]
+    except (ValueError, OSError, KeyError, TypeError):
+        return None
+    matches = []
+    for filename in sorted((root / "work/jobs").glob("*/deployments/*.json")):
+        try:
+            receipt_path = filename.relative_to(root).as_posix()
+            receipt = read_json(_file(root, receipt_path))
+            if (receipt.get("schemaVersion") != 1 or receipt.get("passed") is not True
+                    or receipt.get("anonymousBoundaryVerified") is not True or receipt.get("origin") != origin
+                    or not isinstance(receipt.get("build"), str) or not receipt["build"].strip()):
+                continue
+            deployed_at = datetime.fromisoformat(receipt["deployedAt"])
+            if deployed_at.tzinfo is None:
+                continue
+            packet_path = receipt.get("packet")
+            packet_file = _file(root, packet_path)
+            relative = packet_file.relative_to(root)
+            if (len(relative.parts) != 5 or relative.parts[:2] != ("work", "jobs")
+                    or relative.parts[2] != filename.parents[1].name or relative.parts[3] != "releases"
+                    or relative.suffix != ".json"):
+                continue
+            packet_bytes = packet_file.read_bytes()
+            if receipt.get("packetSha256") != digest(packet_bytes):
+                continue
+            packet = read_json(packet_file)
+            if (packet.get("schemaVersion") != 1 or packet.get("state") != "prepared" or packet.get("passed") is not True
+                    or packet.get("operation") != "content-release" or packet.get("job") != relative.parts[2]
+                    or packet.get("id") != packet_file.stem or not isinstance(packet.get("inputs"), dict)
+                    or packet.get("inputHash") != digest(canonical_bytes(packet["inputs"]))
+                    or receipt.get("inputHash") != packet.get("inputHash")):
+                continue
+            handoffs = packet.get("researchHandoffs")
+            if not isinstance(handoffs, list) or receipt.get("researchHandoffs") != handoffs:
+                continue
+            if any(not isinstance(row, dict) for row in handoffs) or len({row.get("chapter") for row in handoffs}) != len(handoffs):
+                continue
+            if not any(row.get("chapter") == chapter_id and row.get("path") == handoff_path
+                       and row.get("sha256") == handoff_sha and row.get("current") is True for row in handoffs):
+                continue
+            paths = [receipt_path, packet_path, "wrangler.jsonc"]
+            matches.append((deployed_at, receipt_path, {"deployment": receipt_path, "packet": packet_path,
+                "inputs": [{"path": name, "sha256": digest(_file(root, name).read_bytes())} for name in paths]}))
+        except (ValueError, OSError, TypeError, KeyError, AttributeError):
+            continue
+    # A subsequent publication must not replace the original adoption proof;
+    # otherwise each deployment would invalidate its own prepared input hash.
+    return min(matches, key=lambda row: (row[0], row[1]))[2] if matches else None
+
+
+def _research_binding(root: Path, chapter_id: str, contract: dict) -> dict:
+    """Check the actual pre-author handoff, not a caller's accepted note.
+
+    Kept outside structural validity: a working chapter can be inspected before
+    research is ready, while quality/release preparation must reject the gap.
+    """
+    from .inquiry import check_handoff
+    path = contract.get("researchHandoff")
+    if not isinstance(path, str) or not path:
+        return {"ok": False, "errors": ["research handoff is required before chapter adoption"], "inputs": []}
+    try:
+        _file(root, path)  # canonical repository identity, never a host-specific path
+        result = check_handoff(root, path, chapter=chapter_id)
+        if not result.get("ok"):
+            proof = _adoption_proof(root, chapter_id, path, digest(_file(root, path).read_bytes()))
+            if proof:
+                adopted_result = check_handoff(root, path, chapter=chapter_id, adopted=True)
+                if adopted_result.get("ok"):
+                    result = {**adopted_result, "adoptionProof": {key: value for key, value in proof.items() if key != "inputs"},
+                              "inputs": adopted_result["inputs"] + proof["inputs"]}
+    except (ValueError, OSError, TypeError, KeyError) as error:
+        return {"ok": False, "errors": ["invalid research handoff: " + str(error)], "inputs": []}
+    errors = list(result.get("errors", []))
+    if result.get("ok"):
+        scope, dossier = result.get("scope", {}), result.get("dossier", {})
+        paradigm = contract.get("paradigm", {})
+        if scope.get("paradigm") != paradigm.get("name"):
+            errors.append("chapter paradigm differs from the adopted research scope")
+        included = {row["id"]: row for row in scope.get("branches", []) if row.get("status") == "included"}
+        actual = {row["id"]: row for row in paradigm.get("branches", [])}
+        if set(included) != set(actual):
+            errors.append("chapter branches must exactly carry the final included research branches")
+        research_materials = {row["id"]: row for row in dossier.get("materials", [])}
+        author_materials = {row["id"]: row for row in contract.get("materials", [])}
+        for bid in included.keys() & actual.keys():
+            needed = set(included[bid].get("materialIds", []))
+            if not needed.issubset(set(actual[bid].get("materialIds", []))):
+                errors.append("chapter branch drops research material evidence: " + bid)
+            for mid in needed:
+                source, adopted = research_materials.get(mid, {}), author_materials.get(mid, {})
+                if not source or adopted.get("evidence") != source.get("note"):
+                    errors.append("chapter material must preserve its researched evidence note: " + mid)
+        planned_types = {row["id"]: row for row in scope.get("problemTypes", [])}
+        author_types = {row["id"]: row for row in contract.get("reading", {}).get("units", [])}
+        if set(planned_types) != set(author_types):
+            errors.append("formal problem-type sections must carry the research handoff type plan")
+        for uid in planned_types.keys() & author_types.keys():
+            planned, authored = planned_types[uid], author_types[uid]
+            for mid in planned.get("materialIds", []):
+                source, adopted = research_materials.get(mid, {}), author_materials.get(mid, {})
+                if not source or adopted.get("evidence") != source.get("note"):
+                    errors.append("formal type drops its researched material evidence: " + uid + "/" + mid)
+            expected_branches = set(planned.get("branchIds", []))
+            actual_branches = {bid for bid, row in actual.items() if uid in row.get("sectionIds", [])}
+            if expected_branches != actual_branches:
+                errors.append("formal section branch mapping differs from research: " + uid)
+            urls = {row.get("url") for row in authored.get("exercises", [])}
+            if not urls.issubset(set(planned.get("exerciseUrls", []))):
+                errors.append("formal exercises were not obtained by the research type plan: " + uid)
+    return {**result, "ok": bool(result.get("ok") and not errors), "errors": errors}
+
+
 def inspect_chapters(root: Path, publications: dict, model: dict, documents: dict) -> tuple[dict, dict]:
     """Validate chapter contracts. Open gaps and absent reviews are legal here."""
     errors, dependencies, chapters = [], set(), []
@@ -516,8 +639,27 @@ def inspect_chapters(root: Path, publications: dict, model: dict, documents: dic
         if reading_state == "addressed" and not expected_tasks.issubset(unit_tasks):
             errors.append(cid + ".reading: every chapter task needs an actual reading unit")
         _paradigm_contract(contract, cid, model, documents, permitted, material_ids, errors)
+        # Include the full durable provenance closure in editorial/release
+        # snapshots, even when an existing handoff is stale. Missing research is
+        # an adoption gap; it does not stop examining unfinished author files.
+        research = _research_binding(root, cid, contract)
+        for item in research.get("inputs", []):
+            name = item.get("path") if isinstance(item, dict) else None
+            try:
+                if name and (root / name).is_file():
+                    dependencies.add(_file(root, name).relative_to(root).as_posix())
+            except (ValueError, OSError, TypeError):
+                pass
+        handoff_path = contract.get("researchHandoff")
+        if isinstance(handoff_path, str):
+            try:
+                if (root / handoff_path).is_file():
+                    dependencies.add(_file(root, handoff_path).relative_to(root).as_posix())
+            except (ValueError, OSError, TypeError):
+                pass
         chapters.append({"id": cid, "collection": collection, "contractPath": contract_path,
-                         "reviewPath": review_path, "contract": contract, "documents": permitted, "promises": commitments})
+                         "reviewPath": review_path, "contract": contract, "documents": permitted,
+                         "promises": commitments, "research": research})
     if collections != set(published):
         errors.append("Every published chapter requires exactly one chapter contract")
     if authority_paths & review_paths or dependencies & review_paths:
@@ -548,6 +690,9 @@ def chapter_quality(root: Path, chapter_id: str | None = None) -> dict:
         raise ValueError("Unknown chapter: " + str(chapter_id))
     for chapter in selected:
         cid, contract, errors = chapter["id"], chapter["contract"], []
+        research = chapter["research"]
+        if not research["ok"]:
+            errors.extend("research handoff: " + message for message in research["errors"])
         if contract.get("schemaVersion") != 2:
             errors.append("legacy chapter contract: not adopted under the paradigm-led hard protocol (schemaVersion 2 required)")
         else:
@@ -602,6 +747,10 @@ def chapter_quality(root: Path, chapter_id: str | None = None) -> dict:
             errors.append("Missing/invalid chapter review: " + str(error))
         reports.append({"id": cid, "title": contract["title"], "ok": not errors, "errors": errors,
                         "contract": chapter["contractPath"], "review": review_path,
+                        "researchHandoff": {"path": contract.get("researchHandoff"),
+                                            "sha256": research.get("sha256"), "current": research["ok"],
+                                            "adopted": bool(research.get("adopted")),
+                                            "adoptionProof": research.get("adoptionProof")},
                         "reviewSha256": digest(_file(root, review_path).read_bytes()) if review is not None else None})
     return {"ok": all(row["ok"] for row in reports), "operation": checked["operation"],
             "inputHash": snapshot["inputHash"], "chapters": reports,

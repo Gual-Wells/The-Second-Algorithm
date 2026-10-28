@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "research-facilities-20261028",
+  "goal": "建立与编纂发布同等约束的可恢复迭代研究设施，接通章级采用与发布门禁，保持现行内容清零",
+  "createdAt": "2026-10-28T10:26:47.948071+00:00",
+  "evidence": [
+    {
+      "id": "0dc574863e1e41429ab71a03c7174959",
+      "kind": "research",
+      "path": "research/2026-10-28/research-facilities-design.md",
+      "summary": "实际完成研究设施设计与方法依据调研；此任务是工程正式化，不是算法新章研究",
+      "outcome": "accepted",
+      "sha256": "76ef77140e2ea97a1e2212742a15ffd36c0503befd956d3a66d7a71c891b5a27",
+      "inputHash": "7a8a708ced3906e3841243f943c5225b3a3f6f8bd6db157a74d737b0502a8542",
+      "recordedAt": "2026-10-28T10:37:40.360529+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "7c7ef54676a247e1965d29c7e6ad2083",
+      "kind": "review",
+      "path": "work/research-facilities-20261028/review.md",
+      "summary": "已核研究链、持续恢复、材料处置、范围复审、出版承接与历史采用；完整测试另有收据",
+      "outcome": "accepted",
+      "sha256": "a4273309e8191d1341360c0a6339c208ae9a8d5a1eda307ca64bac749b10da6f",
+      "inputHash": "7a8a708ced3906e3841243f943c5225b3a3f6f8bd6db157a74d737b0502a8542",
+      "recordedAt": "2026-10-28T10:37:41.022675+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    }
+  ],
+  "lastGoodVerification": null,
+  "lastPreparedRelease": null
+}

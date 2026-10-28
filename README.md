@@ -10,16 +10,18 @@
 
 教材、书目、来源池、目录快照和原题阅读证据保留。269项历史研究模式重置为候选，148份原题的教学归属重置为pending，不再声称有已出版正文或已经覆盖。下一章尚未选定，须按有效硬协议重新研究大思想领域。
 
-有效研究/编纂/透明知识/发布工程保留，身份与私人笔记不清空。撤回的实际线上状态以本轮部署收据为准，不能把空登记或准备包冒充已部署。[资料现状](work/withdraw-all-20261028/materials-and-sources.md) · [前置与正式节设计](work/withdraw-all-20261028/section-design.md)
+正式版初步以“前置研究设施＋大思想编纂＋透明C++知识＋采用/发布门禁＋受保护阅读器”为完整工程。前置研究与出版同等约束，已经有独立档案、阶段快照和研究交接；正式设施成立不代表有正式教学内容。本轮不自动选章或恢复旧稿，身份与私人笔记不清空。线上状态以部署收据为准，不能把空登记或准备包冒充已部署。[资料现状](work/withdraw-all-20261028/materials-and-sources.md) · [前置与正式节设计](work/withdraw-all-20261028/section-design.md)
 
 ## 研究与采用
 
-先复盘出版和全部已知教材/来源，尽可能提取相关正文、例题、练习、索引与交叉应用，按实际机制语义归并；先领域全景，后题型提纲。独立材料反查、连续通读、逐承诺回查与权威代码验证共同支持采用，不能从小题单或绿色测试自证完整。
+先复盘出版并理解全部已知教材/来源概况，研究初始大领域；充分提取并动态补充资料，反复研究综合，再研究范围、跟进变化、按修订范围重新研究并充分综合最终档案。过程持续落盘，最终冻结交接后才进入编纂；不能从小题单、普通accepted笔记或绿色测试自证完整。
 
-[共同协议](protocol/CONTENT_PIPELINE.md) · [章节标准](protocol/CHAPTER_STANDARD.md) · [研究部](protocol/RESEARCH_DEPARTMENT.md) · [实现标准](protocol/IMPLEMENTATION_STANDARD.md) · [质量工艺](protocol/QUALITY_WORKFLOW.md)
+[共同协议](protocol/CONTENT_PIPELINE.md) · [研究设施](protocol/RESEARCH_FACILITIES.md) · [章节标准](protocol/CHAPTER_STANDARD.md) · [研究部](protocol/RESEARCH_DEPARTMENT.md) · [实现标准](protocol/IMPLEMENTATION_STANDARD.md) · [质量工艺](protocol/QUALITY_WORKFLOW.md)
 
 ```sh
 python -m second_algorithm research init task-id --goal "实际研究目标"
+python -m second_algorithm research open-study task-id --chapter chapter-id
+python -m second_algorithm research study-status task-id
 python -m second_algorithm research status task-id
 python -m second_algorithm course validate
 python -m second_algorithm course chapters
@@ -28,7 +30,7 @@ python -m second_algorithm course search Q000001
 npm run check
 ```
 
-CLI与CI核实际关系、位置、输入身份、编译/运行、证据当前性与发布准备，不认证分类正确、语义全面或用户学会。章节open/gap、旧合同、审阅缺失/过期或最新验证失败会阻止内容发布，generic accepted不能绕过。内部CLI可按知识编号检索，产品不显示编号管理。
+CLI与CI核研究次序/依赖、材料处置、交接到合同的关系、正文位置、输入身份、编译/运行与发布准备，不认证分类正确、语义全面或用户学会。章节open/gap、旧合同、研究交接缺失/过期/不匹配、审阅缺失/过期或最新验证失败会阻止内容发布，generic accepted不能绕过。内部CLI可按知识编号检索，产品不显示编号管理。
 
 ```sh
 npm run deploy -- --release work/jobs/task-id/releases/<id>.json

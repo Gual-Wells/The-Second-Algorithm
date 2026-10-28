@@ -9,6 +9,7 @@ from .catalog import report, search, validate
 from .collect import collect
 from .chapters import chapter_inputs, chapter_quality, render_chapters
 from .learning import course_targets, search_learning, validate_learning
+from .inquiry import (check_handoff, checkpoint, open_study, seal_handoff, study_status)
 from .storage import now, read_json, read_jsonl, sources, valid_id, valid_url, write_json
 from .workflow import (add_evidence, check_release, init_job, job_status, list_jobs, prepare_release,
                        resume_job, verify_course, verify_job)
@@ -70,6 +71,20 @@ def main(argv=None) -> int:
     status.add_argument("job", nargs="?")
     resuming = research_commands.add_parser("resume")
     resuming.add_argument("job")
+    opening = research_commands.add_parser("open-study", help="建立独立于正文的动态研究档案，不选择或编写章节")
+    opening.add_argument("job")
+    opening.add_argument("--chapter", required=True)
+    studying = research_commands.add_parser("study-status", help="检查阶段链、当前资料、缺口及恢复动作")
+    studying.add_argument("job")
+    checkpointing = research_commands.add_parser("checkpoint", help="保存真实阶段研究及不可变输入快照")
+    checkpointing.add_argument("job")
+    checkpointing.add_argument("--phase", required=True,
+                               choices=["overview", "scope", "collection", "synthesis", "scope-review", "resynthesis"])
+    checkpointing.add_argument("--record", required=True)
+    handing = research_commands.add_parser("seal-handoff", help="冻结当前研究交接；不等于完成教学或出版")
+    handing.add_argument("job")
+    handcheck = research_commands.add_parser("check-handoff", help="核验出版所绑定的完整研究链及当前资料")
+    handcheck.add_argument("path")
     evidence = research_commands.add_parser("evidence")
     evidence.add_argument("job")
     evidence.add_argument("--kind", choices=["research", "review"], required=True)
@@ -178,6 +193,20 @@ def main(argv=None) -> int:
                 emit(job_status(root, args.job) if args.job else list_jobs(root))
             elif args.research_command == "resume":
                 emit(resume_job(root, args.job))
+            elif args.research_command == "open-study":
+                emit(open_study(root, args.job, args.chapter))
+            elif args.research_command == "study-status":
+                result = study_status(root, args.job)
+                emit(result)
+                return 0 if result["ok"] else 1
+            elif args.research_command == "checkpoint":
+                emit(checkpoint(root, args.job, args.phase, args.record))
+            elif args.research_command == "seal-handoff":
+                emit(seal_handoff(root, args.job))
+            elif args.research_command == "check-handoff":
+                result = check_handoff(root, args.path)
+                emit(result)
+                return 0 if result["ok"] else 1
             elif args.research_command == "evidence":
                 emit(add_evidence(root, args.job, kind=args.kind, path=args.path,
                                   summary=args.summary, outcome=args.outcome))

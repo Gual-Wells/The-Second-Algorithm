@@ -109,6 +109,14 @@ def _evidence_status(root: Path, job: dict, input_hash: str | None) -> dict:
 
 def job_status(root: Path, job_id: str) -> dict:
     job = _job(root, job_id)
+    study = None
+    if (_job_path(root, job_id).parent / "study/study.json").is_file():
+        from .inquiry import study_status
+        try:
+            study = study_status(root, job_id)
+        except (ValueError, OSError, TypeError, KeyError) as error:
+            study = {"ok": False, "errors": [str(error)],
+                     "nextActions": ["Repair the durable research study record before continuing."]}
     try:
         snapshot = course_snapshot(root)
         current_hash, validation = snapshot["inputHash"], snapshot["validation"]
@@ -123,11 +131,18 @@ def job_status(root: Path, job_id: str) -> dict:
     prepared, preparation_reason = _receipt_current(root, job.get("lastPreparedRelease"), current_hash)
     evidence = _evidence_status(root, job, current_hash)
     from .chapters import chapter_quality
-    quality = chapter_quality(root)
+    try:
+        quality = chapter_quality(root)
+    except (ValueError, OSError, TypeError, KeyError, AttributeError) as error:
+        # A pre-author study is recoverable before there is any valid course.
+        # This reports its current frontier without waiving publication checks.
+        quality = {"ok": False, "errors": [str(error)], "chapters": [],
+                   "semanticCompletenessCertified": False}
     ready = bool(validation["ok"] and quality["ok"] and verified and all(row["current"] for row in evidence.values()))
     return {"ok": True, "id": job_id, "goal": job["goal"], "inputHash": current_hash,
             "publicationState": validation.get("publicationState"), "operation": validation.get("operation"),
             "validation": validation, "chapterQuality": quality, "evidence": evidence,
+            "researchStudy": study,
             "verification": {"current": verified, "reason": verification_reason,
                              "lastGood": job.get("lastGoodVerification")},
             "release": {"current": prepared and ready, "reason": preparation_reason if ready else "requirements-not-current",
@@ -143,7 +158,10 @@ def list_jobs(root: Path) -> list[dict]:
 
 def resume_job(root: Path, job_id: str) -> dict:
     result = job_status(root, job_id)
-    steps = []
+    steps = list((result.get("researchStudy") or {}).get("nextActions", []))
+    study = result.get("researchStudy")
+    if study and not study.get("lastHandoff") and not steps:
+        steps.append("Continue durable chapter research at phase: " + str(study.get("nextPhase", "repair-research-evidence")))
     if not result["validation"]["ok"]:
         steps.append("Fix current-course structural errors before registering new evidence.")
     if not result["chapterQuality"]["ok"]:
@@ -283,11 +301,14 @@ def prepare_release(root: Path, job_id: str) -> dict:
         if snapshot["inputHash"] != status["inputHash"]:
             raise ValueError("Course inputs changed during release preparation")
         evidence = [status["evidence"][kind]["record"] for kind in ("research", "review")]
+        handoffs = [{"chapter": row["id"], **row["researchHandoff"]}
+                    for row in status["chapterQuality"]["chapters"]]
         receipt = {"schemaVersion": 1, "id": uuid.uuid4().hex, "job": job_id, "createdAt": now(),
                    "state": "prepared", "passed": True, "inputHash": snapshot["inputHash"],
                    "inputs": snapshot["inputs"], "documents": snapshot["documents"],
                    "publicationState": snapshot["publicationState"], "operation": snapshot["operation"],
                    "evidence": evidence, "chapterQuality": status["chapterQuality"], "verification": job["lastGoodVerification"],
+                   "researchHandoffs": handoffs,
                    "automaticSemanticCertification": False, "deployed": False}
         filename = _job_path(root, job_id).parent / "releases" / (receipt["id"] + ".json")
         write_json(filename, receipt, immutable=True)
@@ -323,6 +344,10 @@ def check_release(root: Path, packet: str) -> dict:
         raise ValueError("Release packet evidence or document scope is no longer current")
     if record.get("chapterQuality") != status["chapterQuality"]:
         raise ValueError("Release packet chapter reviews are no longer current")
+    handoffs = [{"chapter": row["id"], **row["researchHandoff"]}
+                for row in status["chapterQuality"]["chapters"]]
+    if record.get("researchHandoffs") != handoffs:
+        raise ValueError("Release packet research handoffs are no longer current")
     if course_snapshot(root)["inputHash"] != snapshot["inputHash"]:
         raise ValueError("Inputs changed during release packet check")
     return {"ok": True, "packet": packet, "inputHash": snapshot["inputHash"],

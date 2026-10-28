@@ -129,6 +129,7 @@ int main() {
 
     def notes(self):
         if self.publications.get("state") != "withdrawn":
+            self.researched_fixture()
             review = {"schemaVersion": 1, "chapter": "unit", "inputHash": chapter_inputs(self.root, "unit")["inputHash"],
                 "verdict": "accepted", "comparison": {"baseline": "Actual fixture source", "findings": "Both implementations preserve the sorted contract"},
                 "outsideChallenge": {"materialIds": ["outside"], "findings": "Checked empty and absent-value task conditions"},
@@ -140,6 +141,22 @@ int main() {
         for kind in ("research", "review"):
             add_evidence(self.root, "lesson-job", kind=kind, path="work/"+kind+".md",
                          summary="Explicit fixture " + kind, outcome="accepted")
+
+    def researched_fixture(self):
+        """Exercise real stage machinery with a deliberately tiny test corpus.
+
+        This test fixture is not an editorial recommendation or a real chapter
+        completeness claim. A separate study job prevents generic production
+        evidence from masquerading as the preceding research process.
+        """
+        if self.contract.get("researchHandoff"):
+            return
+        from test_inquiry import complete_study_fixture
+        self.contract["researchHandoff"] = complete_study_fixture(
+            self.root, job="fixture-study", chapter="unit", paradigm="Binary search",
+            branch="ordered", material="outside", note="work/material.md",
+            problem_type="boundary-unit")
+        write_json(self.root / "content/unit/chapter.contract.json", self.contract)
 
     @staticmethod
     def process_success(command, *args):
@@ -368,6 +385,20 @@ class IndependentKnowledgeTest(LearningFixture):
 
 
 class ResearchWorkflowTest(LearningFixture):
+    def test_study_resume_works_before_any_author_course_exists(self):
+        from second_algorithm.inquiry import open_study
+        (self.root / "catalog/learning.json").unlink()
+        (self.root / "carrier/publications.json").unlink()
+        write_json(self.root / "catalog/books.json", {"books": []})
+        write_json(self.root / "catalog/sources.json", {"sources": []})
+        init_job(self.root, "pre-author", "Research before course authoring")
+        open_study(self.root, "pre-author", "future-chapter")
+        status = resume_job(self.root, "pre-author")
+        self.assertFalse(status["readyForReleasePreparation"])
+        self.assertTrue(status["researchStudy"]["ok"])
+        self.assertEqual(status["researchStudy"]["nextPhase"], "overview")
+        self.assertTrue(any("overview" in action for action in status["nextActions"]))
+
     def test_withdrawal_keeps_evidence_gate_and_never_claims_cpp_compilation(self):
         self.publications.update(state="withdrawn", collections=[])
         self.model = {"schemaVersion": 2, "questions": [], "tasks": [], "targets": []}

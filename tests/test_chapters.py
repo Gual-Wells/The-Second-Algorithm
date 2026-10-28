@@ -7,11 +7,11 @@ import json
 from unittest.mock import patch
 
 from test_learning_workflow import LearningFixture
-from second_algorithm.chapters import chapter_inputs, chapter_quality, render_chapters
+from second_algorithm.chapters import _research_binding, chapter_inputs, chapter_quality, render_chapters
 from second_algorithm.cli import main
 from second_algorithm.learning import course_snapshot, validate_learning
-from second_algorithm.storage import read_json, write_json
-from second_algorithm.workflow import add_evidence, init_job, job_status, prepare_release, verify_job
+from second_algorithm.storage import digest, read_json, write_json
+from second_algorithm.workflow import add_evidence, check_release, init_job, job_status, prepare_release, verify_job
 
 
 class ChapterHelpers:
@@ -27,6 +27,176 @@ class ChapterHelpers:
     def accepted_fixture(self):
         init_job(self.root, "lesson-job", "Fixture editorial review")
         self.notes()
+
+
+class ResearchAdoptionTest(ChapterHelpers, LearningFixture):
+    """Real fixture packets/receipts exercise historical adoption, not content quality."""
+
+    def published_fixture(self):
+        self.put("wrangler.jsonc", '{"vars":{"APP_ORIGIN":"https://example.com"}}\n')
+        self.verified_job()
+        before = course_snapshot(self.root)["inputHash"]
+        prepared = prepare_release(self.root, "lesson-job")
+        packet = prepared["receipt"]["path"]
+        receipt_path = "work/jobs/lesson-job/deployments/first.json"
+        receipt = {"schemaVersion": 1, "packet": packet,
+            "packetSha256": digest((self.root / packet).read_bytes()),
+            "inputHash": prepared["release"]["inputHash"],
+            "researchHandoffs": prepared["release"]["researchHandoffs"],
+            "origin": "https://example.com", "deployedAt": "2026-10-28T10:00:00+00:00",
+            "build": "synthetic-build", "anonymousBoundaryVerified": True, "passed": True}
+        write_json(self.root / receipt_path, receipt)
+        self.assertEqual(before, course_snapshot(self.root)["inputHash"])
+        self.assertTrue(check_release(self.root, packet)["ok"])
+        return receipt_path, packet
+
+    def expand_base(self):
+        books = read_json(self.root / "catalog/books.json")
+        books["books"].append({"id": "later-book"})
+        write_json(self.root / "catalog/books.json", books)
+
+    def test_new_chapter_cannot_claim_adoption_without_verified_previous_publication(self):
+        self.accepted_fixture()
+        self.expand_base()
+        self.contract["adopted"] = True  # A caller-written flag is not evidence.
+        self.save_contract()
+        self.notes()
+        self.assertFalse(_research_binding(self.root, "unit", self.contract)["ok"])
+        self.assertFalse(chapter_quality(self.root)["ok"])
+
+    def test_published_handoff_survives_later_base_growth_and_can_publish_again(self):
+        receipt_path, packet = self.published_fixture()
+        self.expand_base()
+        from second_algorithm.inquiry import check_handoff
+        self.assertFalse(check_handoff(self.root, self.contract["researchHandoff"])["ok"])
+        binding = _research_binding(self.root, "unit", self.contract)
+        self.assertTrue(binding["ok"], binding)
+        self.assertTrue(binding["adopted"])
+        self.assertEqual(binding["adoptionProof"]["deployment"], receipt_path)
+        inputs = course_snapshot(self.root)["inputs"]
+        self.assertIn(receipt_path, inputs)
+        self.assertIn(packet, inputs)
+        self.notes()  # Current editorial impact review remains necessary.
+        with patch("second_algorithm.workflow._process", side_effect=self.process_success):
+            verify_job(self.root, "lesson-job", "fixture-c++")
+        next_release = prepare_release(self.root, "lesson-job")
+        self.assertTrue(check_release(self.root, next_release["receipt"]["path"])["ok"])
+        before = course_snapshot(self.root)["inputHash"]
+        later_receipt = read_json(self.root / receipt_path)
+        later_receipt.update(packet=next_release["receipt"]["path"],
+                             packetSha256=next_release["receipt"]["sha256"],
+                             inputHash=next_release["release"]["inputHash"],
+                             researchHandoffs=next_release["release"]["researchHandoffs"],
+                             deployedAt="2026-10-29T10:00:00+00:00")
+        write_json(self.root / "work/jobs/lesson-job/deployments/later.json", later_receipt)
+        self.assertEqual(before, course_snapshot(self.root)["inputHash"])
+        self.assertTrue(check_release(self.root, next_release["receipt"]["path"])["ok"])
+
+    def test_modified_deployment_or_packet_cannot_authorize_historical_adoption(self):
+        receipt_path, packet_path = self.published_fixture()
+        self.expand_base()
+        self.assertTrue(_research_binding(self.root, "unit", self.contract)["ok"])
+        original_receipt = (self.root / receipt_path).read_bytes()
+        receipt = read_json(self.root / receipt_path)
+        receipt["researchHandoffs"] = []
+        write_json(self.root / receipt_path, receipt)
+        self.assertFalse(_research_binding(self.root, "unit", self.contract)["ok"])
+        (self.root / receipt_path).write_bytes(original_receipt)
+        packet_bytes = (self.root / packet_path).read_bytes()
+        (self.root / packet_path).write_bytes(packet_bytes + b"\n")
+        self.assertFalse(_research_binding(self.root, "unit", self.contract)["ok"])
+        (self.root / packet_path).write_bytes(packet_bytes)
+        self.assertTrue(_research_binding(self.root, "unit", self.contract)["ok"])
+
+    def test_historical_adoption_never_waives_changed_own_research_notes(self):
+        self.published_fixture()
+        self.expand_base()
+        self.assertTrue(_research_binding(self.root, "unit", self.contract)["ok"])
+        self.put("work/material.md", "Changed actual research evidence after publication.\n")
+        self.assertFalse(_research_binding(self.root, "unit", self.contract)["ok"])
+
+    def test_second_actual_chapter_can_publish_without_rebuilding_first_research(self):
+        """Two tiny copies test lifecycle mechanics, never real chapter selection."""
+        self.published_fixture()
+        first_handoff = self.contract["researchHandoff"]
+        first_handoff_bytes = (self.root / first_handoff).read_bytes()
+        first_study = self.root / "work/jobs/fixture-study/study/study.json"
+        first_study_bytes = first_study.read_bytes()
+        second_source, second_draft = "content/second/Lesson.cpp", "content/second/Lesson.source.md"
+        self.put(second_source, (self.root / self.source).read_text(encoding="utf-8"))
+        self.put(second_draft, (self.root / self.draft).read_text(encoding="utf-8").replace(
+            "{{knowledge:Q000001}}", "[[Q000001|边界在哪里]]"))
+        self.put("tests/cpp/second.cpp", (self.root / "tests/cpp/check.cpp").read_text(encoding="utf-8").replace(
+            "../../content/unit/Lesson.cpp", "../../content/second/Lesson.cpp"))
+        second_collection = copy.deepcopy(self.publications["collections"][0])
+        second_collection.update(id="second", title="Second synthetic chapter", chapterNumber=2,
+            documents=[{"id": "lesson-second", "title": "Second fixture", "path": "content/second/Lesson"}])
+        self.publications["collections"].append(second_collection)
+        second_task = copy.deepcopy(self.model["tasks"][0])
+        second_task.update(id="boundary-second", document="lesson-second")
+        second_task["methods"][0]["id"] = "binary-second"
+        for implementation in second_task["methods"][0]["implementations"]:
+            implementation.update(id=implementation["id"] + "-second", source=second_source, target="boundaries-second")
+        self.model["tasks"].append(second_task)
+        self.model["targets"].append({"id": "boundaries-second", "kind": "run", "source": "tests/cpp/second.cpp",
+                                      "standard": "c++17", "timeoutSeconds": 30})
+        self.save()
+        second_contract = copy.deepcopy(self.contract)
+        second_contract.update(chapter="second", title="Second synthetic contract")
+        second_contract.pop("researchHandoff")
+        second_contract["materials"][0].update(id="outside-second", evidence="work/second-material.md")
+        second_contract["paradigm"]["corpusEvidence"] = ["outside-second"]
+        second_contract["paradigm"]["branches"][0]["materialIds"] = ["outside-second"]
+        for promise in second_contract["commitments"]:
+            promise.update(taskIds=["boundary-second"], materialIds=["outside-second"])
+        second_contract["reading"]["units"][0].update(taskIds=["boundary-second"],
+            manualImplementationIds=["manual-boundary-second"], standardImplementationIds=["standard-boundary-second"])
+
+        def second_locations(value):
+            if isinstance(value, dict):
+                if value.get("document") == "lesson":
+                    value["document"] = "lesson-second"
+                for item in value.values():
+                    second_locations(item)
+            elif isinstance(value, list):
+                for item in value:
+                    second_locations(item)
+
+        second_locations(second_contract)
+        self.chapter_index["chapters"].append({"id": "second", "collection": "second",
+            "contract": "content/second/chapter.contract.json", "review": "content/second/chapter.review.json"})
+        write_json(self.root / "catalog/chapters.json", self.chapter_index)
+        write_json(self.root / "content/second/chapter.contract.json", second_contract)
+        from test_inquiry import complete_study_fixture
+        second_contract["researchHandoff"] = complete_study_fixture(self.root, job="second-study", chapter="second",
+            paradigm="Binary search", branch="ordered", material="outside-second", note="work/second-material.md",
+            problem_type="boundary-unit")
+        write_json(self.root / "content/second/chapter.contract.json", second_contract)
+        self.assertTrue(validate_learning(self.root)["ok"], validate_learning(self.root))
+        first_binding = _research_binding(self.root, "unit", self.contract)
+        second_binding = _research_binding(self.root, "second", second_contract)
+        self.assertTrue(first_binding["ok"], first_binding)
+        self.assertTrue(first_binding["adopted"])
+        self.assertTrue(second_binding["ok"], second_binding)
+        self.assertFalse(second_binding["adopted"])
+        self.notes()
+        second_review = copy.deepcopy(self.review())
+        second_review.update(chapter="second", outsideChallenge={"materialIds": ["outside-second"],
+            "findings": "Independent fixture check of boundary conditions"})
+        second_locations(second_review)
+        write_json(self.root / "content/second/chapter.review.json", second_review)
+        self.notes()  # Register current generic evidence after both reviews exist.
+        self.assertTrue(chapter_quality(self.root)["ok"], chapter_quality(self.root))
+        with patch("second_algorithm.workflow._process", side_effect=self.process_success):
+            verify_job(self.root, "lesson-job", "fixture-c++")
+        release = prepare_release(self.root, "lesson-job")
+        self.assertTrue(check_release(self.root, release["receipt"]["path"])["ok"])
+        handoffs = {row["chapter"]: row for row in release["release"]["researchHandoffs"]}
+        self.assertEqual(set(handoffs), {"unit", "second"})
+        self.assertTrue(handoffs["unit"]["adopted"])
+        self.assertFalse(handoffs["second"]["adopted"])
+        self.assertEqual(first_handoff_bytes, (self.root / first_handoff).read_bytes())
+        self.assertEqual(first_study_bytes, first_study.read_bytes())
 
 
 class ChapterContractTest(ChapterHelpers, LearningFixture):
@@ -279,6 +449,63 @@ class ParadigmContractTest(ChapterHelpers, LearningFixture):
         with patch("second_algorithm.workflow._process", side_effect=self.process_success):
             verify_job(self.root, "lesson-job", "fixture-c++")
         self.assertTrue(prepare_release(self.root, "lesson-job")["release"]["passed"])
+
+    def test_generic_research_note_cannot_replace_actual_stage_handoff(self):
+        self.accepted_fixture()
+        self.contract.pop("researchHandoff")
+        self.save_contract()
+        review = self.review()
+        review["inputHash"] = chapter_inputs(self.root, "unit")["inputHash"]
+        self.put_review(review)
+        for kind in ("research", "review"):
+            add_evidence(self.root, "lesson-job", kind=kind, path="work/" + kind + ".md",
+                         summary="Generic current note cannot replace stage history", outcome="accepted")
+        self.assertTrue(validate_learning(self.root)["ok"])
+        errors = " ".join(chapter_quality(self.root)["chapters"][0]["errors"])
+        self.assertIn("research handoff", errors)
+        with patch("second_algorithm.workflow._process", side_effect=self.process_success):
+            verify_job(self.root, "lesson-job", "fixture-c++")
+        with self.assertRaisesRegex(ValueError, "Release not ready"):
+            prepare_release(self.root, "lesson-job")
+
+    def test_author_cannot_silently_rename_domain_or_drop_researched_branch(self):
+        self.accepted_fixture()
+        self.contract["paradigm"]["name"] = "Convenient local tricks"
+        self.save_contract()
+        self.assertIn("paradigm differs", " ".join(chapter_quality(self.root)["chapters"][0]["errors"]))
+        self.contract["paradigm"]["name"] = "Binary search"
+        self.contract["paradigm"]["branches"][0]["id"] = "convenient-subset"
+        self.save_contract()
+        self.assertIn("final included research branches", " ".join(chapter_quality(self.root)["chapters"][0]["errors"]))
+
+    def test_material_and_type_links_preserve_research_target(self):
+        self.accepted_fixture()
+        self.put("work/replacement.md", "Unrelated after-the-fact note\n")
+        self.contract["materials"][0]["evidence"] = "work/replacement.md"
+        self.save_contract()
+        errors = " ".join(chapter_quality(self.root)["chapters"][0]["errors"])
+        self.assertIn("researched evidence note", errors)
+        self.assertIn("formal type drops its researched material evidence", errors)
+        self.contract["materials"][0]["evidence"] = "work/material.md"
+        self.contract["reading"]["units"][0]["id"] = "unresearched-type"
+        self.contract["paradigm"]["branches"][0]["sectionIds"] = ["unresearched-type"]
+        self.save_contract()
+        self.assertIn("research handoff type plan", " ".join(chapter_quality(self.root)["chapters"][0]["errors"]))
+
+    def test_new_exercise_and_changed_dossier_cannot_inherit_old_research(self):
+        self.accepted_fixture()
+        self.model["tasks"][0]["sourceUrls"].append("https://example.com/unresearched")
+        self.contract["reading"]["units"][0]["exercises"] = [{"title": "New", "url": "https://example.com/unresearched"}]
+        self.put(self.draft, (self.root/self.draft).read_text(encoding="utf-8") + "\n[New](https://example.com/unresearched)\n")
+        self.save()
+        self.save_contract()
+        errors = " ".join(chapter_quality(self.root)["chapters"][0]["errors"])
+        self.assertIn("not obtained by the research type plan", errors)
+        before = course_snapshot(self.root)["inputHash"]
+        dossier = self.root / "work/jobs/fixture-study/study/dossier.json"
+        dossier.write_text(dossier.read_text(encoding="utf-8") + "\n", encoding="utf-8")
+        self.assertNotEqual(before, course_snapshot(self.root)["inputHash"])
+        self.assertIn("research handoff", " ".join(chapter_quality(self.root)["chapters"][0]["errors"]))
 
     def test_legacy_contract_is_readable_but_not_eligible_for_new_publication(self):
         self.contract["schemaVersion"] = 1

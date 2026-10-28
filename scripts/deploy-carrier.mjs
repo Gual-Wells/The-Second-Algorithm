@@ -3,7 +3,7 @@ import { access, mkdir, readFile, realpath, open, writeFile, unlink } from 'node
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 process.chdir(root);
@@ -51,6 +51,10 @@ if (build.mode !== 'full') throw Error('Deployment requires a full isolated arti
 checkPacket();
 run([wrangler, 'd1', 'migrations', 'apply', 'second-algorithm', '--remote']);
 checkPacket();
+const releaseBytes = await readFile(packet);
+const packetSha256 = createHash('sha256').update(releaseBytes).digest('hex');
+const release = JSON.parse(releaseBytes.toString('utf8'));
+const packetPath = path.relative(root, path.resolve(root, packet)).split(path.sep).join('/');
 run([wrangler, 'pages', 'deploy', artifact, '--project-name', 'second-algorithm', '--branch', 'main', '--commit-dirty=true']);
 const base = configuration.vars.APP_ORIGIN;
 for (const [suffix, expected] of [['/auth/status', 200], ['/api/library', 401], ['/api/state', 401],
@@ -58,7 +62,6 @@ for (const [suffix, expected] of [['/auth/status', 200], ['/api/library', 401], 
   const response = await fetch(base + suffix, { signal: AbortSignal.timeout(60_000) });
   if (response.status !== expected) throw Error(`Live authentication boundary failed: ${suffix} ${response.status}`);
 }
-const release = JSON.parse(await readFile(packet, 'utf8'));
 const directory = path.join(root, 'work/jobs', release.job, 'deployments');
 await mkdir(directory, { recursive: true });
 const deployedWorker = await fetch(base + '/sw.js', { signal: AbortSignal.timeout(60_000) });
@@ -67,8 +70,11 @@ const liveWorker = await deployedWorker.text();
 const expectedBuild = localWorker.match(/(?:const|let) (?:BUILD|VERSION)\s*=\s*['"]([^'"]+)/)?.[1];
 if (deployedWorker.status !== 200 || !expectedBuild || !liveWorker.includes(expectedBuild))
   throw Error('Published service worker build does not match local release.');
+if (createHash('sha256').update(await readFile(packet)).digest('hex') !== packetSha256)
+  throw Error('Prepared packet changed during deployment; no successful receipt will be recorded.');
 await writeFile(path.join(directory, Date.now() + '.json'), JSON.stringify({ schemaVersion: 1,
-  packet, inputHash: release.inputHash, artifact, origin: base, deployedAt: new Date().toISOString(),
+  packet: packetPath, packetSha256, researchHandoffs: release.researchHandoffs,
+  inputHash: release.inputHash, artifact, origin: base, deployedAt: new Date().toISOString(),
   build: expectedBuild, anonymousBoundaryVerified: true, passed: true }, null, 2) + '\n');
 console.log('Published and verified private Second Algorithm reader: ' + base);
 } finally {
