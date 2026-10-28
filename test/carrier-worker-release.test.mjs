@@ -9,6 +9,12 @@ const path = '/library/first-chapter/first-document/new.json';
 
 function actualWorker(build, paths) {
   const handlers = new Map(), calls = [];
+  const checks = new Map();
+  let versionRequests = 0;
+  const check = number => {
+    if (!checks.has(number)) checks.set(number, Promise.withResolvers());
+    return checks.get(number);
+  };
   const source = readFileSync(new URL('../web/sw.js', import.meta.url), 'utf8')
     .replaceAll('__BUILD__', build).replaceAll('__LIBRARY_PATHS__', JSON.stringify(paths));
   vm.runInNewContext(source, {
@@ -20,7 +26,14 @@ function actualWorker(build, paths) {
   });
   return {
     calls,
+    versionChecked(number) { return check(number).promise; },
     postMessage(data, ports) {
+      if (data.type === 'VERSION') {
+        const pending = check(++versionRequests);
+        // readWorkerBuild closes its ports after consuming the reply. This is
+        // an actual completion barrier, independent of MessageChannel timing.
+        ports[0].addEventListener('close', () => pending.resolve(), { once: true });
+      }
       handlers.get('message')({ data, ports, source: { url: origin + '/' }, waitUntil(promise) { void promise; } });
     },
     async read(url) {
@@ -66,6 +79,7 @@ test('an actual hidden-release worker rejects the new route, but the gate preven
     .then(() => { requested = true; return sw.controller.read(path); });
   cleanUpPending(t, sw, current, reading);
   await sw.updateStarted;
+  await old.versionChecked(2);
   assert.equal(requested, false);
   assert.equal(sw.updates, 1);
   assert.equal(current.calls.length, 0);
@@ -86,6 +100,7 @@ test('an update is not ready merely because registration.update resolved', { tim
   cleanUpPending(t, sw, current, release);
   const { completed } = await sw.updateStarted;
   await completed;
+  await old.versionChecked(2);
   assert.equal(ready, false);
   sw.takeOver(current);
   assert.equal((await release).build, 'new-build');
@@ -111,6 +126,7 @@ test('a controller older than the page cannot masquerade as a completed newer up
   cleanUpPending(t, sw, current, update);
   const { completed } = await sw.updateStarted;
   await completed;
+  await old.versionChecked(2);
   assert.equal(ready, false);
   registration.installing = null; registration.active = current; sw.takeOver(current);
   assert.equal((await update).build, 'new-release');
