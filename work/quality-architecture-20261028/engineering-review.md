@@ -14,6 +14,8 @@
 
 19项章节测试覆盖实际有效与反例：缺catalog不能关闭门禁、open允许施工但prepare拒绝、generic accepted不能替代逐承诺审阅、四维/真实引用/reading任务承载、当前hash和材料/规则变动、审阅自身无循环而最终包冻结其字节、accepted不能掩盖gap、撤回豁免及上述三项修复。
 
+首次远端Linux CI（40619673772）发现反斜线路径虽也被拒绝，但POSIX将反斜线视为普通字符，因而报durable-content错误而非规范身份错误；Windows本地已在resolve阶段拒绝。现于相同入口先显式拒绝反斜线，统一跨平台规范与诊断，不放松测试断言。修改后本地76项Python重验通过；最终远端重验身份另记delivery-status.json，不把首次远端失败隐去。
+
 当前真实 `course validate` 成功；`course quality --json` 退出1，逐项列出缺口及needs-work，review输入当前而非过期误拒绝。这两个结果分别满足设计，不以技术绿灯声称章节可发。本机非iPhone真机，未在线OJ提交、未衡量学习效果。无新增持续成本。
 
 ## 采用判断

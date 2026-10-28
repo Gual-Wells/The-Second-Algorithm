@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "chapter": "boundary-feasibility",
-  "inputHash": "9d7d1e30abad3565cbb7c2d743ce001139e9e0f5fd380696030039979529dde9",
+  "inputHash": "df2dc6922671f0f6aed6ad94dab8472b08f38e5d4d7474d55310b4fc1cd887ac",
   "assessments": [
     {
       "commitment": "predicate-proof",

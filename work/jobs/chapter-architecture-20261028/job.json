@@ -47,17 +47,39 @@
       "inputHash": "3929825e1dab5be3a4d75192b9917082301d7d05092ef6df54ee4c32e82ea3f6",
       "recordedAt": "2026-10-28T02:11:56.553623+00:00",
       "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "b94f7b2169c94481b2fca27466e26cfe",
+      "kind": "research",
+      "path": "work/quality-architecture-20261028/README.md",
+      "summary": "架构完成，跨平台路径身份规则经本地与远端差异检查",
+      "outcome": "accepted",
+      "sha256": "635a8aafb3082bc340b97b6ee14fe09813c08edfabec090b0b7f1b1a8215c860",
+      "inputHash": "b0b662361d971107e567b8f54b437a82e3650de10ffedd2f28d383dcc59b92e2",
+      "recordedAt": "2026-10-28T02:17:40.991984+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "96481f3e5808416aad976f05fb1fcf64",
+      "kind": "review",
+      "path": "work/quality-architecture-20261028/engineering-review.md",
+      "summary": "Linux路径诊断分歧已修，本地76测试重验；当前章仍needs-work",
+      "outcome": "accepted",
+      "sha256": "307bfac81ff9f4c351831f223585ba52a5095e635669d7b4feffa6b0c1bc4e0a",
+      "inputHash": "b0b662361d971107e567b8f54b437a82e3650de10ffedd2f28d383dcc59b92e2",
+      "recordedAt": "2026-10-28T02:17:41.471787+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
     }
   ],
   "lastGoodVerification": {
-    "path": "work/jobs/chapter-architecture-20261028/verifications/abdf3c3be2ed4456ab987bebb7f010c8.json",
-    "sha256": "a326021cc01954fa01e1c5cc232fd9a822eec6076ac2ceb45124972e52cb68b2",
-    "inputHash": "3929825e1dab5be3a4d75192b9917082301d7d05092ef6df54ee4c32e82ea3f6"
+    "path": "work/jobs/chapter-architecture-20261028/verifications/a66741114a114c1b92640de4726465fd.json",
+    "sha256": "7ad32a9b6ef5a14e659f3f4f3bc88b260b85f8497acae506cb7143a860558b5a",
+    "inputHash": "b0b662361d971107e567b8f54b437a82e3650de10ffedd2f28d383dcc59b92e2"
   },
   "lastPreparedRelease": null,
   "lastVerificationAttempt": {
-    "path": "work/jobs/chapter-architecture-20261028/verifications/abdf3c3be2ed4456ab987bebb7f010c8.json",
-    "sha256": "a326021cc01954fa01e1c5cc232fd9a822eec6076ac2ceb45124972e52cb68b2",
-    "inputHash": "3929825e1dab5be3a4d75192b9917082301d7d05092ef6df54ee4c32e82ea3f6"
+    "path": "work/jobs/chapter-architecture-20261028/verifications/a66741114a114c1b92640de4726465fd.json",
+    "sha256": "7ad32a9b6ef5a14e659f3f4f3bc88b260b85f8497acae506cb7143a860558b5a",
+    "inputHash": "b0b662361d971107e567b8f54b437a82e3650de10ffedd2f28d383dcc59b92e2"
   }
 }

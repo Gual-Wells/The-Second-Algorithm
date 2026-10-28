@@ -55,6 +55,8 @@ def _prose_anchors(draft: str) -> list[str]:
 def _relative(root: Path, value: str) -> Path:
     if not isinstance(value, str) or not value or Path(value).is_absolute():
         raise ValueError("Expected a repository-relative chapter file")
+    if "\\" in value:
+        raise ValueError("Chapter file paths must use their canonical relative POSIX identity: " + value)
     filename = safe_relative(root, value)
     if filename.relative_to(root).as_posix() != value:
         raise ValueError("Chapter file paths must use their canonical relative POSIX identity: " + value)
