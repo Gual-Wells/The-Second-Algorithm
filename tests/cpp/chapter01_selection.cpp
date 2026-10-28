@@ -99,10 +99,16 @@ int main() {
     for(int m=1;m<=16;++m)for(int n=1;n<=16;++n){
         std::vector<int>a;for(int i=1;i<=m;++i)for(int j=1;j<=n;++j)a.push_back(i*j);
         std::sort(a.begin(),a.end());
-        for(int k=1;k<=m*n;++k){assert(multiplication_kth_manual(m,n,k)==a[k-1]);assert(multiplication_kth_standard(m,n,k)==a[k-1]);++checks;}
+        for(int k=1;k<=m*n;++k){assert(multiplication_kth_manual(m,n,k)==a[k-1]);assert(multiplication_count_manual(m,n,a[k-1])>=k);++checks;}
     }
     assert(multiplication_kth_manual(30000,30000,900000000)==900000000);
-    assert(multiplication_kth_standard(30000,30000,1)==1);
+    assert(multiplication_kth_manual(30000,30000,1)==1);
+    for(int cols=1;cols<=16;++cols) for(int row=1;row<=16;++row)
+        for(i64 x=0;x<=256;++x) {
+            i64 expected=0;
+            for(int col=1;col<=cols;++col) expected+=1LL*row*col<=x;
+            assert(multiplication_row_standard(cols,x,row)==expected);
+        }
     for(int trial=0;trial<400;++trial){
         std::vector<int>a(rnd(9)),b(rnd(9));if(a.empty()&&b.empty())b.push_back(0);
         for(auto&v:a)v=rnd(9)-4;

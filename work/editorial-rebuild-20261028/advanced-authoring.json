@@ -1,0 +1,456 @@
+{
+  "document": "binary-advanced",
+  "path": "content/binary/advanced",
+  "target": {
+    "id": "chapter01-advanced",
+    "kind": "run",
+    "source": "tests/cpp/chapter01_advanced.cpp",
+    "standard": "c++17",
+    "timeoutSeconds": 120
+  },
+  "units": [
+    {
+      "id": "fenwick-rank",
+      "title": "动态频数中的第k个位置",
+      "anchor": "fenwick-rank",
+      "manualAnchor": "fenwick-rank-manual",
+      "standardAnchor": "fenwick-rank-standard",
+      "engineeringAnchor": "fenwick-rank-engineering",
+      "standardRole": {
+        "kind": "algorithm",
+        "explanation": "partial_sum与lower_bound确实完成同一频数选择，但每问重建前缀为线性基线；动态Fenwick不是std算法。"
+      },
+      "implementations": [
+        {
+          "id": "advanced-fenwick-lift",
+          "kind": "manual",
+          "symbol": "FrequencyTree",
+          "regions": [
+            "advanced-fenwick-manual"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100005"
+          ],
+          "complexity": {
+            "time": "point update/kth O(log n); remove_by_rank O(n log n)",
+            "space": "O(n)"
+          },
+          "method": "fenwick-block-selection"
+        },
+        {
+          "id": "advanced-frequency-prefix",
+          "kind": "standard",
+          "symbol": "kth_with_prefix",
+          "regions": [
+            "advanced-fenwick-standard"
+          ],
+          "questions": [
+            "Q100001",
+            "Q100002"
+          ],
+          "complexity": {
+            "time": "O(n) per call including prefix rebuild",
+            "space": "O(n)"
+          },
+          "method": "prefix-rebuild-selection"
+        }
+      ],
+      "methods": [
+        {
+          "id": "fenwick-block-selection",
+          "title": "Fenwick块内秩选择",
+          "invariant": "接受累计量仍小于目标秩的整块，剩余秩随跳跃扣减。"
+        },
+        {
+          "id": "prefix-rebuild-selection",
+          "title": "重建累计量后查下界",
+          "invariant": "由非负频数重建单调前缀，查首次达到k的位置；每问付线性重建。"
+        }
+      ]
+    },
+    {
+      "id": "summary-descent",
+      "title": "区间摘要驱动的首次失败位置",
+      "anchor": "summary-descent",
+      "manualAnchor": "summary-descent-manual",
+      "standardAnchor": "summary-descent-standard",
+      "engineeringAnchor": "summary-descent-engineering",
+      "standardRole": {
+        "kind": "support",
+        "explanation": "find_if给线性同题基线；ACL max_right只解释真实外部接口与条件，不列作ISO标准库或引入依赖。"
+      },
+      "implementations": [
+        {
+          "id": "advanced-max-summary",
+          "kind": "manual",
+          "symbol": "MaxTree",
+          "regions": [
+            "advanced-summary-manual"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100005",
+            "Q100009"
+          ],
+          "complexity": {
+            "time": "build O(n); point set/range max/first boundary O(log n)",
+            "space": "O(n)"
+          },
+          "method": "segment-summary-descent"
+        },
+        {
+          "id": "advanced-first-linear",
+          "kind": "standard",
+          "symbol": "first_at_least_linear",
+          "regions": [
+            "advanced-summary-standard"
+          ],
+          "questions": [
+            "Q100003",
+            "Q100005"
+          ],
+          "complexity": {
+            "time": "O(n-start)",
+            "space": "O(1)"
+          },
+          "method": "linear-value-scan"
+        }
+      ],
+      "methods": [
+        {
+          "id": "segment-summary-descent",
+          "title": "摘要驱动块下降",
+          "invariant": "排除起点之前与摘要不足的整块，优先下降到最早可行叶子。"
+        },
+        {
+          "id": "linear-value-scan",
+          "title": "线性值扫描",
+          "invariant": "按原下标检查每个值，返回首个满足者；没有二分分区前提。"
+        }
+      ]
+    },
+    {
+      "id": "ancestor-boundary",
+      "title": "祖先会合边界与同步提升",
+      "anchor": "ancestor-boundary",
+      "manualAnchor": "ancestor-boundary-manual",
+      "standardAnchor": "ancestor-boundary-standard",
+      "engineeringAnchor": "ancestor-boundary-engineering",
+      "standardRole": {
+        "kind": "support",
+        "explanation": "std::find只支持祖先链交集基线；lower_bound处理有序当前路径的阈值祖先变型，不声称标准库直接提供LCA。"
+      },
+      "implementations": [
+        {
+          "id": "advanced-ancestor-lift",
+          "kind": "manual",
+          "symbol": "Ancestors",
+          "regions": [
+            "advanced-ancestor-manual"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100005"
+          ],
+          "complexity": {
+            "time": "preprocess O(n log n), query O(log n)",
+            "space": "O(n log n)"
+          },
+          "method": "synchronous-ancestor-lifting"
+        },
+        {
+          "id": "advanced-ancestor-find",
+          "kind": "standard",
+          "symbol": "lca_with_find",
+          "regions": [
+            "advanced-ancestor-standard"
+          ],
+          "questions": [
+            "Q100005"
+          ],
+          "complexity": {
+            "time": "O(height(a)*height(b))",
+            "space": "O(height(a))"
+          },
+          "method": "ancestor-chain-intersection"
+        },
+        {
+          "id": "advanced-threshold-path",
+          "kind": "alternative",
+          "symbol": "threshold_ancestor_queries",
+          "regions": [
+            "advanced-ancestor-threshold"
+          ],
+          "questions": [
+            "Q100001",
+            "Q100005",
+            "Q100009",
+            "Q100013"
+          ],
+          "complexity": {
+            "time": "O(n+q log n)",
+            "space": "O(n+q)"
+          },
+          "method": "ordered-current-path"
+        }
+      ],
+      "methods": [
+        {
+          "id": "synchronous-ancestor-lifting",
+          "title": "等深同步提升",
+          "invariant": "只接受两个祖先仍不同的跳跃，保留第一次会合边界。"
+        },
+        {
+          "id": "ancestor-chain-intersection",
+          "title": "祖先链交集扫描",
+          "invariant": "从一端向根首次命中另一端祖先集合，得到最近公共祖先。"
+        },
+        {
+          "id": "ordered-current-path",
+          "title": "有序当前路径阈值",
+          "invariant": "进出事件维护当前祖先链，权值非降时查首次达到阈值者。"
+        }
+      ]
+    },
+    {
+      "id": "cyclic-jump",
+      "title": "循环正数序列的最少分段",
+      "anchor": "cyclic-jump",
+      "manualAnchor": "cyclic-jump-manual",
+      "standardAnchor": "cyclic-jump-standard",
+      "engineeringAnchor": "cyclic-jump-engineering",
+      "standardRole": {
+        "kind": "shared-core",
+        "explanation": "upper_bound以单调前缀建立最远合法终点，复用同一按位提升核心；没有复制两份跳表。"
+      },
+      "implementations": [
+        {
+          "id": "advanced-cyclic-window",
+          "kind": "manual",
+          "symbol": "min_cyclic_parts",
+          "regions": [
+            "advanced-cyclic-manual",
+            "advanced-cyclic-core"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100005"
+          ],
+          "complexity": {
+            "time": "successors O(n), lifting and all starts O(n log n)",
+            "space": "O(n log n)"
+          },
+          "method": "window-successor-lifting"
+        },
+        {
+          "id": "advanced-cyclic-bounds",
+          "kind": "standard",
+          "symbol": "min_cyclic_parts_with_bounds",
+          "regions": [
+            "advanced-cyclic-standard",
+            "advanced-cyclic-core"
+          ],
+          "questions": [
+            "Q100001",
+            "Q100002",
+            "Q100005"
+          ],
+          "complexity": {
+            "time": "O(n log n)",
+            "space": "O(n log n)"
+          },
+          "method": "prefix-bound-successor-lifting"
+        }
+      ],
+      "methods": [
+        {
+          "id": "window-successor-lifting",
+          "title": "滑窗建后继再提升",
+          "invariant": "正数窗口求最远合法下一位置，再找尚未覆盖一圈的最大跳数。"
+        },
+        {
+          "id": "prefix-bound-successor-lifting",
+          "title": "前缀边界建后继再提升",
+          "invariant": "有序前缀upper_bound构造最远合法段，与滑窗版共享提升核心。"
+        }
+      ]
+    },
+    {
+      "id": "time-parallel-search",
+      "title": "共享时间轴判定的并行二分",
+      "anchor": "time-parallel-search",
+      "manualAnchor": "time-parallel-search-manual",
+      "standardAnchor": "time-parallel-search-standard",
+      "engineeringAnchor": "time-parallel-search-engineering",
+      "standardRole": {
+        "kind": "support",
+        "explanation": "vector提供查询桶与DSU数组、iota初始化父结点、swap支持按规模合并；DSU与PBS均非std一键算法。"
+      },
+      "implementations": [
+        {
+          "id": "advanced-time-pbs",
+          "kind": "manual",
+          "symbol": "first_connection_days",
+          "regions": [
+            "advanced-pbs-manual"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100005",
+            "Q100013"
+          ],
+          "complexity": {
+            "time": "O((n+(m+q)*alpha(n))*log(m+2))",
+            "space": "O(n+m+q)"
+          },
+          "method": "batch-time-prefix"
+        },
+        {
+          "id": "advanced-dsu-support",
+          "kind": "standard",
+          "symbol": "DisjointSet",
+          "regions": [
+            "advanced-pbs-standard"
+          ],
+          "questions": [
+            "Q100005"
+          ],
+          "complexity": {
+            "time": "initialization O(n), amortized find/unite O(alpha(n))",
+            "space": "O(n)"
+          },
+          "method": "batch-time-prefix"
+        }
+      ],
+      "methods": [
+        {
+          "id": "batch-time-prefix",
+          "title": "共享时间前缀判定",
+          "invariant": "每轮按mid分组并重放事件，DSU代表当前真实时间前缀。"
+        }
+      ]
+    },
+    {
+      "id": "dynamic-range-kth",
+      "title": "带修改区间第k小的整体二分",
+      "anchor": "dynamic-range-kth",
+      "manualAnchor": "dynamic-range-kth-manual",
+      "standardAnchor": "dynamic-range-kth-standard",
+      "engineeringAnchor": "dynamic-range-kth-engineering",
+      "standardRole": {
+        "kind": "support",
+        "explanation": "sort/unique/erase和lower_bound只承担全生命周期的值压缩，稳定事件分流、残秩和回滚由实际核心完成。"
+      },
+      "implementations": [
+        {
+          "id": "advanced-dynamic-kth",
+          "kind": "manual",
+          "symbol": "dynamic_range_kth",
+          "regions": [
+            "advanced-kth-model",
+            "advanced-kth-manual"
+          ],
+          "questions": [
+            "Q100001",
+            "Q100005",
+            "Q100009",
+            "Q100012",
+            "Q100013"
+          ],
+          "complexity": {
+            "time": "O((n+A) log(n+A+1) + E log(U+1) log(n+1)); E=n+2A+Q",
+            "space": "O(E+n+U+log(U+1)); E includes all input assignments"
+          },
+          "method": "value-domain-event-partition"
+        },
+        {
+          "id": "advanced-kth-compress",
+          "kind": "standard",
+          "symbol": "compressed_values",
+          "regions": [
+            "advanced-kth-standard"
+          ],
+          "questions": [
+            "Q100001",
+            "Q100005",
+            "Q100012",
+            "Q100013"
+          ],
+          "complexity": {
+            "time": "collect/sort O((n+assignments) log(n+assignments)); value_rank O(log U)",
+            "space": "O(n+assignments)"
+          },
+          "method": "value-domain-event-partition"
+        }
+      ],
+      "methods": [
+        {
+          "id": "value-domain-event-partition",
+          "title": "值域事件稳定分流",
+          "invariant": "按原时间累计左值域贡献，查询右行扣剩余秩，递归前撤销全部实际更新。"
+        }
+      ]
+    },
+    {
+      "id": "marginal-penalty",
+      "title": "递减边际资源分配的惩罚参数搜索",
+      "anchor": "marginal-penalty",
+      "manualAnchor": "marginal-penalty-manual",
+      "standardAnchor": "marginal-penalty-standard",
+      "engineeringAnchor": "marginal-penalty-engineering",
+      "standardRole": {
+        "kind": "support",
+        "explanation": "priority_queue只提供同题另一边际贪心算法的堆结构支撑；堆路径明确为alternative，不能冒称参数二分换容器或ISO库整题解。"
+      },
+      "implementations": [
+        {
+          "id": "advanced-penalty-cutoff",
+          "kind": "manual",
+          "symbol": "maximize_fun",
+          "regions": [
+            "advanced-penalty-manual"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100003"
+          ],
+          "complexity": {
+            "time": "O(n log max Ai)",
+            "space": "O(1) auxiliary"
+          },
+          "method": "penalty-threshold"
+        },
+        {
+          "id": "advanced-marginal-heap",
+          "kind": "alternative",
+          "symbol": "fun_with_priority_queue",
+          "regions": [
+            "advanced-penalty-standard"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100005"
+          ],
+          "complexity": {
+            "time": "O(n+min(K,T)*log n)",
+            "space": "O(n)"
+          },
+          "method": "heap-marginal-greedy"
+        }
+      ],
+      "methods": [
+        {
+          "id": "penalty-threshold",
+          "title": "惩罚阈值与精确恢复",
+          "invariant": "递减边际给出支持目标数量的同值计数区间，以H(h)+hK恢复。"
+        },
+        {
+          "id": "heap-marginal-greedy",
+          "title": "逐次最大边际堆贪心",
+          "invariant": "每次取可用最高边际，取后放回该设施下一边际。"
+        }
+      ]
+    }
+  ]
+}

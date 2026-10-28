@@ -349,7 +349,7 @@ class ChapterContractTest(ChapterHelpers, LearningFixture):
 
     def test_reading_path_open_is_legal_but_missing_route_blocks_release(self):
         self.contract["reading"] = {"status": "open", "gap": "No coherent reader route yet"}
-        if self.contract.get("schemaVersion") == 2:
+        if self.contract.get("schemaVersion") in {2, 3}:
             self.contract["paradigm"].update(status="open", gap="The type map is still being formed", branches=[])
         self.save_contract()
         self.accepted_fixture()
@@ -357,8 +357,8 @@ class ChapterContractTest(ChapterHelpers, LearningFixture):
         self.assertIn("reading structure is open", " ".join(chapter_quality(self.root)["chapters"][0]["errors"]))
         self.assertIn("No coherent reader route", render_chapters(self.root, "unit"))
 
-    def test_addressed_reading_path_requires_entry_units_map_and_real_task_coverage(self):
-        for field in ("entry", "units", "selectionMap"):
+    def test_addressed_reading_path_requires_entry_units_and_real_task_coverage(self):
+        for field in ("entry", "units"):
             original = self.contract["reading"][field]
             self.contract["reading"][field] = []
             self.save_contract()
@@ -473,14 +473,14 @@ class ParadigmContractTest(ChapterHelpers, LearningFixture):
         self.put(question["source"], "# 边界在哪里\n\n实际解释。\n")
         self.save()
         loc = [{"document": "lesson", "anchor": "boundary-type"}]
-        self.contract.update(schemaVersion=2,
+        self.contract.update(schemaVersion=3,
             paradigm={"status": "addressed", "name": "Binary search", "mechanism": "Halve a partitioned space",
                 "coverageArgument": "Synthetic fixture only; not a claim of real domain completeness", "corpusEvidence": ["outside"],
                 "branches": [{"id": "ordered", "title": "Ordered boundaries", "status": "addressed", "materialIds": ["outside"],
                               "sectionIds": ["boundary-unit"], "crossParadigms": []}]},
             prelude={"status": "addressed", "locations": [{"document": "lesson", "anchor": "prelude"}]})
-        self.contract["reading"].update(entry=copy.deepcopy(self.contract["prelude"]["locations"]), selectionMap=copy.deepcopy(loc))
-        self.contract["reading"]["units"] = [{"id": "boundary-unit", "title": "Ordered boundary problems", "taskIds": ["boundary"],
+        self.contract["reading"].update(entry=copy.deepcopy(self.contract["prelude"]["locations"]))
+        self.contract["reading"]["units"] = [{"id": "boundary-unit", "title": "Ordered boundary problems", "researchTypeIds": ["boundary-unit"], "taskIds": ["boundary"],
             "locations": copy.deepcopy(loc), "facets": {key: copy.deepcopy(loc) for key in
                 ("problem", "fit", "variation", "manual", "manualExplanation", "standard", "standardExplanation", "engineering")},
             "manualImplementationIds": ["manual-boundary"], "standardImplementationIds": ["standard-boundary"],
@@ -488,13 +488,111 @@ class ParadigmContractTest(ChapterHelpers, LearningFixture):
             "exercises": [{"title": "Boundary", "url": "https://example.com/task"}], "dependsOn": []}]
         self.save_contract()
 
-    def test_complete_schema2_relationships_can_be_reviewed_and_prepared(self):
+    def test_complete_schema3_relationships_can_be_reviewed_and_prepared(self):
         self.assertTrue(validate_learning(self.root)["ok"], validate_learning(self.root))
         self.accepted_fixture()
         self.assertTrue(chapter_quality(self.root)["ok"], chapter_quality(self.root))
         with patch("second_algorithm.workflow._process", side_effect=self.process_success):
             verify_job(self.root, "lesson-job", "fixture-c++")
         self.assertTrue(prepare_release(self.root, "lesson-job")["release"]["passed"])
+
+    def test_schema2_is_technically_readable_but_cannot_be_formally_adopted(self):
+        self.contract["schemaVersion"] = 2
+        self.contract["reading"]["selectionMap"] = copy.deepcopy(self.contract["reading"]["units"][0]["locations"])
+        self.save_contract()
+        self.accepted_fixture()
+        self.assertTrue(validate_learning(self.root)["ok"], validate_learning(self.root))
+        self.assertIn("schemaVersion 3 required", " ".join(chapter_quality(self.root)["chapters"][0]["errors"]))
+        self.assertIn("旧schema2合同", render_chapters(self.root))
+
+    def test_entry_can_derive_from_prelude_without_becoming_a_third_section(self):
+        self.contract["reading"].pop("entry")
+        self.save_contract()
+        self.assertTrue(validate_learning(self.root)["ok"], validate_learning(self.root))
+        self.assertIn("入口：lesson#prelude", render_chapters(self.root))
+
+    def test_selection_map_cannot_own_a_chapter_level_heading(self):
+        self.contract["reading"]["selectionMap"] = copy.deepcopy(self.contract["reading"]["units"][0]["locations"])
+        self.save_contract()
+        self.assertIn("selectionMap conflicts with the user structure", " ".join(validate_learning(self.root)["errors"]))
+        self.contract["reading"]["selectionMap"] = []
+        self.save_contract()
+        self.assertTrue(validate_learning(self.root)["ok"], validate_learning(self.root))
+
+    def test_schema3_requires_one_logical_document(self):
+        self.publications["collections"][0]["documents"].append(
+            {"id": "author-part", "title": "Another author's part", "path": "content/unit/Part"})
+        self.put("content/unit/Part.source.md", "# Another author\n")
+        self.put("content/unit/Part.cpp", "// Author fragment\n")
+        self.save()
+        self.assertIn("one logical chapter document", " ".join(validate_learning(self.root)["errors"]))
+
+    def test_every_editorial_section_needs_nonempty_research_object_references(self):
+        unit = self.contract["reading"]["units"][0]
+        for value in (None, [], "boundary-unit", ["boundary-unit", "boundary-unit"]):
+            with self.subTest(value=value):
+                unit["researchTypeIds"] = value
+                self.save_contract()
+                self.assertFalse(validate_learning(self.root)["ok"])
+
+    def test_editorial_section_identity_can_differ_from_its_research_object(self):
+        self.accepted_fixture()
+        handoff = self.root / self.contract["researchHandoff"]
+        original = handoff.read_bytes()
+        self.contract["reading"]["units"][0]["id"] = "editorial-boundary"
+        self.contract["paradigm"]["branches"][0]["sectionIds"] = ["editorial-boundary"]
+        self.save_contract()
+        self.assertTrue(validate_learning(self.root)["ok"], validate_learning(self.root))
+        binding = _research_binding(self.root, "unit", self.contract)
+        self.assertTrue(binding["ok"], binding)
+        self.assertEqual(original, handoff.read_bytes())
+
+    def test_one_research_object_can_be_taught_in_multiple_formal_sections(self):
+        self.accepted_fixture()
+        second = copy.deepcopy(self.contract["reading"]["units"][0])
+        loc = [{"document": "lesson", "anchor": "harder-type"}]
+        second.update(id="harder-editorial-section", title="A harder condition", locations=loc,
+                      facets={key: copy.deepcopy(loc) for key in second["facets"]}, dependsOn=["boundary-unit"])
+        self.contract["reading"]["units"].append(second)
+        self.contract["paradigm"]["branches"][0]["sectionIds"].append(second["id"])
+        self.put(self.draft, (self.root / self.draft).read_text(encoding="utf-8") +
+                 '\n<a id="harder-type"></a>\n\n## A harder condition\n\n[Boundary](https://example.com/task)\n')
+        self.save_contract()
+        self.assertTrue(validate_learning(self.root)["ok"], validate_learning(self.root))
+        binding = _research_binding(self.root, "unit", self.contract)
+        self.assertTrue(binding["ok"], binding)
+
+    def test_merged_research_objects_use_joint_material_branch_and_exercise_authority(self):
+        self.accepted_fixture()
+        from second_algorithm.inquiry import check_handoff
+        research = check_handoff(self.root, self.contract["researchHandoff"], chapter="unit")
+        # This boundary fixture supplies a second checked research object; it
+        # does not mutate an archived handoff or claim new research was done.
+        research["scope"]["branches"].append({"id": "second-branch", "status": "included", "materialIds": ["second-material"]})
+        second_type = copy.deepcopy(research["scope"]["problemTypes"][0])
+        second_type.update(id="second-object", branchIds=["second-branch"], materialIds=["second-material"],
+                           exerciseUrls=["https://example.com/second"])
+        research["scope"]["problemTypes"].append(second_type)
+        research["dossier"]["materials"].append({"id": "second-material", "note": "work/second-material.md"})
+        self.contract["materials"].append({"id": "second-material", "evidence": "work/second-material.md"})
+        self.contract["paradigm"]["branches"].append({"id": "second-branch", "materialIds": ["second-material"],
+                                                      "sectionIds": ["boundary-unit"]})
+        unit = self.contract["reading"]["units"][0]
+        unit.update(researchTypeIds=["boundary-unit", "second-object"],
+                    exercises=[{"title": "Second", "url": "https://example.com/second"}])
+        with patch("second_algorithm.inquiry.check_handoff", return_value=research):
+            binding = _research_binding(self.root, "unit", self.contract)
+            self.assertTrue(binding["ok"], binding)
+            self.contract["paradigm"]["branches"][1]["sectionIds"] = []
+            self.assertIn("branch mapping differs", " ".join(_research_binding(self.root, "unit", self.contract)["errors"]))
+            self.contract["paradigm"]["branches"][1]["sectionIds"] = ["boundary-unit"]
+            self.contract["materials"][1]["evidence"] = "work/replacement.md"
+            self.assertIn("researched material evidence", " ".join(_research_binding(self.root, "unit", self.contract)["errors"]))
+            self.contract["materials"][1]["evidence"] = "work/second-material.md"
+            unit["researchTypeIds"] = ["boundary-unit"]
+            errors = " ".join(_research_binding(self.root, "unit", self.contract)["errors"])
+            self.assertIn("complete research handoff type plan", errors)
+            self.assertIn("not obtained by the research type plan", errors)
 
     def test_generic_research_note_cannot_replace_actual_stage_handoff(self):
         self.accepted_fixture()
@@ -533,8 +631,7 @@ class ParadigmContractTest(ChapterHelpers, LearningFixture):
         self.assertIn("researched evidence note", errors)
         self.assertIn("formal type drops its researched material evidence", errors)
         self.contract["materials"][0]["evidence"] = "work/material.md"
-        self.contract["reading"]["units"][0]["id"] = "unresearched-type"
-        self.contract["paradigm"]["branches"][0]["sectionIds"] = ["unresearched-type"]
+        self.contract["reading"]["units"][0]["researchTypeIds"] = ["unresearched-type"]
         self.save_contract()
         self.assertIn("research handoff type plan", " ".join(chapter_quality(self.root)["chapters"][0]["errors"]))
 
@@ -555,6 +652,7 @@ class ParadigmContractTest(ChapterHelpers, LearningFixture):
 
     def test_legacy_contract_is_readable_but_not_eligible_for_new_publication(self):
         self.contract["schemaVersion"] = 1
+        self.contract["reading"]["selectionMap"] = copy.deepcopy(self.contract["reading"]["units"][0]["locations"])
         self.save_contract()
         self.accepted_fixture()
         self.assertTrue(validate_learning(self.root)["ok"])

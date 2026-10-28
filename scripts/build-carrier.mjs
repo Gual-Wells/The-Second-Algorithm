@@ -7,6 +7,7 @@ import { marked } from 'marked';
 import hljs from 'highlight.js/lib/core';
 import cpp from 'highlight.js/lib/languages/cpp';
 import { readKnowledge, knowledgeTokens, expandKnowledgeReferences } from '../tools/knowledge.mjs';
+import { composeDocument, compositionPath } from '../tools/compose-chapter.mjs';
 
 hljs.registerLanguage('cpp', cpp);
 
@@ -67,6 +68,7 @@ export function validatePublications(publications) {
       documents.add(document.id);
       if (!document.title?.trim()) throw new Error('Document requires a title');
       contentPath(process.cwd(), document.path);
+      if (document.composition !== undefined) compositionPath(document.composition);
       if (authorities.has(document.path)) throw new Error('A document authority is registered twice');
       authorities.add(document.path);
     }
@@ -161,6 +163,16 @@ export async function readAuthority(root, descriptor) {
   const manifestPath = path.join(path.dirname(base), 'build', name + '.json');
   if (!inside(path.resolve(root, 'content'), await fs.realpath(manifestPath))) throw new Error('Manifest escapes content/');
   const manifest = JSON.parse(await fs.readFile(manifestPath, 'utf8'));
+  let composition;
+  if (descriptor.composition !== undefined) {
+    composition = await composeDocument(root, descriptor);
+    const actual = Object.entries(composition.dependencies), recorded = Object.entries(manifest.authoringDependencies || {});
+    if (actual.length !== recorded.length || actual.some(([relative, expected]) =>
+      !SHA.test(manifest.authoringDependencies?.[relative] ?? '') || manifest.authoringDependencies[relative] !== expected))
+      throw new Error('Authoring dependency hash mismatch; rebuild reading assets');
+  } else if (manifest.authoringDependencies !== undefined) {
+    throw new Error('Authoring dependencies require a registered composition');
+  }
   for (const [relative, expected] of Object.entries(manifest.knowledgeDependencies || {})) {
     if (!/^content\/knowledge\/[^/]+\.md$/.test(relative) && relative !== 'tools/knowledge.mjs')
       throw new Error('Unexpected knowledge dependency');
@@ -180,6 +192,8 @@ export async function readAuthority(root, descriptor) {
     if (!SHA.test(manifest[kind + 'Sha256'] ?? '') || hash(bytes[kind]) !== manifest[kind + 'Sha256'])
       throw new Error(`${descriptor.id}: ${kind} authority hash mismatch; rebuild the reading assets first`);
   }
+  if (composition && (!bytes.source.equals(Buffer.from(composition.draft)) || !bytes.code.equals(Buffer.from(composition.source))))
+    throw new Error('Composed author sources differ from generated reading authorities; rebuild reading assets');
   const blocks = new Map();
   for (const match of bytes.code.toString('utf8').matchAll(/\/\/ BEGIN ([\w-]+)\r?\n([\s\S]*?)\/\/ END \1/g)) {
     if (blocks.has(match[1])) throw new Error('Duplicate canonical code block');
@@ -197,7 +211,7 @@ export async function readAuthority(root, descriptor) {
   }
   const revision = hash(JSON.stringify([manifest.sourceSha256, manifest.codeSha256, manifest.markdownSha256,
     manifest.htmlSha256, manifest.builderSha256, manifest.learningSha256, manifest.publicationsSha256,
-    manifest.knowledgeDependencies, manifest.knowledgeHelperSha256]));
+    manifest.knowledgeDependencies, manifest.knowledgeHelperSha256, manifest.authoringDependencies]));
   const inlineExamples = new Set();
   marked.walkTokens(marked.lexer(bytes.source.toString('utf8')), token => {
     if (token.type === 'code') inlineExamples.add(token.text.replace(/\r\n?/g, '\n').trim());

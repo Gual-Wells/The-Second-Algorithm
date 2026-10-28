@@ -85,7 +85,7 @@ checkpoint保存 `snapshots/<uuid>/checkpoint.json` 及 `files/` 中的证据字
 
 chapters登记schema1的`chapters[]`仍为`id/collection/contract/review`。每个published chapter恰对应一项，合同与审阅路径须是持久仓库文件；不能删除登记退回旧门禁。章名/章号由publication负责，不在此复制正文。
 
-合同schema2保留reader、scope、reading、materials、commitments，并加入paradigm和prelude：
+当前正式合同schema3保留reader、scope、reading、materials、commitments、paradigm和prelude，并区分研究对象与编纂节：
 
 | 字段 | 职责 |
 |---|---|
@@ -95,29 +95,32 @@ chapters登记schema1的`chapters[]`仍为`id/collection/contract/review`。每�
 | `paradigm` | status、name、mechanism、coverageArgument、corpusEvidence与branches；表达共同思想和全景材料归并 |
 | `paradigm.branches[]` | id、title、status、materialIds、sectionIds、crossParadigms；主要分支与题型/交叉思想的实际关系 |
 | `prelude` | status、locations，思想理论前置的实际位置 |
-| `reading` | status、entry、units、selectionMap；units是正式题型节，不是任意问题簇 |
+| `reading` | status、可选entry、units；units是正式题型节，selectionMap只能缺失或为空 |
 | `commitments` | id、dimension、claim、acceptance、status、taskIds、locations、materialIds；四维真实承诺 |
 | `researchHandoff` | 不可变研究交接的仓库相对path；章级采用/发布必须检查当前有效性及实际范围承接 |
 
-status为open/addressed；open必须给具体gap，addressed不得暗藏gap。schema1旧合同只支持结构恢复，不能作为新硬协议的发布采用。2026-10-28撤回清零后，第一章“二分”已独立重研建立新合同与知识；旧专题及采用仅在历史恢复，不能直接追认为新大思想章。实时内容以当前登记、质量检查和实际部署收据为准。
+status为open/addressed；open必须给具体gap，addressed不得暗藏gap。schema1/2旧合同只支持历史技术读入，正式quality要求schema3；不能改版本号追认新结构或重建历史研究。2026-10-28撤回清零后，第一章“二分”已独立重研建立新合同与知识；旧专题及采用仅在历史恢复，不能直接追认为新大思想章。实时内容以当前登记、质量检查和实际部署收据为准。
 
 paradigm.corpusEvidence引用materials内实际教材/来源筛选归并读件；addressed领域须有证据和分支，addressed分支须有真实材料与题型落点。相关材料全部读过、分支是否充分仍须Agent判断；字段非空不认证全面。
 
-reading.units保留id/title/taskIds/locations，新增：
+reading.units保留id/title/taskIds/locations，并声明：
 
+- `researchTypeIds`：非空、无重复的研究对象身份，引用交接`scope.problemTypes`。全部研究对象必须有节承接；允许多个对象归一节或一对象分多节，不要求研究与读者节身份/数量相等。
 - `dependsOn`：本章更早的正式节身份，按实际作者顺序形成依赖。
 - `facets`：problem、fit、variation、manual、manualExplanation、standard、standardExplanation、engineering八项正文位置。它们是语义落点，不强迫八个固定小标题，可自然共享明确位置。
 - `manualImplementationIds/standardImplementationIds`：属于本节任务的真实实现。manual引用手写；设施角色为algorithm/structure时引用standard实现，support/shared-core允许复用核心但必须解释设施实际承担的层次。
 - `standardRole`：kind为algorithm/structure/support/shared-core，explanation说明真实替代职责，不虚构整题库解。
 - `exercises`：1–5项title/url，来自本节task.sourceUrls并在所属正文中有实际可见链接；同节不能重复URL。
 
-正文位置为`{document,anchor}`，只认真实显式锚点，排除注释/代码示例假锚点。题型主位置对应实际H2且归属唯一；前置先于正式节，entry指向前置，selectionMap位于题型之后，facets在自己题型范围内，不能借别节内容充数。除前置、题型和选择地图外，不允许无归属H2让证明/支撑抢占目录。多文档顺序服从当前出版顺序。
+正文位置为`{document,anchor}`，只认真实显式锚点，排除注释/代码示例假锚点。schema3每章只有一个逻辑文档，一个前置H2，每个正式节恰有一个归属唯一的H2。前置先于正式节，entry可省略从前置派生，显式提供时也须指向前置；facets在自己题型范围内。章内主结构只有前置/正式节，selectionMap非空即拒绝，不能让四篇、作者分工、证明/支撑或章末地图抢占主目录。
 
-结构允许诚实施工open，包括研究尚未交接；`course quality`另查研究交接、领域/前置/分支/阅读/承诺是否已addressed、审阅是否当前有效。合同paradigm.name须与交接scope.paradigm一致，采用分支与交接纳入分支对应；各分支材料应承接研究材料，合同materials.evidence与资料note对应。reading.units身份须承接scope.problemTypes，分支—题型关系一致，正式练习从该研究题型已有exerciseUrls选择；编纂新发现须回到研究修订计划，而非另搜凑数。旧schema、关键open/gap、缺/过期/不匹配的交接、缺/过期/needs-work审阅阻止内容发布。数量、位置与关系正确，不证明题型有代表性、练习真正匹配或完整链讲解充分。
+结构允许诚实施工open，包括研究尚未交接；`course quality`另查研究交接、领域/前置/分支/阅读/承诺是否已addressed、审阅是否当前有效。合同paradigm.name须与交接scope.paradigm一致，采用分支与交接纳入分支对应；各分支材料应承接研究材料，合同materials.evidence须保留资料原note。每节分支关系等于所映射研究对象branchIds的联合，所需材料逐项保留，练习须来自该联合已有exerciseUrls，同时满足本节任务sourceUrls及可见链接约束。不能借多对多映射缩减重要条件/变型；实质研究新发现须返回研究，而非另搜凑数。旧schema、关键open/gap、缺/过期/不匹配的交接、缺/过期/needs-work审阅阻止内容发布。数量、位置与关系正确，不证明题型有代表性、练习真正匹配或完整链讲解充分。
 
 ## 统一出版与学习关系
 
 出版schema2的collection.kind为chapter/draft，无track；章号是全课程唯一正整数。draft必须hidden且无章号；文档ID全局唯一，path指向`content/<unit>/<稿名>`，配套source.md/cpp及生成读件。
+
+schema3正式章只登记一个逻辑document，可在文档描述中以`composition`指向内部装配JSON。装配声明`title`、显式`sourceFiles`、`prelude:{source,anchor}`、`sections:[{id,source,anchor}]`和`codeSources`；所有作者源H2必须恰采用一次，代码区域仍来自唯一源码。工具按声明确定性装配，不决定题型语义，也不把物理作者稿暴露成四篇。manifest的`authoringDependencies`固定composition、sourceFiles、codeSources及装配工具的SHA；Python核对真实依赖闭包和装配结果，编辑审阅/发布快照绑定实际来源字节，不能沿用陈旧生成件。
 
 根state为active或withdrawn。active有真实发布文档、知识、任务和验证目标；withdrawn无published文档且learning.questions/tasks/targets为空。原稿、hidden登记和私人状态可保留，不能用空active或假目标绕门禁。withdrawal验证明确不适用C++编译，但仍要载体/浏览器/真实SW检查；恢复active后重新走实际研究与验证。
 

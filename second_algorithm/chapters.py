@@ -96,9 +96,12 @@ def _state(value, label: str, errors: list[str]) -> str | None:
 
 
 def _paradigm_contract(contract, cid, model, documents, permitted, material_ids, errors):
-    """Schema 2 deterministic relationships; no automatic taxonomy judgement."""
-    if contract.get("schemaVersion") != 2:
+    """Deterministic editorial relationships; no automatic taxonomy judgement."""
+    version = contract.get("schemaVersion")
+    if version not in {2, 3}:
         return
+    if version == 3 and len(permitted) != 1:
+        errors.append(cid + ": schemaVersion 3 requires one logical chapter document; compose author fragments internally")
     paradigm = contract.get("paradigm", {})
     state = _state(paradigm, cid + ".paradigm", errors)
     if not isinstance(paradigm, dict):
@@ -139,14 +142,17 @@ def _paradigm_contract(contract, cid, model, documents, permitted, material_ids,
         return result
 
     prelude_positions = major(prelude_locations, cid + ".prelude")
-    # Entry and the final selection map may have their own chapter-level H2;
-    # other H2s must belong to actual problem-type sections.
-    for name in ("entry", "selectionMap"):
-        major(reading.get(name, []), cid + ".reading." + name)
+    if version == 2:
+        # Historical schema 2 retains its technical reading semantics. It
+        # cannot qualify for current publication through chapter_quality.
+        for name in ("entry", "selectionMap"):
+            major(reading.get(name, []), cid + ".reading." + name)
+    elif prelude_state == "addressed" and len(prelude_positions) != 1:
+        errors.append(cid + ": schemaVersion 3 requires one theory prelude H2")
     if complete:
         prelude_keys = {(point.get("document"), point.get("anchor")) for point in prelude_locations}
         if any((point.get("document"), point.get("anchor")) not in prelude_keys
-               for point in _rows(reading.get("entry", []), cid + ".reading.entry", errors)):
+               for point in _rows(reading.get("entry", prelude_locations if version == 3 else []), cid + ".reading.entry", errors)):
             errors.append(cid + ": chapter entry must identify its theory prelude, not unrelated H2s")
     implementations, task_urls = {}, {}
     for task in model.get("tasks", []):
@@ -164,6 +170,12 @@ def _paradigm_contract(contract, cid, model, documents, permitted, material_ids,
         uid, label = unit.get("id"), cid + ".section." + str(unit.get("id"))
         locations = _rows(unit.get("locations", []), label + ".locations", errors)
         positions = major(locations, label)
+        if version == 3:
+            researched = _strings(unit.get("researchTypeIds", []), label + ".researchTypeIds", errors)
+            if not researched:
+                errors.append(label + ": nonempty researchTypeIds required for faithful research coverage")
+            if complete and len(positions) != 1:
+                errors.append(label + ": a formal problem-type section must identify one H2")
         if positions:
             unit_positions.append(min(positions))
             if unit_headings & set(positions):
@@ -254,7 +266,7 @@ def _paradigm_contract(contract, cid, model, documents, permitted, material_ids,
         errors.append(cid + ": problem-type sections must follow distinct author prose order")
     if prelude_positions and unit_positions and max(prelude_positions) >= min(unit_positions):
         errors.append(cid + ": the theory prelude must precede all formal problem-type sections")
-    if complete and unit_positions:
+    if version == 2 and complete and unit_positions:
         for point in _rows(reading.get("selectionMap", []), cid + ".reading.selectionMap", errors):
             did, anchor = point.get("document"), point.get("anchor")
             heading = outlines.get(did, {}).get("locations", {}).get(anchor)
@@ -445,39 +457,71 @@ def _research_binding(root: Path, chapter_id: str, contract: dict) -> dict:
     if result.get("ok"):
         scope, dossier = result.get("scope", {}), result.get("dossier", {})
         paradigm = contract.get("paradigm", {})
+        if not isinstance(paradigm, dict):
+            paradigm = {}
         if scope.get("paradigm") != paradigm.get("name"):
             errors.append("chapter paradigm differs from the adopted research scope")
         included = {row["id"]: row for row in scope.get("branches", []) if row.get("status") == "included"}
-        actual = {row["id"]: row for row in paradigm.get("branches", [])}
+        actual = {row["id"]: row for row in _rows(paradigm.get("branches", []), "paradigm.branches", errors)
+                  if isinstance(row.get("id"), str)}
         if set(included) != set(actual):
             errors.append("chapter branches must exactly carry the final included research branches")
         research_materials = {row["id"]: row for row in dossier.get("materials", [])}
-        author_materials = {row["id"]: row for row in contract.get("materials", [])}
+        author_materials = {row["id"]: row for row in _rows(contract.get("materials", []), "materials", errors)
+                            if isinstance(row.get("id"), str)}
         for bid in included.keys() & actual.keys():
             needed = set(included[bid].get("materialIds", []))
-            if not needed.issubset(set(actual[bid].get("materialIds", []))):
+            if not needed.issubset(set(_strings(actual[bid].get("materialIds", []), "branch." + bid + ".materialIds", errors))):
                 errors.append("chapter branch drops research material evidence: " + bid)
             for mid in needed:
                 source, adopted = research_materials.get(mid, {}), author_materials.get(mid, {})
                 if not source or adopted.get("evidence") != source.get("note"):
                     errors.append("chapter material must preserve its researched evidence note: " + mid)
         planned_types = {row["id"]: row for row in scope.get("problemTypes", [])}
-        author_types = {row["id"]: row for row in contract.get("reading", {}).get("units", [])}
-        if set(planned_types) != set(author_types):
+        reading = contract.get("reading", {})
+        if not isinstance(reading, dict):
+            reading = {}
+        author_types = {row["id"]: row for row in _rows(reading.get("units", []), "reading.units", errors)
+                        if isinstance(row.get("id"), str)}
+        # Research objects describe the preserved scope. Editorial sections
+        # describe how a reader learns it; these identities need not coincide.
+        # All material notes remain the immutable research authority.
+        for mid, adopted in author_materials.items():
+            if mid in research_materials and adopted.get("evidence") != research_materials[mid].get("note"):
+                errors.append("chapter material must preserve its researched evidence note: " + mid)
+        mapped_types = set()
+        if contract.get("schemaVersion") != 3 and set(planned_types) != set(author_types):
             errors.append("formal problem-type sections must carry the research handoff type plan")
-        for uid in planned_types.keys() & author_types.keys():
-            planned, authored = planned_types[uid], author_types[uid]
-            for mid in planned.get("materialIds", []):
+        for uid, authored in author_types.items():
+            if contract.get("schemaVersion") == 3:
+                references = _strings(authored.get("researchTypeIds", []), "section." + uid + ".researchTypeIds", errors)
+                if not references:
+                    errors.append("formal section requires nonempty researchTypeIds: " + uid)
+                for identity in references:
+                    if identity not in planned_types:
+                        errors.append("formal section references an unresearched problem type: " + uid + "/" + identity)
+            else:
+                references = [uid] if uid in planned_types else []
+            mapped_types.update(references)
+            planned = [planned_types[identity] for identity in references if identity in planned_types]
+            needed_materials = {mid for item in planned for mid in item.get("materialIds", [])}
+            for mid in needed_materials:
                 source, adopted = research_materials.get(mid, {}), author_materials.get(mid, {})
                 if not source or adopted.get("evidence") != source.get("note"):
                     errors.append("formal type drops its researched material evidence: " + uid + "/" + mid)
-            expected_branches = set(planned.get("branchIds", []))
-            actual_branches = {bid for bid, row in actual.items() if uid in row.get("sectionIds", [])}
+            expected_branches = {bid for item in planned for bid in item.get("branchIds", [])}
+            actual_branches = {bid for bid, row in actual.items()
+                               if uid in _strings(row.get("sectionIds", []), "branch." + bid + ".sectionIds", errors)}
             if expected_branches != actual_branches:
                 errors.append("formal section branch mapping differs from research: " + uid)
-            urls = {row.get("url") for row in authored.get("exercises", [])}
-            if not urls.issubset(set(planned.get("exerciseUrls", []))):
+            urls = {row.get("url") for row in _rows(authored.get("exercises", []), "section." + uid + ".exercises", errors)
+                    if isinstance(row.get("url"), str)}
+            available_urls = {url for item in planned for url in item.get("exerciseUrls", [])}
+            if not urls.issubset(available_urls):
                 errors.append("formal exercises were not obtained by the research type plan: " + uid)
+        if contract.get("schemaVersion") == 3 and set(planned_types) - mapped_types:
+            errors.append("formal problem-type sections must cover the complete research handoff type plan: "
+                          + ", ".join(sorted(set(planned_types) - mapped_types)))
     return {**result, "ok": bool(result.get("ok") and not errors), "errors": errors}
 
 
@@ -533,7 +577,7 @@ def inspect_chapters(root: Path, publications: dict, model: dict, documents: dic
             authority_paths.add(contract_path)
             dependencies.add(contract_path)
             contract = read_json(filename)
-            if not isinstance(contract, dict) or contract.get("schemaVersion") not in {1, 2} or contract.get("chapter") != cid:
+            if not isinstance(contract, dict) or contract.get("schemaVersion") not in {1, 2, 3} or contract.get("chapter") != cid:
                 raise ValueError(cid + ": invalid chapter contract identity/version")
         except (ValueError, OSError, TypeError) as error:
             errors.append(str(error))
@@ -621,8 +665,16 @@ def inspect_chapters(root: Path, publications: dict, model: dict, documents: dic
             _text(reading.get("gap"), cid + ".reading.gap", errors)
         elif reading.get("gap") is not None and reading.get("gap") != "":
             errors.append(cid + ".reading: addressed reading path cannot conceal a gap")
-        _locations(reading.get("entry", []), cid + ".reading.entry", documents, permitted, errors, required=reading_state == "addressed")
-        _locations(reading.get("selectionMap", []), cid + ".reading.selectionMap", documents, permitted, errors, required=reading_state == "addressed")
+        prelude = contract.get("prelude", {})
+        derived_entry = prelude.get("locations", []) if contract.get("schemaVersion") == 3 and isinstance(prelude, dict) else []
+        _locations(reading.get("entry", derived_entry), cid + ".reading.entry", documents, permitted, errors, required=reading_state == "addressed")
+        if contract.get("schemaVersion") == 3:
+            if reading.get("selectionMap"):
+                errors.append(cid + ": selectionMap conflicts with the user structure; only prelude and formal sections may own H2s")
+            elif reading.get("selectionMap") is not None and not isinstance(reading["selectionMap"], list):
+                errors.append(cid + ".reading.selectionMap: expected an empty array or absence")
+        else:
+            _locations(reading.get("selectionMap", []), cid + ".reading.selectionMap", documents, permitted, errors, required=reading_state == "addressed")
         units = _rows(reading.get("units", []), cid + ".reading.units", errors)
         if reading_state == "addressed" and not units:
             errors.append(cid + ".reading: actual problem-cluster reading units required")
@@ -693,8 +745,8 @@ def chapter_quality(root: Path, chapter_id: str | None = None) -> dict:
         research = chapter["research"]
         if not research["ok"]:
             errors.extend("research handoff: " + message for message in research["errors"])
-        if contract.get("schemaVersion") != 2:
-            errors.append("legacy chapter contract: not adopted under the paradigm-led hard protocol (schemaVersion 2 required)")
+        if contract.get("schemaVersion") != 3:
+            errors.append("legacy chapter contract: not adopted under the editorial hard protocol (schemaVersion 3 required)")
         else:
             if context["model"].get("schemaVersion") != 2:
                 errors.append("transparent knowledge registry requires learning schemaVersion 2; legacy visible-Q main explanations cannot qualify")
@@ -785,9 +837,11 @@ def render_chapters(root: Path, chapter_id: str | None = None) -> str:
                       "读者起点：" + contract["reader"]["startingPoint"], "能力目标：" + contract["reader"]["targetCapability"],
                       "实现支撑：" + contract["reader"]["supportPolicy"], "核心范围：" + contract["scope"]["core"],
                       "扩展关系：" + contract["scope"]["extensions"], "完备性论据：" + contract["scope"]["completenessArgument"]])
-        if contract.get("schemaVersion") != 2:
+        if contract.get("schemaVersion") not in {2, 3}:
             lines.append("新硬协议：旧问题专题合同，尚未完成大思想领域/正式题型结构采用；阻止重新发布。")
         else:
+            if contract.get("schemaVersion") == 2:
+                lines.append("新硬协议：旧schema2合同仅供历史技术读入，尚未完成研究对象到编纂节的schema3采用；阻止重新发布。")
             paradigm = contract["paradigm"]
             lines.append("算法思想领域：" + paradigm["name"] + " [" + paradigm["status"] + "]")
             lines.append("共同机制：" + paradigm["mechanism"])
@@ -812,11 +866,13 @@ def render_chapters(root: Path, chapter_id: str | None = None) -> str:
         lines.append("阅读路径 [" + reading["status"] + "]")
         if reading.get("gap"):
             lines.append("  缺口：" + reading["gap"])
-        for location in reading.get("entry", []):
+        for location in reading.get("entry", contract.get("prelude", {}).get("locations", []) if contract.get("schemaVersion") == 3 else []):
             lines.append("  入口：" + location["document"] + "#" + location["anchor"])
         for unit in reading.get("units", []):
-            lines.append(("  正式题型节：" if contract.get("schemaVersion") == 2 else "  问题簇：")
+            lines.append(("  正式题型节：" if contract.get("schemaVersion") in {2, 3} else "  问题簇：")
                          + unit["title"] + " [" + unit["id"] + "]；任务：" + ", ".join(unit.get("taskIds", [])))
+            if contract.get("schemaVersion") == 3:
+                lines.append("    承接研究对象：" + ", ".join(unit.get("researchTypeIds", [])))
             for location in unit.get("locations", []):
                 lines.append("    正文：" + location["document"] + "#" + location["anchor"])
         for location in reading.get("selectionMap", []):

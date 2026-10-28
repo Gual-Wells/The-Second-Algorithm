@@ -78,7 +78,7 @@ int main() {
         self.put("work/material.md", "Actual fixture material read: sorted boundary contract and method choices.\n")
         self.chapter_index = {"schemaVersion": 1, "chapters": [{"id": "unit", "collection": "unit",
             "contract": "content/unit/chapter.contract.json", "review": "content/unit/chapter.review.json"}]}
-        self.contract = {"schemaVersion": 2, "chapter": "unit", "title": "Unit contract",
+        self.contract = {"schemaVersion": 3, "chapter": "unit", "title": "Unit contract",
             "reader": {"startingPoint": "Basic programming, limited C++ facility knowledge",
                        "targetCapability": "Recognize and implement sorted boundaries", "supportPolicy": "One canonical Q explanation"},
             "scope": {"core": "Sorted boundary queries", "extensions": "Manual and standard implementation choice",
@@ -89,14 +89,14 @@ int main() {
                     "materialIds": ["outside"], "sectionIds": ["boundary-unit"], "crossParadigms": []}]},
             "prelude": {"status": "addressed", "locations": [{"document": "lesson", "anchor": "prelude"}]},
             "reading": {"status": "addressed", "entry": [{"document": "lesson", "anchor": "prelude"}],
-                "units": [{"id": "boundary-unit", "title": "Sorted boundary problems", "taskIds": ["boundary"],
+                "units": [{"id": "boundary-unit", "title": "Sorted boundary problems", "researchTypeIds": ["boundary-unit"], "taskIds": ["boundary"],
                     "locations": [{"document": "lesson", "anchor": "boundary-type"}],
                     "facets": {key: [{"document": "lesson", "anchor": "boundary-type"}] for key in
                         ("problem", "fit", "variation", "manual", "manualExplanation", "standard", "standardExplanation", "engineering")},
                     "manualImplementationIds": ["manual-boundary"], "standardImplementationIds": ["standard-boundary"],
                     "standardRole": {"kind": "algorithm", "explanation": "std::lower_bound replaces the boundary search"},
                     "exercises": [{"title": "Boundary", "url": "https://example.com/task"}], "dependsOn": []}],
-                "selectionMap": [{"document": "lesson", "anchor": "boundary-type"}], "gap": ""},
+                "gap": ""},
             "materials": [{"id": "outside", "kind": "countercheck", "locator": "Independent boundary task",
                            "evidence": "work/material.md", "sourcePaths": []}],
             "commitments": [{"id": dimension, "dimension": dimension, "claim": "Explain " + dimension,

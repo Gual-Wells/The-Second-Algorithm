@@ -53,6 +53,63 @@ def source_closure(root: Path, filenames: list[str]) -> set[str]:
     return found
 
 
+def composition_inputs(root: Path, document: dict) -> dict[str, str]:
+    """Bind original author files, never treat a generated chapter as its own author.
+
+    The JS composer checks fragment semantics and exact assembly. This check
+    independently fixes its complete input closure for Python release receipts.
+    """
+    relative = document.get("composition")
+    if relative is None:
+        return {}
+
+    def author_file(name, suffix):
+        if (not isinstance(name, str) or not name.startswith("content/")
+                or not name.endswith(suffix) or "\\" in name
+                or any(not part or part in {".", ".."} or re.search(r'[<>:"|?*\x00-\x1f]', part)
+                       or part.endswith((".", " ")) for part in name.split("/"))):
+            raise ValueError("Invalid composition authority path: " + str(name))
+        filename = file_path(root, name)
+        if not filename.is_relative_to((root / "content").resolve()):
+            raise ValueError("Composition authority escapes content/: " + name)
+        return filename
+
+    manifest_file = author_file(relative, ".authoring.json")
+    plan = read_json(manifest_file)
+    if (not isinstance(plan, dict) or plan.get("schemaVersion") != 1
+            or plan.get("title") != document.get("title")
+            or not isinstance(plan.get("prelude"), dict)
+            or not isinstance(plan.get("sections"), list) or not plan["sections"]):
+        raise ValueError("Invalid chapter composition manifest")
+    names = {relative, "tools/compose-chapter.mjs"}
+    for field, suffix in (("sourceFiles", ".source.md"), ("codeSources", ".cpp")):
+        items = plan.get(field)
+        if (not isinstance(items, list) or not items or any(not isinstance(x, str) for x in items)
+                or len(set(items)) != len(items)):
+            raise ValueError("Invalid/duplicate composition " + field)
+        for name in items:
+            author_file(name, suffix)
+            if name in {document["path"] + ".source.md", document["path"] + ".cpp"}:
+                raise ValueError("Generated chapter files cannot also be author sources")
+            names.add(name)
+    for entry in [plan["prelude"], *plan["sections"]]:
+        if not isinstance(entry, dict) or entry.get("source") not in plan["sourceFiles"]:
+            raise ValueError("Composition fragment source is not in sourceFiles")
+    helper = file_path(root, "tools/compose-chapter.mjs")
+    if not helper.is_relative_to((root / "tools").resolve()):
+        raise ValueError("Composition helper escapes tools/")
+    expected = {name: digest(file_path(root, name).read_bytes()) for name in sorted(names)}
+    base = Path(document["path"])
+    build_file = file_path(root, (base.parent / "build" / (base.name + ".json")).as_posix())
+    build = read_json(build_file)
+    if not isinstance(build, dict) or build.get("authoringDependencies") != expected:
+        raise ValueError("Composition author inputs changed; rebuild the chapter")
+    for suffix, key in ((".source.md", "sourceSha256"), (".cpp", "codeSha256")):
+        if digest(file_path(root, document["path"] + suffix).read_bytes()) != build.get(key):
+            raise ValueError("Generated composition authority changed: " + suffix)
+    return expected
+
+
 def _inspect(root: Path) -> tuple[dict, dict]:
     errors: list[str] = []
     model = read_json(root / "catalog/learning.json")
@@ -128,7 +185,8 @@ def _inspect(root: Path) -> tuple[dict, dict]:
                 try:
                     draft = file_path(root, base + ".source.md").read_text(encoding="utf-8-sig")
                     file_path(root, base + ".cpp")
-                    documents[did] = {**document, "draft": draft}
+                    author_inputs = composition_inputs(root.resolve(), document)
+                    documents[did] = {**document, "draft": draft, "authoringDependencies": author_inputs}
                 except (ValueError, OSError) as error:
                     errors.append(str(error))
 
@@ -404,6 +462,7 @@ def course_snapshot(root: Path, *, include_reviews: bool = True) -> dict:
         inputs.update(name for name in review_paths if (root / name).is_file())
     for document in context["documents"].values():
         base = document["path"]
+        inputs.update(document.get("authoringDependencies", {}))
         inputs.update([base + ".source.md", base + ".cpp"])
         for suffix in (".md", ".html"):
             if (root / (base + suffix)).is_file():

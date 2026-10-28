@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { marked } from 'marked';
 import { readKnowledge, knowledgeTokens, expandKnowledgeReferences, expandKnowledgeIntroductions } from './knowledge.mjs';
+import { composeDocument } from './compose-chapter.mjs';
 
 const REPOSITORY=path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 if (!process.argv[2] || !process.argv[3])
@@ -12,12 +13,33 @@ const ROOT=path.resolve(process.argv[2]);
 const NAME=process.argv[3];
 const SERIES=process.argv[4] || '第二算法 · 实战与实现';
 const TOC='问题与实现目录';
-const source=await fs.readFile(path.join(ROOT,NAME+'.cpp'),'utf8');
-const draft=await fs.readFile(path.join(ROOT,NAME+'.source.md'),'utf8');
 const learningBytes=await fs.readFile(path.join(REPOSITORY,'catalog/learning.json'));
 const publicationBytes=await fs.readFile(path.join(REPOSITORY,'carrier/publications.json'));
 const learning=JSON.parse(learningBytes), publications=JSON.parse(publicationBytes);
 const documents=new Map(publications.collections.flatMap(c=>c.documents.map(d=>[d.id,d])));
+const relativeBase=path.relative(REPOSITORY,path.join(ROOT,NAME)).replaceAll('\\','/');
+const descriptor=[...documents.values()].find(document=>document.path===relativeBase);
+let authoringDependencies;
+if(descriptor && descriptor.composition!==undefined){
+  const composed=await composeDocument(REPOSITORY,descriptor);
+  const contentRoot=await fs.realpath(path.join(REPOSITORY,'content'));
+  const realDirectory=await fs.realpath(ROOT);
+  const within=filename=>{const relative=path.relative(contentRoot,filename);return relative!==''&&relative!=='..'&&!relative.startsWith('..'+path.sep)&&!path.isAbsolute(relative);};
+  if(!within(realDirectory))throw new Error('Generated chapter directory escapes content/');
+  for(const extension of ['.source.md','.cpp']){
+    const filename=path.join(ROOT,NAME+extension);
+    try{
+      if((await fs.lstat(filename)).isSymbolicLink())throw new Error('Generated chapter authority cannot be a symlink');
+      if(!within(await fs.realpath(filename)))throw new Error('Generated chapter authority escapes content/');
+    }
+    catch(error){if(error.code!=='ENOENT')throw error;}
+  }
+  await fs.writeFile(path.join(ROOT,NAME+'.source.md'),composed.draft,'utf8');
+  await fs.writeFile(path.join(ROOT,NAME+'.cpp'),composed.source,'utf8');
+  authoringDependencies=composed.dependencies;
+}
+const source=await fs.readFile(path.join(ROOT,NAME+'.cpp'),'utf8');
+const draft=await fs.readFile(path.join(ROOT,NAME+'.source.md'),'utf8');
 const questions=new Map();
 for(const q of learning.questions){
   if(questions.has(q.id))throw new Error('Duplicate question '+q.id);
@@ -146,6 +168,6 @@ const html='<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta 
 await fs.writeFile(path.join(ROOT,NAME+'.html'),html,'utf8');
 await fs.mkdir(path.join(ROOT,'build'),{recursive:true});
 const sha=s=>createHash('sha256').update(s).digest('hex');
-await fs.writeFile(path.join(ROOT,'build/'+NAME+'.json'),JSON.stringify({codeBlocks:used,questionReferences,knowledgeIntroductions,knowledgeDependencies,knowledgeHelperSha256:sha(await fs.readFile(new URL('./knowledge.mjs',import.meta.url))),headings,sourceSha256:sha(draft),codeSha256:sha(source),markdownSha256:sha(md),htmlSha256:sha(html),builderSha256:sha(await fs.readFile(fileURLToPath(import.meta.url))),learningSha256:sha(learningBytes),publicationsSha256:sha(publicationBytes),markdownBytes:Buffer.byteLength(md),htmlBytes:Buffer.byteLength(html)},null,2)+'\n','utf8');
+await fs.writeFile(path.join(ROOT,'build/'+NAME+'.json'),JSON.stringify({authoringDependencies,codeBlocks:used,questionReferences,knowledgeIntroductions,knowledgeDependencies,knowledgeHelperSha256:sha(await fs.readFile(new URL('./knowledge.mjs',import.meta.url))),headings,sourceSha256:sha(draft),codeSha256:sha(source),markdownSha256:sha(md),htmlSha256:sha(html),builderSha256:sha(await fs.readFile(fileURLToPath(import.meta.url))),learningSha256:sha(learningBytes),publicationsSha256:sha(publicationBytes),markdownBytes:Buffer.byteLength(md),htmlBytes:Buffer.byteLength(html)},null,2)+'\n','utf8');
 console.log(JSON.stringify({codeBlocks:used.length,sections:headings.filter(h=>h.depth===2).length,topics:headings.filter(h=>h.depth===3).length,markdownBytes:Buffer.byteLength(md)}));
 

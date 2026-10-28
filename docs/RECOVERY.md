@@ -4,7 +4,9 @@
 
 首章恢复先确认出版/章节登记是明确的有效空集合；文件缺失或状态矛盾不是空库。coordinationContext=no-prior-chapters表示已核前沿没有其他正式章，alignment与scope-review仍保留真实空说明，所有其他研究与内容要求照常。前沿变动或状态错误先处理，不沿用旧空上下文；本章登记排除自身，真实其他章到来须重新协同。
 
-当前硬协议是大思想领域为章、前置思想理论、正式节为题型；手写与真实标准设施、必要C++和每节1–5题共同承载。2026-10-28曾撤回清零（withdraw-all-20261028），随后第一章“二分”按新流程独立研究并建立内容；当前任务为first-chapter-20261028。先核其study-status、当前章合同与质量，再查实际部署收据，不把准备包当上线。教材和原题证据保留，旧稿只在Git历史中恢复，不默认重用；历史job/旧采用与候选模式不构成现行内容或章界。用`course chapters`和`course quality`恢复真实状态；本章之外无其他正式章时协同仍为空，下一章则须实际协同第一章。
+当前硬协议是大思想领域为章，主结构只有前置思想理论与正式题型节；手写与真实标准设施、必要C++和每节1–5题共同承载。2026-10-28曾撤回清零（withdraw-all-20261028），随后第一章“二分”独立研究并建立内容，研究归档为first-chapter-20261028；其后的编纂工程任务见work/editorial-rebuild-20261028/plan.md。先核study-status、当前章合同与质量，再查实际部署收据，不把准备包当上线。教材和原题证据保留，旧稿只在Git历史中恢复，不默认重用；历史job/旧采用与候选模式不构成现行内容或章界。用`course chapters`和`course quality`恢复真实状态；本章之外无其他正式章时协同仍为空，下一章则须实际协同第一章。
+
+正式采用要求章合同schema3和单一逻辑文档，内部多稿通过composition按节装配。恢复时同时读sourceFiles、prelude/sections顺序、codeSources及manifest的authoringDependencies，核当前字节，不能把旧四稿构建通过当作当前成品。reading.units的researchTypeIds须完整映射已研究对象，可多对多；编辑负责路径、逐题型作者负责完整链条、整章总编负责连续通读与全范围回查。不得为改编排去改写旧研究归档，schema1/2只作历史技术读入。
 
 权威关系为catalog/chapters.json、catalog/learning.json和schema2出版登记。正文/代码/独立知识源各自唯一；知识内部身份不外显，后续术语浮窗复用，不把C++去重扩成算法跨章内容只能讲一次。旧双线、trial、原稿和cases/patterns是素材，不是当前范围或兼容义务。
 

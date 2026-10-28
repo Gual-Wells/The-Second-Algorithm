@@ -220,8 +220,8 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
         // or the first manuscript in a multi-part chapter.
         for (const chapter of catalog.collections) for (const document of chapter.documents) {
           await page.goto(`${origin}/#/read/${chapter.id}/${document.id}`);
-          await page.waitForFunction(id => document.querySelector('#documentTabs [aria-selected="true"]')?.dataset.document === id
-            || document.querySelector('#documentSelect')?.value === id, document.id);
+          await page.waitForFunction(id => window.__refinement.state.active?.meta.id === id
+            && !window.__refinement.state.restoring, document.id);
           await page.locator('#readingArticle .code-block').first().waitFor();
           const current = await page.evaluate(() => ({
             outer: document.documentElement.scrollWidth, viewport: innerWidth,
@@ -233,6 +233,94 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
           assert.doesNotMatch(current.text, /Q\d{6}/, document.id + ': exposed knowledge identity');
           await page.screenshot({ path: path.join(output, `current-${document.id}-402x874.png`) });
         }
+        const binary = catalog.collections.find(chapter => chapter.id === 'chapter-01');
+        assert.equal(binary.documents.length, 1, 'the current binary chapter has one logical reader document');
+        assert.equal(binary.documents[0].id, 'binary-search');
+        const composition = JSON.parse(await fs.readFile(path.join(root, 'content/binary/chapter.authoring.json'), 'utf8'));
+        const selections = [composition.prelude, ...composition.sections];
+        assert.equal(selections.length, 38, 'this is the current chapter scope, not a generic UI limit');
+        await page.goto(`${origin}/#/read/${binary.id}/binary-search`);
+        await page.waitForFunction(() => window.__refinement.state.active?.meta.id === 'binary-search'
+          && !window.__refinement.state.restoring);
+        assert.equal(await page.locator('#documentTabs').isVisible(), false);
+        const mainSections = await page.locator('#readingArticle').evaluate((article, anchors) => {
+          const headings = [...article.querySelectorAll('h2[id]')];
+          return anchors.map(anchor => {
+            const marker = [...article.querySelectorAll('[id]')].find(node => node.id === anchor);
+            const heading = marker && headings.find(node => marker.compareDocumentPosition(node) & Node.DOCUMENT_POSITION_FOLLOWING);
+            return { anchor, id: heading?.id, title: heading?.textContent, index: headings.indexOf(heading) };
+          });
+        }, selections.map(selection => selection.anchor));
+        assert.deepEqual(mainSections.map(section => section.index), selections.map((_, index) => index),
+          'rendered H2 order must follow the explicit composition across all four author files');
+        assert.equal(await page.locator('#readingArticle h2').count(), 38);
+        await page.locator('#tocButton').click();
+        assert.deepEqual(await page.locator('#tocResults .toc-row').evaluateAll(rows => rows.map(row => ({
+          id: row.dataset.anchor, title: row.textContent
+        }))), mainSections.map(section => ({ id: section.id, title: section.title })));
+        assert.equal(await page.locator('#tocResults .depth-3,#tocResults .toc-group').count(), 0,
+          'the reader directory exposes main sections without internal manuscripts or H3 subheadings');
+        await page.screenshot({ path: path.join(output, 'current-main-section-directory.png') });
+        await page.locator('[data-sheet-close]').click();
+        await page.waitForFunction(() => !document.querySelector('#sheetDialog').open);
+        const ordered = mainSections.find(section => section.anchor === 'ordered-boundaries');
+        const dynamic = mainSections.find(section => section.anchor === 'fenwick-rank');
+        assert(ordered && dynamic);
+        // Reaching an implementation H3 keeps the question type as the footer
+        // title; progress is calculated across the entire composed chapter.
+        await page.locator('#readingArticle').evaluate((article, id) => {
+          const children = [...article.children], index = children.findIndex(node => node.id === id);
+          const detail = children.slice(index + 1).find(node => node.tagName === 'H3');
+          if (!detail) throw new Error('Expected a real implementation subheading');
+          detail.scrollIntoView({ block: 'start' });
+        }, ordered.id);
+        await page.waitForFunction(title => document.querySelector('#progressLabel span').textContent === title, ordered.title);
+        const expectedProgress = await page.locator('#readingPane').evaluate(node =>
+          Math.round(100 * node.scrollTop / (node.scrollHeight - node.clientHeight)));
+        await page.waitForFunction(value => Number(document.querySelector('#progressLabel').getAttribute('aria-valuenow')) === value,
+          expectedProgress);
+        assert.equal(Number(await page.locator('#progressLabel').getAttribute('aria-valuenow')), expectedProgress);
+        for (const [query, expected] of [['有序数据 equal_range', ordered], ['动态频数 kth', dynamic]]) {
+          await page.locator('#tocButton').click();
+          await page.locator('#tocSearch').fill(query);
+          await page.locator('#tocResults .search-row').first().waitFor();
+          const hits = await page.locator('#tocResults .search-row').evaluateAll(rows => rows.map(row => ({
+            document: row.dataset.goDocument, title: row.querySelector('strong')?.textContent
+          })));
+          assert(hits.some(hit => hit.document === 'binary-search' && hit.title?.includes(expected.title)),
+            query + ': title and implementation tokens must combine within the parent question type');
+          await page.screenshot({ path: path.join(output, `current-search-${expected.anchor}.png`) });
+          assert((await page.locator('#sheetBody').evaluate(node => node.scrollTop)) < 3,
+            query + ': fresh search results must start at the top instead of keeping the old directory scroll');
+          await page.locator('#tocResults .search-row[data-go-document="binary-search"]').first().click();
+          await page.waitForFunction(() => !document.querySelector('#sheetDialog').open && !window.__refinement.state.restoring);
+          assert.equal(await page.evaluate(() => window.__refinement.state.active.meta.id), 'binary-search');
+          await page.waitForFunction(title => document.querySelector('#progressLabel span').textContent === title, expected.title);
+          assert.equal(await page.locator('#progressLabel span').innerText(), expected.title);
+        }
+        const beforeKnowledge = await page.evaluate(() => ({ top: document.querySelector('#readingPane').scrollTop,
+          hash: location.hash, progress: document.querySelector('#progressLabel').textContent }));
+        await page.locator('#tocButton').click(); await page.locator('#tocSearch').fill('严格弱序');
+        const knowledgeHit = page.locator('#tocResults .search-row[data-knowledge]').first();
+        await knowledgeHit.waitFor();
+        const knowledgeId = await knowledgeHit.getAttribute('data-knowledge');
+        const knowledge = catalog.questions.find(question => question.id === knowledgeId);
+        assert(knowledge, 'a knowledge result must resolve to an actually published knowledge card');
+        assert.equal(await knowledgeHit.locator('strong').innerText(), knowledge.title);
+        assert.doesNotMatch(await knowledgeHit.innerText(), /Q\d{6}/);
+        await page.screenshot({ path: path.join(output, 'current-knowledge-search.png') });
+        assert((await page.locator('#sheetBody').evaluate(node => node.scrollTop)) < 3,
+          'knowledge results must be visible from their start before any automated click scrolls them into view');
+        await knowledgeHit.click(); await page.locator('.knowledge-paper').waitFor();
+        assert.equal(await page.locator('#sheetTitle').innerText(), knowledge.title);
+        await page.locator('[data-sheet-close]').click();
+        await page.waitForFunction(() => !document.querySelector('#sheetDialog').open);
+        const afterKnowledge = await page.evaluate(() => ({ top: document.querySelector('#readingPane').scrollTop,
+          hash: location.hash, progress: document.querySelector('#progressLabel').textContent }));
+        assert.equal(afterKnowledge.hash, beforeKnowledge.hash);
+        assert.equal(afterKnowledge.progress, beforeKnowledge.progress);
+        assert(Math.abs(afterKnowledge.top - beforeKnowledge.top) < 3,
+          JSON.stringify({ beforeKnowledge, afterKnowledge }));
         await page.locator('#readingArticle [data-knowledge]').first().click();
         await page.locator('.knowledge-paper').waitFor();
         assert.doesNotMatch(await page.locator('#sheetTitle').innerText(), /Q\d{6}/);
@@ -251,6 +339,12 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
           assert.equal(await page.locator('#readingArticle .code-block').count() > 0, true);
         }
         assert.deepEqual(real.mock.errors, []);
+      } catch (error) {
+        for (const [index, page] of real.context.pages().entries()) {
+          await page.screenshot({ path: path.join(output, `current-publication-failure-${index}.png`) }).catch(() => {});
+          await fs.writeFile(path.join(output, `current-publication-failure-${index}.txt`), await page.locator('body').innerText()).catch(() => {});
+        }
+        throw error;
       } finally { await real.context.close(); }
     });
 

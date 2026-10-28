@@ -1,0 +1,530 @@
+{
+  "document": "binary-selection",
+  "path": "content/binary/selection",
+  "target": {
+    "id": "chapter01-selection",
+    "kind": "run",
+    "source": "tests/cpp/chapter01_selection.cpp",
+    "standard": "c++17",
+    "timeoutSeconds": 120
+  },
+  "units": [
+    {
+      "id": "pigeonhole-domain",
+      "title": "值域容量异常：重复与缺失",
+      "anchor": "pigeonhole-domain",
+      "manualAnchor": "pigeonhole-domain-manual",
+      "standardAnchor": "pigeonhole-domain-standard",
+      "engineeringAnchor": "pigeonhole-domain-engineering",
+      "standardRole": {
+        "kind": "support",
+        "explanation": "count_if替代扫描计数，共用值域边界；欠满区间为存在性变型，不冒称Floyd同算法。"
+      },
+      "implementations": [
+        {
+          "id": "selection-duplicate-manual",
+          "kind": "manual",
+          "symbol": "duplicate_manual",
+          "regions": [
+            "duplicate-manual"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100003"
+          ],
+          "complexity": {
+            "time": "O(n log n)",
+            "space": "O(1)"
+          },
+          "method": "duplicate-count"
+        },
+        {
+          "id": "selection-duplicate-standard",
+          "kind": "standard",
+          "symbol": "duplicate_standard",
+          "regions": [
+            "duplicate-standard"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100003"
+          ],
+          "complexity": {
+            "time": "O(n log n)",
+            "space": "O(1)"
+          },
+          "method": "duplicate-count"
+        },
+        {
+          "id": "selection-missing-domain",
+          "kind": "alternative",
+          "symbol": "missing_domain",
+          "regions": [
+            "missing-domain"
+          ],
+          "questions": [
+            "Q100002"
+          ],
+          "complexity": {
+            "time": "O(n log U)",
+            "space": "O(1)"
+          },
+          "method": "underfilled-domain"
+        }
+      ]
+    },
+    {
+      "id": "weighted-inverse",
+      "title": "累计权重的逆查询与采样",
+      "anchor": "weighted-inverse",
+      "manualAnchor": "weighted-inverse-manual",
+      "standardAnchor": "weighted-inverse-standard",
+      "engineeringAnchor": "weighted-inverse-engineering",
+      "standardRole": {
+        "kind": "algorithm",
+        "explanation": "partial_sum建立64位累计，lower_bound查票号，uniform_int_distribution负责无偏整数票号。"
+      },
+      "implementations": [
+        {
+          "id": "selection-ticket-manual",
+          "kind": "manual",
+          "symbol": "ticket_manual",
+          "regions": [
+            "weighted-manual"
+          ],
+          "questions": [
+            "Q100002"
+          ],
+          "complexity": {
+            "time": "O(n) preprocessing; O(log n) query",
+            "space": "O(n)"
+          },
+          "method": "cumulative-inverse"
+        },
+        {
+          "id": "selection-ticket-standard",
+          "kind": "standard",
+          "symbol": "ticket_standard",
+          "regions": [
+            "weighted-standard"
+          ],
+          "questions": [
+            "Q100001",
+            "Q100002",
+            "Q100010"
+          ],
+          "complexity": {
+            "time": "O(n) preprocessing; O(log n) query",
+            "space": "O(n)"
+          },
+          "method": "cumulative-inverse"
+        },
+        {
+          "id": "selection-sample",
+          "kind": "standard",
+          "symbol": "sample_index",
+          "regions": [
+            "weighted-standard"
+          ],
+          "questions": [
+            "Q100010"
+          ],
+          "complexity": {
+            "time": "O(log n) plus distribution cost",
+            "space": "O(1) beyond prefix"
+          },
+          "method": "sampling"
+        }
+      ]
+    },
+    {
+      "id": "matrix-rank",
+      "title": "行列有序矩阵秩：楼梯计数",
+      "anchor": "matrix-rank",
+      "manualAnchor": "matrix-rank-manual",
+      "standardAnchor": "matrix-rank-standard",
+      "engineeringAnchor": "matrix-rank-engineering",
+      "standardRole": {
+        "kind": "algorithm",
+        "explanation": "upper_bound逐行计数，检查O(R log C)，与楼梯O(R+C)区别。"
+      },
+      "implementations": [
+        {
+          "id": "selection-matrix-manual",
+          "kind": "manual",
+          "symbol": "matrix_kth_manual",
+          "regions": [
+            "matrix-rank-manual"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100003"
+          ],
+          "complexity": {
+            "time": "O((R+C) log V)",
+            "space": "O(1)"
+          },
+          "method": "staircase-rank"
+        },
+        {
+          "id": "selection-matrix-standard",
+          "kind": "standard",
+          "symbol": "matrix_kth_standard",
+          "regions": [
+            "matrix-rank-standard"
+          ],
+          "questions": [
+            "Q100001",
+            "Q100002",
+            "Q100003"
+          ],
+          "complexity": {
+            "time": "O(R log C log V)",
+            "space": "O(1)"
+          },
+          "method": "row-bound-rank"
+        }
+      ]
+    },
+    {
+      "id": "pair-distance-rank",
+      "title": "数对距离秩：窗口计数反求第 k 小",
+      "anchor": "pair-distance-rank",
+      "manualAnchor": "pair-distance-rank-manual",
+      "standardAnchor": "pair-distance-rank-standard",
+      "engineeringAnchor": "pair-distance-rank-engineering",
+      "standardRole": {
+        "kind": "algorithm",
+        "explanation": "每左端upper_bound与双指针是两种计数组织，明确额外log。"
+      },
+      "implementations": [
+        {
+          "id": "selection-pairs-manual",
+          "kind": "manual",
+          "symbol": "pair_distance_manual",
+          "regions": [
+            "pair-rank-manual"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100004"
+          ],
+          "complexity": {
+            "time": "O(n log n+n log V)",
+            "space": "O(n) copied input"
+          },
+          "method": "window-rank"
+        },
+        {
+          "id": "selection-pairs-standard",
+          "kind": "standard",
+          "symbol": "pair_distance_standard",
+          "regions": [
+            "pair-rank-standard"
+          ],
+          "questions": [
+            "Q100001",
+            "Q100002",
+            "Q100004"
+          ],
+          "complexity": {
+            "time": "O(n log n+n log n log V)",
+            "space": "O(n) copied input"
+          },
+          "method": "bound-rank"
+        }
+      ]
+    },
+    {
+      "id": "multiplication-rank",
+      "title": "乘法表秩：解析计数巨大隐式集合",
+      "anchor": "multiplication-rank",
+      "manualAnchor": "multiplication-rank-manual",
+      "standardAnchor": "multiplication-rank-standard",
+      "engineeringAnchor": "multiplication-rank-engineering",
+      "standardRole": {
+        "kind": "support",
+        "explanation": "std::min只替换单行解析贡献，std::swap选短边；整题复用唯一值域搜索和计数主体，不复制整份wrapper。"
+      },
+      "implementations": [
+        {
+          "id": "selection-multiply-manual",
+          "kind": "manual",
+          "symbol": "multiplication_kth_manual",
+          "regions": [
+            "multiplication-manual"
+          ],
+          "questions": [
+            "Q100002"
+          ],
+          "complexity": {
+            "time": "O(min(m,n) log(mn))",
+            "space": "O(1)"
+          },
+          "method": "analytic-rank"
+        },
+        {
+          "id": "selection-multiply-standard",
+          "kind": "standard",
+          "symbol": "multiplication_row_standard",
+          "regions": [
+            "multiplication-standard"
+          ],
+          "questions": [
+            "Q100002"
+          ],
+          "complexity": {
+            "time": "单行贡献O(1)；完整算法仍O(min(m,n) log(mn))",
+            "space": "O(1)"
+          },
+          "method": "analytic-rank"
+        }
+      ]
+    },
+    {
+      "id": "two-sorted-partition",
+      "title": "两有序数组中位：在合法分割位置二分",
+      "anchor": "two-sorted-partition",
+      "manualAnchor": "two-sorted-partition-manual",
+      "standardAnchor": "two-sorted-partition-standard",
+      "engineeringAnchor": "two-sorted-partition-engineering",
+      "standardRole": {
+        "kind": "algorithm",
+        "explanation": "merge给真实线性合并基线，不满足LC4对数合同；正文明确是不同算法。"
+      },
+      "implementations": [
+        {
+          "id": "selection-two-kth",
+          "kind": "manual",
+          "symbol": "two_array_kth",
+          "regions": [
+            "two-array-manual"
+          ],
+          "questions": [
+            "Q100002"
+          ],
+          "complexity": {
+            "time": "O(log(min(m,n)+1))",
+            "space": "O(1)"
+          },
+          "method": "cross-partition"
+        },
+        {
+          "id": "selection-two-median",
+          "kind": "manual",
+          "symbol": "two_array_median",
+          "regions": [
+            "two-array-manual"
+          ],
+          "questions": [
+            "Q100002"
+          ],
+          "complexity": {
+            "time": "O(log(min(m,n)+1))",
+            "space": "O(1)"
+          },
+          "method": "cross-partition"
+        },
+        {
+          "id": "selection-two-merge",
+          "kind": "standard",
+          "symbol": "two_array_merge",
+          "regions": [
+            "two-array-standard"
+          ],
+          "questions": [
+            "Q100005"
+          ],
+          "complexity": {
+            "time": "O(m+n)",
+            "space": "O(m+n)"
+          },
+          "method": "merge-baseline"
+        }
+      ]
+    },
+    {
+      "id": "ordered-dp-frontier",
+      "title": "DP 有序前沿：最小尾值与二分替换",
+      "anchor": "ordered-dp-frontier",
+      "manualAnchor": "ordered-dp-frontier-manual",
+      "standardAnchor": "ordered-dp-frontier-standard",
+      "engineeringAnchor": "ordered-dp-frontier-engineering",
+      "standardRole": {
+        "kind": "algorithm",
+        "explanation": "lower/upper替换真实tail定位，共享恢复核心；信封排序与计数DP分成实际方法。"
+      },
+      "implementations": [
+        {
+          "id": "selection-lis-manual",
+          "kind": "manual",
+          "symbol": "lis_manual",
+          "regions": [
+            "lis-manual"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100005",
+            "Q100013"
+          ],
+          "complexity": {
+            "time": "O(n log n)",
+            "space": "O(n)"
+          },
+          "method": "minimal-tail"
+        },
+        {
+          "id": "selection-lis-standard",
+          "kind": "standard",
+          "symbol": "lis_standard",
+          "regions": [
+            "lis-standard"
+          ],
+          "questions": [
+            "Q100001",
+            "Q100005",
+            "Q100013"
+          ],
+          "complexity": {
+            "time": "O(n log n)",
+            "space": "O(n)"
+          },
+          "method": "minimal-tail"
+        },
+        {
+          "id": "selection-envelopes",
+          "kind": "standard",
+          "symbol": "envelopes_standard",
+          "regions": [
+            "envelopes-standard"
+          ],
+          "questions": [
+            "Q100004",
+            "Q100005",
+            "Q100013"
+          ],
+          "complexity": {
+            "time": "O(n log n)",
+            "space": "O(n)"
+          },
+          "method": "envelope-reduction"
+        },
+        {
+          "id": "selection-lis-count",
+          "kind": "alternative",
+          "symbol": "lis_count",
+          "regions": [
+            "lis-count"
+          ],
+          "questions": [
+            "Q100002"
+          ],
+          "complexity": {
+            "time": "O(n^2)",
+            "space": "O(n)"
+          },
+          "method": "length-count-dp"
+        }
+      ]
+    },
+    {
+      "id": "weighted-predecessor",
+      "title": "带权兼容调度：二分定位 DP 前驱",
+      "anchor": "weighted-predecessor",
+      "manualAnchor": "weighted-predecessor-manual",
+      "standardAnchor": "weighted-predecessor-standard",
+      "engineeringAnchor": "weighted-predecessor-engineering",
+      "standardRole": {
+        "kind": "algorithm",
+        "explanation": "lower/upper按不同题目端点替代前驱扫描，DP共享。"
+      },
+      "implementations": [
+        {
+          "id": "selection-jobs-manual",
+          "kind": "manual",
+          "symbol": "jobs_manual",
+          "regions": [
+            "jobs-manual"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100004",
+            "Q100005"
+          ],
+          "complexity": {
+            "time": "O(n log n)",
+            "space": "O(n)"
+          },
+          "method": "weighted-interval-dp"
+        },
+        {
+          "id": "selection-jobs-standard",
+          "kind": "standard",
+          "symbol": "jobs_standard",
+          "regions": [
+            "jobs-standard"
+          ],
+          "questions": [
+            "Q100001",
+            "Q100002",
+            "Q100004",
+            "Q100005"
+          ],
+          "complexity": {
+            "time": "O(n log n)",
+            "space": "O(n)"
+          },
+          "method": "weighted-interval-dp"
+        }
+      ]
+    },
+    {
+      "id": "resource-queries",
+      "title": "查询会消耗资源：反求最少试探次数",
+      "anchor": "resource-queries",
+      "manualAnchor": "resource-queries-manual",
+      "standardAnchor": "resource-queries-standard",
+      "engineeringAnchor": "resource-queries-engineering",
+      "standardRole": {
+        "kind": "support",
+        "explanation": "vector和min承载另一覆盖DP，明确非标准整题解，与组合判定二分不同求值算法。"
+      },
+      "implementations": [
+        {
+          "id": "selection-eggs-search",
+          "kind": "manual",
+          "symbol": "egg_moves_manual",
+          "regions": [
+            "egg-manual"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100003"
+          ],
+          "complexity": {
+            "time": "O(k log n)",
+            "space": "O(1)"
+          },
+          "method": "inverse-coverage"
+        },
+        {
+          "id": "selection-eggs-dp",
+          "kind": "alternative",
+          "symbol": "egg_moves_coverage",
+          "regions": [
+            "egg-standard"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100005"
+          ],
+          "complexity": {
+            "time": "O(k * answer)",
+            "space": "O(k)"
+          },
+          "method": "coverage-dp"
+        }
+      ]
+    }
+  ]
+}

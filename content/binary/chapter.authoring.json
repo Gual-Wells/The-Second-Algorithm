@@ -1,0 +1,207 @@
+{
+  "schemaVersion": 1,
+  "title": "二分",
+  "sourceFiles": [
+    "content/binary/boundary.source.md",
+    "content/binary/decision.source.md",
+    "content/binary/selection.source.md",
+    "content/binary/advanced.source.md"
+  ],
+  "prelude": {
+    "source": "content/binary/boundary.source.md",
+    "anchor": "prelude"
+  },
+  "sections": [
+    {
+      "id": "ordered-boundaries",
+      "source": "content/binary/boundary.source.md",
+      "anchor": "ordered-boundaries"
+    },
+    {
+      "id": "predicate-access",
+      "source": "content/binary/boundary.source.md",
+      "anchor": "predicate-access"
+    },
+    {
+      "id": "transformed-index",
+      "source": "content/binary/boundary.source.md",
+      "anchor": "transformed-index"
+    },
+    {
+      "id": "rotated-search",
+      "source": "content/binary/boundary.source.md",
+      "anchor": "rotated-search"
+    },
+    {
+      "id": "paired-break",
+      "source": "content/binary/boundary.source.md",
+      "anchor": "paired-break"
+    },
+    {
+      "id": "local-peak",
+      "source": "content/binary/boundary.source.md",
+      "anchor": "local-peak"
+    },
+    {
+      "id": "matrix-membership",
+      "source": "content/binary/boundary.source.md",
+      "anchor": "matrix-membership"
+    },
+    {
+      "id": "integer-root",
+      "source": "content/binary/boundary.source.md",
+      "anchor": "integer-root"
+    },
+    {
+      "id": "capacity-partition",
+      "source": "content/binary/decision.source.md",
+      "anchor": "capacity-partition"
+    },
+    {
+      "id": "maximin-spacing",
+      "source": "content/binary/decision.source.md",
+      "anchor": "maximin-spacing"
+    },
+    {
+      "id": "cumulative-production",
+      "source": "content/binary/decision.source.md",
+      "anchor": "cumulative-production"
+    },
+    {
+      "id": "ordered-simulation",
+      "source": "content/binary/decision.source.md",
+      "anchor": "ordered-simulation"
+    },
+    {
+      "id": "graph-threshold",
+      "source": "content/binary/decision.source.md",
+      "anchor": "graph-threshold"
+    },
+    {
+      "id": "prefix-activation",
+      "source": "content/binary/decision.source.md",
+      "anchor": "prefix-activation"
+    },
+    {
+      "id": "weighted-inverse",
+      "source": "content/binary/selection.source.md",
+      "anchor": "weighted-inverse"
+    },
+    {
+      "id": "pigeonhole-domain",
+      "source": "content/binary/selection.source.md",
+      "anchor": "pigeonhole-domain"
+    },
+    {
+      "id": "matrix-rank",
+      "source": "content/binary/selection.source.md",
+      "anchor": "matrix-rank"
+    },
+    {
+      "id": "multiplication-rank",
+      "source": "content/binary/selection.source.md",
+      "anchor": "multiplication-rank"
+    },
+    {
+      "id": "pair-distance-rank",
+      "source": "content/binary/selection.source.md",
+      "anchor": "pair-distance-rank"
+    },
+    {
+      "id": "two-sorted-partition",
+      "source": "content/binary/selection.source.md",
+      "anchor": "two-sorted-partition"
+    },
+    {
+      "id": "ordered-dp-frontier",
+      "source": "content/binary/selection.source.md",
+      "anchor": "ordered-dp-frontier"
+    },
+    {
+      "id": "weighted-predecessor",
+      "source": "content/binary/selection.source.md",
+      "anchor": "weighted-predecessor"
+    },
+    {
+      "id": "resource-queries",
+      "source": "content/binary/selection.source.md",
+      "anchor": "resource-queries"
+    },
+    {
+      "id": "matrix-peak",
+      "source": "content/binary/boundary.source.md",
+      "anchor": "matrix-peak"
+    },
+    {
+      "id": "string-prefix",
+      "source": "content/binary/boundary.source.md",
+      "anchor": "string-prefix"
+    },
+    {
+      "id": "continuous-root",
+      "source": "content/binary/boundary.source.md",
+      "anchor": "continuous-root"
+    },
+    {
+      "id": "average-transform",
+      "source": "content/binary/decision.source.md",
+      "anchor": "average-transform"
+    },
+    {
+      "id": "ratio-selection",
+      "source": "content/binary/decision.source.md",
+      "anchor": "ratio-selection"
+    },
+    {
+      "id": "convex-location",
+      "source": "content/binary/boundary.source.md",
+      "anchor": "convex-location"
+    },
+    {
+      "id": "matching-threshold",
+      "source": "content/binary/decision.source.md",
+      "anchor": "matching-threshold"
+    },
+    {
+      "id": "fenwick-rank",
+      "source": "content/binary/advanced.source.md",
+      "anchor": "fenwick-rank"
+    },
+    {
+      "id": "summary-descent",
+      "source": "content/binary/advanced.source.md",
+      "anchor": "summary-descent"
+    },
+    {
+      "id": "ancestor-boundary",
+      "source": "content/binary/advanced.source.md",
+      "anchor": "ancestor-boundary"
+    },
+    {
+      "id": "cyclic-jump",
+      "source": "content/binary/advanced.source.md",
+      "anchor": "cyclic-jump"
+    },
+    {
+      "id": "time-parallel-search",
+      "source": "content/binary/advanced.source.md",
+      "anchor": "time-parallel-search"
+    },
+    {
+      "id": "dynamic-range-kth",
+      "source": "content/binary/advanced.source.md",
+      "anchor": "dynamic-range-kth"
+    },
+    {
+      "id": "marginal-penalty",
+      "source": "content/binary/advanced.source.md",
+      "anchor": "marginal-penalty"
+    }
+  ],
+  "codeSources": [
+    "content/binary/boundary.cpp",
+    "content/binary/decision.cpp",
+    "content/binary/selection.cpp",
+    "content/binary/advanced.cpp"
+  ]
+}

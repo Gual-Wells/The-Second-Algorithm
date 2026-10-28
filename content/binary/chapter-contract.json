@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "chapter": "chapter-01",
   "title": "二分",
   "researchHandoff": "work/jobs/first-chapter-20261028/study/handoffs/30fca997eabc41e0a39dd8eff7adaf45.json",
@@ -829,6 +829,27 @@
       "locator": "Final continuous reading of the four manuscripts and research-to-publication promises",
       "evidence": "work/first-chapter-20261028/edition-independent-review.md",
       "sourcePaths": []
+    },
+    {
+      "id": "editorial-content-changes",
+      "kind": "countercheck",
+      "locator": "本轮逐型编纂更正及作者实际回归",
+      "evidence": "work/editorial-rebuild-20261028/content-changes.md",
+      "sourcePaths": []
+    },
+    {
+      "id": "editorial-prelude-review",
+      "kind": "countercheck",
+      "locator": "非前置作者对根重写前置的实际审读",
+      "evidence": "work/editorial-rebuild-20261028/prelude-review.md",
+      "sourcePaths": []
+    },
+    {
+      "id": "editorial-independent-review",
+      "kind": "countercheck",
+      "locator": "本轮从读者顺序检查统一生成教材",
+      "evidence": "work/editorial-rebuild-20261028/independent-review.md",
+      "sourcePaths": []
     }
   ],
   "paradigm": {
@@ -986,8 +1007,8 @@
           "ordered-simulation",
           "graph-threshold",
           "prefix-activation",
-          "matching-threshold",
-          "resource-queries"
+          "resource-queries",
+          "matching-threshold"
         ],
         "crossParadigms": [
           "差分",
@@ -1035,11 +1056,11 @@
           "epi-two-array-selection"
         ],
         "sectionIds": [
-          "pigeonhole-domain",
           "weighted-inverse",
+          "pigeonhole-domain",
           "matrix-rank",
-          "pair-distance-rank",
           "multiplication-rank",
+          "pair-distance-rank",
           "two-sorted-partition"
         ],
         "crossParadigms": [
@@ -1251,7 +1272,7 @@
     "status": "addressed",
     "locations": [
       {
-        "document": "binary-boundary",
+        "document": "binary-search",
         "anchor": "prelude"
       }
     ]
@@ -1259,22 +1280,19 @@
   "reading": {
     "status": "addressed",
     "gap": "",
-    "entry": [
-      {
-        "document": "binary-boundary",
-        "anchor": "prelude"
-      }
-    ],
     "units": [
       {
         "id": "ordered-boundaries",
         "title": "有序数据的边界、计数与前驱",
+        "researchTypeIds": [
+          "ordered-boundaries"
+        ],
         "taskIds": [
           "task-ordered-boundaries"
         ],
         "locations": [
           {
-            "document": "binary-boundary",
+            "document": "binary-search",
             "anchor": "ordered-boundaries"
           }
         ],
@@ -1282,49 +1300,49 @@
         "facets": {
           "problem": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "ordered-boundaries"
             }
           ],
           "fit": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "ordered-boundaries"
             }
           ],
           "variation": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "ordered-boundaries"
             }
           ],
           "manual": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "ordered-boundaries-manual"
             }
           ],
           "manualExplanation": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "ordered-boundaries-manual"
             }
           ],
           "standard": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "ordered-boundaries-library"
             }
           ],
           "standardExplanation": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "ordered-boundaries-library"
             }
           ],
           "engineering": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "ordered-boundaries-engineering"
             }
           ]
@@ -1362,12 +1380,15 @@
       {
         "id": "predicate-access",
         "title": "昂贵访问与未知上界的首次满足",
+        "researchTypeIds": [
+          "predicate-access"
+        ],
         "taskIds": [
           "task-predicate-access"
         ],
         "locations": [
           {
-            "document": "binary-boundary",
+            "document": "binary-search",
             "anchor": "predicate-access"
           }
         ],
@@ -1377,49 +1398,49 @@
         "facets": {
           "problem": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "predicate-access"
             }
           ],
           "fit": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "predicate-access"
             }
           ],
           "variation": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "predicate-access"
             }
           ],
           "manual": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "predicate-access-manual"
             }
           ],
           "manualExplanation": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "predicate-access-manual"
             }
           ],
           "standard": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "predicate-access-library"
             }
           ],
           "standardExplanation": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "predicate-access-library"
             }
           ],
           "engineering": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "predicate-access-engineering"
             }
           ]
@@ -1445,12 +1466,15 @@
       {
         "id": "transformed-index",
         "title": "值与下标关系中的固定点和缺失数",
+        "researchTypeIds": [
+          "transformed-index"
+        ],
         "taskIds": [
           "task-transformed-index"
         ],
         "locations": [
           {
-            "document": "binary-boundary",
+            "document": "binary-search",
             "anchor": "transformed-index"
           }
         ],
@@ -1460,49 +1484,49 @@
         "facets": {
           "problem": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "transformed-index"
             }
           ],
           "fit": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "transformed-index"
             }
           ],
           "variation": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "transformed-index"
             }
           ],
           "manual": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "transformed-index-manual"
             }
           ],
           "manualExplanation": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "transformed-index-manual"
             }
           ],
           "standard": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "transformed-index-library"
             }
           ],
           "standardExplanation": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "transformed-index-library"
             }
           ],
           "engineering": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "transformed-index-engineering"
             }
           ]
@@ -1529,12 +1553,15 @@
       {
         "id": "rotated-search",
         "title": "旋转序列中的成员与最小值",
+        "researchTypeIds": [
+          "rotated-search"
+        ],
         "taskIds": [
           "task-rotated-search"
         ],
         "locations": [
           {
-            "document": "binary-boundary",
+            "document": "binary-search",
             "anchor": "rotated-search"
           }
         ],
@@ -1542,49 +1569,49 @@
         "facets": {
           "problem": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "rotated-search"
             }
           ],
           "fit": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "rotated-search"
             }
           ],
           "variation": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "rotated-search"
             }
           ],
           "manual": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "rotated-search-manual"
             }
           ],
           "manualExplanation": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "rotated-search-manual"
             }
           ],
           "standard": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "rotated-search-library"
             }
           ],
           "standardExplanation": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "rotated-search-library"
             }
           ],
           "engineering": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "rotated-search-engineering"
             }
           ]
@@ -1615,12 +1642,15 @@
       {
         "id": "paired-break",
         "title": "有序配对结构中的唯一异常",
+        "researchTypeIds": [
+          "paired-break"
+        ],
         "taskIds": [
           "task-paired-break"
         ],
         "locations": [
           {
-            "document": "binary-boundary",
+            "document": "binary-search",
             "anchor": "paired-break"
           }
         ],
@@ -1628,49 +1658,49 @@
         "facets": {
           "problem": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "paired-break"
             }
           ],
           "fit": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "paired-break"
             }
           ],
           "variation": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "paired-break"
             }
           ],
           "manual": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "paired-break-manual"
             }
           ],
           "manualExplanation": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "paired-break-manual"
             }
           ],
           "standard": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "paired-break-library"
             }
           ],
           "standardExplanation": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "paired-break-library"
             }
           ],
           "engineering": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "paired-break-engineering"
             }
           ]
@@ -1695,12 +1725,15 @@
       {
         "id": "local-peak",
         "title": "任意一维局部峰与单峰边界",
+        "researchTypeIds": [
+          "local-peak"
+        ],
         "taskIds": [
           "task-local-peak"
         ],
         "locations": [
           {
-            "document": "binary-boundary",
+            "document": "binary-search",
             "anchor": "local-peak"
           }
         ],
@@ -1708,49 +1741,49 @@
         "facets": {
           "problem": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "local-peak"
             }
           ],
           "fit": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "local-peak"
             }
           ],
           "variation": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "local-peak"
             }
           ],
           "manual": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "local-peak-manual"
             }
           ],
           "manualExplanation": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "local-peak-manual"
             }
           ],
           "standard": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "local-peak-library"
             }
           ],
           "standardExplanation": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "local-peak-library"
             }
           ],
           "engineering": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "local-peak-engineering"
             }
           ]
@@ -1773,96 +1806,17 @@
         ]
       },
       {
-        "id": "matrix-peak",
-        "title": "二维局部峰的存在性搜索",
-        "taskIds": [
-          "task-matrix-peak"
-        ],
-        "locations": [
-          {
-            "document": "binary-boundary",
-            "anchor": "matrix-peak"
-          }
-        ],
-        "dependsOn": [
-          "local-peak"
-        ],
-        "facets": {
-          "problem": [
-            {
-              "document": "binary-boundary",
-              "anchor": "matrix-peak"
-            }
-          ],
-          "fit": [
-            {
-              "document": "binary-boundary",
-              "anchor": "matrix-peak"
-            }
-          ],
-          "variation": [
-            {
-              "document": "binary-boundary",
-              "anchor": "matrix-peak"
-            }
-          ],
-          "manual": [
-            {
-              "document": "binary-boundary",
-              "anchor": "matrix-peak-manual"
-            }
-          ],
-          "manualExplanation": [
-            {
-              "document": "binary-boundary",
-              "anchor": "matrix-peak-manual"
-            }
-          ],
-          "standard": [
-            {
-              "document": "binary-boundary",
-              "anchor": "matrix-peak-library"
-            }
-          ],
-          "standardExplanation": [
-            {
-              "document": "binary-boundary",
-              "anchor": "matrix-peak-library"
-            }
-          ],
-          "engineering": [
-            {
-              "document": "binary-boundary",
-              "anchor": "matrix-peak-engineering"
-            }
-          ]
-        },
-        "manualImplementationIds": [
-          "boundary-matrix-peak"
-        ],
-        "standardImplementationIds": [
-          "boundary-matrix-peak-library"
-        ],
-        "standardRole": {
-          "kind": "shared-core",
-          "explanation": "共享matrix_peak_core的存在性二分，manual扫描列，standard用iota+max_element按列取行号；后者O(m)额外空间如实保留。"
-        },
-        "exercises": [
-          {
-            "title": "二维局部峰",
-            "url": "https://leetcode.com/problems/find-a-peak-element-ii/"
-          }
-        ]
-      },
-      {
         "id": "matrix-membership",
         "title": "二维有序数据中的存在性查找",
+        "researchTypeIds": [
+          "matrix-membership"
+        ],
         "taskIds": [
           "task-matrix-membership"
         ],
         "locations": [
           {
-            "document": "binary-boundary",
+            "document": "binary-search",
             "anchor": "matrix-membership"
           }
         ],
@@ -1870,49 +1824,49 @@
         "facets": {
           "problem": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "matrix-membership"
             }
           ],
           "fit": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "matrix-membership"
             }
           ],
           "variation": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "matrix-membership"
             }
           ],
           "manual": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "matrix-membership-manual"
             }
           ],
           "manualExplanation": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "matrix-membership-manual"
             }
           ],
           "standard": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "matrix-membership-library"
             }
           ],
           "standardExplanation": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "matrix-membership-library"
             }
           ],
           "engineering": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "matrix-membership-engineering"
             }
           ]
@@ -1941,12 +1895,15 @@
       {
         "id": "integer-root",
         "title": "不溢出的整数根与最后可行值",
+        "researchTypeIds": [
+          "integer-root"
+        ],
         "taskIds": [
           "task-integer-root"
         ],
         "locations": [
           {
-            "document": "binary-boundary",
+            "document": "binary-search",
             "anchor": "integer-root"
           }
         ],
@@ -1954,49 +1911,49 @@
         "facets": {
           "problem": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "integer-root"
             }
           ],
           "fit": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "integer-root"
             }
           ],
           "variation": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "integer-root"
             }
           ],
           "manual": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "integer-root-manual"
             }
           ],
           "manualExplanation": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "integer-root-manual"
             }
           ],
           "standard": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "integer-root-library"
             }
           ],
           "standardExplanation": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "integer-root-library"
             }
           ],
           "engineering": [
             {
-              "document": "binary-boundary",
+              "document": "binary-search",
               "anchor": "integer-root-engineering"
             }
           ]
@@ -2019,258 +1976,17 @@
         ]
       },
       {
-        "id": "continuous-root",
-        "title": "连续方程的异号夹逼与误差",
-        "taskIds": [
-          "task-continuous-root"
-        ],
-        "locations": [
-          {
-            "document": "binary-boundary",
-            "anchor": "continuous-root"
-          }
-        ],
-        "dependsOn": [],
-        "facets": {
-          "problem": [
-            {
-              "document": "binary-boundary",
-              "anchor": "continuous-root"
-            }
-          ],
-          "fit": [
-            {
-              "document": "binary-boundary",
-              "anchor": "continuous-root"
-            }
-          ],
-          "variation": [
-            {
-              "document": "binary-boundary",
-              "anchor": "continuous-root"
-            }
-          ],
-          "manual": [
-            {
-              "document": "binary-boundary",
-              "anchor": "continuous-root-manual"
-            }
-          ],
-          "manualExplanation": [
-            {
-              "document": "binary-boundary",
-              "anchor": "continuous-root-manual"
-            }
-          ],
-          "standard": [
-            {
-              "document": "binary-boundary",
-              "anchor": "continuous-root-library"
-            }
-          ],
-          "standardExplanation": [
-            {
-              "document": "binary-boundary",
-              "anchor": "continuous-root-library"
-            }
-          ],
-          "engineering": [
-            {
-              "document": "binary-boundary",
-              "anchor": "continuous-root-engineering"
-            }
-          ]
-        },
-        "manualImplementationIds": [
-          "boundary-continuous-root"
-        ],
-        "standardImplementationIds": [
-          "boundary-cubic-critical-library"
-        ],
-        "standardRole": {
-          "kind": "shared-core",
-          "explanation": "通用夹逼核心唯一；P1024用导数两临界点分三个各含一根的区间，monic归一、sqrt/fma实际计算，不靠整数端点恰零或epsilon合并。"
-        },
-        "exercises": [
-          {
-            "title": "一元三次方程求解",
-            "url": "https://www.luogu.com.cn/problem/P1024"
-          }
-        ]
-      },
-      {
-        "id": "string-prefix",
-        "title": "字典序前缀与比较成本",
-        "taskIds": [
-          "task-string-prefix"
-        ],
-        "locations": [
-          {
-            "document": "binary-boundary",
-            "anchor": "string-prefix"
-          }
-        ],
-        "dependsOn": [
-          "ordered-boundaries"
-        ],
-        "facets": {
-          "problem": [
-            {
-              "document": "binary-boundary",
-              "anchor": "string-prefix"
-            }
-          ],
-          "fit": [
-            {
-              "document": "binary-boundary",
-              "anchor": "string-prefix"
-            }
-          ],
-          "variation": [
-            {
-              "document": "binary-boundary",
-              "anchor": "string-prefix"
-            }
-          ],
-          "manual": [
-            {
-              "document": "binary-boundary",
-              "anchor": "string-prefix-manual"
-            }
-          ],
-          "manualExplanation": [
-            {
-              "document": "binary-boundary",
-              "anchor": "string-prefix-manual"
-            }
-          ],
-          "standard": [
-            {
-              "document": "binary-boundary",
-              "anchor": "string-prefix-library"
-            }
-          ],
-          "standardExplanation": [
-            {
-              "document": "binary-boundary",
-              "anchor": "string-prefix-library"
-            }
-          ],
-          "engineering": [
-            {
-              "document": "binary-boundary",
-              "anchor": "string-prefix-engineering"
-            }
-          ]
-        },
-        "manualImplementationIds": [
-          "boundary-prefix-range"
-        ],
-        "standardImplementationIds": [
-          "boundary-prefix-range-library",
-          "boundary-suggestions-library",
-          "boundary-lcp-library"
-        ],
-        "standardRole": {
-          "kind": "algorithm",
-          "explanation": "lower/upper_bound比较前缀；建议系统sort+区间取前三；mismatch为确定性线性LCP，明确优于朴素重复前缀二分。"
-        },
-        "exercises": [
-          {
-            "title": "搜索建议系统",
-            "url": "https://leetcode.com/problems/search-suggestions-system/"
-          }
-        ]
-      },
-      {
-        "id": "convex-location",
-        "title": "凸多边形中的扇区定位",
-        "taskIds": [
-          "task-convex-location"
-        ],
-        "locations": [
-          {
-            "document": "binary-boundary",
-            "anchor": "convex-location"
-          }
-        ],
-        "dependsOn": [],
-        "facets": {
-          "problem": [
-            {
-              "document": "binary-boundary",
-              "anchor": "convex-location"
-            }
-          ],
-          "fit": [
-            {
-              "document": "binary-boundary",
-              "anchor": "convex-location"
-            }
-          ],
-          "variation": [
-            {
-              "document": "binary-boundary",
-              "anchor": "convex-location"
-            }
-          ],
-          "manual": [
-            {
-              "document": "binary-boundary",
-              "anchor": "convex-location-manual"
-            }
-          ],
-          "manualExplanation": [
-            {
-              "document": "binary-boundary",
-              "anchor": "convex-location-manual"
-            }
-          ],
-          "standard": [
-            {
-              "document": "binary-boundary",
-              "anchor": "convex-location-library"
-            }
-          ],
-          "standardExplanation": [
-            {
-              "document": "binary-boundary",
-              "anchor": "convex-location-library"
-            }
-          ],
-          "engineering": [
-            {
-              "document": "binary-boundary",
-              "anchor": "convex-location-engineering"
-            }
-          ]
-        },
-        "manualImplementationIds": [
-          "boundary-convex-location"
-        ],
-        "standardImplementationIds": [
-          "boundary-convex-location-library"
-        ],
-        "standardRole": {
-          "kind": "algorithm",
-          "explanation": "partition_point真实替代扇区定位；叉积和边界射线证书仍共用，严格凸CCW及8e18预算不省略。"
-        },
-        "exercises": [
-          {
-            "title": "凸多边形多次点定位",
-            "url": "https://atcoder.jp/contests/abc296/tasks/abc296_g"
-          }
-        ]
-      },
-      {
         "id": "capacity-partition",
         "title": "连续容量分段：以最少段数判定最大段和",
+        "researchTypeIds": [
+          "capacity-partition"
+        ],
         "taskIds": [
           "task-capacity-partition"
         ],
         "locations": [
           {
-            "document": "binary-decision",
+            "document": "binary-search",
             "anchor": "capacity-partition"
           }
         ],
@@ -2278,49 +1994,49 @@
         "facets": {
           "problem": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "capacity-partition"
             }
           ],
           "fit": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "capacity-partition"
             }
           ],
           "variation": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "capacity-partition"
             }
           ],
           "manual": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "capacity-partition-manual"
             }
           ],
           "manualExplanation": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "capacity-partition-manual"
             }
           ],
           "standard": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "capacity-partition-standard"
             }
           ],
           "standardExplanation": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "capacity-partition-standard"
             }
           ],
           "engineering": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "capacity-partition-engineering"
             }
           ]
@@ -2349,12 +2065,15 @@
       {
         "id": "maximin-spacing",
         "title": "最大化最小间距：以最早放置保留空间",
+        "researchTypeIds": [
+          "maximin-spacing"
+        ],
         "taskIds": [
           "task-maximin-spacing"
         ],
         "locations": [
           {
-            "document": "binary-decision",
+            "document": "binary-search",
             "anchor": "maximin-spacing"
           }
         ],
@@ -2362,49 +2081,49 @@
         "facets": {
           "problem": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "maximin-spacing"
             }
           ],
           "fit": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "maximin-spacing"
             }
           ],
           "variation": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "maximin-spacing"
             }
           ],
           "manual": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "maximin-spacing-manual"
             }
           ],
           "manualExplanation": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "maximin-spacing-manual"
             }
           ],
           "standard": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "maximin-spacing-standard"
             }
           ],
           "standardExplanation": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "maximin-spacing-standard"
             }
           ],
           "engineering": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "maximin-spacing-engineering"
             }
           ]
@@ -2429,12 +2148,15 @@
       {
         "id": "cumulative-production",
         "title": "累计产能：反求达标最早时刻",
+        "researchTypeIds": [
+          "cumulative-production"
+        ],
         "taskIds": [
           "task-cumulative-production"
         ],
         "locations": [
           {
-            "document": "binary-decision",
+            "document": "binary-search",
             "anchor": "cumulative-production"
           }
         ],
@@ -2442,49 +2164,49 @@
         "facets": {
           "problem": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "cumulative-production"
             }
           ],
           "fit": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "cumulative-production"
             }
           ],
           "variation": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "cumulative-production"
             }
           ],
           "manual": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "cumulative-production-manual"
             }
           ],
           "manualExplanation": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "cumulative-production-manual"
             }
           ],
           "standard": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "cumulative-production-standard"
             }
           ],
           "standardExplanation": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "cumulative-production-standard"
             }
           ],
           "engineering": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "cumulative-production-engineering"
             }
           ]
@@ -2509,12 +2231,15 @@
       {
         "id": "ordered-simulation",
         "title": "并行台数：以事件模拟判定固定顺序队列",
+        "researchTypeIds": [
+          "ordered-simulation"
+        ],
         "taskIds": [
           "task-ordered-simulation"
         ],
         "locations": [
           {
-            "document": "binary-decision",
+            "document": "binary-search",
             "anchor": "ordered-simulation"
           }
         ],
@@ -2522,49 +2247,49 @@
         "facets": {
           "problem": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "ordered-simulation"
             }
           ],
           "fit": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "ordered-simulation"
             }
           ],
           "variation": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "ordered-simulation"
             }
           ],
           "manual": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "ordered-simulation-manual"
             }
           ],
           "manualExplanation": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "ordered-simulation-manual"
             }
           ],
           "standard": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "ordered-simulation-standard"
             }
           ],
           "standardExplanation": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "ordered-simulation-standard"
             }
           ],
           "engineering": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "ordered-simulation-engineering"
             }
           ]
@@ -2589,12 +2314,15 @@
       {
         "id": "graph-threshold",
         "title": "路径瓶颈：阈值下的可达性",
+        "researchTypeIds": [
+          "graph-threshold"
+        ],
         "taskIds": [
           "task-graph-threshold"
         ],
         "locations": [
           {
-            "document": "binary-decision",
+            "document": "binary-search",
             "anchor": "graph-threshold"
           }
         ],
@@ -2602,49 +2330,49 @@
         "facets": {
           "problem": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "graph-threshold"
             }
           ],
           "fit": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "graph-threshold"
             }
           ],
           "variation": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "graph-threshold"
             }
           ],
           "manual": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "graph-threshold-manual"
             }
           ],
           "manualExplanation": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "graph-threshold-manual"
             }
           ],
           "standard": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "graph-threshold-standard"
             }
           ],
           "standardExplanation": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "graph-threshold-standard"
             }
           ],
           "engineering": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "graph-threshold-engineering"
             }
           ]
@@ -2669,12 +2397,15 @@
       {
         "id": "prefix-activation",
         "title": "事件前缀的首次成功与首次失败",
+        "researchTypeIds": [
+          "prefix-activation"
+        ],
         "taskIds": [
           "task-prefix-activation"
         ],
         "locations": [
           {
-            "document": "binary-decision",
+            "document": "binary-search",
             "anchor": "prefix-activation"
           }
         ],
@@ -2682,49 +2413,49 @@
         "facets": {
           "problem": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "prefix-activation"
             }
           ],
           "fit": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "prefix-activation"
             }
           ],
           "variation": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "prefix-activation"
             }
           ],
           "manual": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "prefix-activation-manual"
             }
           ],
           "manualExplanation": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "prefix-activation-manual"
             }
           ],
           "standard": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "prefix-activation-standard"
             }
           ],
           "standardExplanation": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "prefix-activation-standard"
             }
           ],
           "engineering": [
             {
-              "document": "binary-decision",
+              "document": "binary-search",
               "anchor": "prefix-activation-engineering"
             }
           ]
@@ -2753,340 +2484,17 @@
         ]
       },
       {
-        "id": "matching-threshold",
-        "title": "阈值下的互斥选择与匹配",
-        "taskIds": [
-          "task-matching-threshold"
-        ],
-        "locations": [
-          {
-            "document": "binary-decision",
-            "anchor": "matching-threshold"
-          }
-        ],
-        "dependsOn": [],
-        "facets": {
-          "problem": [
-            {
-              "document": "binary-decision",
-              "anchor": "matching-threshold"
-            }
-          ],
-          "fit": [
-            {
-              "document": "binary-decision",
-              "anchor": "matching-threshold"
-            }
-          ],
-          "variation": [
-            {
-              "document": "binary-decision",
-              "anchor": "matching-threshold"
-            }
-          ],
-          "manual": [
-            {
-              "document": "binary-decision",
-              "anchor": "matching-threshold-manual"
-            }
-          ],
-          "manualExplanation": [
-            {
-              "document": "binary-decision",
-              "anchor": "matching-threshold-manual"
-            }
-          ],
-          "standard": [
-            {
-              "document": "binary-decision",
-              "anchor": "matching-threshold-standard"
-            }
-          ],
-          "standardExplanation": [
-            {
-              "document": "binary-decision",
-              "anchor": "matching-threshold-standard"
-            }
-          ],
-          "engineering": [
-            {
-              "document": "binary-decision",
-              "anchor": "matching-threshold-engineering"
-            }
-          ]
-        },
-        "manualImplementationIds": [
-          "decision-matching-threshold-manual"
-        ],
-        "standardImplementationIds": [
-          "decision-matching-standard"
-        ],
-        "standardRole": {
-          "kind": "shared-core",
-          "explanation": "sort/unique将候选阈值离散化，Kuhn增广路共享手写核心，并真实补全完整行列指派。"
-        },
-        "exercises": [
-          {
-            "title": "小凸玩矩阵",
-            "url": "https://www.luogu.com.cn/problem/P4251"
-          }
-        ]
-      },
-      {
-        "id": "average-transform",
-        "title": "平均值优化中的合法区间判定",
-        "taskIds": [
-          "task-average-transform"
-        ],
-        "locations": [
-          {
-            "document": "binary-decision",
-            "anchor": "average-transform"
-          }
-        ],
-        "dependsOn": [],
-        "facets": {
-          "problem": [
-            {
-              "document": "binary-decision",
-              "anchor": "average-transform"
-            }
-          ],
-          "fit": [
-            {
-              "document": "binary-decision",
-              "anchor": "average-transform"
-            }
-          ],
-          "variation": [
-            {
-              "document": "binary-decision",
-              "anchor": "average-transform"
-            }
-          ],
-          "manual": [
-            {
-              "document": "binary-decision",
-              "anchor": "average-transform-manual"
-            }
-          ],
-          "manualExplanation": [
-            {
-              "document": "binary-decision",
-              "anchor": "average-transform-manual"
-            }
-          ],
-          "standard": [
-            {
-              "document": "binary-decision",
-              "anchor": "average-transform-standard"
-            }
-          ],
-          "standardExplanation": [
-            {
-              "document": "binary-decision",
-              "anchor": "average-transform-standard"
-            }
-          ],
-          "engineering": [
-            {
-              "document": "binary-decision",
-              "anchor": "average-transform-engineering"
-            }
-          ]
-        },
-        "manualImplementationIds": [
-          "decision-max-average-manual",
-          "decision-min-remaining-average-manual"
-        ],
-        "standardImplementationIds": [
-          "decision-max-average-standard",
-          "decision-shifted-values-standard"
-        ],
-        "standardRole": {
-          "kind": "structure",
-          "explanation": "deque替代数组单调队列；transform只演示Sabotage逐项阈值变换，不冒称完整库解。"
-        },
-        "exercises": [
-          {
-            "title": "寻找段落",
-            "url": "https://www.luogu.com.cn/problem/P1419"
-          },
-          {
-            "title": "Sabotage",
-            "url": "https://usaco.org/index.php?page=viewproblem2&cpid=419"
-          }
-        ]
-      },
-      {
-        "id": "ratio-selection",
-        "title": "固定数量最大比值：变换后取最大的 m 项",
-        "taskIds": [
-          "task-ratio-selection"
-        ],
-        "locations": [
-          {
-            "document": "binary-decision",
-            "anchor": "ratio-selection"
-          }
-        ],
-        "dependsOn": [],
-        "facets": {
-          "problem": [
-            {
-              "document": "binary-decision",
-              "anchor": "ratio-selection"
-            }
-          ],
-          "fit": [
-            {
-              "document": "binary-decision",
-              "anchor": "ratio-selection"
-            }
-          ],
-          "variation": [
-            {
-              "document": "binary-decision",
-              "anchor": "ratio-selection"
-            }
-          ],
-          "manual": [
-            {
-              "document": "binary-decision",
-              "anchor": "ratio-selection-manual"
-            }
-          ],
-          "manualExplanation": [
-            {
-              "document": "binary-decision",
-              "anchor": "ratio-selection-manual"
-            }
-          ],
-          "standard": [
-            {
-              "document": "binary-decision",
-              "anchor": "ratio-selection-standard"
-            }
-          ],
-          "standardExplanation": [
-            {
-              "document": "binary-decision",
-              "anchor": "ratio-selection-standard"
-            }
-          ],
-          "engineering": [
-            {
-              "document": "binary-decision",
-              "anchor": "ratio-selection-engineering"
-            }
-          ]
-        },
-        "manualImplementationIds": [
-          "decision-ratio-manual"
-        ],
-        "standardImplementationIds": [
-          "decision-ratio-standard"
-        ],
-        "standardRole": {
-          "kind": "algorithm",
-          "explanation": "nth_element隔出最大m项替代手写插入排序；不要求该前缀内部有序。"
-        },
-        "exercises": [
-          {
-            "title": "KC 喝咖啡",
-            "url": "https://www.luogu.com.cn/problem/P1570"
-          }
-        ]
-      },
-      {
-        "id": "pigeonhole-domain",
-        "title": "值域容量异常：重复与缺失",
-        "taskIds": [
-          "task-pigeonhole-domain"
-        ],
-        "locations": [
-          {
-            "document": "binary-selection",
-            "anchor": "pigeonhole-domain"
-          }
-        ],
-        "dependsOn": [],
-        "facets": {
-          "problem": [
-            {
-              "document": "binary-selection",
-              "anchor": "pigeonhole-domain"
-            }
-          ],
-          "fit": [
-            {
-              "document": "binary-selection",
-              "anchor": "pigeonhole-domain"
-            }
-          ],
-          "variation": [
-            {
-              "document": "binary-selection",
-              "anchor": "pigeonhole-domain"
-            }
-          ],
-          "manual": [
-            {
-              "document": "binary-selection",
-              "anchor": "pigeonhole-domain-manual"
-            }
-          ],
-          "manualExplanation": [
-            {
-              "document": "binary-selection",
-              "anchor": "pigeonhole-domain-manual"
-            }
-          ],
-          "standard": [
-            {
-              "document": "binary-selection",
-              "anchor": "pigeonhole-domain-standard"
-            }
-          ],
-          "standardExplanation": [
-            {
-              "document": "binary-selection",
-              "anchor": "pigeonhole-domain-standard"
-            }
-          ],
-          "engineering": [
-            {
-              "document": "binary-selection",
-              "anchor": "pigeonhole-domain-engineering"
-            }
-          ]
-        },
-        "manualImplementationIds": [
-          "selection-duplicate-manual"
-        ],
-        "standardImplementationIds": [
-          "selection-duplicate-standard"
-        ],
-        "standardRole": {
-          "kind": "support",
-          "explanation": "count_if替代扫描计数，共用值域边界；欠满区间为存在性变型，不冒称Floyd同算法。"
-        },
-        "exercises": [
-          {
-            "title": "LC287 · 寻找重复数",
-            "url": "https://leetcode.com/problems/find-the-duplicate-number/"
-          }
-        ]
-      },
-      {
         "id": "weighted-inverse",
         "title": "累计权重的逆查询与采样",
+        "researchTypeIds": [
+          "weighted-inverse"
+        ],
         "taskIds": [
           "task-weighted-inverse"
         ],
         "locations": [
           {
-            "document": "binary-selection",
+            "document": "binary-search",
             "anchor": "weighted-inverse"
           }
         ],
@@ -3094,49 +2502,49 @@
         "facets": {
           "problem": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "weighted-inverse"
             }
           ],
           "fit": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "weighted-inverse"
             }
           ],
           "variation": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "weighted-inverse"
             }
           ],
           "manual": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "weighted-inverse-manual"
             }
           ],
           "manualExplanation": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "weighted-inverse-manual"
             }
           ],
           "standard": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "weighted-inverse-standard"
             }
           ],
           "standardExplanation": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "weighted-inverse-standard"
             }
           ],
           "engineering": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "weighted-inverse-engineering"
             }
           ]
@@ -3160,14 +2568,100 @@
         ]
       },
       {
+        "id": "pigeonhole-domain",
+        "title": "值域容量异常：重复与缺失",
+        "researchTypeIds": [
+          "pigeonhole-domain"
+        ],
+        "taskIds": [
+          "task-pigeonhole-domain"
+        ],
+        "locations": [
+          {
+            "document": "binary-search",
+            "anchor": "pigeonhole-domain"
+          }
+        ],
+        "dependsOn": [],
+        "facets": {
+          "problem": [
+            {
+              "document": "binary-search",
+              "anchor": "pigeonhole-domain"
+            }
+          ],
+          "fit": [
+            {
+              "document": "binary-search",
+              "anchor": "pigeonhole-domain"
+            }
+          ],
+          "variation": [
+            {
+              "document": "binary-search",
+              "anchor": "pigeonhole-domain"
+            }
+          ],
+          "manual": [
+            {
+              "document": "binary-search",
+              "anchor": "pigeonhole-domain-manual"
+            }
+          ],
+          "manualExplanation": [
+            {
+              "document": "binary-search",
+              "anchor": "pigeonhole-domain-manual"
+            }
+          ],
+          "standard": [
+            {
+              "document": "binary-search",
+              "anchor": "pigeonhole-domain-standard"
+            }
+          ],
+          "standardExplanation": [
+            {
+              "document": "binary-search",
+              "anchor": "pigeonhole-domain-standard"
+            }
+          ],
+          "engineering": [
+            {
+              "document": "binary-search",
+              "anchor": "pigeonhole-domain-engineering"
+            }
+          ]
+        },
+        "manualImplementationIds": [
+          "selection-duplicate-manual"
+        ],
+        "standardImplementationIds": [
+          "selection-duplicate-standard"
+        ],
+        "standardRole": {
+          "kind": "support",
+          "explanation": "count_if替代扫描计数，共用值域边界；欠满区间为存在性变型，不冒称Floyd同算法。"
+        },
+        "exercises": [
+          {
+            "title": "LC287 · 寻找重复数",
+            "url": "https://leetcode.com/problems/find-the-duplicate-number/"
+          }
+        ]
+      },
+      {
         "id": "matrix-rank",
         "title": "行列有序矩阵秩：楼梯计数",
+        "researchTypeIds": [
+          "matrix-rank"
+        ],
         "taskIds": [
           "task-matrix-rank"
         ],
         "locations": [
           {
-            "document": "binary-selection",
+            "document": "binary-search",
             "anchor": "matrix-rank"
           }
         ],
@@ -3175,49 +2669,49 @@
         "facets": {
           "problem": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "matrix-rank"
             }
           ],
           "fit": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "matrix-rank"
             }
           ],
           "variation": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "matrix-rank"
             }
           ],
           "manual": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "matrix-rank-manual"
             }
           ],
           "manualExplanation": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "matrix-rank-manual"
             }
           ],
           "standard": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "matrix-rank-standard"
             }
           ],
           "standardExplanation": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "matrix-rank-standard"
             }
           ],
           "engineering": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "matrix-rank-engineering"
             }
           ]
@@ -3240,14 +2734,102 @@
         ]
       },
       {
+        "id": "multiplication-rank",
+        "title": "乘法表秩：解析计数巨大隐式集合",
+        "researchTypeIds": [
+          "multiplication-rank"
+        ],
+        "taskIds": [
+          "task-multiplication-rank"
+        ],
+        "locations": [
+          {
+            "document": "binary-search",
+            "anchor": "multiplication-rank"
+          }
+        ],
+        "dependsOn": [
+          "matrix-rank"
+        ],
+        "facets": {
+          "problem": [
+            {
+              "document": "binary-search",
+              "anchor": "multiplication-rank"
+            }
+          ],
+          "fit": [
+            {
+              "document": "binary-search",
+              "anchor": "multiplication-rank"
+            }
+          ],
+          "variation": [
+            {
+              "document": "binary-search",
+              "anchor": "multiplication-rank"
+            }
+          ],
+          "manual": [
+            {
+              "document": "binary-search",
+              "anchor": "multiplication-rank-manual"
+            }
+          ],
+          "manualExplanation": [
+            {
+              "document": "binary-search",
+              "anchor": "multiplication-rank-manual"
+            }
+          ],
+          "standard": [
+            {
+              "document": "binary-search",
+              "anchor": "multiplication-rank-standard"
+            }
+          ],
+          "standardExplanation": [
+            {
+              "document": "binary-search",
+              "anchor": "multiplication-rank-standard"
+            }
+          ],
+          "engineering": [
+            {
+              "document": "binary-search",
+              "anchor": "multiplication-rank-engineering"
+            }
+          ]
+        },
+        "manualImplementationIds": [
+          "selection-multiply-manual"
+        ],
+        "standardImplementationIds": [
+          "selection-multiply-standard"
+        ],
+        "standardRole": {
+          "kind": "support",
+          "explanation": "std::min只替换单行解析贡献，std::swap选短边；整题复用唯一值域搜索和计数主体，不复制整份wrapper。"
+        },
+        "exercises": [
+          {
+            "title": "LC668 · 乘法表中第 k 小的数",
+            "url": "https://leetcode.com/problems/kth-smallest-number-in-multiplication-table/description/"
+          }
+        ]
+      },
+      {
         "id": "pair-distance-rank",
         "title": "数对距离秩：窗口计数反求第 k 小",
+        "researchTypeIds": [
+          "pair-distance-rank"
+        ],
         "taskIds": [
           "task-pair-distance-rank"
         ],
         "locations": [
           {
-            "document": "binary-selection",
+            "document": "binary-search",
             "anchor": "pair-distance-rank"
           }
         ],
@@ -3257,49 +2839,49 @@
         "facets": {
           "problem": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "pair-distance-rank"
             }
           ],
           "fit": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "pair-distance-rank"
             }
           ],
           "variation": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "pair-distance-rank"
             }
           ],
           "manual": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "pair-distance-rank-manual"
             }
           ],
           "manualExplanation": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "pair-distance-rank-manual"
             }
           ],
           "standard": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "pair-distance-rank-standard"
             }
           ],
           "standardExplanation": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "pair-distance-rank-standard"
             }
           ],
           "engineering": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "pair-distance-rank-engineering"
             }
           ]
@@ -3322,96 +2904,17 @@
         ]
       },
       {
-        "id": "multiplication-rank",
-        "title": "乘法表秩：解析计数巨大隐式集合",
-        "taskIds": [
-          "task-multiplication-rank"
-        ],
-        "locations": [
-          {
-            "document": "binary-selection",
-            "anchor": "multiplication-rank"
-          }
-        ],
-        "dependsOn": [
-          "matrix-rank"
-        ],
-        "facets": {
-          "problem": [
-            {
-              "document": "binary-selection",
-              "anchor": "multiplication-rank"
-            }
-          ],
-          "fit": [
-            {
-              "document": "binary-selection",
-              "anchor": "multiplication-rank"
-            }
-          ],
-          "variation": [
-            {
-              "document": "binary-selection",
-              "anchor": "multiplication-rank"
-            }
-          ],
-          "manual": [
-            {
-              "document": "binary-selection",
-              "anchor": "multiplication-rank-manual"
-            }
-          ],
-          "manualExplanation": [
-            {
-              "document": "binary-selection",
-              "anchor": "multiplication-rank-manual"
-            }
-          ],
-          "standard": [
-            {
-              "document": "binary-selection",
-              "anchor": "multiplication-rank-standard"
-            }
-          ],
-          "standardExplanation": [
-            {
-              "document": "binary-selection",
-              "anchor": "multiplication-rank-standard"
-            }
-          ],
-          "engineering": [
-            {
-              "document": "binary-selection",
-              "anchor": "multiplication-rank-engineering"
-            }
-          ]
-        },
-        "manualImplementationIds": [
-          "selection-multiply-manual"
-        ],
-        "standardImplementationIds": [
-          "selection-multiply-standard"
-        ],
-        "standardRole": {
-          "kind": "support",
-          "explanation": "min截断解析行计数，swap选短边，共用值域搜索，无整题std函数。"
-        },
-        "exercises": [
-          {
-            "title": "LC668 · 乘法表中第 k 小的数",
-            "url": "https://leetcode.com/problems/kth-smallest-number-in-multiplication-table/description/"
-          }
-        ]
-      },
-      {
         "id": "two-sorted-partition",
         "title": "两有序数组中位：在合法分割位置二分",
+        "researchTypeIds": [
+          "two-sorted-partition"
+        ],
         "taskIds": [
           "task-two-sorted-partition"
         ],
         "locations": [
           {
-            "document": "binary-selection",
+            "document": "binary-search",
             "anchor": "two-sorted-partition"
           }
         ],
@@ -3421,49 +2924,49 @@
         "facets": {
           "problem": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "two-sorted-partition"
             }
           ],
           "fit": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "two-sorted-partition"
             }
           ],
           "variation": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "two-sorted-partition"
             }
           ],
           "manual": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "two-sorted-partition-manual"
             }
           ],
           "manualExplanation": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "two-sorted-partition-manual"
             }
           ],
           "standard": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "two-sorted-partition-standard"
             }
           ],
           "standardExplanation": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "two-sorted-partition-standard"
             }
           ],
           "engineering": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "two-sorted-partition-engineering"
             }
           ]
@@ -3489,12 +2992,15 @@
       {
         "id": "ordered-dp-frontier",
         "title": "DP 有序前沿：最小尾值与二分替换",
+        "researchTypeIds": [
+          "ordered-dp-frontier"
+        ],
         "taskIds": [
           "task-ordered-dp-frontier"
         ],
         "locations": [
           {
-            "document": "binary-selection",
+            "document": "binary-search",
             "anchor": "ordered-dp-frontier"
           }
         ],
@@ -3504,49 +3010,49 @@
         "facets": {
           "problem": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "ordered-dp-frontier"
             }
           ],
           "fit": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "ordered-dp-frontier"
             }
           ],
           "variation": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "ordered-dp-frontier"
             }
           ],
           "manual": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "ordered-dp-frontier-manual"
             }
           ],
           "manualExplanation": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "ordered-dp-frontier-manual"
             }
           ],
           "standard": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "ordered-dp-frontier-standard"
             }
           ],
           "standardExplanation": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "ordered-dp-frontier-standard"
             }
           ],
           "engineering": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "ordered-dp-frontier-engineering"
             }
           ]
@@ -3580,12 +3086,15 @@
       {
         "id": "weighted-predecessor",
         "title": "带权兼容调度：二分定位 DP 前驱",
+        "researchTypeIds": [
+          "weighted-predecessor"
+        ],
         "taskIds": [
           "task-weighted-predecessor"
         ],
         "locations": [
           {
-            "document": "binary-selection",
+            "document": "binary-search",
             "anchor": "weighted-predecessor"
           }
         ],
@@ -3595,49 +3104,49 @@
         "facets": {
           "problem": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "weighted-predecessor"
             }
           ],
           "fit": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "weighted-predecessor"
             }
           ],
           "variation": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "weighted-predecessor"
             }
           ],
           "manual": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "weighted-predecessor-manual"
             }
           ],
           "manualExplanation": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "weighted-predecessor-manual"
             }
           ],
           "standard": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "weighted-predecessor-standard"
             }
           ],
           "standardExplanation": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "weighted-predecessor-standard"
             }
           ],
           "engineering": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "weighted-predecessor-engineering"
             }
           ]
@@ -3666,12 +3175,15 @@
       {
         "id": "resource-queries",
         "title": "查询会消耗资源：反求最少试探次数",
+        "researchTypeIds": [
+          "resource-queries"
+        ],
         "taskIds": [
           "task-resource-queries"
         ],
         "locations": [
           {
-            "document": "binary-selection",
+            "document": "binary-search",
             "anchor": "resource-queries"
           }
         ],
@@ -3681,49 +3193,49 @@
         "facets": {
           "problem": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "resource-queries"
             }
           ],
           "fit": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "resource-queries"
             }
           ],
           "variation": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "resource-queries"
             }
           ],
           "manual": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "resource-queries-manual"
             }
           ],
           "manualExplanation": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "resource-queries-manual"
             }
           ],
           "standard": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "resource-queries-standard"
             }
           ],
           "standardExplanation": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "resource-queries-standard"
             }
           ],
           "engineering": [
             {
-              "document": "binary-selection",
+              "document": "binary-search",
               "anchor": "resource-queries-engineering"
             }
           ]
@@ -3746,14 +3258,614 @@
         ]
       },
       {
+        "id": "matrix-peak",
+        "title": "二维局部峰的存在性搜索",
+        "researchTypeIds": [
+          "matrix-peak"
+        ],
+        "taskIds": [
+          "task-matrix-peak"
+        ],
+        "locations": [
+          {
+            "document": "binary-search",
+            "anchor": "matrix-peak"
+          }
+        ],
+        "dependsOn": [
+          "local-peak"
+        ],
+        "facets": {
+          "problem": [
+            {
+              "document": "binary-search",
+              "anchor": "matrix-peak"
+            }
+          ],
+          "fit": [
+            {
+              "document": "binary-search",
+              "anchor": "matrix-peak"
+            }
+          ],
+          "variation": [
+            {
+              "document": "binary-search",
+              "anchor": "matrix-peak"
+            }
+          ],
+          "manual": [
+            {
+              "document": "binary-search",
+              "anchor": "matrix-peak-manual"
+            }
+          ],
+          "manualExplanation": [
+            {
+              "document": "binary-search",
+              "anchor": "matrix-peak-manual"
+            }
+          ],
+          "standard": [
+            {
+              "document": "binary-search",
+              "anchor": "matrix-peak-library"
+            }
+          ],
+          "standardExplanation": [
+            {
+              "document": "binary-search",
+              "anchor": "matrix-peak-library"
+            }
+          ],
+          "engineering": [
+            {
+              "document": "binary-search",
+              "anchor": "matrix-peak-engineering"
+            }
+          ]
+        },
+        "manualImplementationIds": [
+          "boundary-matrix-peak"
+        ],
+        "standardImplementationIds": [
+          "boundary-matrix-peak-library"
+        ],
+        "standardRole": {
+          "kind": "shared-core",
+          "explanation": "共享matrix_peak_core的存在性二分，manual扫描列，standard用iota+max_element按列取行号；后者O(m)额外空间如实保留。"
+        },
+        "exercises": [
+          {
+            "title": "二维局部峰",
+            "url": "https://leetcode.com/problems/find-a-peak-element-ii/"
+          }
+        ]
+      },
+      {
+        "id": "string-prefix",
+        "title": "字典序前缀与比较成本",
+        "researchTypeIds": [
+          "string-prefix"
+        ],
+        "taskIds": [
+          "task-string-prefix"
+        ],
+        "locations": [
+          {
+            "document": "binary-search",
+            "anchor": "string-prefix"
+          }
+        ],
+        "dependsOn": [
+          "ordered-boundaries"
+        ],
+        "facets": {
+          "problem": [
+            {
+              "document": "binary-search",
+              "anchor": "string-prefix"
+            }
+          ],
+          "fit": [
+            {
+              "document": "binary-search",
+              "anchor": "string-prefix"
+            }
+          ],
+          "variation": [
+            {
+              "document": "binary-search",
+              "anchor": "string-prefix"
+            }
+          ],
+          "manual": [
+            {
+              "document": "binary-search",
+              "anchor": "string-prefix-manual"
+            }
+          ],
+          "manualExplanation": [
+            {
+              "document": "binary-search",
+              "anchor": "string-prefix-manual"
+            }
+          ],
+          "standard": [
+            {
+              "document": "binary-search",
+              "anchor": "string-prefix-library"
+            }
+          ],
+          "standardExplanation": [
+            {
+              "document": "binary-search",
+              "anchor": "string-prefix-library"
+            }
+          ],
+          "engineering": [
+            {
+              "document": "binary-search",
+              "anchor": "string-prefix-engineering"
+            }
+          ]
+        },
+        "manualImplementationIds": [
+          "boundary-prefix-range"
+        ],
+        "standardImplementationIds": [
+          "boundary-prefix-range-library",
+          "boundary-suggestions-library",
+          "boundary-lcp-library"
+        ],
+        "standardRole": {
+          "kind": "algorithm",
+          "explanation": "lower/upper_bound比较前缀；建议系统sort+区间取前三；mismatch为确定性线性LCP，明确优于朴素重复前缀二分。"
+        },
+        "exercises": [
+          {
+            "title": "搜索建议系统",
+            "url": "https://leetcode.com/problems/search-suggestions-system/"
+          }
+        ]
+      },
+      {
+        "id": "continuous-root",
+        "title": "连续方程的异号夹逼与误差",
+        "researchTypeIds": [
+          "continuous-root"
+        ],
+        "taskIds": [
+          "task-continuous-root"
+        ],
+        "locations": [
+          {
+            "document": "binary-search",
+            "anchor": "continuous-root"
+          }
+        ],
+        "dependsOn": [],
+        "facets": {
+          "problem": [
+            {
+              "document": "binary-search",
+              "anchor": "continuous-root"
+            }
+          ],
+          "fit": [
+            {
+              "document": "binary-search",
+              "anchor": "continuous-root"
+            }
+          ],
+          "variation": [
+            {
+              "document": "binary-search",
+              "anchor": "continuous-root"
+            }
+          ],
+          "manual": [
+            {
+              "document": "binary-search",
+              "anchor": "continuous-root-manual"
+            }
+          ],
+          "manualExplanation": [
+            {
+              "document": "binary-search",
+              "anchor": "continuous-root-manual"
+            }
+          ],
+          "standard": [
+            {
+              "document": "binary-search",
+              "anchor": "continuous-root-library"
+            }
+          ],
+          "standardExplanation": [
+            {
+              "document": "binary-search",
+              "anchor": "continuous-root-library"
+            }
+          ],
+          "engineering": [
+            {
+              "document": "binary-search",
+              "anchor": "continuous-root-engineering"
+            }
+          ]
+        },
+        "manualImplementationIds": [
+          "boundary-continuous-root"
+        ],
+        "standardImplementationIds": [
+          "boundary-cubic-critical-library"
+        ],
+        "standardRole": {
+          "kind": "shared-core",
+          "explanation": "通用夹逼核心唯一；P1024用导数两临界点分三个各含一根的区间，monic归一、sqrt/fma实际计算，不靠整数端点恰零或epsilon合并。"
+        },
+        "exercises": [
+          {
+            "title": "一元三次方程求解",
+            "url": "https://www.luogu.com.cn/problem/P1024"
+          }
+        ]
+      },
+      {
+        "id": "average-transform",
+        "title": "平均值优化中的合法区间判定",
+        "researchTypeIds": [
+          "average-transform"
+        ],
+        "taskIds": [
+          "task-average-transform"
+        ],
+        "locations": [
+          {
+            "document": "binary-search",
+            "anchor": "average-transform"
+          }
+        ],
+        "dependsOn": [
+          "continuous-root"
+        ],
+        "facets": {
+          "problem": [
+            {
+              "document": "binary-search",
+              "anchor": "average-transform"
+            }
+          ],
+          "fit": [
+            {
+              "document": "binary-search",
+              "anchor": "average-transform"
+            }
+          ],
+          "variation": [
+            {
+              "document": "binary-search",
+              "anchor": "average-transform"
+            }
+          ],
+          "manual": [
+            {
+              "document": "binary-search",
+              "anchor": "average-transform-manual"
+            }
+          ],
+          "manualExplanation": [
+            {
+              "document": "binary-search",
+              "anchor": "average-transform-manual"
+            }
+          ],
+          "standard": [
+            {
+              "document": "binary-search",
+              "anchor": "average-transform-standard"
+            }
+          ],
+          "standardExplanation": [
+            {
+              "document": "binary-search",
+              "anchor": "average-transform-standard"
+            }
+          ],
+          "engineering": [
+            {
+              "document": "binary-search",
+              "anchor": "average-transform-engineering"
+            }
+          ]
+        },
+        "manualImplementationIds": [
+          "decision-max-average-manual",
+          "decision-min-remaining-average-manual"
+        ],
+        "standardImplementationIds": [
+          "decision-max-average-standard",
+          "decision-shifted-values-standard"
+        ],
+        "standardRole": {
+          "kind": "structure",
+          "explanation": "deque替代数组单调队列；transform只演示Sabotage逐项阈值变换，不冒称完整库解。"
+        },
+        "exercises": [
+          {
+            "title": "寻找段落",
+            "url": "https://www.luogu.com.cn/problem/P1419"
+          },
+          {
+            "title": "Sabotage",
+            "url": "https://usaco.org/index.php?page=viewproblem2&cpid=419"
+          }
+        ]
+      },
+      {
+        "id": "ratio-selection",
+        "title": "固定数量最大比值：变换后取最大的 m 项",
+        "researchTypeIds": [
+          "ratio-selection"
+        ],
+        "taskIds": [
+          "task-ratio-selection"
+        ],
+        "locations": [
+          {
+            "document": "binary-search",
+            "anchor": "ratio-selection"
+          }
+        ],
+        "dependsOn": [
+          "continuous-root"
+        ],
+        "facets": {
+          "problem": [
+            {
+              "document": "binary-search",
+              "anchor": "ratio-selection"
+            }
+          ],
+          "fit": [
+            {
+              "document": "binary-search",
+              "anchor": "ratio-selection"
+            }
+          ],
+          "variation": [
+            {
+              "document": "binary-search",
+              "anchor": "ratio-selection"
+            }
+          ],
+          "manual": [
+            {
+              "document": "binary-search",
+              "anchor": "ratio-selection-manual"
+            }
+          ],
+          "manualExplanation": [
+            {
+              "document": "binary-search",
+              "anchor": "ratio-selection-manual"
+            }
+          ],
+          "standard": [
+            {
+              "document": "binary-search",
+              "anchor": "ratio-selection-standard"
+            }
+          ],
+          "standardExplanation": [
+            {
+              "document": "binary-search",
+              "anchor": "ratio-selection-standard"
+            }
+          ],
+          "engineering": [
+            {
+              "document": "binary-search",
+              "anchor": "ratio-selection-engineering"
+            }
+          ]
+        },
+        "manualImplementationIds": [
+          "decision-ratio-manual"
+        ],
+        "standardImplementationIds": [
+          "decision-ratio-standard"
+        ],
+        "standardRole": {
+          "kind": "algorithm",
+          "explanation": "nth_element隔出最大m项替代手写插入排序；不要求该前缀内部有序。"
+        },
+        "exercises": [
+          {
+            "title": "KC 喝咖啡",
+            "url": "https://www.luogu.com.cn/problem/P1570"
+          }
+        ]
+      },
+      {
+        "id": "convex-location",
+        "title": "凸多边形中的扇区定位",
+        "researchTypeIds": [
+          "convex-location"
+        ],
+        "taskIds": [
+          "task-convex-location"
+        ],
+        "locations": [
+          {
+            "document": "binary-search",
+            "anchor": "convex-location"
+          }
+        ],
+        "dependsOn": [],
+        "facets": {
+          "problem": [
+            {
+              "document": "binary-search",
+              "anchor": "convex-location"
+            }
+          ],
+          "fit": [
+            {
+              "document": "binary-search",
+              "anchor": "convex-location"
+            }
+          ],
+          "variation": [
+            {
+              "document": "binary-search",
+              "anchor": "convex-location"
+            }
+          ],
+          "manual": [
+            {
+              "document": "binary-search",
+              "anchor": "convex-location-manual"
+            }
+          ],
+          "manualExplanation": [
+            {
+              "document": "binary-search",
+              "anchor": "convex-location-manual"
+            }
+          ],
+          "standard": [
+            {
+              "document": "binary-search",
+              "anchor": "convex-location-library"
+            }
+          ],
+          "standardExplanation": [
+            {
+              "document": "binary-search",
+              "anchor": "convex-location-library"
+            }
+          ],
+          "engineering": [
+            {
+              "document": "binary-search",
+              "anchor": "convex-location-engineering"
+            }
+          ]
+        },
+        "manualImplementationIds": [
+          "boundary-convex-location"
+        ],
+        "standardImplementationIds": [
+          "boundary-convex-location-library"
+        ],
+        "standardRole": {
+          "kind": "algorithm",
+          "explanation": "partition_point真实替代扇区定位；叉积和边界射线证书仍共用，严格凸CCW及8e18预算不省略。"
+        },
+        "exercises": [
+          {
+            "title": "凸多边形多次点定位",
+            "url": "https://atcoder.jp/contests/abc296/tasks/abc296_g"
+          }
+        ]
+      },
+      {
+        "id": "matching-threshold",
+        "title": "阈值下的互斥选择与匹配",
+        "researchTypeIds": [
+          "matching-threshold"
+        ],
+        "taskIds": [
+          "task-matching-threshold"
+        ],
+        "locations": [
+          {
+            "document": "binary-search",
+            "anchor": "matching-threshold"
+          }
+        ],
+        "dependsOn": [],
+        "facets": {
+          "problem": [
+            {
+              "document": "binary-search",
+              "anchor": "matching-threshold"
+            }
+          ],
+          "fit": [
+            {
+              "document": "binary-search",
+              "anchor": "matching-threshold"
+            }
+          ],
+          "variation": [
+            {
+              "document": "binary-search",
+              "anchor": "matching-threshold"
+            }
+          ],
+          "manual": [
+            {
+              "document": "binary-search",
+              "anchor": "matching-threshold-manual"
+            }
+          ],
+          "manualExplanation": [
+            {
+              "document": "binary-search",
+              "anchor": "matching-threshold-manual"
+            }
+          ],
+          "standard": [
+            {
+              "document": "binary-search",
+              "anchor": "matching-threshold-standard"
+            }
+          ],
+          "standardExplanation": [
+            {
+              "document": "binary-search",
+              "anchor": "matching-threshold-standard"
+            }
+          ],
+          "engineering": [
+            {
+              "document": "binary-search",
+              "anchor": "matching-threshold-engineering"
+            }
+          ]
+        },
+        "manualImplementationIds": [
+          "decision-matching-threshold-manual"
+        ],
+        "standardImplementationIds": [
+          "decision-matching-standard"
+        ],
+        "standardRole": {
+          "kind": "shared-core",
+          "explanation": "sort/unique将候选阈值离散化，Kuhn增广路共享手写核心，并真实补全完整行列指派。"
+        },
+        "exercises": [
+          {
+            "title": "小凸玩矩阵",
+            "url": "https://www.luogu.com.cn/problem/P4251"
+          }
+        ]
+      },
+      {
         "id": "fenwick-rank",
         "title": "动态频数中的第k个位置",
+        "researchTypeIds": [
+          "fenwick-rank"
+        ],
         "taskIds": [
           "task-fenwick-rank"
         ],
         "locations": [
           {
-            "document": "binary-advanced",
+            "document": "binary-search",
             "anchor": "fenwick-rank"
           }
         ],
@@ -3763,49 +3875,49 @@
         "facets": {
           "problem": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "fenwick-rank"
             }
           ],
           "fit": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "fenwick-rank"
             }
           ],
           "variation": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "fenwick-rank"
             }
           ],
           "manual": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "fenwick-rank-manual"
             }
           ],
           "manualExplanation": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "fenwick-rank-manual"
             }
           ],
           "standard": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "fenwick-rank-standard"
             }
           ],
           "standardExplanation": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "fenwick-rank-standard"
             }
           ],
           "engineering": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "fenwick-rank-engineering"
             }
           ]
@@ -3830,12 +3942,15 @@
       {
         "id": "summary-descent",
         "title": "区间摘要驱动的首次失败位置",
+        "researchTypeIds": [
+          "summary-descent"
+        ],
         "taskIds": [
           "task-summary-descent"
         ],
         "locations": [
           {
-            "document": "binary-advanced",
+            "document": "binary-search",
             "anchor": "summary-descent"
           }
         ],
@@ -3843,49 +3958,49 @@
         "facets": {
           "problem": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "summary-descent"
             }
           ],
           "fit": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "summary-descent"
             }
           ],
           "variation": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "summary-descent"
             }
           ],
           "manual": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "summary-descent-manual"
             }
           ],
           "manualExplanation": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "summary-descent-manual"
             }
           ],
           "standard": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "summary-descent-standard"
             }
           ],
           "standardExplanation": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "summary-descent-standard"
             }
           ],
           "engineering": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "summary-descent-engineering"
             }
           ]
@@ -3910,12 +4025,15 @@
       {
         "id": "ancestor-boundary",
         "title": "祖先会合边界与同步提升",
+        "researchTypeIds": [
+          "ancestor-boundary"
+        ],
         "taskIds": [
           "task-ancestor-boundary"
         ],
         "locations": [
           {
-            "document": "binary-advanced",
+            "document": "binary-search",
             "anchor": "ancestor-boundary"
           }
         ],
@@ -3923,49 +4041,49 @@
         "facets": {
           "problem": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "ancestor-boundary"
             }
           ],
           "fit": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "ancestor-boundary"
             }
           ],
           "variation": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "ancestor-boundary"
             }
           ],
           "manual": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "ancestor-boundary-manual"
             }
           ],
           "manualExplanation": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "ancestor-boundary-manual"
             }
           ],
           "standard": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "ancestor-boundary-standard"
             }
           ],
           "standardExplanation": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "ancestor-boundary-standard"
             }
           ],
           "engineering": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "ancestor-boundary-engineering"
             }
           ]
@@ -4002,12 +4120,15 @@
       {
         "id": "cyclic-jump",
         "title": "循环正数序列的最少分段",
+        "researchTypeIds": [
+          "cyclic-jump"
+        ],
         "taskIds": [
           "task-cyclic-jump"
         ],
         "locations": [
           {
-            "document": "binary-advanced",
+            "document": "binary-search",
             "anchor": "cyclic-jump"
           }
         ],
@@ -4018,49 +4139,49 @@
         "facets": {
           "problem": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "cyclic-jump"
             }
           ],
           "fit": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "cyclic-jump"
             }
           ],
           "variation": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "cyclic-jump"
             }
           ],
           "manual": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "cyclic-jump-manual"
             }
           ],
           "manualExplanation": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "cyclic-jump-manual"
             }
           ],
           "standard": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "cyclic-jump-standard"
             }
           ],
           "standardExplanation": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "cyclic-jump-standard"
             }
           ],
           "engineering": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "cyclic-jump-engineering"
             }
           ]
@@ -4085,12 +4206,15 @@
       {
         "id": "time-parallel-search",
         "title": "共享时间轴判定的并行二分",
+        "researchTypeIds": [
+          "time-parallel-search"
+        ],
         "taskIds": [
           "task-time-parallel-search"
         ],
         "locations": [
           {
-            "document": "binary-advanced",
+            "document": "binary-search",
             "anchor": "time-parallel-search"
           }
         ],
@@ -4100,49 +4224,49 @@
         "facets": {
           "problem": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "time-parallel-search"
             }
           ],
           "fit": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "time-parallel-search"
             }
           ],
           "variation": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "time-parallel-search"
             }
           ],
           "manual": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "time-parallel-search-manual"
             }
           ],
           "manualExplanation": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "time-parallel-search-manual"
             }
           ],
           "standard": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "time-parallel-search-standard"
             }
           ],
           "standardExplanation": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "time-parallel-search-standard"
             }
           ],
           "engineering": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "time-parallel-search-engineering"
             }
           ]
@@ -4167,12 +4291,15 @@
       {
         "id": "dynamic-range-kth",
         "title": "带修改区间第k小的整体二分",
+        "researchTypeIds": [
+          "dynamic-range-kth"
+        ],
         "taskIds": [
           "task-dynamic-range-kth"
         ],
         "locations": [
           {
-            "document": "binary-advanced",
+            "document": "binary-search",
             "anchor": "dynamic-range-kth"
           }
         ],
@@ -4182,49 +4309,49 @@
         "facets": {
           "problem": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "dynamic-range-kth"
             }
           ],
           "fit": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "dynamic-range-kth"
             }
           ],
           "variation": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "dynamic-range-kth"
             }
           ],
           "manual": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "dynamic-range-kth-manual"
             }
           ],
           "manualExplanation": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "dynamic-range-kth-manual"
             }
           ],
           "standard": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "dynamic-range-kth-standard"
             }
           ],
           "standardExplanation": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "dynamic-range-kth-standard"
             }
           ],
           "engineering": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "dynamic-range-kth-engineering"
             }
           ]
@@ -4253,12 +4380,15 @@
       {
         "id": "marginal-penalty",
         "title": "递减边际资源分配的惩罚参数搜索",
+        "researchTypeIds": [
+          "marginal-penalty"
+        ],
         "taskIds": [
           "task-marginal-penalty"
         ],
         "locations": [
           {
-            "document": "binary-advanced",
+            "document": "binary-search",
             "anchor": "marginal-penalty"
           }
         ],
@@ -4269,49 +4399,49 @@
         "facets": {
           "problem": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "marginal-penalty"
             }
           ],
           "fit": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "marginal-penalty"
             }
           ],
           "variation": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "marginal-penalty"
             }
           ],
           "manual": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "marginal-penalty-manual"
             }
           ],
           "manualExplanation": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "marginal-penalty-manual"
             }
           ],
           "standard": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "marginal-penalty-standard"
             }
           ],
           "standardExplanation": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "marginal-penalty-standard"
             }
           ],
           "engineering": [
             {
-              "document": "binary-advanced",
+              "document": "binary-search",
               "anchor": "marginal-penalty-engineering"
             }
           ]
@@ -4332,12 +4462,6 @@
             "url": "https://atcoder.jp/contests/abc216/tasks/abc216_e"
           }
         ]
-      }
-    ],
-    "selectionMap": [
-      {
-        "document": "binary-advanced",
-        "anchor": "selection-map"
       }
     ]
   },
@@ -4390,151 +4514,151 @@
       ],
       "locations": [
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "ordered-boundaries"
         },
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "predicate-access"
         },
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "transformed-index"
         },
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "rotated-search"
         },
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "paired-break"
         },
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "local-peak"
         },
         {
-          "document": "binary-boundary",
-          "anchor": "matrix-peak"
-        },
-        {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "matrix-membership"
         },
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "integer-root"
         },
         {
-          "document": "binary-boundary",
-          "anchor": "continuous-root"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "string-prefix"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "convex-location"
-        },
-        {
-          "document": "binary-decision",
+          "document": "binary-search",
           "anchor": "capacity-partition"
         },
         {
-          "document": "binary-decision",
+          "document": "binary-search",
           "anchor": "maximin-spacing"
         },
         {
-          "document": "binary-decision",
+          "document": "binary-search",
           "anchor": "cumulative-production"
         },
         {
-          "document": "binary-decision",
+          "document": "binary-search",
           "anchor": "ordered-simulation"
         },
         {
-          "document": "binary-decision",
+          "document": "binary-search",
           "anchor": "graph-threshold"
         },
         {
-          "document": "binary-decision",
+          "document": "binary-search",
           "anchor": "prefix-activation"
         },
         {
-          "document": "binary-decision",
-          "anchor": "matching-threshold"
-        },
-        {
-          "document": "binary-decision",
-          "anchor": "average-transform"
-        },
-        {
-          "document": "binary-decision",
-          "anchor": "ratio-selection"
-        },
-        {
-          "document": "binary-selection",
-          "anchor": "pigeonhole-domain"
-        },
-        {
-          "document": "binary-selection",
+          "document": "binary-search",
           "anchor": "weighted-inverse"
         },
         {
-          "document": "binary-selection",
+          "document": "binary-search",
+          "anchor": "pigeonhole-domain"
+        },
+        {
+          "document": "binary-search",
           "anchor": "matrix-rank"
         },
         {
-          "document": "binary-selection",
-          "anchor": "pair-distance-rank"
-        },
-        {
-          "document": "binary-selection",
+          "document": "binary-search",
           "anchor": "multiplication-rank"
         },
         {
-          "document": "binary-selection",
+          "document": "binary-search",
+          "anchor": "pair-distance-rank"
+        },
+        {
+          "document": "binary-search",
           "anchor": "two-sorted-partition"
         },
         {
-          "document": "binary-selection",
+          "document": "binary-search",
           "anchor": "ordered-dp-frontier"
         },
         {
-          "document": "binary-selection",
+          "document": "binary-search",
           "anchor": "weighted-predecessor"
         },
         {
-          "document": "binary-selection",
+          "document": "binary-search",
           "anchor": "resource-queries"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
+          "anchor": "matrix-peak"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "string-prefix"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "continuous-root"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "average-transform"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "ratio-selection"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "convex-location"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "matching-threshold"
+        },
+        {
+          "document": "binary-search",
           "anchor": "fenwick-rank"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
           "anchor": "summary-descent"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
           "anchor": "ancestor-boundary"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
           "anchor": "cyclic-jump"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
           "anchor": "time-parallel-search"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
           "anchor": "dynamic-range-kth"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
           "anchor": "marginal-penalty"
         }
       ],
@@ -4641,24 +4765,24 @@
       ],
       "locations": [
         {
-          "document": "binary-decision",
-          "anchor": "matching-threshold"
-        },
-        {
-          "document": "binary-selection",
+          "document": "binary-search",
           "anchor": "resource-queries"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
+          "anchor": "matching-threshold"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "summary-descent"
+        },
+        {
+          "document": "binary-search",
           "anchor": "dynamic-range-kth"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
           "anchor": "marginal-penalty"
-        },
-        {
-          "document": "binary-advanced",
-          "anchor": "summary-descent"
         }
       ],
       "materialIds": [
@@ -4724,151 +4848,151 @@
       ],
       "locations": [
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "ordered-boundaries"
         },
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "predicate-access"
         },
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "transformed-index"
         },
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "rotated-search"
         },
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "paired-break"
         },
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "local-peak"
         },
         {
-          "document": "binary-boundary",
-          "anchor": "matrix-peak"
-        },
-        {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "matrix-membership"
         },
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "integer-root"
         },
         {
-          "document": "binary-boundary",
-          "anchor": "continuous-root"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "string-prefix"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "convex-location"
-        },
-        {
-          "document": "binary-decision",
+          "document": "binary-search",
           "anchor": "capacity-partition"
         },
         {
-          "document": "binary-decision",
+          "document": "binary-search",
           "anchor": "maximin-spacing"
         },
         {
-          "document": "binary-decision",
+          "document": "binary-search",
           "anchor": "cumulative-production"
         },
         {
-          "document": "binary-decision",
+          "document": "binary-search",
           "anchor": "ordered-simulation"
         },
         {
-          "document": "binary-decision",
+          "document": "binary-search",
           "anchor": "graph-threshold"
         },
         {
-          "document": "binary-decision",
+          "document": "binary-search",
           "anchor": "prefix-activation"
         },
         {
-          "document": "binary-decision",
-          "anchor": "matching-threshold"
-        },
-        {
-          "document": "binary-decision",
-          "anchor": "average-transform"
-        },
-        {
-          "document": "binary-decision",
-          "anchor": "ratio-selection"
-        },
-        {
-          "document": "binary-selection",
-          "anchor": "pigeonhole-domain"
-        },
-        {
-          "document": "binary-selection",
+          "document": "binary-search",
           "anchor": "weighted-inverse"
         },
         {
-          "document": "binary-selection",
+          "document": "binary-search",
+          "anchor": "pigeonhole-domain"
+        },
+        {
+          "document": "binary-search",
           "anchor": "matrix-rank"
         },
         {
-          "document": "binary-selection",
-          "anchor": "pair-distance-rank"
-        },
-        {
-          "document": "binary-selection",
+          "document": "binary-search",
           "anchor": "multiplication-rank"
         },
         {
-          "document": "binary-selection",
+          "document": "binary-search",
+          "anchor": "pair-distance-rank"
+        },
+        {
+          "document": "binary-search",
           "anchor": "two-sorted-partition"
         },
         {
-          "document": "binary-selection",
+          "document": "binary-search",
           "anchor": "ordered-dp-frontier"
         },
         {
-          "document": "binary-selection",
+          "document": "binary-search",
           "anchor": "weighted-predecessor"
         },
         {
-          "document": "binary-selection",
+          "document": "binary-search",
           "anchor": "resource-queries"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
+          "anchor": "matrix-peak"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "string-prefix"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "continuous-root"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "average-transform"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "ratio-selection"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "convex-location"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "matching-threshold"
+        },
+        {
+          "document": "binary-search",
           "anchor": "fenwick-rank"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
           "anchor": "summary-descent"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
           "anchor": "ancestor-boundary"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
           "anchor": "cyclic-jump"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
           "anchor": "time-parallel-search"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
           "anchor": "dynamic-range-kth"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
           "anchor": "marginal-penalty"
         }
       ],
@@ -4962,8 +5086,8 @@
     {
       "id": "reader-flow",
       "dimension": "readability",
-      "claim": "四读件仍同一章，理论在前、正式题型主目录、知识唯一浮窗。",
-      "acceptance": "检查目录/字体/代码与原生阅读，内部编号不外显，首次知识就近且后续不重复长讲。",
+      "claim": "读者只面对一章中的前置与正式题型；问题和变型先于对应代码，必要依赖就近可理解。",
+      "acceptance": "从真实入口连续通读生成教材，核题型主目录、整章进度、首次解释、代码邻近和检索上下文；不以作者文件或已通过字段验收。",
       "status": "addressed",
       "gap": "",
       "taskIds": [
@@ -5007,152 +5131,8 @@
       ],
       "locations": [
         {
-          "document": "binary-boundary",
-          "anchor": "ordered-boundaries"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "predicate-access"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "transformed-index"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "rotated-search"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "paired-break"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "local-peak"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "matrix-peak"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "matrix-membership"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "integer-root"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "continuous-root"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "string-prefix"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "convex-location"
-        },
-        {
-          "document": "binary-decision",
-          "anchor": "capacity-partition"
-        },
-        {
-          "document": "binary-decision",
-          "anchor": "maximin-spacing"
-        },
-        {
-          "document": "binary-decision",
-          "anchor": "cumulative-production"
-        },
-        {
-          "document": "binary-decision",
-          "anchor": "ordered-simulation"
-        },
-        {
-          "document": "binary-decision",
-          "anchor": "graph-threshold"
-        },
-        {
-          "document": "binary-decision",
-          "anchor": "prefix-activation"
-        },
-        {
-          "document": "binary-decision",
-          "anchor": "matching-threshold"
-        },
-        {
-          "document": "binary-decision",
-          "anchor": "average-transform"
-        },
-        {
-          "document": "binary-decision",
-          "anchor": "ratio-selection"
-        },
-        {
-          "document": "binary-selection",
-          "anchor": "pigeonhole-domain"
-        },
-        {
-          "document": "binary-selection",
-          "anchor": "weighted-inverse"
-        },
-        {
-          "document": "binary-selection",
-          "anchor": "matrix-rank"
-        },
-        {
-          "document": "binary-selection",
-          "anchor": "pair-distance-rank"
-        },
-        {
-          "document": "binary-selection",
-          "anchor": "multiplication-rank"
-        },
-        {
-          "document": "binary-selection",
-          "anchor": "two-sorted-partition"
-        },
-        {
-          "document": "binary-selection",
-          "anchor": "ordered-dp-frontier"
-        },
-        {
-          "document": "binary-selection",
-          "anchor": "weighted-predecessor"
-        },
-        {
-          "document": "binary-selection",
-          "anchor": "resource-queries"
-        },
-        {
-          "document": "binary-advanced",
-          "anchor": "fenwick-rank"
-        },
-        {
-          "document": "binary-advanced",
-          "anchor": "summary-descent"
-        },
-        {
-          "document": "binary-advanced",
-          "anchor": "ancestor-boundary"
-        },
-        {
-          "document": "binary-advanced",
-          "anchor": "cyclic-jump"
-        },
-        {
-          "document": "binary-advanced",
-          "anchor": "time-parallel-search"
-        },
-        {
-          "document": "binary-advanced",
-          "anchor": "dynamic-range-kth"
-        },
-        {
-          "document": "binary-advanced",
-          "anchor": "marginal-penalty"
+          "document": "binary-search",
+          "anchor": "prelude"
         }
       ],
       "materialIds": [

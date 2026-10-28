@@ -12,7 +12,7 @@ async function fixture() {
   const root = await fs.mkdtemp(path.join(parent, 'case-'));
   for (const dir of ['tools', 'catalog', 'carrier', 'content/unit', 'content/knowledge', 'tests/cpp'])
     await fs.mkdir(path.join(root, dir), { recursive: true });
-  for (const filename of ['build_handbook.mjs', 'knowledge.mjs'])
+  for (const filename of ['build_handbook.mjs', 'knowledge.mjs', 'compose-chapter.mjs'])
     await fs.copyFile(path.join(ROOT, 'tools', filename), path.join(root, 'tools', filename));
   const descriptor = { id: 'fixture', title: '题型', path: 'content/unit/Fixture' };
   const publications = { schemaVersion: 2, collections: [{ id: 'chapter', title: '领域', kind: 'chapter', chapterNumber: 1, documents: [descriptor] }] };

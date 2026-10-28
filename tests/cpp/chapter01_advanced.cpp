@@ -31,6 +31,10 @@ void test_frequency() {
             expected.push_back(remaining[rank-1]);remaining.erase(remaining.begin()+rank-1);}
         assert(remove_by_rank(values,ranks)==expected);
     }
+    FrequencyTree traced(8);
+    const std::vector<i64> trace_frequency{1,0,2,1,0,3,0,1};
+    for(int i=0;i<8;++i) traced.add(i,trace_frequency[i]);
+    assert(traced.kth(5)==5); // the alignment trace in the text returns zero-based 5
     FrequencyTree empty(0);assert(empty.kth(1)==0);
     FrequencyTree large(200000);
     for(int i=0;i<200000;++i) large.add(i,1);

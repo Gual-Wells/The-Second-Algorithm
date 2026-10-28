@@ -173,15 +173,9 @@ i64 multiplication_kth_manual(int rows, int cols, i64 k) {
 // END multiplication-manual
 
 // BEGIN multiplication-standard
-i64 multiplication_count_standard(int rows, int cols, i64 x) {
-    i64 count = 0;
-    for (i64 i = 1; i <= rows; ++i) count += std::min<i64>(cols,x/i);
-    return count;
-}
-i64 multiplication_kth_standard(int rows, int cols, i64 k) {
-    if (rows > cols) std::swap(rows,cols);
-    return kth_value(1,1LL*rows*cols,k,
-                     [&](i64 x) { return multiplication_count_standard(rows,cols,x); });
+// 替换解析计数循环中一行的贡献，值域搜索与求和主体保持共用。
+i64 multiplication_row_standard(int cols, i64 x, i64 row) {
+    return std::min<i64>(cols, x / row);
 }
 // END multiplication-standard
 
@@ -257,6 +251,9 @@ std::vector<int> lis_standard(const std::vector<int>& a,bool nondecreasing=false
         return static_cast<int>(it-tail.begin()); // 变成下标再允许vector增长
     });
 }
+// END lis-standard
+
+// BEGIN envelopes-standard
 int envelopes_standard(std::vector<std::pair<int,int>> envelopes) {
     std::sort(envelopes.begin(),envelopes.end(),[](auto a,auto b) {
         return a.first != b.first ? a.first<b.first : a.second>b.second;
@@ -265,7 +262,7 @@ int envelopes_standard(std::vector<std::pair<int,int>> envelopes) {
     for (auto item : envelopes) heights.push_back(item.second);
     return static_cast<int>(lis_standard(heights).size());
 }
-// END lis-standard
+// END envelopes-standard
 
 // BEGIN lis-count
 i64 lis_count(const std::vector<int>& a) {
@@ -278,6 +275,7 @@ i64 lis_count(const std::vector<int>& a) {
         return y>cap-x ? cap : x+y;
     };
     for (int i=0;i<n;++i) for (int j=0;j<i;++j) if (a[j]<a[i]) {
+        // 更长则覆盖旧长度的方案；同长才合并互斥的倒数第二下标。
         if (len[j]+1>len[i]) { len[i]=len[j]+1; ways[i]=ways[j]; }
         else if (len[j]+1==len[i]) ways[i]=add_count(ways[i],ways[j]);
     }

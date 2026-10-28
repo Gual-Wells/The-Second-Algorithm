@@ -1,177 +1,174 @@
 {
   "schemaVersion": 1,
   "chapter": "chapter-01",
-  "inputHash": "2124e184ac0be106c58728101ab7a92636cb297bd056ca68bcb1d2408e40a4f6",
+  "inputHash": "d16ea5d4de7ec338c4b348e6fdabcde99bd2bd83c3e738b54e0a6939ce8ef8c7",
   "verdict": "accepted",
   "comparison": {
-    "baseline": "2026-10-28清空后无已有正式章；独立比较大领域，取全14书目和39来源概况、108动态材料与37型计划，而非把历史binary稿改名。旧单页模板覆盖不能继承为当前教学。",
-    "findings": "当前章以证书/条件/检查器组织，处理标准到复杂交叉，四读件仍是一章。实际作者交叉审阅暴露并修复漏根、局部计数、复杂度和证明缺口；edition-independent-review.md记录当前文字采样与非作者审阅边界。出版内容可接受，未来新型或更佳表达仍可增补。 最终整合仅修正新增浏览器检查对定位参数消费的错误假设；产品及正文未改，实际跳转重跑通过，见edition-review.md。"
+    "baseline": "基线d1fe0ba的二分已实际出版为四读件。此次保真采用其精确研究交接并重新编纂，旧accepted不继承；对照用户仅前置/正式题型的硬结构，以及第二语言实际唯一作者源和确定性成品经验。",
+    "findings": "编纂、装配、合同、发布输入和阅读器同步改变，而非只合并页面。关键实质改动与连续通读见work/editorial-rebuild-20261028/edition-review.md；作者、前置审读、独立困难节抽查各有真实范围，未以schema/计数自证教学完成。"
   },
   "outsideChallenge": {
     "materialIds": [
-      "edition-cross-boundary",
-      "edition-cross-decision",
-      "edition-cross-selection",
-      "edition-cross-advanced",
-      "edition-cross-knowledge",
-      "edition-independent",
+      "editorial-content-changes",
+      "editorial-prelude-review",
+      "editorial-independent-review",
       "challenge-aliens-official-method",
       "challenge-abc216e-official-editorial"
     ],
-    "findings": "独立范围挑战导致补齐参数恢复分支并明确一般WQS失败边界。作者期交叉审阅保留真实失败记录；P1024改导数临界点隔离并重新测试，LIS以饱和非负计数保持原题精确，产能紧界不再虚称必须防溢出，台数支配/Kuhn证明与合法平均前缀补清。最终独立通读确认关闭；boundary原失败报告未篡改成通过。"
+    "findings": "保留已采用研究的独立范围挑战；本轮新审读发现并修复重复旋转不能保证对半、浮点helper过早和困难结构解释缺口。非作者对生成读件另查前置/LIS/秩/根/结构与离线法，未发现阻断所查理解的缺口；具体证据和未查边界保留。"
   },
   "assessments": [
     {
       "commitment": "domain-coverage",
       "outcome": "pass",
-      "reason": "连续通读四稿，并将当前九个机制分支回查到书目/站点提取与独立范围挑战。新增结构下降、两种离线法和离散凹参数恢复均有真实推理与代码；连续异号、峰存在、有序分区不被单调性混为一谈。明确保留CHT/Aliens全体系、任意oracle等范围界，不用37个标题自证全网穷尽。",
+      "reason": "从当前37型统一正文反查九分支与原研究材料；排序未删核心范围，结构存在/连续异号不混作单调边界，跨思想的DP、匹配、结构下降和离线法保留必要推理。研究对象与读者节可多对多不是删范围授权；不主张全网穷尽。",
       "locations": [
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "ordered-boundaries"
         },
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "predicate-access"
         },
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "transformed-index"
         },
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "rotated-search"
         },
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "paired-break"
         },
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "local-peak"
         },
         {
-          "document": "binary-boundary",
-          "anchor": "matrix-peak"
-        },
-        {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "matrix-membership"
         },
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "integer-root"
         },
         {
-          "document": "binary-boundary",
-          "anchor": "continuous-root"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "string-prefix"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "convex-location"
-        },
-        {
-          "document": "binary-decision",
+          "document": "binary-search",
           "anchor": "capacity-partition"
         },
         {
-          "document": "binary-decision",
+          "document": "binary-search",
           "anchor": "maximin-spacing"
         },
         {
-          "document": "binary-decision",
+          "document": "binary-search",
           "anchor": "cumulative-production"
         },
         {
-          "document": "binary-decision",
+          "document": "binary-search",
           "anchor": "ordered-simulation"
         },
         {
-          "document": "binary-decision",
+          "document": "binary-search",
           "anchor": "graph-threshold"
         },
         {
-          "document": "binary-decision",
+          "document": "binary-search",
           "anchor": "prefix-activation"
         },
         {
-          "document": "binary-decision",
-          "anchor": "matching-threshold"
-        },
-        {
-          "document": "binary-decision",
-          "anchor": "average-transform"
-        },
-        {
-          "document": "binary-decision",
-          "anchor": "ratio-selection"
-        },
-        {
-          "document": "binary-selection",
-          "anchor": "pigeonhole-domain"
-        },
-        {
-          "document": "binary-selection",
+          "document": "binary-search",
           "anchor": "weighted-inverse"
         },
         {
-          "document": "binary-selection",
+          "document": "binary-search",
+          "anchor": "pigeonhole-domain"
+        },
+        {
+          "document": "binary-search",
           "anchor": "matrix-rank"
         },
         {
-          "document": "binary-selection",
-          "anchor": "pair-distance-rank"
-        },
-        {
-          "document": "binary-selection",
+          "document": "binary-search",
           "anchor": "multiplication-rank"
         },
         {
-          "document": "binary-selection",
+          "document": "binary-search",
+          "anchor": "pair-distance-rank"
+        },
+        {
+          "document": "binary-search",
           "anchor": "two-sorted-partition"
         },
         {
-          "document": "binary-selection",
+          "document": "binary-search",
           "anchor": "ordered-dp-frontier"
         },
         {
-          "document": "binary-selection",
+          "document": "binary-search",
           "anchor": "weighted-predecessor"
         },
         {
-          "document": "binary-selection",
+          "document": "binary-search",
           "anchor": "resource-queries"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
+          "anchor": "matrix-peak"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "string-prefix"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "continuous-root"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "average-transform"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "ratio-selection"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "convex-location"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "matching-threshold"
+        },
+        {
+          "document": "binary-search",
           "anchor": "fenwick-rank"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
           "anchor": "summary-descent"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
           "anchor": "ancestor-boundary"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
           "anchor": "cyclic-jump"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
           "anchor": "time-parallel-search"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
           "anchor": "dynamic-range-kth"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
           "anchor": "marginal-penalty"
         }
       ]
@@ -179,181 +176,189 @@
     {
       "commitment": "hard-variants",
       "outcome": "pass",
-      "reason": "核对匹配增广路及前缀最大性、鸡蛋覆盖反演、动态kth稳定分派及逆序回滚、结构摘要下降、参数同值范围与精确恢复。P1024合法小数系数漏根、LIS局部计数超界两项真实反例已修复，独立审阅再次核对现代码；完整复杂度计入压缩和oracle成本。",
+      "reason": "实读并修订Fenwick结点区间与对齐归纳、LIS计数状态及合并、资源覆盖反演、匹配阈值、时间重放、带修改稳定分流/剩余秩/回滚以及惩罚恢复条件。独立复读的实际结论和非阻断建议见新审阅，代码验证另有独立模型。",
       "locations": [
         {
-          "document": "binary-decision",
-          "anchor": "matching-threshold"
+          "document": "binary-search",
+          "anchor": "ordered-dp-frontier"
         },
         {
-          "document": "binary-selection",
+          "document": "binary-search",
           "anchor": "resource-queries"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
+          "anchor": "matching-threshold"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "fenwick-rank"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "time-parallel-search"
+        },
+        {
+          "document": "binary-search",
           "anchor": "dynamic-range-kth"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
           "anchor": "marginal-penalty"
-        },
-        {
-          "document": "binary-advanced",
-          "anchor": "summary-descent"
         }
       ]
     },
     {
       "commitment": "complete-type-chain",
       "outcome": "pass",
-      "reason": "逐型核对问题本质和成立条件、机制变型、注释手写实现、真实标准/支持设施及邻近解释、必要C++合同和1至4条研究期原题。99项登记实现绑定唯一源码，4个目标实际调用；无假std整题函数，无仅列高级名词或未解释check。代码通过不代替上述语义判断。",
+      "reason": "逐型回查问题本质和适用条件、特性造成的变型、注释手写及邻近解析、真实标准设施、必要知识和研究期练习。题意/变型移到代码前，helper先定义，乘法表不再复制同算法凑双版本；借用与vector失效分成单一知识权威，后续语义索引复用。",
       "locations": [
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "ordered-boundaries"
         },
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "predicate-access"
         },
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "transformed-index"
         },
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "rotated-search"
         },
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "paired-break"
         },
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "local-peak"
         },
         {
-          "document": "binary-boundary",
-          "anchor": "matrix-peak"
-        },
-        {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "matrix-membership"
         },
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
           "anchor": "integer-root"
         },
         {
-          "document": "binary-boundary",
-          "anchor": "continuous-root"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "string-prefix"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "convex-location"
-        },
-        {
-          "document": "binary-decision",
+          "document": "binary-search",
           "anchor": "capacity-partition"
         },
         {
-          "document": "binary-decision",
+          "document": "binary-search",
           "anchor": "maximin-spacing"
         },
         {
-          "document": "binary-decision",
+          "document": "binary-search",
           "anchor": "cumulative-production"
         },
         {
-          "document": "binary-decision",
+          "document": "binary-search",
           "anchor": "ordered-simulation"
         },
         {
-          "document": "binary-decision",
+          "document": "binary-search",
           "anchor": "graph-threshold"
         },
         {
-          "document": "binary-decision",
+          "document": "binary-search",
           "anchor": "prefix-activation"
         },
         {
-          "document": "binary-decision",
-          "anchor": "matching-threshold"
-        },
-        {
-          "document": "binary-decision",
-          "anchor": "average-transform"
-        },
-        {
-          "document": "binary-decision",
-          "anchor": "ratio-selection"
-        },
-        {
-          "document": "binary-selection",
-          "anchor": "pigeonhole-domain"
-        },
-        {
-          "document": "binary-selection",
+          "document": "binary-search",
           "anchor": "weighted-inverse"
         },
         {
-          "document": "binary-selection",
+          "document": "binary-search",
+          "anchor": "pigeonhole-domain"
+        },
+        {
+          "document": "binary-search",
           "anchor": "matrix-rank"
         },
         {
-          "document": "binary-selection",
-          "anchor": "pair-distance-rank"
-        },
-        {
-          "document": "binary-selection",
+          "document": "binary-search",
           "anchor": "multiplication-rank"
         },
         {
-          "document": "binary-selection",
+          "document": "binary-search",
+          "anchor": "pair-distance-rank"
+        },
+        {
+          "document": "binary-search",
           "anchor": "two-sorted-partition"
         },
         {
-          "document": "binary-selection",
+          "document": "binary-search",
           "anchor": "ordered-dp-frontier"
         },
         {
-          "document": "binary-selection",
+          "document": "binary-search",
           "anchor": "weighted-predecessor"
         },
         {
-          "document": "binary-selection",
+          "document": "binary-search",
           "anchor": "resource-queries"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
+          "anchor": "matrix-peak"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "string-prefix"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "continuous-root"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "average-transform"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "ratio-selection"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "convex-location"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "matching-threshold"
+        },
+        {
+          "document": "binary-search",
           "anchor": "fenwick-rank"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
           "anchor": "summary-descent"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
           "anchor": "ancestor-boundary"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
           "anchor": "cyclic-jump"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
           "anchor": "time-parallel-search"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
           "anchor": "dynamic-range-kth"
         },
         {
-          "document": "binary-advanced",
+          "document": "binary-search",
           "anchor": "marginal-penalty"
         }
       ]
@@ -361,155 +366,31 @@
     {
       "commitment": "reader-flow",
       "outcome": "pass",
-      "reason": "实际检查同章四读件递进、H2题型目录、前置机制与最终选择地图；首次知识在使用处解释，后续语义链接复用12份权威。真浏览器在402×874等尺寸检查当前四文档，未见外层溢出，代码独立滚动、知识浮窗无内部编号。该观察不冒称真实iPhone实机验收。",
+      "reason": "按唯一前置和37正式节连续回读并检查新接缝；没有四篇或独立地图主结构。当前真实浏览器主目录38项，全章进度、实现处所属题型、知识搜索/浮窗及返回均核验；修复深读位目录搜索继承旧滚动遮住首批结果。未冒称实机或学习效果验收。",
       "locations": [
         {
-          "document": "binary-boundary",
+          "document": "binary-search",
+          "anchor": "prelude"
+        },
+        {
+          "document": "binary-search",
           "anchor": "ordered-boundaries"
         },
         {
-          "document": "binary-boundary",
-          "anchor": "predicate-access"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "transformed-index"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "rotated-search"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "paired-break"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "local-peak"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "matrix-peak"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "matrix-membership"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "integer-root"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "continuous-root"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "string-prefix"
-        },
-        {
-          "document": "binary-boundary",
-          "anchor": "convex-location"
-        },
-        {
-          "document": "binary-decision",
+          "document": "binary-search",
           "anchor": "capacity-partition"
         },
         {
-          "document": "binary-decision",
-          "anchor": "maximin-spacing"
-        },
-        {
-          "document": "binary-decision",
-          "anchor": "cumulative-production"
-        },
-        {
-          "document": "binary-decision",
-          "anchor": "ordered-simulation"
-        },
-        {
-          "document": "binary-decision",
-          "anchor": "graph-threshold"
-        },
-        {
-          "document": "binary-decision",
-          "anchor": "prefix-activation"
-        },
-        {
-          "document": "binary-decision",
-          "anchor": "matching-threshold"
-        },
-        {
-          "document": "binary-decision",
-          "anchor": "average-transform"
-        },
-        {
-          "document": "binary-decision",
-          "anchor": "ratio-selection"
-        },
-        {
-          "document": "binary-selection",
-          "anchor": "pigeonhole-domain"
-        },
-        {
-          "document": "binary-selection",
-          "anchor": "weighted-inverse"
-        },
-        {
-          "document": "binary-selection",
-          "anchor": "matrix-rank"
-        },
-        {
-          "document": "binary-selection",
-          "anchor": "pair-distance-rank"
-        },
-        {
-          "document": "binary-selection",
-          "anchor": "multiplication-rank"
-        },
-        {
-          "document": "binary-selection",
-          "anchor": "two-sorted-partition"
-        },
-        {
-          "document": "binary-selection",
+          "document": "binary-search",
           "anchor": "ordered-dp-frontier"
         },
         {
-          "document": "binary-selection",
-          "anchor": "weighted-predecessor"
-        },
-        {
-          "document": "binary-selection",
-          "anchor": "resource-queries"
-        },
-        {
-          "document": "binary-advanced",
+          "document": "binary-search",
           "anchor": "fenwick-rank"
         },
         {
-          "document": "binary-advanced",
-          "anchor": "summary-descent"
-        },
-        {
-          "document": "binary-advanced",
-          "anchor": "ancestor-boundary"
-        },
-        {
-          "document": "binary-advanced",
-          "anchor": "cyclic-jump"
-        },
-        {
-          "document": "binary-advanced",
-          "anchor": "time-parallel-search"
-        },
-        {
-          "document": "binary-advanced",
+          "document": "binary-search",
           "anchor": "dynamic-range-kth"
-        },
-        {
-          "document": "binary-advanced",
-          "anchor": "marginal-penalty"
         }
       ]
     }

@@ -32,7 +32,8 @@ public:
         while (step <= n / 2) step *= 2;
         for (; step != 0; step /= 2) {
             int next = accepted + step;
-            // tree[next] is precisely the next whole block at this alignment.
+            // accepted是2*step的倍数，故lowbit(next)=step，
+            // tree[next]恰覆盖1基区间(accepted,next]，没有重叠计数。
             if (next <= n && tree[next] < k) {
                 accepted = next;
                 k -= tree[next]; // rank among the unaccepted suffix
@@ -299,7 +300,10 @@ struct RangeOperation {
 };
 struct RankEvent {
     bool query;
-    int x, y, k, id, value; // update: x=position,k=delta,value=compressed rank
+    int left, right; // update uses left as position; query uses inclusive [left,right]
+    int rank;        // query only: rank within the current candidate value interval
+    int delta;       // update only: +1 insert, -1 delete
+    int id, value;   // query output index; update compressed value
 };
 // END advanced-kth-model
 
@@ -325,15 +329,15 @@ std::vector<i64> dynamic_range_kth(const std::vector<i64>& initial,
     std::vector<i64> current = initial;
     std::vector<RankEvent> events;
     for (int i = 0; i < static_cast<int>(initial.size()); ++i)
-        events.push_back({false,i,0,1,0,value_rank(values,initial[i])});
+        events.push_back({false,i,i,0,1,-1,value_rank(values,initial[i])});
     int queries = 0;
     for (const auto& op : operations) {
         if (op.kind == RangeOperation::Kind::assign) {
             if (current[op.left] == op.value) continue;
-            events.push_back({false,op.left,0,-1,0,value_rank(values,current[op.left])});
-            events.push_back({false,op.left,0,1,0,value_rank(values,op.value)});
+            events.push_back({false,op.left,op.left,0,-1,-1,value_rank(values,current[op.left])});
+            events.push_back({false,op.left,op.left,0,1,-1,value_rank(values,op.value)});
             current[op.left] = op.value; // the next assignment must delete this value
-        } else events.push_back({true,op.left,op.right,op.k,queries++,0});
+        } else events.push_back({true,op.left,op.right,op.k,0,queries++,0});
     }
     std::vector<i64> answer(queries);
     if (queries == 0) return answer;
@@ -353,11 +357,11 @@ std::vector<i64> dynamic_range_kth(const std::vector<i64>& initial,
             bool left;
             if (!event.query) {
                 left = event.value <= mid;
-                if (left) count.add(event.x,event.k);
+                if (left) count.add(event.left,event.delta);
             } else {
-                i64 smaller = count.prefix(event.y+1)-count.prefix(event.x);
-                left = event.k <= smaller;
-                if (!left) event.k -= static_cast<int>(smaller); // residual rank
+                i64 smaller = count.prefix(event.right+1)-count.prefix(event.left);
+                left = event.rank <= smaller;
+                if (!left) event.rank -= static_cast<int>(smaller); // residual rank
             }
             goes_left[i] = static_cast<unsigned char>(left);
             left_count += left;
@@ -365,7 +369,7 @@ std::vector<i64> dynamic_range_kth(const std::vector<i64>& initial,
         // Reverse replay restores actual earlier states, including nonnegative frequencies.
         // No query from either child is allowed before this node is fully undone.
         for (int i = end-1; i >= begin; --i)
-            if (!events[i].query && goes_left[i]) count.add(events[i].x,-events[i].k);
+            if (!events[i].query && goes_left[i]) count.add(events[i].left,-events[i].delta);
         int l = begin, r = begin+left_count;
         for (int i = begin; i < end; ++i)
             scratch[goes_left[i] ? l++ : r++] = events[i]; // stable in each child

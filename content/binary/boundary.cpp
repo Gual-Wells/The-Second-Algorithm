@@ -44,6 +44,9 @@ std::optional<int> predecessor_manual(const std::vector<int>& a, int key) {
     if (end == 0) return std::nullopt;
     return a[end - 1];
 }
+// END boundary-ordered-manual
+
+// BEGIN boundary-time-manual
 struct TimedValue { int time; std::string value; };
 // 同一key的记录已按time严格递增；查最后一个time<=query。
 std::optional<std::string> time_manual(const std::vector<TimedValue>& a, int query) {
@@ -56,7 +59,7 @@ std::optional<std::string> time_manual(const std::vector<TimedValue>& a, int que
     if (lo == 0) return std::nullopt;
     return a[lo - 1].value;
 }
-// END boundary-ordered-manual
+// END boundary-time-manual
 
 // BEGIN boundary-ordered-standard
 std::pair<std::size_t, std::size_t>
@@ -65,6 +68,9 @@ equal_standard(const std::vector<int>& a, int key) {
     return {static_cast<std::size_t>(range.first - a.begin()),
             static_cast<std::size_t>(range.second - a.begin())};
 }
+// END boundary-ordered-standard
+
+// BEGIN boundary-time-standard
 std::optional<std::string> time_standard(const std::vector<TimedValue>& a, int query) {
     // upper_bound比较方向是comp(value, element)，不同于lower_bound。
     auto it = std::upper_bound(a.begin(), a.end(), query,
@@ -72,7 +78,7 @@ std::optional<std::string> time_standard(const std::vector<TimedValue>& a, int q
     if (it == a.begin()) return std::nullopt;
     return std::prev(it)->value;
 }
-// END boundary-ordered-standard
+// END boundary-time-standard
 
 // BEGIN boundary-access-manual
 template<class Predicate>
@@ -140,6 +146,9 @@ std::optional<std::size_t> fixed_distinct(const std::vector<int>& a) {
     if (lo < a.size() && static_cast<std::int64_t>(a[lo]) == static_cast<std::int64_t>(lo)) return lo;
     return std::nullopt;
 }
+// END boundary-transformed-manual
+
+// BEGIN boundary-fixed-duplicates
 std::optional<std::size_t>
 fixed_duplicate_range(const std::vector<int>& a, std::ptrdiff_t lo, std::ptrdiff_t hi) {
     if (lo > hi) return std::nullopt;
@@ -153,6 +162,9 @@ fixed_duplicate_range(const std::vector<int>& a, std::ptrdiff_t lo, std::ptrdiff
 std::optional<std::size_t> fixed_duplicates(const std::vector<int>& a) {
     return fixed_duplicate_range(a, 0, static_cast<std::ptrdiff_t>(a.size()) - 1);
 }
+// END boundary-fixed-duplicates
+
+// BEGIN boundary-missing-manual
 std::int64_t kth_missing_manual(const std::vector<int>& a, std::int64_t k) {
     // a严格递增、正整数；k>0，且n+k可用int64表示。
     std::size_t lo = 0, hi = a.size();
@@ -164,7 +176,7 @@ std::int64_t kth_missing_manual(const std::vector<int>& a, std::int64_t k) {
     }
     return k + static_cast<std::int64_t>(lo);
 }
-// END boundary-transformed-manual
+// END boundary-missing-manual
 
 // BEGIN boundary-transformed-standard
 std::int64_t kth_missing_precomputed(const std::vector<int>& a, std::int64_t k) {
@@ -457,6 +469,9 @@ prefix_range_manual(const std::vector<std::string>& words, std::string_view pref
     }
     return {first, lo};
 }
+// END boundary-prefix-manual
+
+// BEGIN boundary-lcp-manual
 std::size_t lcp_binary(std::string_view a, std::string_view b) {
     std::size_t lo = 0, hi = std::min(a.size(), b.size());
     while (lo < hi) {
@@ -467,7 +482,7 @@ std::size_t lcp_binary(std::string_view a, std::string_view b) {
     }
     return lo;
 }
-// END boundary-prefix-manual
+// END boundary-lcp-manual
 
 // BEGIN boundary-prefix-standard
 std::pair<std::size_t, std::size_t>
@@ -483,6 +498,9 @@ prefix_range_standard(const std::vector<std::string>& words, std::string_view pr
     return {static_cast<std::size_t>(first - words.begin()),
             static_cast<std::size_t>(last - words.begin())};
 }
+// END boundary-prefix-standard
+
+// BEGIN boundary-suggestions-standard
 std::vector<std::vector<std::string>>
 suggestions_standard(std::vector<std::string> products, std::string_view query) {
     std::sort(products.begin(), products.end());
@@ -495,10 +513,13 @@ suggestions_standard(std::vector<std::string> products, std::string_view query) 
     }
     return result;
 }
+// END boundary-suggestions-standard
+
+// BEGIN boundary-lcp-standard
 std::size_t lcp_standard(std::string_view a, std::string_view b) {
     return static_cast<std::size_t>(std::mismatch(a.begin(), a.end(), b.begin(), b.end()).first - a.begin());
 }
-// END boundary-prefix-standard
+// END boundary-lcp-standard
 
 // BEGIN boundary-convex-manual
 struct Point { std::int64_t x, y; };

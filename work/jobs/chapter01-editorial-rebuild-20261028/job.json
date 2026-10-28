@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "chapter01-editorial-rebuild-20261028",
+  "goal": "按用户前置节与正式题型节完成编纂工程改造，保真承接已发布二分研究、重编首章并验证正式发布",
+  "createdAt": "2026-10-28T15:10:27.945477+00:00",
+  "evidence": [
+    {
+      "id": "50a91216d33e4bc1830c5b3a84f27372",
+      "kind": "research",
+      "path": "work/editorial-rebuild-20261028/research-synthesis.md",
+      "summary": "核对原研究采用、第二语言实际装配机制和本章编纂缺陷，落实单章schema3、独立作者源、确定性装配与当前输入闭包",
+      "outcome": "accepted",
+      "sha256": "9cfbfc73537cb4144476477e7c93ec0a18bbdc8598fa948fb73b006d5aea7862",
+      "inputHash": "97ac4d68a541203b0d078e505085c7c10c36843fc9d438ff65a7822e621d5458",
+      "recordedAt": "2026-10-28T15:42:16.665032+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "f42e735710334ac4a23f58faf79a4348",
+      "kind": "review",
+      "path": "work/editorial-rebuild-20261028/edition-review.md",
+      "summary": "当前单章连续回查、作者/非作者实读、困难节机制修订与真实浏览器问题闭环；区分技术通过和语义采用",
+      "outcome": "accepted",
+      "sha256": "381409d35e609f9046cfa655385ccc114d91f504f2dd2cb73647715332e98465",
+      "inputHash": "97ac4d68a541203b0d078e505085c7c10c36843fc9d438ff65a7822e621d5458",
+      "recordedAt": "2026-10-28T15:42:19.064023+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    }
+  ],
+  "lastGoodVerification": {
+    "path": "work/jobs/chapter01-editorial-rebuild-20261028/verifications/703ecb905ef542689fe3f18ba1fcc4e1.json",
+    "sha256": "dc88dbdc43008f4c6c4e28b167a7d0a7521950c47a07b56f14a2cf40c5bbe01d",
+    "inputHash": "97ac4d68a541203b0d078e505085c7c10c36843fc9d438ff65a7822e621d5458"
+  },
+  "lastPreparedRelease": {
+    "path": "work/jobs/chapter01-editorial-rebuild-20261028/releases/51804aa8006246c8aef3a67bd7954ee0.json",
+    "sha256": "4f285a50a791af10c66869f91814e383677ebc3ac6cf96a6ff6116d1a6b2f0c8",
+    "inputHash": "97ac4d68a541203b0d078e505085c7c10c36843fc9d438ff65a7822e621d5458"
+  },
+  "lastVerificationAttempt": {
+    "path": "work/jobs/chapter01-editorial-rebuild-20261028/verifications/703ecb905ef542689fe3f18ba1fcc4e1.json",
+    "sha256": "dc88dbdc43008f4c6c4e28b167a7d0a7521950c47a07b56f14a2cf40c5bbe01d",
+    "inputHash": "97ac4d68a541203b0d078e505085c7c10c36843fc9d438ff65a7822e621d5458"
+  }
+}

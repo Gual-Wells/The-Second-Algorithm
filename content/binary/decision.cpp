@@ -36,6 +36,9 @@ i64 last_true(i64 lo, i64 hi, Predicate feasible) {
     return lo;
 }
 
+// END decision-search-core
+
+// BEGIN decision-real-search-core
 // 固定迭代预算，并防止浮点中点已无法前进。
 template<class Predicate>
 long double real_last_true(long double lo, long double hi, Predicate feasible) {
@@ -58,7 +61,7 @@ long double real_first_true(long double lo, long double hi, Predicate feasible) 
     }
     return hi;
 }
-// END decision-search-core
+// END decision-real-search-core
 
 // BEGIN decision-capacity-manual
 // a 非空、各项非负、1 <= k <= a.size()；总和须可用 i64 表示。

@@ -279,13 +279,14 @@ function renderLibrary() {
   const row = c => {
     const last = c.documents.find(d => d.id === readLocal(`last-document:${c.id}`))
       || [...c.documents].sort((a, b) => (S.records[`position:${b.id}`]?.updatedAt || 0) - (S.records[`position:${a.id}`]?.updatedAt || 0))[0];
-    return `<button class="book-row" type="button" data-open-collection="${c.id}" data-open-document="${last.id}"><span><strong>${esc(c.kind === 'chapter' ? `第${c.chapterNumber}章　${c.title}` : c.title)}</strong><small>${c.documents.length}篇${c.documents.some(d => positionFor(d.id)) ? ' · 继续阅读' : ''}</small></span><span aria-hidden="true">›</span></button>`;
+    const units = c.documents.length === 1 ? Math.max(0, last.headings.filter(h => h.depth === 2).length - 1) : null;
+    return `<button class="book-row" type="button" data-open-collection="${c.id}" data-open-document="${last.id}"><span><strong>${esc(c.kind === 'chapter' ? `第${c.chapterNumber}章　${c.title}` : c.title)}</strong><small>${units === null ? `${c.documents.length}篇` : `${units}个题型`}${c.documents.some(d => positionFor(d.id)) ? ' · 继续阅读' : ''}</small></span><span aria-hidden="true">›</span></button>`;
   };
   const chapters = entries.filter(c => c.kind === 'chapter');
   $('bookList').innerHTML = `<section class="shelf-section"><h3>章节</h3>${chapters.length ? chapters.map(row).join('') : '<p class="empty-state">暂无章节</p>'}</section>`;
   const resume = readLocal('resume'), collection = entries.find(c => c.id === resume?.collection), meta = collection?.documents.find(d => d.id === resume.document);
   $('libraryResume').hidden = !meta;
-  if (meta) { $('libraryResume').innerHTML = `<span><small>继续阅读</small><strong>${esc(collection.title)} · ${esc(meta.title)}</strong></span><span aria-hidden="true">›</span>`; $('libraryResume').dataset.route = resume.route; }
+  if (meta) { $('libraryResume').innerHTML = `<span><small>继续阅读</small><strong>${esc(collection.title)}${collection.documents.length > 1 ? ' · ' + esc(meta.title) : ''}</strong></span><span aria-hidden="true">›</span>`; $('libraryResume').dataset.route = resume.route; }
 }
 
 function positionFor(docId) {
@@ -366,7 +367,7 @@ function currentHeading() {
   // Native anchor alignment combines the pane's padding with the heading's
   // scroll margin. A newly reached heading should already be the current one.
   const top = pane.getBoundingClientRect().top + (parseFloat(getComputedStyle(pane).scrollPaddingTop) || 0) + 24;
-  const headings = [...$('readingArticle').querySelectorAll('h2[id],h3[id]')];
+  const headings = [...$('readingArticle').querySelectorAll('h2[id]')];
   return headings.filter(h => h.getBoundingClientRect().top <= top).at(-1);
 }
 
@@ -410,7 +411,9 @@ function rememberSheet(render) {
 function tocMarkup() {
   if (!S.active) return '';
   const { collection, meta } = S.active, current = currentHeading()?.id;
-  return collection.documents.map(d => `<details class="toc-group"${d.id === meta.id ? ' open' : ''}><summary>${esc(d.title)}${d.id === meta.id ? '<small>当前篇</small>' : ''}</summary>${d.headings.filter(h => h.depth === 2 || h.depth === 3).map(h => `<button type="button" class="toc-row depth-${h.depth}" data-go-document="${d.id}" data-go-collection="${collection.id}" data-anchor="${esc(h.id)}"${d.id === meta.id && h.id === current ? ' aria-current="location"' : ''}>${esc(h.text)}</button>`).join('')}</details>`).join('');
+  const rows = d => d.headings.filter(h => h.depth === 2).map(h => `<button type="button" class="toc-row depth-2" data-go-document="${d.id}" data-go-collection="${collection.id}" data-anchor="${esc(h.id)}"${d.id === meta.id && h.id === current ? ' aria-current="location"' : ''}>${esc(h.text)}</button>`).join('');
+  if (collection.documents.length === 1) return rows(meta);
+  return collection.documents.map(d => `<details class="toc-group"${d.id === meta.id ? ' open' : ''}><summary>${esc(d.title)}</summary>${rows(d)}</details>`).join('');
 }
 
 function showToc() {
@@ -477,15 +480,30 @@ async function search(query, container, pairs) {
     try {
       const doc = await getDocument(meta), template = document.createElement('template'); template.innerHTML = doc.html;
       template.content.querySelectorAll('.code-toolbar,.code-copy').forEach(node => node.remove());
-      let title = meta.title, anchor = '', text = '';
+      let parentTitle = meta.title, title = meta.title, anchor = '', text = '';
       const commit = () => {
         const lower = (title + ' ' + text).toLocaleLowerCase(); if (!terms.every(t => lower.includes(t))) return;
-        const at = Math.max(0, text.toLocaleLowerCase().indexOf(terms[0]) - 35);
+        const matches = terms.map(term => text.toLocaleLowerCase().indexOf(term)).filter(at => at >= 0);
+        const at = Math.max(0, (matches.length ? Math.min(...matches) : 0) - 35);
         results.push({ collection, meta, title, anchor, snippet: text.slice(at, at + 125) });
       };
       for (const node of template.content.children) {
-        if (/^H[23]$/.test(node.tagName)) { commit(); title = node.textContent; anchor = node.id; text = ''; }
-        else text += ' ' + node.textContent;
+        if (node.tagName === 'H2') {
+          commit(); parentTitle = title = node.textContent; anchor = node.id; text = '';
+        } else if (node.tagName === 'H3') {
+          commit(); title = parentTitle + ' · ' + node.textContent; anchor = node.id; text = '';
+        } else if (node.matches('.knowledge-introduction')) {
+          const knowledgeId = node.dataset.knowledgeIntroduction;
+          const titleNode = node.querySelector('.knowledge-title');
+          const knowledgeTitle = titleNode?.textContent;
+          titleNode?.remove();
+          const body = node.textContent;
+          if (knowledgeTitle && S.library.questions.some(q => q.id === knowledgeId)
+              && terms.every(term => (parentTitle + ' ' + knowledgeTitle + ' ' + body).toLocaleLowerCase().includes(term))) {
+            const at = Math.max(0, body.toLocaleLowerCase().indexOf(terms[0]) - 35);
+            results.push({ collection, meta, title: knowledgeTitle, parentTitle, knowledgeId, snippet: body.slice(at, at + 125) });
+          }
+        } else text += ' ' + node.textContent;
       }
       commit();
     } catch { failed.push(meta.id); }
@@ -494,7 +512,8 @@ async function search(query, container, pairs) {
   if (sequence !== S.searchSequence || !container.isConnected) return;
   const scope = failed.length ? `<p class="search-notice">${pairs.length - failed.length} / ${pairs.length}篇已检索；其余内容${S.offline ? '尚未下载' : '暂不可用'}。</p>` : '';
   container.innerHTML = `<p class="search-summary">${results.length}处匹配${results.length > 80 ? ' · 显示前80处' : ''}</p>` + scope
-    + (results.length ? results.slice(0, 80).map(r => `<button type="button" class="search-row" data-go-collection="${r.collection.id}" data-go-document="${r.meta.id}" data-anchor="${esc(r.anchor)}"><strong>${markText(r.title, terms)}</strong><small>${esc(r.collection.title)} · ${esc(r.meta.title)}</small><span class="search-snippet">${markText(r.snippet, terms)}</span></button>`).join('') : `<p class="empty-state">${failed.length === pairs.length ? '暂无可检索内容' : failed.length ? '已检索内容中未找到匹配' : '没有找到匹配内容'}</p>`);
+    + (results.length ? results.slice(0, 80).map(r => `<button type="button" class="search-row" ${r.knowledgeId ? `data-knowledge="${esc(r.knowledgeId)}"` : `data-go-collection="${r.collection.id}" data-go-document="${r.meta.id}" data-anchor="${esc(r.anchor)}"`}><strong>${markText(r.title, terms)}</strong><small>${esc(r.collection.title)}${r.knowledgeId ? ' · ' + esc(r.parentTitle) : r.collection.documents.length > 1 ? ' · ' + esc(r.meta.title) : ''}</small><span class="search-snippet">${markText(r.snippet, terms)}</span></button>`).join('') : `<p class="empty-state">${failed.length === pairs.length ? '暂无可检索内容' : failed.length ? '已检索内容中未找到匹配' : '没有找到匹配内容'}</p>`);
+  if (container.id === 'tocResults' && sheetView === 'toc') $('sheetBody').scrollTop = 0;
 }
 
 function getNote(collectionId) {
@@ -596,9 +615,9 @@ function showSettings() {
     <div class="settings-row"><span>正文字号</span><div><button type="button" data-font="-1" aria-label="缩小正文字号">−</button> <output id="fontValue">${S.settings.fontSize}</output> <button type="button" data-font="1" aria-label="放大正文字号">＋</button></div></div>
     <div class="settings-row"><span>代码字号</span><div><button type="button" data-code-font="-0.5" aria-label="缩小代码字号">−</button> <output id="codeFontValue">${S.settings.codeSize}</output> <button type="button" data-code-font="0.5" aria-label="放大代码字号">＋</button></div></div>
     <label class="settings-row"><span>代码自动换行</span><input id="wrapCode" type="checkbox"${S.settings.wrapCode ? ' checked' : ''}></label>
-    <label class="settings-row"><span>打开时下载整组</span><input id="preloadContent" type="checkbox"${S.settings.preload ? ' checked' : ''}></label>
+    <label class="settings-row"><span>打开时下载章节</span><input id="preloadContent" type="checkbox"${S.settings.preload ? ' checked' : ''}></label>
     ${S.active ? '<button type="button" class="settings-link" data-settings-pure><span>纯净阅读</span><span aria-hidden="true">›</span></button>' : ''}</section>
-    ${S.active ? `<section class="settings-group"><h3>${esc(S.active.collection.title)}</h3><button type="button" class="settings-link" data-show-source><span>查看本篇源码</span><span aria-hidden="true">›</span></button><button type="button" class="settings-link" data-download-current><span>下载整组内容<small>${S.active.collection.documents.length}篇 · 含C++源码</small></span><span aria-hidden="true">↓</span></button></section>` : ''}
+    ${S.active ? `<section class="settings-group"><h3>${esc(S.active.collection.title)}</h3><button type="button" class="settings-link" data-show-source><span>查看源码</span><span aria-hidden="true">›</span></button><button type="button" class="settings-link" data-download-current><span>下载本章<small>含C++源码</small></span><span aria-hidden="true">↓</span></button></section>` : ''}
     <section class="settings-group"><h3>应用</h3><button type="button" class="settings-link" data-check-updates><span>检查内容更新</span><span aria-hidden="true">↻</span></button><button type="button" class="settings-link" data-reload-app${S.updateReady ? '' : ' hidden'}><span>重新载入应用</span><span aria-hidden="true">↻</span></button><button type="button" class="settings-link" data-install-info><span>添加到主屏幕</span><span aria-hidden="true">›</span></button><button type="button" class="settings-link sign-out" data-logout><span>退出登录</span></button></section>`, 'settings');
 }
 
