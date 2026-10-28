@@ -21,18 +21,21 @@ python -m second_algorithm research open-study task-id --chapter chapter-id
 python -m second_algorithm research study-status task-id
 ```
 
-编辑 `work/jobs/<task-id>/study/ledger.json`、`dossier.json`、`scope.json`，真实研究笔记与每阶段JSON记录置于持久 `work/` 路径。open-study生成全书目/来源待判断项，不代表已经概况理解或读过。精确字段见CONTENT_MODEL。每阶段完成相应实质研究后提交当前记录：
+编辑 `work/jobs/<task-id>/study/ledger.json`、`dossier.json`、`scope.json`，真实研究笔记与每阶段JSON记录置于持久 `work/` 路径。当前研究状态、阶段收据及交接为schemaVersion2，三个动态档案仍为schemaVersion1。open-study生成书目/来源及已有正式章节的待判断项，不代表已经概况理解或读过；旧章此时仅作身份/状态盘点。精确字段见CONTENT_MODEL。每阶段完成相应实质研究后提交当前记录：
 
 ```sh
 python -m second_algorithm research checkpoint task-id --phase overview --record work/task/overview.json
 python -m second_algorithm research checkpoint task-id --phase scope --record work/task/scope-selection.json
+python -m second_algorithm research checkpoint task-id --phase alignment --record work/task/chapter-alignment.json
 python -m second_algorithm research checkpoint task-id --phase collection --record work/task/collection.json
 python -m second_algorithm research checkpoint task-id --phase synthesis --record work/task/synthesis.json
 python -m second_algorithm research checkpoint task-id --phase scope-review --record work/task/scope-review.json
 python -m second_algorithm research checkpoint task-id --phase resynthesis --record work/task/resynthesis.json
 ```
 
-这六种阶段表示依赖，不是连续执行六条命令就算研究完成。动态补充、反复研究和范围复审按RESEARCH_FACILITIES实际进行；最后一阶段必须真正充分研究当前档案，跟进复审任务。笔记记录读取范围/版本、机制与分类、变化、负结果、未决和下一动作。不可访问不标已读，不上传商业全文或凭据。
+这七种阶段表示依赖，不是连续执行七条命令就算研究完成。scope先独立研究领域提案，记录独立依据及非旧章材料；alignment再协同已有正式章节并确立初始范围，然后才充分提取本章内容。alignment和scope-review都保存chapterCoordination，后者须把旧章作为真实研究材料再次协同，不只沿用前次结论。动态补充、反复研究和范围复审按RESEARCH_FACILITIES实际进行；最后一阶段必须真正充分研究当前档案，跟进复审任务。
+
+已有正式章用chapter来源、实际定位与分析笔记进入档案；逐章判断关系，相关内容按需实读，无关章不强迫全量重读。部分重合和近邻可以保留，各章完整性、领域独立性和全局广度仍须研究判断；无已有章时保存明确空记录。笔记记录读取范围/版本、机制与分类、变化、负结果、未决和下一动作。不可访问不标已读，不上传商业全文或凭据。
 
 每次checkpoint固定当前档案、记录及引用笔记字节，并保存前驱。阶段不可跳过；重新提交较早阶段会保留历史、截去当前有效链的后续阶段，须按影响续作。scope-review之后若scope改变，先重做scope-review再进行resynthesis。在研/初次出版时，书目、来源池、有效研究基座或其他章节出版前沿变化须按status恢复overview；动态补充资料无需抹去历史初始范围。真正已出版交接的历史基座规则见RESEARCH_FACILITIES，不转借给新研究。
 

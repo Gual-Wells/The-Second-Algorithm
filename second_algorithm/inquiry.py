@@ -8,7 +8,7 @@ from pathlib import Path
 
 from .storage import canonical_bytes, digest, now, read_json, safe_relative, valid_id, valid_url, write_json
 
-PHASES = ("overview", "scope", "collection", "synthesis", "scope-review", "resynthesis")
+PHASES = ("overview", "scope", "alignment", "collection", "synthesis", "scope-review", "resynthesis")
 MUTABLE = ("ledger.json", "dossier.json", "scope.json")
 BASE = ("catalog/books.json", "catalog/sources.json", "protocol/RESEARCH_DEPARTMENT.md", "protocol/RESEARCH_FACILITIES.md")
 
@@ -22,8 +22,8 @@ def _folder(root, job):
 def _state(root, job):
     folder = _folder(root, job)
     state = read_json(folder / "study.json")
-    if not isinstance(state, dict) or state.get("schemaVersion") != 1 or state.get("job") != job:
-        raise ValueError("No valid study; use research open-study first")
+    if not isinstance(state, dict) or state.get("schemaVersion") != 2 or state.get("job") != job:
+        raise ValueError("Study schemaVersion 2 is required; preserve old research and start a current study without fabricating alignment")
     if not isinstance(state.get("active"), list) or not isinstance(state.get("history"), list):
         raise ValueError("Invalid study journal")
     return folder, state
@@ -55,7 +55,7 @@ def _rows(data, key):
     return rows
 
 
-def _registry(root):
+def _registry(root, chapter=None):
     identities = set()
     for filename, key, prefix in (("books.json", "books", "book:"), ("sources.json", "sources", "source:")):
         record = read_json(root / "catalog" / filename)
@@ -68,18 +68,61 @@ def _registry(root):
         if len(set(ids)) != len(ids):
             raise ValueError("Duplicate source/book registry identity")
         identities.update(prefix + identity for identity in ids)
+    if chapter is not None:
+        identities.update("chapter:" + row["id"] for row in _prior_chapters(root, chapter))
     return identities
 
 
-def _frontier(root, chapter):
-    # The chapter being authored is not prior publication. Its collection may differ from its ID.
-    own = {chapter}
-    for row in read_json(root / "catalog/chapters.json", {"chapters": []}).get("chapters", []):
-        if row.get("id") == chapter:
-            own.add(row.get("collection"))
+def _prior_chapters(root, chapter):
+    """Current formal publications only; capture identity without selecting a topic."""
+    index = read_json(root / "catalog/chapters.json", {"chapters": []})
+    if not isinstance(index, dict) or not isinstance(index.get("chapters"), list) or any(not isinstance(row, dict) for row in index["chapters"]):
+        raise ValueError("Prior chapter registration must contain a chapters array")
+    registrations = index.get("chapters", [])
+    # Chapter IDs and collection IDs are separate namespaces. Only an actual
+    # target registration can identify its own collection.
+    own = {row.get("collection") for row in registrations if row.get("id") == chapter}
     publication = read_json(root / "carrier/publications.json", {"collections": []})
-    collections = sorted([row for row in publication.get("collections", []) if row.get("id") not in own], key=lambda row: row["id"])
+    if (not isinstance(publication, dict) or not isinstance(publication.get("collections"), list)
+            or any(not isinstance(row, dict) for row in publication["collections"])):
+        raise ValueError("Prior publication registry must contain a collections array")
+    if publication.get("state") == "withdrawn":
+        return []
+    result = []
+    for collection in publication.get("collections", []):
+        if (collection.get("id") in own or collection.get("visibility") != "published"
+                or collection.get("kind") != "chapter"):
+            continue
+        if (not isinstance(collection.get("documents"), list)
+                or any(not isinstance(row, dict) for row in collection["documents"])):
+            raise ValueError("Published prior chapter needs a valid documents array")
+        matches = [row for row in registrations if row.get("collection") == collection.get("id")]
+        if len(matches) != 1 or not valid_id(matches[0].get("id")):
+            raise ValueError("Published prior chapter needs one actual chapter registration")
+        registration = matches[0]
+        path = registration.get("contract")
+        if not isinstance(path, str):
+            raise ValueError("Published prior chapter needs its actual contract")
+        filename = safe_relative(root, path)
+        contract = read_json(filename)
+        if not isinstance(contract, dict) or contract.get("chapter") != registration["id"]:
+            raise ValueError("Published prior chapter contract is missing or mismatched")
+        result.append({"id": registration["id"], "collection": collection["id"],
+                       "title": collection.get("title", registration["id"]), "contract": path,
+                       "paradigm": contract.get("paradigm", {}), "scope": contract.get("scope", {}),
+                       "documents": collection.get("documents", [])})
+    if len({row["id"] for row in result}) != len(result) or len({row["collection"] for row in result}) != len(result):
+        raise ValueError("Published prior chapter identities and collections must be unique")
+    return sorted(result, key=lambda row: row["id"])
+
+
+def _frontier(root, chapter):
+    prior = _prior_chapters(root, chapter)
+    publication = read_json(root / "carrier/publications.json", {"collections": []})
+    prior_collections = {row["collection"] for row in prior}
+    collections = sorted([row for row in publication.get("collections", []) if row.get("id") in prior_collections], key=lambda row: row["id"])
     paths, document_ids, knowledge_ids = set(), set(), set()
+    paths.update(row["contract"] for row in prior)
     for collection in collections:
         for document in collection.get("documents", []):
             document_ids.add(document.get("id"))
@@ -110,7 +153,7 @@ def _frontier(root, chapter):
                 if source.is_file():
                     paths.add(source.relative_to(root).as_posix())
                     knowledge_ids.update(re.findall(r"Q[0-9]{6,}", source.read_text(encoding="utf-8-sig")))
-    return {"collections": collections, "tasks": prior_tasks,
+    return {"collections": collections, "chapters": prior, "tasks": prior_tasks,
             "knowledge": [questions[identity] for identity in sorted(seen) if identity in questions],
             "inputs": [{"path": name, "sha256": digest((root / name).read_bytes())} for name in sorted(paths)]}
 
@@ -140,7 +183,7 @@ def _validate_data(root, folder, *, final=False, collected=False, registry_ids=N
     questions, searches = _rows(dossier, "questions"), _rows(dossier, "searches")
     branches = _rows(scope, "branches")
     sources = {row["id"]: row for row in entries}
-    registry = _registry(root) if registry_ids is None else registry_ids
+    registry = _registry(root, read_json(folder / "study.json")["chapter"]) if registry_ids is None else registry_ids
     mids, bids = {row["id"] for row in materials}, {row["id"] for row in branches}
     if set(registry) - set(sources):
         raise ValueError("The whole book/source registry must have a ledger disposition")
@@ -265,7 +308,38 @@ def _validate_data(root, folder, *, final=False, collected=False, registry_ids=N
     return ledger, dossier, scope
 
 
-def _record(root, phase, record, dossier, scope):
+def _coordination(root, record, dossier, frontier):
+    coordination = record.get("chapterCoordination")
+    if not isinstance(coordination, dict):
+        raise ValueError("Actual chapterCoordination research is required")
+    for key in ("domainIndependence", "globalBreadth", "scopeDecision"):
+        _text(coordination.get(key), "chapter coordination " + key)
+    rows = coordination.get("chapters")
+    if not isinstance(rows, list) or any(not isinstance(row, dict) for row in rows):
+        raise ValueError("Chapter coordination rows must be objects")
+    expected = {row["id"] for row in frontier["chapters"]}
+    ids = [row.get("chapter") for row in rows]
+    if any(not isinstance(value, str) for value in ids) or len(set(ids)) != len(ids) or set(ids) != expected:
+        raise ValueError("Chapter coordination must assess every current published formal chapter exactly once")
+    if not expected:
+        _text(coordination.get("emptyReason"), "empty prior publication explanation")
+    materials = {row["id"]: row for row in dossier["materials"]}
+    for row in rows:
+        if row.get("relationship") not in {"overlapping", "adjacent", "separate"}:
+            raise ValueError("Chapter relationship must be overlapping, adjacent or separate")
+        for key in ("reason", "overlapTreatment"):
+            _text(row.get(key), "chapter comparison " + key)
+        _path(root, row.get("note"))
+        _references(row.get("materialIds"), set(materials), "chapter comparison materials", nonempty=True)
+        for mid in row["materialIds"]:
+            material = materials[mid]
+            if (material.get("source") != "chapter:" + row["chapter"]
+                    or material.get("readState") != "analyzed" or material.get("disposition") == "pending"):
+                raise ValueError("Chapter comparison needs analyzed material from that actual prior chapter")
+    return coordination
+
+
+def _record(root, phase, record, dossier, scope, frontier):
     if not isinstance(record, dict):
         raise ValueError("A substantive JSON checkpoint record is required")
     _text(record.get("summary"), "checkpoint summary")
@@ -275,13 +349,18 @@ def _record(root, phase, record, dossier, scope):
     for value in notes:
         _path(root, value)
     required = {"overview": ("corpusUnderstanding", "publicationReview", "candidateBasis"),
-                "scope": ("selectionReason",), "collection": ("extractionSummary", "limitations"),
+                "scope": ("selectionReason", "independentBasis"), "alignment": (), "collection": ("extractionSummary", "limitations"),
                 "synthesis": ("unresolved",), "scope-review": ("scopeConclusion",),
                 "resynthesis": ("resolvedChanges", "finalArgument")}[phase]
     for key in required:
         _text(record.get(key), phase + " " + key)
     mids = {row["id"] for row in dossier["materials"]}
     if phase == "scope":
+        _references(record.get("basisMaterialIds"), mids, "independent scope basis", nonempty=True)
+        for mid in record["basisMaterialIds"]:
+            basis = next(row for row in dossier["materials"] if row["id"] == mid)
+            if basis.get("source", "").startswith("chapter:") or basis.get("readState") != "analyzed":
+                raise ValueError("Independent scope basis must be analyzed textbook/site/external material, before chapter alignment")
         candidates = record.get("candidates")
         if not isinstance(candidates, list) or not candidates:
             raise ValueError("Scope selection needs an actual candidate comparison")
@@ -294,6 +373,8 @@ def _record(root, phase, record, dossier, scope):
             _text(scope.get(key), "initial scope " + key)
         if not scope["branches"]:
             raise ValueError("Initial scope needs a branch map")
+    if phase in {"alignment", "scope-review"}:
+        _coordination(root, record, dossier, frontier)
     if phase in {"synthesis", "resynthesis"}:
         sessions = record.get("sessions")
         if not isinstance(sessions, list) or not sessions:
@@ -327,6 +408,8 @@ def _notes(record, dossier):
     values = set(record["notes"])
     if isinstance(record.get("challenge"), dict):
         values.add(record["challenge"]["note"])
+    if isinstance(record.get("chapterCoordination"), dict):
+        values.update(row["note"] for row in record["chapterCoordination"]["chapters"])
     for key in ("materials", "findings", "searches"):
         values.update(row["note"] for row in dossier[key])
     return values
@@ -347,7 +430,8 @@ def _chain(root, state):
     records, previous = [], None
     for pointer in state["active"]:
         item = _load_pointer(root, pointer)
-        if item.get("previous") != previous or item.get("job") != state["job"] or item.get("chapter") != state["chapter"]:
+        if (item.get("schemaVersion") != 2 or item.get("previous") != previous
+                or item.get("job") != state["job"] or item.get("chapter") != state["chapter"]):
             raise ValueError("Broken research checkpoint derivation")
         for row in item["files"]:
             archive = _path(root, row["archive"])
@@ -372,11 +456,11 @@ def open_study(root: Path, job_id: str, chapter: str) -> dict:
         if (folder / "study.json").exists():
             raise ValueError("Study already exists; inspect study-status and resume its files")
         entries = [{"id": identity, "relevance": "pending", "reason": "Not assessed yet", "locator": "Not read yet",
-                    "readState": "directory", "materialIds": [], "core": False} for identity in sorted(_registry(root))]
+                    "readState": "directory", "materialIds": [], "core": False} for identity in sorted(_registry(root, chapter))]
         write_json(folder / "ledger.json", {"schemaVersion": 1, "entries": entries})
         write_json(folder / "dossier.json", {"schemaVersion": 1, "materials": [], "findings": [], "questions": [], "searches": []})
         write_json(folder / "scope.json", {"schemaVersion": 1, "paradigm": "", "title": "", "mechanism": "", "branches": [], "exclusions": [], "completenessArgument": ""})
-        write_json(folder / "study.json", {"schemaVersion": 1, "job": job_id, "chapter": chapter,
+        write_json(folder / "study.json", {"schemaVersion": 2, "job": job_id, "chapter": chapter,
                    "createdAt": now(), "active": [], "history": [], "lastHandoff": None})
     return study_status(root, job_id)
 
@@ -394,16 +478,20 @@ def checkpoint(root: Path, job_id: str, phase: str, record_path: str) -> dict:
         base = _base(root, state["chapter"])
         if chain and chain[0]["base"] != base and phase != "overview":
             raise ValueError("Research base changed; refresh overview first")
-        ledger, dossier, scope = _validate_data(root, folder, collected=index >= 2, final=phase == "resynthesis")
-        if phase in {"overview", "scope"} and any(row["relevance"] == "pending" for row in ledger["entries"]):
+        registry = _registry(root) | {"chapter:" + row["id"] for row in base["publicationFrontier"]["chapters"]}
+        ledger, dossier, scope = _validate_data(root, folder, collected=index >= PHASES.index("collection"),
+                                              final=phase == "resynthesis", registry_ids=registry)
+        if phase in {"overview", "scope"} and any(row["relevance"] == "pending" and not row["id"].startswith("chapter:") for row in ledger["entries"]):
             raise ValueError("Whole-base relevance must be assessed before initial scope; pending sources remain")
+        if phase == "alignment" and any(row["relevance"] == "pending" and row["id"].startswith("chapter:") for row in ledger["entries"]):
+            raise ValueError("Prior chapter dispositions must be assessed during alignment")
         filename = _path(root, record_path)
         if filename in {folder / name for name in MUTABLE} or filename == folder / "study.json":
             raise ValueError("Checkpoint record must be separate from mutable study state")
         record = read_json(filename)
-        _record(root, phase, record, dossier, scope)
+        _record(root, phase, record, dossier, scope, base["publicationFrontier"])
         if phase == "scope-review":
-            previous_ids = {row["id"] for stage in chain if stage["phase"] in {"scope", "synthesis", "scope-review", "resynthesis"}
+            previous_ids = {row["id"] for stage in chain if stage["phase"] in {"scope", "alignment", "synthesis", "scope-review", "resynthesis"}
                             for row in stage["data"]["scope"]["branches"]}
             current_ids = {row["id"] for row in scope["branches"]}
             decisions = record["decisions"]
@@ -417,8 +505,11 @@ def checkpoint(root: Path, job_id: str, phase: str, record_path: str) -> dict:
                 current = next((branch for branch in scope["branches"] if branch["id"] == row["branch"]), None)
                 if current and ((row["action"] == "exclude") != (current["status"] == "excluded")) and row["action"] != "merge":
                     raise ValueError("Scope review decision contradicts current branch disposition")
-        if phase == "resynthesis" and chain[4]["data"]["scope"] != scope:
+        if phase == "resynthesis" and next(stage for stage in chain if stage["phase"] == "scope-review")["data"]["scope"] != scope:
             raise ValueError("Scope changed after scope-review; repeat scope-review first")
+        if phase == "resynthesis":
+            review = next(stage for stage in chain if stage["phase"] == "scope-review")
+            _coordination(root, review["record"], dossier, base["publicationFrontier"])
         active = state["active"][:index]
         retained = chain[:index]
         paths = {str((folder / name).relative_to(root).as_posix()) for name in MUTABLE} | _notes(record, dossier) | {record_path}
@@ -436,7 +527,7 @@ def checkpoint(root: Path, job_id: str, phase: str, record_path: str) -> dict:
             with target.open("xb") as stream:
                 stream.write(content)
             files.append({"path": value, "sha256": digest(content), "archive": target.relative_to(root).as_posix()})
-        snapshot = {"schemaVersion": 1, "id": identity, "job": job_id, "chapter": state["chapter"],
+        snapshot = {"schemaVersion": 2, "id": identity, "job": job_id, "chapter": state["chapter"],
                     "phase": phase, "createdAt": now(), "base": base, "previous": active[-1] if active else None,
                     "recordPath": record_path, "record": record, "files": files,
                     "data": {"ledger": ledger, "dossier": dossier, "scope": scope}, "automaticSemanticCertification": False}
@@ -467,7 +558,9 @@ def study_status(root: Path, job_id: str, *, compare_base=True) -> dict:
         if final and not errors:
             historical_registry = None if compare_base else {
                 row["id"] for row in chain[-1]["data"]["ledger"]["entries"] if not row["id"].startswith("external:")}
-            _validate_data(root, folder, final=True, collected=True, registry_ids=historical_registry)
+            _, dossier, _ = _validate_data(root, folder, final=True, collected=True, registry_ids=historical_registry)
+            review = next(stage for stage in chain if stage["phase"] == "scope-review")
+            _coordination(root, review["record"], dossier, chain[-1]["base"]["publicationFrontier"])
         phase = chain[-1]["phase"] if chain else None
         next_phase = PHASES[len(chain)] if not final else "seal-handoff"
         if errors:
@@ -498,6 +591,8 @@ def study_status(root: Path, job_id: str, *, compare_base=True) -> dict:
                 "readyForHandoff": final and not errors and not changes, "lastHandoff": state.get("lastHandoff"),
                 "historyCount": len(state["history"]), "studyPath": folder.relative_to(root).as_posix(),
                 "scope": {"paradigm": scope.get("paradigm"), "branches": scope.get("branches", [])},
+                "independentScope": next((stage["data"]["scope"] for stage in chain if stage["phase"] == "scope"), None),
+                "alignedScope": next((stage["data"]["scope"] for stage in chain if stage["phase"] == "alignment"), None),
                 "unresolvedQuestions": unresolved, "pendingSources": pending,
                 "pendingMaterials": [row["id"] for row in dossier.get("materials", []) if row.get("disposition") == "pending"],
                 "nextActions": actions,
@@ -510,6 +605,8 @@ def study_status(root: Path, job_id: str, *, compare_base=True) -> dict:
                     "phase": chain[-1]["phase"] if chain else None, "historyCount": len(state["history"]),
                     "lastHandoff": state.get("lastHandoff"), "studyPath": folder.relative_to(root).as_posix(),
                     "scope": archived["scope"], "changedFiles": changes, "errors": [str(error)],
+                    "independentScope": next((stage["data"]["scope"] for stage in chain if stage["phase"] == "scope"), None),
+                    "alignedScope": next((stage["data"]["scope"] for stage in chain if stage["phase"] == "alignment"), None),
                     "currentEditError": str(error), "readyForHandoff": False,
                     "nextPhase": "repair-current-dossier",
                     "nextActions": ["Repair current mutable research files; keep the archived checkpoint frontier and handoff history: " + str(error)],
@@ -529,7 +626,7 @@ def seal_handoff(root: Path, job_id: str) -> dict:
         chain = _chain(root, state)
         final = chain[-1]
         identity = uuid.uuid4().hex
-        handoff = {"schemaVersion": 1, "id": identity, "job": job_id, "chapter": state["chapter"],
+        handoff = {"schemaVersion": 2, "id": identity, "job": job_id, "chapter": state["chapter"],
                    "createdAt": now(), "state": "research-handoff", "base": final["base"],
                    "checkpoints": state["active"], "files": final["files"],
                    "scope": final["data"]["scope"], "dossier": final["data"]["dossier"],
@@ -546,7 +643,7 @@ def check_handoff(root: Path, path: str, chapter: str | None = None, *, adopted=
     try:
         filename = _path(root, path)
         handoff = read_json(filename)
-        if not isinstance(handoff, dict) or handoff.get("schemaVersion") != 1 or handoff.get("state") != "research-handoff":
+        if not isinstance(handoff, dict) or handoff.get("schemaVersion") != 2 or handoff.get("state") != "research-handoff":
             raise ValueError("Not a research handoff")
         folder, state = _state(root, handoff["job"])
         if filename.parent != folder / "handoffs" or state.get("lastHandoff") != _pointer(root, filename):

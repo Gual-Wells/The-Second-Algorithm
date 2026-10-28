@@ -6,12 +6,12 @@
 
 研究的语义工艺见 `protocol/RESEARCH_FACILITIES.md`，实际模型见 `second_algorithm/inquiry.py`。研究档案独立于有效的作者课程，不能先要求成稿再留研究证据。
 
-`research open-study <job> --chapter <id>` 在已有job的 `work/jobs/<job>/study/` 创建以下schemaVersion1文件；初始生成项是待研究状态，不能当作已读证据：
+`research open-study <job> --chapter <id>` 在已有job的 `work/jobs/<job>/study/` 创建研究状态和动态档案。当前study、checkpoint和handoff采用schemaVersion2；ledger/dossier/scope仍为schemaVersion1，普通job/准备包/部署收据继续采用各自现行版本。初始生成项是待研究状态，不能当作已读证据：
 
 | 文件 | 内容 |
 |---|---|
 | `study.json` | job、chapter、createdAt、active当前阶段链、history全部阶段指针、lastHandoff；指针保存path/sha256 |
-| `ledger.json` | 全部书目/来源及增量外部来源的entries；逐项判断相关性与读取情况 |
+| `ledger.json` | 全部书目/来源、已有正式章及增量外部来源的entries；按阶段逐项判断相关性与读取情况 |
 | `dossier.json` | materials、findings、questions、searches，分别保存材料处置、综合发现、未决和真实检索 |
 | `scope.json` | paradigm、title、mechanism、branches、exclusions、completenessArgument；最终再有prelude和problemTypes |
 
@@ -19,7 +19,7 @@
 
 ### 动态档案字段
 
-- `ledger.entries[]`：id为`book:<登记id>`、`source:<登记id>`或`external:<局部id>`；relevance为related/excluded/unavailable/pending；reason、locator、readState、materialIds及core表达处置、读取定位、提取关系和重要性。外部来源另有url。readState为directory/read/analyzed/unavailable；目录不等于读正文。核心来源不可得时用replacementMaterialIds指向已分析采用的替代材料，并说明替代范围与限制；缺替代则阻止最终交接。
+- `ledger.entries[]`：id为`book:<登记id>`、`source:<登记id>`、`chapter:<已有正式章id>`或`external:<局部id>`；relevance为related/excluded/unavailable/pending；reason、locator、readState、materialIds及core表达处置、读取定位、提取关系和重要性。外部来源另有url。readState为directory/read/analyzed/unavailable；目录不等于读正文。核心来源不可得时用replacementMaterialIds指向已分析采用的替代材料，并说明替代范围与限制；缺替代则阻止最终交接。chapter身份由当前published正式章登记及其collection核实，排除本章、隐藏/草稿/撤回历史。
 - `materials[]`：id、source指向ledger、locator、readState、note、disposition及reason。disposition为included/merged/excluded/pending；merged用mergedInto指明规范材料。note是`work/`下原创/派生的非空.md或.json，不是商业原书。最终采用/合并材料补mechanism、conditions、variants、crossParadigms和exerciseUrls，说明可复用机制及实质差异。
 - `findings[]`：id、materialIds、branchIds、claim、note。最终有problem、mechanism、conditions、variants、crossParadigms和exerciseLinks（title/url），形成分支/题型综合，不能把每个链接都当新发现。
 - `questions[]`：id、status为open/resolved/deferred、reason、core。核心问题未resolved阻止交接；非核心延期仍需真实理由及影响说明。
@@ -27,26 +27,41 @@
 - `scope.branches[]`：id、title、status为included/excluded、reason、materialIds。纳入分支须有实际分析材料与综合，排除不靠“以后再说”。
 - 最终`scope.prelude`说明理论前置计划；`problemTypes[]`包含id、title、branchIds、materialIds、exerciseUrls、problem、variation。每题型1–5个练习URL必须已存在于所指材料，纳入分支都应有题型承载。正式内容仍须额外落实手写/标准设施/C++等产品要求。
 
-全部已知书目/来源必须有台账身份；overview与初始scope前须完成相关性判断，不能保留pending来源处置。collection开始related来源须有提取材料。最终没有pending材料，采用材料已分析、没有孤立采用材料/分支，合并关系须可解析到实际采用材料而无环；核心问题和核心不可得依据不得悬置。原题链接及读取状态的真实性仍由研究者负责，HTTP地址存在不证明读过。
+全部已知书目/来源和当前已有正式章必须有台账身份。overview与独立scope前完成书目/站点/已知外部来源判断；chapter此时可以pending，仅盘点身份，不提前以旧章内容限制独立候选。alignment时完成已有章协同处置并有实际分析材料；collection开始相关来源须有提取材料。最终没有pending材料，采用材料已分析、没有孤立采用材料/分支，合并关系须可解析到实际采用材料而无环；核心问题和核心不可得依据不得悬置。原题链接及读取状态的真实性仍由研究者负责，HTTP地址存在不证明读过。
+
+chapter来源材料通过真实locator和work笔记支撑协同判断，在alignment和scope-review使用。比较用材料可以说明理由后excluded，不强迫把旧章全部作为本章教学内容采用；这与因内容曾出现而删去当前算法所需讲解不同。相关部分按需实读，无关部分允许目录/范围判断加分析记录。旧章提供本项目历史内容与关联证据，原题约束、算法/标准结论仍须回到相应原始权威。
 
 ### 阶段记录与不可变身份
 
-阶段顺序为overview→scope→collection→synthesis→scope-review→resynthesis。每阶段记录JSON都含真实summary和非空notes路径列表，另有：
+阶段顺序为overview→scope→alignment→collection→synthesis→scope-review→resynthesis。每阶段记录JSON都含真实summary和非空notes路径列表，另有：
 
 | phase | 专项记录 |
 |---|---|
-| overview | corpusUnderstanding、publicationReview、candidateBasis |
-| scope | candidates（name/decision/reason）、selectionReason；配合初始scope机制与分支 |
+| overview | corpusUnderstanding、publicationReview、candidateBasis；publicationReview此时为正式章身份/状态盘点 |
+| scope | candidates（name/decision/reason）、selectionReason、independentBasis、basisMaterialIds；基于教材/来源/外部材料的独立范围提案 |
+| alignment | chapterCoordination；在独立scope之后与已有正式章节协同，配合scope.json确定真正初始范围 |
 | collection | extractionSummary、limitations |
 | synthesis | sessions（question/materialIds/findings/implications）、unresolved |
-| scope-review | decisions（branch/action/reason/materialIds）、challenge、scopeConclusion |
+| scope-review | decisions（branch/action/reason/materialIds）、challenge、scopeConclusion、chapterCoordination；已有章作为资料再次协同 |
 | resynthesis | sessions、resolvedChanges、finalArgument |
 
 scope-review.action为retain/add/merge/exclude/correct，merge另用mergedInto指向当前分支；不能无说明地让前轮分支消失。challenge保存researcher、perspective、independent:true、inputMaterialIds、findings、note、responses。应在笔记中逐项回应挑战与范围变化，后续sessions/resolvedChanges真实跟进，不以非空字符串证明已完成。研究可以反复返回，不规定代理数、资料数量或机械重复轮数。
 
+scope记录的independentBasis说明独立候选依据，basisMaterialIds指向已分析且非chapter来源材料。这项独立性约束研究次序与可核依据，不要求模型忘记既有知识。独立scope快照保留当时范围；alignment及后续范围修订不能回写旧快照。
+
+alignment和scope-review的 `chapterCoordination` 包含：
+
+- `chapters[]`：每个当前已有正式章恰一项，含chapter、relationship（overlapping/adjacent/separate）、reason、overlapTreatment、note及materialIds。note为实际持久分析笔记，materialIds对应该章来源的已分析材料和读取定位。
+- `domainIndependence`：当前范围何以仍为大而独立明确的算法思想领域。
+- `globalBreadth`：结合全章目版图判断广度，防止过拟合相关性陷入局部，同时不强求零近邻。
+- `scopeDecision`：此次协同导致的保留、调整或改选及依据；不强迫为了字段制造范围变化。
+- 无已有正式章时chapters为空，另填`emptyReason`说明真实空状态；阶段仍保留，不虚构旧章。
+
+这里的重合/相邻/相对独立均是允许的关系，不设数值阈值或自动拒绝规则。C点的chapterCoordination须结合本轮研究重新分析，当前题型与算法必要内容不因已教而删减；稳定C++知识继续复用独立权威。程序核身份、读件关系及阶段，语义判断由研究者负责。
+
 checkpoint保存 `snapshots/<uuid>/checkpoint.json` 及 `files/` 中的证据字节，含phase、previous、record、data和文件哈希。归档原始路径的派生笔记/档案，不归档商业原书。active必须是合法阶段前缀；重交早期阶段截去当前后缀但history保留。已有阶段文件、归档和前驱不能原位改写；不要为修hash规范化已封存文件的换行。
 
-动态资料增加不抹去初始范围的历史。当前档案/笔记变化会显示changedFiles，最终交接需最新resynthesis；scope在scope-review之后改变须先重新scope-review。在研与初次采用时，书目/来源与声明的研究协议基座变化需要恢复overview。出版前沿排除本章自身collection，允许研究交接后注册本章；其他collection及其实际正文/源码、相关任务与知识依赖改变会触发复盘。此前沿身份保护不等于系统自动读懂了其他章节内容，仍须实质复盘。当前本章排除是为避免自引用，不允许借改其他章身份绕过影响判断。
+动态资料增加不抹去独立提案或初始范围的历史。当前档案/笔记变化会显示changedFiles，最终交接需最新resynthesis；scope在scope-review之后改变须先重新scope-review。在研与初次采用时，书目/来源与声明的研究协议基座变化需要恢复overview。已有正式章前沿排除本章自身collection，允许研究交接后注册本章；其他正式章的范围合同、实际正文/源码、相关任务与知识依赖改变会触发复盘。此前沿身份保护不等于系统自动读懂了其他章节内容，仍须alignment和C点的实质协同。本章排除是为避免自引用，不允许借改其他章身份绕过影响判断。
 
 `study-status`显示phase、nextPhase、changedFiles、errors、readyForHandoff及scope、pendingSources、pendingMaterials、unresolvedQuestions、nextActions，便于恢复具体断点而非只看红绿。封存后nextPhase为authoring。`seal-handoff`生成 `handoffs/<uuid>.json`，固定当前阶段链、资料、范围与输入身份，`study.json.lastHandoff`指向当前交接。`check-handoff`核身份、归档、依赖、当前材料和范围并返回inputs；旧交接被后续checkpoint或新交接替代后不能继续采用。交接及每阶段都声明automaticSemanticCertification:false。状态/归档/收据是内部文件，不是PWA内容。
 

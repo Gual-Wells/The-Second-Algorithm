@@ -48,7 +48,8 @@ class InquiryCliTest(unittest.TestCase):
             self.assertEqual(code, 1)
             self.assertFalse(rejection["ok"])
             self.assertFalse(list((root / "work/jobs/first-study/study").glob("handoffs/*")))
-            code, rejection = invoke("checkpoint", "first-study", "--phase", "synthesis",
-                                     "--record", "work/not-a-real-record.json")
-            self.assertEqual(code, 1)
-            self.assertIn("skip", rejection["error"])
+            for phase in ("alignment", "synthesis"):
+                code, rejection = invoke("checkpoint", "first-study", "--phase", phase,
+                                         "--record", "work/not-a-real-record.json")
+                self.assertEqual(code, 1)
+                self.assertIn("skip", rejection["error"])

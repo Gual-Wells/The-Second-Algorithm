@@ -9,7 +9,7 @@ from .catalog import report, search, validate
 from .collect import collect
 from .chapters import chapter_inputs, chapter_quality, render_chapters
 from .learning import course_targets, search_learning, validate_learning
-from .inquiry import (check_handoff, checkpoint, open_study, seal_handoff, study_status)
+from .inquiry import (PHASES, check_handoff, checkpoint, open_study, seal_handoff, study_status)
 from .storage import now, read_json, read_jsonl, sources, valid_id, valid_url, write_json
 from .workflow import (add_evidence, check_release, init_job, job_status, list_jobs, prepare_release,
                        resume_job, verify_course, verify_job)
@@ -78,8 +78,7 @@ def main(argv=None) -> int:
     studying.add_argument("job")
     checkpointing = research_commands.add_parser("checkpoint", help="保存真实阶段研究及不可变输入快照")
     checkpointing.add_argument("job")
-    checkpointing.add_argument("--phase", required=True,
-                               choices=["overview", "scope", "collection", "synthesis", "scope-review", "resynthesis"])
+    checkpointing.add_argument("--phase", required=True, choices=PHASES)
     checkpointing.add_argument("--record", required=True)
     handing = research_commands.add_parser("seal-handoff", help="冻结当前研究交接；不等于完成教学或出版")
     handing.add_argument("job")

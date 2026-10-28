@@ -115,8 +115,13 @@ class ResearchAdoptionTest(ChapterHelpers, LearningFixture):
         self.put("work/material.md", "Changed actual research evidence after publication.\n")
         self.assertFalse(_research_binding(self.root, "unit", self.contract)["ok"])
 
-    def test_second_actual_chapter_can_publish_without_rebuilding_first_research(self):
-        """Two tiny copies test lifecycle mechanics, never real chapter selection."""
+    def second_actual_chapter_fixture(self, relationship):
+        """Tiny copies test lifecycle mechanics, never real chapter selection.
+
+        Overlap and adjacency are valid research conclusions. The fixture must
+        retain its complete current branch/type instead of deleting content to
+        manufacture distance from the first chapter.
+        """
         self.published_fixture()
         first_handoff = self.contract["researchHandoff"]
         first_handoff_bytes = (self.root / first_handoff).read_bytes()
@@ -170,7 +175,7 @@ class ResearchAdoptionTest(ChapterHelpers, LearningFixture):
         from test_inquiry import complete_study_fixture
         second_contract["researchHandoff"] = complete_study_fixture(self.root, job="second-study", chapter="second",
             paradigm="Binary search", branch="ordered", material="outside-second", note="work/second-material.md",
-            problem_type="boundary-unit")
+            problem_type="boundary-unit", chapter_relationship=relationship)
         write_json(self.root / "content/second/chapter.contract.json", second_contract)
         self.assertTrue(validate_learning(self.root)["ok"], validate_learning(self.root))
         first_binding = _research_binding(self.root, "unit", self.contract)
@@ -197,6 +202,47 @@ class ResearchAdoptionTest(ChapterHelpers, LearningFixture):
         self.assertFalse(handoffs["second"]["adopted"])
         self.assertEqual(first_handoff_bytes, (self.root / first_handoff).read_bytes())
         self.assertEqual(first_study_bytes, first_study.read_bytes())
+        handoff = read_json(self.root / second_contract["researchHandoff"])
+        self.assertEqual([row["id"] for row in handoff["scope"]["branches"]], ["ordered"])
+        self.assertEqual([row["id"] for row in handoff["scope"]["problemTypes"]], ["boundary-unit"])
+        stages = [read_json(self.root / row["path"]) for row in handoff["checkpoints"]]
+        for stage in stages:
+            if stage["phase"] in {"alignment", "scope-review"}:
+                comparison = stage["record"]["chapterCoordination"]["chapters"]
+                self.assertEqual([row["chapter"] for row in comparison], ["unit"])
+                self.assertEqual(comparison[0]["relationship"], relationship)
+                material_ids = set(comparison[0]["materialIds"])
+                self.assertTrue(material_ids)
+                self.assertTrue(all(row["source"] == "chapter:unit" for row in handoff["dossier"]["materials"]
+                                    if row["id"] in material_ids))
+        return second_contract
+
+    def test_second_actual_chapter_can_publish_without_rebuilding_first_research(self):
+        self.second_actual_chapter_fixture("overlapping")
+
+    def test_adjacent_chapter_can_publish_while_preserving_its_full_scope(self):
+        self.second_actual_chapter_fixture("adjacent")
+
+    def test_generic_notes_cannot_replace_omitted_existing_chapter_coordination(self):
+        second = self.second_actual_chapter_fixture("overlapping")
+        record_path = "work/jobs/second-study/study/records/scope-review.json"
+        record = read_json(self.root / record_path)
+        record.pop("chapterCoordination")
+        write_json(self.root / record_path, record)
+        binding = _research_binding(self.root, "second", second)
+        self.assertFalse(binding["ok"], binding)
+        self.notes()
+        # Even current caller-written editorial/generic notes cannot repair a
+        # changed research record or manufacture the missing C-point review.
+        second_review = read_json(self.root / "content/second/chapter.review.json")
+        second_review["inputHash"] = chapter_inputs(self.root, "second")["inputHash"]
+        write_json(self.root / "content/second/chapter.review.json", second_review)
+        self.notes()
+        with patch("second_algorithm.workflow._process", side_effect=self.process_success):
+            self.assertTrue(verify_job(self.root, "lesson-job", "fixture-c++")["passed"])
+        self.assertFalse(job_status(self.root, "lesson-job")["readyForReleasePreparation"])
+        with self.assertRaisesRegex(ValueError, "chapter-quality"):
+            prepare_release(self.root, "lesson-job")
 
 
 class ChapterContractTest(ChapterHelpers, LearningFixture):

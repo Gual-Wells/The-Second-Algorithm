@@ -10,7 +10,11 @@
 
 ## 恢复前置研究
 
-读取 `work/jobs/<job>/study/study.json` 的chapter、active、history和lastHandoff，再读ledger/dossier/scope及有效阶段记录。研究顺序为材料全景→初始范围→动态提取→首轮综合→范围复审→修订范围再研究。阶段表示依赖，反复研究的结论、增量材料、负结果、矛盾和复审跟进在其引用笔记中恢复；不要只看阶段名称就声称研究完成。
+读取 `work/jobs/<job>/study/study.json` 的chapter、active、history和lastHandoff，再读ledger/dossier/scope及有效阶段记录。当前研究顺序为材料全景/出版状态盘点→独立范围提案(scope)→已有正式章协同确定初始范围(alignment)→动态提取→首轮综合→已有章作为资料再协同的范围复审→修订范围再研究。阶段表示依赖，反复研究的结论、增量材料、负结果、矛盾和复审跟进在其引用笔记中恢复；不要只看阶段名称就声称研究完成。
+
+恢复范围时先看独立scope快照，再看alignment的chapterCoordination及范围变化，最后看本轮scope-review的再次协同与资料。不能用后来修改的scope.json替代最初提案，也不能因已有章讲过便删必要算法内容。重合和近邻允许；核大领域独立性与全局广度，防止过拟合关系或过严避邻。无已有正式章的空记录也是有效研究事实，不能把隐藏/撤回内容补作正式比较。
+
+当前study、阶段收据与handoff为schemaVersion2，包含独立提案及alignment。旧六阶段记录保留历史，不能补一个字段或空比较就追认为已完成协同；按真实工作建立当前研究并明确复用依据。普通job和动态材料文件仍按各自现行模型，不整体改版本号。
 
 study-status返回phase、nextPhase、changedFiles、errors、readyForHandoff等。对在研或尚未实际出版的交接逐项读变化：资料变化后重新综合，范围变化后先复审再综合，研究基座或其他章节前沿变化后恢复overview；可复用未受影响的研究，但说明真实影响。新材料不擦除历史初始范围。
 

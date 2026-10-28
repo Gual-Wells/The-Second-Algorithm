@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "chapter-coordination-20261028",
+  "goal": "补齐独立选域后的已有章节协同与范围复审资料协同，保留正常重合和领域近邻，更新正式设施并保持内容清零",
+  "createdAt": "2026-10-28T11:26:58.166109+00:00",
+  "evidence": [
+    {
+      "id": "9467589ee7ef4fa9995b0e1b9845e4ca",
+      "kind": "research",
+      "path": "research/2026-10-28/chapter-coordination-amendment.md",
+      "summary": "实际研究并实现独立选域后的章节协同及C点再次协同；本次为设施工程，不是新章生产",
+      "outcome": "accepted",
+      "sha256": "e6bd5bb483e61919167b4be1c2847d7584852fb70647f192e17892d213426392",
+      "inputHash": "ba6b8c6ab52788f3ca3d405cadc15fbd62c167bf85ff95459e26c55b7a3e74cf",
+      "recordedAt": "2026-10-28T11:34:29.447365+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "01bf6f5ed04c404d96a62f7c62fcb853",
+      "kind": "review",
+      "path": "work/chapter-coordination-20261028/review.md",
+      "summary": "实际核对两次协同、独立快照、正式章节身份、重合近邻与出版门禁；针对性生命周期测试通过",
+      "outcome": "accepted",
+      "sha256": "291ff9594757bb3e4e1082c6abda588c0cc1f53ac47366838d08b9d731bc44a7",
+      "inputHash": "ba6b8c6ab52788f3ca3d405cadc15fbd62c167bf85ff95459e26c55b7a3e74cf",
+      "recordedAt": "2026-10-28T11:34:29.575661+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    }
+  ],
+  "lastGoodVerification": null,
+  "lastPreparedRelease": null
+}
