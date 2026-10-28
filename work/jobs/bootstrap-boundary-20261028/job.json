@@ -27,6 +27,19 @@
       "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
     }
   ],
-  "lastGoodVerification": null,
-  "lastPreparedRelease": null
+  "lastGoodVerification": {
+    "path": "work/jobs/bootstrap-boundary-20261028/verifications/e12ee3431b7249329c8ab80800a0f9f8.json",
+    "sha256": "22981714bbd07b50faa7185bb3c0213f0b9f83a2a0bc74aa41e25b17adbaf4e4",
+    "inputHash": "9c166a78c8b9a1ec33886346fed6a31442d24b02e859ee068dc70ac880364a9e"
+  },
+  "lastPreparedRelease": {
+    "path": "work/jobs/bootstrap-boundary-20261028/releases/b88c14d0110047eabae4f56123e7aabf.json",
+    "sha256": "895405af370a89f53d80b85dac716753b5cd8a07046029ed742ccea1c8a999cc",
+    "inputHash": "9c166a78c8b9a1ec33886346fed6a31442d24b02e859ee068dc70ac880364a9e"
+  },
+  "lastVerificationAttempt": {
+    "path": "work/jobs/bootstrap-boundary-20261028/verifications/e12ee3431b7249329c8ab80800a0f9f8.json",
+    "sha256": "22981714bbd07b50faa7185bb3c0213f0b9f83a2a0bc74aa41e25b17adbaf4e4",
+    "inputHash": "9c166a78c8b9a1ec33886346fed6a31442d24b02e859ee068dc70ac880364a9e"
+  }
 }

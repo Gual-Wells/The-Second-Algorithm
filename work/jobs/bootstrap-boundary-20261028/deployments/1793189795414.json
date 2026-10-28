@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "packet": "work/jobs/bootstrap-boundary-20261028/releases/b88c14d0110047eabae4f56123e7aabf.json",
+  "packetSha256": "895405af370a89f53d80b85dac716753b5cd8a07046029ed742ccea1c8a999cc",
+  "researchHandoffs": [],
+  "inputHash": "9c166a78c8b9a1ec33886346fed6a31442d24b02e859ee068dc70ac880364a9e",
+  "artifact": ".local/releases/a96fe23e-e82a-41fe-8d70-89ce2397378b",
+  "origin": "https://second-algorithm.pages.dev",
+  "deployedAt": "2026-10-28T12:16:35.414Z",
+  "build": "d6441e8610e0f21de3baedb5a0ab9ada4c46976c66fd49b2e94600ddc8906612",
+  "anonymousBoundaryVerified": true,
+  "passed": true
+}

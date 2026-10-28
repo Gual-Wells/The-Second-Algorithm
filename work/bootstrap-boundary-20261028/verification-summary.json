@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-10-28T12:17:55.495846+00:00",
+  "sourceCommit": "8cb17a7f43a86f8d8aadad9a651f157755cc609b",
+  "inputHash": "9c166a78c8b9a1ec33886346fed6a31442d24b02e859ee068dc70ac880364a9e",
+  "currentCoordinationContext": {
+    "mode": "no-prior-chapters",
+    "priorChapterIds": [],
+    "comparisonApplicable": false
+  },
+  "local": {
+    "bootstrapTests": 10,
+    "bootstrapPassed": true,
+    "inquiryInitialRun": {
+      "tests": 37,
+      "passed": 36,
+      "failed": 1,
+      "reason": "Old fixture omitted now-required schemaVersion; corrected explicit metadata and reran affected case successfully"
+    },
+    "correctedCasePassed": true,
+    "preauthorCliPassed": true,
+    "preauthorResumePassed": true
+  },
+  "ci": {
+    "run": 40685863183,
+    "conclusion": "success",
+    "url": "https://github.com/Gual-Wells/The-Second-Algorithm/actions/runs/40685863183",
+    "completePythonCases": 164,
+    "scope": "Fresh complete Python, C++ fixtures, Node, browser and real SW checks"
+  },
+  "live": {
+    "verifiedAt": "2026-10-28T12:17:55.193Z",
+    "origin": "https://second-algorithm.pages.dev",
+    "deployment": "https://3551a1d7.second-algorithm.pages.dev",
+    "receipt": "work/jobs/bootstrap-boundary-20261028/deployments/1793189795414.json",
+    "build": "d6441e8610e0f21de3baedb5a0ab9ada4c46976c66fd49b2e94600ddc8906612",
+    "swExactBytes": true,
+    "ownerEnrolled": true,
+    "enrollmentOpen": false,
+    "anonymousLibraryHTTP": 401,
+    "collections": 0,
+    "staticLibraryFiles": [
+      "catalog.json"
+    ],
+    "passed": true
+  },
+  "realFirstChapterCreated": false,
+  "currentFormalCollections": 0,
+  "newRecurringServices": 0,
+  "newRecurringCost": 0,
+  "databaseSchemaChanged": false
+}
