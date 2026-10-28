@@ -21,6 +21,8 @@ python -m second_algorithm research open-study task-id --chapter chapter-id
 python -m second_algorithm research study-status task-id
 ```
 
+出版和章节登记须明确存在且有效，当前项目已经保存真实空登记。研究早于作者稿不等于可以缺失登记文件；若登记丢失先核Git并恢复实际状态，不能临时补空冒充初始化。首章的coordinationContext会显示no-prior-chapters及comparisonApplicable:false，两次协同仍按RESEARCH_FACILITIES保存空说明，其他要求不变。
+
 编辑 `work/jobs/<task-id>/study/ledger.json`、`dossier.json`、`scope.json`，真实研究笔记与每阶段JSON记录置于持久 `work/` 路径。当前研究状态、阶段收据及交接为schemaVersion2，三个动态档案仍为schemaVersion1。open-study生成书目/来源及已有正式章节的待判断项，不代表已经概况理解或读过；旧章此时仅作身份/状态盘点。精确字段见CONTENT_MODEL。每阶段完成相应实质研究后提交当前记录：
 
 ```sh

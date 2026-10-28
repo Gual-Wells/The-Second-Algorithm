@@ -389,6 +389,8 @@ class ResearchWorkflowTest(LearningFixture):
         from second_algorithm.inquiry import open_study
         (self.root / "catalog/learning.json").unlink()
         (self.root / "carrier/publications.json").unlink()
+        write_json(self.root / "carrier/publications.json", {"schemaVersion": 2, "state": "withdrawn", "collections": []})
+        write_json(self.root / "catalog/chapters.json", {"schemaVersion": 1, "chapters": []})
         write_json(self.root / "catalog/books.json", {"books": []})
         write_json(self.root / "catalog/sources.json", {"sources": []})
         init_job(self.root, "pre-author", "Research before course authoring")

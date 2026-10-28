@@ -2,6 +2,8 @@
 
 先核对Git分支/HEAD/dirty、AGENTS、CONTENT_PIPELINE与RESEARCH_FACILITIES，再执行 `python -m second_algorithm research status`，选当前job执行resume。对具有study的任务另执行 `research study-status <job>`。恢复真实目标、当前输入、材料/范围/合同/作者/知识/源码和缺口，不从旧聊天、旧题单或accepted日志推断完成。
 
+首章恢复先确认出版/章节登记是明确的有效空集合；文件缺失或状态矛盾不是空库。coordinationContext=no-prior-chapters表示已核前沿没有其他正式章，alignment与scope-review仍保留真实空说明，所有其他研究与内容要求照常。前沿变动或状态错误先处理，不沿用旧空上下文；本章登记排除自身，真实其他章到来须重新协同。
+
 当前硬协议是大思想领域为章、前置思想理论、正式节为题型；手写与真实标准设施、必要C++和每节1–5题共同承载。2026-10-28全部出版/作者稿/知识已清零，撤回记录为withdraw-all-20261028；后续建立完整前置研究设施不恢复内容，下一章仍未选定。教材和原题证据保留，旧稿只在Git历史中恢复，不默认重用；历史job/旧采用与候选模式不构成现行内容或章界。以后用`course chapters`和`course quality`恢复真实状态。
 
 权威关系为catalog/chapters.json、catalog/learning.json和schema2出版登记。正文/代码/独立知识源各自唯一；知识内部身份不外显，后续术语浮窗复用，不把C++去重扩成算法跨章内容只能讲一次。旧双线、trial、原稿和cases/patterns是素材，不是当前范围或兼容义务。

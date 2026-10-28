@@ -20,6 +20,8 @@ class InquiryCliTest(unittest.TestCase):
             root = Path(location)
             write_json(root / "catalog/books.json", {"books": [{"id": "reference"}]})
             write_json(root / "catalog/sources.json", {"sources": [{"id": "problem-site"}]})
+            write_json(root / "catalog/chapters.json", {"schemaVersion": 1, "chapters": []})
+            write_json(root / "carrier/publications.json", {"schemaVersion": 2, "state": "withdrawn", "collections": []})
 
             def invoke(*arguments):
                 output = io.StringIO()

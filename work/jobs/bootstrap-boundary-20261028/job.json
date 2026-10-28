@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "bootstrap-boundary-20261028",
+  "goal": "管理真实空项目的首章初始化边界，保留空协同并拒绝误判为空，保持全部内容质量与发布验证要求",
+  "createdAt": "2026-10-28T12:11:08.812882+00:00",
+  "evidence": [
+    {
+      "id": "9e8629e907c449f2b8cb56adb4441810",
+      "kind": "research",
+      "path": "research/2026-10-28/bootstrap-boundary.md",
+      "summary": "实际审查首章空协同与假空边界，确定派生上下文及完整质量要求",
+      "outcome": "accepted",
+      "sha256": "658eee6288a11ff7b7cd77b9289bca2ab1492e6b0113f2ceb2576a82ddc7756f",
+      "inputHash": "9c166a78c8b9a1ec33886346fed6a31442d24b02e859ee068dc70ac880364a9e",
+      "recordedAt": "2026-10-28T12:11:56.607162+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "24078c9e44af4f24ba51e2f4ca483777",
+      "kind": "review",
+      "path": "work/bootstrap-boundary-20261028/review.md",
+      "summary": "空站到首章生命周期和边界10例通过，既有研究核心36例加修订夹具目标例通过，CLI与无正文恢复通过",
+      "outcome": "accepted",
+      "sha256": "bc6d3f1fd474ad550204e21dc29ea68940e4f4dec40dc110e33c681f2980e481",
+      "inputHash": "9c166a78c8b9a1ec33886346fed6a31442d24b02e859ee068dc70ac880364a9e",
+      "recordedAt": "2026-10-28T12:11:56.677427+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    }
+  ],
+  "lastGoodVerification": null,
+  "lastPreparedRelease": null
+}

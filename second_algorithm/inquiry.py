@@ -75,27 +75,43 @@ def _registry(root, chapter=None):
 
 def _prior_chapters(root, chapter):
     """Current formal publications only; capture identity without selecting a topic."""
-    index = read_json(root / "catalog/chapters.json", {"chapters": []})
-    if not isinstance(index, dict) or not isinstance(index.get("chapters"), list) or any(not isinstance(row, dict) for row in index["chapters"]):
+    index = read_json(root / "catalog/chapters.json")
+    if (not isinstance(index, dict) or index.get("schemaVersion") != 1
+            or not isinstance(index.get("chapters"), list) or any(not isinstance(row, dict) for row in index["chapters"])):
         raise ValueError("Prior chapter registration must contain a chapters array")
     registrations = index.get("chapters", [])
+    ids, mappings = [row.get("id") for row in registrations], [row.get("collection") for row in registrations]
+    if (any(not valid_id(value) for value in ids + mappings)
+            or len(set(ids)) != len(ids) or len(set(mappings)) != len(mappings)):
+        raise ValueError("Prior chapter registrations require unique chapter identities and collection mappings")
     # Chapter IDs and collection IDs are separate namespaces. Only an actual
     # target registration can identify its own collection.
     own = {row.get("collection") for row in registrations if row.get("id") == chapter}
-    publication = read_json(root / "carrier/publications.json", {"collections": []})
-    if (not isinstance(publication, dict) or not isinstance(publication.get("collections"), list)
+    publication = read_json(root / "carrier/publications.json")
+    if (not isinstance(publication, dict) or publication.get("schemaVersion") != 2
+            or not isinstance(publication.get("collections"), list)
             or any(not isinstance(row, dict) for row in publication["collections"])):
         raise ValueError("Prior publication registry must contain a collections array")
-    if publication.get("state") == "withdrawn":
-        return []
+    state = publication.get("state", "active")
+    if state not in {"active", "withdrawn"}:
+        raise ValueError("Prior publication registry has an invalid publication state")
+    collection_ids = [row.get("id") for row in publication["collections"]]
+    if any(not valid_id(value) for value in collection_ids) or len(set(collection_ids)) != len(collection_ids):
+        raise ValueError("Prior publication registry requires unique collection identities")
     result = []
     for collection in publication.get("collections", []):
-        if (collection.get("id") in own or collection.get("visibility") != "published"
-                or collection.get("kind") != "chapter"):
-            continue
+        visibility, kind = collection.get("visibility", "published"), collection.get("kind")
+        if visibility not in {"published", "hidden"} or kind not in {"chapter", "draft"}:
+            raise ValueError("Prior publication registry has invalid visibility or kind")
+        if kind == "draft" and (visibility != "hidden" or "chapterNumber" in collection):
+            raise ValueError("Prior publication drafts must be hidden and have no chapter number")
         if (not isinstance(collection.get("documents"), list)
                 or any(not isinstance(row, dict) for row in collection["documents"])):
             raise ValueError("Published prior chapter needs a valid documents array")
+        if state == "withdrawn" and visibility == "published" and collection["documents"]:
+            raise ValueError("Withdrawn publication state contradicts published documents; cannot infer an empty chapter corpus")
+        if state == "withdrawn" or collection.get("id") in own or visibility != "published" or kind != "chapter":
+            continue
         matches = [row for row in registrations if row.get("collection") == collection.get("id")]
         if len(matches) != 1 or not valid_id(matches[0].get("id")):
             raise ValueError("Published prior chapter needs one actual chapter registration")
@@ -114,6 +130,12 @@ def _prior_chapters(root, chapter):
     if len({row["id"] for row in result}) != len(result) or len({row["collection"] for row in result}) != len(result):
         raise ValueError("Published prior chapter identities and collections must be unique")
     return sorted(result, key=lambda row: row["id"])
+
+
+def _coordination_context(frontier):
+    identities = [row["id"] for row in frontier["chapters"]]
+    return {"mode": "existing-chapters" if identities else "no-prior-chapters",
+            "priorChapterIds": identities, "comparisonApplicable": bool(identities)}
 
 
 def _frontier(root, chapter):
@@ -323,6 +345,8 @@ def _coordination(root, record, dossier, frontier):
         raise ValueError("Chapter coordination must assess every current published formal chapter exactly once")
     if not expected:
         _text(coordination.get("emptyReason"), "empty prior publication explanation")
+    elif coordination.get("emptyReason"):
+        raise ValueError("An empty prior publication explanation cannot accompany existing formal chapters")
     materials = {row["id"]: row for row in dossier["materials"]}
     for row in rows:
         if row.get("relationship") not in {"overlapping", "adjacent", "separate"}:
@@ -591,6 +615,7 @@ def study_status(root: Path, job_id: str, *, compare_base=True) -> dict:
                 "readyForHandoff": final and not errors and not changes, "lastHandoff": state.get("lastHandoff"),
                 "historyCount": len(state["history"]), "studyPath": folder.relative_to(root).as_posix(),
                 "scope": {"paradigm": scope.get("paradigm"), "branches": scope.get("branches", [])},
+                "coordinationContext": _coordination_context(chain[-1]["base"]["publicationFrontier"] if chain else _frontier(root, state["chapter"])),
                 "independentScope": next((stage["data"]["scope"] for stage in chain if stage["phase"] == "scope"), None),
                 "alignedScope": next((stage["data"]["scope"] for stage in chain if stage["phase"] == "alignment"), None),
                 "unresolvedQuestions": unresolved, "pendingSources": pending,
@@ -605,6 +630,7 @@ def study_status(root: Path, job_id: str, *, compare_base=True) -> dict:
                     "phase": chain[-1]["phase"] if chain else None, "historyCount": len(state["history"]),
                     "lastHandoff": state.get("lastHandoff"), "studyPath": folder.relative_to(root).as_posix(),
                     "scope": archived["scope"], "changedFiles": changes, "errors": [str(error)],
+                    "coordinationContext": _coordination_context(chain[-1]["base"]["publicationFrontier"]) if chain else None,
                     "independentScope": next((stage["data"]["scope"] for stage in chain if stage["phase"] == "scope"), None),
                     "alignedScope": next((stage["data"]["scope"] for stage in chain if stage["phase"] == "alignment"), None),
                     "currentEditError": str(error), "readyForHandoff": False,
@@ -674,6 +700,7 @@ def check_handoff(root: Path, path: str, chapter: str | None = None, *, adopted=
         inputs = [_pointer(root, _path(root, value)) if value.startswith("work/") else _pointer(root, safe_relative(root, value)) for value in sorted(paths)]
         return {"ok": True, "errors": [], "chapter": state["chapter"], "scope": handoff["scope"],
                 "dossier": handoff["dossier"], "inputs": inputs, "path": path, "sha256": digest(filename.read_bytes()),
+                "coordinationContext": _coordination_context(final["base"]["publicationFrontier"]),
                 "adopted": adopted, "baseCurrent": base_current,
                 "automaticSemanticCertification": False}
     except (ValueError, OSError, KeyError, TypeError, IndexError) as error:

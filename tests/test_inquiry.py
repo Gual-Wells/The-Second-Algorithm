@@ -59,6 +59,10 @@ def seed_study(root, job="fixture-study", chapter="unit", paradigm="Binary searc
     for filename, key in (("books", "books"), ("sources", "sources")):
         if not (root / "catalog" / (filename + ".json")).exists():
             write_json(root / "catalog" / (filename + ".json"), {key: []})
+    if not (root / "catalog/chapters.json").exists():
+        write_json(root / "catalog/chapters.json", {"schemaVersion": 1, "chapters": []})
+    if not (root / "carrier/publications.json").exists():
+        write_json(root / "carrier/publications.json", {"schemaVersion": 2, "state": "withdrawn", "collections": []})
     if not (root / "work/jobs" / job / "job.json").exists():
         init_job(root, job, "Synthetic research provenance fixture only")
     open_study(root, job, chapter)
@@ -245,10 +249,12 @@ class InquiryTest(unittest.TestCase):
 
     def test_hidden_draft_withdrawn_are_not_existing_formal_chapters(self):
         self.prior("hidden", visibility="hidden")
-        self.prior("draft", visibility="published", kind="draft")
+        self.prior("draft", visibility="hidden", kind="draft")
         self.assertEqual([], _frontier(self.root, "unit")["chapters"])
         self.prior("withdrawn")
         publication = read_json(self.root / "carrier/publications.json")
+        for collection in publication["collections"]:
+            collection["visibility"] = "hidden"
         publication["state"] = "withdrawn"
         write_json(self.root / "carrier/publications.json", publication)
         self.assertEqual([], _frontier(self.root, "unit")["chapters"])
@@ -276,11 +282,11 @@ class InquiryTest(unittest.TestCase):
             _frontier(self.root, "unit")
 
     def test_malformed_prior_registries_report_structured_errors(self):
-        write_json(self.root / "catalog/chapters.json", {"chapters": ["bad registration"]})
+        write_json(self.root / "catalog/chapters.json", {"schemaVersion": 1, "chapters": ["bad registration"]})
         with self.assertRaisesRegex(ValueError, "registration"):
             _frontier(self.root, "unit")
-        write_json(self.root / "catalog/chapters.json", {"chapters": []})
-        write_json(self.root / "carrier/publications.json", {"collections": ["bad collection"]})
+        write_json(self.root / "catalog/chapters.json", {"schemaVersion": 1, "chapters": []})
+        write_json(self.root / "carrier/publications.json", {"schemaVersion": 2, "collections": ["bad collection"]})
         with self.assertRaisesRegex(ValueError, "publication registry"):
             _frontier(self.root, "unit")
 
@@ -445,7 +451,7 @@ class InquiryTest(unittest.TestCase):
 
     def test_own_publication_allowed_different_collection_other_publication_stales(self):
         result = self.complete()
-        write_json(self.root / "catalog/chapters.json", {"chapters": [{"id": "unit", "collection": "own-collection"}]})
+        write_json(self.root / "catalog/chapters.json", {"schemaVersion": 1, "chapters": [{"id": "unit", "collection": "own-collection"}]})
         publication = {"schemaVersion": 2, "state": "active", "collections": [{"id": "own-collection", "visibility": "published", "kind": "chapter", "documents": [{"id": "self"}]}]}
         write_json(self.root / "carrier/publications.json", publication)
         self.assertTrue(check_handoff(self.root, result["path"])["ok"])

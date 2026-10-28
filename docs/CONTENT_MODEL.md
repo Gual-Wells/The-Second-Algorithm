@@ -57,6 +57,10 @@ alignment和scope-review的 `chapterCoordination` 包含：
 - `scopeDecision`：此次协同导致的保留、调整或改选及依据；不强迫为了字段制造范围变化。
 - 无已有正式章时chapters为空，另填`emptyReason`说明真实空状态；阶段仍保留，不虚构旧章。
 
+空目标由实际登记判定，不设人工bootstrap豁免。`catalog/chapters.json`（schemaVersion1）和`carrier/publications.json`（schemaVersion2）必须明确存在，研究可先于作者稿/learning课程建立，但不能把缺登记当作空登记。登记身份/映射唯一、状态有效，withdrawn不能同时承载published文档；visibility默认published，与课程校验一致。存在真实旧章时，非空emptyReason会被拒绝。
+
+`study-status`与`check-handoff`返回派生的`coordinationContext`：mode为no-prior-chapters或existing-chapters，priorChapterIds为已核前沿的其他正式章身份，comparisonApplicable表明是否存在实际章间比较。它不改变研究质量要求，也不是作者可选的跳关开关；状态报错/前沿过期时须先处理错误，不能拿历史空上下文继续交接。
+
 这里的重合/相邻/相对独立均是允许的关系，不设数值阈值或自动拒绝规则。C点的chapterCoordination须结合本轮研究重新分析，当前题型与算法必要内容不因已教而删减；稳定C++知识继续复用独立权威。程序核身份、读件关系及阶段，语义判断由研究者负责。
 
 checkpoint保存 `snapshots/<uuid>/checkpoint.json` 及 `files/` 中的证据字节，含phase、previous、record、data和文件哈希。归档原始路径的派生笔记/档案，不归档商业原书。active必须是合法阶段前缀；重交早期阶段截去当前后缀但history保留。已有阶段文件、归档和前驱不能原位改写；不要为修hash规范化已封存文件的换行。
