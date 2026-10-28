@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "packet": "work/jobs/chapter-coordination-20261028/releases/8b8707d4df804644bb6d019cb3f58913.json",
+  "packetSha256": "7b928b301755cf5c27c32f987adacc3c26f29f4e44c1fcfd6a12fce66f84cfbe",
+  "researchHandoffs": [],
+  "inputHash": "e6ec443e178c1cc5fcea8cec809f30b462376f65c27bedb284023da8a8d1aa7c",
+  "artifact": ".local/releases/9919ccb5-18f0-4463-bd98-58303ee8fc56",
+  "origin": "https://second-algorithm.pages.dev",
+  "deployedAt": "2026-10-28T11:50:36.752Z",
+  "build": "6511a6cae509cb1928ea76b51429750d9c932232e80270c40853b5a5986f73d1",
+  "anonymousBoundaryVerified": true,
+  "passed": true
+}

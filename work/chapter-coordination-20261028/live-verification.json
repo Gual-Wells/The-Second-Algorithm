@@ -1,0 +1,18 @@
+{
+  "verifiedAt": "2026-10-28T11:51:45.909Z",
+  "origin": "https://second-algorithm.pages.dev",
+  "deployment": "https://446558c0.second-algorithm.pages.dev",
+  "receipt": "work/jobs/chapter-coordination-20261028/deployments/1793188236751.json",
+  "build": "6511a6cae509cb1928ea76b51429750d9c932232e80270c40853b5a5986f73d1",
+  "swHTTP": 200,
+  "swExactBytes": true,
+  "authHTTP": 200,
+  "ownerEnrolled": true,
+  "enrollmentOpen": false,
+  "anonymousLibraryHTTP": 401,
+  "collections": 0,
+  "staticLibraryFiles": [
+    "catalog.json"
+  ],
+  "passed": true
+}

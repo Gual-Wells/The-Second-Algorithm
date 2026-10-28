@@ -25,8 +25,65 @@
       "inputHash": "ba6b8c6ab52788f3ca3d405cadc15fbd62c167bf85ff95459e26c55b7a3e74cf",
       "recordedAt": "2026-10-28T11:34:29.575661+00:00",
       "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "d815b0fe5a40447ba51e8ca7116399c7",
+      "kind": "research",
+      "path": "research/2026-10-28/chapter-coordination-amendment.md",
+      "summary": "已有章节协同设施研究与实现，独立提案/再次协同/领域重合近邻原则",
+      "outcome": "accepted",
+      "sha256": "e6bd5bb483e61919167b4be1c2847d7584852fb70647f192e17892d213426392",
+      "inputHash": "9ca1e61fbb96d4d0b797e1335a497892c8620885b1e18c6eff64b8d3c8cdc6d4",
+      "recordedAt": "2026-10-28T11:47:25.954945+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "b03e92f0bea14512bfecd272aabb71cb",
+      "kind": "review",
+      "path": "work/chapter-coordination-20261028/review.md",
+      "summary": "研究与出版集成审阅通过；Python154、Node70、浏览器21及真实SW通过，修复测试固定等待",
+      "outcome": "accepted",
+      "sha256": "61a39f7e3d7e8fd31ebf2d0aee57a2f63245d2d329f95e9aba191c44aedac1f8",
+      "inputHash": "9ca1e61fbb96d4d0b797e1335a497892c8620885b1e18c6eff64b8d3c8cdc6d4",
+      "recordedAt": "2026-10-28T11:47:26.025166+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "93e10932746048208c6bcd704106b011",
+      "kind": "research",
+      "path": "research/2026-10-28/chapter-coordination-amendment.md",
+      "summary": "独立选域后的已有章节协同及范围复审再次协同，正常重合近邻保留",
+      "outcome": "accepted",
+      "sha256": "e6bd5bb483e61919167b4be1c2847d7584852fb70647f192e17892d213426392",
+      "inputHash": "e6ec443e178c1cc5fcea8cec809f30b462376f65c27bedb284023da8a8d1aa7c",
+      "recordedAt": "2026-10-28T11:50:06.074941+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "1041122a99914ed3a4fe39d38e1087d5",
+      "kind": "review",
+      "path": "work/chapter-coordination-20261028/review.md",
+      "summary": "设施与出版集成验证通过；Python154、Node70、浏览器21和真实SW各部件通过；修复既有测试定时依赖",
+      "outcome": "accepted",
+      "sha256": "61a39f7e3d7e8fd31ebf2d0aee57a2f63245d2d329f95e9aba191c44aedac1f8",
+      "inputHash": "e6ec443e178c1cc5fcea8cec809f30b462376f65c27bedb284023da8a8d1aa7c",
+      "recordedAt": "2026-10-28T11:50:06.148250+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
     }
   ],
-  "lastGoodVerification": null,
-  "lastPreparedRelease": null
+  "lastGoodVerification": {
+    "path": "work/jobs/chapter-coordination-20261028/verifications/523ab9e170a64516b2475f369e0662d3.json",
+    "sha256": "7b3f9c98c06c0b4730d193ae80404566000dc27d2d25c4ee35665da027ab1f48",
+    "inputHash": "e6ec443e178c1cc5fcea8cec809f30b462376f65c27bedb284023da8a8d1aa7c"
+  },
+  "lastPreparedRelease": {
+    "path": "work/jobs/chapter-coordination-20261028/releases/8b8707d4df804644bb6d019cb3f58913.json",
+    "sha256": "7b928b301755cf5c27c32f987adacc3c26f29f4e44c1fcfd6a12fce66f84cfbe",
+    "inputHash": "e6ec443e178c1cc5fcea8cec809f30b462376f65c27bedb284023da8a8d1aa7c"
+  },
+  "lastVerificationAttempt": {
+    "path": "work/jobs/chapter-coordination-20261028/verifications/523ab9e170a64516b2475f369e0662d3.json",
+    "sha256": "7b3f9c98c06c0b4730d193ae80404566000dc27d2d25c4ee35665da027ab1f48",
+    "inputHash": "e6ec443e178c1cc5fcea8cec809f30b462376f65c27bedb284023da8a8d1aa7c"
+  }
 }

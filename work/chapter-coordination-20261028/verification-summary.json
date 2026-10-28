@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-10-28T11:53:14.112286+00:00",
+  "facilityCommit": "dfc104958035c2a8f484fcd93d21791949885ff0",
+  "finalSourceCommit": "ca5c834d251fddb8f169b1815affd8fcb235bdca",
+  "inputHash": "e6ec443e178c1cc5fcea8cec809f30b462376f65c27bedb284023da8a8d1aa7c",
+  "checks": {
+    "allComponentsPassed": true,
+    "pythonTests": 154,
+    "pythonPassed": true,
+    "nodeTests": 70,
+    "nodePassed": true,
+    "browserCases": 21,
+    "browserPassed": true,
+    "realServiceWorkerUpgradePassed": true
+  },
+  "firstFullCommand": {
+    "passed": false,
+    "pythonPassed": true,
+    "nodePassed": 69,
+    "nodeFailed": 1,
+    "failure": "Existing SW test assumed message delivery/update after fixed 15ms; replaced with actual update and VERSION-consumption signals; production code unchanged",
+    "log": {
+      "path": ".local/chapter-coordination-check/attempt-1.log",
+      "sha256": "01975e1a578b0667a9f1157d050b7f0917b7d99612e0f9b7e7c360f9efe549f8"
+    }
+  },
+  "rechecks": {
+    "workerReleaseTests": 7,
+    "workerReleasePassed": true,
+    "nodeLog": {
+      "path": ".local/chapter-coordination-check/node-attempt2.log",
+      "sha256": "dfe565e5a15fade9ae8f80c4b68c57b59e876d24bd2b2a5900c4a20576a06d2c"
+    },
+    "workerReleaseLog": {
+      "path": ".local/chapter-coordination-check/worker-release-attempt2.log",
+      "sha256": "e489274db5fe74e549043512d5ebd976078ac7e672e17951e4c6e05cb5927c02"
+    },
+    "browserAndUpgradeLog": {
+      "path": ".local/chapter-coordination-check/browser-and-upgrade.log",
+      "sha256": "a1182c71994a69659295c8c60c33c2fd7d7d695e4b7082fdd48dd72a58b53434"
+    },
+    "pythonRepeatedLocally": false,
+    "reason": "Only Node test synchronization changed after Python passed; final Linux CI runs complete fresh suite"
+  },
+  "ci": {
+    "run": 40682984845,
+    "status": "completed",
+    "conclusion": "success",
+    "url": "https://github.com/Gual-Wells/The-Second-Algorithm/actions/runs/40682984845",
+    "scope": "Complete fresh suite at final source commit"
+  },
+  "live": {
+    "verifiedAt": "2026-10-28T11:51:45.909Z",
+    "origin": "https://second-algorithm.pages.dev",
+    "deployment": "https://446558c0.second-algorithm.pages.dev",
+    "receipt": "work/jobs/chapter-coordination-20261028/deployments/1793188236751.json",
+    "build": "6511a6cae509cb1928ea76b51429750d9c932232e80270c40853b5a5986f73d1",
+    "swHTTP": 200,
+    "swExactBytes": true,
+    "authHTTP": 200,
+    "ownerEnrolled": true,
+    "enrollmentOpen": false,
+    "anonymousLibraryHTTP": 401,
+    "collections": 0,
+    "staticLibraryFiles": [
+      "catalog.json"
+    ],
+    "passed": true
+  },
+  "studySchemaVersion": 2,
+  "checkpointSchemaVersion": 2,
+  "handoffSchemaVersion": 2,
+  "cppProductionVerification": "not-applicable: explicit withdrawn empty course; actual toolchain fixtures remain covered by tests",
+  "newChapterResearched": false,
+  "currentFormalCollections": 0,
+  "newRecurringServices": 0,
+  "newRecurringCost": 0,
+  "privateStateReset": false
+}
