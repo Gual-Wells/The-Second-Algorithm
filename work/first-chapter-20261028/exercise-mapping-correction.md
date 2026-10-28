@@ -1,0 +1,3 @@
+# 既有原题映射修正
+
+编纂入口核对发现prefix-activation已研究并明确要求P1083，但类型exerciseUrls只复制了NailingPlanks。将既有root-prefix-orders原题补入该类型，未增加领域或新方法。按门禁重新记录范围复审及最终综合，旧交接不原位修改。

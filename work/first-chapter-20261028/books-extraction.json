@@ -1,0 +1,1171 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-28",
+  "scope": "binary-search-large-domain",
+  "provenance": "current private textbook packages and author official CPH; original analysis only",
+  "materials": [
+    {
+      "id": "epi-binary-principle",
+      "source": "book:epi-cpp",
+      "locator": "2015 v2.0.0 physical198–201; chapter12 introduction/boot camp",
+      "readState": "analyzed",
+      "note": "完整读取相关文字；代码仅观察合同，不从OCR生成课程代码。教材强调候选集合消除和比较序。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "证明每次排除部分不含目标，保留候选不变量并终止",
+      "conditions": [
+        "访问/比较合同与数据排列一致",
+        "区分比较次数、访问成本和预排序成本"
+      ],
+      "variants": [
+        "自定义记录比较",
+        "存在性与位置返回区别"
+      ],
+      "crossParadigms": [],
+      "exerciseUrls": []
+    },
+    {
+      "id": "epi-boundary-family",
+      "source": "book:epi-cpp",
+      "locator": "physical201–202;12.1及三个边界变型",
+      "readState": "analyzed",
+      "note": "首个相等、首个严格更大、首尾区间以分区边界归并；相等后继续保留更早候选。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "first-true/last-false边界",
+      "conditions": [
+        "有序或相对当前键分区",
+        "返回未找到或尾边界的政策明确"
+      ],
+      "variants": [
+        "重复值",
+        "插入位",
+        "计数",
+        "严格/非严格上界"
+      ],
+      "crossParadigms": [],
+      "exerciseUrls": []
+    },
+    {
+      "id": "epi-local-extrema",
+      "source": "book:epi-cpp",
+      "locator": "physical202;12.1 local-min variant;202原图已目视",
+      "readState": "analyzed",
+      "note": "原图核实端点A[0]>=A[1]且A[n-2]<=A[n-1]，目标为任意局部极小且允许等值。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "方向证据保证某半边仍有局部解",
+      "conditions": [
+        "明确端点是否可作答案",
+        "弱/严格极值不能混同"
+      ],
+      "variants": [
+        "局部峰/谷",
+        "相邻相等",
+        "全局峰与局部峰区别"
+      ],
+      "crossParadigms": [],
+      "exerciseUrls": []
+    },
+    {
+      "id": "epi-string-prefix-interval",
+      "source": "book:epi-cpp",
+      "locator": "physical202;12.1 prefix variant",
+      "readState": "analyzed",
+      "note": "题型原文已读；前缀匹配形成字典序连续区间，需原题补证具体字符域合同。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "前缀等价类边界",
+      "conditions": [
+        "排序比较序一致",
+        "前缀语义和字符域明确"
+      ],
+      "variants": [
+        "空前缀",
+        "空字符串",
+        "不存在安全字符后继"
+      ],
+      "crossParadigms": [
+        "string-order"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "epi-fixed-point",
+      "source": "book:epi-cpp",
+      "locator": "physical202–203;12.2含重复变型;203原图已目视",
+      "readState": "analyzed",
+      "note": "原书声称A[i]-i至少增长1错误，实际只保证非降；同页差分示例本身反证该句。重复值变型仅提出，未提供完整解。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "不显式构造的单调差分变换",
+      "conditions": [
+        "A严格递增且为整数才有A[i]-i非降",
+        "允许重复后普通半区舍弃可能错"
+      ],
+      "variants": [
+        "任意/首个固定点",
+        "重复值需双区间剪枝最坏线性",
+        "由秩差迁移到第k缺失：本轮原创推导，非原书原题"
+      ],
+      "crossParadigms": [
+        "pruning"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "epi-rotated-array",
+      "source": "book:epi-cpp",
+      "locator": "physical203–204;12.3及两个变型",
+      "readState": "analyzed",
+      "note": "完整读取；互异旋转数组可由中点和端点关系找最小值/目标；重复会有信息不足和线性下界。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "识别有序半区或切点后消除",
+      "conditions": [
+        "旋转自同一有序序列",
+        "互异与允许重复分别论证"
+      ],
+      "variants": [
+        "最小值位置",
+        "给定目标",
+        "重复退化",
+        "严格单峰最大值"
+      ],
+      "crossParadigms": [],
+      "exerciseUrls": []
+    },
+    {
+      "id": "epi-integer-root",
+      "source": "book:epi-cpp",
+      "locator": "physical204–205;12.4",
+      "readState": "analyzed",
+      "note": "整数平方根定位最后可行整数；原书用long平方不能作为Windows安全实现依据。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "整数值域单调判定",
+      "conditions": [
+        "非负输入",
+        "乘法/除法比较必须安全",
+        "有明确可行下界/不可行上界政策"
+      ],
+      "variants": [
+        "0/1",
+        "类型极值",
+        "更高次整数根"
+      ],
+      "crossParadigms": [
+        "integer-arithmetic"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "epi-real-root",
+      "source": "book:epi-cpp",
+      "locator": "physical205–207;12.5;207分式原图已目视",
+      "readState": "analyzed",
+      "note": "完整读取并核实变型为不用除法算x/y；x<1时[0,x]不夹根，原归一化epsilon比较不作通用模板。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "实数夹逼与精度终止",
+      "conditions": [
+        "有效有限数输入和夹逼区间",
+        "绝对/相对误差区分",
+        "浮点停滞必须结束"
+      ],
+      "variants": [
+        "0<x<1",
+        "0",
+        "极大/极小量级",
+        "无除法计算正数商"
+      ],
+      "crossParadigms": [
+        "numerical-analysis"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "epi-matrix-search",
+      "source": "book:epi-cpp",
+      "locator": "physical207–209;12.6",
+      "readState": "analyzed",
+      "note": "逐行二分O(m logn)与阶梯消除O(m+n)均已读；仅行列有序不保证展平全局有序。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "多重有序结构中的可消除区域",
+      "conditions": [
+        "矩阵的有序关系必须区分",
+        "空行/形状/尺寸合同需定义"
+      ],
+      "variants": [
+        "逐行二分",
+        "展平需额外条件",
+        "阶梯法替代",
+        "值域计数求第k需外部原题"
+      ],
+      "crossParadigms": [
+        "two-pointers"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "epi-missing-ip",
+      "source": "book:epi-cpp",
+      "locator": "physical212–214;12.9;与physical34和207分类交叉核对",
+      "readState": "analyzed",
+      "note": "原书分类自相矛盾：正文放generalized search而早前称binary search。实际常空间法按欠满值域半分保存缺失值存在性，多桶法两遍。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "抽屉容量不足证据驱动的值域消除",
+      "conditions": [
+        "当前候选域出现次数小于域容量",
+        "输入可重复扫描",
+        "值域宽度/桶计数不能溢出"
+      ],
+      "variants": [
+        "二分常空间O(n logU)",
+        "多桶内存换遍历",
+        "重复值不破坏欠满充分条件"
+      ],
+      "crossParadigms": [
+        "pigeonhole",
+        "external-memory"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "epi-missing-xor-contrast",
+      "source": "book:epi-cpp",
+      "locator": "physical214–217;12.10",
+      "readState": "analyzed",
+      "note": "完整读相邻缺失/重复的求和和XOR机制；这些不是二分，应保留替代边界而非硬归本域。",
+      "disposition": "contrast",
+      "reason": "防止因同章或同题词强行归为二分",
+      "mechanism": "聚合代数消去，与候选半分不同",
+      "conditions": [
+        "准确的唯一缺失/重复数量保证"
+      ],
+      "variants": [
+        "无序缺失",
+        "XOR分组"
+      ],
+      "crossParadigms": [
+        "bitwise"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "epi-exponential-bracket",
+      "source": "book:epi-cpp",
+      "locator": "physical470–471;25.15",
+      "readState": "analyzed",
+      "note": "完整读取未知长度题与解法；先指数探测含目标窗口而不必求精确长度。原书泛exception捕获及移位需重做。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "指数扩界后有界二分",
+      "conditions": [
+        "随机索引访问器有明确越界语义",
+        "溢出/最大可寻址范围保护",
+        "其他访问失败不能吞成未找到"
+      ],
+      "variants": [
+        "空访问器",
+        "目标在首项之前",
+        "超过尾部",
+        "昂贵访问/调用次数"
+      ],
+      "crossParadigms": [
+        "oracle-interface"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "epi-two-array-selection",
+      "source": "book:epi-cpp",
+      "locator": "physical471–472;25.16",
+      "readState": "analyzed",
+      "note": "完整读取：取x和k-x个元素构成前k，搜索域[max(0,k-n),min(m,k)]，按交叉边界调整。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "协调分割位置的二分",
+      "conditions": [
+        "两数组各自有序",
+        "k在1..m+n",
+        "重复合法",
+        "哨兵/索引边界独立设计"
+      ],
+      "variants": [
+        "第k小",
+        "中位数",
+        "空一侧",
+        "极不均匀长度",
+        "平均溢出"
+      ],
+      "crossParadigms": [
+        "selection"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "epi-weighted-inverse",
+      "source": "book:epi-cpp",
+      "locator": "physical96–97;6.15",
+      "readState": "analyzed",
+      "note": "完整读取；前缀建立O(n)，重复查询O(logn)。[0,W)阈值应找第一个累计>阈值，整数[1,W]则>=。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "累计分布逆映射",
+      "conditions": [
+        "非负权重且总和正",
+        "零权重形成空区间",
+        "随机数端点和累计数值可靠"
+      ],
+      "variants": [
+        "零权重",
+        "总和溢出",
+        "离散/连续分布",
+        "std::discrete_distribution为任务替代非同实现保证"
+      ],
+      "crossParadigms": [
+        "prefix-sums",
+        "probability"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "epi-intersection-cost",
+      "source": "book:epi-cpp",
+      "locator": "physical247;14.1",
+      "readState": "analyzed",
+      "note": "完整读取有序交集的逐项二分与双指针对照；不声称二分总优。",
+      "disposition": "support",
+      "reason": "解释同题方法选择和二分调用总成本",
+      "mechanism": "批量有序成员/边界查询",
+      "conditions": [
+        "两有序输入",
+        "去重语义明确",
+        "较短一侧枚举成本"
+      ],
+      "variants": [
+        "长度极不均匀",
+        "双指针O(m+n)",
+        "重复元素"
+      ],
+      "crossParadigms": [
+        "two-pointers"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "epi-salary-piecewise",
+      "source": "book:epi-cpp",
+      "locator": "physical261–262;14.10",
+      "readState": "analyzed",
+      "note": "完整读取工资封顶：sum(min(salary,c))单调；排序断点间线性，可前缀定位后解析求值。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "单调残差或分段断点边界",
+      "conditions": [
+        "目标不超过原总额才可能实现",
+        "输入非负与目标有效性",
+        "实数/舍入合同"
+      ],
+      "variants": [
+        "多目标查询",
+        "前缀预处理",
+        "解析替代",
+        "无解"
+      ],
+      "crossParadigms": [
+        "sorting",
+        "prefix-sums"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "epi-selection-inversion-contrast",
+      "source": "book:epi-cpp",
+      "locator": "physical210–212;12.8;physical494;25.28",
+      "readState": "analyzed",
+      "note": "已读随机选择及归并计数相邻方法；用于反查“第k/计数就应该二分”误判，不作为本章新增整域。",
+      "disposition": "contrast",
+      "reason": "保持代表性大领域的合理边界",
+      "mechanism": "随机分割/归并合并与二分边界不同",
+      "conditions": [
+        "输入可否修改",
+        "平均/最坏复杂度分别表述"
+      ],
+      "variants": [
+        "nth_element任务替代",
+        "逆序对归并优于逐项二分"
+      ],
+      "crossParadigms": [
+        "divide-and-conquer",
+        "selection"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "cp4-dfs-path-boundary",
+      "source": "book:competitive-programming-4",
+      "locator": "Book1 physical178–179;3.3.1 My Ancestor",
+      "readState": "analyzed",
+      "note": "完整读取；离线DFS维护当前根路径的递增权重，到查询节点时lower_bound，回溯恢复，O(N+QlogN)。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "临时有序路径上的阈值定位",
+      "conditions": [
+        "根到叶权重递增",
+        "离线查询挂节点",
+        "祖先是否含自身按原题核",
+        "返回节点身份"
+      ],
+      "variants": [
+        "树退化链",
+        "多查询同节点",
+        "无合格祖先"
+      ],
+      "crossParadigms": [
+        "DFS",
+        "offline-processing"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "cp4-numerical-bisection",
+      "source": "book:competitive-programming-4",
+      "locator": "Book1 physical179–180;3.3.1 loan example",
+      "readState": "analyzed",
+      "note": "完整读取；贷款残差随还款量变化，用端点夹逼。教材未充分区分连续异号根与单调阈值。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "实数根夹逼",
+      "conditions": [
+        "连续性与异号夹根",
+        "单调跳跃未必有零点",
+        "精度要求与评价成本"
+      ],
+      "variants": [
+        "固定迭代",
+        "残差与区间误差",
+        "解析解比较"
+      ],
+      "crossParadigms": [
+        "numerical-analysis"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "cp4-simulation-feasibility",
+      "source": "book:competitive-programming-4",
+      "locator": "Book1 physical180–182;UVa11935;physical220解答",
+      "readState": "analyzed",
+      "note": "完整读取油箱事件模拟判定及教材给出的无二分一次扫描替代，不能教成唯一最优解。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "容量越大可行集合嵌套",
+      "conditions": [
+        "事件模拟正确",
+        "非负实际耗油模型",
+        "上界真实可行"
+      ],
+      "variants": [
+        "实数容量",
+        "直接最大消耗段O(n)替代"
+      ],
+      "crossParadigms": [
+        "simulation"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "cp4-partition-capacity",
+      "source": "book:competitive-programming-4",
+      "locator": "Book2 physical201–203;8.7.1 Copying Books",
+      "readState": "analyzed",
+      "note": "完整读取书中题干、贪心判定和反查练习。容量给定时求最少连续分组，再定位最小容量。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "最小化最大连续段负载",
+      "conditions": [
+        "非负工作量支持贪心",
+        "恰好k与最多k等价需能非空拆分",
+        "最大单项下界/总和上界"
+      ],
+      "variants": [
+        "输出分割",
+        "负数导致贪心失效",
+        "分组数限制"
+      ],
+      "crossParadigms": [
+        "greedy"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "cp4-geometry-residual",
+      "source": "book:competitive-programming-4",
+      "locator": "Book2 physical202–203;Athletics Track;8.7.1",
+      "readState": "analyzed",
+      "note": "完整读取长度推宽度、弧长比较与解析解练习；几何内部推导需要采用时再核图。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "公式残差夹逼",
+      "conditions": [
+        "正比例与几何有效域",
+        "同一单位",
+        "误差控制"
+      ],
+      "variants": [
+        "可解析分段",
+        "公式求值成本"
+      ],
+      "crossParadigms": [
+        "geometry",
+        "numerical-analysis"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "cp4-graph-threshold-family",
+      "source": "book:competitive-programming-4",
+      "locator": "Book2 physical201,209,213;8.7.1及题目表",
+      "readState": "analyzed",
+      "note": "正文分类和具体题目表已读；连通/BFS/SSSP为不同可行判定；并未读取所有原题或完整算法正文。",
+      "disposition": "needs-original-problem-check",
+      "reason": "本域重要组合家族，不能只列名；原题和内部判定待父研究核验",
+      "mechanism": "阈值筛边/筛点后检验路径或距离",
+      "conditions": [
+        "阈值使允许集合嵌套",
+        "可达与最短路/时限分别建模",
+        "判定算法须完整补读"
+      ],
+      "variants": [
+        "连通",
+        "多源危险距离",
+        "SSSP带约束"
+      ],
+      "crossParadigms": [
+        "connectivity",
+        "BFS",
+        "shortest-path"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "cp4-matching-flow-feasibility",
+      "source": "book:competitive-programming-4",
+      "locator": "Book2 physical201,209;8.7.1列MCBM/maxflow",
+      "readState": "analyzed",
+      "note": "已读教材的组合分类/例题线索，未声称网络流/匹配完整正文已读透。",
+      "disposition": "needs-original-problem-check",
+      "reason": "复杂判定的独立本质需有实际可实现落点",
+      "mechanism": "阈值下是否存在满足配对/容量约束的方案",
+      "conditions": [
+        "单调的是方案存在性",
+        "判定需真实匹配或流而非贪心假设",
+        "输入规模决定可负担调用次数"
+      ],
+      "variants": [
+        "阈值匹配",
+        "容量流",
+        "完美匹配"
+      ],
+      "crossParadigms": [
+        "matching",
+        "network-flow"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "cp4-permutation-spacing",
+      "source": "book:competitive-programming-4",
+      "locator": "Book2 physical207–208;8.7.8 A Careful Approach",
+      "readState": "analyzed",
+      "note": "完整读取n<=8飞机时间窗；枚举次序，给定间隔后尽早落地贪心，再二分最大间隔。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "最大化最小间隔与安全可行性判定",
+      "conditions": [
+        "小规模允许枚举n!",
+        "固定次序后最早排程的正确性",
+        "时间窗/单位/输出舍入明确"
+      ],
+      "variants": [
+        "排列外层",
+        "贪心check",
+        "实数与整数替代"
+      ],
+      "crossParadigms": [
+        "enumeration",
+        "greedy"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "cp4-precomputed-inverse",
+      "source": "book:competitive-programming-4",
+      "locator": "Book2 physical206–207;Recover Factorial",
+      "readState": "analyzed",
+      "note": "完整读取按素因子数量构造累计表，再定位最早相等值；跳过的目标应无解。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "预计算单调映射的逆查",
+      "conditions": [
+        "表构造正确",
+        "查询目标可能不在值域像中",
+        "最早满足政策"
+      ],
+      "variants": [
+        "精确等值",
+        "累计计数",
+        "多查询"
+      ],
+      "crossParadigms": [
+        "number-theory",
+        "prefix-sums"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "cp4-lis-maintained-summary",
+      "source": "book:competitive-programming-4",
+      "locator": "Book1 physical208–209;LIS O(nlogk)",
+      "readState": "analyzed",
+      "note": "完整读取最小尾数组、重建数组和例子；tails有序但不等于实际LIS。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "维护有序最优摘要后边界更新",
+      "conditions": [
+        "严格递增/非降分别选边界",
+        "同长度更小末尾支配更大末尾",
+        "重建需身份/前驱"
+      ],
+      "variants": [
+        "LIS长度",
+        "重建",
+        "非下降",
+        "二维排序后LIS需额外同键条件"
+      ],
+      "crossParadigms": [
+        "greedy",
+        "dynamic-programming"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "cp4-dp-transition-boundary",
+      "source": "book:competitive-programming-4",
+      "locator": "Book2 physical153;8.3.8 busticket",
+      "readState": "analyzed",
+      "note": "完整读取已排序乘车日期中通票失效后首日定位，把DP转移扫描降为边界查询。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "有序转移目的地定位",
+      "conditions": [
+        "日期非降",
+        "通票有效区间为半开",
+        "状态和转移合同明确"
+      ],
+      "variants": [
+        "重复日期",
+        "二分O(nlogn)",
+        "移动边界预处理可O(n)"
+      ],
+      "crossParadigms": [
+        "dynamic-programming",
+        "two-pointers"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "cp4-fenwick-select",
+      "source": "book:competitive-programming-4",
+      "locator": "Book1 physical138;2.4.3 select(rank k)",
+      "readState": "analyzed",
+      "note": "完整读取相关段；外部二分每次前缀查询O(logn)导致O(log²n)，应与树内倍增定位对照。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "累计频率的动态第k/前缀边界",
+      "conditions": [
+        "频率非负",
+        "1<=k<=总频数",
+        "任意带负数前缀不保证单调"
+      ],
+      "variants": [
+        "值域频率",
+        "动态删除/增加",
+        "Fenwick内倍增O(logn)需额外实现补证"
+      ],
+      "crossParadigms": [
+        "Fenwick-tree",
+        "order-statistics"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "cp4-suffix-prefix-range",
+      "source": "book:competitive-programming-4",
+      "locator": "Book2 physical87;6.5.5 suffix-array string matching",
+      "readState": "analyzed",
+      "note": "完整读取模式匹配双边界及比较成本；索引构造并未因此完整教会。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "字典序后缀上的前缀等价类",
+      "conditions": [
+        "后缀排序已正确建立",
+        "只比较模式长度前缀",
+        "单次比较O(m)"
+      ],
+      "variants": [
+        "所有匹配起点",
+        "O(m logn)",
+        "模式长于后缀"
+      ],
+      "crossParadigms": [
+        "suffix-array",
+        "strings"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "cp4-egg-drop",
+      "source": "book:competitive-programming-4",
+      "locator": "Book2 physical290–293;9.22",
+      "readState": "analyzed",
+      "note": "完整读取各DP视角；有限鸡蛋使直接对楼层二分不合法，DP交点及覆盖楼层关于次数的逆查才是可二分对象。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "交叉代价定位/问题倒置后的最小可行次数",
+      "conditions": [
+        "查询会消耗鸡蛋",
+        "失败/成功剩余状态不同",
+        "覆盖计数可饱和到N避免溢出"
+      ],
+      "variants": [
+        "DP转移交点",
+        "按次数的覆盖DP",
+        "组合计数+BSTA",
+        "K=1"
+      ],
+      "crossParadigms": [
+        "dynamic-programming",
+        "combinatorics"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "cp4-cht-query-boundary",
+      "source": "book:competitive-programming-4",
+      "locator": "Book2 physical294–296;9.23 convex hull technique",
+      "readState": "analyzed",
+      "note": "完整读取该子节三页；有序包络断点上二分，斜率单调维护和查询单调游标是额外条件。未把原书代码当可靠模板。",
+      "disposition": "scope-review",
+      "reason": "复杂的同机制实例，不能只贴查询就声称教会CHT，也不机械把全部DP优化归二分",
+      "mechanism": "维护下包络的区间定位",
+      "conditions": [
+        "斜率有序",
+        "同斜率需处置",
+        "交点数值/乘积安全",
+        "单调查询才可游标替代"
+      ],
+      "variants": [
+        "任意查询二分",
+        "单调查询摊还O(1)",
+        "完整CHT维护需正式采用时补证"
+      ],
+      "crossParadigms": [
+        "convex-hull-trick",
+        "dynamic-programming"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "cp4-interactive-boundary",
+      "source": "book:competitive-programming-4",
+      "locator": "Book2 physical321;9.31 Kattis guess",
+      "readState": "analyzed",
+      "note": "完整读取交互猜数；书的换行flush建议不可照搬。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "查询预算下的区间消除",
+      "conditions": [
+        "每次响应可靠且符合协议",
+        "必须实际flush",
+        "终止/非法响应/读失败有政策"
+      ],
+      "variants": [
+        "昂贵oracle",
+        "查询次数下界",
+        "mock judge验证"
+      ],
+      "crossParadigms": [
+        "interactive"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "cp4-nearby-search-boundary",
+      "source": "book:competitive-programming-4",
+      "locator": "Book1 physical182–184;3.3.2/3.3.3;Book2 physical137–138及8.2目录138–146",
+      "readState": "analyzed",
+      "note": "三分相邻正文已读；高级完整搜索只有目录和开头读件，不冒充二分正文。",
+      "disposition": "contrast",
+      "reason": "防止按书名/小节名误扩或误缩范围",
+      "mechanism": "三分保留区间与二分边界不同",
+      "conditions": [
+        "单峰条件分开",
+        "弱单峰平台不能泛化",
+        "搜索一词不代表同一范式"
+      ],
+      "variants": [
+        "三分",
+        "位掩码回溯",
+        "双向BFS"
+      ],
+      "crossParadigms": [
+        "ternary-search",
+        "backtracking",
+        "BFS"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "cph-step-halving",
+      "source": "book:competitive-programmers-handbook",
+      "locator": "official2018 draft physical41–44;3.3",
+      "readState": "analyzed",
+      "note": "完整读取区间法、步长减半、最小解边界和严格单峰；步骤是多实现，不单列题型。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "幂次试跳构造边界",
+      "conditions": [
+        "已知覆盖答案的上界",
+        "检查索引/域安全",
+        "严格峰条件不能默放宽"
+      ],
+      "variants": [
+        "mid法",
+        "步长法",
+        "最小可行",
+        "严格单峰"
+      ],
+      "crossParadigms": [],
+      "exerciseUrls": []
+    },
+    {
+      "id": "cph-lis-scope-limit",
+      "source": "book:competitive-programmers-handbook",
+      "locator": "official2018 draft physical80–81;7.2",
+      "readState": "analyzed",
+      "note": "正文只给O(n²)DP并提问更快法，不把它登记成已经提供O(nlogn)实现的来源。",
+      "disposition": "support",
+      "reason": "诚实区分教材提问与完整方法已取得",
+      "mechanism": "序列DP状态与二分优化的前置",
+      "conditions": [
+        "子序列而非子数组",
+        "严格上升"
+      ],
+      "variants": [
+        "O(nlogn)解需用CP4等补足"
+      ],
+      "crossParadigms": [
+        "dynamic-programming"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "cph-binary-lifting-contract",
+      "source": "book:competitive-programmers-handbook",
+      "locator": "official2018 draft physical164–165,173–174;16.3/18.1",
+      "readState": "analyzed",
+      "note": "完整读取后继和祖先2^j表；普通k步跳是二进制分解，只有额外单调边界谓词才属于阈值查找。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "预计算跳跃后沿大步尝试边界",
+      "conditions": [
+        "后继/祖先定义稳定",
+        "缺祖先哨兵有效",
+        "搜索谓词沿路径必须保持所需单调性"
+      ],
+      "variants": [
+        "第k祖先非二分",
+        "树路径阈值",
+        "函数图后继"
+      ],
+      "crossParadigms": [
+        "tree",
+        "doubling"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "cph-lca-alternatives",
+      "source": "book:competitive-programmers-handbook",
+      "locator": "official2018 draft physical177–179;18.3",
+      "readState": "analyzed",
+      "note": "完整读取等深后向上会合与Euler-RMQ替代，支持对树上边界/提升的机制区分。",
+      "disposition": "support",
+      "reason": "同机制交叉示例，不能据2^j表把全部树算法归二分",
+      "mechanism": "同层祖先路径上的会合边界",
+      "conditions": [
+        "树已确定根",
+        "先对齐深度",
+        "祖先表正确"
+      ],
+      "variants": [
+        "LCA提升",
+        "Euler tour+RMQ"
+      ],
+      "crossParadigms": [
+        "tree",
+        "RMQ"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "cph-segment-tree-descent",
+      "source": "book:competitive-programmers-handbook",
+      "locator": "official2018 draft physical102;9.3 other queries",
+      "readState": "analyzed",
+      "note": "完整读取节点最小值指导下降找极小值位置，需区别外部二分套RMQ多一层log。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "节点摘要证明半区无解后下降",
+      "conditions": [
+        "聚合摘要足以判断目标是否在半区",
+        "查询范围约束需补实际问题"
+      ],
+      "variants": [
+        "第一个达到阈值",
+        "第k频数",
+        "外部二分O(log²n)与内下降O(logn)"
+      ],
+      "crossParadigms": [
+        "segment-tree"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "cph-hash-lcp-boundary",
+      "source": "book:competitive-programmers-handbook",
+      "locator": "official2018 draft physical256;26 string hashing",
+      "readState": "analyzed",
+      "note": "完整读取哈希+二分LCP以及紧邻碰撞风险；真实前缀相等单调，哈希oracle可能错误。",
+      "disposition": "include",
+      "reason": "对应本领域实际题型或不可省略的条件变化",
+      "mechanism": "前缀长度的最大相等边界",
+      "conditions": [
+        "预处理哈希正确",
+        "碰撞风险不消失",
+        "结果可靠性合同显式说明"
+      ],
+      "variants": [
+        "字典序比较",
+        "多查询LCP",
+        "确定性替代/确证成本"
+      ],
+      "crossParadigms": [
+        "hashing",
+        "strings"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "cph-two-sum-alternative",
+      "source": "book:competitive-programmers-handbook",
+      "locator": "official2018 draft physical89;8.1",
+      "readState": "analyzed",
+      "note": "完整读取TwoSum逐元素二分与双指针替代说明。",
+      "disposition": "contrast",
+      "reason": "不要为二分主题把更优批处理方法省略",
+      "mechanism": "重复成员搜索与批处理扫描比较",
+      "conditions": [
+        "排序成本计入",
+        "不得重复用同一元素"
+      ],
+      "variants": [
+        "TwoSum",
+        "3Sum外枚举"
+      ],
+      "crossParadigms": [
+        "two-pointers"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "professional-binary-algorithms",
+      "source": "book:professional-cpp-6",
+      "locator": "6e physical696–697,869–870;sections s0734/s0736/s0891",
+      "readState": "analyzed",
+      "note": "完整读取partition_point、lower/upper/equal/binary_search以及有序插入实际例子；成员map/set查找应优先。标准细则由根另核。",
+      "disposition": "support",
+      "reason": "每型真实标准设施与工程代价支撑，不决定算法分类",
+      "mechanism": "标准设施承载边界/等价类",
+      "conditions": [
+        "相对键的分区/比较合同",
+        "查找位置不代表插入廉价",
+        "关联容器成员查找"
+      ],
+      "variants": [
+        "vector插入失效",
+        "partition_point",
+        "异构比较方向"
+      ],
+      "crossParadigms": [
+        "cpp-library"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "professional-iterator-range",
+      "source": "book:professional-cpp-6",
+      "locator": "6e physical706–711;17 iterators",
+      "readState": "analyzed",
+      "note": "完整读取相关页，明确半开范围/空范围/end以及迭代器类别；不把input/forward/random-access同化。",
+      "disposition": "support",
+      "reason": "边界实现的必要C++而非另开基础课",
+      "mechanism": "按能力访问与合法范围",
+      "conditions": [
+        "end不得解引用",
+        "距离类型与size类型不同",
+        "算法需要类别能力"
+      ],
+      "variants": [
+        "借用",
+        "返回迭代器",
+        "空范围",
+        "随机/非随机步进"
+      ],
+      "crossParadigms": [
+        "cpp-language"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "professional-transparent-compare",
+      "source": "book:professional-cpp-6",
+      "locator": "6e physical821–822;19 comparison functors",
+      "readState": "analyzed",
+      "note": "完整读取less<>/greater<>及透明关联查找；默认构造临时string与string_view查找有差异。",
+      "disposition": "support",
+      "reason": "真实企业实现所需的比较和借用细节",
+      "mechanism": "比较器作为排序与查找语义合同",
+      "conditions": [
+        "排序/查询比较一致",
+        "异构类型必须可比较",
+        "不要假设透明比较自动覆盖所有classic/ranges算法合同"
+      ],
+      "variants": [
+        "记录投影",
+        "降序",
+        "string_view键",
+        "避免临时分配"
+      ],
+      "crossParadigms": [
+        "cpp-library"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "cookbook-search-cost",
+      "source": "book:modern-cpp-cookbook-2",
+      "locator": "2e physical274–278;Searching a range",
+      "readState": "analyzed",
+      "note": "完整读取实际二分函数及解释，278明确比较对数但非随机迭代器递增线性；277有search返回bool排印错。",
+      "disposition": "support",
+      "reason": "补充并纠正其他教材的简化复杂度陈述",
+      "mechanism": "真实库返回类型和成本模型",
+      "conditions": [
+        "binary_search bool",
+        "lower/upper iterator",
+        "equal_range pair",
+        "forward至少支持但未必总时间对数"
+      ],
+      "variants": [
+        "not-found/end",
+        "计数为边界差",
+        "容器成员查找"
+      ],
+      "crossParadigms": [
+        "cpp-library"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "cookbook-sorting-selection-contrast",
+      "source": "book:modern-cpp-cookbook-2",
+      "locator": "2e physical279–282;Sorting a range",
+      "readState": "analyzed",
+      "note": "完整读取排序/稳定排序/部分排序/nth_element；它们修改输入和排序强度不同，不是二分函数替代品。",
+      "disposition": "contrast",
+      "reason": "避免声称调用库即可获得不存在的二分前置",
+      "mechanism": "预处理或选择操作的真实保证",
+      "conditions": [
+        "输入可否修改",
+        "稳定/等价关系",
+        "nth_element不保证两侧内部有序"
+      ],
+      "variants": [
+        "partial_sort",
+        "stable_sort",
+        "nth_element"
+      ],
+      "crossParadigms": [
+        "sorting",
+        "selection"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "cookbook-span-borrowing",
+      "source": "book:modern-cpp-cookbook-2",
+      "locator": "2e physical349–350;std::span recipe",
+      "readState": "analyzed",
+      "note": "读取借用连续序列的引入和实际接口例子；寿命/构造约束需根按标准核，不在此全展开。",
+      "disposition": "support",
+      "reason": "原创实现如采用span时的必要支撑，不强迫每题使用",
+      "mechanism": "非拥有输入视图",
+      "conditions": [
+        "被借用对象寿命覆盖调用/返回",
+        "const按接口需要",
+        "C++20门槛明确"
+      ],
+      "variants": [
+        "pointer+size替代",
+        "vector/array视图",
+        "切片"
+      ],
+      "crossParadigms": [
+        "cpp-language"
+      ],
+      "exerciseUrls": []
+    }
+  ],
+  "readingLimit": "Analyzed refers to the indicated body text or explicitly identified taxonomy; it does not certify all original problems, nested algorithm proofs, figures or source code. exerciseUrls intentionally empty until original-judge verification by integrating researcher.",
+  "sourceIdentities": {
+    "epi": "2015 v2.0.0 physical530 pages",
+    "cp4": "2020-07-19 Book1 329 and Book2 352 physical pages",
+    "cph": {
+      "url": "https://cses.fi/book/book.pdf",
+      "bytes": 1099959,
+      "pages": 296,
+      "sha256": "3a04509c7cc2bde6717907d52821c7dd159f92c3a73199f5f6664bf0218a947e",
+      "version": "Draft July3,2018"
+    },
+    "professional-cpp": "6e2024 physical1379",
+    "cookbook": "2e2020 physical751"
+  },
+  "visualChecks": [
+    {
+      "source": "book:epi-cpp",
+      "physicalPages": [
+        202,
+        203,
+        207
+      ],
+      "status": "rendered-and-visually-reviewed",
+      "artifactStorage": "private ignored package inspection/research-20261028; not published"
+    }
+  ]
+}

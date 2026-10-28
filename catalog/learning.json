@@ -1,6 +1,2813 @@
 {
   "schemaVersion": 2,
-  "questions": [],
-  "tasks": [],
-  "targets": []
+  "questions": [
+    {
+      "id": "Q100001",
+      "title": "二分库的分区与迭代器合同",
+      "source": "content/knowledge/binary-library.md",
+      "prerequisites": [],
+      "sources": [
+        "https://timsong-cpp.github.io/cppwp/n4659/alg.binary.search",
+        "https://timsong-cpp.github.io/cppwp/n4659/alg.partitions"
+      ]
+    },
+    {
+      "id": "Q100002",
+      "title": "整数表达式与溢出预算",
+      "source": "content/knowledge/integer-budget.md",
+      "prerequisites": [],
+      "sources": [
+        "https://timsong-cpp.github.io/cppwp/n4659/expr",
+        "https://timsong-cpp.github.io/cppwp/n4659/accumulate",
+        "https://timsong-cpp.github.io/cppwp/n4659/partial.sum"
+      ]
+    },
+    {
+      "id": "Q100003",
+      "title": "判定器与lambda捕获",
+      "source": "content/knowledge/predicate-capture.md",
+      "prerequisites": [],
+      "sources": [
+        "https://timsong-cpp.github.io/cppwp/n4659/expr.prim.lambda.capture",
+        "https://timsong-cpp.github.io/cppwp/n4659/algorithms.requirements"
+      ]
+    },
+    {
+      "id": "Q100004",
+      "title": "比较器与排序合同",
+      "source": "content/knowledge/ordering.md",
+      "prerequisites": [],
+      "sources": [
+        "https://timsong-cpp.github.io/cppwp/n4659/alg.sorting",
+        "https://timsong-cpp.github.io/cppwp/n4659/alg.binary.search"
+      ]
+    },
+    {
+      "id": "Q100005",
+      "title": "借用参数与容器失效",
+      "source": "content/knowledge/borrowing-vector.md",
+      "prerequisites": [],
+      "sources": [
+        "https://timsong-cpp.github.io/cppwp/n4659/vector.capacity",
+        "https://timsong-cpp.github.io/cppwp/n4659/vector.modifiers",
+        "https://timsong-cpp.github.io/cppwp/n4659/forward"
+      ]
+    },
+    {
+      "id": "Q100006",
+      "title": "浮点夹逼与误差",
+      "source": "content/knowledge/floating-search.md",
+      "prerequisites": [],
+      "sources": [
+        "https://timsong-cpp.github.io/cppwp/n4659/basic.fundamental",
+        "https://timsong-cpp.github.io/cppwp/n4659/numeric.limits"
+      ]
+    },
+    {
+      "id": "Q100007",
+      "title": "优先队列与堆接口",
+      "source": "content/knowledge/priority-queue.md",
+      "prerequisites": [],
+      "sources": [
+        "https://timsong-cpp.github.io/cppwp/n4659/priority.queue",
+        "https://timsong-cpp.github.io/cppwp/n4659/alg.heap.operations"
+      ]
+    },
+    {
+      "id": "Q100008",
+      "title": "选择算法与重排语义",
+      "source": "content/knowledge/selection-reorder.md",
+      "prerequisites": [],
+      "sources": [
+        "https://timsong-cpp.github.io/cppwp/n4659/alg.nth.element",
+        "https://timsong-cpp.github.io/cppwp/n4659/sort"
+      ]
+    },
+    {
+      "id": "Q100009",
+      "title": "递归回调与调用栈",
+      "source": "content/knowledge/recursive-callback.md",
+      "prerequisites": [
+        "Q100003"
+      ],
+      "sources": [
+        "https://timsong-cpp.github.io/cppwp/n4659/expr.prim.lambda",
+        "https://timsong-cpp.github.io/cppwp/n4659/func.wrap.func"
+      ]
+    },
+    {
+      "id": "Q100010",
+      "title": "整数随机分布与可复现性",
+      "source": "content/knowledge/random-integers.md",
+      "prerequisites": [],
+      "sources": [
+        "https://timsong-cpp.github.io/cppwp/n4659/rand.dist.uni.int",
+        "https://timsong-cpp.github.io/cppwp/n4659/rand"
+      ]
+    },
+    {
+      "id": "Q100011",
+      "title": "队列和双端队列的状态",
+      "source": "content/knowledge/queue-deque.md",
+      "prerequisites": [],
+      "sources": [
+        "https://timsong-cpp.github.io/cppwp/n4659/queue",
+        "https://timsong-cpp.github.io/cppwp/n4659/deque.modifiers"
+      ]
+    },
+    {
+      "id": "Q100012",
+      "title": "稳定事件顺序与分流",
+      "source": "content/knowledge/stable-events.md",
+      "prerequisites": [
+        "Q100005"
+      ],
+      "sources": [
+        "https://timsong-cpp.github.io/cppwp/n4659/alg.partitions"
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "id": "task-ordered-boundaries",
+      "title": "有序数据的边界、计数与前驱",
+      "document": "binary-boundary",
+      "contract": "首次>=与首次>组成相等段、计数和前驱；记录查找保留时间序。；严格/非严格、空表、前驱无解、异构比较方向。",
+      "sourceUrls": [
+        "https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/",
+        "https://leetcode.com/problems/search-insert-position/",
+        "https://leetcode.com/problems/time-based-key-value-store/"
+      ],
+      "methods": [
+        {
+          "id": "main",
+          "title": "main",
+          "invariant": "首次>=与首次>组成相等段、计数和前驱；记录查找保留时间序。",
+          "implementations": [
+            {
+              "id": "boundary-lower",
+              "kind": "manual",
+              "symbol": "binary_boundary::lower_manual",
+              "regions": [
+                "boundary-ordered-manual"
+              ],
+              "questions": [
+                "Q100001"
+              ],
+              "complexity": {
+                "time": "O(log n)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            },
+            {
+              "id": "boundary-upper",
+              "kind": "manual",
+              "symbol": "binary_boundary::upper_manual",
+              "regions": [
+                "boundary-ordered-manual"
+              ],
+              "questions": [
+                "Q100001"
+              ],
+              "complexity": {
+                "time": "O(log n)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            },
+            {
+              "id": "boundary-equal",
+              "kind": "manual",
+              "symbol": "binary_boundary::equal_manual",
+              "regions": [
+                "boundary-ordered-manual"
+              ],
+              "questions": [
+                "Q100001"
+              ],
+              "complexity": {
+                "time": "O(log n)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            },
+            {
+              "id": "boundary-predecessor",
+              "kind": "manual",
+              "symbol": "binary_boundary::predecessor_manual",
+              "regions": [
+                "boundary-ordered-manual"
+              ],
+              "questions": [
+                "Q100001"
+              ],
+              "complexity": {
+                "time": "O(log n)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            },
+            {
+              "id": "boundary-time",
+              "kind": "manual",
+              "symbol": "binary_boundary::time_manual",
+              "regions": [
+                "boundary-ordered-manual"
+              ],
+              "questions": [
+                "Q100005"
+              ],
+              "complexity": {
+                "time": "O(log n + |返回字符串|)",
+                "space": "O(|返回字符串|)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            },
+            {
+              "id": "boundary-equal-library",
+              "kind": "standard",
+              "symbol": "binary_boundary::equal_standard",
+              "regions": [
+                "boundary-ordered-standard"
+              ],
+              "questions": [
+                "Q100001"
+              ],
+              "complexity": {
+                "time": "O(log n)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            },
+            {
+              "id": "boundary-time-library",
+              "kind": "standard",
+              "symbol": "binary_boundary::time_standard",
+              "regions": [
+                "boundary-ordered-standard"
+              ],
+              "questions": [
+                "Q100001",
+                "Q100004",
+                "Q100005"
+              ],
+              "complexity": {
+                "time": "O(log n + |返回字符串|)",
+                "space": "O(|返回字符串|)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-predicate-access",
+      "title": "昂贵访问与未知上界的首次满足",
+      "document": "binary-boundary",
+      "contract": "在不可物化的谓词域定位首次真，必要时倍增建立界。；接口成本、未知上界、全真/全假和倍增溢出。",
+      "sourceUrls": [
+        "https://leetcode.com/problems/first-bad-version/"
+      ],
+      "methods": [
+        {
+          "id": "main",
+          "title": "main",
+          "invariant": "在不可物化的谓词域定位首次真，必要时倍增建立界。",
+          "implementations": [
+            {
+              "id": "boundary-first-true",
+              "kind": "manual",
+              "symbol": "binary_boundary::first_true_manual",
+              "regions": [
+                "boundary-access-manual"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100003"
+              ],
+              "complexity": {
+                "time": "O(log(n+1))次判定",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            },
+            {
+              "id": "boundary-unknown-first",
+              "kind": "manual",
+              "symbol": "binary_boundary::first_true_unknown",
+              "regions": [
+                "boundary-access-manual"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100003"
+              ],
+              "complexity": {
+                "time": "O(log(p+1))次判定；无解O(log(cap+1))",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            },
+            {
+              "id": "boundary-unknown-at",
+              "kind": "standard",
+              "symbol": "binary_boundary::find_unknown_at",
+              "regions": [
+                "boundary-access-standard"
+              ],
+              "questions": [
+                "Q100003",
+                "Q100005"
+              ],
+              "complexity": {
+                "time": "O(log(p+1))次访问；无解O(log(cap+1))",
+                "space": "O(1)，另计指定访问器异常机制"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-transformed-index",
+      "title": "值与下标关系中的固定点和缺失数",
+      "document": "binary-boundary",
+      "contract": "值与下标差揭示累计缺口；p+k恢复缺失数。；固定点与缺失数；重复时单调证明可能失效。",
+      "sourceUrls": [
+        "https://leetcode.com/problems/kth-missing-positive-number/"
+      ],
+      "methods": [
+        {
+          "id": "main",
+          "title": "main",
+          "invariant": "值与下标差揭示累计缺口；p+k恢复缺失数。",
+          "implementations": [
+            {
+              "id": "boundary-fixed-distinct",
+              "kind": "manual",
+              "symbol": "binary_boundary::fixed_distinct",
+              "regions": [
+                "boundary-transformed-manual"
+              ],
+              "questions": [
+                "Q100002"
+              ],
+              "complexity": {
+                "time": "O(log n)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            },
+            {
+              "id": "boundary-fixed-duplicates",
+              "kind": "manual",
+              "symbol": "binary_boundary::fixed_duplicates",
+              "regions": [
+                "boundary-transformed-manual"
+              ],
+              "questions": [
+                "Q100002"
+              ],
+              "complexity": {
+                "time": "最坏O(n)",
+                "space": "O(log n)递归栈"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            },
+            {
+              "id": "boundary-missing",
+              "kind": "manual",
+              "symbol": "binary_boundary::kth_missing_manual",
+              "regions": [
+                "boundary-transformed-manual"
+              ],
+              "questions": [
+                "Q100002"
+              ],
+              "complexity": {
+                "time": "O(log n)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            },
+            {
+              "id": "boundary-missing-library",
+              "kind": "standard",
+              "symbol": "binary_boundary::kth_missing_precomputed",
+              "regions": [
+                "boundary-transformed-standard"
+              ],
+              "questions": [
+                "Q100001",
+                "Q100002"
+              ],
+              "complexity": {
+                "time": "O(n)预处理+O(log n)查询",
+                "space": "O(n)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-rotated-search",
+      "title": "旋转序列中的成员与最小值",
+      "document": "binary-boundary",
+      "contract": "借一侧有序定位目标或保留最小值；相等时只能安全缩边。；互异与重复、成员和最小值，不对整段直接binary_search。",
+      "sourceUrls": [
+        "https://leetcode.com/problems/search-in-rotated-sorted-array-ii/",
+        "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/"
+      ],
+      "methods": [
+        {
+          "id": "main",
+          "title": "main",
+          "invariant": "借一侧有序定位目标或保留最小值；相等时只能安全缩边。",
+          "implementations": [
+            {
+              "id": "boundary-rotation-min",
+              "kind": "manual",
+              "symbol": "binary_boundary::rotated_min_manual",
+              "regions": [
+                "boundary-rotated-manual"
+              ],
+              "questions": [
+                "Q100001"
+              ],
+              "complexity": {
+                "time": "互异O(log n)，重复最坏O(n)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            },
+            {
+              "id": "boundary-rotation-member",
+              "kind": "manual",
+              "symbol": "binary_boundary::rotated_member_manual",
+              "regions": [
+                "boundary-rotated-manual"
+              ],
+              "questions": [
+                "Q100001"
+              ],
+              "complexity": {
+                "time": "互异O(log n)，重复最坏O(n)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            },
+            {
+              "id": "boundary-rotation-member-library",
+              "kind": "standard",
+              "symbol": "binary_boundary::rotated_member_standard",
+              "regions": [
+                "boundary-rotated-standard"
+              ],
+              "questions": [
+                "Q100001"
+              ],
+              "complexity": {
+                "time": "O(n)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            },
+            {
+              "id": "boundary-rotation-min-library",
+              "kind": "standard",
+              "symbol": "binary_boundary::rotated_min_standard",
+              "regions": [
+                "boundary-rotated-standard"
+              ],
+              "questions": [
+                "Q100001"
+              ],
+              "complexity": {
+                "time": "O(n)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-paired-break",
+      "title": "有序配对结构中的唯一异常",
+      "document": "binary-boundary",
+      "contract": "配对下标奇偶的首次破坏。；中点对齐与m^1等价性，频次条件改变不可照搬。",
+      "sourceUrls": [
+        "https://leetcode.com/problems/single-element-in-a-sorted-array/"
+      ],
+      "methods": [
+        {
+          "id": "main",
+          "title": "main",
+          "invariant": "配对下标奇偶的首次破坏。",
+          "implementations": [
+            {
+              "id": "boundary-paired-aligned",
+              "kind": "manual",
+              "symbol": "binary_boundary::paired_unique_manual",
+              "regions": [
+                "boundary-paired-manual"
+              ],
+              "questions": [
+                "Q100002"
+              ],
+              "complexity": {
+                "time": "O(log n)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            },
+            {
+              "id": "boundary-paired-xor-index",
+              "kind": "alternative",
+              "symbol": "binary_boundary::paired_unique_xor_index",
+              "regions": [
+                "boundary-paired-manual"
+              ],
+              "questions": [
+                "Q100002"
+              ],
+              "complexity": {
+                "time": "O(log n)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            },
+            {
+              "id": "boundary-paired-xor-library",
+              "kind": "standard",
+              "symbol": "binary_boundary::paired_unique_standard",
+              "regions": [
+                "boundary-paired-standard"
+              ],
+              "questions": [
+                "Q100002"
+              ],
+              "complexity": {
+                "time": "O(n)，不同算法线性基线",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-local-peak",
+      "title": "任意一维局部峰与单峰边界",
+      "document": "binary-boundary",
+      "contract": "保留一个局部峰的存在性，二维以中列最大值建立横向证书。；任意局部峰/单峰/二维；斜率序列并不全局单调。",
+      "sourceUrls": [
+        "https://leetcode.com/problems/find-peak-element/"
+      ],
+      "methods": [
+        {
+          "id": "main",
+          "title": "main",
+          "invariant": "保留一个局部峰的存在性，二维以中列最大值建立横向证书。",
+          "implementations": [
+            {
+              "id": "boundary-peak",
+              "kind": "manual",
+              "symbol": "binary_boundary::peak_manual",
+              "regions": [
+                "boundary-peak-manual"
+              ],
+              "questions": [
+                "Q100005"
+              ],
+              "complexity": {
+                "time": "O(log n)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            },
+            {
+              "id": "boundary-peak-library",
+              "kind": "standard",
+              "symbol": "binary_boundary::peak_standard",
+              "regions": [
+                "boundary-peak-standard"
+              ],
+              "questions": [
+                "Q100005"
+              ],
+              "complexity": {
+                "time": "O(n)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-matrix-peak",
+      "title": "二维局部峰的存在性搜索",
+      "document": "binary-boundary",
+      "contract": "保留一个局部峰的存在性，二维以中列最大值建立横向证书。；任意局部峰/单峰/二维；斜率序列并不全局单调。",
+      "sourceUrls": [
+        "https://leetcode.com/problems/find-a-peak-element-ii/"
+      ],
+      "methods": [
+        {
+          "id": "main",
+          "title": "main",
+          "invariant": "保留一个局部峰的存在性，二维以中列最大值建立横向证书。",
+          "implementations": [
+            {
+              "id": "boundary-matrix-peak",
+              "kind": "manual",
+              "symbol": "binary_boundary::matrix_peak_manual",
+              "regions": [
+                "boundary-matrix-peak-manual"
+              ],
+              "questions": [
+                "Q100003",
+                "Q100004"
+              ],
+              "complexity": {
+                "time": "O(m log(n+1))",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            },
+            {
+              "id": "boundary-matrix-peak-library",
+              "kind": "standard",
+              "symbol": "binary_boundary::matrix_peak_standard",
+              "regions": [
+                "boundary-matrix-peak-standard"
+              ],
+              "questions": [
+                "Q100003",
+                "Q100004"
+              ],
+              "complexity": {
+                "time": "O(m log(n+1))",
+                "space": "O(m)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-matrix-membership",
+      "title": "二维有序数据中的存在性查找",
+      "document": "binary-boundary",
+      "contract": "全局有序虚拟展平与仅行列有序逐行二分的不同合同。；随机访问下标、逐行lower_bound、阶梯算法比较。",
+      "sourceUrls": [
+        "https://leetcode.com/problems/search-a-2d-matrix/",
+        "https://leetcode.com/problems/search-a-2d-matrix-ii/"
+      ],
+      "methods": [
+        {
+          "id": "main",
+          "title": "main",
+          "invariant": "全局有序虚拟展平与仅行列有序逐行二分的不同合同。",
+          "implementations": [
+            {
+              "id": "boundary-matrix-flat",
+              "kind": "manual",
+              "symbol": "binary_boundary::matrix_flat_manual",
+              "regions": [
+                "boundary-matrix-lookup-manual"
+              ],
+              "questions": [
+                "Q100001",
+                "Q100002"
+              ],
+              "complexity": {
+                "time": "O(log(mn+1))",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            },
+            {
+              "id": "boundary-matrix-staircase",
+              "kind": "alternative",
+              "symbol": "binary_boundary::matrix_staircase",
+              "regions": [
+                "boundary-matrix-lookup-manual"
+              ],
+              "questions": [
+                "Q100002"
+              ],
+              "complexity": {
+                "time": "O(m+n)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            },
+            {
+              "id": "boundary-matrix-row-library",
+              "kind": "standard",
+              "symbol": "binary_boundary::matrix_row_standard",
+              "regions": [
+                "boundary-matrix-lookup-standard"
+              ],
+              "questions": [
+                "Q100001"
+              ],
+              "complexity": {
+                "time": "O(Σ行 log(行长+1))",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-integer-root",
+      "title": "不溢出的整数根与最后可行值",
+      "document": "binary-boundary",
+      "contract": "最大m满足m²<=x，乘法改除法避免溢出。；上下中点、平方边界、Windows long非64位。",
+      "sourceUrls": [
+        "https://leetcode.com/problems/sqrtx/"
+      ],
+      "methods": [
+        {
+          "id": "main",
+          "title": "main",
+          "invariant": "最大m满足m²<=x，乘法改除法避免溢出。",
+          "implementations": [
+            {
+              "id": "boundary-integer-root",
+              "kind": "manual",
+              "symbol": "binary_boundary::isqrt_manual",
+              "regions": [
+                "boundary-integer-root-manual"
+              ],
+              "questions": [
+                "Q100002"
+              ],
+              "complexity": {
+                "time": "O(log(x+1))，uint64最多64轮",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            },
+            {
+              "id": "boundary-integer-root-library",
+              "kind": "standard",
+              "symbol": "binary_boundary::isqrt_estimate_standard",
+              "regions": [
+                "boundary-integer-root-standard"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100006"
+              ],
+              "complexity": {
+                "time": "sqrt成本+O(|初值−整数根|+1)修正",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-continuous-root",
+      "title": "连续方程的异号夹逼与误差",
+      "document": "binary-boundary",
+      "contract": "归一后用两个导数临界点分隔三根，再分别异号夹逼。；通用异号求某根与导数分段找全三根分开，归一化/临界值裕量取代脆弱整数端点零判断。",
+      "sourceUrls": [
+        "https://www.luogu.com.cn/problem/P1024"
+      ],
+      "methods": [
+        {
+          "id": "main",
+          "title": "main",
+          "invariant": "归一后用两个导数临界点分隔三根，再分别异号夹逼。",
+          "implementations": [
+            {
+              "id": "boundary-continuous-root",
+              "kind": "manual",
+              "symbol": "binary_boundary::bisect_root",
+              "regions": [
+                "boundary-continuous-manual"
+              ],
+              "questions": [
+                "Q100003",
+                "Q100006"
+              ],
+              "complexity": {
+                "time": "O(min(steps,log(W/ε)))次函数求值；还受浮点停滞限制",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            },
+            {
+              "id": "boundary-cubic-critical-library",
+              "kind": "standard",
+              "symbol": "binary_boundary::cubic_roots_by_critical_points",
+              "regions": [
+                "boundary-continuous-standard"
+              ],
+              "questions": [
+                "Q100003",
+                "Q100006"
+              ],
+              "complexity": {
+                "time": "两临界点计算+3次O(log(202/ε))夹逼",
+                "space": "O(1)，固定3个根"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-string-prefix",
+      "title": "字典序前缀与比较成本",
+      "document": "binary-boundary",
+      "contract": "字典序中前缀匹配形成连续区间，边界定位后取有限建议。；全部前缀范围与至多三条建议；不把后缀索引建造混成库查找。",
+      "sourceUrls": [
+        "https://leetcode.com/problems/search-suggestions-system/"
+      ],
+      "methods": [
+        {
+          "id": "main",
+          "title": "main",
+          "invariant": "字典序中前缀匹配形成连续区间，边界定位后取有限建议。",
+          "implementations": [
+            {
+              "id": "boundary-prefix-range",
+              "kind": "manual",
+              "symbol": "binary_boundary::prefix_range_manual",
+              "regions": [
+                "boundary-prefix-manual"
+              ],
+              "questions": [
+                "Q100004",
+                "Q100005"
+              ],
+              "complexity": {
+                "time": "O(|p| log(n+1))字符比较",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            },
+            {
+              "id": "boundary-lcp-binary",
+              "kind": "alternative",
+              "symbol": "binary_boundary::lcp_binary",
+              "regions": [
+                "boundary-prefix-manual"
+              ],
+              "questions": [
+                "Q100005"
+              ],
+              "complexity": {
+                "time": "最坏O(L log(L+1))字符比较",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            },
+            {
+              "id": "boundary-prefix-range-library",
+              "kind": "standard",
+              "symbol": "binary_boundary::prefix_range_standard",
+              "regions": [
+                "boundary-prefix-standard"
+              ],
+              "questions": [
+                "Q100001",
+                "Q100004",
+                "Q100005"
+              ],
+              "complexity": {
+                "time": "O(|p| log(n+1))字符比较",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            },
+            {
+              "id": "boundary-suggestions-library",
+              "kind": "standard",
+              "symbol": "binary_boundary::suggestions_standard",
+              "regions": [
+                "boundary-prefix-standard"
+              ],
+              "questions": [
+                "Q100004",
+                "Q100005"
+              ],
+              "complexity": {
+                "time": "O(M n log(n+1)+q² log(n+1)+结果字符数)，M为最长产品长度",
+                "space": "O(产品副本+结果)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            },
+            {
+              "id": "boundary-lcp-library",
+              "kind": "standard",
+              "symbol": "binary_boundary::lcp_standard",
+              "regions": [
+                "boundary-prefix-standard"
+              ],
+              "questions": [
+                "Q100005"
+              ],
+              "complexity": {
+                "time": "O(L)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-convex-location",
+      "title": "凸多边形中的扇区定位",
+      "document": "binary-boundary",
+      "contract": "凸多边形射线序中二分扇区再判第三边。；IN/ON/OUT、顶点与射线外延；凹形不适用。",
+      "sourceUrls": [
+        "https://atcoder.jp/contests/abc296/tasks/abc296_g"
+      ],
+      "methods": [
+        {
+          "id": "main",
+          "title": "main",
+          "invariant": "凸多边形射线序中二分扇区再判第三边。",
+          "implementations": [
+            {
+              "id": "boundary-convex-location",
+              "kind": "manual",
+              "symbol": "binary_boundary::convex_manual",
+              "regions": [
+                "boundary-convex-manual"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100004"
+              ],
+              "complexity": {
+                "time": "每查询O(log n)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            },
+            {
+              "id": "boundary-convex-location-library",
+              "kind": "standard",
+              "symbol": "binary_boundary::convex_standard",
+              "regions": [
+                "boundary-convex-standard"
+              ],
+              "questions": [
+                "Q100001",
+                "Q100002",
+                "Q100004"
+              ],
+              "complexity": {
+                "time": "每查询O(log n)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/boundary.cpp",
+              "standard": "c++17",
+              "target": "chapter01-boundary"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-capacity-partition",
+      "title": "连续容量分段：以最少段数判定最大段和",
+      "document": "binary-decision",
+      "contract": "LC410 将非负序列分成恰好 k 个非空连续段，使最大段和最小；n≤1000、k≤min(50,n)、元素 0..10^6。CSES1085 为正数、n≤2×10^5、元素≤10^9。Codility MinMaxDivision 允许空块，与恰好非空不得无声混称。；与产能、间距、调度共用外层但检查器不通用。若加入负数或额外代价，可能要换成 DP。输出实际划分需保恰好 k 非空，可反向恢复或强制留足剩余单项。",
+      "sourceUrls": [
+        "https://leetcode.com/problems/split-array-largest-sum/description/",
+        "https://cses.fi/problemset/task/1085/"
+      ],
+      "methods": [
+        {
+          "id": "main",
+          "title": "main",
+          "invariant": "给上界 B，从左到右尽量延长当前段，只有加入下一项会超过 B 才开新段。贪心得到最少段数：任何可行首段不能超过贪心首段，再对余下部分归纳。段数≤k 为可行；在非负且 k≤n 时继续切段可达恰好 k。B 越大约束越宽，找 first true。",
+          "implementations": [
+            {
+              "id": "decision-capacity-manual",
+              "kind": "manual",
+              "symbol": "binary_decision::capacity_manual",
+              "regions": [
+                "decision-capacity-manual"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100003"
+              ],
+              "complexity": {
+                "time": "O(n log(S-M+1))",
+                "space": "O(1)"
+              },
+              "source": "content/binary/decision.cpp",
+              "standard": "c++17",
+              "target": "chapter01-decision"
+            },
+            {
+              "id": "decision-capacity-bounds-standard",
+              "kind": "standard",
+              "symbol": "binary_decision::capacity_bounds_standard",
+              "regions": [
+                "decision-capacity-support"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100003"
+              ],
+              "complexity": {
+                "time": "O(n)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/decision.cpp",
+              "standard": "c++17",
+              "target": "chapter01-decision"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-maximin-spacing",
+      "title": "最大化最小间距：以最早放置保留空间",
+      "document": "binary-decision",
+      "contract": "LC1552 从 n 个互异整数位置选 m 个，最大化两球最小间距；n≤10^5、坐标 1..10^9、2≤m≤n。输入不保证排序。；与容量分段的交换/领先论证不同。位置若改成可放置区间，check 要计算每区间可容纳数且防溢出，属于实质变型，不能只换输入类型。",
+      "sourceUrls": [
+        "https://leetcode.com/problems/magnetic-force-between-two-balls/description/"
+      ],
+      "methods": [
+        {
+          "id": "main",
+          "title": "main",
+          "invariant": "排序后给 d，先选最左点，此后选距上点至少 d 的最早位置。第 j 个贪心位置不晚于任何可行方案的第 j 个位置，保留最多剩余空间。能放≥m 即 true；d 变大收紧，找 last true。",
+          "implementations": [
+            {
+              "id": "decision-spacing-sorted-manual",
+              "kind": "manual",
+              "symbol": "binary_decision::spacing_sorted_manual",
+              "regions": [
+                "decision-spacing-manual"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100004",
+                "Q100005"
+              ],
+              "complexity": {
+                "time": "O(n log D)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/decision.cpp",
+              "standard": "c++17",
+              "target": "chapter01-decision"
+            },
+            {
+              "id": "decision-spacing-standard",
+              "kind": "standard",
+              "symbol": "binary_decision::spacing_standard",
+              "regions": [
+                "decision-spacing-standard"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100004",
+                "Q100005"
+              ],
+              "complexity": {
+                "time": "O(n log n+n log D)",
+                "space": "O(n)，按值接收的输入副本"
+              },
+              "source": "content/binary/decision.cpp",
+              "standard": "c++17",
+              "target": "chapter01-decision"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-cumulative-production",
+      "title": "累计产能：反求达标最早时刻",
+      "document": "binary-decision",
+      "contract": "CSES1620 多台独立机器同时生产，ki 秒/件，求 t 件所需最短时间；n≤2×10^5、t≤10^9、ki≤10^9。；和 Cow Dance 不同，产能直接可加，无固定队列产生的开始时间依赖。加入机器启动时间需改贡献公式并核合同。",
+      "sourceUrls": [
+        "https://cses.fi/problemset/task/1620/"
+      ],
+      "methods": [
+        {
+          "id": "main",
+          "title": "main",
+          "invariant": "T 时每台贡献 floor(T/ki)，求和≥t 为可行；first true，不逐件模拟。",
+          "implementations": [
+            {
+              "id": "decision-production-manual",
+              "kind": "manual",
+              "symbol": "binary_decision::production_manual",
+              "regions": [
+                "decision-production-manual"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100003"
+              ],
+              "complexity": {
+                "time": "O(n log(min(t)*target+1))",
+                "space": "O(1)"
+              },
+              "source": "content/binary/decision.cpp",
+              "standard": "c++17",
+              "target": "chapter01-decision"
+            },
+            {
+              "id": "decision-production-upper-standard",
+              "kind": "standard",
+              "symbol": "binary_decision::production_upper_standard",
+              "regions": [
+                "decision-production-support"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100003"
+              ],
+              "complexity": {
+                "time": "O(n)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/decision.cpp",
+              "standard": "c++17",
+              "target": "chapter01-decision"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-ordered-simulation",
+      "title": "并行台数：以事件模拟判定固定顺序队列",
+      "document": "binary-decision",
+      "contract": "USACO Cow Dance Show 固定登台顺序，K 个台位；谁先结束谁让下一头立即开始。N≤10000、di≤100000、Tmax≤10^6，保证 K=N 可行，求最小 K。原题 cowdance.in/out。；产能题直接计数，此题有事件依赖；区间房间分配的开始时刻是给定，此题则动态形成。恢复具体台位要另存台位 ID。",
+      "sourceUrls": [
+        "https://usaco.org/index.php?page=viewproblem2&cpid=690"
+      ],
+      "methods": [
+        {
+          "id": "main",
+          "title": "main",
+          "invariant": "给 K，用结束时间最小堆模拟最早释放台位，后续结束时刻=最小结束时刻+新时长；任何结束>Tmax 即不可行。题目与官方解析明确加台位不使固定队列更晚开始，因此 first true。",
+          "implementations": [
+            {
+              "id": "decision-stage-slots-manual",
+              "kind": "manual",
+              "symbol": "binary_decision::stage_slots_manual",
+              "regions": [
+                "decision-simulation-manual"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100007"
+              ],
+              "complexity": {
+                "time": "O(N log^2 N)",
+                "space": "O(N)"
+              },
+              "source": "content/binary/decision.cpp",
+              "standard": "c++17",
+              "target": "chapter01-decision"
+            },
+            {
+              "id": "decision-stage-slots-standard",
+              "kind": "standard",
+              "symbol": "binary_decision::stage_slots_standard",
+              "regions": [
+                "decision-simulation-standard"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100007"
+              ],
+              "complexity": {
+                "time": "O(N log^2 N)",
+                "space": "O(N)"
+              },
+              "source": "content/binary/decision.cpp",
+              "standard": "c++17",
+              "target": "chapter01-decision"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-graph-threshold",
+      "title": "路径瓶颈：阈值下的可达性",
+      "document": "binary-decision",
+      "contract": "LC1631 四邻接网格，从左上到右下，路径代价为最大相邻高度绝对差，求最小代价；行列 1..100、高度 1..10^6。；minimax Dijkstra 与边排序+DSU 是同题不同算法，不能伪装成二分的库实现；说明为何适用即可，不展开整部图论。",
+      "sourceUrls": [
+        "https://leetcode.com/problems/path-with-minimum-effort/description/"
+      ],
+      "methods": [
+        {
+          "id": "main",
+          "title": "main",
+          "invariant": "给 B，只允许高度差≤B 的边，B 增大只增边；用 BFS/DFS 查可达性。最优值为原边权之一或 0，可二分数值或排序去重边权。",
+          "implementations": [
+            {
+              "id": "decision-path-effort-manual",
+              "kind": "manual",
+              "symbol": "binary_decision::path_effort_manual",
+              "regions": [
+                "decision-graph-manual"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100011"
+              ],
+              "complexity": {
+                "time": "O(RC log W)",
+                "space": "O(RC)"
+              },
+              "source": "content/binary/decision.cpp",
+              "standard": "c++17",
+              "target": "chapter01-decision"
+            },
+            {
+              "id": "decision-path-effort-standard",
+              "kind": "standard",
+              "symbol": "binary_decision::path_effort_standard",
+              "regions": [
+                "decision-graph-standard"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100011"
+              ],
+              "complexity": {
+                "time": "O(RC log W)",
+                "space": "O(RC)"
+              },
+              "source": "content/binary/decision.cpp",
+              "standard": "c++17",
+              "target": "chapter01-decision"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-prefix-activation",
+      "title": "事件前缀的首次成功与首次失败",
+      "document": "binary-decision",
+      "contract": "Codility NailingPlanks 必须按顺序使用前 J 钉子，让每个闭区间木板至少被一钉命中，求最小 J 或 -1。N,M≤30000，坐标 1..2M，A≤B。；坐标大时可 sort 前 J 钉+lower_bound(A) 查≤B，或预处理最早钉序+RMQ；这是条件/复杂度变化。本题单查询不同于多查询并行二分。",
+      "sourceUrls": [
+        "https://app.codility.com/programmers/lessons/14-binary_search_algorithm/nailing_planks/",
+        "https://www.luogu.com.cn/problem/P1083"
+      ],
+      "methods": [
+        {
+          "id": "main",
+          "title": "main",
+          "invariant": "固定 J，给前 J 钉位置计数+前缀和；每板 prefix[B]-prefix[A-1]>0。J 增大只加钉，first true。先检查 J=M 区分无解。",
+          "implementations": [
+            {
+              "id": "decision-first-nails-manual",
+              "kind": "manual",
+              "symbol": "binary_decision::first_nails_manual",
+              "regions": [
+                "decision-prefix-manual"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100003"
+              ],
+              "complexity": {
+                "time": "O((N+M)log(M+1))",
+                "space": "O(M)"
+              },
+              "source": "content/binary/decision.cpp",
+              "standard": "c++17",
+              "target": "chapter01-decision"
+            },
+            {
+              "id": "decision-first-failed-order-manual",
+              "kind": "manual",
+              "symbol": "binary_decision::first_failed_order_manual",
+              "regions": [
+                "decision-prefix-manual"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100003"
+              ],
+              "complexity": {
+                "time": "O((n+m)log(m+1))",
+                "space": "O(n)"
+              },
+              "source": "content/binary/decision.cpp",
+              "standard": "c++17",
+              "target": "chapter01-decision"
+            },
+            {
+              "id": "decision-first-nails-standard",
+              "kind": "standard",
+              "symbol": "binary_decision::first_nails_standard",
+              "regions": [
+                "decision-prefix-standard"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100003"
+              ],
+              "complexity": {
+                "time": "O((N+M)log(M+1))",
+                "space": "O(M)"
+              },
+              "source": "content/binary/decision.cpp",
+              "standard": "c++17",
+              "target": "chapter01-decision"
+            },
+            {
+              "id": "decision-first-failed-order-standard",
+              "kind": "standard",
+              "symbol": "binary_decision::first_failed_order_standard",
+              "regions": [
+                "decision-prefix-standard"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100003"
+              ],
+              "complexity": {
+                "time": "O((n+m)log(m+1))",
+                "space": "O(n)"
+              },
+              "source": "content/binary/decision.cpp",
+              "standard": "c++17",
+              "target": "chapter01-decision"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-matching-threshold",
+      "title": "阈值下的互斥选择与匹配",
+      "document": "binary-decision",
+      "contract": "第k大阈值转为低权边匹配至少n-k+1。；增广路判定、值域离散化与性能预算。",
+      "sourceUrls": [
+        "https://www.luogu.com.cn/problem/P4251"
+      ],
+      "methods": [
+        {
+          "id": "main",
+          "title": "main",
+          "invariant": "第k大阈值转为低权边匹配至少n-k+1。",
+          "implementations": [
+            {
+              "id": "decision-matching-threshold-manual",
+              "kind": "manual",
+              "symbol": "binary_decision::matching_threshold_manual",
+              "regions": [
+                "decision-matching-manual"
+              ],
+              "questions": [
+                "Q100004",
+                "Q100009"
+              ],
+              "complexity": {
+                "time": "O(n^2*m*log W)",
+                "space": "O(n+m)，不计输入矩阵"
+              },
+              "source": "content/binary/decision.cpp",
+              "standard": "c++17",
+              "target": "chapter01-decision"
+            },
+            {
+              "id": "decision-matching-standard",
+              "kind": "standard",
+              "symbol": "binary_decision::matching_standard",
+              "regions": [
+                "decision-matching-standard"
+              ],
+              "questions": [
+                "Q100004",
+                "Q100009"
+              ],
+              "complexity": {
+                "time": "O(nm log(nm)+n^2*m*log(nm))",
+                "space": "O(nm+n+m)"
+              },
+              "source": "content/binary/decision.cpp",
+              "standard": "c++17",
+              "target": "chapter01-decision"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-average-transform",
+      "title": "平均值优化中的合法区间判定",
+      "document": "binary-decision",
+      "contract": "Luogu P1419：n≤10^5，合法段长 S..T，元素 [-10^4,10^4]，求最大平均，输出三位。比方法示例仅最短长度多了最长长度。；USACO Sabotage：3≤N≤10^5，Mi=1..10000，必须删非空内部连续区间，首尾保留，求剩余平均最小，输出三位。原文一处 remove cow 是叙述笔误，不改机器合同。；合法前缀窗口与非空内部最大子段和是不同约束，必须同时讲清。",
+      "sourceUrls": [
+        "https://www.luogu.com.cn/problem/P1419",
+        "https://usaco.org/index.php?page=viewproblem2&cpid=419"
+      ],
+      "methods": [
+        {
+          "id": "main",
+          "title": "main",
+          "invariant": "试 λ，b_i=a_i-λ。存在平均≥λ 的段，等价 P[r]-min(P[l])≥0，l∈[r-T,r-S]。单调队列维护合法前缀窗口；λ 增大收紧，last true。",
+          "implementations": [
+            {
+              "id": "decision-max-average-manual",
+              "kind": "manual",
+              "symbol": "binary_decision::max_average_manual",
+              "regions": [
+                "decision-average-manual"
+              ],
+              "questions": [
+                "Q100003",
+                "Q100006",
+                "Q100011"
+              ],
+              "complexity": {
+                "time": "O(I*n)，I<=80",
+                "space": "O(n)"
+              },
+              "source": "content/binary/decision.cpp",
+              "standard": "c++17",
+              "target": "chapter01-decision"
+            },
+            {
+              "id": "decision-min-remaining-average-manual",
+              "kind": "manual",
+              "symbol": "binary_decision::min_remaining_average_manual",
+              "regions": [
+                "decision-average-manual"
+              ],
+              "questions": [
+                "Q100003",
+                "Q100006",
+                "Q100011"
+              ],
+              "complexity": {
+                "time": "O(I*n)，I<=80",
+                "space": "O(1)"
+              },
+              "source": "content/binary/decision.cpp",
+              "standard": "c++17",
+              "target": "chapter01-decision"
+            },
+            {
+              "id": "decision-max-average-standard",
+              "kind": "standard",
+              "symbol": "binary_decision::max_average_standard",
+              "regions": [
+                "decision-average-standard"
+              ],
+              "questions": [
+                "Q100003",
+                "Q100006",
+                "Q100011"
+              ],
+              "complexity": {
+                "time": "O(I*n)，I<=80",
+                "space": "O(n)"
+              },
+              "source": "content/binary/decision.cpp",
+              "standard": "c++17",
+              "target": "chapter01-decision"
+            },
+            {
+              "id": "decision-shifted-values-standard",
+              "kind": "standard",
+              "symbol": "binary_decision::shifted_values_standard",
+              "regions": [
+                "decision-average-standard"
+              ],
+              "questions": [
+                "Q100003",
+                "Q100006",
+                "Q100011"
+              ],
+              "complexity": {
+                "time": "O(n)",
+                "space": "O(n)"
+              },
+              "source": "content/binary/decision.cpp",
+              "standard": "c++17",
+              "target": "chapter01-decision"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-ratio-selection",
+      "title": "固定数量最大比值：变换后取最大的 m 项",
+      "document": "binary-decision",
+      "contract": "Luogu P1570，从 n≤200 项恰选 m 项，最大化 sum(v)/sum(c)，ci,vi=1..10^4，答案≤1000，输出三位。不是取单项 vi/ci 最大的 m 个。；与最大平均、删中段同属分数变换，但各自可行子问题不同；Dinkelbach 是另一方法，不能称库重写。",
+      "sourceUrls": [
+        "https://www.luogu.com.cn/problem/P1570"
+      ],
+      "methods": [
+        {
+          "id": "main",
+          "title": "main",
+          "invariant": "正分母下，sum(v)/sum(c)≥λ ⇔ sum(v-λc)≥0。取最大的 m 项变换分数可得该阈值下最优和；λ 增大收紧，last true。",
+          "implementations": [
+            {
+              "id": "decision-ratio-manual",
+              "kind": "manual",
+              "symbol": "binary_decision::ratio_manual",
+              "regions": [
+                "decision-ratio-manual"
+              ],
+              "questions": [
+                "Q100004",
+                "Q100006",
+                "Q100008"
+              ],
+              "complexity": {
+                "time": "O(I*n^2)，I<=80",
+                "space": "O(n)"
+              },
+              "source": "content/binary/decision.cpp",
+              "standard": "c++17",
+              "target": "chapter01-decision"
+            },
+            {
+              "id": "decision-ratio-standard",
+              "kind": "standard",
+              "symbol": "binary_decision::ratio_standard",
+              "regions": [
+                "decision-ratio-standard"
+              ],
+              "questions": [
+                "Q100004",
+                "Q100006",
+                "Q100008"
+              ],
+              "complexity": {
+                "time": "平均O(I*n)，I<=80",
+                "space": "O(n)"
+              },
+              "source": "content/binary/decision.cpp",
+              "standard": "c++17",
+              "target": "chapter01-decision"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-pigeonhole-domain",
+      "title": "值域容量异常：重复与缺失",
+      "document": "binary-selection",
+      "contract": "值域计数与容量异常作为保留重复/缺失的证书。；单调前缀判定与一般区间抽屉证书、重复/缺失对照。",
+      "sourceUrls": [
+        "https://leetcode.com/problems/find-the-duplicate-number/"
+      ],
+      "methods": [
+        {
+          "id": "duplicate-count",
+          "title": "duplicate count",
+          "invariant": "值域计数与容量异常作为保留重复/缺失的证书。",
+          "implementations": [
+            {
+              "id": "selection-duplicate-manual",
+              "kind": "manual",
+              "symbol": "duplicate_manual",
+              "regions": [
+                "duplicate-manual"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100003"
+              ],
+              "complexity": {
+                "time": "O(n log n)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/selection.cpp",
+              "standard": "c++17",
+              "target": "chapter01-selection"
+            },
+            {
+              "id": "selection-duplicate-standard",
+              "kind": "standard",
+              "symbol": "duplicate_standard",
+              "regions": [
+                "duplicate-standard"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100003"
+              ],
+              "complexity": {
+                "time": "O(n log n)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/selection.cpp",
+              "standard": "c++17",
+              "target": "chapter01-selection"
+            }
+          ]
+        },
+        {
+          "id": "underfilled-domain",
+          "title": "underfilled domain",
+          "invariant": "值域计数与容量异常作为保留重复/缺失的证书。",
+          "implementations": [
+            {
+              "id": "selection-missing-domain",
+              "kind": "alternative",
+              "symbol": "missing_domain",
+              "regions": [
+                "missing-domain"
+              ],
+              "questions": [
+                "Q100002"
+              ],
+              "complexity": {
+                "time": "O(n log U)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/selection.cpp",
+              "standard": "c++17",
+              "target": "chapter01-selection"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-weighted-inverse",
+      "title": "累计权重的逆查询与采样",
+      "document": "binary-selection",
+      "contract": "均匀整数票号逆查累计权重。；静态前缀与后续动态前缀秩的对照。",
+      "sourceUrls": [
+        "https://leetcode.com/problems/random-pick-with-weight/"
+      ],
+      "methods": [
+        {
+          "id": "cumulative-inverse",
+          "title": "cumulative inverse",
+          "invariant": "均匀整数票号逆查累计权重。",
+          "implementations": [
+            {
+              "id": "selection-ticket-manual",
+              "kind": "manual",
+              "symbol": "ticket_manual",
+              "regions": [
+                "weighted-manual"
+              ],
+              "questions": [
+                "Q100002"
+              ],
+              "complexity": {
+                "time": "O(n) preprocessing; O(log n) query",
+                "space": "O(n)"
+              },
+              "source": "content/binary/selection.cpp",
+              "standard": "c++17",
+              "target": "chapter01-selection"
+            },
+            {
+              "id": "selection-ticket-standard",
+              "kind": "standard",
+              "symbol": "ticket_standard",
+              "regions": [
+                "weighted-standard"
+              ],
+              "questions": [
+                "Q100001",
+                "Q100002",
+                "Q100010"
+              ],
+              "complexity": {
+                "time": "O(n) preprocessing; O(log n) query",
+                "space": "O(n)"
+              },
+              "source": "content/binary/selection.cpp",
+              "standard": "c++17",
+              "target": "chapter01-selection"
+            }
+          ]
+        },
+        {
+          "id": "sampling",
+          "title": "sampling",
+          "invariant": "均匀整数票号逆查累计权重。",
+          "implementations": [
+            {
+              "id": "selection-sample",
+              "kind": "standard",
+              "symbol": "sample_index",
+              "regions": [
+                "weighted-standard"
+              ],
+              "questions": [
+                "Q100010"
+              ],
+              "complexity": {
+                "time": "O(log n) plus distribution cost",
+                "space": "O(1) beyond prefix"
+              },
+              "source": "content/binary/selection.cpp",
+              "standard": "c++17",
+              "target": "chapter01-selection"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-matrix-rank",
+      "title": "行列有序矩阵秩：楼梯计数",
+      "document": "binary-selection",
+      "contract": "LC378 n×n 每行每列非降，求第 k 小并按重数；额外空间须优于 O(n²)。n≤300、值 [-10^9,10^9]、1≤k≤n²。；题目提及更高阶 O(n) 选择论文；这是非二分的更强方法，不必把本章改成线性矩阵选择专论，但应知存在，不能声称二分最优到不可改进。",
+      "sourceUrls": [
+        "https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/description/"
+      ],
+      "methods": [
+        {
+          "id": "staircase-rank",
+          "title": "staircase rank",
+          "invariant": "试 x，从左下/右上沿边界，每步整行/列排除，O(n) 统计≤x；找 first count≥k。边界为左上值、右下值。",
+          "implementations": [
+            {
+              "id": "selection-matrix-manual",
+              "kind": "manual",
+              "symbol": "matrix_kth_manual",
+              "regions": [
+                "matrix-rank-manual"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100003"
+              ],
+              "complexity": {
+                "time": "O((R+C) log V)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/selection.cpp",
+              "standard": "c++17",
+              "target": "chapter01-selection"
+            }
+          ]
+        },
+        {
+          "id": "row-bound-rank",
+          "title": "row bound rank",
+          "invariant": "试 x，从左下/右上沿边界，每步整行/列排除，O(n) 统计≤x；找 first count≥k。边界为左上值、右下值。",
+          "implementations": [
+            {
+              "id": "selection-matrix-standard",
+              "kind": "standard",
+              "symbol": "matrix_kth_standard",
+              "regions": [
+                "matrix-rank-standard"
+              ],
+              "questions": [
+                "Q100001",
+                "Q100002",
+                "Q100003"
+              ],
+              "complexity": {
+                "time": "O(R log C log V)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/selection.cpp",
+              "standard": "c++17",
+              "target": "chapter01-selection"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-pair-distance-rank",
+      "title": "数对距离秩：窗口计数反求第 k 小",
+      "document": "binary-selection",
+      "contract": "LC719 所有 i<j 数对距离按重数排序，求第 k 小；n≤10^4、值 0..10^6、k≤n(n-1)/2。；与矩阵秩共有值域二分，但 count 是双指针；不是第 k 个不同距离，也不是恰等 D 的数对数。",
+      "sourceUrls": [
+        "https://leetcode.com/problems/find-k-th-smallest-pair-distance/description/"
+      ],
+      "methods": [
+        {
+          "id": "window-rank",
+          "title": "window rank",
+          "invariant": "排序后试 D，单调左指针保持 nums[r]-nums[l]≤D，累计 r-l 得到距离≤D 的数对数 C(D)。求最小 C(D)≥k。",
+          "implementations": [
+            {
+              "id": "selection-pairs-manual",
+              "kind": "manual",
+              "symbol": "pair_distance_manual",
+              "regions": [
+                "pair-rank-manual"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100004"
+              ],
+              "complexity": {
+                "time": "O(n log n+n log V)",
+                "space": "O(n) copied input"
+              },
+              "source": "content/binary/selection.cpp",
+              "standard": "c++17",
+              "target": "chapter01-selection"
+            }
+          ]
+        },
+        {
+          "id": "bound-rank",
+          "title": "bound rank",
+          "invariant": "排序后试 D，单调左指针保持 nums[r]-nums[l]≤D，累计 r-l 得到距离≤D 的数对数 C(D)。求最小 C(D)≥k。",
+          "implementations": [
+            {
+              "id": "selection-pairs-standard",
+              "kind": "standard",
+              "symbol": "pair_distance_standard",
+              "regions": [
+                "pair-rank-standard"
+              ],
+              "questions": [
+                "Q100001",
+                "Q100002",
+                "Q100004"
+              ],
+              "complexity": {
+                "time": "O(n log n+n log n log V)",
+                "space": "O(n) copied input"
+              },
+              "source": "content/binary/selection.cpp",
+              "standard": "c++17",
+              "target": "chapter01-selection"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-multiplication-rank",
+      "title": "乘法表秩：解析计数巨大隐式集合",
+      "document": "binary-selection",
+      "contract": "LC668 m×n 表 aij=i*j，1-based，求第 k 小；m,n≤30000、k≤m*n，不显式存表。；比矩阵秩多解析模型、无须访问单元格；整除分块可能进一步加速，但原约束 O(min(m,n)log mn) 足够，不能只为堆高阶技巧增加负担。",
+      "sourceUrls": [
+        "https://leetcode.com/problems/kth-smallest-number-in-multiplication-table/description/"
+      ],
+      "methods": [
+        {
+          "id": "analytic-rank",
+          "title": "analytic rank",
+          "invariant": "试 x，第 i 行有 min(n,floor(x/i)) 个值≤x，累加成秩；first≥k。迭代较小维度降低代价。",
+          "implementations": [
+            {
+              "id": "selection-multiply-manual",
+              "kind": "manual",
+              "symbol": "multiplication_kth_manual",
+              "regions": [
+                "multiplication-manual"
+              ],
+              "questions": [
+                "Q100002"
+              ],
+              "complexity": {
+                "time": "O(min(m,n) log(mn))",
+                "space": "O(1)"
+              },
+              "source": "content/binary/selection.cpp",
+              "standard": "c++17",
+              "target": "chapter01-selection"
+            },
+            {
+              "id": "selection-multiply-standard",
+              "kind": "standard",
+              "symbol": "multiplication_kth_standard",
+              "regions": [
+                "multiplication-standard"
+              ],
+              "questions": [
+                "Q100002"
+              ],
+              "complexity": {
+                "time": "O(min(m,n) log(mn))",
+                "space": "O(1)"
+              },
+              "source": "content/binary/selection.cpp",
+              "standard": "c++17",
+              "target": "chapter01-selection"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-two-sorted-partition",
+      "title": "两有序数组中位：在合法分割位置二分",
+      "document": "binary-selection",
+      "contract": "LC4 两个升序数组，各长 0..1000，总长 1..2000，值 [-10^6,10^6]，O(log(m+n)) 返回中位数。；第 k 小改左侧总数与合法范围；逐次去掉两数组各约 k/2 元素是另一选择法。merge 线性不满足题目对数复杂度。",
+      "sourceUrls": [
+        "https://leetcode.com/problems/median-of-two-sorted-arrays/description/"
+      ],
+      "methods": [
+        {
+          "id": "cross-partition",
+          "title": "cross partition",
+          "invariant": "较短数组取左半长度 i，另数组 j=(m+n+1)/2-i。需 A左末≤B右首、B左末≤A右首；第一条失败则 i 太大，第二条失败则 i 太小。合法后左最大/右最小组成奇偶答案。",
+          "implementations": [
+            {
+              "id": "selection-two-kth",
+              "kind": "manual",
+              "symbol": "two_array_kth",
+              "regions": [
+                "two-array-manual"
+              ],
+              "questions": [
+                "Q100002"
+              ],
+              "complexity": {
+                "time": "O(log(min(m,n)+1))",
+                "space": "O(1)"
+              },
+              "source": "content/binary/selection.cpp",
+              "standard": "c++17",
+              "target": "chapter01-selection"
+            },
+            {
+              "id": "selection-two-median",
+              "kind": "manual",
+              "symbol": "two_array_median",
+              "regions": [
+                "two-array-manual"
+              ],
+              "questions": [
+                "Q100002"
+              ],
+              "complexity": {
+                "time": "O(log(min(m,n)+1))",
+                "space": "O(1)"
+              },
+              "source": "content/binary/selection.cpp",
+              "standard": "c++17",
+              "target": "chapter01-selection"
+            }
+          ]
+        },
+        {
+          "id": "merge-baseline",
+          "title": "merge baseline",
+          "invariant": "较短数组取左半长度 i，另数组 j=(m+n+1)/2-i。需 A左末≤B右首、B左末≤A右首；第一条失败则 i 太大，第二条失败则 i 太小。合法后左最大/右最小组成奇偶答案。",
+          "implementations": [
+            {
+              "id": "selection-two-merge",
+              "kind": "standard",
+              "symbol": "two_array_merge",
+              "regions": [
+                "two-array-standard"
+              ],
+              "questions": [
+                "Q100005"
+              ],
+              "complexity": {
+                "time": "O(m+n)",
+                "space": "O(m+n)"
+              },
+              "source": "content/binary/selection.cpp",
+              "standard": "c++17",
+              "target": "chapter01-selection"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-ordered-dp-frontier",
+      "title": "DP 有序前沿：最小尾值与二分替换",
+      "document": "binary-selection",
+      "contract": "LC300 严格 LIS 长度（n≤2500，允许负数/重复）；LC354 严格双维信封、不可旋转（n≤10^5）；LC673 严格 LIS 方案数（n≤2000，答案 32 位）。；恢复最优链、严格/非降、二维偏序与最少非增覆盖对偶是有用邻支。LC673 用长度+计数 DP 或值域树状态，不是改一行 lower_bound；作者文章的“不能用二分”须限定为其简单 tail 方法，不声称所有含二分工具的计数算法都不可能。",
+      "sourceUrls": [
+        "https://leetcode.com/problems/longest-increasing-subsequence/description/",
+        "https://leetcode.com/problems/russian-doll-envelopes/description/",
+        "https://leetcode.com/problems/number-of-longest-increasing-subsequence/description/"
+      ],
+      "methods": [
+        {
+          "id": "minimal-tail",
+          "title": "minimal tail",
+          "invariant": "tail[len-1] 是当前前缀中长度 len 的可行序列最小尾值，属于支配压缩，不是同一真实序列。严格 LIS 首个≥x，非降首个>x。信封宽升序、同宽高降序，再高严格 LIS，阻止同宽入链。",
+          "implementations": [
+            {
+              "id": "selection-lis-manual",
+              "kind": "manual",
+              "symbol": "lis_manual",
+              "regions": [
+                "lis-manual"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100005"
+              ],
+              "complexity": {
+                "time": "O(n log n)",
+                "space": "O(n)"
+              },
+              "source": "content/binary/selection.cpp",
+              "standard": "c++17",
+              "target": "chapter01-selection"
+            },
+            {
+              "id": "selection-lis-standard",
+              "kind": "standard",
+              "symbol": "lis_standard",
+              "regions": [
+                "lis-standard"
+              ],
+              "questions": [
+                "Q100001",
+                "Q100005"
+              ],
+              "complexity": {
+                "time": "O(n log n)",
+                "space": "O(n)"
+              },
+              "source": "content/binary/selection.cpp",
+              "standard": "c++17",
+              "target": "chapter01-selection"
+            }
+          ]
+        },
+        {
+          "id": "envelope-reduction",
+          "title": "envelope reduction",
+          "invariant": "tail[len-1] 是当前前缀中长度 len 的可行序列最小尾值，属于支配压缩，不是同一真实序列。严格 LIS 首个≥x，非降首个>x。信封宽升序、同宽高降序，再高严格 LIS，阻止同宽入链。",
+          "implementations": [
+            {
+              "id": "selection-envelopes",
+              "kind": "standard",
+              "symbol": "envelopes_standard",
+              "regions": [
+                "lis-standard"
+              ],
+              "questions": [
+                "Q100004",
+                "Q100005"
+              ],
+              "complexity": {
+                "time": "O(n log n)",
+                "space": "O(n)"
+              },
+              "source": "content/binary/selection.cpp",
+              "standard": "c++17",
+              "target": "chapter01-selection"
+            }
+          ]
+        },
+        {
+          "id": "length-count-dp",
+          "title": "length count dp",
+          "invariant": "tail[len-1] 是当前前缀中长度 len 的可行序列最小尾值，属于支配压缩，不是同一真实序列。严格 LIS 首个≥x，非降首个>x。信封宽升序、同宽高降序，再高严格 LIS，阻止同宽入链。",
+          "implementations": [
+            {
+              "id": "selection-lis-count",
+              "kind": "alternative",
+              "symbol": "lis_count",
+              "regions": [
+                "lis-count"
+              ],
+              "questions": [
+                "Q100002"
+              ],
+              "complexity": {
+                "time": "O(n^2)",
+                "space": "O(n)"
+              },
+              "source": "content/binary/selection.cpp",
+              "standard": "c++17",
+              "target": "chapter01-selection"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-weighted-predecessor",
+      "title": "带权兼容调度：二分定位 DP 前驱",
+      "document": "binary-selection",
+      "contract": "CSES Projects n≤2×10^5、日期/奖励≤10^9，同日只能参加一个，所以 end<start；LC1235 n≤5×10^4、profit≤10^4，明确 end==start 可衔接。CSES 允许 a=b。；冷却期、恢复集合改变兼容键或祖先信息；按起点反向找后继是对称实现。不是普通数组查找的换皮。",
+      "sourceUrls": [
+        "https://cses.fi/problemset/task/1140/",
+        "https://leetcode.com/problems/maximum-profit-in-job-scheduling/description/"
+      ],
+      "methods": [
+        {
+          "id": "weighted-interval-dp",
+          "title": "weighted interval dp",
+          "invariant": "按结束排序，dp[i] 为前 i 项最大奖励。找最后兼容前驱 p，dp[i]=max(dp[i-1],dp[p]+profit)。CSES lower_bound(start) 得 end<start 数量，LC upper_bound(start) 得 end≤start 数量。",
+          "implementations": [
+            {
+              "id": "selection-jobs-manual",
+              "kind": "manual",
+              "symbol": "jobs_manual",
+              "regions": [
+                "jobs-manual"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100004",
+                "Q100005"
+              ],
+              "complexity": {
+                "time": "O(n log n)",
+                "space": "O(n)"
+              },
+              "source": "content/binary/selection.cpp",
+              "standard": "c++17",
+              "target": "chapter01-selection"
+            },
+            {
+              "id": "selection-jobs-standard",
+              "kind": "standard",
+              "symbol": "jobs_standard",
+              "regions": [
+                "jobs-standard"
+              ],
+              "questions": [
+                "Q100001",
+                "Q100002",
+                "Q100004",
+                "Q100005"
+              ],
+              "complexity": {
+                "time": "O(n log n)",
+                "space": "O(n)"
+              },
+              "source": "content/binary/selection.cpp",
+              "standard": "c++17",
+              "target": "chapter01-selection"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-resource-queries",
+      "title": "查询会消耗资源：反求最少试探次数",
+      "document": "binary-selection",
+      "contract": "反转为给定次数可覆盖楼层，再二分最少次数。；楼层不能按普通二分免费试探；覆盖DP与组合计数等价。",
+      "sourceUrls": [
+        "https://leetcode.com/problems/super-egg-drop/description/"
+      ],
+      "methods": [
+        {
+          "id": "inverse-coverage",
+          "title": "inverse coverage",
+          "invariant": "反转为给定次数可覆盖楼层，再二分最少次数。",
+          "implementations": [
+            {
+              "id": "selection-eggs-search",
+              "kind": "manual",
+              "symbol": "egg_moves_manual",
+              "regions": [
+                "egg-manual"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100003"
+              ],
+              "complexity": {
+                "time": "O(k log n)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/selection.cpp",
+              "standard": "c++17",
+              "target": "chapter01-selection"
+            }
+          ]
+        },
+        {
+          "id": "coverage-dp",
+          "title": "coverage dp",
+          "invariant": "反转为给定次数可覆盖楼层，再二分最少次数。",
+          "implementations": [
+            {
+              "id": "selection-eggs-dp",
+              "kind": "alternative",
+              "symbol": "egg_moves_coverage",
+              "regions": [
+                "egg-standard"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100005"
+              ],
+              "complexity": {
+                "time": "O(k * answer)",
+                "space": "O(k)"
+              },
+              "source": "content/binary/selection.cpp",
+              "standard": "c++17",
+              "target": "chapter01-selection"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-fenwick-rank",
+      "title": "动态频数中的第k个位置",
+      "document": "binary-advanced",
+      "contract": "Greedy acceptance of power-of-two Fenwick blocks while reducing residual rank.；kth live element; dynamic frequency selection; negative updates allowed only while actual frequencies preserve monotonicity",
+      "sourceUrls": [
+        "https://cses.fi/problemset/task/1749"
+      ],
+      "methods": [
+        {
+          "id": "fenwick-block-selection",
+          "title": "Fenwick块内秩选择",
+          "invariant": "接受累计量仍小于目标秩的整块，剩余秩随跳跃扣减。",
+          "implementations": [
+            {
+              "id": "advanced-fenwick-lift",
+              "kind": "manual",
+              "symbol": "FrequencyTree",
+              "regions": [
+                "advanced-fenwick-manual"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100005"
+              ],
+              "complexity": {
+                "time": "point update/kth O(log n); remove_by_rank O(n log n)",
+                "space": "O(n)"
+              },
+              "source": "content/binary/advanced.cpp",
+              "standard": "c++17",
+              "target": "chapter01-advanced"
+            }
+          ]
+        },
+        {
+          "id": "prefix-rebuild-selection",
+          "title": "重建累计量后查下界",
+          "invariant": "由非负频数重建单调前缀，查首次达到k的位置；每问付线性重建。",
+          "implementations": [
+            {
+              "id": "advanced-frequency-prefix",
+              "kind": "standard",
+              "symbol": "kth_with_prefix",
+              "regions": [
+                "advanced-fenwick-standard"
+              ],
+              "questions": [
+                "Q100001",
+                "Q100002"
+              ],
+              "complexity": {
+                "time": "O(n) per call including prefix rebuild",
+                "space": "O(n)"
+              },
+              "source": "content/binary/advanced.cpp",
+              "standard": "c++17",
+              "target": "chapter01-advanced"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-summary-descent",
+      "title": "区间摘要驱动的首次失败位置",
+      "document": "binary-advanced",
+      "contract": "Skip aggregate blocks and descend only into first block violating prefix predicate.；max_right; min_left; first value above threshold after updates; noncommutative ordered aggregate",
+      "sourceUrls": [
+        "https://atcoder.jp/contests/practice2/tasks/practice2_j"
+      ],
+      "methods": [
+        {
+          "id": "segment-summary-descent",
+          "title": "摘要驱动块下降",
+          "invariant": "排除起点之前与摘要不足的整块，优先下降到最早可行叶子。",
+          "implementations": [
+            {
+              "id": "advanced-max-summary",
+              "kind": "manual",
+              "symbol": "MaxTree",
+              "regions": [
+                "advanced-summary-manual"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100005",
+                "Q100009"
+              ],
+              "complexity": {
+                "time": "build O(n); point set/range max/first boundary O(log n)",
+                "space": "O(n)"
+              },
+              "source": "content/binary/advanced.cpp",
+              "standard": "c++17",
+              "target": "chapter01-advanced"
+            }
+          ]
+        },
+        {
+          "id": "linear-value-scan",
+          "title": "线性值扫描",
+          "invariant": "按原下标检查每个值，返回首个满足者；没有二分分区前提。",
+          "implementations": [
+            {
+              "id": "advanced-first-linear",
+              "kind": "standard",
+              "symbol": "first_at_least_linear",
+              "regions": [
+                "advanced-summary-standard"
+              ],
+              "questions": [
+                "Q100003",
+                "Q100005"
+              ],
+              "complexity": {
+                "time": "O(n-start)",
+                "space": "O(1)"
+              },
+              "source": "content/binary/advanced.cpp",
+              "standard": "c++17",
+              "target": "chapter01-advanced"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-ancestor-boundary",
+      "title": "祖先会合边界与同步提升",
+      "document": "binary-advanced",
+      "contract": "等深后同步提升，保留尚未会合的最大距离。；精确k跳是支撑；LCA和阈值祖先才有搜索证书。",
+      "sourceUrls": [
+        "https://cses.fi/problemset/task/1688/",
+        "https://cses.fi/problemset/task/1687",
+        "https://cses.fi/problemset/task/1750",
+        "https://cses.fi/problemset/task/1191"
+      ],
+      "methods": [
+        {
+          "id": "synchronous-ancestor-lifting",
+          "title": "等深同步提升",
+          "invariant": "只接受两个祖先仍不同的跳跃，保留第一次会合边界。",
+          "implementations": [
+            {
+              "id": "advanced-ancestor-lift",
+              "kind": "manual",
+              "symbol": "Ancestors",
+              "regions": [
+                "advanced-ancestor-manual"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100005"
+              ],
+              "complexity": {
+                "time": "preprocess O(n log n), query O(log n)",
+                "space": "O(n log n)"
+              },
+              "source": "content/binary/advanced.cpp",
+              "standard": "c++17",
+              "target": "chapter01-advanced"
+            }
+          ]
+        },
+        {
+          "id": "ancestor-chain-intersection",
+          "title": "祖先链交集扫描",
+          "invariant": "从一端向根首次命中另一端祖先集合，得到最近公共祖先。",
+          "implementations": [
+            {
+              "id": "advanced-ancestor-find",
+              "kind": "standard",
+              "symbol": "lca_with_find",
+              "regions": [
+                "advanced-ancestor-standard"
+              ],
+              "questions": [
+                "Q100005"
+              ],
+              "complexity": {
+                "time": "O(height(a)*height(b))",
+                "space": "O(height(a))"
+              },
+              "source": "content/binary/advanced.cpp",
+              "standard": "c++17",
+              "target": "chapter01-advanced"
+            }
+          ]
+        },
+        {
+          "id": "ordered-current-path",
+          "title": "有序当前路径阈值",
+          "invariant": "进出事件维护当前祖先链，权值非降时查首次达到阈值者。",
+          "implementations": [
+            {
+              "id": "advanced-threshold-path",
+              "kind": "alternative",
+              "symbol": "threshold_ancestor_queries",
+              "regions": [
+                "advanced-ancestor-threshold"
+              ],
+              "questions": [
+                "Q100001",
+                "Q100005",
+                "Q100009"
+              ],
+              "complexity": {
+                "time": "O(n+q log n)",
+                "space": "O(n+q)"
+              },
+              "source": "content/binary/advanced.cpp",
+              "standard": "c++17",
+              "target": "chapter01-advanced"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-cyclic-jump",
+      "title": "循环正数序列的最少分段",
+      "document": "binary-advanced",
+      "contract": "Power-of-two successor preprocessing and largest admissible jumps.；exact-k; LCA; cyclic array jumps",
+      "sourceUrls": [
+        "https://cses.fi/problemset/task/1191"
+      ],
+      "methods": [
+        {
+          "id": "window-successor-lifting",
+          "title": "滑窗建后继再提升",
+          "invariant": "正数窗口求最远合法下一位置，再找尚未覆盖一圈的最大跳数。",
+          "implementations": [
+            {
+              "id": "advanced-cyclic-window",
+              "kind": "manual",
+              "symbol": "min_cyclic_parts",
+              "regions": [
+                "advanced-cyclic-manual",
+                "advanced-cyclic-core"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100005"
+              ],
+              "complexity": {
+                "time": "successors O(n), lifting and all starts O(n log n)",
+                "space": "O(n log n)"
+              },
+              "source": "content/binary/advanced.cpp",
+              "standard": "c++17",
+              "target": "chapter01-advanced"
+            }
+          ]
+        },
+        {
+          "id": "prefix-bound-successor-lifting",
+          "title": "前缀边界建后继再提升",
+          "invariant": "有序前缀upper_bound构造最远合法段，与滑窗版共享提升核心。",
+          "implementations": [
+            {
+              "id": "advanced-cyclic-bounds",
+              "kind": "standard",
+              "symbol": "min_cyclic_parts_with_bounds",
+              "regions": [
+                "advanced-cyclic-standard",
+                "advanced-cyclic-core"
+              ],
+              "questions": [
+                "Q100001",
+                "Q100002",
+                "Q100005"
+              ],
+              "complexity": {
+                "time": "O(n log n)",
+                "space": "O(n log n)"
+              },
+              "source": "content/binary/advanced.cpp",
+              "standard": "c++17",
+              "target": "chapter01-advanced"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-time-parallel-search",
+      "title": "共享时间轴判定的并行二分",
+      "document": "binary-advanced",
+      "contract": "Group query midpoints and sweep event prefixes once per binary-search round.；same-vertex day 0; unreachable sentinel; rollback recursion requires different structural contract",
+      "sourceUrls": [
+        "https://cses.fi/problemset/task/2101"
+      ],
+      "methods": [
+        {
+          "id": "batch-time-prefix",
+          "title": "共享时间前缀判定",
+          "invariant": "每轮按mid分组并重放事件，DSU代表当前真实时间前缀。",
+          "implementations": [
+            {
+              "id": "advanced-time-pbs",
+              "kind": "manual",
+              "symbol": "first_connection_days",
+              "regions": [
+                "advanced-pbs-manual"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100005"
+              ],
+              "complexity": {
+                "time": "O((n+(m+q)*alpha(n))*log(m+2))",
+                "space": "O(n+m+q)"
+              },
+              "source": "content/binary/advanced.cpp",
+              "standard": "c++17",
+              "target": "chapter01-advanced"
+            },
+            {
+              "id": "advanced-dsu-support",
+              "kind": "standard",
+              "symbol": "DisjointSet",
+              "regions": [
+                "advanced-pbs-standard"
+              ],
+              "questions": [
+                "Q100005"
+              ],
+              "complexity": {
+                "time": "initialization O(n), amortized find/unite O(alpha(n))",
+                "space": "O(n)"
+              },
+              "source": "content/binary/advanced.cpp",
+              "standard": "c++17",
+              "target": "chapter01-advanced"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-dynamic-range-kth",
+      "title": "带修改区间第k小的整体二分",
+      "document": "binary-advanced",
+      "contract": "Partition values/events and queries around value midpoint; left-count selects branch; right query subtracts left rank.；static range kth; point-assignment range kth; duplicates; query residual rank; rollback lifecycle",
+      "sourceUrls": [
+        "https://www.luogu.com.cn/problem/P3834",
+        "https://www.luogu.com.cn/problem/P2617"
+      ],
+      "methods": [
+        {
+          "id": "value-domain-event-partition",
+          "title": "值域事件稳定分流",
+          "invariant": "按原时间累计左值域贡献，查询右行扣剩余秩，递归前撤销全部实际更新。",
+          "implementations": [
+            {
+              "id": "advanced-dynamic-kth",
+              "kind": "manual",
+              "symbol": "dynamic_range_kth",
+              "regions": [
+                "advanced-kth-model",
+                "advanced-kth-manual"
+              ],
+              "questions": [
+                "Q100001",
+                "Q100005",
+                "Q100009",
+                "Q100012"
+              ],
+              "complexity": {
+                "time": "O((n+A) log(n+A+1) + E log(U+1) log(n+1)); E=n+2A+Q",
+                "space": "O(E+n+U+log(U+1)); E includes all input assignments"
+              },
+              "source": "content/binary/advanced.cpp",
+              "standard": "c++17",
+              "target": "chapter01-advanced"
+            },
+            {
+              "id": "advanced-kth-compress",
+              "kind": "standard",
+              "symbol": "compressed_values",
+              "regions": [
+                "advanced-kth-standard"
+              ],
+              "questions": [
+                "Q100001",
+                "Q100005",
+                "Q100012"
+              ],
+              "complexity": {
+                "time": "collect/sort O((n+assignments) log(n+assignments)); value_rank O(log U)",
+                "space": "O(n+assignments)"
+              },
+              "source": "content/binary/advanced.cpp",
+              "standard": "c++17",
+              "target": "chapter01-advanced"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "task-marginal-penalty",
+      "title": "递减边际资源分配的惩罚参数搜索",
+      "document": "binary-advanced",
+      "contract": "Search the positive marginal reward cutoff and complete tied marginal rewards to target count.；K exceeds total positive rewards; ties at cutoff; strict versus inclusive threshold count; huge implicit reward multiset",
+      "sourceUrls": [
+        "https://atcoder.jp/contests/abc216/tasks/abc216_e"
+      ],
+      "methods": [
+        {
+          "id": "penalty-threshold",
+          "title": "惩罚阈值与精确恢复",
+          "invariant": "递减边际给出支持目标数量的同值计数区间，以H(h)+hK恢复。",
+          "implementations": [
+            {
+              "id": "advanced-penalty-cutoff",
+              "kind": "manual",
+              "symbol": "maximize_fun",
+              "regions": [
+                "advanced-penalty-manual"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100003"
+              ],
+              "complexity": {
+                "time": "O(n log max Ai)",
+                "space": "O(1) auxiliary"
+              },
+              "source": "content/binary/advanced.cpp",
+              "standard": "c++17",
+              "target": "chapter01-advanced"
+            }
+          ]
+        },
+        {
+          "id": "heap-marginal-greedy",
+          "title": "逐次最大边际堆贪心",
+          "invariant": "每次取可用最高边际，取后放回该设施下一边际。",
+          "implementations": [
+            {
+              "id": "advanced-marginal-heap",
+              "kind": "alternative",
+              "symbol": "fun_with_priority_queue",
+              "regions": [
+                "advanced-penalty-standard"
+              ],
+              "questions": [
+                "Q100002",
+                "Q100005"
+              ],
+              "complexity": {
+                "time": "O(n+min(K,T)*log n)",
+                "space": "O(n)"
+              },
+              "source": "content/binary/advanced.cpp",
+              "standard": "c++17",
+              "target": "chapter01-advanced"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "id": "chapter01-boundary",
+      "kind": "run",
+      "source": "tests/cpp/chapter01_boundary.cpp",
+      "standard": "c++17",
+      "timeoutSeconds": 120
+    },
+    {
+      "id": "chapter01-decision",
+      "kind": "run",
+      "source": "tests/cpp/chapter01_decision.cpp",
+      "standard": "c++17",
+      "timeoutSeconds": 120
+    },
+    {
+      "id": "chapter01-selection",
+      "kind": "run",
+      "source": "tests/cpp/chapter01_selection.cpp",
+      "standard": "c++17",
+      "timeoutSeconds": 120
+    },
+    {
+      "id": "chapter01-advanced",
+      "kind": "run",
+      "source": "tests/cpp/chapter01_advanced.cpp",
+      "standard": "c++17",
+      "timeoutSeconds": 120
+    }
+  ]
 }

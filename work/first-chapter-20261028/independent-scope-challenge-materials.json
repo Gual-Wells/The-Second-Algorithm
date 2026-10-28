@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-28",
+  "independence": "Written before reading integrator scope, pattern table or manuscript; uses sources newly read after candidate comparison.",
+  "notClaimed": ["chapter completeness", "production implementation validation", "official acceptance of reference code", "earliest historical origin of every technique"],
+  "materials": [
+    {
+      "id": "challenge-time-pbs-method",
+      "source": "Minh-Thien Nguyen, self-authored algorithm article",
+      "url": "https://minhnguyent546.io.vn/blog/parallel-binary-search/",
+      "locator": "Introduction, CSES New Roads Queries, iterative implementation; lines 31-88 and 147-178 at read time",
+      "note": "Method prose and iterative code read; recursive sketch not adopted as a generic correct DSU algorithm. Runtime independently includes N-size DSU reinitialization.",
+      "mechanism": "Group query midpoints and sweep event prefixes once per binary-search round.",
+      "conditions": ["queries available offline", "each query predicate monotone along event time", "data structure can incrementally apply events and be rebuilt each round"],
+      "variants": ["same-vertex day 0", "unreachable sentinel", "rollback recursion requires different structural contract"],
+      "crossParadigms": ["offline batching", "DSU", "incremental connectivity"],
+      "exerciseUrls": ["https://cses.fi/problemset/task/2101"],
+      "readStatus": "method-and-iterative-implementation-read"
+    },
+    {
+      "id": "challenge-value-divide-method",
+      "source": "OI Wiki contributors, self-authored method exposition",
+      "url": "https://oi-wiki.org/misc/parallel-binsearch/",
+      "locator": "查询区间第k小、带修区间第k小 and implementations; HTML lines 1000-1109; raw markdown lines 81-197",
+      "note": "Static and dynamic value-domain divide-and-conquer read. Additivity conditions are not treated as necessary for every time-PBS algorithm. Derived invariants retained separately.",
+      "mechanism": "Partition values/events and queries around value midpoint; left-count selects branch; right query subtracts left rank.",
+      "conditions": ["offline event stream", "preserve temporal order in every partition", "signed point contributions and invertible Fenwick updates", "all future assignment values included in compression"],
+      "variants": ["static range kth", "point-assignment range kth", "duplicates", "query residual rank", "rollback lifecycle"],
+      "crossParadigms": ["divide and conquer", "Fenwick tree", "offline algorithms", "coordinate compression"],
+      "exerciseUrls": ["https://www.luogu.com.cn/problem/P3834", "https://www.luogu.com.cn/problem/P2617"],
+      "readStatus": "method-and-reference-code-read-not-run"
+    },
+    {
+      "id": "challenge-fenwick-structural-search",
+      "source": "KACTL, Lukas Polacek, CC0 implementation",
+      "url": "https://raw.githubusercontent.com/kth-competitive-programming/kactl/b3548e973f8772010c1ef84e6d427c749733fd2c/content/data-structures/FenwickTree.h",
+      "locator": "FT::lower_bound, source lines 22-30",
+      "note": "Actual source read and pinned. Nonnegative prefix-frequency requirement is independently derived, not claimed explicitly documented in file. Fixed 1<<25 is not adopted as arbitrary-size guarantee.",
+      "mechanism": "Greedy acceptance of power-of-two Fenwick blocks while reducing residual rank.",
+      "conditions": ["prefix cumulative quantity monotone", "initial step covers supported size", "explicit absent and nonpositive target policy"],
+      "variants": ["kth live element", "dynamic frequency selection", "negative updates allowed only while actual frequencies preserve monotonicity"],
+      "crossParadigms": ["Fenwick tree", "binary lifting", "order statistics"],
+      "exerciseUrls": ["https://cses.fi/problemset/task/1749"],
+      "readStatus": "pinned-source-read-not-revalidated",
+      "version": "b3548e973f8772010c1ef84e6d427c749733fd2c"
+    },
+    {
+      "id": "challenge-binary-lifting-source",
+      "source": "KACTL, Johan Sannemo, CC0 implementation",
+      "url": "https://raw.githubusercontent.com/kth-competitive-programming/kactl/b3548e973f8772010c1ef84e6d427c749733fd2c/content/graph/BinaryLifting.h",
+      "locator": "treeJump, jmp, lca; full 36-line file",
+      "note": "Distinguishes exact function composition from unknown-boundary search. Root-self assumption explicit in source; CSES missing-ancestor semantics need adaptation.",
+      "mechanism": "Precompute power-of-two function compositions; boundary search additionally needs an acceptance certificate.",
+      "conditions": ["jump table covers maximum step count", "sentinel/root semantics explicit", "monotone certificate needed only for search, not exact-k jump"],
+      "variants": ["kth ancestor", "functional graph kth successor", "LCA synchronous lifting", "threshold ancestor"],
+      "crossParadigms": ["function exponentiation", "tree preprocessing", "graph modeling"],
+      "exerciseUrls": ["https://cses.fi/problemset/task/1687", "https://cses.fi/problemset/task/1750", "https://cses.fi/problemset/task/1191"],
+      "readStatus": "pinned-source-read-not-revalidated",
+      "version": "b3548e973f8772010c1ef84e6d427c749733fd2c"
+    },
+    {
+      "id": "challenge-acl-structural-search",
+      "source": "AtCoder Library official documentation",
+      "url": "https://atcoder.github.io/ac-library/production/document_en/segtree.html",
+      "locator": "max_right/min_left, lines 102-149; official practice2_j example",
+      "note": "Actual contract and example read. ACL is external library, not ISO C++ standard library. Determinism, identity-true, and prefix monotonicity must not be omitted.",
+      "mechanism": "Skip aggregate blocks and descend only into first block violating prefix predicate.",
+      "conditions": ["monoid operation", "f(e()) is true", "same argument same result/no side effects", "monotone prefix predicate for maximal boundary interpretation"],
+      "variants": ["max_right", "min_left", "first value above threshold after updates", "noncommutative ordered aggregate"],
+      "crossParadigms": ["segment tree", "monoids", "binary descent"],
+      "exerciseUrls": ["https://atcoder.jp/contests/practice2/tasks/practice2_j"],
+      "readStatus": "official-contract-and-example-read"
+    },
+    {
+      "id": "challenge-aliens-official-method",
+      "source": "IOI2016 official solutions, Chethiya Abeysinghe",
+      "url": "https://ioinformatics.org/files/ioi2016solutions.pdf",
+      "locator": "Aliens, physical PDF pages 14-17; especially Subtask6 on page17",
+      "note": "Aliens solution text read; page17 rendered and visually checked. Penalty/count monotonicity, discrete convexity and skipped-count interpolation are distinct obligations. Full CHT implementation not tested.",
+      "mechanism": "Remove photo-count dimension by per-photo penalty; search monotone optimal count; recover convex value at target count.",
+      "conditions": ["discrete convex value in count", "tie-aware optimum count", "valid same-slope recovery", "efficient unconstrained penalized oracle"],
+      "variants": ["exactly versus at-most count", "count jumps across target", "collinear optima", "CHT oracle"],
+      "crossParadigms": ["dynamic programming", "Lagrangian relaxation", "convexity", "convex hull trick", "geometric interval preprocessing"],
+      "exerciseUrls": ["https://ioinformatics.org/files/ioi2016problem6.pdf"],
+      "readStatus": "official-method-read-key-page-visually-verified",
+      "sha256": "7dae12de89fd17aebdc623d33f8a76a185aad7272dfd26aaf6b7f21cdd55e0cc"
+    },
+    {
+      "id": "challenge-tallbarn-official-method",
+      "source": "USACO official analysis by Yang Liu",
+      "url": "https://usaco.org/current/data/sol_tallbarn_platinum_jan17.html",
+      "locator": "Analysis paragraphs and ct/answer-adjustment reference code",
+      "note": "Actual official analysis and reference implementation read. Decreasing marginal returns make threshold allocation possible; correctness is not generalized to arbitrary cardinality problems.",
+      "mechanism": "Binary-search marginal-benefit threshold instead of assigning up to 1e12 workers individually; correct residual worker count at threshold.",
+      "conditions": ["decreasing marginal benefit a/(c(c+1))", "every job initially receives one cow", "numerical precision and rounding contract", "count correction near threshold"],
+      "variants": ["multiple equal marginal benefits", "threshold count above/below target", "large resource count"],
+      "crossParadigms": ["greedy allocation", "discrete convexity", "numerical search"],
+      "exerciseUrls": ["https://usaco.org/index.php?page=viewproblem2&cpid=697"],
+      "readStatus": "official-method-and-code-read-not-run"
+    },
+    {
+      "id": "challenge-wqs-extended-exposition",
+      "source": "OI Wiki contributors, self-authored WQS exposition",
+      "url": "https://oi-wiki.org/dp/opt/wqs-binary-search/",
+      "locator": "引入、共线情形、对偶方法、凸性证明; lines598-607, 657-675, 881-898 at read time",
+      "note": "Read sections only, not all examples. Generalized higher-dimensional dual optimization changes search mechanism and is a boundary, not mandatory full inclusion in one-dimensional chapter.",
+      "mechanism": "Price count constraint, then reason about supported convex value points and dual recovery.",
+      "conditions": ["efficient penalized oracle", "convex/concave value structure for exact cardinality recovery", "tie treatment"],
+      "variants": ["integer or real multiplier", "collinear supported points", "higher-dimensional extension outside one-dimensional search core"],
+      "crossParadigms": ["DP optimization", "convex analysis", "duality", "ternary/golden-section alternatives"],
+      "exerciseUrls": [],
+      "readStatus": "selected-method-sections-read"
+    },
+    {
+      "id": "challenge-binary-jump-guide",
+      "source": "USACO Guide contributors, self-authored explanation",
+      "url": "https://usaco.guide/plat/binary-jump?lang=cpp",
+      "locator": "Binary Jumping explanation and Lowest Common Ancestor explanation",
+      "note": "Method explanation read; linked advanced problems not claimed read. Reinforces that binary jumping is power composition before any boundary certificate.",
+      "mechanism": "Power-of-two successor preprocessing and largest admissible jumps.",
+      "conditions": ["valid ancestor relation or successor function", "enough powers for maximum query"],
+      "variants": ["exact-k", "LCA", "cyclic array jumps"],
+      "crossParadigms": ["tree algorithms", "function composition"],
+      "exerciseUrls": ["https://cses.fi/problemset/task/1687", "https://cses.fi/problemset/task/1750", "https://cses.fi/problemset/task/1191"],
+      "readStatus": "method-explanation-read"
+    }
+  ],
+  "verifiedExercises": [
+    {"id":"cses2101","source":"CSES original problem","url":"https://cses.fi/problemset/task/2101","title":"New Roads Queries","constraints":["1<=n,m,q<=200000","1<=a,b<=n"],"contract":"Undirected edge added each day, earliest connectivity day per pair, -1 if never. Equal vertices imply day0.","readStatus":"original-full-statement-read"},
+    {"id":"luogu3834","source":"Luogu official hosted judge statement","url":"https://www.luogu.com.cn/problem/P3834","title":"静态区间第k小","constraints":["1<=n,m<=200000","0<=a_i<=1000000000","1<=l<=r<=n","1<=k<=r-l+1"],"contract":"No updates. Closed interval kth value, duplicates counted by multiplicity.","readStatus":"host-statement-and-constraints-read"},
+    {"id":"luogu2617","source":"Luogu hosted judge statement; source bzoj1901, Luogu-generated tests","url":"https://www.luogu.com.cn/problem/P2617","title":"Dynamic Rankings","constraints":["1<=n,m<=100000","0<=a_i,y<=1000000000","1<=l<=r<=n","1<=k<=r-l+1","1<=x<=n"],"contract":"Q l r k queries current interval kth, C x y assigns one position.","readStatus":"host-statement-and-constraints-read-original-bzoj-not-retrieved"},
+    {"id":"cses1749","source":"CSES original problem","url":"https://cses.fi/problemset/task/1749","title":"List Removals","constraints":["1<=n<=200000","1<=x_i<=1000000000","1<=p_i<=n-i+1"],"contract":"Delete current position p_i, return removed values in order.","readStatus":"original-full-statement-read"},
+    {"id":"atcoderpractice2j","source":"AtCoder original problem","url":"https://atcoder.jp/contests/practice2/tasks/practice2_j","title":"J - Segment Tree","constraints":["1<=N,Q<=200000","0<=A_i,V_i<=1000000000","1<=X_i<=N","1<=L_i<=R_i<=N"],"contract":"Point assignment, interval max, first j>=X_i with A_j>=V_i; absent N+1.","readStatus":"original-full-statement-read"},
+    {"id":"cses1687","source":"CSES original problem","url":"https://cses.fi/problemset/task/1687","title":"Company Queries I","constraints":["1<=n,q<=200000","1<=e_i<=i-1","1<=x,k<=n"],"contract":"Tree kth ancestor; absent -1.","readStatus":"original-full-statement-read"},
+    {"id":"cses1750","source":"CSES original problem","url":"https://cses.fi/problemset/task/1750","title":"Planets Queries I","constraints":["1<=n,q<=200000","1<=t_i,x<=n","0<=k<=1000000000"],"contract":"Arbitrary successor function including cycles/self loops; exact k teleporters.","readStatus":"original-full-statement-read"},
+    {"id":"cses1191","source":"CSES original problem","url":"https://cses.fi/problemset/task/1191","title":"Cyclic Array","constraints":["1<=n<=200000","1<=x_i<=1000000000","1<=k<=1000000000000000000","x_i<=k guaranteed"],"contract":"Minimum partition count of a cyclic positive array with segment sums at most k.","readStatus":"original-full-statement-read"},
+    {"id":"usaco697","source":"USACO original problem, Yang Liu","url":"https://usaco.org/index.php?page=viewproblem2&cpid=697","title":"Building a Tall Barn","constraints":["1<=N<=100000","N<=K<=1000000000000","1<=a_i<=1000000000000"],"contract":"Allocate integer positive cows per sequential floor to minimize sum a_i/c_i. Nearest-integer output guaranteed >0.1 from rounding boundary.","readStatus":"original-full-statement-read"},
+    {"id":"ioi2016aliens","source":"IOI official original problem","url":"https://ioinformatics.org/files/ioi2016problem6.pdf","title":"Aliens","constraints":["1<=n<=100000","1<=m<=1000000","1<=k<=n","0<=r_i,c_i<m"],"contract":"At most k grid-aligned diagonal-corner square photos cover all points; minimize union cell area. Function int64 take_photos(...).","readStatus":"original-text-read-and-page3-constraints-visually-checked","sha256":"9e519af7665834a89372957032f78912280521438e7149a7ff6fac3968f7c879"}
+  ],
+  "negativeResults": [
+    {"url":"https://usaco.guide/plat/parallel-bin-search?lang=cpp","status":"not-accessible","impact":"Not used as read method source."},
+    {"url":"https://usaco.guide/adv/parallel-bs?lang=cpp","status":"not-accessible","impact":"Not used as read method source; Git tree had no dedicated parallel-binary file."},
+    {"url":"https://cses.fi/book/book.pdf","status":"2018-author-handbook-searched-no-parallel-binary-section","impact":"Does not establish another book's forum-mentioned page294."},
+    {"url":"https://szkopul.edu.pl/problemset/problem/czzVm7v3I58TnPHzBgWiyELT/site/?key=statement","status":"statement-text-read-but-math-as-images-not-fully-verified","impact":"Meteors not included as verified exercise constraints."}
+  ],
+  "independentReasoning": [
+    {"id":"penalty-monotonic-not-exact","claim":"Optimal count decreases with penalty even for nonconvex value sequences; exact target recovery is stronger.","counterexample":{"F":[0,1,0],"targetCount":1,"trueValue":1,"supportedConvexEnvelopeValue":0}},
+    {"id":"collinear-skipped-count-recoverable","claim":"Tie policy may skip a count on a linear value segment while dual recovery remains exact.","example":{"F":[4,2,0],"lambda":2,"targetCount":1,"G":4,"recoveredValue":2}},
+    {"id":"delete-not-time-monotone","claim":"Negative deletion events in dynamic kth preserve nonnegative current frequencies and value-threshold count monotonicity, but not monotonicity over event time."},
+    {"id":"lifting-not-automatically-search","claim":"Exact-k function composition on a cyclic successor graph is not an unknown-boundary search without an additional predicate certificate."}
+  ]
+}

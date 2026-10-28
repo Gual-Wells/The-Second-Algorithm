@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "first-chapter-20261028",
+  "goal": "按正式七阶段研究流程独立确立代表性大算法思想领域，完整编纂第一章并实际验证、GitHub与PWA发布",
+  "createdAt": "2026-10-28T12:28:00.510929+00:00",
+  "evidence": [
+    {
+      "id": "411ccbcdb1524b2692118e37f1a47777",
+      "kind": "research",
+      "path": "work/first-chapter-20261028/final-research.md",
+      "summary": "七阶段研究完成，作者期事实修订已重新封存交接，当前出版逐型采用",
+      "outcome": "accepted",
+      "sha256": "9c567e64896fcf4e6f4500966660c8302161dfaa624bd76cf57a465355915a1f",
+      "inputHash": "c6e9e022f2e5ff813f4b4e32f133ca7a84366fb721694e3ff068368edf652840",
+      "recordedAt": "2026-10-28T13:38:58.732772+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "af625220179349f0b9f9c2117cbaf12f",
+      "kind": "review",
+      "path": "work/first-chapter-20261028/edition-review.md",
+      "summary": "当前四稿逐承诺通读、独立反例修复与实际内容及载体验证完成",
+      "outcome": "accepted",
+      "sha256": "fd22aa57e2bc1c37757f4a1dd8b2d0c0aca266ddc517fb65e33dad01683c358a",
+      "inputHash": "c6e9e022f2e5ff813f4b4e32f133ca7a84366fb721694e3ff068368edf652840",
+      "recordedAt": "2026-10-28T13:39:00.679653+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    }
+  ],
+  "lastGoodVerification": {
+    "path": "work/jobs/first-chapter-20261028/verifications/cad65f94d8f04ead88d2fd8702fc4f80.json",
+    "sha256": "a14f8e0aec500f4388421ea4cd7fedbb7e94767045c73b3809244eda25e823b8",
+    "inputHash": "c6e9e022f2e5ff813f4b4e32f133ca7a84366fb721694e3ff068368edf652840"
+  },
+  "lastPreparedRelease": {
+    "path": "work/jobs/first-chapter-20261028/releases/31f196de91894f14af75dfde16135d95.json",
+    "sha256": "b2005f77b726b109642ac42afe96a219500d2e52460189751b07df4948405c6a",
+    "inputHash": "c6e9e022f2e5ff813f4b4e32f133ca7a84366fb721694e3ff068368edf652840"
+  },
+  "lastVerificationAttempt": {
+    "path": "work/jobs/first-chapter-20261028/verifications/cad65f94d8f04ead88d2fd8702fc4f80.json",
+    "sha256": "a14f8e0aec500f4388421ea4cd7fedbb7e94767045c73b3809244eda25e823b8",
+    "inputHash": "c6e9e022f2e5ff813f4b4e32f133ca7a84366fb721694e3ff068368edf652840"
+  }
+}

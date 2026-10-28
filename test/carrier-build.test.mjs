@@ -201,6 +201,73 @@ test('all source, C++, Markdown, HTML and builder authorities are hash-checked',
   } finally { await dispose(f.root); }
 });
 
+test('reader anchors distinguish real id attributes from equal data-code-id values', async () => {
+  const f = await fixture();
+  const manifest = { schemaVersion: 2, collections: [f.collection] };
+  const output = path.join(f.root, '.local/anchor-attributes');
+  const save = async (source, markdown) => {
+    f.manifest.sourceSha256 = hash(source);
+    f.manifest.markdownSha256 = hash(markdown);
+    await fs.writeFile(path.join(f.root, 'content/unit/Fixture.source.md'), source);
+    await fs.writeFile(path.join(f.root, 'content/unit/Fixture.md'), markdown);
+    await fs.writeFile(path.join(f.root, 'content/unit/build/Fixture.json'), JSON.stringify(f.manifest));
+  };
+  try {
+    // The explicit reading anchor and canonical code region deliberately share
+    // their name, as matrix-rank-manual/standard do in the actual chapter.
+    const source = f.source.replace('{{one}}', '<a id="one"></a>\n\n{{one}}');
+    const markdown = f.markdown.replace('```cpp\nint sum', '<a id="one"></a>\n\n```cpp\nint sum');
+    await save(source, markdown);
+    const built = await buildLibrary(f.root, output, manifest, gitRevision);
+    assert.equal(built.codeBlocks, 1);
+    const document = built.catalog.collections[0].documents[0];
+    const payload = JSON.parse(await fs.readFile(path.join(output, document.url.slice(1)), 'utf8'));
+    assert.match(payload.html, /<a id="one"><\/a>/);
+    assert.match(payload.html, /data-code-id="one"/);
+
+    // A second actual id must still be rejected; fixing the false positive
+    // must not disable duplicate reading-anchor enforcement altogether.
+    await save(source + '\n<a id="one"></a>\n', markdown + '\n<a id="one"></a>\n');
+    await assert.rejects(buildLibrary(f.root, path.join(f.root, '.local/duplicate-real-anchor'),
+      manifest, gitRevision), /duplicate reading anchors: one/);
+  } finally { await dispose(f.root); }
+});
+
+test('qualified implementation symbols resolve inside namespaces only in their declared regions', async () => {
+  const f = await fixture();
+  const manifest = { schemaVersion: 2, collections: [f.collection] };
+  try {
+    const helper = 'int helper() { return 7; }';
+    const cpp = f.cpp.replace('// BEGIN one', 'namespace fixture {\n// BEGIN one')
+      + '// BEGIN helper\n' + helper + '\n// END helper\n}\n';
+    const source = f.source + '\n{{helper}}\n';
+    const markdown = f.markdown + '\n```cpp\n' + helper + '\n```\n';
+    f.learning.tasks[0].methods[0].implementations[0].symbol = 'fixture::sum';
+    const learning = JSON.stringify(f.learning);
+    Object.assign(f.manifest, { codeBlocks: ['one', 'helper'], codeSha256: hash(cpp),
+      sourceSha256: hash(source), markdownSha256: hash(markdown), learningSha256: hash(learning) });
+    await fs.writeFile(path.join(f.root, 'content/unit/Fixture.cpp'), cpp);
+    await fs.writeFile(path.join(f.root, 'content/unit/Fixture.source.md'), source);
+    await fs.writeFile(path.join(f.root, 'content/unit/Fixture.md'), markdown);
+    await fs.writeFile(path.join(f.root, 'catalog/learning.json'), learning);
+    await fs.writeFile(path.join(f.root, 'content/unit/build/Fixture.json'), JSON.stringify(f.manifest));
+
+    // No fully-qualified spelling occurs in the source: sum is declared
+    // lexically inside namespace fixture, which is a valid C++ definition.
+    assert.ok(!cpp.includes('fixture::sum'));
+    const built = await buildLibrary(f.root, path.join(f.root, '.local/namespace-symbol'),
+      manifest, gitRevision);
+    assert.equal(built.codeBlocks, 2);
+
+    const wrongRegion = structuredClone(f.learning);
+    wrongRegion.tasks[0].methods[0].implementations[0].regions = ['helper'];
+    // sum still exists elsewhere in the same source file. Its presence must
+    // not validate an implementation registered against the helper region.
+    await assert.rejects(buildLibrary(f.root, path.join(f.root, '.local/wrong-symbol-region'),
+      manifest, gitRevision, wrongRegion), /Implementation symbol is absent: sum-manual/);
+  } finally { await dispose(f.root); }
+});
+
 test('Q relationships reject duplicate explanations, unknown references and cyclic prerequisites', async () => {
   const f = await fixture();
   const manifest = { schemaVersion: 2, collections: [f.collection] };

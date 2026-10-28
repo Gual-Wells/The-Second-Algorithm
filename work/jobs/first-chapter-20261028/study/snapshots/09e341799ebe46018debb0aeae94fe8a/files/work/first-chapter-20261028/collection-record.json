@@ -1,0 +1,11 @@
+{
+  "summary": "教材正文与原题/方法/标准充分提取，形成动态材料档案，核心待决保留。",
+  "notes": [
+    "work/first-chapter-20261028/books-extraction.md",
+    "work/first-chapter-20261028/sources-extraction.md",
+    "work/first-chapter-20261028/root-extraction.md",
+    "work/first-chapter-20261028/independent-scope-challenge.md"
+  ],
+  "extractionSummary": "EPI/CP4/CPH按全书索引反查，原题按合同和判定机制归并；每份材料保留版本、定位、条件、变型、跨思想、候选练习及真实读取边界。独立挑战带来新的结构与参数恢复证据。",
+  "limitations": "未提供商业书、付费LC1102、Kattis403等不冒称已读；教材图/OCR/官方措辞均可能错误。CHT归属和参数精确恢复暂未关闭；目录线索不充当原题全解。"
+}

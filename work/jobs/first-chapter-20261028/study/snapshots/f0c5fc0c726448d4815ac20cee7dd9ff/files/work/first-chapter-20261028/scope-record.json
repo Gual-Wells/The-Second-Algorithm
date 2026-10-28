@@ -1,0 +1,45 @@
+{
+  "summary": "三独立视角与根阅读合议后选择二分大领域，保留其他合格候选及否决小模板的边界。",
+  "notes": [
+    "work/first-chapter-20261028/candidate-comparison.md",
+    "work/first-chapter-20261028/books-overview.md",
+    "work/first-chapter-20261028/sources-overview.md",
+    "work/first-chapter-20261028/root-overview.md"
+  ],
+  "candidates": [
+    {
+      "name": "二分",
+      "decision": "采用并进入充分研究",
+      "reason": "共同排除机制明确，标准到复杂跨思想均有实际材料；不以旧稿或短篇为据。"
+    },
+    {
+      "name": "贪心",
+      "decision": "保留未来候选",
+      "reason": "强实战领域；本轮不因难排除，但安全选择证明多样，不与二分混作同一章。"
+    },
+    {
+      "name": "完整搜索与回溯",
+      "decision": "保留未来候选",
+      "reason": "完备生成和剪枝证明为独立大机制；不退化递归语法课。"
+    },
+    {
+      "name": "动态规划",
+      "decision": "保留未来候选",
+      "reason": "状态与依赖机制独立，选用则必须接受其完整体量，不因首章缩成背包。"
+    },
+    {
+      "name": "图遍历与路径",
+      "decision": "重界定后再研究",
+      "reason": "图是对象，遍历/松弛/定标等机制不能含混拼接。"
+    }
+  ],
+  "selectionReason": "教材、来源与独立候选一致支持；二分可由标准边界发展到判定建模、隐式秩与共享状态，适合有CS基础的实战教材。",
+  "independentBasis": "先在无旧章内容约束下读取CP4/EPI/CPH、原方法与多平台原题形成候选比较，随后才执行协同。",
+  "basisMaterialIds": [
+    "candidate-books",
+    "candidate-interview",
+    "candidate-problems",
+    "candidate-methods",
+    "candidate-assessment"
+  ]
+}

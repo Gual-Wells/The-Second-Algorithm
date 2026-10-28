@@ -1,0 +1,227 @@
+{
+  "codeBlocks": [
+    "advanced-fenwick-manual",
+    "advanced-fenwick-standard",
+    "advanced-summary-manual",
+    "advanced-summary-standard",
+    "advanced-ancestor-manual",
+    "advanced-ancestor-standard",
+    "advanced-ancestor-threshold",
+    "advanced-cyclic-manual",
+    "advanced-cyclic-core",
+    "advanced-cyclic-standard",
+    "advanced-pbs-manual",
+    "advanced-pbs-standard",
+    "advanced-kth-model",
+    "advanced-kth-manual",
+    "advanced-kth-standard",
+    "advanced-penalty-manual",
+    "advanced-penalty-standard"
+  ],
+  "questionReferences": [
+    "Q100001",
+    "Q100002",
+    "Q100005",
+    "Q100003",
+    "Q100009",
+    "Q100005",
+    "Q100002",
+    "Q100002",
+    "Q100005",
+    "Q100009",
+    "Q100002",
+    "Q100005",
+    "Q100002",
+    "Q100005",
+    "Q100012",
+    "Q100009",
+    "Q100005",
+    "Q100001",
+    "Q100005",
+    "Q100002",
+    "Q100003"
+  ],
+  "knowledgeIntroductions": [
+    "Q100012"
+  ],
+  "knowledgeDependencies": {
+    "content/knowledge/binary-library.md": "73032bfacaabbb7cfc97893bcb0de1febf516c9d0d13fd7abc7342331337dac1",
+    "content/knowledge/integer-budget.md": "0fd808334cbdcaa476cdaa009a8bcead67242c09cb7c99bb984b6776dd1bca5d",
+    "content/knowledge/borrowing-vector.md": "fca6169ced851bbada4dfa0825954ab016a86083ee4fe7c66be618286661caa1",
+    "content/knowledge/predicate-capture.md": "20268ac5417cf64e018b84239e1b19812b6c68e7a8f11a7b5cd2db4df8cd6486",
+    "content/knowledge/recursive-callback.md": "377b577332e72a1f70c3eb61b2d3fbafc06e2e000ea1440c435667f706da2854",
+    "content/knowledge/stable-events.md": "9295b06a5e31fcf41ded237371f3530c077a40e78fb60a4c6a3b8d440c245517"
+  },
+  "knowledgeHelperSha256": "25c097f043c8361f3d9c98d39556c4c70b1858ed1e074d23f1d39185caa49055",
+  "headings": [
+    {
+      "depth": 1,
+      "id": "二分-结构内定位-批量判定与参数恢复",
+      "text": "二分：结构内定位、批量判定与参数恢复"
+    },
+    {
+      "depth": 2,
+      "id": "动态频数中的第k个位置",
+      "text": "动态频数中的第k个位置"
+    },
+    {
+      "depth": 3,
+      "id": "手写结构与删除序列",
+      "text": "手写结构与删除序列"
+    },
+    {
+      "depth": 3,
+      "id": "标准设施-重建累计量的对照",
+      "text": "标准设施：重建累计量的对照"
+    },
+    {
+      "depth": 3,
+      "id": "当前实现的边界",
+      "text": "当前实现的边界"
+    },
+    {
+      "depth": 2,
+      "id": "区间摘要驱动的首次失败位置",
+      "text": "区间摘要驱动的首次失败位置"
+    },
+    {
+      "depth": 3,
+      "id": "手写-排除整块-优先左子树",
+      "text": "手写：排除整块，优先左子树"
+    },
+    {
+      "depth": 3,
+      "id": "标准设施与真实结构库",
+      "text": "标准设施与真实结构库"
+    },
+    {
+      "depth": 3,
+      "id": "当前实现的边界-2",
+      "text": "当前实现的边界"
+    },
+    {
+      "depth": 2,
+      "id": "祖先会合边界与同步提升",
+      "text": "祖先会合边界与同步提升"
+    },
+    {
+      "depth": 3,
+      "id": "手写-等深与尚未会合",
+      "text": "手写：等深与尚未会合"
+    },
+    {
+      "depth": 3,
+      "id": "标准设施-祖先链交集与有序当前路径",
+      "text": "标准设施：祖先链交集与有序当前路径"
+    },
+    {
+      "depth": 3,
+      "id": "当前实现的边界-3",
+      "text": "当前实现的边界"
+    },
+    {
+      "depth": 2,
+      "id": "循环正数序列的最少分段",
+      "text": "循环正数序列的最少分段"
+    },
+    {
+      "depth": 3,
+      "id": "手写-最远段与尚未覆盖的跳跃",
+      "text": "手写：最远段与尚未覆盖的跳跃"
+    },
+    {
+      "depth": 3,
+      "id": "标准设施-前缀和上的最远合法右端",
+      "text": "标准设施：前缀和上的最远合法右端"
+    },
+    {
+      "depth": 3,
+      "id": "当前实现的边界-4",
+      "text": "当前实现的边界"
+    },
+    {
+      "depth": 2,
+      "id": "共享时间轴判定的并行二分",
+      "text": "共享时间轴判定的并行二分"
+    },
+    {
+      "depth": 3,
+      "id": "手写-分组mid-一轮共享一条扫描线",
+      "text": "手写：分组mid，一轮共享一条扫描线"
+    },
+    {
+      "depth": 3,
+      "id": "标准设施-真实支撑-不伪造std并查集",
+      "text": "标准设施：真实支撑，不伪造std并查集"
+    },
+    {
+      "depth": 3,
+      "id": "当前实现的边界-5",
+      "text": "当前实现的边界"
+    },
+    {
+      "depth": 2,
+      "id": "带修改区间第k小的整体二分",
+      "text": "带修改区间第k小的整体二分"
+    },
+    {
+      "depth": 3,
+      "id": "手写-事件-剩余秩与回滚",
+      "text": "手写：事件、剩余秩与回滚"
+    },
+    {
+      "depth": 3,
+      "id": "标准设施-压缩全生命周期的值",
+      "text": "标准设施：压缩全生命周期的值"
+    },
+    {
+      "depth": 3,
+      "id": "当前实现的边界-6",
+      "text": "当前实现的边界"
+    },
+    {
+      "depth": 2,
+      "id": "递减边际资源分配的惩罚参数搜索",
+      "text": "递减边际资源分配的惩罚参数搜索"
+    },
+    {
+      "depth": 3,
+      "id": "参数不是答案-惩罚与精确恢复",
+      "text": "参数不是答案：惩罚与精确恢复"
+    },
+    {
+      "depth": 3,
+      "id": "手写-只搜索计数-最终恢复惩罚价值",
+      "text": "手写：只搜索计数，最终恢复惩罚价值"
+    },
+    {
+      "depth": 3,
+      "id": "标准设施-同题堆贪心对照",
+      "text": "标准设施：同题堆贪心对照"
+    },
+    {
+      "depth": 3,
+      "id": "数量单调仍不足以保证任意问题精确恢复",
+      "text": "数量单调仍不足以保证任意问题精确恢复"
+    },
+    {
+      "depth": 3,
+      "id": "当前实现的边界-7",
+      "text": "当前实现的边界"
+    },
+    {
+      "depth": 2,
+      "id": "全章选择地图-先找证书-再选搜索方式",
+      "text": "全章选择地图：先找证书，再选搜索方式"
+    }
+  ],
+  "sourceSha256": "8c7f3e5dd173c9c7f6d1063a5dcdebe30f9e98d35acfe96d1246c6c803e28bdc",
+  "codeSha256": "7b58c419b636f51f7692e922b1e72a3a42663b61d65472ada4de180257e65e52",
+  "markdownSha256": "6073459c567c93b07fabb98139c72fd82f279e2c6b3cc2f5b6ed6025edb089fc",
+  "htmlSha256": "181f3b9fc4e22f13140ab8e7d183dc2249d5f36cccd5154f3b38a48b5443065c",
+  "builderSha256": "cfd34b742cb814b7b0318662bbdb48b4937f74001c4fb729af37c4fc99771146",
+  "learningSha256": "a2dff9fe5b1df1dd0faa77805f2ccb2085ad09341f5caf7c6a67cabb7be3b1ac",
+  "publicationsSha256": "752cb538156bdb4934619e280aff7a3c84a071d89dae8af2899a2afdf5a9a09e",
+  "markdownBytes": 46140,
+  "htmlBytes": 91340
+}

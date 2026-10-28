@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "paradigm": "二分",
+  "title": "二分：有序结构、判定与选择",
+  "mechanism": "用有序关系、单调可行性或可证明的存在性证书排除半域；判定/计数/结构状态决定每次探查的含义与成本。",
+  "branches": [
+    {
+      "id": "ordered",
+      "title": "有序序列与分区边界",
+      "status": "included",
+      "reason": "查找、计数、前驱后继与隐式单调位置；未知上界先建立区间。",
+      "materialIds": [
+        "candidate-books",
+        "candidate-interview"
+      ]
+    },
+    {
+      "id": "structured",
+      "title": "结构性半区排除",
+      "status": "included",
+      "reason": "旋转、重复、配对、峰值与二维峰；不强造全局单调谓词。",
+      "materialIds": [
+        "candidate-books",
+        "candidate-interview"
+      ]
+    },
+    {
+      "id": "decision",
+      "title": "最优化转单调判定",
+      "status": "included",
+      "reason": "容量、间距、速率、图/DP等复杂判定；判定证明与单调证明分开。",
+      "materialIds": [
+        "candidate-methods"
+      ]
+    },
+    {
+      "id": "rank",
+      "title": "秩与选择",
+      "status": "included",
+      "reason": "计数≤候选值，及两序列切分选择；二者机制不同。",
+      "materialIds": [
+        "candidate-methods"
+      ]
+    },
+    {
+      "id": "transition",
+      "title": "有序状态加速组合算法",
+      "status": "included",
+      "reason": "LIS与兼容任务前驱；二分只替代真实转移中的定位层。",
+      "materialIds": [
+        "candidate-methods"
+      ]
+    },
+    {
+      "id": "continuous",
+      "title": "实数阈值与连续夹逼",
+      "status": "included",
+      "reason": "平均值/比值变换及异号根夹逼；数值合同和全局单调性分开。",
+      "materialIds": [
+        "candidate-methods"
+      ]
+    },
+    {
+      "id": "lifting",
+      "title": "倍增定位与结构内提升",
+      "status": "included",
+      "reason": "指数扩界与按位构造，树路径/Fenwick前缀选择。",
+      "materialIds": [
+        "candidate-methods"
+      ]
+    },
+    {
+      "id": "batch",
+      "title": "多查询共享二分",
+      "status": "included",
+      "reason": "时间轴批量判定和值域递归；状态重建、撤销、时间顺序。",
+      "materialIds": [
+        "candidate-methods"
+      ]
+    }
+  ],
+  "exclusions": [
+    "随机划分的Quickselect不是按序值域二分；可作方法对照。",
+    "三分/黄金分割与Newton依赖不同证书，相关性不自动构成二分主干；复审继续检查参数搜索边界。"
+  ],
+  "completenessArgument": "初始八个机制分支来自三套教材和原方法/原题比较，不取某站标签合集。此时只是可修订假设，尚待完整提取、困难题和独立范围挑战，不宣布完备。"
+}

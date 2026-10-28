@@ -1,0 +1,191 @@
+{
+  "summary": "独立新材料挑战已逐项回应；复审保留二分、增加参数精确恢复并明确结构/批量/范围边界。 已修正既有P1083练习映射，不改变已研究范围。",
+  "notes": [
+    "work/first-chapter-20261028/first-synthesis.md",
+    "work/first-chapter-20261028/revised-synthesis.md",
+    "work/first-chapter-20261028/independent-scope-challenge.md",
+    "work/first-chapter-20261028/challenge-response.md",
+    "work/first-chapter-20261028/scope-challenge-alignment.md",
+    "work/first-chapter-20261028/exercise-mapping-correction.md"
+  ],
+  "decisions": [
+    {
+      "branch": "ordered",
+      "action": "retain",
+      "reason": "查找、计数、前驱后继与隐式单调位置；未知上界先建立区间。；具体复审与条件见revised-synthesis。",
+      "materialIds": [
+        "root-boundary",
+        "epi-boundary-family",
+        "root-cpp-contracts",
+        "root-api",
+        "epi-exponential-bracket",
+        "cp4-interactive-boundary",
+        "root-deficit",
+        "epi-fixed-point",
+        "root-matrix-lookup",
+        "epi-matrix-search",
+        "root-strings",
+        "epi-string-prefix-interval",
+        "cp4-suffix-prefix-range",
+        "cph-hash-lcp-boundary"
+      ]
+    },
+    {
+      "branch": "structured",
+      "action": "retain",
+      "reason": "旋转、重复、配对、峰值与二维峰；不强造全局单调谓词。；具体复审与条件见revised-synthesis。",
+      "materialIds": [
+        "root-rotated",
+        "epi-rotated-array",
+        "root-paired",
+        "root-peak",
+        "epi-local-extrema",
+        "root-convex"
+      ]
+    },
+    {
+      "branch": "decision",
+      "action": "retain",
+      "reason": "容量、间距、速率、图/DP等复杂判定；判定证明与单调证明分开。；具体复审与条件见revised-synthesis。",
+      "materialIds": [
+        "root-isqrt",
+        "epi-integer-root",
+        "web-family-1-1",
+        "web-family-1-2",
+        "cp4-partition-capacity",
+        "web-family-2-1",
+        "web-family-3-1",
+        "web-family-4-1",
+        "method-cowdance",
+        "web-family-5-1",
+        "cp4-graph-threshold-family",
+        "web-family-6-1",
+        "root-prefix-orders",
+        "root-matching",
+        "cp4-matching-flow-feasibility",
+        "root-eggdrop",
+        "cp4-egg-drop"
+      ]
+    },
+    {
+      "branch": "rank",
+      "action": "retain",
+      "reason": "计数≤候选值，及两序列切分选择；二者机制不同。；具体复审与条件见revised-synthesis。",
+      "materialIds": [
+        "root-pigeonhole",
+        "epi-missing-ip",
+        "root-weighted",
+        "epi-weighted-inverse",
+        "web-family-8-1",
+        "web-family-7-1",
+        "web-family-9-1",
+        "web-family-10-1",
+        "epi-two-array-selection"
+      ]
+    },
+    {
+      "branch": "transition",
+      "action": "retain",
+      "reason": "LIS与兼容任务前驱；二分只替代真实转移中的定位层。；具体复审与条件见revised-synthesis。",
+      "materialIds": [
+        "web-family-11-1",
+        "web-family-11-2",
+        "web-family-11-3",
+        "method-lis",
+        "cp4-lis-maintained-summary",
+        "cph-lis-scope-limit",
+        "web-family-12-1",
+        "web-family-12-2",
+        "cp4-dp-transition-boundary",
+        "root-eggdrop",
+        "cp4-egg-drop"
+      ]
+    },
+    {
+      "branch": "continuous",
+      "action": "retain",
+      "reason": "平均值/比值变换及异号根夹逼；数值合同和全局单调性分开。；具体复审与条件见revised-synthesis。",
+      "materialIds": [
+        "root-continuous",
+        "epi-real-root",
+        "cp4-numerical-bisection",
+        "epi-salary-piecewise",
+        "web-family-13-1",
+        "web-family-14-1",
+        "method-average",
+        "method-sabotage",
+        "web-family-15-1"
+      ]
+    },
+    {
+      "branch": "lifting",
+      "action": "retain",
+      "reason": "指数扩界与按位构造，树路径/Fenwick前缀选择。；具体复审与条件见revised-synthesis。",
+      "materialIds": [
+        "root-api",
+        "epi-exponential-bracket",
+        "cp4-interactive-boundary",
+        "challenge-fenwick-structural-search",
+        "cp4-fenwick-select",
+        "challenge-acl-structural-search",
+        "cph-segment-tree-descent",
+        "root-lca",
+        "challenge-binary-lifting-source",
+        "cp4-dfs-path-boundary",
+        "cph-binary-lifting-contract",
+        "cph-lca-alternatives",
+        "challenge-binary-jump-guide"
+      ]
+    },
+    {
+      "branch": "batch",
+      "action": "retain",
+      "reason": "时间轴批量判定和值域递归；状态重建、撤销、时间顺序。；具体复审与条件见revised-synthesis。",
+      "materialIds": [
+        "challenge-time-pbs-method",
+        "challenge-value-divide-method"
+      ]
+    },
+    {
+      "branch": "parametric",
+      "action": "add",
+      "reason": "独立挑战暴露初始范围没有承担的机制；用整数离散凹实例完整证明oracle、计数区间与恢复。；具体复审与条件见revised-synthesis。",
+      "materialIds": [
+        "challenge-abc216e-original",
+        "challenge-abc216e-official-editorial",
+        "challenge-aliens-official-method",
+        "challenge-tallbarn-official-method",
+        "challenge-wqs-extended-exposition"
+      ]
+    }
+  ],
+  "challenge": {
+    "researcher": "chapter01_independent_candidates",
+    "perspective": "在未见作者题型范围前读取新的方法、原题、官方解答与库合同，挑战复杂查询/结构/惩罚恢复遗漏。",
+    "independent": true,
+    "inputMaterialIds": [
+      "challenge-time-pbs-method",
+      "challenge-value-divide-method",
+      "challenge-fenwick-structural-search",
+      "challenge-binary-lifting-source",
+      "challenge-acl-structural-search",
+      "challenge-aliens-official-method",
+      "challenge-tallbarn-official-method",
+      "challenge-wqs-extended-exposition",
+      "challenge-binary-jump-guide",
+      "challenge-abc216e-original",
+      "challenge-abc216e-official-editorial"
+    ],
+    "findings": "时间PBS与值域分流不同；结构摘要可消掉额外log；计数单调不能保证WQS精确恢复。",
+    "responses": "全部实质接受；增加参数分支采用已独立核证ABC216E；保留两离线法、Fenwick/摘要/LCA/循环提升，界定完整Aliens/CHT/高维优化。",
+    "note": "work/first-chapter-20261028/scope-challenge-alignment.md"
+  },
+  "scopeConclusion": "以全书/全池概况后独立确立的排除机制为根，材料反查覆盖有序分区、结构存在性、优化判定、隐式秩/切分、状态转移、连续夹逼、结构提升、时间/值域批量与参数精确恢复。各条件变化均有题型或本型变体；不按题号或API复制，不称全网所有可能oracle已穷尽。具体题型与分支材料关系可回查；完整CHT/高维对偶/后缀建索引等独立体系不冒称已教，当前交叉实例须实作到可理解可运行。",
+  "chapterCoordination": {
+    "chapters": [],
+    "domainIndependence": "复审后仍以有证书的有序单参数/半域排除统摄；参数恢复作为真实新增分支，未变成算法对象杂烩。",
+    "globalBreadth": "结合全部教材与候选版图，无旧章时不做虚构距离/重合比较；按机制补缺而非围绕历史小专题切邻章。",
+    "scopeDecision": "保留初始八分支并补参数恢复，结构下降和两种离线法实际细化；不省跨思想核心，也不吞并所有独立结构体系。",
+    "emptyReason": "再次核有效空出版/空章登记，设施派生no-prior-chapters；不存在可比较的当前正式旧章。"
+  }
+}

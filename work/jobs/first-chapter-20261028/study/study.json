@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 2,
+  "job": "first-chapter-20261028",
+  "chapter": "chapter-01",
+  "createdAt": "2026-10-28T12:28:01.121128+00:00",
+  "active": [
+    {
+      "path": "work/jobs/first-chapter-20261028/study/snapshots/99c695d8f8454f898baac13bb759bcfb/checkpoint.json",
+      "sha256": "ec6532b0caa267212d657981c3de4afcdb421a87c71875d78ee00288e21ea544"
+    },
+    {
+      "path": "work/jobs/first-chapter-20261028/study/snapshots/ef32e65ca9244fb4b93beeaf52788cb5/checkpoint.json",
+      "sha256": "63444610d18c7f723f75edac64a93112bd4f433b3c35871906e8347a838f672e"
+    },
+    {
+      "path": "work/jobs/first-chapter-20261028/study/snapshots/8f8247dbe9a842808bdb493506c071f5/checkpoint.json",
+      "sha256": "00fa3cfd0f940d9c333716ab27e7b4fce6ab5a06f79853455d36b3cd3efd1b03"
+    },
+    {
+      "path": "work/jobs/first-chapter-20261028/study/snapshots/1f8b53f0e7c34c3cbadd35371135ca04/checkpoint.json",
+      "sha256": "4daacd45c3c04404438b1e3d2cc678b910823dca0a8314fffef4e9abc1d44593"
+    },
+    {
+      "path": "work/jobs/first-chapter-20261028/study/snapshots/3b5cc870bafa42b186d645f93ef95e7f/checkpoint.json",
+      "sha256": "3e950f068ea7036a397ef57312c5e73f82940cb916a9a8353b0fcdf971249cdd"
+    },
+    {
+      "path": "work/jobs/first-chapter-20261028/study/snapshots/eae6297012f04e2cb1c8f913491fd177/checkpoint.json",
+      "sha256": "575f3a41130569fcddea1bd755805d0729e5e7727edbf91fb6eba8e963ee4c95"
+    },
+    {
+      "path": "work/jobs/first-chapter-20261028/study/snapshots/79c6fccdee8c49ae9765ed42ce06a4fc/checkpoint.json",
+      "sha256": "dba75ca8a1d87da96dc71671e1c71e7047e09c999351f3e57a9e125d51a2bba4"
+    }
+  ],
+  "history": [
+    {
+      "path": "work/jobs/first-chapter-20261028/study/snapshots/99c695d8f8454f898baac13bb759bcfb/checkpoint.json",
+      "sha256": "ec6532b0caa267212d657981c3de4afcdb421a87c71875d78ee00288e21ea544"
+    },
+    {
+      "path": "work/jobs/first-chapter-20261028/study/snapshots/ef32e65ca9244fb4b93beeaf52788cb5/checkpoint.json",
+      "sha256": "63444610d18c7f723f75edac64a93112bd4f433b3c35871906e8347a838f672e"
+    },
+    {
+      "path": "work/jobs/first-chapter-20261028/study/snapshots/8f8247dbe9a842808bdb493506c071f5/checkpoint.json",
+      "sha256": "00fa3cfd0f940d9c333716ab27e7b4fce6ab5a06f79853455d36b3cd3efd1b03"
+    },
+    {
+      "path": "work/jobs/first-chapter-20261028/study/snapshots/1f8b53f0e7c34c3cbadd35371135ca04/checkpoint.json",
+      "sha256": "4daacd45c3c04404438b1e3d2cc678b910823dca0a8314fffef4e9abc1d44593"
+    },
+    {
+      "path": "work/jobs/first-chapter-20261028/study/snapshots/3b5cc870bafa42b186d645f93ef95e7f/checkpoint.json",
+      "sha256": "3e950f068ea7036a397ef57312c5e73f82940cb916a9a8353b0fcdf971249cdd"
+    },
+    {
+      "path": "work/jobs/first-chapter-20261028/study/snapshots/f0c5fc0c726448d4815ac20cee7dd9ff/checkpoint.json",
+      "sha256": "b5bb821fa77ec685b06bf997f2a07b8bd0b98110782af0737f53683fe1b0d760"
+    },
+    {
+      "path": "work/jobs/first-chapter-20261028/study/snapshots/4ccf41830bd44c40bc8f5807d89dd6a2/checkpoint.json",
+      "sha256": "791bc5279d86e014bcb0d4feb12e3f88c0b4c99356164b5267d7d9123c95c97b"
+    },
+    {
+      "path": "work/jobs/first-chapter-20261028/study/snapshots/51c3626dd86146fab1670b2220083cc9/checkpoint.json",
+      "sha256": "90822b041efa3a0fbe32bb09604d2cbf881e0a6e0e338377535a3565b39e8dc2"
+    },
+    {
+      "path": "work/jobs/first-chapter-20261028/study/snapshots/09e341799ebe46018debb0aeae94fe8a/checkpoint.json",
+      "sha256": "8af90f65f9cc40051564339b705803ee155d06e96dbe6f63cfac2244184e3faa"
+    },
+    {
+      "path": "work/jobs/first-chapter-20261028/study/snapshots/eae6297012f04e2cb1c8f913491fd177/checkpoint.json",
+      "sha256": "575f3a41130569fcddea1bd755805d0729e5e7727edbf91fb6eba8e963ee4c95"
+    },
+    {
+      "path": "work/jobs/first-chapter-20261028/study/snapshots/79c6fccdee8c49ae9765ed42ce06a4fc/checkpoint.json",
+      "sha256": "dba75ca8a1d87da96dc71671e1c71e7047e09c999351f3e57a9e125d51a2bba4"
+    }
+  ],
+  "lastHandoff": {
+    "path": "work/jobs/first-chapter-20261028/study/handoffs/30fca997eabc41e0a39dd8eff7adaf45.json",
+    "sha256": "678a8224a593e49e10100c6befb9dd926fbb521221380cefd17cf8a40156275c"
+  }
+}

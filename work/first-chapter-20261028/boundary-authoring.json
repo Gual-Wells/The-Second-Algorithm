@@ -1,0 +1,785 @@
+{
+  "document": "binary-boundary",
+  "path": "content/binary/boundary",
+  "target": {
+    "id": "chapter01-boundary",
+    "kind": "run",
+    "source": "tests/cpp/chapter01_boundary.cpp",
+    "standard": "c++17",
+    "timeoutSeconds": 120
+  },
+  "units": [
+    {
+      "id": "ordered-boundaries",
+      "title": "有序数据的边界、计数与前驱",
+      "anchor": "ordered-boundaries",
+      "manualAnchor": "ordered-boundaries-manual",
+      "standardAnchor": "ordered-boundaries-library",
+      "engineeringAnchor": "ordered-boundaries-engineering",
+      "standardRole": {
+        "kind": "algorithm",
+        "explanation": "equal_range替代两次边界循环；upper_bound按记录时间取前驱，比较参数方向真实不同。"
+      },
+      "implementations": [
+        {
+          "id": "boundary-lower",
+          "kind": "manual",
+          "symbol": "binary_boundary::lower_manual",
+          "regions": [
+            "boundary-ordered-manual"
+          ],
+          "questions": [
+            "Q100001"
+          ],
+          "complexity": {
+            "time": "O(log n)",
+            "space": "O(1)"
+          }
+        },
+        {
+          "id": "boundary-upper",
+          "kind": "manual",
+          "symbol": "binary_boundary::upper_manual",
+          "regions": [
+            "boundary-ordered-manual"
+          ],
+          "questions": [
+            "Q100001"
+          ],
+          "complexity": {
+            "time": "O(log n)",
+            "space": "O(1)"
+          }
+        },
+        {
+          "id": "boundary-equal",
+          "kind": "manual",
+          "symbol": "binary_boundary::equal_manual",
+          "regions": [
+            "boundary-ordered-manual"
+          ],
+          "questions": [
+            "Q100001"
+          ],
+          "complexity": {
+            "time": "O(log n)",
+            "space": "O(1)"
+          }
+        },
+        {
+          "id": "boundary-predecessor",
+          "kind": "manual",
+          "symbol": "binary_boundary::predecessor_manual",
+          "regions": [
+            "boundary-ordered-manual"
+          ],
+          "questions": [
+            "Q100001"
+          ],
+          "complexity": {
+            "time": "O(log n)",
+            "space": "O(1)"
+          }
+        },
+        {
+          "id": "boundary-time",
+          "kind": "manual",
+          "symbol": "binary_boundary::time_manual",
+          "regions": [
+            "boundary-ordered-manual"
+          ],
+          "questions": [
+            "Q100005"
+          ],
+          "complexity": {
+            "time": "O(log n + |返回字符串|)",
+            "space": "O(|返回字符串|)"
+          }
+        },
+        {
+          "id": "boundary-equal-library",
+          "kind": "standard",
+          "symbol": "binary_boundary::equal_standard",
+          "regions": [
+            "boundary-ordered-standard"
+          ],
+          "questions": [
+            "Q100001"
+          ],
+          "complexity": {
+            "time": "O(log n)",
+            "space": "O(1)"
+          }
+        },
+        {
+          "id": "boundary-time-library",
+          "kind": "standard",
+          "symbol": "binary_boundary::time_standard",
+          "regions": [
+            "boundary-ordered-standard"
+          ],
+          "questions": [
+            "Q100001",
+            "Q100004",
+            "Q100005"
+          ],
+          "complexity": {
+            "time": "O(log n + |返回字符串|)",
+            "space": "O(|返回字符串|)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "predicate-access",
+      "title": "昂贵访问与未知上界的首次满足",
+      "anchor": "predicate-access",
+      "manualAnchor": "predicate-access-manual",
+      "standardAnchor": "predicate-access-library",
+      "engineeringAnchor": "predicate-access-engineering",
+      "standardRole": {
+        "kind": "support",
+        "explanation": "C++17无虚拟无限整数域搜索函数；at只实施指定越界访问政策，optional表示查询域内无解，仍调用唯一指数扩界核心。"
+      },
+      "implementations": [
+        {
+          "id": "boundary-first-true",
+          "kind": "manual",
+          "symbol": "binary_boundary::first_true_manual",
+          "regions": [
+            "boundary-access-manual"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100003"
+          ],
+          "complexity": {
+            "time": "O(log(n+1))次判定",
+            "space": "O(1)"
+          }
+        },
+        {
+          "id": "boundary-unknown-first",
+          "kind": "manual",
+          "symbol": "binary_boundary::first_true_unknown",
+          "regions": [
+            "boundary-access-manual"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100003"
+          ],
+          "complexity": {
+            "time": "O(log(p+1))次判定；无解O(log(cap+1))",
+            "space": "O(1)"
+          }
+        },
+        {
+          "id": "boundary-unknown-at",
+          "kind": "standard",
+          "symbol": "binary_boundary::find_unknown_at",
+          "regions": [
+            "boundary-access-standard"
+          ],
+          "questions": [
+            "Q100003",
+            "Q100005"
+          ],
+          "complexity": {
+            "time": "O(log(p+1))次访问；无解O(log(cap+1))",
+            "space": "O(1)，另计指定访问器异常机制"
+          }
+        }
+      ]
+    },
+    {
+      "id": "transformed-index",
+      "title": "值与下标关系中的固定点和缺失数",
+      "anchor": "transformed-index",
+      "manualAnchor": "transformed-index-manual",
+      "standardAnchor": "transformed-index-library",
+      "engineeringAnchor": "transformed-index-engineering",
+      "standardRole": {
+        "kind": "algorithm",
+        "explanation": "显式gap预处理后lower_bound；完整函数O(n)，不能冒称每次临时构造仍是O(log n)。"
+      },
+      "implementations": [
+        {
+          "id": "boundary-fixed-distinct",
+          "kind": "manual",
+          "symbol": "binary_boundary::fixed_distinct",
+          "regions": [
+            "boundary-transformed-manual"
+          ],
+          "questions": [
+            "Q100002"
+          ],
+          "complexity": {
+            "time": "O(log n)",
+            "space": "O(1)"
+          }
+        },
+        {
+          "id": "boundary-fixed-duplicates",
+          "kind": "manual",
+          "symbol": "binary_boundary::fixed_duplicates",
+          "regions": [
+            "boundary-transformed-manual"
+          ],
+          "questions": [
+            "Q100002"
+          ],
+          "complexity": {
+            "time": "最坏O(n)",
+            "space": "O(log n)递归栈"
+          }
+        },
+        {
+          "id": "boundary-missing",
+          "kind": "manual",
+          "symbol": "binary_boundary::kth_missing_manual",
+          "regions": [
+            "boundary-transformed-manual"
+          ],
+          "questions": [
+            "Q100002"
+          ],
+          "complexity": {
+            "time": "O(log n)",
+            "space": "O(1)"
+          }
+        },
+        {
+          "id": "boundary-missing-library",
+          "kind": "standard",
+          "symbol": "binary_boundary::kth_missing_precomputed",
+          "regions": [
+            "boundary-transformed-standard"
+          ],
+          "questions": [
+            "Q100001",
+            "Q100002"
+          ],
+          "complexity": {
+            "time": "O(n)预处理+O(log n)查询",
+            "space": "O(n)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "rotated-search",
+      "title": "旋转序列中的成员与最小值",
+      "anchor": "rotated-search",
+      "manualAnchor": "rotated-search-manual",
+      "standardAnchor": "rotated-search-library",
+      "engineeringAnchor": "rotated-search-engineering",
+      "standardRole": {
+        "kind": "algorithm",
+        "explanation": "is_sorted_until线性恢复两条有序区间，再binary_search；min_element为独立线性对照，均不伪称对数。"
+      },
+      "implementations": [
+        {
+          "id": "boundary-rotation-min",
+          "kind": "manual",
+          "symbol": "binary_boundary::rotated_min_manual",
+          "regions": [
+            "boundary-rotated-manual"
+          ],
+          "questions": [
+            "Q100001"
+          ],
+          "complexity": {
+            "time": "互异O(log n)，重复最坏O(n)",
+            "space": "O(1)"
+          }
+        },
+        {
+          "id": "boundary-rotation-member",
+          "kind": "manual",
+          "symbol": "binary_boundary::rotated_member_manual",
+          "regions": [
+            "boundary-rotated-manual"
+          ],
+          "questions": [
+            "Q100001"
+          ],
+          "complexity": {
+            "time": "互异O(log n)，重复最坏O(n)",
+            "space": "O(1)"
+          }
+        },
+        {
+          "id": "boundary-rotation-member-library",
+          "kind": "standard",
+          "symbol": "binary_boundary::rotated_member_standard",
+          "regions": [
+            "boundary-rotated-standard"
+          ],
+          "questions": [
+            "Q100001"
+          ],
+          "complexity": {
+            "time": "O(n)",
+            "space": "O(1)"
+          }
+        },
+        {
+          "id": "boundary-rotation-min-library",
+          "kind": "standard",
+          "symbol": "binary_boundary::rotated_min_standard",
+          "regions": [
+            "boundary-rotated-standard"
+          ],
+          "questions": [
+            "Q100001"
+          ],
+          "complexity": {
+            "time": "O(n)",
+            "space": "O(1)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "paired-break",
+      "title": "有序配对结构中的唯一异常",
+      "anchor": "paired-break",
+      "manualAnchor": "paired-break-manual",
+      "standardAnchor": "paired-break-library",
+      "engineeringAnchor": "paired-break-engineering",
+      "standardRole": {
+        "kind": "algorithm",
+        "explanation": "accumulate与bit_xor为不同的线性聚合算法；不满足原题O(log n)，不虚构库二分断点函数。"
+      },
+      "implementations": [
+        {
+          "id": "boundary-paired-aligned",
+          "kind": "manual",
+          "symbol": "binary_boundary::paired_unique_manual",
+          "regions": [
+            "boundary-paired-manual"
+          ],
+          "questions": [
+            "Q100002"
+          ],
+          "complexity": {
+            "time": "O(log n)",
+            "space": "O(1)"
+          }
+        },
+        {
+          "id": "boundary-paired-xor-index",
+          "kind": "alternative",
+          "symbol": "binary_boundary::paired_unique_xor_index",
+          "regions": [
+            "boundary-paired-manual"
+          ],
+          "questions": [
+            "Q100002"
+          ],
+          "complexity": {
+            "time": "O(log n)",
+            "space": "O(1)"
+          }
+        },
+        {
+          "id": "boundary-paired-xor-library",
+          "kind": "standard",
+          "symbol": "binary_boundary::paired_unique_standard",
+          "regions": [
+            "boundary-paired-standard"
+          ],
+          "questions": [
+            "Q100002"
+          ],
+          "complexity": {
+            "time": "O(n)，不同算法线性基线",
+            "space": "O(1)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "local-peak",
+      "title": "任意一维局部峰与单峰边界",
+      "anchor": "local-peak",
+      "manualAnchor": "local-peak-manual",
+      "standardAnchor": "local-peak-library",
+      "engineeringAnchor": "local-peak-engineering",
+      "standardRole": {
+        "kind": "algorithm",
+        "explanation": "max_element取全局最大，邻值不等时满足局部峰；线性基线不满足原题对数目标。"
+      },
+      "implementations": [
+        {
+          "id": "boundary-peak",
+          "kind": "manual",
+          "symbol": "binary_boundary::peak_manual",
+          "regions": [
+            "boundary-peak-manual"
+          ],
+          "questions": [
+            "Q100005"
+          ],
+          "complexity": {
+            "time": "O(log n)",
+            "space": "O(1)"
+          }
+        },
+        {
+          "id": "boundary-peak-library",
+          "kind": "standard",
+          "symbol": "binary_boundary::peak_standard",
+          "regions": [
+            "boundary-peak-standard"
+          ],
+          "questions": [
+            "Q100005"
+          ],
+          "complexity": {
+            "time": "O(n)",
+            "space": "O(1)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "matrix-peak",
+      "title": "二维局部峰的存在性搜索",
+      "anchor": "matrix-peak",
+      "manualAnchor": "matrix-peak-manual",
+      "standardAnchor": "matrix-peak-library",
+      "engineeringAnchor": "matrix-peak-engineering",
+      "standardRole": {
+        "kind": "shared-core",
+        "explanation": "共享matrix_peak_core的存在性二分，manual扫描列，standard用iota+max_element按列取行号；后者O(m)额外空间如实保留。"
+      },
+      "implementations": [
+        {
+          "id": "boundary-matrix-peak",
+          "kind": "manual",
+          "symbol": "binary_boundary::matrix_peak_manual",
+          "regions": [
+            "boundary-matrix-peak-manual"
+          ],
+          "questions": [
+            "Q100003",
+            "Q100004"
+          ],
+          "complexity": {
+            "time": "O(m log(n+1))",
+            "space": "O(1)"
+          }
+        },
+        {
+          "id": "boundary-matrix-peak-library",
+          "kind": "standard",
+          "symbol": "binary_boundary::matrix_peak_standard",
+          "regions": [
+            "boundary-matrix-peak-standard"
+          ],
+          "questions": [
+            "Q100003",
+            "Q100004"
+          ],
+          "complexity": {
+            "time": "O(m log(n+1))",
+            "space": "O(m)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "matrix-membership",
+      "title": "二维有序数据中的存在性查找",
+      "anchor": "matrix-membership",
+      "manualAnchor": "matrix-membership-manual",
+      "standardAnchor": "matrix-membership-library",
+      "engineeringAnchor": "matrix-membership-engineering",
+      "standardRole": {
+        "kind": "algorithm",
+        "explanation": "各行lower_bound后核等由any_of聚合；只要求各行有序而非虚拟展平的强合同，时间O(m log n)。"
+      },
+      "implementations": [
+        {
+          "id": "boundary-matrix-flat",
+          "kind": "manual",
+          "symbol": "binary_boundary::matrix_flat_manual",
+          "regions": [
+            "boundary-matrix-lookup-manual"
+          ],
+          "questions": [
+            "Q100001",
+            "Q100002"
+          ],
+          "complexity": {
+            "time": "O(log(mn+1))",
+            "space": "O(1)"
+          }
+        },
+        {
+          "id": "boundary-matrix-staircase",
+          "kind": "alternative",
+          "symbol": "binary_boundary::matrix_staircase",
+          "regions": [
+            "boundary-matrix-lookup-manual"
+          ],
+          "questions": [
+            "Q100002"
+          ],
+          "complexity": {
+            "time": "O(m+n)",
+            "space": "O(1)"
+          }
+        },
+        {
+          "id": "boundary-matrix-row-library",
+          "kind": "standard",
+          "symbol": "binary_boundary::matrix_row_standard",
+          "regions": [
+            "boundary-matrix-lookup-standard"
+          ],
+          "questions": [
+            "Q100001"
+          ],
+          "complexity": {
+            "time": "O(Σ行 log(行长+1))",
+            "space": "O(1)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "integer-root",
+      "title": "不溢出的整数根与最后可行值",
+      "anchor": "integer-root",
+      "manualAnchor": "integer-root-manual",
+      "standardAnchor": "integer-root-library",
+      "engineeringAnchor": "integer-root-engineering",
+      "standardRole": {
+        "kind": "support",
+        "explanation": "sqrt提供浮点估计，安全整数不等式向两侧修正才确证；不声称浮点估计自带精确整数根。"
+      },
+      "implementations": [
+        {
+          "id": "boundary-integer-root",
+          "kind": "manual",
+          "symbol": "binary_boundary::isqrt_manual",
+          "regions": [
+            "boundary-integer-root-manual"
+          ],
+          "questions": [
+            "Q100002"
+          ],
+          "complexity": {
+            "time": "O(log(x+1))，uint64最多64轮",
+            "space": "O(1)"
+          }
+        },
+        {
+          "id": "boundary-integer-root-library",
+          "kind": "standard",
+          "symbol": "binary_boundary::isqrt_estimate_standard",
+          "regions": [
+            "boundary-integer-root-standard"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100006"
+          ],
+          "complexity": {
+            "time": "sqrt成本+O(|初值−整数根|+1)修正",
+            "space": "O(1)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "continuous-root",
+      "title": "连续方程的异号夹逼与误差",
+      "anchor": "continuous-root",
+      "manualAnchor": "continuous-root-manual",
+      "standardAnchor": "continuous-root-library",
+      "engineeringAnchor": "continuous-root-engineering",
+      "standardRole": {
+        "kind": "shared-core",
+        "explanation": "通用夹逼核心唯一；P1024用导数两临界点分三个各含一根的区间，monic归一、sqrt/fma实际计算，不靠整数端点恰零或epsilon合并。"
+      },
+      "implementations": [
+        {
+          "id": "boundary-continuous-root",
+          "kind": "manual",
+          "symbol": "binary_boundary::bisect_root",
+          "regions": [
+            "boundary-continuous-manual"
+          ],
+          "questions": [
+            "Q100003",
+            "Q100006"
+          ],
+          "complexity": {
+            "time": "O(min(steps,log(W/ε)))次函数求值；还受浮点停滞限制",
+            "space": "O(1)"
+          }
+        },
+        {
+          "id": "boundary-cubic-critical-library",
+          "kind": "standard",
+          "symbol": "binary_boundary::cubic_roots_by_critical_points",
+          "regions": [
+            "boundary-continuous-standard"
+          ],
+          "questions": [
+            "Q100003",
+            "Q100006"
+          ],
+          "complexity": {
+            "time": "两临界点计算+3次O(log(202/ε))夹逼",
+            "space": "O(1)，固定3个根"
+          }
+        }
+      ]
+    },
+    {
+      "id": "string-prefix",
+      "title": "字典序前缀与比较成本",
+      "anchor": "string-prefix",
+      "manualAnchor": "string-prefix-manual",
+      "standardAnchor": "string-prefix-library",
+      "engineeringAnchor": "string-prefix-engineering",
+      "standardRole": {
+        "kind": "algorithm",
+        "explanation": "lower/upper_bound比较前缀；建议系统sort+区间取前三；mismatch为确定性线性LCP，明确优于朴素重复前缀二分。"
+      },
+      "implementations": [
+        {
+          "id": "boundary-prefix-range",
+          "kind": "manual",
+          "symbol": "binary_boundary::prefix_range_manual",
+          "regions": [
+            "boundary-prefix-manual"
+          ],
+          "questions": [
+            "Q100004",
+            "Q100005"
+          ],
+          "complexity": {
+            "time": "O(|p| log(n+1))字符比较",
+            "space": "O(1)"
+          }
+        },
+        {
+          "id": "boundary-lcp-binary",
+          "kind": "alternative",
+          "symbol": "binary_boundary::lcp_binary",
+          "regions": [
+            "boundary-prefix-manual"
+          ],
+          "questions": [
+            "Q100005"
+          ],
+          "complexity": {
+            "time": "最坏O(L log(L+1))字符比较",
+            "space": "O(1)"
+          }
+        },
+        {
+          "id": "boundary-prefix-range-library",
+          "kind": "standard",
+          "symbol": "binary_boundary::prefix_range_standard",
+          "regions": [
+            "boundary-prefix-standard"
+          ],
+          "questions": [
+            "Q100001",
+            "Q100004",
+            "Q100005"
+          ],
+          "complexity": {
+            "time": "O(|p| log(n+1))字符比较",
+            "space": "O(1)"
+          }
+        },
+        {
+          "id": "boundary-suggestions-library",
+          "kind": "standard",
+          "symbol": "binary_boundary::suggestions_standard",
+          "regions": [
+            "boundary-prefix-standard"
+          ],
+          "questions": [
+            "Q100004",
+            "Q100005"
+          ],
+          "complexity": {
+            "time": "O(M n log(n+1)+q² log(n+1)+结果字符数)，M为最长产品长度",
+            "space": "O(产品副本+结果)"
+          }
+        },
+        {
+          "id": "boundary-lcp-library",
+          "kind": "standard",
+          "symbol": "binary_boundary::lcp_standard",
+          "regions": [
+            "boundary-prefix-standard"
+          ],
+          "questions": [
+            "Q100005"
+          ],
+          "complexity": {
+            "time": "O(L)",
+            "space": "O(1)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "convex-location",
+      "title": "凸多边形中的扇区定位",
+      "anchor": "convex-location",
+      "manualAnchor": "convex-location-manual",
+      "standardAnchor": "convex-location-library",
+      "engineeringAnchor": "convex-location-engineering",
+      "standardRole": {
+        "kind": "algorithm",
+        "explanation": "partition_point真实替代扇区定位；叉积和边界射线证书仍共用，严格凸CCW及8e18预算不省略。"
+      },
+      "implementations": [
+        {
+          "id": "boundary-convex-location",
+          "kind": "manual",
+          "symbol": "binary_boundary::convex_manual",
+          "regions": [
+            "boundary-convex-manual"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100004"
+          ],
+          "complexity": {
+            "time": "每查询O(log n)",
+            "space": "O(1)"
+          }
+        },
+        {
+          "id": "boundary-convex-location-library",
+          "kind": "standard",
+          "symbol": "binary_boundary::convex_standard",
+          "regions": [
+            "boundary-convex-standard"
+          ],
+          "questions": [
+            "Q100001",
+            "Q100002",
+            "Q100004"
+          ],
+          "complexity": {
+            "time": "每查询O(log n)",
+            "space": "O(1)"
+          }
+        }
+      ]
+    }
+  ]
+}

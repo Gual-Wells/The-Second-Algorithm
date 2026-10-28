@@ -1,0 +1,59 @@
+{
+  "schemaVersion":1,
+  "date":"2026-10-28",
+  "relationship":"Supplement to independent-scope-challenge; original independent document unchanged; integrator scope and manuscript not read.",
+  "materials":[
+    {
+      "id":"challenge-abc216e-original",
+      "source":"AtCoder official original problem",
+      "url":"https://atcoder.jp/contests/abc216/tasks/abc216_e",
+      "locator":"Problem Statement, Constraints, Examples 1 and 2",
+      "note":"Original full statement read. Gain current Ai then decrement by1; at mostK not exactlyK.",
+      "mechanism":"Search the positive marginal reward cutoff and complete tied marginal rewards to target count.",
+      "conditions":["1<=N<=100000","1<=K<=2000000000","1<=Ai<=2000000000","independent facilities with unit decreasing marginal gains"],
+      "variants":["K exceeds total positive rewards","ties at cutoff","strict versus inclusive threshold count","huge implicit reward multiset"],
+      "crossParadigms":["greedy marginal allocation","discrete concavity","Lagrangian penalty","implicit order statistics"],
+      "exerciseUrls":["https://atcoder.jp/contests/abc216/tasks/abc216_e"],
+      "readStatus":"original-full-statement-and-constraints-read"
+    },
+    {
+      "id":"challenge-abc216e-official-editorial",
+      "source":"AtCoder official editorial, en_translator",
+      "url":"https://atcoder.jp/contests/abc216/editorial/3122",
+      "locator":"Implicit multiset reformulation and binary-search paragraphs, lines29-54 at read time",
+      "note":"Read actual editorial. Endpoint truth/minimum direction and variable statements contain apparent errors; formulas in response independently derived from original contract rather than copied.",
+      "mechanism":"Count implicit rewards at least threshold and recover arithmetic progression sum.",
+      "conditions":["positive rewards only","prefix feasibility follows decreasing facility rewards"],
+      "variants":["largest true cutoff","equal-value residual fill"],
+      "crossParadigms":["implicit selection","greedy"],
+      "exerciseUrls":["https://atcoder.jp/contests/abc216/tasks/abc216_e"],
+      "readStatus":"official-editorial-read-with-direction-errors-flagged"
+    }
+  ],
+  "derivedFormulas":{
+    "effectiveCount":"Kprime=min(K,sum(Ai))",
+    "predicate":"Cge(v)=sum(max(Ai-v+1,0)) >= Kprime",
+    "cutoff":"h=max true v in [1,max(Ai)]",
+    "strictCount":"ci=max(Ai-h,0); S=sum(ci); E=count(Ai>=h); S<Kprime<=S+E",
+    "penaltyOracle":"H(lambda)=max sum(Ui(ti)-lambda*ti)=sum(max(Ai-lambda,0)*(max(Ai-lambda,0)+1)/2), lambda>=0 integer, 0<=ti<=Ai",
+    "restore":"answer=H(h)+h*Kprime",
+    "penaltyCountAtH":"all integer optimal counts in [S,S+E] attainable by selecting zero-net-gain ties"
+  },
+  "validation":{
+    "reference":"Independent exact-integer resource-allocation DP, plus per-facility exhaustive penalized optimization",
+    "arrays":1554,
+    "budgetCases":23793,
+    "penaltyOracleChecks":11158,
+    "range":"N=1..4, Ai=1..6, K=1..sum(Ai)+2; lambda=0..max(Ai)+1",
+    "result":"all passed",
+    "notClaimed":"Production C++ validation or exhaustive original-constraint verification"
+  },
+  "bounds":{
+    "maxCount":200000000000000,
+    "maxAnswerUpperBound":4000000000000000000,
+    "unconstrainedPositiveRewardSum":"200000000100000000000000",
+    "int64Max":9223372036854775807,
+    "policy":"Binary search counts only; accumulate reward at final cutoff. Arbitrary penalty-oracle values can exceed int64. Promote operands before additions and multiplications."
+  },
+  "verdict":"Accept as concrete one-dimensional separable concave penalty/marginal parameter-search case, provided the penalized oracle, optimal count interval and exact recovery are made explicit; not evidence that all general WQS-DP mechanisms have been implemented."
+}

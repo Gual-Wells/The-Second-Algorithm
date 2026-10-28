@@ -1,0 +1,14 @@
+{
+  "summary": "独立提案之后核对真实空出版前沿；初始范围保留，不虚构旧章比较。",
+  "notes": [
+    "work/first-chapter-20261028/baseline.md",
+    "work/first-chapter-20261028/candidate-comparison.md"
+  ],
+  "chapterCoordination": {
+    "chapters": [],
+    "domainIndependence": "二分以排除证书为共同机制，八分支承载真实题型，不以某个API或输入对象命名。",
+    "globalBreadth": "无既有章限制；独立比较了贪心/搜索/DP/图机制，二分范围不追随历史小专题的近邻。",
+    "scopeDecision": "保留独立初始范围，进入逐分支充分提取；复杂参数法/离线法等仍须研究后决定。",
+    "emptyReason": "有效出版登记withdrawn/collections为空，章登记chapters为空；设施派生no-prior-chapters，历史撤回章不作协同目标。"
+  }
+}

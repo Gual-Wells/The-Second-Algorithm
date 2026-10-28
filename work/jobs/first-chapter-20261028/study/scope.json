@@ -1,0 +1,835 @@
+{
+  "schemaVersion": 1,
+  "paradigm": "二分",
+  "title": "二分：有序结构、判定与选择",
+  "mechanism": "用有序关系、单调可行性或可证明的存在性证书排除半域；判定/计数/结构状态决定每次探查的含义与成本。",
+  "branches": [
+    {
+      "id": "ordered",
+      "title": "有序序列与分区边界",
+      "status": "included",
+      "reason": "查找、计数、前驱后继与隐式单调位置；未知上界先建立区间。",
+      "materialIds": [
+        "root-boundary",
+        "epi-boundary-family",
+        "root-cpp-contracts",
+        "root-api",
+        "epi-exponential-bracket",
+        "cp4-interactive-boundary",
+        "root-deficit",
+        "epi-fixed-point",
+        "root-matrix-lookup",
+        "epi-matrix-search",
+        "root-strings",
+        "epi-string-prefix-interval",
+        "cp4-suffix-prefix-range",
+        "cph-hash-lcp-boundary"
+      ]
+    },
+    {
+      "id": "structured",
+      "title": "结构性半区排除",
+      "status": "included",
+      "reason": "旋转、重复、配对、峰值与二维峰；不强造全局单调谓词。",
+      "materialIds": [
+        "root-rotated",
+        "epi-rotated-array",
+        "root-paired",
+        "root-peak",
+        "epi-local-extrema",
+        "root-convex"
+      ]
+    },
+    {
+      "id": "decision",
+      "title": "最优化转单调判定",
+      "status": "included",
+      "reason": "容量、间距、速率、图/DP等复杂判定；判定证明与单调证明分开。",
+      "materialIds": [
+        "root-isqrt",
+        "epi-integer-root",
+        "web-family-1-1",
+        "web-family-1-2",
+        "cp4-partition-capacity",
+        "web-family-2-1",
+        "web-family-3-1",
+        "web-family-4-1",
+        "method-cowdance",
+        "web-family-5-1",
+        "cp4-graph-threshold-family",
+        "web-family-6-1",
+        "root-prefix-orders",
+        "root-matching",
+        "cp4-matching-flow-feasibility",
+        "root-eggdrop",
+        "cp4-egg-drop",
+        "correction-production-tight-bound"
+      ]
+    },
+    {
+      "id": "rank",
+      "title": "秩与选择",
+      "status": "included",
+      "reason": "计数≤候选值，及两序列切分选择；二者机制不同。",
+      "materialIds": [
+        "root-pigeonhole",
+        "epi-missing-ip",
+        "root-weighted",
+        "epi-weighted-inverse",
+        "web-family-8-1",
+        "web-family-7-1",
+        "web-family-9-1",
+        "web-family-10-1",
+        "epi-two-array-selection"
+      ]
+    },
+    {
+      "id": "transition",
+      "title": "有序状态加速组合算法",
+      "status": "included",
+      "reason": "LIS与兼容任务前驱；二分只替代真实转移中的定位层。",
+      "materialIds": [
+        "web-family-11-1",
+        "web-family-11-2",
+        "web-family-11-3",
+        "method-lis",
+        "cp4-lis-maintained-summary",
+        "cph-lis-scope-limit",
+        "web-family-12-1",
+        "web-family-12-2",
+        "cp4-dp-transition-boundary",
+        "root-eggdrop",
+        "cp4-egg-drop",
+        "correction-lis-intermediate-count"
+      ]
+    },
+    {
+      "id": "continuous",
+      "title": "实数阈值与连续夹逼",
+      "status": "included",
+      "reason": "平均值/比值变换及异号根夹逼；数值合同和全局单调性分开。",
+      "materialIds": [
+        "root-continuous",
+        "epi-real-root",
+        "cp4-numerical-bisection",
+        "epi-salary-piecewise",
+        "web-family-13-1",
+        "web-family-14-1",
+        "method-average",
+        "method-sabotage",
+        "web-family-15-1",
+        "correction-cubic-critical-points"
+      ]
+    },
+    {
+      "id": "lifting",
+      "title": "倍增定位与结构内提升",
+      "status": "included",
+      "reason": "指数扩界与按位构造，树路径/Fenwick前缀选择。",
+      "materialIds": [
+        "root-api",
+        "epi-exponential-bracket",
+        "cp4-interactive-boundary",
+        "challenge-fenwick-structural-search",
+        "cp4-fenwick-select",
+        "challenge-acl-structural-search",
+        "cph-segment-tree-descent",
+        "root-lca",
+        "challenge-binary-lifting-source",
+        "cp4-dfs-path-boundary",
+        "cph-binary-lifting-contract",
+        "cph-lca-alternatives",
+        "challenge-binary-jump-guide"
+      ]
+    },
+    {
+      "id": "batch",
+      "title": "多查询共享二分",
+      "status": "included",
+      "reason": "时间轴批量判定和值域递归；状态重建、撤销、时间顺序。",
+      "materialIds": [
+        "challenge-time-pbs-method",
+        "challenge-value-divide-method"
+      ]
+    },
+    {
+      "id": "parametric",
+      "title": "一维惩罚参数与精确数量恢复",
+      "status": "included",
+      "reason": "独立挑战暴露初始范围没有承担的机制；用整数离散凹实例完整证明oracle、计数区间与恢复。",
+      "materialIds": [
+        "challenge-abc216e-original",
+        "challenge-abc216e-official-editorial",
+        "challenge-aliens-official-method",
+        "challenge-tallbarn-official-method",
+        "challenge-wqs-extended-exposition"
+      ]
+    }
+  ],
+  "exclusions": [
+    "随机划分的Quickselect不是按序值域二分；可作方法对照。",
+    "三分/黄金分割与Newton依赖不同证书，相关性不自动构成二分主干；复审继续检查参数搜索边界。",
+    "完整CHT维护、任意DP oracle、所有匹配/流算法、高维对偶不是因含一个二分调用就成为本章全部主干；本章完整承载代表性匹配、状态转移、几何扇区及离散凹参数恢复。",
+    "原题只读目录/付费不可得者不作为正式练习；历史稿不继承教学覆盖。"
+  ],
+  "completenessArgument": "以全书/全池概况后独立确立的排除机制为根，材料反查覆盖有序分区、结构存在性、优化判定、隐式秩/切分、状态转移、连续夹逼、结构提升、时间/值域批量与参数精确恢复。各条件变化均有题型或本型变体；不按题号或API复制，不称全网所有可能oracle已穷尽。具体题型与分支材料关系可回查；完整CHT/高维对偶/后缀建索引等独立体系不冒称已教，当前交叉实例须实作到可理解可运行。",
+  "problemTypes": [
+    {
+      "id": "ordered-boundaries",
+      "title": "有序数据的边界、计数与前驱",
+      "part": "boundary",
+      "branchIds": [
+        "ordered"
+      ],
+      "materialIds": [
+        "root-boundary",
+        "epi-boundary-family",
+        "root-cpp-contracts"
+      ],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/",
+        "https://leetcode.com/problems/search-insert-position/",
+        "https://leetcode.com/problems/time-based-key-value-store/"
+      ],
+      "problem": "首次>=与首次>组成相等段、计数和前驱；记录查找保留时间序。",
+      "variation": "严格/非严格、空表、前驱无解、异构比较方向。"
+    },
+    {
+      "id": "predicate-access",
+      "title": "昂贵访问与未知上界的首次满足",
+      "part": "boundary",
+      "branchIds": [
+        "ordered",
+        "lifting"
+      ],
+      "materialIds": [
+        "root-api",
+        "epi-exponential-bracket",
+        "cp4-interactive-boundary"
+      ],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/first-bad-version/"
+      ],
+      "problem": "在不可物化的谓词域定位首次真，必要时倍增建立界。",
+      "variation": "接口成本、未知上界、全真/全假和倍增溢出。"
+    },
+    {
+      "id": "transformed-index",
+      "title": "值与下标关系中的固定点和缺失数",
+      "part": "boundary",
+      "branchIds": [
+        "ordered"
+      ],
+      "materialIds": [
+        "root-deficit",
+        "epi-fixed-point"
+      ],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/kth-missing-positive-number/"
+      ],
+      "problem": "值与下标差揭示累计缺口；p+k恢复缺失数。",
+      "variation": "固定点与缺失数；重复时单调证明可能失效。"
+    },
+    {
+      "id": "rotated-search",
+      "title": "旋转序列中的成员与最小值",
+      "part": "boundary",
+      "branchIds": [
+        "structured"
+      ],
+      "materialIds": [
+        "root-rotated",
+        "epi-rotated-array"
+      ],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/search-in-rotated-sorted-array-ii/",
+        "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/"
+      ],
+      "problem": "借一侧有序定位目标或保留最小值；相等时只能安全缩边。",
+      "variation": "互异与重复、成员和最小值，不对整段直接binary_search。"
+    },
+    {
+      "id": "paired-break",
+      "title": "有序配对结构中的唯一异常",
+      "part": "boundary",
+      "branchIds": [
+        "structured"
+      ],
+      "materialIds": [
+        "root-paired"
+      ],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/single-element-in-a-sorted-array/"
+      ],
+      "problem": "配对下标奇偶的首次破坏。",
+      "variation": "中点对齐与m^1等价性，频次条件改变不可照搬。"
+    },
+    {
+      "id": "local-peak",
+      "title": "任意一维局部峰与单峰边界",
+      "part": "boundary",
+      "branchIds": [
+        "structured"
+      ],
+      "materialIds": [
+        "root-peak",
+        "epi-local-extrema"
+      ],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/find-peak-element/"
+      ],
+      "problem": "保留一个局部峰的存在性，二维以中列最大值建立横向证书。",
+      "variation": "任意局部峰/单峰/二维；斜率序列并不全局单调。"
+    },
+    {
+      "id": "matrix-peak",
+      "title": "二维局部峰的存在性搜索",
+      "part": "boundary",
+      "branchIds": [
+        "structured"
+      ],
+      "materialIds": [
+        "root-peak"
+      ],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/find-a-peak-element-ii/"
+      ],
+      "problem": "保留一个局部峰的存在性，二维以中列最大值建立横向证书。",
+      "variation": "任意局部峰/单峰/二维；斜率序列并不全局单调。"
+    },
+    {
+      "id": "matrix-membership",
+      "title": "二维有序数据中的存在性查找",
+      "part": "boundary",
+      "branchIds": [
+        "ordered"
+      ],
+      "materialIds": [
+        "root-matrix-lookup",
+        "epi-matrix-search"
+      ],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/search-a-2d-matrix/",
+        "https://leetcode.com/problems/search-a-2d-matrix-ii/"
+      ],
+      "problem": "全局有序虚拟展平与仅行列有序逐行二分的不同合同。",
+      "variation": "随机访问下标、逐行lower_bound、阶梯算法比较。"
+    },
+    {
+      "id": "integer-root",
+      "title": "不溢出的整数根与最后可行值",
+      "part": "boundary",
+      "branchIds": [
+        "decision"
+      ],
+      "materialIds": [
+        "root-isqrt",
+        "epi-integer-root"
+      ],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/sqrtx/"
+      ],
+      "problem": "最大m满足m²<=x，乘法改除法避免溢出。",
+      "variation": "上下中点、平方边界、Windows long非64位。"
+    },
+    {
+      "id": "continuous-root",
+      "title": "连续方程的异号夹逼与误差",
+      "part": "boundary",
+      "branchIds": [
+        "continuous"
+      ],
+      "materialIds": [
+        "root-continuous",
+        "epi-real-root",
+        "cp4-numerical-bisection",
+        "epi-salary-piecewise",
+        "correction-cubic-critical-points"
+      ],
+      "exerciseUrls": [
+        "https://www.luogu.com.cn/problem/P1024"
+      ],
+      "problem": "归一后用两个导数临界点分隔三根，再分别异号夹逼。",
+      "variation": "通用异号求某根与导数分段找全三根分开，归一化/临界值裕量取代脆弱整数端点零判断。"
+    },
+    {
+      "id": "string-prefix",
+      "title": "字典序前缀与比较成本",
+      "part": "boundary",
+      "branchIds": [
+        "ordered"
+      ],
+      "materialIds": [
+        "root-strings",
+        "epi-string-prefix-interval",
+        "cp4-suffix-prefix-range",
+        "cph-hash-lcp-boundary"
+      ],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/search-suggestions-system/"
+      ],
+      "problem": "字典序中前缀匹配形成连续区间，边界定位后取有限建议。",
+      "variation": "全部前缀范围与至多三条建议；不把后缀索引建造混成库查找。"
+    },
+    {
+      "id": "convex-location",
+      "title": "凸多边形中的扇区定位",
+      "part": "boundary",
+      "branchIds": [
+        "structured"
+      ],
+      "materialIds": [
+        "root-convex"
+      ],
+      "exerciseUrls": [
+        "https://atcoder.jp/contests/abc296/tasks/abc296_g"
+      ],
+      "problem": "凸多边形射线序中二分扇区再判第三边。",
+      "variation": "IN/ON/OUT、顶点与射线外延；凹形不适用。"
+    },
+    {
+      "id": "capacity-partition",
+      "title": "连续容量分段：以最少段数判定最大段和",
+      "part": "decision",
+      "branchIds": [
+        "decision"
+      ],
+      "materialIds": [
+        "web-family-1-1",
+        "web-family-1-2",
+        "cp4-partition-capacity"
+      ],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/split-array-largest-sum/description/",
+        "https://cses.fi/problemset/task/1085/"
+      ],
+      "problem": "LC410 将非负序列分成恰好 k 个非空连续段，使最大段和最小；n≤1000、k≤min(50,n)、元素 0..10^6。CSES1085 为正数、n≤2×10^5、元素≤10^9。Codility MinMaxDivision 允许空块，与恰好非空不得无声混称。",
+      "variation": "与产能、间距、调度共用外层但检查器不通用。若加入负数或额外代价，可能要换成 DP。输出实际划分需保恰好 k 非空，可反向恢复或强制留足剩余单项。"
+    },
+    {
+      "id": "maximin-spacing",
+      "title": "最大化最小间距：以最早放置保留空间",
+      "part": "decision",
+      "branchIds": [
+        "decision"
+      ],
+      "materialIds": [
+        "web-family-2-1"
+      ],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/magnetic-force-between-two-balls/description/"
+      ],
+      "problem": "LC1552 从 n 个互异整数位置选 m 个，最大化两球最小间距；n≤10^5、坐标 1..10^9、2≤m≤n。输入不保证排序。",
+      "variation": "与容量分段的交换/领先论证不同。位置若改成可放置区间，check 要计算每区间可容纳数且防溢出，属于实质变型，不能只换输入类型。"
+    },
+    {
+      "id": "cumulative-production",
+      "title": "累计产能：反求达标最早时刻",
+      "part": "decision",
+      "branchIds": [
+        "decision"
+      ],
+      "materialIds": [
+        "web-family-3-1",
+        "correction-production-tight-bound"
+      ],
+      "exerciseUrls": [
+        "https://cses.fi/problemset/task/1620/"
+      ],
+      "problem": "CSES1620 多台独立机器同时生产，ki 秒/件，求 t 件所需最短时间；n≤2×10^5、t≤10^9、ki≤10^9。",
+      "variation": "和 Cow Dance 不同，产能直接可加，无固定队列产生的开始时间依赖。加入机器启动时间需改贡献公式并核合同。"
+    },
+    {
+      "id": "ordered-simulation",
+      "title": "并行台数：以事件模拟判定固定顺序队列",
+      "part": "decision",
+      "branchIds": [
+        "decision"
+      ],
+      "materialIds": [
+        "web-family-4-1",
+        "method-cowdance"
+      ],
+      "exerciseUrls": [
+        "https://usaco.org/index.php?page=viewproblem2&cpid=690"
+      ],
+      "problem": "USACO Cow Dance Show 固定登台顺序，K 个台位；谁先结束谁让下一头立即开始。N≤10000、di≤100000、Tmax≤10^6，保证 K=N 可行，求最小 K。原题 cowdance.in/out。",
+      "variation": "产能题直接计数，此题有事件依赖；区间房间分配的开始时刻是给定，此题则动态形成。恢复具体台位要另存台位 ID。"
+    },
+    {
+      "id": "graph-threshold",
+      "title": "路径瓶颈：阈值下的可达性",
+      "part": "decision",
+      "branchIds": [
+        "decision"
+      ],
+      "materialIds": [
+        "web-family-5-1",
+        "cp4-graph-threshold-family"
+      ],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/path-with-minimum-effort/description/"
+      ],
+      "problem": "LC1631 四邻接网格，从左上到右下，路径代价为最大相邻高度绝对差，求最小代价；行列 1..100、高度 1..10^6。",
+      "variation": "minimax Dijkstra 与边排序+DSU 是同题不同算法，不能伪装成二分的库实现；说明为何适用即可，不展开整部图论。"
+    },
+    {
+      "id": "prefix-activation",
+      "title": "事件前缀的首次成功与首次失败",
+      "part": "decision",
+      "branchIds": [
+        "decision"
+      ],
+      "materialIds": [
+        "web-family-6-1",
+        "root-prefix-orders"
+      ],
+      "exerciseUrls": [
+        "https://app.codility.com/programmers/lessons/14-binary_search_algorithm/nailing_planks/",
+        "https://www.luogu.com.cn/problem/P1083"
+      ],
+      "problem": "Codility NailingPlanks 必须按顺序使用前 J 钉子，让每个闭区间木板至少被一钉命中，求最小 J 或 -1。N,M≤30000，坐标 1..2M，A≤B。",
+      "variation": "坐标大时可 sort 前 J 钉+lower_bound(A) 查≤B，或预处理最早钉序+RMQ；这是条件/复杂度变化。本题单查询不同于多查询并行二分。"
+    },
+    {
+      "id": "matching-threshold",
+      "title": "阈值下的互斥选择与匹配",
+      "part": "decision",
+      "branchIds": [
+        "decision"
+      ],
+      "materialIds": [
+        "root-matching",
+        "cp4-matching-flow-feasibility"
+      ],
+      "exerciseUrls": [
+        "https://www.luogu.com.cn/problem/P4251"
+      ],
+      "problem": "第k大阈值转为低权边匹配至少n-k+1。",
+      "variation": "增广路判定、值域离散化与性能预算。"
+    },
+    {
+      "id": "average-transform",
+      "title": "平均值优化中的合法区间判定",
+      "part": "decision",
+      "branchIds": [
+        "continuous"
+      ],
+      "materialIds": [
+        "web-family-13-1",
+        "web-family-14-1",
+        "method-average",
+        "method-sabotage"
+      ],
+      "exerciseUrls": [
+        "https://www.luogu.com.cn/problem/P1419",
+        "https://usaco.org/index.php?page=viewproblem2&cpid=419"
+      ],
+      "problem": "Luogu P1419：n≤10^5，合法段长 S..T，元素 [-10^4,10^4]，求最大平均，输出三位。比方法示例仅最短长度多了最长长度。；USACO Sabotage：3≤N≤10^5，Mi=1..10000，必须删非空内部连续区间，首尾保留，求剩余平均最小，输出三位。原文一处 remove cow 是叙述笔误，不改机器合同。",
+      "variation": "合法前缀窗口与非空内部最大子段和是不同约束，必须同时讲清。"
+    },
+    {
+      "id": "ratio-selection",
+      "title": "固定数量最大比值：变换后取最大的 m 项",
+      "part": "decision",
+      "branchIds": [
+        "continuous"
+      ],
+      "materialIds": [
+        "web-family-15-1"
+      ],
+      "exerciseUrls": [
+        "https://www.luogu.com.cn/problem/P1570"
+      ],
+      "problem": "Luogu P1570，从 n≤200 项恰选 m 项，最大化 sum(v)/sum(c)，ci,vi=1..10^4，答案≤1000，输出三位。不是取单项 vi/ci 最大的 m 个。",
+      "variation": "与最大平均、删中段同属分数变换，但各自可行子问题不同；Dinkelbach 是另一方法，不能称库重写。"
+    },
+    {
+      "id": "pigeonhole-domain",
+      "title": "值域容量异常：重复与缺失",
+      "part": "selection",
+      "branchIds": [
+        "rank"
+      ],
+      "materialIds": [
+        "root-pigeonhole",
+        "epi-missing-ip"
+      ],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/find-the-duplicate-number/"
+      ],
+      "problem": "值域计数与容量异常作为保留重复/缺失的证书。",
+      "variation": "单调前缀判定与一般区间抽屉证书、重复/缺失对照。"
+    },
+    {
+      "id": "weighted-inverse",
+      "title": "累计权重的逆查询与采样",
+      "part": "selection",
+      "branchIds": [
+        "rank"
+      ],
+      "materialIds": [
+        "root-weighted",
+        "epi-weighted-inverse"
+      ],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/random-pick-with-weight/"
+      ],
+      "problem": "均匀整数票号逆查累计权重。",
+      "variation": "静态前缀与后续动态前缀秩的对照。"
+    },
+    {
+      "id": "matrix-rank",
+      "title": "行列有序矩阵秩：楼梯计数",
+      "part": "selection",
+      "branchIds": [
+        "rank"
+      ],
+      "materialIds": [
+        "web-family-8-1"
+      ],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/description/"
+      ],
+      "problem": "LC378 n×n 每行每列非降，求第 k 小并按重数；额外空间须优于 O(n²)。n≤300、值 [-10^9,10^9]、1≤k≤n²。",
+      "variation": "题目提及更高阶 O(n) 选择论文；这是非二分的更强方法，不必把本章改成线性矩阵选择专论，但应知存在，不能声称二分最优到不可改进。"
+    },
+    {
+      "id": "pair-distance-rank",
+      "title": "数对距离秩：窗口计数反求第 k 小",
+      "part": "selection",
+      "branchIds": [
+        "rank"
+      ],
+      "materialIds": [
+        "web-family-7-1"
+      ],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/find-k-th-smallest-pair-distance/description/"
+      ],
+      "problem": "LC719 所有 i<j 数对距离按重数排序，求第 k 小；n≤10^4、值 0..10^6、k≤n(n-1)/2。",
+      "variation": "与矩阵秩共有值域二分，但 count 是双指针；不是第 k 个不同距离，也不是恰等 D 的数对数。"
+    },
+    {
+      "id": "multiplication-rank",
+      "title": "乘法表秩：解析计数巨大隐式集合",
+      "part": "selection",
+      "branchIds": [
+        "rank"
+      ],
+      "materialIds": [
+        "web-family-9-1"
+      ],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/kth-smallest-number-in-multiplication-table/description/"
+      ],
+      "problem": "LC668 m×n 表 aij=i*j，1-based，求第 k 小；m,n≤30000、k≤m*n，不显式存表。",
+      "variation": "比矩阵秩多解析模型、无须访问单元格；整除分块可能进一步加速，但原约束 O(min(m,n)log mn) 足够，不能只为堆高阶技巧增加负担。"
+    },
+    {
+      "id": "two-sorted-partition",
+      "title": "两有序数组中位：在合法分割位置二分",
+      "part": "selection",
+      "branchIds": [
+        "rank"
+      ],
+      "materialIds": [
+        "web-family-10-1",
+        "epi-two-array-selection"
+      ],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/median-of-two-sorted-arrays/description/"
+      ],
+      "problem": "LC4 两个升序数组，各长 0..1000，总长 1..2000，值 [-10^6,10^6]，O(log(m+n)) 返回中位数。",
+      "variation": "第 k 小改左侧总数与合法范围；逐次去掉两数组各约 k/2 元素是另一选择法。merge 线性不满足题目对数复杂度。"
+    },
+    {
+      "id": "ordered-dp-frontier",
+      "title": "DP 有序前沿：最小尾值与二分替换",
+      "part": "selection",
+      "branchIds": [
+        "transition"
+      ],
+      "materialIds": [
+        "web-family-11-1",
+        "web-family-11-2",
+        "web-family-11-3",
+        "method-lis",
+        "cp4-lis-maintained-summary",
+        "cph-lis-scope-limit",
+        "correction-lis-intermediate-count"
+      ],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/longest-increasing-subsequence/description/",
+        "https://leetcode.com/problems/russian-doll-envelopes/description/",
+        "https://leetcode.com/problems/number-of-longest-increasing-subsequence/description/"
+      ],
+      "problem": "LC300 严格 LIS 长度（n≤2500，允许负数/重复）；LC354 严格双维信封、不可旋转（n≤10^5）；LC673 严格 LIS 方案数（n≤2000，答案 32 位）。",
+      "variation": "恢复最优链、严格/非降、二维偏序与最少非增覆盖对偶是有用邻支。LC673 用长度+计数 DP 或值域树状态，不是改一行 lower_bound；作者文章的“不能用二分”须限定为其简单 tail 方法，不声称所有含二分工具的计数算法都不可能。"
+    },
+    {
+      "id": "weighted-predecessor",
+      "title": "带权兼容调度：二分定位 DP 前驱",
+      "part": "selection",
+      "branchIds": [
+        "transition"
+      ],
+      "materialIds": [
+        "web-family-12-1",
+        "web-family-12-2",
+        "cp4-dp-transition-boundary"
+      ],
+      "exerciseUrls": [
+        "https://cses.fi/problemset/task/1140/",
+        "https://leetcode.com/problems/maximum-profit-in-job-scheduling/description/"
+      ],
+      "problem": "CSES Projects n≤2×10^5、日期/奖励≤10^9，同日只能参加一个，所以 end<start；LC1235 n≤5×10^4、profit≤10^4，明确 end==start 可衔接。CSES 允许 a=b。",
+      "variation": "冷却期、恢复集合改变兼容键或祖先信息；按起点反向找后继是对称实现。不是普通数组查找的换皮。"
+    },
+    {
+      "id": "resource-queries",
+      "title": "查询会消耗资源：反求最少试探次数",
+      "part": "selection",
+      "branchIds": [
+        "decision",
+        "transition"
+      ],
+      "materialIds": [
+        "root-eggdrop",
+        "cp4-egg-drop"
+      ],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/super-egg-drop/description/"
+      ],
+      "problem": "反转为给定次数可覆盖楼层，再二分最少次数。",
+      "variation": "楼层不能按普通二分免费试探；覆盖DP与组合计数等价。"
+    },
+    {
+      "id": "fenwick-rank",
+      "title": "动态频数中的第k个位置",
+      "part": "advanced",
+      "branchIds": [
+        "lifting"
+      ],
+      "materialIds": [
+        "challenge-fenwick-structural-search",
+        "cp4-fenwick-select"
+      ],
+      "exerciseUrls": [
+        "https://cses.fi/problemset/task/1749"
+      ],
+      "problem": "Greedy acceptance of power-of-two Fenwick blocks while reducing residual rank.",
+      "variation": "kth live element; dynamic frequency selection; negative updates allowed only while actual frequencies preserve monotonicity"
+    },
+    {
+      "id": "summary-descent",
+      "title": "区间摘要驱动的首次失败位置",
+      "part": "advanced",
+      "branchIds": [
+        "lifting"
+      ],
+      "materialIds": [
+        "challenge-acl-structural-search",
+        "cph-segment-tree-descent"
+      ],
+      "exerciseUrls": [
+        "https://atcoder.jp/contests/practice2/tasks/practice2_j"
+      ],
+      "problem": "Skip aggregate blocks and descend only into first block violating prefix predicate.",
+      "variation": "max_right; min_left; first value above threshold after updates; noncommutative ordered aggregate"
+    },
+    {
+      "id": "ancestor-boundary",
+      "title": "祖先会合边界与同步提升",
+      "part": "advanced",
+      "branchIds": [
+        "lifting"
+      ],
+      "materialIds": [
+        "root-lca",
+        "challenge-binary-lifting-source",
+        "cp4-dfs-path-boundary",
+        "cph-binary-lifting-contract",
+        "cph-lca-alternatives"
+      ],
+      "exerciseUrls": [
+        "https://cses.fi/problemset/task/1688/",
+        "https://cses.fi/problemset/task/1687",
+        "https://cses.fi/problemset/task/1750",
+        "https://cses.fi/problemset/task/1191"
+      ],
+      "problem": "等深后同步提升，保留尚未会合的最大距离。",
+      "variation": "精确k跳是支撑；LCA和阈值祖先才有搜索证书。"
+    },
+    {
+      "id": "cyclic-jump",
+      "title": "循环正数序列的最少分段",
+      "part": "advanced",
+      "branchIds": [
+        "lifting"
+      ],
+      "materialIds": [
+        "challenge-binary-jump-guide"
+      ],
+      "exerciseUrls": [
+        "https://cses.fi/problemset/task/1191"
+      ],
+      "problem": "Power-of-two successor preprocessing and largest admissible jumps.",
+      "variation": "exact-k; LCA; cyclic array jumps"
+    },
+    {
+      "id": "time-parallel-search",
+      "title": "共享时间轴判定的并行二分",
+      "part": "advanced",
+      "branchIds": [
+        "batch"
+      ],
+      "materialIds": [
+        "challenge-time-pbs-method"
+      ],
+      "exerciseUrls": [
+        "https://cses.fi/problemset/task/2101"
+      ],
+      "problem": "Group query midpoints and sweep event prefixes once per binary-search round.",
+      "variation": "same-vertex day 0; unreachable sentinel; rollback recursion requires different structural contract"
+    },
+    {
+      "id": "dynamic-range-kth",
+      "title": "带修改区间第k小的整体二分",
+      "part": "advanced",
+      "branchIds": [
+        "batch"
+      ],
+      "materialIds": [
+        "challenge-value-divide-method"
+      ],
+      "exerciseUrls": [
+        "https://www.luogu.com.cn/problem/P3834",
+        "https://www.luogu.com.cn/problem/P2617"
+      ],
+      "problem": "Partition values/events and queries around value midpoint; left-count selects branch; right query subtracts left rank.",
+      "variation": "static range kth; point-assignment range kth; duplicates; query residual rank; rollback lifecycle"
+    },
+    {
+      "id": "marginal-penalty",
+      "title": "递减边际资源分配的惩罚参数搜索",
+      "part": "advanced",
+      "branchIds": [
+        "parametric"
+      ],
+      "materialIds": [
+        "challenge-abc216e-original",
+        "challenge-abc216e-official-editorial",
+        "challenge-aliens-official-method",
+        "challenge-tallbarn-official-method",
+        "challenge-wqs-extended-exposition"
+      ],
+      "exerciseUrls": [
+        "https://atcoder.jp/contests/abc216/tasks/abc216_e"
+      ],
+      "problem": "Search the positive marginal reward cutoff and complete tied marginal rewards to target count.",
+      "variation": "K exceeds total positive rewards; ties at cutoff; strict versus inclusive threshold count; huge implicit reward multiset"
+    }
+  ],
+  "prelude": "建立候选集合/分区与存在性证书、首次真/最后真与闭合合同、单调性和判定正确性分开、区间不变量/终止/无解、值域/下标域/参数域、复杂度含检查成本和比较字符数、整数数值与实数误差、标准库真实职责、题型应用地图。"
+}

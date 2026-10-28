@@ -1,5 +1,35 @@
 {
   "schemaVersion": 2,
-  "state": "withdrawn",
-  "collections": []
+  "state": "active",
+  "collections": [
+    {
+      "id": "chapter-01",
+      "kind": "chapter",
+      "chapterNumber": 1,
+      "title": "二分",
+      "visibility": "published",
+      "documents": [
+        {
+          "id": "binary-boundary",
+          "title": "边界与结构",
+          "path": "content/binary/boundary"
+        },
+        {
+          "id": "binary-decision",
+          "title": "判定与优化",
+          "path": "content/binary/decision"
+        },
+        {
+          "id": "binary-selection",
+          "title": "选择与状态",
+          "path": "content/binary/selection"
+        },
+        {
+          "id": "binary-advanced",
+          "title": "提升与批量",
+          "path": "content/binary/advanced"
+        }
+      ]
+    }
+  ]
 }

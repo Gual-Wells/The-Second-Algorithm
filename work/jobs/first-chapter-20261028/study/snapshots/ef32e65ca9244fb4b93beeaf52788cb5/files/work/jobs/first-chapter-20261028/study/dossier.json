@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "materials": [
+    {
+      "id": "candidate-books",
+      "source": "book:competitive-programming-4",
+      "locator": "CP4 B1 physical159–219 / B2 full TOC; EPI chapters12/16/17/18/19",
+      "readState": "analyzed",
+      "note": "work/first-chapter-20261028/books-overview.md",
+      "disposition": "excluded",
+      "reason": "独立候选比较与范围依据；后续以具体分支材料承接，不将其他候选变为二分正文。"
+    },
+    {
+      "id": "candidate-interview",
+      "source": "book:epi-cpp",
+      "locator": "EPI physical198,290,311,341,358 and chapter directories",
+      "readState": "analyzed",
+      "note": "work/first-chapter-20261028/candidate-comparison.md",
+      "disposition": "excluded",
+      "reason": "独立候选比较与范围依据；后续以具体分支材料承接，不将其他候选变为二分正文。"
+    },
+    {
+      "id": "candidate-problems",
+      "source": "source:cses",
+      "locator": "CSES original Factory Machines, Array Division, Flight Discount, Queens and DP task statements",
+      "readState": "analyzed",
+      "note": "work/first-chapter-20261028/candidate-comparison.md",
+      "disposition": "excluded",
+      "reason": "独立候选比较与范围依据；后续以具体分支材料承接，不将其他候选变为二分正文。"
+    },
+    {
+      "id": "candidate-methods",
+      "source": "source:cp-algorithms",
+      "locator": "Binary Search sections arbitrary predicate / continuous / powers / parallel",
+      "readState": "analyzed",
+      "note": "work/first-chapter-20261028/root-overview.md",
+      "disposition": "excluded",
+      "reason": "独立候选比较与范围依据；后续以具体分支材料承接，不将其他候选变为二分正文。"
+    },
+    {
+      "id": "candidate-assessment",
+      "source": "source:codility",
+      "locator": "Developer Training lessons14,16,17 and MinMaxDivision original contract",
+      "readState": "analyzed",
+      "note": "work/first-chapter-20261028/sources-overview.md",
+      "disposition": "excluded",
+      "reason": "独立候选比较与范围依据；后续以具体分支材料承接，不将其他候选变为二分正文。"
+    }
+  ],
+  "findings": [],
+  "questions": [],
+  "searches": [
+    {
+      "id": "overview-primary",
+      "query": "whole textbook and source role overview; compare binary/greedy/search/DP/graph",
+      "source": "actual primary directories and textbook locators in notes",
+      "result": "三独立视角均认为二分是合格且优先的大领域，其他候选并非因难而排除；目录分类不能直接复制。",
+      "note": "work/first-chapter-20261028/candidate-comparison.md"
+    }
+  ]
+}

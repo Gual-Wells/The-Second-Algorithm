@@ -216,11 +216,40 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
           await page.screenshot({ path: path.join(output, `current-publication-${viewport.width}x${viewport.height}.png`) });
         }
         await page.setViewportSize({ width: 402, height: 874 });
+        // Check the actual current documents, not only the synthetic reader fixture
+        // or the first manuscript in a multi-part chapter.
+        for (const chapter of catalog.collections) for (const document of chapter.documents) {
+          await page.goto(`${origin}/#/read/${chapter.id}/${document.id}`);
+          await page.waitForFunction(id => document.querySelector('#documentTabs [aria-selected="true"]')?.dataset.document === id
+            || document.querySelector('#documentSelect')?.value === id, document.id);
+          await page.locator('#readingArticle .code-block').first().waitFor();
+          const current = await page.evaluate(() => ({
+            outer: document.documentElement.scrollWidth, viewport: innerWidth,
+            headings: document.querySelectorAll('#readingArticle h2').length,
+            text: document.querySelector('#readingArticle').innerText
+          }));
+          assert(current.outer <= current.viewport + 1, document.id + ': outer overflow');
+          assert.equal(current.headings, document.headings.filter(h => h.depth === 2).length);
+          assert.doesNotMatch(current.text, /Q\d{6}/, document.id + ': exposed knowledge identity');
+          await page.screenshot({ path: path.join(output, `current-${document.id}-402x874.png`) });
+        }
         await page.locator('#readingArticle [data-knowledge]').first().click();
         await page.locator('.knowledge-paper').waitFor();
         assert.doesNotMatch(await page.locator('#sheetTitle').innerText(), /Q\d{6}/);
         await page.screenshot({ path: path.join(output, 'current-knowledge-402x874.png') });
         await page.locator('[data-sheet-close]').click();
+        const crossLink = page.locator('#readingArticle a[href^="#/read/"]').first();
+        if (await crossLink.count()) {
+          const href = await crossLink.getAttribute('href');
+          const anchor = new URLSearchParams(href.split('?')[1]).get('anchor');
+          // The reader consumes the anchor query after positioning so reload
+          // restores the saved reading place rather than replaying this jump.
+          await crossLink.click(); await page.waitForURL(origin + '/' + href.split('?')[0]);
+          if (anchor) await page.waitForFunction(id => [...document.querySelectorAll('#readingArticle [id]')]
+            .some(node => node.id === id), anchor);
+          await page.locator('#readingArticle .code-block').first().waitFor();
+          assert.equal(await page.locator('#readingArticle .code-block').count() > 0, true);
+        }
         assert.deepEqual(real.mock.errors, []);
       } finally { await real.context.close(); }
     });

@@ -52,11 +52,14 @@ for(const m of source.matchAll(/\/\/ BEGIN ([\w-]+)\r?\n([\s\S]*?)\/\/ END \1/g)
   blocks.set(m[1],m[2].trim());
 }
 let used=[];
+// Validate author markers before injecting C++: aggregate initializers can
+// legitimately contain '{{', and must retain their exact source bytes.
+if(linkedDraft.replace(/\{\{(?:(?:code|code-block):)?([\w-]+)\}\}/g,'').includes('{{'))
+  throw new Error('Unresolved marker');
 const md=linkedDraft.replace(/\{\{(?:(?:code|code-block):)?([\w-]+)\}\}/g,(_,name)=>{
   if(!blocks.has(name))throw new Error('Missing code '+name);
   used.push(name);return '```cpp\n'+blocks.get(name)+'\n```';
 });
-if(md.includes('{{'))throw new Error('Unresolved marker');
 if(used.length!==blocks.size||new Set(used).size!==used.length)throw new Error('Each code region needs one authoritative display');
 await fs.writeFile(path.join(ROOT,NAME+'.md'),md,'utf8');
 

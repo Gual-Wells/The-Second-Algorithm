@@ -99,7 +99,7 @@ chapters登记schema1的`chapters[]`仍为`id/collection/contract/review`。每�
 | `commitments` | id、dimension、claim、acceptance、status、taskIds、locations、materialIds；四维真实承诺 |
 | `researchHandoff` | 不可变研究交接的仓库相对path；章级采用/发布必须检查当前有效性及实际范围承接 |
 
-status为open/addressed；open必须给具体gap，addressed不得暗藏gap。schema1旧合同只支持结构恢复，不能作为新硬协议的发布采用。2026-10-28全部出版与作者内容已清零，当前无章合同或知识资产；旧专题及采用仅在历史恢复，不能直接追认为新大思想章。
+status为open/addressed；open必须给具体gap，addressed不得暗藏gap。schema1旧合同只支持结构恢复，不能作为新硬协议的发布采用。2026-10-28撤回清零后，第一章“二分”已独立重研建立新合同与知识；旧专题及采用仅在历史恢复，不能直接追认为新大思想章。实时内容以当前登记、质量检查和实际部署收据为准。
 
 paradigm.corpusEvidence引用materials内实际教材/来源筛选归并读件；addressed领域须有证据和分支，addressed分支须有真实材料与题型落点。相关材料全部读过、分支是否充分仍须Agent判断；字段非空不认证全面。
 

@@ -1,0 +1,499 @@
+{
+  "document": "binary-decision",
+  "path": "content/binary/decision",
+  "target": {
+    "id": "chapter01-decision",
+    "kind": "run",
+    "source": "tests/cpp/chapter01_decision.cpp",
+    "standard": "c++17",
+    "timeoutSeconds": 120
+  },
+  "units": [
+    {
+      "id": "capacity-partition",
+      "title": "连续容量分段：以最少段数判定最大段和",
+      "anchor": "capacity-partition",
+      "manualAnchor": "capacity-partition-manual",
+      "standardAnchor": "capacity-partition-standard",
+      "engineeringAnchor": "capacity-partition-engineering",
+      "standardRole": {
+        "kind": "support",
+        "explanation": "标准设施只接管最大值/总和边界统计；贪心与二分仍由手写核心负责。"
+      },
+      "implementations": [
+        {
+          "id": "decision-capacity-manual",
+          "kind": "manual",
+          "symbol": "binary_decision::capacity_manual",
+          "regions": [
+            "decision-capacity-manual"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100003"
+          ],
+          "complexity": {
+            "time": "O(n log(S-M+1))",
+            "space": "O(1)"
+          }
+        },
+        {
+          "id": "decision-capacity-bounds-standard",
+          "kind": "standard",
+          "symbol": "binary_decision::capacity_bounds_standard",
+          "regions": [
+            "decision-capacity-support"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100003"
+          ],
+          "complexity": {
+            "time": "O(n)",
+            "space": "O(1)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "maximin-spacing",
+      "title": "最大化最小间距：以最早放置保留空间",
+      "anchor": "maximin-spacing",
+      "manualAnchor": "maximin-spacing-manual",
+      "standardAnchor": "maximin-spacing-standard",
+      "engineeringAnchor": "maximin-spacing-engineering",
+      "standardRole": {
+        "kind": "shared-core",
+        "explanation": "sort建立有序前提，然后共享已证明的手写放置检查与二分。"
+      },
+      "implementations": [
+        {
+          "id": "decision-spacing-sorted-manual",
+          "kind": "manual",
+          "symbol": "binary_decision::spacing_sorted_manual",
+          "regions": [
+            "decision-spacing-manual"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100004",
+            "Q100005"
+          ],
+          "complexity": {
+            "time": "O(n log D)",
+            "space": "O(1)"
+          }
+        },
+        {
+          "id": "decision-spacing-standard",
+          "kind": "standard",
+          "symbol": "binary_decision::spacing_standard",
+          "regions": [
+            "decision-spacing-standard"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100004",
+            "Q100005"
+          ],
+          "complexity": {
+            "time": "O(n log n+n log D)",
+            "space": "O(n)，按值接收的输入副本"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cumulative-production",
+      "title": "累计产能：反求达标最早时刻",
+      "anchor": "cumulative-production",
+      "manualAnchor": "cumulative-production-manual",
+      "standardAnchor": "cumulative-production-standard",
+      "engineeringAnchor": "cumulative-production-engineering",
+      "standardRole": {
+        "kind": "support",
+        "explanation": "min_element仅用于紧搜索上界，不虚构完整生产优化标准函数。"
+      },
+      "implementations": [
+        {
+          "id": "decision-production-manual",
+          "kind": "manual",
+          "symbol": "binary_decision::production_manual",
+          "regions": [
+            "decision-production-manual"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100003"
+          ],
+          "complexity": {
+            "time": "O(n log(min(t)*target+1))",
+            "space": "O(1)"
+          }
+        },
+        {
+          "id": "decision-production-upper-standard",
+          "kind": "standard",
+          "symbol": "binary_decision::production_upper_standard",
+          "regions": [
+            "decision-production-support"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100003"
+          ],
+          "complexity": {
+            "time": "O(n)",
+            "space": "O(1)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ordered-simulation",
+      "title": "并行台数：以事件模拟判定固定顺序队列",
+      "anchor": "ordered-simulation",
+      "manualAnchor": "ordered-simulation-manual",
+      "standardAnchor": "ordered-simulation-standard",
+      "engineeringAnchor": "ordered-simulation-engineering",
+      "standardRole": {
+        "kind": "structure",
+        "explanation": "priority_queue完整替代手搓最小堆，事件模拟与外层二分的逻辑不变。"
+      },
+      "implementations": [
+        {
+          "id": "decision-stage-slots-manual",
+          "kind": "manual",
+          "symbol": "binary_decision::stage_slots_manual",
+          "regions": [
+            "decision-simulation-manual"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100007"
+          ],
+          "complexity": {
+            "time": "O(N log^2 N)",
+            "space": "O(N)"
+          }
+        },
+        {
+          "id": "decision-stage-slots-standard",
+          "kind": "standard",
+          "symbol": "binary_decision::stage_slots_standard",
+          "regions": [
+            "decision-simulation-standard"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100007"
+          ],
+          "complexity": {
+            "time": "O(N log^2 N)",
+            "space": "O(N)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "graph-threshold",
+      "title": "路径瓶颈：阈值下的可达性",
+      "anchor": "graph-threshold",
+      "manualAnchor": "graph-threshold-manual",
+      "standardAnchor": "graph-threshold-standard",
+      "engineeringAnchor": "graph-threshold-engineering",
+      "standardRole": {
+        "kind": "structure",
+        "explanation": "queue替代数组队列，网格隐式建边、阈值与visited仍由算法负责。"
+      },
+      "implementations": [
+        {
+          "id": "decision-path-effort-manual",
+          "kind": "manual",
+          "symbol": "binary_decision::path_effort_manual",
+          "regions": [
+            "decision-graph-manual"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100011"
+          ],
+          "complexity": {
+            "time": "O(RC log W)",
+            "space": "O(RC)"
+          }
+        },
+        {
+          "id": "decision-path-effort-standard",
+          "kind": "standard",
+          "symbol": "binary_decision::path_effort_standard",
+          "regions": [
+            "decision-graph-standard"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100011"
+          ],
+          "complexity": {
+            "time": "O(RC log W)",
+            "space": "O(RC)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "prefix-activation",
+      "title": "事件前缀的首次成功与首次失败",
+      "anchor": "prefix-activation",
+      "manualAnchor": "prefix-activation-manual",
+      "standardAnchor": "prefix-activation-standard",
+      "engineeringAnchor": "prefix-activation-engineering",
+      "standardRole": {
+        "kind": "algorithm",
+        "explanation": "partial_sum接管钉子计数前缀和订单差分恢复；equal只执行逐日容量比较。"
+      },
+      "implementations": [
+        {
+          "id": "decision-first-nails-manual",
+          "kind": "manual",
+          "symbol": "binary_decision::first_nails_manual",
+          "regions": [
+            "decision-prefix-manual"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100003"
+          ],
+          "complexity": {
+            "time": "O((N+M)log(M+1))",
+            "space": "O(M)"
+          }
+        },
+        {
+          "id": "decision-first-failed-order-manual",
+          "kind": "manual",
+          "symbol": "binary_decision::first_failed_order_manual",
+          "regions": [
+            "decision-prefix-manual"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100003"
+          ],
+          "complexity": {
+            "time": "O((n+m)log(m+1))",
+            "space": "O(n)"
+          }
+        },
+        {
+          "id": "decision-first-nails-standard",
+          "kind": "standard",
+          "symbol": "binary_decision::first_nails_standard",
+          "regions": [
+            "decision-prefix-standard"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100003"
+          ],
+          "complexity": {
+            "time": "O((N+M)log(M+1))",
+            "space": "O(M)"
+          }
+        },
+        {
+          "id": "decision-first-failed-order-standard",
+          "kind": "standard",
+          "symbol": "binary_decision::first_failed_order_standard",
+          "regions": [
+            "decision-prefix-standard"
+          ],
+          "questions": [
+            "Q100002",
+            "Q100003"
+          ],
+          "complexity": {
+            "time": "O((n+m)log(m+1))",
+            "space": "O(n)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "matching-threshold",
+      "title": "阈值下的互斥选择与匹配",
+      "anchor": "matching-threshold",
+      "manualAnchor": "matching-threshold-manual",
+      "standardAnchor": "matching-threshold-standard",
+      "engineeringAnchor": "matching-threshold-engineering",
+      "standardRole": {
+        "kind": "shared-core",
+        "explanation": "sort/unique将候选阈值离散化，Kuhn增广路共享手写核心，并真实补全完整行列指派。"
+      },
+      "implementations": [
+        {
+          "id": "decision-matching-threshold-manual",
+          "kind": "manual",
+          "symbol": "binary_decision::matching_threshold_manual",
+          "regions": [
+            "decision-matching-manual"
+          ],
+          "questions": [
+            "Q100004",
+            "Q100009"
+          ],
+          "complexity": {
+            "time": "O(n^2*m*log W)",
+            "space": "O(n+m)，不计输入矩阵"
+          }
+        },
+        {
+          "id": "decision-matching-standard",
+          "kind": "standard",
+          "symbol": "binary_decision::matching_standard",
+          "regions": [
+            "decision-matching-standard"
+          ],
+          "questions": [
+            "Q100004",
+            "Q100009"
+          ],
+          "complexity": {
+            "time": "O(nm log(nm)+n^2*m*log(nm))",
+            "space": "O(nm+n+m)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "average-transform",
+      "title": "平均值优化中的合法区间判定",
+      "anchor": "average-transform",
+      "manualAnchor": "average-transform-manual",
+      "standardAnchor": "average-transform-standard",
+      "engineeringAnchor": "average-transform-engineering",
+      "standardRole": {
+        "kind": "structure",
+        "explanation": "deque替代数组单调队列；transform只演示Sabotage逐项阈值变换，不冒称完整库解。"
+      },
+      "implementations": [
+        {
+          "id": "decision-max-average-manual",
+          "kind": "manual",
+          "symbol": "binary_decision::max_average_manual",
+          "regions": [
+            "decision-average-manual"
+          ],
+          "questions": [
+            "Q100003",
+            "Q100006",
+            "Q100011"
+          ],
+          "complexity": {
+            "time": "O(I*n)，I<=80",
+            "space": "O(n)"
+          }
+        },
+        {
+          "id": "decision-min-remaining-average-manual",
+          "kind": "manual",
+          "symbol": "binary_decision::min_remaining_average_manual",
+          "regions": [
+            "decision-average-manual"
+          ],
+          "questions": [
+            "Q100003",
+            "Q100006",
+            "Q100011"
+          ],
+          "complexity": {
+            "time": "O(I*n)，I<=80",
+            "space": "O(1)"
+          }
+        },
+        {
+          "id": "decision-max-average-standard",
+          "kind": "standard",
+          "symbol": "binary_decision::max_average_standard",
+          "regions": [
+            "decision-average-standard"
+          ],
+          "questions": [
+            "Q100003",
+            "Q100006",
+            "Q100011"
+          ],
+          "complexity": {
+            "time": "O(I*n)，I<=80",
+            "space": "O(n)"
+          }
+        },
+        {
+          "id": "decision-shifted-values-standard",
+          "kind": "standard",
+          "symbol": "binary_decision::shifted_values_standard",
+          "regions": [
+            "decision-average-standard"
+          ],
+          "questions": [
+            "Q100003",
+            "Q100006",
+            "Q100011"
+          ],
+          "complexity": {
+            "time": "O(n)",
+            "space": "O(n)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ratio-selection",
+      "title": "固定数量最大比值：变换后取最大的 m 项",
+      "anchor": "ratio-selection",
+      "manualAnchor": "ratio-selection-manual",
+      "standardAnchor": "ratio-selection-standard",
+      "engineeringAnchor": "ratio-selection-engineering",
+      "standardRole": {
+        "kind": "algorithm",
+        "explanation": "nth_element隔出最大m项替代手写插入排序；不要求该前缀内部有序。"
+      },
+      "implementations": [
+        {
+          "id": "decision-ratio-manual",
+          "kind": "manual",
+          "symbol": "binary_decision::ratio_manual",
+          "regions": [
+            "decision-ratio-manual"
+          ],
+          "questions": [
+            "Q100004",
+            "Q100006",
+            "Q100008"
+          ],
+          "complexity": {
+            "time": "O(I*n^2)，I<=80",
+            "space": "O(n)"
+          }
+        },
+        {
+          "id": "decision-ratio-standard",
+          "kind": "standard",
+          "symbol": "binary_decision::ratio_standard",
+          "regions": [
+            "decision-ratio-standard"
+          ],
+          "questions": [
+            "Q100004",
+            "Q100006",
+            "Q100008"
+          ],
+          "complexity": {
+            "time": "平均O(I*n)，I<=80",
+            "space": "O(n)"
+          }
+        }
+      ]
+    }
+  ]
+}

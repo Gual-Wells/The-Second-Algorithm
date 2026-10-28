@@ -1,0 +1,324 @@
+{
+  "materials": [
+    {
+      "id": "root-boundary",
+      "source": "source:leetcode",
+      "locator": "https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/; https://leetcode.com/problems/search-insert-position/; https://leetcode.com/problems/time-based-key-value-store/",
+      "readState": "analyzed",
+      "note": "work/first-chapter-20261028/root-extraction.md",
+      "disposition": "included",
+      "reason": "原题合同与方法已实际分析，提供不能被同构归并吞掉的机制或条件。",
+      "mechanism": "首次>=与首次>组成相等段、计数和前驱；记录查找保留时间序。",
+      "conditions": "有序/对固定谓词分区；end不可解引用；时间记录追加有序。",
+      "variants": "严格/非严格、空表、前驱无解、异构比较方向。",
+      "crossParadigms": [],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/",
+        "https://leetcode.com/problems/search-insert-position/",
+        "https://leetcode.com/problems/time-based-key-value-store/"
+      ]
+    },
+    {
+      "id": "root-api",
+      "source": "source:leetcode",
+      "locator": "https://leetcode.com/problems/first-bad-version/",
+      "readState": "analyzed",
+      "note": "work/first-chapter-20261028/root-extraction.md",
+      "disposition": "included",
+      "reason": "原题合同与方法已实际分析，提供不能被同构归并吞掉的机制或条件。",
+      "mechanism": "在不可物化的谓词域定位首次真，必要时倍增建立界。",
+      "conditions": "判定稳定且单调，已知可表示cap；无真需明确返回政策。",
+      "variants": "接口成本、未知上界、全真/全假和倍增溢出。",
+      "crossParadigms": [],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/first-bad-version/"
+      ]
+    },
+    {
+      "id": "root-deficit",
+      "source": "source:leetcode",
+      "locator": "https://leetcode.com/problems/kth-missing-positive-number/",
+      "readState": "analyzed",
+      "note": "work/first-chapter-20261028/root-extraction.md",
+      "disposition": "included",
+      "reason": "原题合同与方法已实际分析，提供不能被同构归并吞掉的机制或条件。",
+      "mechanism": "值与下标差揭示累计缺口；p+k恢复缺失数。",
+      "conditions": "正整数严格升序；差分非降，不是严格增。",
+      "variants": "固定点与缺失数；重复时单调证明可能失效。",
+      "crossParadigms": [],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/kth-missing-positive-number/"
+      ]
+    },
+    {
+      "id": "root-weighted",
+      "source": "source:leetcode",
+      "locator": "https://leetcode.com/problems/random-pick-with-weight/",
+      "readState": "analyzed",
+      "note": "work/first-chapter-20261028/root-extraction.md",
+      "disposition": "included",
+      "reason": "原题合同与方法已实际分析，提供不能被同构归并吞掉的机制或条件。",
+      "mechanism": "均匀整数票号逆查累计权重。",
+      "conditions": "正权重及总和可表示；票号合同与lower/upper边界一致。",
+      "variants": "静态前缀与后续动态前缀秩的对照。",
+      "crossParadigms": [
+        "前缀和",
+        "随机采样"
+      ],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/random-pick-with-weight/"
+      ]
+    },
+    {
+      "id": "root-pigeonhole",
+      "source": "source:leetcode",
+      "locator": "https://leetcode.com/problems/find-the-duplicate-number/",
+      "readState": "analyzed",
+      "note": "work/first-chapter-20261028/root-extraction.md",
+      "disposition": "included",
+      "reason": "原题合同与方法已实际分析，提供不能被同构归并吞掉的机制或条件。",
+      "mechanism": "值域计数与容量异常作为保留重复/缺失的证书。",
+      "conditions": "重复题n+1个数在1..n且唯一重复；缺失题总条数小于域容量。",
+      "variants": "单调前缀判定与一般区间抽屉证书、重复/缺失对照。",
+      "crossParadigms": [
+        "抽屉原理"
+      ],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/find-the-duplicate-number/"
+      ]
+    },
+    {
+      "id": "root-rotated",
+      "source": "source:leetcode",
+      "locator": "https://leetcode.com/problems/search-in-rotated-sorted-array-ii/; https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/",
+      "readState": "analyzed",
+      "note": "work/first-chapter-20261028/root-extraction.md",
+      "disposition": "included",
+      "reason": "原题合同与方法已实际分析，提供不能被同构归并吞掉的机制或条件。",
+      "mechanism": "借一侧有序定位目标或保留最小值；相等时只能安全缩边。",
+      "conditions": "非降数组旋转；重复消除区分证据，最坏线性。",
+      "variants": "互异与重复、成员和最小值，不对整段直接binary_search。",
+      "crossParadigms": [],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/search-in-rotated-sorted-array-ii/",
+        "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/"
+      ]
+    },
+    {
+      "id": "root-paired",
+      "source": "source:leetcode",
+      "locator": "https://leetcode.com/problems/single-element-in-a-sorted-array/",
+      "readState": "analyzed",
+      "note": "work/first-chapter-20261028/root-extraction.md",
+      "disposition": "included",
+      "reason": "原题合同与方法已实际分析，提供不能被同构归并吞掉的机制或条件。",
+      "mechanism": "配对下标奇偶的首次破坏。",
+      "conditions": "唯一单次、其余恰双次、有序且奇数长度。",
+      "variants": "中点对齐与m^1等价性，频次条件改变不可照搬。",
+      "crossParadigms": [],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/single-element-in-a-sorted-array/"
+      ]
+    },
+    {
+      "id": "root-peak",
+      "source": "source:leetcode",
+      "locator": "https://leetcode.com/problems/find-peak-element/; https://leetcode.com/problems/find-a-peak-element-ii/",
+      "readState": "analyzed",
+      "note": "work/first-chapter-20261028/root-extraction.md",
+      "disposition": "included",
+      "reason": "原题合同与方法已实际分析，提供不能被同构归并吞掉的机制或条件。",
+      "mechanism": "保留一个局部峰的存在性，二维以中列最大值建立横向证书。",
+      "conditions": "邻值不同；外围低于实际数据；二维正值与矩形。",
+      "variants": "任意局部峰/单峰/二维；斜率序列并不全局单调。",
+      "crossParadigms": [
+        "分治存在性证明"
+      ],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/find-peak-element/",
+        "https://leetcode.com/problems/find-a-peak-element-ii/"
+      ]
+    },
+    {
+      "id": "root-matrix-lookup",
+      "source": "source:leetcode",
+      "locator": "https://leetcode.com/problems/search-a-2d-matrix/; https://leetcode.com/problems/search-a-2d-matrix-ii/",
+      "readState": "analyzed",
+      "note": "work/first-chapter-20261028/root-extraction.md",
+      "disposition": "included",
+      "reason": "原题合同与方法已实际分析，提供不能被同构归并吞掉的机制或条件。",
+      "mechanism": "全局有序虚拟展平与仅行列有序逐行二分的不同合同。",
+      "conditions": "行间隔离才允许扁平搜索；仅行列序有阶梯替代。",
+      "variants": "随机访问下标、逐行lower_bound、阶梯算法比较。",
+      "crossParadigms": [
+        "二维偏序"
+      ],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/search-a-2d-matrix/",
+        "https://leetcode.com/problems/search-a-2d-matrix-ii/"
+      ]
+    },
+    {
+      "id": "root-isqrt",
+      "source": "source:leetcode",
+      "locator": "https://leetcode.com/problems/sqrtx/",
+      "readState": "analyzed",
+      "note": "work/first-chapter-20261028/root-extraction.md",
+      "disposition": "included",
+      "reason": "原题合同与方法已实际分析，提供不能被同构归并吞掉的机制或条件。",
+      "mechanism": "最大m满足m²<=x，乘法改除法避免溢出。",
+      "conditions": "非负有界整数；处理0并避免除0；明确64位扩展范围。",
+      "variants": "上下中点、平方边界、Windows long非64位。",
+      "crossParadigms": [],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/sqrtx/"
+      ]
+    },
+    {
+      "id": "root-continuous",
+      "source": "source:luogu",
+      "locator": "https://www.luogu.com.cn/problem/P1024",
+      "readState": "analyzed",
+      "note": "work/first-chapter-20261028/root-extraction.md",
+      "disposition": "included",
+      "reason": "原题合同与方法已实际分析，提供不能被同构归并吞掉的机制或条件。",
+      "mechanism": "连续异号夹逼保留某根存在；原题单位扫描保证三根分别定位。",
+      "conditions": "连续；端点/根间距/范围假设来自原题；有符号比较不用乘积。",
+      "variants": "非单调函数仍可求某根；偶重根与多根不能无假设找全。",
+      "crossParadigms": [
+        "数值分析"
+      ],
+      "exerciseUrls": [
+        "https://www.luogu.com.cn/problem/P1024"
+      ]
+    },
+    {
+      "id": "root-prefix-orders",
+      "source": "source:luogu",
+      "locator": "https://www.luogu.com.cn/problem/P1083",
+      "readState": "analyzed",
+      "note": "work/first-chapter-20261028/root-extraction.md",
+      "disposition": "included",
+      "reason": "原题合同与方法已实际分析，提供不能被同构归并吞掉的机制或条件。",
+      "mechanism": "前缀订单失败单调；差分重建容量判定。",
+      "conditions": "非负需求；按原次序接单；n,m<=1e6，累计64位。",
+      "variants": "首失败与全成功，差分扫描设施partial_sum。",
+      "crossParadigms": [
+        "差分",
+        "前缀和"
+      ],
+      "exerciseUrls": [
+        "https://www.luogu.com.cn/problem/P1083"
+      ]
+    },
+    {
+      "id": "root-matching",
+      "source": "source:luogu",
+      "locator": "https://www.luogu.com.cn/problem/P4251",
+      "readState": "analyzed",
+      "note": "work/first-chapter-20261028/root-extraction.md",
+      "disposition": "included",
+      "reason": "原题合同与方法已实际分析，提供不能被同构归并吞掉的机制或条件。",
+      "mechanism": "第k大阈值转为低权边匹配至少n-k+1。",
+      "conditions": "完整矩阵且n<=m，剩余匹配可补齐；不能用局部贪心。",
+      "variants": "增广路判定、值域离散化与性能预算。",
+      "crossParadigms": [
+        "二分图匹配"
+      ],
+      "exerciseUrls": [
+        "https://www.luogu.com.cn/problem/P4251"
+      ]
+    },
+    {
+      "id": "root-cpp-contracts",
+      "source": "source:cpp-draft",
+      "locator": "https://timsong-cpp.github.io/cppwp/n4659/alg.binary.search; https://timsong-cpp.github.io/cppwp/n4659/alg.partitions; https://timsong-cpp.github.io/cppwp/n4659/alg.nth.element; https://timsong-cpp.github.io/cppwp/n4659/vector.capacity",
+      "readState": "analyzed",
+      "note": "work/first-chapter-20261028/root-extraction.md",
+      "disposition": "included",
+      "reason": "原题合同与方法已实际分析，提供不能被同构归并吞掉的机制或条件。",
+      "mechanism": "固定C++17分区/比较/迭代器/重排/失效合同，区分库层次。",
+      "conditions": "调用者负责前提；比较次数不等于移动总成本；标准版本不可误标。",
+      "variants": "异构比较、端点、reserve非resize、nth_element重排。",
+      "crossParadigms": [
+        "C++实现"
+      ],
+      "exerciseUrls": []
+    },
+    {
+      "id": "root-strings",
+      "source": "source:leetcode",
+      "locator": "https://leetcode.com/problems/search-suggestions-system/",
+      "readState": "analyzed",
+      "note": "work/first-chapter-20261028/root-extraction.md",
+      "disposition": "included",
+      "reason": "原题合同与方法已实际分析，提供不能被同构归并吞掉的机制或条件。",
+      "mechanism": "字典序中前缀匹配形成连续区间，边界定位后取有限建议。",
+      "conditions": "预排序且词条稳定；一次比较有字符代价。",
+      "variants": "全部前缀范围与至多三条建议；不把后缀索引建造混成库查找。",
+      "crossParadigms": [
+        "字符串",
+        "排序"
+      ],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/search-suggestions-system/"
+      ]
+    },
+    {
+      "id": "root-convex",
+      "source": "source:atcoder",
+      "locator": "https://atcoder.jp/contests/abc296/tasks/abc296_g",
+      "readState": "analyzed",
+      "note": "work/first-chapter-20261028/root-extraction.md",
+      "disposition": "included",
+      "reason": "原题合同与方法已实际分析，提供不能被同构归并吞掉的机制或条件。",
+      "mechanism": "凸多边形射线序中二分扇区再判第三边。",
+      "conditions": "严格凸、逆时针、坐标abs<=1e9；边界射线单独处理。",
+      "variants": "IN/ON/OUT、顶点与射线外延；凹形不适用。",
+      "crossParadigms": [
+        "计算几何"
+      ],
+      "exerciseUrls": [
+        "https://atcoder.jp/contests/abc296/tasks/abc296_g"
+      ]
+    },
+    {
+      "id": "root-eggdrop",
+      "source": "source:leetcode",
+      "locator": "https://leetcode.com/problems/super-egg-drop/description/",
+      "readState": "analyzed",
+      "note": "work/first-chapter-20261028/root-extraction.md",
+      "disposition": "included",
+      "reason": "原题合同与方法已实际分析，提供不能被同构归并吞掉的机制或条件。",
+      "mechanism": "反转为给定次数可覆盖楼层，再二分最少次数。",
+      "conditions": "资源会破损；k<=100,n<=1e4，组合项饱和判定。",
+      "variants": "楼层不能按普通二分免费试探；覆盖DP与组合计数等价。",
+      "crossParadigms": [
+        "动态规划",
+        "组合计数"
+      ],
+      "exerciseUrls": [
+        "https://leetcode.com/problems/super-egg-drop/description/"
+      ]
+    },
+    {
+      "id": "root-lca",
+      "source": "source:cses",
+      "locator": "https://cses.fi/problemset/task/1688/",
+      "readState": "analyzed",
+      "note": "work/first-chapter-20261028/root-extraction.md",
+      "disposition": "included",
+      "reason": "原题合同与方法已实际分析，提供不能被同构归并吞掉的机制或条件。",
+      "mechanism": "等深后同步提升，保留尚未会合的最大距离。",
+      "conditions": "有根树；本题parent[i]<i；n/q<=2e5。",
+      "variants": "精确k跳是支撑；LCA和阈值祖先才有搜索证书。",
+      "crossParadigms": [
+        "树",
+        "倍增"
+      ],
+      "exerciseUrls": [
+        "https://cses.fi/problemset/task/1688/"
+      ]
+    }
+  ]
+}

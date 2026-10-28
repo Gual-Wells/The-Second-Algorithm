@@ -1,0 +1,99 @@
+{
+  "summary": "完成第一轮机制/条件/实现可行性综合，初始八分支成立但参数恢复与包络层次仍是核心待决。",
+  "notes": [
+    "work/first-chapter-20261028/first-synthesis.md",
+    "work/first-chapter-20261028/root-extraction.md",
+    "work/first-chapter-20261028/books-extraction.md",
+    "work/first-chapter-20261028/sources-extraction.md",
+    "work/first-chapter-20261028/independent-scope-challenge.md"
+  ],
+  "sessions": [
+    {
+      "question": "有序边界与结构排除能否用同一真值模板？",
+      "materialIds": [
+        "root-boundary",
+        "root-peak",
+        "root-rotated",
+        "root-convex"
+      ],
+      "findings": "不能。全局分区、旋转有序片段、峰值/凸形存在性分别给证书。重复可能迫使线性退化。",
+      "implications": "前置分清三种证据；正式类型保留结构变型，库前提单独核。"
+    },
+    {
+      "question": "各答案二分判定器是否可互换？",
+      "materialIds": [
+        "root-isqrt",
+        "root-prefix-orders",
+        "root-matching",
+        "root-eggdrop",
+        "web-family-1-1",
+        "web-family-1-2",
+        "web-family-2-1",
+        "web-family-3-1",
+        "web-family-4-1",
+        "web-family-5-1",
+        "web-family-6-1",
+        "method-cowdance"
+      ],
+      "findings": "不能。非负分段依靠贪心领先，间距选择靠最早放置，产能可加，台数靠事件依赖，图与匹配需实际完整算法，前缀事件还要差分或命中。鸡蛋查询反转覆盖预算。",
+      "implications": "按问题本质而非一个check模板组织；每个判定都讲正确性、单调性和成本。"
+    },
+    {
+      "question": "秩、选择与有序状态是什么关系？",
+      "materialIds": [
+        "root-pigeonhole",
+        "root-weighted",
+        "web-family-7-1",
+        "web-family-8-1",
+        "web-family-9-1",
+        "web-family-10-1",
+        "web-family-11-1",
+        "web-family-11-2",
+        "web-family-11-3",
+        "web-family-12-1",
+        "web-family-12-2",
+        "method-lis"
+      ],
+      "findings": "隐式集合在值域计数、双数组在分割位置搜索；LIS/加权调度的二分只加速真实DP状态查询。抽屉容量异常与有序累计逆查又有不同证书。",
+      "implications": "不能把矩阵/数对/乘法表计数或两数组切分归并掉；LIS恢复与计数边界须兑现。"
+    },
+    {
+      "question": "连续数值问题的条件是否相同？",
+      "materialIds": [
+        "root-continuous",
+        "web-family-13-1",
+        "web-family-14-1",
+        "web-family-15-1",
+        "method-average",
+        "method-sabotage"
+      ],
+      "findings": "异号根需连续不需全局单调；平均/比值则先代数变换，再由合法子集约束决定单调判定。非空内部删除与长度窗口不同。",
+      "implications": "分别教求某根、合法前缀最小、内部最大子段和、top-m变换选择；固定误差预算。"
+    },
+    {
+      "question": "结构内提升与多问二分有何独立变化？",
+      "materialIds": [
+        "root-lca",
+        "challenge-fenwick-structural-search",
+        "challenge-binary-lifting-source",
+        "challenge-acl-structural-search",
+        "challenge-binary-jump-guide",
+        "challenge-time-pbs-method",
+        "challenge-value-divide-method"
+      ],
+      "findings": "按位函数复合不是天然搜索；LCA/频数秩/区间摘要提供可跳块证书。时间PBS重放事件，动态kth则稳定分流修改与查询并扣秩/撤销。",
+      "implications": "保留实际结构，不拿多次数组lower_bound冒充批量二分；两种离线法分节。"
+    },
+    {
+      "question": "独立挑战是否已把初始八分支推翻？",
+      "materialIds": [
+        "challenge-aliens-official-method",
+        "challenge-tallbarn-official-method",
+        "challenge-wqs-extended-exposition"
+      ],
+      "findings": "未推翻大领域，但暴露一维惩罚参数恢复尚未承载；数量单调并不保证精确约束最优。CHT维护与边界查询的层次也要明确。",
+      "implications": "进入范围复审，选择可整数验证的完整载体；不以太难/以后DP为由关闭。"
+    }
+  ],
+  "unresolved": "惩罚参数恢复载体与CHT范围边界未关闭，须实质复审；原题演算/代码验证还未编纂。"
+}

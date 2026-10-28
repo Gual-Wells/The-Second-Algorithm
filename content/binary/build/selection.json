@@ -1,0 +1,198 @@
+{
+  "codeBlocks": [
+    "duplicate-manual",
+    "duplicate-standard",
+    "missing-domain",
+    "weighted-manual",
+    "weighted-standard",
+    "matrix-rank-manual",
+    "matrix-rank-standard",
+    "pair-rank-manual",
+    "pair-rank-standard",
+    "multiplication-manual",
+    "multiplication-standard",
+    "two-array-manual",
+    "two-array-standard",
+    "lis-manual",
+    "lis-standard",
+    "lis-count",
+    "jobs-manual",
+    "jobs-standard",
+    "egg-manual",
+    "egg-standard"
+  ],
+  "questionReferences": [
+    "Q100003",
+    "Q100002",
+    "Q100010",
+    "Q100001",
+    "Q100002",
+    "Q100008",
+    "Q100004",
+    "Q100005"
+  ],
+  "knowledgeIntroductions": [
+    "Q100010"
+  ],
+  "knowledgeDependencies": {
+    "content/knowledge/predicate-capture.md": "20268ac5417cf64e018b84239e1b19812b6c68e7a8f11a7b5cd2db4df8cd6486",
+    "content/knowledge/integer-budget.md": "0fd808334cbdcaa476cdaa009a8bcead67242c09cb7c99bb984b6776dd1bca5d",
+    "content/knowledge/random-integers.md": "ce3946146d3fe3f667dcee35700aea75add4c0d36327fcb163b7d8fbdcfb92fa",
+    "content/knowledge/binary-library.md": "73032bfacaabbb7cfc97893bcb0de1febf516c9d0d13fd7abc7342331337dac1",
+    "content/knowledge/selection-reorder.md": "b336b505a2c642a4e975aa8c02a0654ee7bd7742c97031d4ee5884a3c3f75f09",
+    "content/knowledge/ordering.md": "fc1e71d7461da30e919e4bcbe7f2dd072ab367f741a733a2e91a779e82518870",
+    "content/knowledge/borrowing-vector.md": "fca6169ced851bbada4dfa0825954ab016a86083ee4fe7c66be618286661caa1"
+  },
+  "knowledgeHelperSha256": "25c097f043c8361f3d9c98d39556c4c70b1858ed1e074d23f1d39185caa49055",
+  "headings": [
+    {
+      "depth": 1,
+      "id": "选择与状态",
+      "text": "选择与状态"
+    },
+    {
+      "depth": 2,
+      "id": "值域容量异常-重复与缺失",
+      "text": "值域容量异常：重复与缺失"
+    },
+    {
+      "depth": 3,
+      "id": "计数驱动的值域收缩",
+      "text": "计数驱动的值域收缩"
+    },
+    {
+      "depth": 3,
+      "id": "用标准算法表达计数",
+      "text": "用标准算法表达计数"
+    },
+    {
+      "depth": 2,
+      "id": "累计权重的逆查询与采样",
+      "text": "累计权重的逆查询与采样"
+    },
+    {
+      "depth": 3,
+      "id": "构建累计量并查位置",
+      "text": "构建累计量并查位置"
+    },
+    {
+      "depth": 3,
+      "id": "前缀算法-边界算法与整数分布",
+      "text": "前缀算法、边界算法与整数分布"
+    },
+    {
+      "depth": 2,
+      "id": "行列有序矩阵秩-楼梯计数",
+      "text": "行列有序矩阵秩：楼梯计数"
+    },
+    {
+      "depth": 3,
+      "id": "值域边界与楼梯判定",
+      "text": "值域边界与楼梯判定"
+    },
+    {
+      "depth": 3,
+      "id": "每行用上界计数",
+      "text": "每行用上界计数"
+    },
+    {
+      "depth": 2,
+      "id": "数对距离秩-窗口计数反求第-k-小",
+      "text": "数对距离秩：窗口计数反求第 k 小"
+    },
+    {
+      "depth": 3,
+      "id": "双指针判定",
+      "text": "双指针判定"
+    },
+    {
+      "depth": 3,
+      "id": "每个左端查一个上界",
+      "text": "每个左端查一个上界"
+    },
+    {
+      "depth": 2,
+      "id": "乘法表秩-解析计数巨大隐式集合",
+      "text": "乘法表秩：解析计数巨大隐式集合"
+    },
+    {
+      "depth": 3,
+      "id": "解析计数",
+      "text": "解析计数"
+    },
+    {
+      "depth": 3,
+      "id": "标准设施只表达支撑操作",
+      "text": "标准设施只表达支撑操作"
+    },
+    {
+      "depth": 2,
+      "id": "两有序数组中位-在合法分割位置二分",
+      "text": "两有序数组中位：在合法分割位置二分"
+    },
+    {
+      "depth": 3,
+      "id": "交叉边界驱动切分",
+      "text": "交叉边界驱动切分"
+    },
+    {
+      "depth": 3,
+      "id": "线性合并是另一条真实路径",
+      "text": "线性合并是另一条真实路径"
+    },
+    {
+      "depth": 2,
+      "id": "dp-有序前沿-最小尾值与二分替换",
+      "text": "DP 有序前沿：最小尾值与二分替换"
+    },
+    {
+      "depth": 3,
+      "id": "保存真实前驱-恢复可行序列",
+      "text": "保存真实前驱，恢复可行序列"
+    },
+    {
+      "depth": 3,
+      "id": "边界设施与二维嵌套",
+      "text": "边界设施与二维嵌套"
+    },
+    {
+      "depth": 2,
+      "id": "带权兼容调度-二分定位-dp-前驱",
+      "text": "带权兼容调度：二分定位 DP 前驱"
+    },
+    {
+      "depth": 3,
+      "id": "前驱数量直接作为-dp-下标",
+      "text": "前驱数量直接作为 DP 下标"
+    },
+    {
+      "depth": 3,
+      "id": "原题端点决定-lower-还是-upper",
+      "text": "原题端点决定 lower 还是 upper"
+    },
+    {
+      "depth": 2,
+      "id": "查询会消耗资源-反求最少试探次数",
+      "text": "查询会消耗资源：反求最少试探次数"
+    },
+    {
+      "depth": 3,
+      "id": "组合计数作为判定器",
+      "text": "组合计数作为判定器"
+    },
+    {
+      "depth": 3,
+      "id": "直接推进覆盖-dp-的对照",
+      "text": "直接推进覆盖 DP 的对照"
+    }
+  ],
+  "sourceSha256": "667de0c2cd3cb7301de2576b2b8b10a9f0c74bd920f42f55532dba0d5d88b07d",
+  "codeSha256": "0f837992c1e8d0ba122b571c2c184902df6cdb876c1a5c82754b9b9141bde605",
+  "markdownSha256": "e62cff2dad15753397860e49aa11d4391d55d4c590cd2ac4df8c3e2a6fbe6b0e",
+  "htmlSha256": "1853da74523c187ce1e3db976d22a6245c5117b99414939062cb46cfeed6bfc2",
+  "builderSha256": "cfd34b742cb814b7b0318662bbdb48b4937f74001c4fb729af37c4fc99771146",
+  "learningSha256": "a2dff9fe5b1df1dd0faa77805f2ccb2085ad09341f5caf7c6a67cabb7be3b1ac",
+  "publicationsSha256": "752cb538156bdb4934619e280aff7a3c84a071d89dae8af2899a2afdf5a9a09e",
+  "markdownBytes": 30770,
+  "htmlBytes": 72002
+}

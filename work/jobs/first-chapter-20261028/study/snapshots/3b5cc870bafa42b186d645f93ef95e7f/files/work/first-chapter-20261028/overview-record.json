@@ -1,0 +1,13 @@
+{
+  "summary": "全14书目与39站来源概况、真实空出版身份及独立候选基础已完成；未声称全书全站读完。",
+  "notes": [
+    "work/first-chapter-20261028/baseline.md",
+    "work/first-chapter-20261028/root-overview.md",
+    "work/first-chapter-20261028/books-overview.md",
+    "work/first-chapter-20261028/sources-overview.md",
+    "work/first-chapter-20261028/candidate-comparison.md"
+  ],
+  "corpusUnderstanding": "六本地材料包保留真实版本与提取限制；CPH可从作者官方在线读取。39站角色含原题、方法、标准、实现及工具，非39个独立题库。各项判断见两份overview JSON/MD。",
+  "publicationReview": "有效schema2 withdrawn空出版与schema1空章登记；study-status为no-prior-chapters。历史撤回内容不充当旧章。",
+  "candidateBasis": "独立比较二分、贪心、完整搜索、DP及图机制，依据CP4/EPI/CPH与CSES/Codility/AtCoder等真实材料；未继承历史章范围。"
+}

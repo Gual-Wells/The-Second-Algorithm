@@ -347,8 +347,9 @@ export function renderAuthority(authority, rewriteLink, knowledge = new Map()) {
   if (heading !== authority.manifest.headings.length || codeIndex !== authority.blocks.size)
     throw new Error('Reading content omitted a canonical heading or code block');
   html = html.replace(/<table>/g, '<div class="table-wrap"><table>').replace(/<\/table>/g, '</table></div>');
-  const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(x => x[1]);
-  if (new Set(ids).size !== ids.length) throw new Error('Duplicate reading anchor');
+  const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map(x => x[1]);
+  if (new Set(ids).size !== ids.length)
+    throw new Error(`${authority.id}: duplicate reading anchors: ${[...new Set(ids.filter((id, index) => ids.indexOf(id) !== index))].join(', ')}`);
   return { html, headings: authority.manifest.headings.filter((x, index) => !(index === 0 && x.depth === 1)) };
 }
 
@@ -465,9 +466,16 @@ export async function buildLibrary(root, output, publications, gitRevision, lear
       if (!inside(path.resolve(root, 'content'), await fs.realpath(filename))) throw new Error('Implementation escapes content/');
       source = await fs.readFile(filename, 'utf8'); sources.set(implementation.source, source);
     }
-    if (!source.includes(implementation.symbol)) throw new Error('Implementation symbol is absent: ' + implementation.id);
-    for (const region of implementation.regions) if (!new RegExp('// BEGIN ' + region + '\\r?\\n[\\s\\S]*?// END ' + region + '(?:\\r?\\n|$)').test(source))
-      throw new Error('Implementation region is absent: ' + region);
+    const regionBodies = implementation.regions.map(region => {
+      const match = source.match(new RegExp('// BEGIN ' + region + '\\r?\\n([\\s\\S]*?)// END ' + region + '(?:\\r?\\n|$)'));
+      if (!match) throw new Error('Implementation region is absent: ' + region);
+      return match[1];
+    }).join('\n');
+    // A qualified function can be defined inside its namespace. Match the same
+    // terminal declaration token as course validation; compilation checks use.
+    const terminalSymbol = implementation.symbol.split('::').at(-1);
+    if (!new RegExp('\\b' + terminalSymbol + '\\s*\\(').test(regionBodies))
+      throw new Error('Implementation symbol is absent: ' + implementation.id);
     const target = learning.targets.find(target => target.id === implementation.target);
     const filename = path.resolve(root, target.source);
     if (!inside(path.join(root, 'tests/cpp'), await fs.realpath(filename))) throw new Error('Target escapes tests/cpp');

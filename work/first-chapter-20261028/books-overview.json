@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-28",
+  "purpose": "first-chapter-independent-books-overview",
+  "stage": "overview-and-independent-candidate-advice",
+  "bookAssessments": [
+    {
+      "id": "epi-cpp",
+      "relevance": "面试题型与变型、实现思路、搜索/递归/DP/贪心/图机制反查",
+      "readState": "overview-and-body-excerpts-read",
+      "reason": "已核530页与303项目录；相关机制正文抽读，未全书精读/代码核验",
+      "locator": [
+        ".local/library/epi/manifest.json",
+        ".local/library/epi/preprocessed/toc-index.json",
+        ".local/library/epi/preprocessed/pages.jsonl",
+        "EPI physical198–205,207,290–291,295,297,305,311–313,326,338,341–344,347,358–361"
+      ]
+    },
+    {
+      "id": "competitive-programming-4",
+      "relevance": "范式和进阶分支、复杂度条件、跨领域反查",
+      "readState": "overview-and-body-excerpts-read",
+      "reason": "已核两卷279目录项与681页；Book1相关正文概况抽读，Book2高级域仅核目录",
+      "locator": [
+        ".local/library/cp4/manifest.json",
+        ".local/library/cp4/cp4-book-1-2020-text/sections.json",
+        ".local/library/cp4/cp4-book-2-2020-text/sections.json",
+        "CP4 B1 physical159,160,165,169,170,178–181,185–187,194–196,203–204,214,223,225,227,245,253,279"
+      ]
+    },
+    {
+      "id": "algorithm-competition-advanced-guide",
+      "relevance": "计划补充中文竞赛方法、复杂变型",
+      "readState": "registered-not-acquired",
+      "reason": "未提供本地正文/目录；不据书名认定实际覆盖",
+      "locator": [
+        "catalog/books.json#algorithm-competition-advanced-guide"
+      ]
+    },
+    {
+      "id": "aoapc-training-guide-2021",
+      "relevance": "计划补充实战题型归并与训练路径",
+      "readState": "registered-not-acquired",
+      "reason": "未提供本地正文/目录；版面、题号未核",
+      "locator": [
+        "catalog/books.json#aoapc-training-guide-2021"
+      ]
+    },
+    {
+      "id": "competitive-programmers-handbook",
+      "relevance": "第三套算法体系与二分/搜索/贪心/DP/图分类反查",
+      "readState": "official-web-toc-and-body-excerpts-read",
+      "reason": "本地未入库；作者CSES官方PDF本轮实际取得，296页、2018-07-03 draft；非全书精读",
+      "locator": [
+        "https://cses.fi/book/index.php",
+        "https://cses.fi/book/book.pdf",
+        "physical41–44 binary search;64 meet-in-the-middle;75–76 DP concept;TOC physical3–5"
+      ]
+    },
+    {
+      "id": "professional-cpp-6",
+      "relevance": "就近支撑迭代器、容器、算法、比较器、所有权/错误合同",
+      "readState": "local-manifest-and-toc-read",
+      "reason": "核34章1426书签34习题入口；本轮未精读全部支撑正文",
+      "locator": [
+        ".local/library/professional-cpp/manifest.json",
+        ".local/library/professional-cpp/chapters.json",
+        ".local/library/professional-cpp/sections.json",
+        "physical705–882 chapters17–20"
+      ]
+    },
+    {
+      "id": "modern-cpp-challenge",
+      "relevance": "具体C++实战例题，不充当算法全景目录",
+      "readState": "local-manifest-and-toc-read",
+      "reason": "核100题12章264spine；算法题45–60仅索引概况，未逐题读解答",
+      "locator": [
+        ".local/library/modern-cpp-challenge/manifest.json",
+        ".local/library/modern-cpp-challenge/index.json",
+        ".local/library/modern-cpp-challenge/chapters.json",
+        "Chapter6 problems45–60 physical98–142"
+      ]
+    },
+    {
+      "id": "discovering-modern-cpp-2",
+      "relevance": "泛型、库与类机制的按需支撑",
+      "readState": "local-manifest-and-toc-read",
+      "reason": "核7章102书签1898页；正文至816，1081附录代码图像不算新增内容；未精读正文",
+      "locator": [
+        ".local/library/discovering-modern-cpp/manifest.json",
+        ".local/library/discovering-modern-cpp/sections.json",
+        ".local/library/discovering-modern-cpp/code-image-index.json"
+      ]
+    },
+    {
+      "id": "modern-cpp-cookbook-3",
+      "relevance": "计划补充新版C++惯用法，当前不依赖",
+      "readState": "registered-not-acquired",
+      "reason": "用户未提供3e；不能用2e替称3e",
+      "locator": [
+        "catalog/books.json#modern-cpp-cookbook-3"
+      ]
+    },
+    {
+      "id": "cpp-concurrency-in-action-2",
+      "relevance": "并发题型实际需要时定点补证",
+      "readState": "registered-not-acquired",
+      "reason": "未取得正文，首章不预塞并发内容",
+      "locator": [
+        "catalog/books.json#cpp-concurrency-in-action-2"
+      ]
+    },
+    {
+      "id": "cpp-brain-teasers",
+      "relevance": "必要语言陷阱与生命周期定点补证",
+      "readState": "registered-not-acquired",
+      "reason": "未取得正文，不将算法章改成语言谜题",
+      "locator": [
+        "catalog/books.json#cpp-brain-teasers"
+      ]
+    },
+    {
+      "id": "exceptional-cpp",
+      "relevance": "异常安全、泛型、接口机制定点补证",
+      "readState": "registered-not-acquired",
+      "reason": "未取得正文，47为书名题数而非本轮读过数量",
+      "locator": [
+        "catalog/books.json#exceptional-cpp"
+      ]
+    },
+    {
+      "id": "more-exceptional-cpp",
+      "relevance": "进阶语言与库机制定点补证",
+      "readState": "registered-not-acquired",
+      "reason": "未取得正文，40为书名题数而非本轮读过数量",
+      "locator": [
+        "catalog/books.json#more-exceptional-cpp"
+      ]
+    },
+    {
+      "id": "modern-cpp-cookbook-2",
+      "relevance": "容器算法迭代器、函数及必要性能惯用法",
+      "readState": "local-manifest-and-toc-read",
+      "reason": "核2e751页12章712书签132配方；非3e，部分外库不冒充标准库",
+      "locator": [
+        ".local/library/modern-cpp-cookbook/manifest.json",
+        ".local/library/modern-cpp-cookbook/sections.json",
+        "physical252–309 Chapter5;176–223 Chapter3;516–577 Chapter9"
+      ]
+    }
+  ],
+  "candidateAdvice": {
+    "preferredResearchCandidate": "binary-search",
+    "strongAlternative": "complete-search-and-backtracking",
+    "notAFinalScope": true,
+    "reason": "统一消除机制可统摄广泛题型、困难判定和标准库合同；不是因历史稿或首章轻量；独立原题研究可推翻候选顺序"
+  },
+  "readingBoundary": "TOC and metadata verified; body excerpt locations explicitly recorded; no full semantic reading or source-code validation claimed"
+}

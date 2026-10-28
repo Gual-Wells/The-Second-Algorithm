@@ -1,0 +1,662 @@
+{
+  "schemaVersion": 2,
+  "id": "99c695d8f8454f898baac13bb759bcfb",
+  "job": "first-chapter-20261028",
+  "chapter": "chapter-01",
+  "phase": "overview",
+  "createdAt": "2026-10-28T12:32:11.894595+00:00",
+  "base": {
+    "inputs": [
+      {
+        "path": "catalog/books.json",
+        "sha256": "328c854281bad24d982c830ec73944ce00c65d233579a7b821820ad7d79a96d8"
+      },
+      {
+        "path": "catalog/sources.json",
+        "sha256": "cd3695b0569fda6c6091fb01c3a346d2a97ac733ddc6632b68d4357c8bee76f3"
+      },
+      {
+        "path": "protocol/RESEARCH_DEPARTMENT.md",
+        "sha256": "8fc44abbc9f08b799fcdfcd1b3b5d52adaf825cd05c1af699fc482018d8dad25"
+      },
+      {
+        "path": "protocol/RESEARCH_FACILITIES.md",
+        "sha256": "82e5894d2e8989414241d0fffeff1a17504acd6947192232c62ee736104ca7bd"
+      }
+    ],
+    "publicationFrontier": {
+      "collections": [],
+      "chapters": [],
+      "tasks": [],
+      "knowledge": [],
+      "inputs": []
+    }
+  },
+  "previous": null,
+  "recordPath": "work/first-chapter-20261028/overview-record.json",
+  "record": {
+    "summary": "全14书目与39站来源概况、真实空出版身份及独立候选基础已完成；未声称全书全站读完。",
+    "notes": [
+      "work/first-chapter-20261028/baseline.md",
+      "work/first-chapter-20261028/root-overview.md",
+      "work/first-chapter-20261028/books-overview.md",
+      "work/first-chapter-20261028/sources-overview.md",
+      "work/first-chapter-20261028/candidate-comparison.md"
+    ],
+    "corpusUnderstanding": "六本地材料包保留真实版本与提取限制；CPH可从作者官方在线读取。39站角色含原题、方法、标准、实现及工具，非39个独立题库。各项判断见两份overview JSON/MD。",
+    "publicationReview": "有效schema2 withdrawn空出版与schema1空章登记；study-status为no-prior-chapters。历史撤回内容不充当旧章。",
+    "candidateBasis": "独立比较二分、贪心、完整搜索、DP及图机制，依据CP4/EPI/CPH与CSES/Codility/AtCoder等真实材料；未继承历史章范围。"
+  },
+  "files": [
+    {
+      "path": "work/first-chapter-20261028/baseline.md",
+      "sha256": "be4394807613c00a6269f57081ca55d6a5054812bbbdd198b7abae44c32c08e2",
+      "archive": "work/jobs/first-chapter-20261028/study/snapshots/99c695d8f8454f898baac13bb759bcfb/files/work/first-chapter-20261028/baseline.md"
+    },
+    {
+      "path": "work/first-chapter-20261028/books-overview.md",
+      "sha256": "0cd8dcb4febcb9b132cbabf59bf331f0a497349f804e3224c5b2387d78680f4e",
+      "archive": "work/jobs/first-chapter-20261028/study/snapshots/99c695d8f8454f898baac13bb759bcfb/files/work/first-chapter-20261028/books-overview.md"
+    },
+    {
+      "path": "work/first-chapter-20261028/candidate-comparison.md",
+      "sha256": "98656dce6ea3a165f939fd95712fdf08668ecea37780b5d3438293d70906969b",
+      "archive": "work/jobs/first-chapter-20261028/study/snapshots/99c695d8f8454f898baac13bb759bcfb/files/work/first-chapter-20261028/candidate-comparison.md"
+    },
+    {
+      "path": "work/first-chapter-20261028/overview-record.json",
+      "sha256": "6f64778035015be90c7ce553b6e366988a0e365b6386d22d44d1bda1eb3f339f",
+      "archive": "work/jobs/first-chapter-20261028/study/snapshots/99c695d8f8454f898baac13bb759bcfb/files/work/first-chapter-20261028/overview-record.json"
+    },
+    {
+      "path": "work/first-chapter-20261028/root-overview.md",
+      "sha256": "4000c3391cb433094625bedec6dada3b4333ac71745b112ce68e9276383100fb",
+      "archive": "work/jobs/first-chapter-20261028/study/snapshots/99c695d8f8454f898baac13bb759bcfb/files/work/first-chapter-20261028/root-overview.md"
+    },
+    {
+      "path": "work/first-chapter-20261028/sources-overview.md",
+      "sha256": "27d799e8a5f47ddc5e6cb311358c7f64dd3c1c6d505f7c12b122151f73b9e0c4",
+      "archive": "work/jobs/first-chapter-20261028/study/snapshots/99c695d8f8454f898baac13bb759bcfb/files/work/first-chapter-20261028/sources-overview.md"
+    },
+    {
+      "path": "work/jobs/first-chapter-20261028/study/dossier.json",
+      "sha256": "c1b1ddfca35eef56d92d254b755a70d6f3cfa7b04db4a7c36729e2a86db61436",
+      "archive": "work/jobs/first-chapter-20261028/study/snapshots/99c695d8f8454f898baac13bb759bcfb/files/work/jobs/first-chapter-20261028/study/dossier.json"
+    },
+    {
+      "path": "work/jobs/first-chapter-20261028/study/ledger.json",
+      "sha256": "5424c70f6fd1a905ea8b26bad3bf6f4322f6e9c61b590dc41320f38c87a1257d",
+      "archive": "work/jobs/first-chapter-20261028/study/snapshots/99c695d8f8454f898baac13bb759bcfb/files/work/jobs/first-chapter-20261028/study/ledger.json"
+    },
+    {
+      "path": "work/jobs/first-chapter-20261028/study/scope.json",
+      "sha256": "29a86a35dde3395051e80ed270ddcb60e9fee45ddd988e7e2094a21908aefdba",
+      "archive": "work/jobs/first-chapter-20261028/study/snapshots/99c695d8f8454f898baac13bb759bcfb/files/work/jobs/first-chapter-20261028/study/scope.json"
+    }
+  ],
+  "data": {
+    "ledger": {
+      "schemaVersion": 1,
+      "entries": [
+        {
+          "id": "book:epi-cpp",
+          "relevance": "related",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。已核530页与303项目录；相关机制正文抽读，未全书精读/代码核验",
+          "locator": ".local/library/epi/manifest.json; .local/library/epi/preprocessed/toc-index.json; .local/library/epi/preprocessed/pages.jsonl; EPI physical198–205,207,290–291,295,297,305,311–313,326,338,341–344,347,358–361",
+          "readState": "analyzed",
+          "materialIds": [
+            "candidate-interview"
+          ],
+          "core": false
+        },
+        {
+          "id": "book:competitive-programming-4",
+          "relevance": "related",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。已核两卷279目录项与681页；Book1相关正文概况抽读，Book2高级域仅核目录",
+          "locator": ".local/library/cp4/manifest.json; .local/library/cp4/cp4-book-1-2020-text/sections.json; .local/library/cp4/cp4-book-2-2020-text/sections.json; CP4 B1 physical159,160,165,169,170,178–181,185–187,194–196,203–204,214,223,225,227,245,253,279",
+          "readState": "analyzed",
+          "materialIds": [
+            "candidate-books"
+          ],
+          "core": false
+        },
+        {
+          "id": "book:algorithm-competition-advanced-guide",
+          "relevance": "unavailable",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。未提供本地正文/目录；不据书名认定实际覆盖",
+          "locator": "catalog/books.json#algorithm-competition-advanced-guide",
+          "readState": "unavailable",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "book:aoapc-training-guide-2021",
+          "relevance": "unavailable",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。未提供本地正文/目录；版面、题号未核",
+          "locator": "catalog/books.json#aoapc-training-guide-2021",
+          "readState": "unavailable",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "book:competitive-programmers-handbook",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。本地未入库；作者CSES官方PDF本轮实际取得，296页、2018-07-03 draft；非全书精读",
+          "locator": "https://cses.fi/book/index.php; https://cses.fi/book/book.pdf; physical41–44 binary search;64 meet-in-the-middle;75–76 DP concept;TOC physical3–5",
+          "readState": "analyzed",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "book:professional-cpp-6",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。核34章1426书签34习题入口；本轮未精读全部支撑正文",
+          "locator": ".local/library/professional-cpp/manifest.json; .local/library/professional-cpp/chapters.json; .local/library/professional-cpp/sections.json; physical705–882 chapters17–20",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "book:modern-cpp-challenge",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。核100题12章264spine；算法题45–60仅索引概况，未逐题读解答",
+          "locator": ".local/library/modern-cpp-challenge/manifest.json; .local/library/modern-cpp-challenge/index.json; .local/library/modern-cpp-challenge/chapters.json; Chapter6 problems45–60 physical98–142",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "book:discovering-modern-cpp-2",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。核7章102书签1898页；正文至816，1081附录代码图像不算新增内容；未精读正文",
+          "locator": ".local/library/discovering-modern-cpp/manifest.json; .local/library/discovering-modern-cpp/sections.json; .local/library/discovering-modern-cpp/code-image-index.json",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "book:modern-cpp-cookbook-3",
+          "relevance": "unavailable",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。用户未提供3e；不能用2e替称3e",
+          "locator": "catalog/books.json#modern-cpp-cookbook-3",
+          "readState": "unavailable",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "book:cpp-concurrency-in-action-2",
+          "relevance": "unavailable",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。未取得正文，首章不预塞并发内容",
+          "locator": "catalog/books.json#cpp-concurrency-in-action-2",
+          "readState": "unavailable",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "book:cpp-brain-teasers",
+          "relevance": "unavailable",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。未取得正文，不将算法章改成语言谜题",
+          "locator": "catalog/books.json#cpp-brain-teasers",
+          "readState": "unavailable",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "book:exceptional-cpp",
+          "relevance": "unavailable",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。未取得正文，47为书名题数而非本轮读过数量",
+          "locator": "catalog/books.json#exceptional-cpp",
+          "readState": "unavailable",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "book:more-exceptional-cpp",
+          "relevance": "unavailable",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。未取得正文，40为书名题数而非本轮读过数量",
+          "locator": "catalog/books.json#more-exceptional-cpp",
+          "readState": "unavailable",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "book:modern-cpp-cookbook-2",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。核2e751页12章712书签132配方；非3e，部分外库不冒充标准库",
+          "locator": ".local/library/modern-cpp-cookbook/manifest.json; .local/library/modern-cpp-cookbook/sections.json; physical252–309 Chapter5;176–223 Chapter3;516–577 Chapter9",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:leetcode",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。核心面试原题身份与函数式合同；二分、贪心、DP、图搜索均可取材。专题标签只是检索入口。 本轮Top Interview 150仅摘要；LC33原题题意、唯一性、复杂度与约束已读。不能声称枚举150题。",
+          "locator": "https://leetcode.com/studyplan/top-interview-150/; https://leetcode.com/problems/search-in-rotated-sorted-array/description/",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:codility",
+          "relevance": "related",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。17课给独立候选横向对照；14二分、16贪心、17DP均有任务入口，不把每课两题当领域全量。 本轮17课导航、14/16/17课列表及MinMaxDivision单一题意全文合同已读；网页重复多语言不重复计题。",
+          "locator": "https://app.codility.com/programmers/lessons/; https://app.codility.com/programmers/lessons/14-binary_search_algorithm/; https://app.codility.com/programmers/lessons/16-greedy_algorithms/; https://app.codility.com/programmers/lessons/17-dynamic_programming/; https://app.codility.com/programmers/lessons/14-binary_search_algorithm/min_max_division/",
+          "readState": "analyzed",
+          "materialIds": [
+            "candidate-assessment"
+          ],
+          "core": false
+        },
+        {
+          "id": "source:hackerrank",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。面试专题涵盖数组、哈希、排序、搜索、贪心、DP、图、树和回溯；可核真实岗位式输入输出。 本轮仅准备Kit导航；未进入全部子题。页面公司百分比不能转为我们的目标岗位频率；提示Cookie限制。",
+          "locator": "https://www.hackerrank.com/interview/interview-preparation-kit",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:cses",
+          "relevance": "related",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。全目录适合跨领域地图；Sorting and Searching是混合桶，不应抄作单一章。DP、图、查询、树、字符串与额外专项显示领域层次。 本轮目录及Ferris Wheel、Counting Rooms原题题意/约束已读；其余目录条目未升级正文读取。",
+          "locator": "https://cses.fi/problemset/; https://cses.fi/problemset/task/1090/; https://cses.fi/problemset/task/1192/",
+          "readState": "analyzed",
+          "materialIds": [
+            "candidate-problems"
+          ],
+          "core": false
+        },
+        {
+          "id": "source:luogu",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。中文原题与可核题号入口，适合条件变型与国内笔试题风；CF/AT/UVa转载须沿上游身份归并。 本轮只复核登记；历史只读当前列表和P1182，未枚举全分页；社区题解另证。",
+          "locator": "https://www.luogu.com.cn/",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:atcoder",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。DP Contest A–Z直接显示大领域支系；ABC/ARC/AGC归档可动态补复杂组合题。 本轮归档当前页、DP A–Z清单和DP E题意/约束已读；非全比赛归档，题解User Editorial不统一称官方。",
+          "locator": "https://atcoder.jp/contests/archive; https://atcoder.jp/contests/dp/tasks; https://atcoder.jp/contests/dp/tasks/dp_e",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:codeforces",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。标签交叉有利于检出二分+贪心/DSU/图等组合，题号身份稳定；题干和方法判断仍需逐题。 本轮当前题库页、API合同及binary search过滤实际响应；1308条元数据不等于1308独立题型或题意已读。",
+          "locator": "https://codeforces.com/problemset; https://codeforces.com/apiHelp/methods#problemset.problems; https://codeforces.com/api/problemset.problems?tags=binary%20search",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:cp-algorithms",
+          "relevance": "related",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。各主题作者解释与实现用于机制、条件和复杂变型；DP、二分、图等导航形成独立分类视角。 本轮导航和二分、DP导论的所述段落已读；非整站。二分当前文章含并行二分入口，成章应主动考察而非默默遗漏。",
+          "locator": "https://cp-algorithms.com/navigation.html; https://cp-algorithms.com/num_methods/binary_search.html; https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+          "readState": "analyzed",
+          "materialIds": [
+            "candidate-methods"
+          ],
+          "core": false
+        },
+        {
+          "id": "source:oi-wiki",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。算法基础、搜索、DP、图与数据结构提供中文别名和细分支，用于反查候选边界。 本轮全局导航读取；条目正文未因导航取得而已读。其竞赛高级分支不自动全部成为求职必要。",
+          "locator": "https://oi-wiki.org/",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:usaco-guide",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。按机制提供原题链接和解题讨论；支持困难变型与第三视角反查，不是USACO官方教材。 本轮general导航；历史二分页实际读件仅作历史证据，未继承当前章节范围；上游题回原平台核。",
+          "locator": "https://usaco.guide/general",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:cpbook",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。作者methods分类用于题型变种与漏项挑战，不把大量题号当完整性证明。 本轮作者说明与过滤结构已读；现页明确是CP5 draft最新分类，非CP4冻结目录；关联题干未全读。",
+          "locator": "https://cpbook.net/methodstosolve",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:epi",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。面试题与作者Judge可提供函数合同、边界测试和C++实现对照；本地商业教材由教材研究负责。 本轮作者主页Judge介绍/版本说明已读；未读取Judge全仓，旧线上Judge已关闭的历史文不能当现服务。",
+          "locator": "https://elementsofprogramminginterviews.com/",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:hello-algo",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。适合简练概念图、术语和标准机制复核，不独担高阶题型完整性。 本轮复核登记；历史有章级导航，未重读正文；多语言共用内容身份。",
+          "locator": "https://www.hello-algo.com/",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:programmercarl",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。以题型路线查面试变型；自己的讲解是方法材料，LC题号仍属LC身份。 本轮复核登记；历史仅导航与仓库元数据；推广、训练营和最全宣传不作证据。",
+          "locator": "https://programmercarl.com/",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:labuladong",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。框架视角用于比较统一写法与条件缺口，不能用框架统一替代方法前提论证。 本轮复核登记；历史二分框架文章可查，不默认受限文章可读，首页提取空白不等全站无内容。",
+          "locator": "https://labuladong.online/zh/algo/",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:doocs-leetcode",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。多解法和多语言用于实现对照；同题翻译或代码不增加原题数。 本轮复核登记；历史导航与仓库元数据；原题条件回LC，需核具体许可证与版本。",
+          "locator": "https://leetcode.doocs.org/",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:onlinejudge",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。UVa原题可补连续数值、图、搜索与竞赛变型；按题号/内容ID建立同一身份。 本轮复核登记；历史23篇指定UVa题面已读、10742未得，不代表全站或当前章取材完成。",
+          "locator": "https://onlinejudge.org/",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:kattis",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。作者分类中的重要上游，可能补数值/建模题，但不能借作者索引冒充已核原题。 本轮/problems再次403；目录与原题均未取得。保持具体缺口，不绕限制。",
+          "locator": "https://open.kattis.com/problems",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:neetcode",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。可作选题路线和题型组织的对照，不是原题合同权威。 本轮roadmap仍只图片链接，未取得完整路线/题单，不宣称读完NeetCode150。",
+          "locator": "https://neetcode.io/roadmap",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:ac-library",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。Fenwick、segtree、DSU、flow、math等有真实库设施；用于复杂交叉实现，不代替算法题型研究。 本轮复核登记；历史production模块与约束已读；后续固定版本并核实际模块合同。",
+          "locator": "https://atcoder.github.io/ac-library/production/document_en/",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:usaco",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。旧竞赛具高质量条件组合、数据与解析，可为候选大领域提供困难证据。 本轮正确归档training及Cow Dance原题已读。注册的contests返回首页/Error；training首试超时、重试成功，未枚举逐篇全部题意。",
+          "locator": "https://usaco.org/index.php?page=contests; https://usaco.org/index.php?page=training; https://usaco.org/index.php?page=viewproblem2&cpid=690",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:oj-uz",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。可为离线、几何、图等高级交叉提供原题与题面PDF，关注任务原出处及OJ重托管身份。 本轮复核登记；历史仅BOI12_mobile单题已读，不能推为全库读取或已有最优实现。",
+          "locator": "https://oj.uz/",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:codechef",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。可补有结构的算法变型；若正文无法取得则不作唯一必要题。 本轮practice只JS壳，未获目录/原题正文；历史TRPTSTIC同样受限。",
+          "locator": "https://www.codechef.com/practice",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:mit-ocw",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。官方讲义用于问题建模、证明和复杂度；峰值搜索可挑战二分必须全局单调的过窄说法。 本轮复核登记；历史仅6.006 2011 Lecture1六页及二维峰值图；不是全课资料已读。",
+          "locator": "https://ocw.mit.edu/",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:cpp-draft",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。标准算法、容器、迭代器和数值边界合同的高权威文本；支持手写与真实标准设施区分。 本轮Algorithms目录和二分整节读件。eel.is是草案展示，滚动草案不等C++17；正式C++17结论须固定N4659或对应文本。",
+          "locator": "https://eel.is/c++draft/algorithms; https://eel.is/c++draft/alg.binary.search",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:cppreference",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。便查版本、重载、失效、复杂度和示例，再向标准文本核关键结论。 本轮复核登记；历史语言/库目录和vector失效表；不能称ISO官方标准。",
+          "locator": "https://cppreference.com/",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:cpp-core-guidelines",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。所有权、接口、边界和RAII的必要工程判断，不把建议当语言强制保证。 本轮复核登记；历史索引/介绍，未逐规则全读。",
+          "locator": "https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:sutter-gotw",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。针对知识缺口选择示例和反例，不另建C++课程；建议与标准语义分开。 本轮复核登记；历史指定#1/#89/#90/#91/#92不同范围，部分C++14年代，现代规则需重核。",
+          "locator": "https://herbsutter.com/gotw/",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:sei-cert-cpp",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。比较器、迭代器、内存与整数等工程陷阱可作C++支撑；规则例子也需独立验证。 本轮复核登记；历史83规则目录及指定正文，不等全读；CTR57已登记归因疑点，不能盲录。",
+          "locator": "https://cmu-sei.github.io/secure-coding-standards/sei-cert-cpp-coding-standard/rules/",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:cppquiz",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。用作必要语义边界的短诊断，不提供算法主章范围。 本轮复核登记；历史C++23说明与179题；网站仓库非题库全集，UB分类须核版本。",
+          "locator": "https://cppquiz.org/",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:exercism-cpp",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。可借环形缓冲等测试与合同补工程机制，按算法章所需取用，不照搬其入门顺序。 本轮复核登记；历史配置及指定题干/测试，未跑习题测试，analyzer:false。",
+          "locator": "https://github.com/exercism/cpp",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:liu-tddd38",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。队列、分配、模板等机制练习和反例可支持知识条目；不强迫读者上课。 本轮复核登记；历史16目录与指定PDF题干；未跑骨架，已有个别提示疑点。",
+          "locator": "https://www.ida.liu.se/~TDDD38/",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:stanford-cs106l",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。真实HashMap/所有权任务支持迭代器、const、接口等必要语义；不能把手写unique_ptr当标准合同。 本轮复核登记；历史固定仓库版本与指定A5/A7、hashmap读件，非全学期/全仓。",
+          "locator": "https://web.stanford.edu/class/cs106l/",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:learncpp",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。查必要机制与短例子，避免基础课序侵入本项目的高阶实战正文。 本轮复核登记；历史目录与14.x选择题，不代表全站已读。",
+          "locator": "https://www.learncpp.com/",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:cpp-insights",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。可观察语法展开以辅佐C++说明；输出不是标准规定必须生成的代码。 本轮复核登记；历史说明和指定转换例，未提交新实验，不作正确性证明。",
+          "locator": "https://cppinsights.io/",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:compiler-explorer",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。为有疑点的代码固定标准、选项、编译器/库进行对照；不属于题库。 本轮复核登记；本轮未跑远程实验；单一汇编或一次通过不证明无UB。",
+          "locator": "https://godbolt.org/",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:modernescpp",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。按需要补模板、并发或设计文章，算法章不因目录存在而扩成C++全课。 本轮复核登记；历史仅分类目录，具体文章未研究。",
+          "locator": "https://www.modernescpp.com/",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:msvc-stl",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。实现可用于观察边界和性能机制；不能把某库/ABI行为提升通用标准保证。 本轮复核登记；历史README，后续具体文件须固定commit；不声称实现文件全读。",
+          "locator": "https://github.com/microsoft/STL",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        },
+        {
+          "id": "source:llvm-libcxx",
+          "relevance": "excluded",
+          "reason": "全景阶段已逐项判断用途与读取边界，尚未作为本章采用材料。定点回归能启发失效、异常和非法比较器测试，验证实现差异。 本轮复核登记；历史llvmorg-20.1.8五份测试全文，未运行上游harness，非题库全量。",
+          "locator": "https://github.com/llvm/llvm-project",
+          "readState": "directory",
+          "materialIds": [],
+          "core": false
+        }
+      ]
+    },
+    "dossier": {
+      "schemaVersion": 1,
+      "materials": [
+        {
+          "id": "candidate-books",
+          "source": "book:competitive-programming-4",
+          "locator": "CP4 B1 physical159–219 / B2 full TOC; EPI chapters12/16/17/18/19",
+          "readState": "analyzed",
+          "note": "work/first-chapter-20261028/books-overview.md",
+          "disposition": "excluded",
+          "reason": "独立候选比较与范围依据；后续以具体分支材料承接，不将其他候选变为二分正文。"
+        },
+        {
+          "id": "candidate-interview",
+          "source": "book:epi-cpp",
+          "locator": "EPI physical198,290,311,341,358 and chapter directories",
+          "readState": "analyzed",
+          "note": "work/first-chapter-20261028/candidate-comparison.md",
+          "disposition": "excluded",
+          "reason": "独立候选比较与范围依据；后续以具体分支材料承接，不将其他候选变为二分正文。"
+        },
+        {
+          "id": "candidate-problems",
+          "source": "source:cses",
+          "locator": "CSES original Factory Machines, Array Division, Flight Discount, Queens and DP task statements",
+          "readState": "analyzed",
+          "note": "work/first-chapter-20261028/candidate-comparison.md",
+          "disposition": "excluded",
+          "reason": "独立候选比较与范围依据；后续以具体分支材料承接，不将其他候选变为二分正文。"
+        },
+        {
+          "id": "candidate-methods",
+          "source": "source:cp-algorithms",
+          "locator": "Binary Search sections arbitrary predicate / continuous / powers / parallel",
+          "readState": "analyzed",
+          "note": "work/first-chapter-20261028/root-overview.md",
+          "disposition": "excluded",
+          "reason": "独立候选比较与范围依据；后续以具体分支材料承接，不将其他候选变为二分正文。"
+        },
+        {
+          "id": "candidate-assessment",
+          "source": "source:codility",
+          "locator": "Developer Training lessons14,16,17 and MinMaxDivision original contract",
+          "readState": "analyzed",
+          "note": "work/first-chapter-20261028/sources-overview.md",
+          "disposition": "excluded",
+          "reason": "独立候选比较与范围依据；后续以具体分支材料承接，不将其他候选变为二分正文。"
+        }
+      ],
+      "findings": [],
+      "questions": [],
+      "searches": [
+        {
+          "id": "overview-primary",
+          "query": "whole textbook and source role overview; compare binary/greedy/search/DP/graph",
+          "source": "actual primary directories and textbook locators in notes",
+          "result": "三独立视角均认为二分是合格且优先的大领域，其他候选并非因难而排除；目录分类不能直接复制。",
+          "note": "work/first-chapter-20261028/candidate-comparison.md"
+        }
+      ]
+    },
+    "scope": {
+      "schemaVersion": 1,
+      "paradigm": "",
+      "title": "",
+      "mechanism": "",
+      "branches": [],
+      "exclusions": [],
+      "completenessArgument": ""
+    }
+  },
+  "automaticSemanticCertification": false
+}

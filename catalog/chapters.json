@@ -1,4 +1,11 @@
 {
   "schemaVersion": 1,
-  "chapters": []
+  "chapters": [
+    {
+      "id": "chapter-01",
+      "collection": "chapter-01",
+      "contract": "content/binary/chapter-contract.json",
+      "review": "content/binary/chapter-review.json"
+    }
+  ]
 }
