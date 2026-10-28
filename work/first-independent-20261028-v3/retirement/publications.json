@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 2,
+  "state": "active",
+  "collections": [
+    {
+      "id": "boundary-feasibility",
+      "title": "边界与答案：把搜索条件写进代码",
+      "kind": "chapter",
+      "visibility": "published",
+      "chapterNumber": 1,
+      "documents": [
+        {
+          "id": "boundary-feasibility",
+          "title": "边界与答案",
+          "path": "content/boundary-feasibility/边界与答案"
+        }
+      ]
+    }
+  ]
+}

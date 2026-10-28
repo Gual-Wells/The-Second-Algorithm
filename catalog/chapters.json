@@ -1,11 +1,4 @@
 {
   "schemaVersion": 1,
-  "chapters": [
-    {
-      "id": "boundary-feasibility",
-      "collection": "boundary-feasibility",
-      "contract": "content/boundary-feasibility/chapter.contract.json",
-      "review": "content/boundary-feasibility/chapter.review.json"
-    }
-  ]
+  "chapters": []
 }

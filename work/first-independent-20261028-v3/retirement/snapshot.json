@@ -1,0 +1,22 @@
+{
+  "baseline": "d43e8ef2d4e958cb78b8f60367f3d3b009cdd5db",
+  "savedAt": "2026-10-28T03:44:47.746635+00:00",
+  "purpose": "User-directed withdrawal; recovery only, excluded from new first-chapter topic and authoring inputs",
+  "files": [
+    {
+      "path": "carrier/publications.json",
+      "sha256": "daab160b280e4d35977ac7e3f1090086cd1583bc0bda637c72a64d262e9bb9ac",
+      "savedAs": "work/first-independent-20261028-v3/retirement/publications.json"
+    },
+    {
+      "path": "catalog/learning.json",
+      "sha256": "28b82a0b99f279de281a514827e9be6694fb1c70cc622e6a0d978a570812e4a1",
+      "savedAs": "work/first-independent-20261028-v3/retirement/learning.json"
+    },
+    {
+      "path": "catalog/chapters.json",
+      "sha256": "6f2695cdc4ee05316dcc84b36ed5eff723359838d9801a383913695cd27f0acd",
+      "savedAs": "work/first-independent-20261028-v3/retirement/chapters.json"
+    }
+  ]
+}
