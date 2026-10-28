@@ -2,7 +2,7 @@
 
 先核对Git分支/HEAD/dirty、AGENTS和有效共同协议，再执行 `python -m second_algorithm research status`，选当前job执行resume。恢复真实目标、当前输入、材料/合同/作者/知识/源码和缺口，不从旧聊天、旧题单或accepted日志推断完成。
 
-当前硬协议是大思想领域为章、前置思想理论、正式节为题型；手写与真实标准设施、必要C++和每节1–5题共同承载。先用`course chapters`恢复领域/分支/题型及真实缺口，再用`course quality`查看本版采用。旧schema合同、线上已存在或旧采用不构成新标准通过；当前区间专题不得仅改名追认。
+当前硬协议是大思想领域为章、前置思想理论、正式节为题型；手写与真实标准设施、必要C++和每节1–5题共同承载。2026-10-28全部出版/作者稿/知识已清零；当前任务为withdraw-all-20261028，下一章未选定。教材和原题证据仍有效，旧稿只在Git历史中恢复，不默认重用；历史job/旧采用与候选模式不构成现行内容或章界。以后用`course chapters`和`course quality`恢复真实状态。
 
 权威关系为catalog/chapters.json、catalog/learning.json和schema2出版登记。正文/代码/独立知识源各自唯一；知识内部身份不外显，后续术语浮窗复用，不把C++去重扩成算法跨章内容只能讲一次。旧双线、trial、原稿和cases/patterns是素材，不是当前范围或兼容义务。
 

@@ -1,20 +1,5 @@
 {
   "schemaVersion": 2,
-  "state": "active",
-  "collections": [
-    {
-      "id": "interval-decisions",
-      "title": "区间上的取舍：覆盖、冲突与收益",
-      "kind": "chapter",
-      "visibility": "published",
-      "chapterNumber": 1,
-      "documents": [
-        {
-          "id": "interval-decisions",
-          "title": "区间上的取舍",
-          "path": "content/interval-decisions/区间上的取舍"
-        }
-      ]
-    }
-  ]
+  "state": "withdrawn",
+  "collections": []
 }

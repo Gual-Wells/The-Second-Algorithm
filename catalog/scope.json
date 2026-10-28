@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "job-coding-cpp-initial",
   "version": "2.0.0",
-  "state": "integrated-practice",
-  "purpose": "统一求职算法实战：手写与标准设施对照，必要C++全局Q唯一讲解。",
+  "state": "withdrawn",
+  "purpose": "按代表性大算法思想逐章研究与发布；手写与真实标准设施、必要C++透明知识共同承载。",
   "implementation_language": "C++17",
   "discovery_entries": [
     "数组与链表",
@@ -21,11 +21,11 @@
   ],
   "boundary_notes": [
     "算法是当前唯一学习主线；手写与标准设施都纳入，必要C++随题解释。",
-    "同一Q全项目唯一编号、完整讲解一次，后续只引用。",
+    "同一Q全项目唯一编号、完整讲解一次，后续技术名称浮窗复用，内部编号不外显。",
     "旧版本无兼容义务；历史cases/patterns不证明当前覆盖。",
     "实际阅读、分析、已讲、验证和用户掌握分开；没有自动语义认证。"
   ],
-  "current_frontier": "schema2统一课程；此前出版已撤回。当前新首章boundary-feasibility由本轮独立原题研究从零形成，first-chapter-independent-20261028不继承旧任务/验收。learning.json为任务/方法/实现/Q/target关系；研究与发布绑定新当前证据与实际验证。后续章界继续由研究形成，不按旧目录。",
+  "current_frontier": "2026-10-28全部出版与作者内容清零。当前无章节、题型任务、知识或验证目标；教材/来源/原题证据保留，历史patterns仅候选，不继承旧范围。当前撤回任务withdraw-all-20261028；下一章须按有效硬协议重新研究大领域，尚未选定。",
   "cpp_discovery_entries": [
     "类型、表达式、推导、转换与初始化",
     "对象生命周期、值类别、复制与移动",

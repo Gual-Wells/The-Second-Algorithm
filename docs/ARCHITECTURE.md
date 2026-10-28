@@ -14,4 +14,4 @@
 
 Worker为已有独立凭据、会话及通用reader_state；D1只存私人状态，不存正文或研究语料。正文/源码/关系是Git资源，静态下载按发布白名单与owner隔离。无需新数据库、微服务或向量检索。
 
-job状态和不可变release receipt在work/jobs，编译临时/日志在.local；失败不覆写last-good，但最新失败阻止发布。release绑定实际输入及工具/前端/依赖，deploy另有锁及线上记录。旧版本无兼容义务；旧content/案例仅留作历史测试素材，不被发布登记或新测试数量支配。
+job状态和不可变release receipt在work/jobs，编译临时/日志在.local；失败不覆写last-good，但最新失败阻止发布。release绑定实际输入及工具/前端/依赖，deploy另有锁及线上记录。2026-10-28已将content及旧专属验证代码清零，仅Git历史可恢复；来源模式保留为候选，原题教学归属重置，未保留任何现行内容覆盖。

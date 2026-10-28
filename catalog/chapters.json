@@ -1,11 +1,4 @@
 {
   "schemaVersion": 1,
-  "chapters": [
-    {
-      "id": "interval-decisions",
-      "collection": "interval-decisions",
-      "contract": "content/interval-decisions/chapter.contract.json",
-      "review": "content/interval-decisions/chapter.review.json"
-    }
-  ]
+  "chapters": []
 }

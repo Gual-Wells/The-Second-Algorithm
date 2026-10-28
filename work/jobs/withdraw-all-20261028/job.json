@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "withdraw-all-20261028",
+  "goal": "按用户要求撤销全部出版并清空当前教学资产/采用登记，保留教材来源和私人状态，发布真实空站并清理历史托管部署",
+  "createdAt": "2026-10-28T08:53:18.962663+00:00",
+  "evidence": [
+    {
+      "id": "7aa6d92888e54907bcd00acd634edced",
+      "kind": "research",
+      "path": "work/withdraw-all-20261028/research.md",
+      "summary": "实际核对并清空所有出版/作者/知识与旧教学采用，保留教材来源和私人状态，完整检查通过",
+      "outcome": "accepted",
+      "sha256": "876f7fe9bbe31b4074c7f2a008caa6bd4feb4b36df08769f261fdb9102d1a1eb",
+      "inputHash": "2fb832d0bad446ff480dccf0aa5065b67e7b2109e74048f0a6446ef8ad387ad9",
+      "recordedAt": "2026-10-28T08:56:38.079632+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "6af89fc6f25f41fda774beae3af6cb4c",
+      "kind": "review",
+      "path": "work/withdraw-all-20261028/review.md",
+      "summary": "真实空登记/空构建与旧JSON源码Markdown知识缓存清理，私人记录保留；仅采用撤回，不采用新教学内容",
+      "outcome": "accepted",
+      "sha256": "b1254f3b91d905e4386fad55e915167bb3c21250b2f9da7712d06780c37222db",
+      "inputHash": "2fb832d0bad446ff480dccf0aa5065b67e7b2109e74048f0a6446ef8ad387ad9",
+      "recordedAt": "2026-10-28T08:56:38.451681+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    }
+  ],
+  "lastGoodVerification": {
+    "path": "work/jobs/withdraw-all-20261028/verifications/02a38d094fb34f7580fa9337eb8c90ae.json",
+    "sha256": "08c4d9069cf29edef4b82767677bb4b974619dff45986a470483ef4f8866526f",
+    "inputHash": "2fb832d0bad446ff480dccf0aa5065b67e7b2109e74048f0a6446ef8ad387ad9"
+  },
+  "lastPreparedRelease": {
+    "path": "work/jobs/withdraw-all-20261028/releases/49fd2c9104bf418ea9a98e9cc06d1636.json",
+    "sha256": "ce9d92afc65d6a88678e6866ed2f4d9efa55483c3658b694f778ff5b19a96714",
+    "inputHash": "2fb832d0bad446ff480dccf0aa5065b67e7b2109e74048f0a6446ef8ad387ad9"
+  },
+  "lastVerificationAttempt": {
+    "path": "work/jobs/withdraw-all-20261028/verifications/02a38d094fb34f7580fa9337eb8c90ae.json",
+    "sha256": "08c4d9069cf29edef4b82767677bb4b974619dff45986a470483ef4f8866526f",
+    "inputHash": "2fb832d0bad446ff480dccf0aa5065b67e7b2109e74048f0a6446ef8ad387ad9"
+  }
+}
