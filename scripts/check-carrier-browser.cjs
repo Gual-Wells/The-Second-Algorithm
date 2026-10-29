@@ -251,7 +251,14 @@ async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries
       assert(pixels.cuts.every(p=>p[3]===0),JSON.stringify(pixels));assert(pixels.nodes.every(p=>p[3]===255),JSON.stringify(pixels));
       // Start a fresh CSS animation after manually seeking the phase samples.
       // WAAPI play() overrides later CSS animation-play-state changes.
-      await p.emulateMedia({reducedMotion:'reduce'});await p.emulateMedia({reducedMotion:'no-preference'});
+      await p.emulateMedia({reducedMotion:'reduce'});
+      // Force the reduced-motion style to settle before switching back. A fast
+      // runner can otherwise coalesce both media changes, retaining the WAAPI
+      // pause used for the exact phase samples instead of creating fresh CSS
+      // animations. This also verifies that both layers really stop in reduce.
+      assert.equal(await motion.evaluate(e=>e.getAnimations().length),0);
+      assert.equal(await p.locator('#headerLogo .header-logo-reflection').evaluate(e=>e.getAnimations().length),0);
+      await p.emulateMedia({reducedMotion:'no-preference'});
       await p.evaluate(()=>{globalThis.__logoHidden=true;Object.defineProperty(document,'hidden',{configurable:true,get:()=>globalThis.__logoHidden});document.dispatchEvent(new Event('visibilitychange'));});
       assert.equal(await motion.evaluate(e=>getComputedStyle(e).animationPlayState),'paused');
       await motion.evaluate(async e=>{await e.getAnimations()[0].ready;});
