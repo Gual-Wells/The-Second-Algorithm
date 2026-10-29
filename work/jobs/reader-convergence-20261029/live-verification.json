@@ -1,0 +1,45 @@
+{
+  "ok": true,
+  "sourceCommit": "c51daa0c44768f93ff3dcd356951c2644ce9190a",
+  "receipt": "work/jobs/reader-convergence-20261029/deployments/1793278775481.json",
+  "deployedAt": "2026-10-29T12:59:35.481Z",
+  "origin": "https://second-algorithm.pages.dev",
+  "build": "e3471a76f6d1a516ab982145153256f57dfe39eed8bc72066d4218264700c10d",
+  "checks": [
+    {
+      "route": "/",
+      "status": 200,
+      "matchesArtifact": true
+    },
+    {
+      "route": "/app.js",
+      "status": 200,
+      "matchesArtifact": true
+    },
+    {
+      "route": "/styles.css",
+      "status": 200,
+      "matchesArtifact": true
+    },
+    {
+      "route": "/sw.js",
+      "status": 200,
+      "matchesArtifact": true
+    },
+    {
+      "route": "/library/catalog.json",
+      "status": 401
+    }
+  ],
+  "anonymousBoot": {
+    "loginVisible": true,
+    "loginButtonVisible": true,
+    "brand": "第二算法",
+    "errors": [],
+    "authStatuses": [
+      200
+    ]
+  },
+  "physicalIPhone": false,
+  "newRecurringCost": 0
+}

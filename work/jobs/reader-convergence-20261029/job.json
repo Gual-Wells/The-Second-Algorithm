@@ -3,7 +3,43 @@
   "id": "reader-convergence-20261029",
   "goal": "落实第二语言移植设计指导的剩余阅读版面：紧凑工具壳、章级身份、H2节导航、任务分组设置、知识与答疑状态；保护日期导航、教材、私人原件与版本权限并验证发布",
   "createdAt": "2026-10-29T12:14:28.210469+00:00",
-  "evidence": [],
-  "lastGoodVerification": null,
-  "lastPreparedRelease": null
+  "evidence": [
+    {
+      "id": "ce5f9189c96f42928068d2e3db5be045",
+      "kind": "research",
+      "path": "work/jobs/reader-convergence-20261029/research.md",
+      "summary": "实读完整移植指导与固定来源，保持原二分采用和60教学权威；逐段整合启动，分开记录受控VERSION缺口与HTTP历史超时",
+      "outcome": "accepted",
+      "sha256": "b26e0ef7e44e3e098342bc5fbf679b67e53a350684cfb3fae5bdc8e8a0374f99",
+      "inputHash": "c5a8417e70433b0bef1c96a44c8adcd42eb5179f3be66d81a5659587be2dff53",
+      "recordedAt": "2026-10-29T12:57:39.475917+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "d1189a1c3f3f4d4abc901b691ab6da20",
+      "kind": "review",
+      "path": "work/jobs/reader-convergence-20261029/implementation-review.md",
+      "summary": "最终c51daa0源码实审与内容保全；198 Python、118 Node、20阅读器、49启动、28日期、真实SW及4 C++有效，保留失败与模拟边界",
+      "outcome": "accepted",
+      "sha256": "717c128351ba971febe13734e4d975644f2392337d86f10b2e0adab17f11e018",
+      "inputHash": "c5a8417e70433b0bef1c96a44c8adcd42eb5179f3be66d81a5659587be2dff53",
+      "recordedAt": "2026-10-29T12:57:42.310135+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    }
+  ],
+  "lastGoodVerification": {
+    "path": "work/jobs/reader-convergence-20261029/verifications/8fe86c3d031f4f38b9965f5a797e45d1.json",
+    "sha256": "10d894448872c98a3fa25a7e692227931d9513406f860c6ee5dab47379c98bb1",
+    "inputHash": "c5a8417e70433b0bef1c96a44c8adcd42eb5179f3be66d81a5659587be2dff53"
+  },
+  "lastPreparedRelease": {
+    "path": "work/jobs/reader-convergence-20261029/releases/7c301db573bb40a2acde30a12bcfa962.json",
+    "sha256": "1f2ecf7d04e6eb8b899455ef1a3f7e9e2c0c8996d891faa973e87873cf40d5fa",
+    "inputHash": "c5a8417e70433b0bef1c96a44c8adcd42eb5179f3be66d81a5659587be2dff53"
+  },
+  "lastVerificationAttempt": {
+    "path": "work/jobs/reader-convergence-20261029/verifications/8fe86c3d031f4f38b9965f5a797e45d1.json",
+    "sha256": "10d894448872c98a3fa25a7e692227931d9513406f860c6ee5dab47379c98bb1",
+    "inputHash": "c5a8417e70433b0bef1c96a44c8adcd42eb5179f3be66d81a5659587be2dff53"
+  }
 }

@@ -1,0 +1,124 @@
+{
+  "headings": 278,
+  "neighborControls": 556,
+  "currentSectionsChecked": 278,
+  "errors": [],
+  "first": {
+    "id": "二分的基本方法",
+    "title": "PRE、二分的基本方法",
+    "text": "PRE、二分的基本方法",
+    "depth": 2,
+    "localNumber": "PRE",
+    "index": 0,
+    "ancestors": [],
+    "sectionId": "二分的基本方法",
+    "number": "PRE",
+    "units": [
+      {
+        "id": "概念-从重复值查找认识二分",
+        "title": "（1）概念：从重复值查找认识二分",
+        "text": "（1）概念：从重复值查找认识二分",
+        "depth": 3,
+        "localNumber": "（1）",
+        "index": 1,
+        "ancestors": [
+          "二分的基本方法"
+        ],
+        "sectionId": "二分的基本方法",
+        "number": "PRE（1）"
+      },
+      {
+        "id": "推导-从一次查找建立边界",
+        "title": "（2）推导：从一次查找建立边界",
+        "text": "（2）推导：从一次查找建立边界",
+        "depth": 3,
+        "localNumber": "（2）",
+        "index": 2,
+        "ancestors": [
+          "二分的基本方法"
+        ],
+        "sectionId": "二分的基本方法",
+        "number": "PRE（2）"
+      },
+      {
+        "id": "建模-将优化目标转成可行性边界",
+        "title": "（3）建模：将优化目标转成可行性边界",
+        "text": "（3）建模：将优化目标转成可行性边界",
+        "depth": 3,
+        "localNumber": "（3）",
+        "index": 3,
+        "ancestors": [
+          "二分的基本方法"
+        ],
+        "sectionId": "二分的基本方法",
+        "number": "PRE（3）"
+      },
+      {
+        "id": "边界-区分单调分界-结构存在性与异号夹逼",
+        "title": "（4）边界：区分单调分界、结构存在性与异号夹逼",
+        "text": "（4）边界：区分单调分界、结构存在性与异号夹逼",
+        "depth": 3,
+        "localNumber": "（4）",
+        "index": 4,
+        "ancestors": [
+          "二分的基本方法"
+        ],
+        "sectionId": "二分的基本方法",
+        "number": "PRE（4）"
+      },
+      {
+        "id": "工程-实现前确定搜索范围与终止方式",
+        "title": "（5）工程：实现前确定搜索范围与终止方式",
+        "text": "（5）工程：实现前确定搜索范围与终止方式",
+        "depth": 3,
+        "localNumber": "（5）",
+        "index": 5,
+        "ancestors": [
+          "二分的基本方法"
+        ],
+        "sectionId": "二分的基本方法",
+        "number": "PRE（5）"
+      },
+      {
+        "id": "复杂度-搜索代价与判定代价",
+        "title": "（6）复杂度：搜索代价与判定代价",
+        "text": "（6）复杂度：搜索代价与判定代价",
+        "depth": 3,
+        "localNumber": "（6）",
+        "index": 6,
+        "ancestors": [
+          "二分的基本方法"
+        ],
+        "sectionId": "二分的基本方法",
+        "number": "PRE（6）"
+      },
+      {
+        "id": "工程-整数与浮点搜索的表示限制",
+        "title": "（7）工程：整数与浮点搜索的表示限制",
+        "text": "（7）工程：整数与浮点搜索的表示限制",
+        "depth": 3,
+        "localNumber": "（7）",
+        "index": 7,
+        "ancestors": [
+          "二分的基本方法"
+        ],
+        "sectionId": "二分的基本方法",
+        "number": "PRE（7）"
+      },
+      {
+        "id": "导读-本章的问题版图与学习线索",
+        "title": "（8）导读：本章的问题版图与学习线索",
+        "text": "（8）导读：本章的问题版图与学习线索",
+        "depth": 3,
+        "localNumber": "（8）",
+        "index": 8,
+        "ancestors": [
+          "二分的基本方法"
+        ],
+        "sectionId": "二分的基本方法",
+        "number": "PRE（8）"
+      }
+    ],
+    "sectionIndex": 0
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-10-29T12:56:54.639276+00:00",
+  "sourceCommit": "c51daa0c44768f93ff3dcd356951c2644ce9190a",
+  "build": {
+    "version": "b6607bb8444b3f8352601e3085673898e40d977a896bdb2fbe8f5ee30399a31a",
+    "buildID": "e3471a76f6d1a516ab982145153256f57dfe39eed8bc72066d4218264700c10d",
+    "gitRevision": "c51daa0c44768f93ff3dcd356951c2644ce9190a",
+    "publicationState": "active",
+    "operation": "content-release",
+    "mode": "full",
+    "documents": 1,
+    "codeBlocks": 89
+  },
+  "python": {
+    "tests": 198,
+    "seconds": 854.946,
+    "passed": true,
+    "trackedImplementationAndTestsMatchBase": true
+  },
+  "pythonSource": "technical-baseline.log",
+  "pythonScope": "All 198 Python implementation/tests passed; tracked implementation/tests match unchanged task base, so unrelated frontend changes do not trigger repetition.",
+  "carrier": {
+    "tests": 118,
+    "passed": 118,
+    "failed": 0,
+    "source": "logs/node-final.log"
+  },
+  "browser": {
+    "passed": 20,
+    "total": 20,
+    "filter": null,
+    "inputStartEqualsEndAndCurrent": true,
+    "source": "qa/browser-verified/results.json",
+    "navigation": {
+      "headings": 278,
+      "neighborControls": 556,
+      "currentSectionsChecked": 278
+    }
+  },
+  "startup": {
+    "passed": true,
+    "checks": 49,
+    "source": "qa/startup-verified/results.json"
+  },
+  "calendar": {
+    "passed": true,
+    "checks": 28,
+    "source": "qa/calendar-verified/results.json"
+  },
+  "upgrade": {
+    "passed": true,
+    "prematureRequests": 0,
+    "source": "qa/upgrade-verified/results.json",
+    "realBrowserAndServiceWorker": true
+  },
+  "chapterQuality": {
+    "ok": true,
+    "editorialInputHash": "e2cbe4eaee18dbbbfcb53f835ac6d755cecc0ecb990ffdacd809423fd4db52fa",
+    "source": "quality-current.json"
+  },
+  "researchVerification": {
+    "passed": true,
+    "targets": 4,
+    "inputHash": "c5a8417e70433b0bef1c96a44c8adcd42eb5179f3be66d81a5659587be2dff53",
+    "receipt": {
+      "path": "work/jobs/reader-convergence-20261029/verifications/8fe86c3d031f4f38b9965f5a797e45d1.json",
+      "sha256": "10d894448872c98a3fa25a7e692227931d9513406f860c6ee5dab47379c98bb1",
+      "inputHash": "c5a8417e70433b0bef1c96a44c8adcd42eb5179f3be66d81a5659587be2dff53"
+    }
+  },
+  "contentPreservation": "content-preservation.json",
+  "failureHistory": {
+    "desktopRawScrollAssertion": "Incorrect measurement across desktop reflow; same 2px semantic point/heading protection and extra mobile raw-scroll check retained.",
+    "horizontalCropSuspicion": "Withdrawn after original-image and ancestor-scroll checks; no fictitious product fix.",
+    "twoConcurrentHttpUpgradeTimeouts": "Exact cause not proven. Original failures retained in qa/upgrade-final and qa/upgrade-merged; separate deterministic null-VERSION recovery and bounded fix are not claimed as their established cause.",
+    "stagedInputs": "Pre-startup acceptance and pre-recovery Node116 remain baseline evidence, not final-input passes."
+  },
+  "passedRequiredGroups": true,
+  "physicalIPhone": false,
+  "userAestheticAcceptance": false,
+  "newRecurringCost": 0,
+  "productionContactedByTests": false,
+  "deploymentClaimed": false,
+  "evidenceSha256": {
+    "technical-baseline.log": "9e711539e66cf2298b0491305038c46f1938af2d8dadc4119c382517bee70754",
+    "logs/node-final.log": "caaeabfdf4fd0ffdee7af4a4e293b0cf710f654336620027c2cec75a145549a4",
+    "logs/browser-final.log": "65cc38d610c0c684d0282303f78788481523aef74457ec5ff660f6c9e6796fee",
+    "logs/startup-final.log": "7ecbf870a474a4c328631c55793280e48a9c5f4225ce329a8df1aabc6495dccf",
+    "logs/calendar-final.log": "b29500442674eb017e8d31a1461751277613adb197243c00c51aa822a8c731ff",
+    "logs/upgrade-final.log": "eb33b40a889af88a35181a712ea19e9a75b1dce004edc6f198b90dad40e9d49a",
+    "qa/browser-verified/results.json": "1510e8a398944c8cd402e03e0b3633d215dab45a7cda0d45ed43f69c2509ec4e",
+    "qa/startup-verified/results.json": "762970862fb54be77030023b7e74073bd0b3722a5a51e6f072272389fc5b15ea",
+    "qa/calendar-verified/results.json": "a70dcc55edd94842bb0901291990755435798a0f5909cfa3221d92c38309baa6",
+    "qa/upgrade-verified/results.json": "ff0bb0ed9ae7eeb25c986b4d3d8d24f25863136d58b1e1bff211f1efd7cc6e9e",
+    "quality-current.json": "4bdde2d8fdc5983df6d702f1fb3336c8b237eb25e8b22f21cccf1567b5dbad21",
+    "content-preservation.json": "191e4d6c86a27ad2cd6f8f28a9025e6287e14c0b63024f67086c61e979be754d"
+  }
+}

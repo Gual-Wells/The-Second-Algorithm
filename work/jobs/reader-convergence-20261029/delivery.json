@@ -1,0 +1,28 @@
+{
+  "completedAt": "2026-10-29T13:01:41.161836+00:00",
+  "sourceCommit": "c51daa0c44768f93ff3dcd356951c2644ce9190a",
+  "integratedStartupCommit": "b4cd5c314c6e52a3d9c202403ee58db7291ff899",
+  "origin": "https://second-algorithm.pages.dev",
+  "deploymentReceipt": "work/jobs/reader-convergence-20261029/deployments/1793278775481.json",
+  "build": "e3471a76f6d1a516ab982145153256f57dfe39eed8bc72066d4218264700c10d",
+  "releasePacket": "work/jobs/reader-convergence-20261029/releases/7c301db573bb40a2acde30a12bcfa962.json",
+  "packetSha256": "1f2ecf7d04e6eb8b899455ef1a3f7e9e2c0c8996d891faa973e87873cf40d5fa",
+  "inputHash": "c5a8417e70433b0bef1c96a44c8adcd42eb5179f3be66d81a5659587be2dff53",
+  "publicArtifactsMatch": true,
+  "anonymousOwnerBoundaryVerified": true,
+  "anonymousBootVerified": true,
+  "checks": {
+    "python": 198,
+    "cppTargets": 4,
+    "node": 118,
+    "readerJourneys": 20,
+    "startupChecks": 49,
+    "calendarChecks": 28,
+    "httpServiceWorker": true
+  },
+  "teachingAuthoritiesPreserved": 60,
+  "manualQuestionService": "not-connected; drafts preserved and capability disclosed",
+  "physicalIPhoneTested": false,
+  "userVisualAcceptance": "pending real use",
+  "newRecurringCost": 0
+}

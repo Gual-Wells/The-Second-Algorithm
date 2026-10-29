@@ -1,6 +1,7 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-10-29T12:40:38.350412+00:00",
+  "capturedAt": "2026-10-29T12:56:05.598644+00:00",
+  "sourceCommit": "c51daa0c44768f93ff3dcd356951c2644ce9190a",
   "baselineAuthorityFiles": 61,
   "authorityFilesUnchanged": false,
   "reviewFilesUpdated": [
@@ -8,7 +9,6 @@
   ],
   "unchangedTeachingAuthorityFiles": 60,
   "unexpectedChanges": [],
-  "missing": [],
   "teachingAuthoritiesPreserved": true,
   "documents": [
     {
@@ -35,6 +35,6 @@
   ],
   "previousDeployment": "work/jobs/startup-calendar-20261029/deployments/1793269119250.json",
   "previousBuild": "1bb092b05bbe79412d8ae3ac70ac4715964aaf0446425e99ff55c20ae297237d",
-  "currentBuild": "6cf462bad8bb81ecbe77c638f47c1ca008c3fa1a435656bb5dcdacc4658ac759",
-  "scope": "Content-only preservation comparison. Current dist may predate final startup integration; refresh this comparison after the final carrier build. The current review is intentionally changed and is not misreported as byte-identical."
+  "currentBuild": "e3471a76f6d1a516ab982145153256f57dfe39eed8bc72066d4218264700c10d",
+  "scope": "Final committed-source carrier artifact content preservation. The semantic review is intentionally updated; teaching source, publication/date identities, protected JSON payload, complete C++ and Markdown retain exact previous-deployment bytes. Technical and user acceptance are separate."
 }

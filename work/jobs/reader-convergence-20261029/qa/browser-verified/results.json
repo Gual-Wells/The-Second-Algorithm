@@ -1,0 +1,147 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "name": "anonymous-owner-gate-and-install-instructions-without-protected-requests",
+      "passed": true
+    },
+    {
+      "name": "guided-reader-compact-toolbar-and-responsive-paper",
+      "passed": true
+    },
+    {
+      "name": "single-h2-neighbors-current-section-directory-and-native-boundaries",
+      "passed": true
+    },
+    {
+      "name": "hierarchical-directory-toggle-current-and-no-search",
+      "passed": true
+    },
+    {
+      "name": "semantic-knowledge-prerequisite-history-late-response-and-focus",
+      "passed": true
+    },
+    {
+      "name": "code-copy-horizontal-scroll-independent-size-and-wrap",
+      "passed": true
+    },
+    {
+      "name": "visual-viewport-keyboard-and-pinch-zoom-sheet-bounds",
+      "passed": true
+    },
+    {
+      "name": "safe-doubleclick-only-pure-preserves-width-text-and-native-selection",
+      "passed": true
+    },
+    {
+      "name": "pure-code-click-excluded-and-pointer-hold-keeps-original-controls",
+      "passed": true
+    },
+    {
+      "name": "same-document-link-browser-back-forward-and-quick-reload-keep-place",
+      "passed": true
+    },
+    {
+      "name": "slow-cross-document-preserves-paper-and-cancel-rejects-late-result",
+      "passed": true
+    },
+    {
+      "name": "invalid-explicit-route-preserves-paper-and-reports-unavailable-target",
+      "passed": true
+    },
+    {
+      "name": "pending-old-scroll-cannot-write-new-document-history-position",
+      "passed": true
+    },
+    {
+      "name": "grouped-settings-files-fonts-sheet-history-and-immediate-reopen",
+      "passed": true
+    },
+    {
+      "name": "manual-question-service-warning-draft-reload-owner-isolation-and-short-viewport",
+      "passed": true
+    },
+    {
+      "name": "legacy-notes-byte-preservation-two-tabs-and-unsent-logout-guard",
+      "passed": true
+    },
+    {
+      "name": "clean-logout-preserves-all-legacy-notes-and-prevents-offline-reentry",
+      "passed": true
+    },
+    {
+      "name": "same-page-expired-owner-and-reconnect-rebuild-the-current-route",
+      "passed": true
+    },
+    {
+      "name": "cross-owner-reconnect-never-shares-reader-private-state-or-legacy-notes",
+      "passed": true
+    },
+    {
+      "name": "actual-built-publication-content-source-knowledge-directory-integrity",
+      "passed": true
+    }
+  ],
+  "failures": [],
+  "gestures": [
+    {
+      "x": 13,
+      "y": 345.9375,
+      "hit": "ARTICLE",
+      "selection": "",
+      "pure": true
+    },
+    {
+      "x": 13,
+      "y": 188,
+      "hit": "ARTICLE",
+      "selection": "",
+      "pure": false
+    },
+    {
+      "x": 13,
+      "y": 345.9375,
+      "hit": "ARTICLE",
+      "selection": "",
+      "pure": true
+    }
+  ],
+  "inputStart": {
+    "web/app.js": "23d44f7dfc0bbe80bf759b38b54e7f3f52bd4c9c3e2c7c7320b06d768a5c716f",
+    "web/reader-runtime.js": "2e3b60c40a69721cbc7bb7ba15fe0d2c5b72f8e10b3921de202d89066c260870",
+    "web/manual-questions.js": "72018d622cfca25bf66cbd570caf52678e3f744123412b1d55a85c664c17dcdb",
+    "web/chapter-dates.js": "6f0d0e526780f6a4f0929b9c2a0083d59aa5ba00650bde64c77c864949f1794c",
+    "web/auth.js": "9f8db119e19cc7ac887e96aa6cefe8bc153759c316bb611472b91a2507b2fd87",
+    "web/worker-release.js": "f79451187b86d84e0bc5260e82f02ae6759cd4fda8a62576309abad39234c776",
+    "web/sw.js": "21b231115a5932ebf1e4f2ff57fae1b3170374c2f61c97248f49fe0e990133ee",
+    "web/index.html": "482dfe708d2f84d97bb24338a76bfea61d42bf4b917f9f75a9f7db438ee1bf3e",
+    "web/styles.css": "b6c2a85c54bec62008962f430fce00f56d854cece565c17fc6c9c8ea1b1ba8c4",
+    "dist/index.html": "ca1363eff2687c960f7b64e15f1ccc30e613ece9109e25a5087b09ac6c41e4a8",
+    "dist/app.js": "a0e9ec5c26703b406e1ad57debdf9fc1603e35b250d601b2050c018e8f13a48d",
+    "dist/library/catalog.json": "d7f5f936c5d8db9827e0c08db92e5c98b1d3de5d6d3d9beb5588ca5bbd06ff0e"
+  },
+  "inputEnd": {
+    "web/app.js": "23d44f7dfc0bbe80bf759b38b54e7f3f52bd4c9c3e2c7c7320b06d768a5c716f",
+    "web/reader-runtime.js": "2e3b60c40a69721cbc7bb7ba15fe0d2c5b72f8e10b3921de202d89066c260870",
+    "web/manual-questions.js": "72018d622cfca25bf66cbd570caf52678e3f744123412b1d55a85c664c17dcdb",
+    "web/chapter-dates.js": "6f0d0e526780f6a4f0929b9c2a0083d59aa5ba00650bde64c77c864949f1794c",
+    "web/auth.js": "9f8db119e19cc7ac887e96aa6cefe8bc153759c316bb611472b91a2507b2fd87",
+    "web/worker-release.js": "f79451187b86d84e0bc5260e82f02ae6759cd4fda8a62576309abad39234c776",
+    "web/sw.js": "21b231115a5932ebf1e4f2ff57fae1b3170374c2f61c97248f49fe0e990133ee",
+    "web/index.html": "482dfe708d2f84d97bb24338a76bfea61d42bf4b917f9f75a9f7db438ee1bf3e",
+    "web/styles.css": "b6c2a85c54bec62008962f430fce00f56d854cece565c17fc6c9c8ea1b1ba8c4",
+    "dist/index.html": "ca1363eff2687c960f7b64e15f1ccc30e613ece9109e25a5087b09ac6c41e4a8",
+    "dist/app.js": "a0e9ec5c26703b406e1ad57debdf9fc1603e35b250d601b2050c018e8f13a48d",
+    "dist/library/catalog.json": "d7f5f936c5d8db9827e0c08db92e5c98b1d3de5d6d3d9beb5588ca5bbd06ff0e"
+  },
+  "caseFilter": null,
+  "browserSourceIntegration": true,
+  "builtPayloadIntegration": true,
+  "serviceWorker": "blocked; actual local HTTP worker tested separately",
+  "authentication": "mocked; system passkey not exercised",
+  "productionContacted": false,
+  "realDatabaseModified": false,
+  "paidServiceContacted": false,
+  "physicalIPhone": false,
+  "testedAt": "2026-10-29T12:53:01.906Z"
+}
