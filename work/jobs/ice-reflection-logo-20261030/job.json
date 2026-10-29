@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "id": "ice-reflection-logo-20261030",
+  "goal": "将标题算法Logo切换为第二种冰蓝独立白反光并匹配第二语言实际可见高度，保留启动页/PWA原件/教材与服务状态",
+  "createdAt": "2026-10-29T18:17:53.107321+00:00",
+  "evidence": [
+    {
+      "id": "e3016801921041679fad70aafcf51123",
+      "kind": "research",
+      "path": "work/jobs/ice-reflection-logo-20261030/research.md",
+      "summary": "实际恢复第二种4.8秒独立白反光原件，核三节点与书形可见高度、槽内居中与孔洞，限定载体影响且保留原教材/状态",
+      "outcome": "accepted",
+      "sha256": "f3fbbf1e99d5cc1f2b04cedf07a5348f2c7baade2b9d8b636d5d808ce310c3dc",
+      "inputHash": "a1521ce2eee4709a8ec331a82d77b324cab97eafff0da2ba94ba68c196ad131e",
+      "recordedAt": "2026-10-29T18:25:03.552163+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "94d1b156244046c5a554ad3e7d5fca9a",
+      "kind": "review",
+      "path": "work/jobs/ice-reflection-logo-20261030/review.md",
+      "summary": "实际目检两相位与减弱动态截图，核五相位/后台暂停/孔洞，真实质量+C++四目标、134载体、完整阅读器、升级与启动验证，未冒称198全检通过",
+      "outcome": "accepted",
+      "sha256": "70211b2bc39bb345e08640846833c18f4601d5f1c0aceff4da2f9074840be575",
+      "inputHash": "a1521ce2eee4709a8ec331a82d77b324cab97eafff0da2ba94ba68c196ad131e",
+      "recordedAt": "2026-10-29T18:25:06.283645+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "9db79a3fe8344567bdbe149f01ece1bf",
+      "kind": "research",
+      "path": "work/jobs/ice-reflection-logo-20261030/research.md",
+      "summary": "实际恢复第二种4.8秒白反光、等比可见高度与孔洞；教学字节保全，审阅LF规范后绑定可跨平台复核的当前输入",
+      "outcome": "accepted",
+      "sha256": "f3fbbf1e99d5cc1f2b04cedf07a5348f2c7baade2b9d8b636d5d808ce310c3dc",
+      "inputHash": "1f3eee78ce35cab4c29d806f82df65413211ba5d8bd3c4589c5c5a51f7b16be7",
+      "recordedAt": "2026-10-29T18:27:21.155418+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "d0ff33ef3d3444b69f99d01c469fd031",
+      "kind": "review",
+      "path": "work/jobs/ice-reflection-logo-20261030/review.md",
+      "summary": "真实五相位/后台/reduce/孔洞目检、134载体、22阅读器、50启动、HTTP/SW与四C++均通过；198全套未完成且未冒称通过",
+      "outcome": "accepted",
+      "sha256": "70211b2bc39bb345e08640846833c18f4601d5f1c0aceff4da2f9074840be575",
+      "inputHash": "1f3eee78ce35cab4c29d806f82df65413211ba5d8bd3c4589c5c5a51f7b16be7",
+      "recordedAt": "2026-10-29T18:27:23.774831+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    }
+  ],
+  "lastGoodVerification": {
+    "path": "work/jobs/ice-reflection-logo-20261030/verifications/1bed603936da47c4b9eb41cf69c59409.json",
+    "sha256": "70546bb36c68f2c98d754694fa26c24e488d1e09fa036e6c3f312cceb05aa2b7",
+    "inputHash": "1f3eee78ce35cab4c29d806f82df65413211ba5d8bd3c4589c5c5a51f7b16be7"
+  },
+  "lastPreparedRelease": {
+    "path": "work/jobs/ice-reflection-logo-20261030/releases/1eca8f24783c4cb896439ab48a52f4af.json",
+    "sha256": "5cd98ad33293b1b43e6007cb5fed1919f95781ae2b40198d4800745ac587e4e9",
+    "inputHash": "1f3eee78ce35cab4c29d806f82df65413211ba5d8bd3c4589c5c5a51f7b16be7"
+  },
+  "lastVerificationAttempt": {
+    "path": "work/jobs/ice-reflection-logo-20261030/verifications/1bed603936da47c4b9eb41cf69c59409.json",
+    "sha256": "70546bb36c68f2c98d754694fa26c24e488d1e09fa036e6c3f312cceb05aa2b7",
+    "inputHash": "1f3eee78ce35cab4c29d806f82df65413211ba5d8bd3c4589c5c5a51f7b16be7"
+  }
+}

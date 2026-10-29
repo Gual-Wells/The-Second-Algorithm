@@ -1,0 +1,436 @@
+{
+  "baseline": "e83056fff843be26b00a678339f050832b3fc35d",
+  "paths": [
+    {
+      "path": "carrier/chapter-calendar.json",
+      "worktreeSha256": "d48de7ff2b0ea159b597d1762bb27eff93e4a22d70359d776e588dfe984df51f",
+      "gitBlob": "0fb26dd4fec32df01ace2f7e6213ee0c46db3d7a",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "carrier/publications.json",
+      "worktreeSha256": "7a0f9e012fcbe71228443287536ea4e8af7a0544acba697adf70cf159cf9ce5b",
+      "gitBlob": "41e81aa2f3e0f3a9018a5ba5a3a1210b30ea9add",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "catalog/README.md",
+      "worktreeSha256": "60da502efdd526656da3ad13d4470aac1d65f33ee2cd6be1c190034ce3707492",
+      "gitBlob": "e7a14b1f0c78d22615cbc29873defe137c7b2aa6",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "catalog/books.json",
+      "worktreeSha256": "328c854281bad24d982c830ec73944ce00c65d233579a7b821820ad7d79a96d8",
+      "gitBlob": "588cee53e293a08bdcb20dc55ca25072f5acd49d",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "catalog/cases.jsonl",
+      "worktreeSha256": "8ccf050fc6ccc35be2221d78e1a8cbc33228a76b2185fae29c747c0fb185f3f0",
+      "gitBlob": "28475d65edabff552c4b1645bcbaecc404d6b695",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "catalog/chapters.json",
+      "worktreeSha256": "002345f48f47767f648bf55c6f0f40d2dae36d3e7722332f4aa0c94a3923fd3e",
+      "gitBlob": "3adc8dc24e1ca3e3646f86d6c5b49b3959274db3",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "catalog/inventories/ac-library/documentation/20261026T075530.991045+0000-3774617ad6f8.json",
+      "worktreeSha256": "f585cd2fbae705e78a7acc1d61f91839c492ed7b1c6f5651bb4573d3d2b84489",
+      "gitBlob": "f535ab8f99ac60c3f7a4810eb3b9471d9ecb1d12",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": false
+    },
+    {
+      "path": "catalog/inventories/atcoder/educational-dp/20261026T075511.764801+0000-ed41712e60fa.json",
+      "worktreeSha256": "d74f58efc08b7a157ff3857ba6a90c75ef4549357cb41bf18802dae404d1a1da",
+      "gitBlob": "2c4c990ec773abda5899be939d0f9cb186a89c62",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": false
+    },
+    {
+      "path": "catalog/inventories/codility/binary-search/20261026T075510.401686+0000-59199f3c9a47.json",
+      "worktreeSha256": "deeae7c341a3815ffdab46dbee60592cdc0ff1aee1df3458d100c2ee41563bc6",
+      "gitBlob": "246b0378ff0af98e00231a891d501f2cd37fe366",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": false
+    },
+    {
+      "path": "catalog/inventories/codility/lessons/20261026T075508.749875+0000-1b19c4053cd5.json",
+      "worktreeSha256": "cc4a06e3355a096b965cab7bb4ad10041b70575beeec3d24e812a77bc5007464",
+      "gitBlob": "e6cb2899a71113ef63f0cc5d4b526d8b679d51e7",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": false
+    },
+    {
+      "path": "catalog/inventories/cp-algorithms/navigation/20261026T075513.706063+0000-b387ea377cd4.json",
+      "worktreeSha256": "40116dbac0c079ae4b6798273a8dba18b78c11bfeb37bc9548c61fb58d687c64",
+      "gitBlob": "95652fabee60109a3a0b3840f5f95e218a1a08ea",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": false
+    },
+    {
+      "path": "catalog/inventories/cpbook/problem-classification/20261026T075527.088605+0000-c7edbd4550a4.json",
+      "worktreeSha256": "924eea931b607e65a63669245e65bbb6fa6f4de41b198150940464bda61056e8",
+      "gitBlob": "48bb4737ddf26944b9265685ef65b65a2bd48c59",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": false
+    },
+    {
+      "path": "catalog/inventories/cpbook/problem-classification/20261026T080139.479160+0000-c7edbd4550a4.json",
+      "worktreeSha256": "8d397e0660a628665c5cf99cac91598aebe3ca4300325bf91fb60887813120b5",
+      "gitBlob": "e48879d4ce4be3eb2eb58160bf6a0ebf0bab9950",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": false
+    },
+    {
+      "path": "catalog/inventories/cpbook/problem-classification/20261026T083207.751282+0000-c7edbd4550a4-e2f040b09e324596944c1d20ab2b7cb7.json",
+      "worktreeSha256": "343d280010f6426b230bb0c161ff36b6f05d56e1cd68b8ba7cb492fce007f1d7",
+      "gitBlob": "3d14fe5c7b3ea7ac53fb34771bb1a9541b6bf55f",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": false
+    },
+    {
+      "path": "catalog/inventories/cses/problemset/20261026T075505.516368+0000-42c1963578a2.json",
+      "worktreeSha256": "a05969988036d15e9f17f7d5f65a3ba159c626664bce6af5539fa63329673eb6",
+      "gitBlob": "e174ffad9c55d284d9edf9d0ce3c4be990009091",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": false
+    },
+    {
+      "path": "catalog/inventories/liu-tddd38/exercise-index/20261026T124549.089723+0000-e29a4a6dce85-cda55a8505334ea5b5642dfe8bd7820f.json",
+      "worktreeSha256": "0792d6dc8f71962091a62a5266b6aca456e3f7fe278f77d184cb03a8bd9bdb5b",
+      "gitBlob": "cc7f95cdcddee6b23747fe4a3c927a78a3524e36",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": false
+    },
+    {
+      "path": "catalog/inventories/sei-cert-cpp/rules/20261026T124359.936568+0000-a4b1204016d7-a076dca026eb407ba5afc8242797a8c8.json",
+      "worktreeSha256": "01da1ecae7ff474f74ba16e3761cdd84a9fba996fb9b00ad3ea45dff0b834e72",
+      "gitBlob": "73556ed7f6d0cd6072bb64089137a566bfaabd9d",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": false
+    },
+    {
+      "path": "catalog/inventories/sei-cert-cpp/rules/20261026T124549.116383+0000-a4b1204016d7-8440fb95a3b743d0a71cd5f4eb2a3b37.json",
+      "worktreeSha256": "3e13be2c91d4e242ba7afae38d1362f3eab0f1973475535c7756b6e71ce249ef",
+      "gitBlob": "eda59c2658210f8ac8a62b48dfc7ce103c3408c7",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": false
+    },
+    {
+      "path": "catalog/inventories/sutter-gotw/revised-index/20261026T124351.917430+0000-980ef9f3b70f-8316681c5a7d4061b3332c95e72c38f4.json",
+      "worktreeSha256": "10ca092a8ffc8b1d7bdbe506bd0caa9276d799e330ae95b3003bcb65e158a8ed",
+      "gitBlob": "3d59de7a45c563b3e15191f6f6afd8e663d2c858",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": false
+    },
+    {
+      "path": "catalog/inventories/usaco-guide/binary-search/20261026T075529.834523+0000-df88c65fa82a.json",
+      "worktreeSha256": "f324cdeced78bf59e0ff519ab1f4f7f3d98db4d1aee3c9df8aa1854d6ff8ad19",
+      "gitBlob": "73c02526a6b8c679615c75df68aa0b0990041905",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": false
+    },
+    {
+      "path": "catalog/inventories/usaco-guide/binary-search/20261026T080141.575436+0000-df88c65fa82a.json",
+      "worktreeSha256": "40b2860a5bf6cfe44cf89d2acadcc84f2a1efdd261b5761df88a7a18683704b6",
+      "gitBlob": "0d4732dd0837330ed37c3ee83957d28cd39f680e",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": false
+    },
+    {
+      "path": "catalog/inventories/usaco-guide/binary-search/20261026T092623.139378+0000-df88c65fa82a-ad65f438de8341829ee3db15c3c2563a.json",
+      "worktreeSha256": "6df2a4a20c97b441395bec226aa743d5837567a5a5ac92697806decc18716548",
+      "gitBlob": "f43d943e042aa02bfd04e2fa7bfb0a2fec582db9",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": false
+    },
+    {
+      "path": "catalog/inventories/usaco-guide/binary-search/20261026T092737.814516+0000-df88c65fa82a-07d4412eaf6b4c4e85551a1a577f54f2.json",
+      "worktreeSha256": "5c4b2d46047bb02014bc6afcf00830ce2513635c7831d498ef44a32084e3cab5",
+      "gitBlob": "cdafa36718ea4c0918413c4c08424eee1bf88a0e",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": false
+    },
+    {
+      "path": "catalog/inventory-heads.json",
+      "worktreeSha256": "56b8f542c659a6f0ffb5ae5fabdd7781d1f395a0f4399a2c6ab8389ea22cb32c",
+      "gitBlob": "fe23f8b2abc769f7eeba7bb058365d756408a701",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": false
+    },
+    {
+      "path": "catalog/learning.json",
+      "worktreeSha256": "dba241f5b72f5cff90badcb776678896db08c99f8a5b9e007767aa4a2dfae62f",
+      "gitBlob": "690643b7f7353ceeb50e1c254d3a2bb6b643a5d6",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "catalog/patterns.jsonl",
+      "worktreeSha256": "01085c79c16ff1eee7577257b12e7ab998094d14c6dc8e0625af2314d8b854de",
+      "gitBlob": "bc149507cafd4ce6af94e0407f86eb7e3f058414",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "catalog/query-plans.json",
+      "worktreeSha256": "017c62cf0b91eda63161fe394bc3a26371df9a5a59a87538c8efff1906f1c74f",
+      "gitBlob": "5e9e8a5168deba79508de77b2b4d920be02dde38",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "catalog/scope.json",
+      "worktreeSha256": "3087e534c4236c642ba1edcef56d088110840da578e054cfcc8b704ffee56bff",
+      "gitBlob": "d1d60d98df65b112296f6818bc85837053da87d0",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "catalog/sources.json",
+      "worktreeSha256": "cd3695b0569fda6c6091fb01c3a346d2a97ac733ddc6632b68d4357c8bee76f3",
+      "gitBlob": "89cbb92d94b38c7f326f079ddb42fda5fcb12c4e",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "catalog/subheadings.json",
+      "worktreeSha256": "95bc45b9b2a836c107a384db089e5ef8958208dcbbef0698de404923674d4fb7",
+      "gitBlob": "a9123aba02bcb1b32a8fac3bca6a72d0e60f6037",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/binary/advanced.cpp",
+      "worktreeSha256": "6bd17b582f1ac1eea42dd360b73ee10e870a7e01cf4334168fb5c7c05b546988",
+      "gitBlob": "e9684b9b14a336b85aa93b6115fe97f7e7f410a1",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/binary/advanced.source.md",
+      "worktreeSha256": "dc695964fae49478b069dbf5c16fa1e4c3ad919b950690a144fda84025acc75e",
+      "gitBlob": "846e9ea80ab56abe6c716636b765143b590f6088",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/binary/boundary.cpp",
+      "worktreeSha256": "d33ebf32477c6fc0ce93a39269866c97c762b7c339e755b828923feb5b0a3475",
+      "gitBlob": "6bba01b9865f027086c1e01ba06b9d4b8990e1c6",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/binary/boundary.source.md",
+      "worktreeSha256": "453be6c7b0c9775aa128e5f380a8a784ef97d6213b18a9c375e9625a5dd72150",
+      "gitBlob": "d1e55d9a581285b5c8be33d6af1c5b72a0818838",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/binary/build/chapter.json",
+      "worktreeSha256": "e2499a1f1dc422b46f8612a03d50800d087206fd0c789cce0eb33435ae942155",
+      "gitBlob": "c731275f8d0ea83b5e0796daa6791a7648cd481f",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/binary/chapter-contract.json",
+      "worktreeSha256": "57e1ed255e63240e2ec29492ea03d53f8c4517a42633ae8e616ad26e9df22e0e",
+      "gitBlob": "d8d5092c184eeabc0c636abbef41ab2a6eb92289",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/binary/chapter-review.json",
+      "worktreeSha256": "158371161b6851c2f16781ac8c3f272093600e16410742cbbd6ea89f540f4030",
+      "gitBlob": "e2896515c53d56a5f7265f4642d60f16ced5d661",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/binary/chapter.authoring.json",
+      "worktreeSha256": "d8863b57143b9bc238e7bc8690cd3385bcc0bf8b22b98ee64a0e26aa467de24d",
+      "gitBlob": "13d2a490a718f6846acd1a521c2a1ff24f7659cb",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/binary/chapter.cpp",
+      "worktreeSha256": "75fff25f5192947b4b0cd10b184eb82fd1dc20d57268ce1d70909e952b367d5f",
+      "gitBlob": "4b9de865ad92ef6bad0df36202eca666c91f1ffc",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/binary/chapter.html",
+      "worktreeSha256": "7633f8f5c1bd465cc7dfb8960028112428a882edff69b74b1578332a0afe30d0",
+      "gitBlob": "1bb6e377255d5445045defae4f5f65fa4bb3313c",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/binary/chapter.md",
+      "worktreeSha256": "201cc3138b76ab2833d392448285d1ee8809aa0de8768bb4611c39ea8e2d25e3",
+      "gitBlob": "684e290c6010605f20a58848fe647a538a798fef",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/binary/chapter.reader.cpp",
+      "worktreeSha256": "979b63e50271fcb7e6a80ed55ec05ce4663754dcbe3858e300155ea7707ecb42",
+      "gitBlob": "b58425b525debfa929fb583c4666cd15900e50e3",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/binary/chapter.source.md",
+      "worktreeSha256": "d6cf4a5d6543ec3cb42e7d5e495bf23dd233183c01e946b31aed27c10d7f17f4",
+      "gitBlob": "c04028fe987ef68ea61648c55414ceb90896dc26",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/binary/chapter.subheadings.json",
+      "worktreeSha256": "60567214298a5ce6b1ab7d808a6520bf24711c4b5ef44a0355bbcee6db1c06a6",
+      "gitBlob": "e1ed519d91ec8df05f2be63664c75df26c687990",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/binary/decision.cpp",
+      "worktreeSha256": "576fd6fd6c0b2b22be12562debe1728c026f814522a6871b11ac5e5e947767fd",
+      "gitBlob": "b0d7917904d8574287741ff396834a5d1e9532bb",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/binary/decision.source.md",
+      "worktreeSha256": "7473d5f80aea7e477e0fdbc41ebde651775edee17659cf29c7ff5e2c4ed1d850",
+      "gitBlob": "320a1f44146ff24c06dd4db2d86684e7fce1b2d4",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/binary/selection.cpp",
+      "worktreeSha256": "ff819911911e1ef6666f6597d3b8ea9ada0e4f6126bfee5116537a2cea3aa37f",
+      "gitBlob": "86bf69ffe08e213877dc0e734a1ab93c2bb89c88",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/binary/selection.source.md",
+      "worktreeSha256": "8f93b764d675c965366b676afe9ed4ffc512aa188d41ae6db3c01002e36d5359",
+      "gitBlob": "a805c23bbb1cba2d730012766d098ba312f0802d",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/knowledge/binary-library.md",
+      "worktreeSha256": "0142e7ed6ea36a6cc70ad46a4369b23090ef9b664d45d91b7cae30c951186806",
+      "gitBlob": "7babe3233ef4e5343366579f60c9d4f9eb0711e2",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/knowledge/borrowing-vector.md",
+      "worktreeSha256": "fb8b73b4ce35b685633ff88932fab177b8062b641eaadbd373b79b787149f6d8",
+      "gitBlob": "f12deeb465ca731f744b2d5bbd071e9f623a3755",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/knowledge/floating-search.md",
+      "worktreeSha256": "40bea37a72316cd8cafd214c2a98b8349826c01cc6017e7a39ba7573a164768d",
+      "gitBlob": "a3ffa23323c1af439254f1014d026c3977231b0b",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/knowledge/integer-budget.md",
+      "worktreeSha256": "38b434ec68676372c152acc126517194d4a6a6eeaeba4205ce19be0e8cd087f7",
+      "gitBlob": "498ab655362a29aabb3b3ca3e993eb9b1857feab",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/knowledge/ordering.md",
+      "worktreeSha256": "54cc56b8b95c82dce1ee49050bf49fdf7bd1ba45679c608e1a9b80f924322e05",
+      "gitBlob": "54e726022b800ee773e5131b8b74227f6b915d89",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/knowledge/predicate-capture.md",
+      "worktreeSha256": "9402e5dbaabd4a9e8ce7997db13ce5a07dee53fbdaa18042fd59ff8a2fee1129",
+      "gitBlob": "55c96be8eb2147e5e40a5e81490a19d239f8321d",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/knowledge/priority-queue.md",
+      "worktreeSha256": "cf0dc5a824f17c0917269a4224beb6ac0b3dfd249ea1bf0391ac55a993c7d84a",
+      "gitBlob": "d8f73ff48151a69d5a0eb9bb9f66118ac31fb8d2",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/knowledge/queue-deque.md",
+      "worktreeSha256": "b08c07700f6e45a9bdc9441fd067c264471bfb388c79cee3e5cacd8090a849fb",
+      "gitBlob": "5b34552ce411b56aea70d1d3b57a6e8250dd4e55",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/knowledge/random-integers.md",
+      "worktreeSha256": "14de285609b68aa10e5f1c577c10ecca47971e1070cc3223302de10bcd85eac7",
+      "gitBlob": "21a53beb1ec30da6c69224d0f1defa244bcc541e",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/knowledge/recursive-callback.md",
+      "worktreeSha256": "809ead82e47dd32828eaddc02f55689c033d8fbba96fea0716f28c4cfdcd8246",
+      "gitBlob": "eb069d7f9a00ebc600ed22592342133d9521bd7e",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/knowledge/selection-reorder.md",
+      "worktreeSha256": "84792030c3d56703a40d63e5eefe674ca09400cb7d2f6005ba42c4d9bb345882",
+      "gitBlob": "aecbd4426180576a39793ca2f02607070d9eb99b",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/knowledge/stable-events.md",
+      "worktreeSha256": "ca54cf0d96f2520731bf0ba0974eb0dc4147d5db1ca222380300ba0d7e8c8d9c",
+      "gitBlob": "d99daa582cb86b72071d16a32c0195ce8a0307ab",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    },
+    {
+      "path": "content/knowledge/vector-validity.md",
+      "worktreeSha256": "969507ed3168b6d4d930c03a8170526d4a9c16907248022d2f115f805d7e73bb",
+      "gitBlob": "516caa53095ee94273e9078f82fce07c6e3b1644",
+      "gitContentUnchanged": true,
+      "rawBlobEqualsCheckout": true
+    }
+  ],
+  "allGitContentUnchanged": true,
+  "allTeachingBytesUnchanged": true,
+  "count": 61,
+  "note": "Git clean filters normalize inventory line endings; raw Git blob comparison differs for those pre-existing checkout files. Teaching bytes match the baseline Git blobs directly. Recorded before chapter-review metadata refresh."
+}

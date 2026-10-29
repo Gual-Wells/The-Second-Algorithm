@@ -14,7 +14,7 @@ const temporary = path.join(output, 'browser-temp'), qaLibrary = path.join(outpu
 const digest = text => createHash('sha256').update(text).digest('hex');
 const probe = '\nglobalThis.__refinement = { get state() { return S; }, get observedLocation() { return observedLocation; }, get reconnecting() { return reconnecting; }, get runtime() { return typeof runtime === "undefined" ? null : runtime; } };\n';
 let qaCatalog, makeIndex;
-const gestures = [],targetGeometry=[],viewportDiagnostics=[],settingsGeometry=[];
+const gestures = [],targetGeometry=[],viewportDiagnostics=[],settingsGeometry=[],headerLogoMotion=[];
 const pendingPersistence=[];
 const watchedFiles = ['web/app.js','web/reader-runtime.js','web/manual-questions.js','web/service-settings.js','web/chapter-dates.js','web/auth.js','web/worker-release.js','web/sw.js','web/index.html','web/styles.css','dist/index.html','dist/app.js','dist/library/catalog.json'];
 async function fingerprint() { return Object.fromEntries(await Promise.all(watchedFiles.map(async file=>[file,digest(await fs.readFile(path.join(root,file)))]))); }
@@ -206,7 +206,7 @@ async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries
         const labels=(await p.locator('#headerActions > button').allTextContents()).map(s=>s.trim());
         assert.deepEqual(labels,['上一节','下一节','章节答疑','设置']);
         assert.equal(await p.locator('#appHeader .title-row .app-title h1').count(),1);
-        assert.equal(await p.locator('#headerLogo img').count(),1);
+        assert.equal(await p.locator('#headerLogo svg').count(),1);
         assert.equal(await p.locator('#notesButton,#noteEditor,#pureButton,#returnButton,#progressLabel,#progressFill,.context-bar,#tocSearch,#librarySearch,#documentTabs,#previousHeading,#nextHeading,#tocButton,#desktopToc,#headingPathButton,#readerFooter').count(),0);
         assert.equal(await p.locator('#readerStatusbar button,#readerStatusbar a').count(),0);
         assert.equal(await p.locator('#readerStatusbar #statusLamp,#readerStatusbar #syncStatus,#readerStatusbar #readingPosition').count(),3);
@@ -215,6 +215,59 @@ async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries
         const g=await geometry(p);assert(g.outer<=g.viewport+1&&g.pane>100&&g.paper<=g.width+1,JSON.stringify({viewport,g}));
         await p.screenshot({path:path.join(output,`viewport-${viewport.width}x${viewport.height}.png`)});
       }
+    });
+    await check('header-logo-shared-height-reflection-and-motion-protection',async env=>{
+      const p=await env.page(),reflection=p.locator('#headerLogo .header-logo-reflection');
+      const measure=()=>p.evaluate(()=>{
+        const slot=document.querySelector('#headerLogo'),svg=slot.querySelector('svg'),shape=slot.querySelector('#algorithm-header-shape'),box=shape.getBBox(),m=shape.transform.baseVal.consolidate().matrix;
+        const rect=e=>{const b=e.getBoundingClientRect();return{x:b.x,y:b.y,width:b.width,height:b.height};};
+        return{slot:rect(slot),svg:rect(svg),header:rect(document.querySelector('#appHeader')),shape:{width:box.width*m.a,height:box.height*m.d,top:box.y*m.d+m.f,bottom:(box.y+box.height)*m.d+m.f},wholeOpacity:getComputedStyle(svg).opacity,wholeTransform:getComputedStyle(svg).transform,base:getComputedStyle(slot.querySelector('.header-logo-base')).fill,reflection:getComputedStyle(slot.querySelector('.header-logo-reflection')).opacity,actions:slot.querySelectorAll('button,a,[tabindex]').length};
+      });
+      const initial=await measure();
+      assert.equal(initial.slot.width,76);assert.equal(initial.slot.height,38);
+      assert.equal(initial.svg.width,52);assert.equal(initial.svg.height,52);
+      assert.equal(initial.slot.y+initial.slot.height/2,initial.svg.y+initial.svg.height/2);
+      assert(Math.abs(initial.shape.height-291)<.001,JSON.stringify(initial));
+      assert(Math.abs(initial.shape.top-106)<.001&&Math.abs(initial.shape.bottom-397)<.001);
+      assert.equal(initial.base,'rgb(207, 232, 255)');assert.equal(initial.actions,0);
+      assert.equal(await reflection.evaluate(e=>e.getAnimations()[0].effect.getTiming().duration),4800);
+      const phases=[[0,.02],[1200,.35],[2400,.68],[3600,.35],[4800,.02]];
+      for(const[time,opacity]of phases){
+        await reflection.evaluate((e,time)=>{const a=e.getAnimations()[0];a.pause();a.currentTime=time;},time);
+        await p.evaluate(()=>new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done))));
+        const state=await measure();assert(Math.abs(Number(state.reflection)-opacity)<.002,JSON.stringify({time,state}));
+        assert.equal(state.wholeOpacity,'1');assert.equal(state.wholeTransform,'none');
+        assert.deepEqual(state.slot,initial.slot);assert.deepEqual(state.svg,initial.svg);assert.deepEqual(state.header,initial.header);
+        headerLogoMotion.push({phaseMs:time,...state,visibleHeightCssPx:state.shape.height*state.svg.height/512});
+        if(time===0||time===2400)await p.screenshot({path:path.join(output,`header-logo-${time===0?'ice':'white-reflection'}-402.png`)});
+      }
+      const pixels=await p.locator('#headerLogo svg').evaluate(async svg=>{
+        const copy=svg.cloneNode(true);copy.setAttribute('xmlns','http://www.w3.org/2000/svg');copy.setAttribute('width','512');copy.setAttribute('height','512');copy.querySelector('.header-logo-reflection').setAttribute('opacity','.68');
+        const image=new Image();image.src='data:image/svg+xml;base64,'+btoa(new XMLSerializer().serializeToString(copy));await image.decode();
+        const canvas=document.createElement('canvas');canvas.width=canvas.height=512;const ctx=canvas.getContext('2d');ctx.drawImage(image,0,0);
+        const at=(x,y)=>{const p=new DOMPoint(x,y).matrixTransform(svg.querySelector('#algorithm-header-shape').transform.baseVal.consolidate().matrix);return[...ctx.getImageData(Math.round(p.x),Math.round(p.y),1,1).data];};
+        return{cuts:[[256,148],[144,356],[368,356]].map(([x,y])=>at(x,y)),nodes:[[256,120],[144,320],[368,320]].map(([x,y])=>at(x,y))};
+      });
+      assert(pixels.cuts.every(p=>p[3]===0),JSON.stringify(pixels));assert(pixels.nodes.every(p=>p[3]===255),JSON.stringify(pixels));
+      // Start a fresh CSS animation after manually seeking the phase samples.
+      // WAAPI play() overrides later CSS animation-play-state changes.
+      await p.emulateMedia({reducedMotion:'reduce'});await p.emulateMedia({reducedMotion:'no-preference'});
+      await p.evaluate(()=>{globalThis.__logoHidden=true;Object.defineProperty(document,'hidden',{configurable:true,get:()=>globalThis.__logoHidden});document.dispatchEvent(new Event('visibilitychange'));});
+      assert.equal(await reflection.evaluate(e=>getComputedStyle(e).animationPlayState),'paused');
+      await reflection.evaluate(async e=>{await e.getAnimations()[0].ready;});
+      const paused=await reflection.evaluate(e=>e.getAnimations()[0].currentTime);await p.waitForTimeout(90);
+      assert(Math.abs(await reflection.evaluate(e=>e.getAnimations()[0].currentTime)-paused)<1);
+      await p.evaluate(()=>{globalThis.__logoHidden=false;document.dispatchEvent(new Event('visibilitychange'));});
+      assert.equal(await reflection.evaluate(e=>getComputedStyle(e).animationPlayState),'running');
+      await reflection.evaluate(async e=>{await e.getAnimations()[0].ready;});
+      await p.waitForTimeout(90);assert(await reflection.evaluate(e=>e.getAnimations()[0].currentTime)>paused);
+      await p.emulateMedia({reducedMotion:'reduce'});
+      assert.equal(await reflection.evaluate(e=>getComputedStyle(e).animationName),'none');assert.equal(await reflection.evaluate(e=>getComputedStyle(e).opacity),'0.1');
+      assert.deepEqual((await measure()).slot,initial.slot);await p.screenshot({path:path.join(output,'header-logo-reduced-motion-402.png')});
+      await p.emulateMedia({reducedMotion:'no-preference'});
+      const startup=await p.evaluate(()=>{const card=document.createElement('div');card.className='opening-card';card.dataset.state='loading';card.innerHTML='<span class="state-icon"></span>';document.body.append(card);const style=getComputedStyle(card.firstElementChild),result={animation:style.animationName,duration:style.animationDuration};card.remove();delete document.hidden;return result;});
+      assert.deepEqual(startup,{animation:'breathe',duration:'1.8s'});
+      headerLogoMotion.push({maskPixels:pixels,backgroundPaused:true,resumes:true,reducedMotion:{reflection:.1,animated:false},startup});
     });
     await check('single-h2-neighbors-source-status-index-and-native-boundaries',async env=>{
       const p=await env.page();
@@ -520,6 +573,6 @@ async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries
   } finally {await browser.close();}
   const inputEnd = await fingerprint();
   if(JSON.stringify(inputStart)!==JSON.stringify(inputEnd)) failures.push({name:'immutable-test-inputs',error:'Reader or built publication bytes changed during regression; repeat on frozen inputs.'});
-  const report={passed:failures.length===0,results,failures,gestures,targetGeometry,viewportDiagnostics,settingsGeometry,pendingPersistence,inputStart,inputEnd,caseFilter:process.env.ALGORITHM_QA_CASE||null,browserSourceIntegration:true,builtPayloadIntegration:results.some(r=>r.name==='actual-built-publication-content-source-knowledge-index-integrity'&&r.passed),serviceWorker:'blocked; actual local HTTP worker tested separately',authentication:'mocked; system passkey not exercised',productionContacted:false,realDatabaseModified:false,paidServiceContacted:false,physicalIPhone:false,testedAt:new Date().toISOString()};
+  const report={passed:failures.length===0,results,failures,gestures,targetGeometry,viewportDiagnostics,settingsGeometry,headerLogoMotion,pendingPersistence,inputStart,inputEnd,caseFilter:process.env.ALGORITHM_QA_CASE||null,browserSourceIntegration:true,builtPayloadIntegration:results.some(r=>r.name==='actual-built-publication-content-source-knowledge-index-integrity'&&r.passed),serviceWorker:'blocked; actual local HTTP worker tested separately',authentication:'mocked; system passkey not exercised',productionContacted:false,realDatabaseModified:false,paidServiceContacted:false,physicalIPhone:false,testedAt:new Date().toISOString()};
   await fs.writeFile(path.join(output,'results.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));if(failures.length)process.exitCode=1;
 })().catch(e=>{console.error(e);process.exitCode=1;});

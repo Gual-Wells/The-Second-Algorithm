@@ -1,0 +1,90 @@
+{
+  "baseline": "e83056fff843be26b00a678339f050832b3fc35d",
+  "carrier": {
+    "passed": true,
+    "tests": 134
+  },
+  "reader": {
+    "passed": true,
+    "journeys": 22,
+    "sourceDigest": {
+      "web/app.js": "f7fa51f8bf9aec8bd733b6875b7d4c2440cbbf517fb18760a1a51136d4bcfd72",
+      "web/reader-runtime.js": "b8d69bae6d2fadaa48bf9135a96a0fef6aaa8ac98784ca9a7a3ec765334f5045",
+      "web/manual-questions.js": "e32145d51a399ea5cc7510798b027ff8cfabd99ee816383bb4e4ad0fe9f6bc78",
+      "web/service-settings.js": "0e3a5cfd66b6707b77cdd574f4cd154207f37f3f4a91e3d6e6de6409c1a2f2d3",
+      "web/chapter-dates.js": "6f0d0e526780f6a4f0929b9c2a0083d59aa5ba00650bde64c77c864949f1794c",
+      "web/auth.js": "9f8db119e19cc7ac887e96aa6cefe8bc153759c316bb611472b91a2507b2fd87",
+      "web/worker-release.js": "f79451187b86d84e0bc5260e82f02ae6759cd4fda8a62576309abad39234c776",
+      "web/sw.js": "8fdfc4fb4391983f4a7126685f58e6d3f4ca68098deeb8827ac624a594355459",
+      "web/index.html": "ef028ba506361f8bc2abeef6b1afc858c295ac8155a5760dda597568bb360bc9",
+      "web/styles.css": "8a3eeb03ca80f3c519c7d94663694b7ba0176bfa111d36230a6762dc2dda164f",
+      "dist/index.html": "291cd46738547e0337ad473f533faa2abfd55802b3f896b953a2124cb530f802",
+      "dist/app.js": "b53315d92eb1bcb725f303ba106c289d2011f228c5d1a127bf1ae9625b08c834",
+      "dist/library/catalog.json": "f720054a8209b3334d445a37143467b53e2c78d0a96c53fb6a89a92bc103e171"
+    },
+    "actualBuiltPublication": true
+  },
+  "logo": {
+    "passed": true,
+    "phasesMs": [
+      0,
+      1200,
+      2400,
+      3600,
+      4800
+    ],
+    "visibleHeightCssPx": 29.554689098149538,
+    "backgroundPaused": true,
+    "reducedMotionStaticOpacity": 0.1,
+    "maskCutouts": true
+  },
+  "startup": {
+    "passed": true,
+    "checks": 50
+  },
+  "upgrade": {
+    "passed": true,
+    "realBrowserAndServiceWorker": true,
+    "heldNewWorkerWhileNewAppRan": true,
+    "prematureRequests": 0,
+    "offlineRestart": true,
+    "unsentNotesPreserved": true,
+    "checkUpdatesWaitsForTakeover": true,
+    "manualReloadOpensFormalChapter": true,
+    "withdrawalPurgedCachedJsonCppMarkdown": true,
+    "withdrawnOldRoutesOffline404": true,
+    "withdrawnEmptyCatalogOfflineRestart": true,
+    "withdrawalUnsentNotesPreserved": true,
+    "actualOwnerSwitchPurgedPriorCache": true,
+    "actualLogoutClearedPrivateCache": true,
+    "loggedOutOfflineRestartLocked": true,
+    "priorOwnerNotesPreserved": true,
+    "authentication": "isolated in-memory local HTTP fixture; no system passkey enrollment",
+    "physicalIPhone": false,
+    "automaticReload": false,
+    "productionContacted": false,
+    "databaseModified": false
+  },
+  "courseQuality": {
+    "passed": true,
+    "editorialInputHash": "a04fe14a482862ccf8d5e06342b90fd80cc2d28aa1f901c1ec909c7bd37ed843"
+  },
+  "formalCppVerification": {
+    "passed": true,
+    "targets": 4,
+    "receipt": {
+      "path": "work/jobs/ice-reflection-logo-20261030/verifications/1bed603936da47c4b9eb41cf69c59409.json",
+      "sha256": "70546bb36c68f2c98d754694fa26c24e488d1e09fa036e6c3f312cceb05aa2b7",
+      "inputHash": "1f3eee78ce35cab4c29d806f82df65413211ba5d8bd3c4589c5c5a51f7b16be7"
+    }
+  },
+  "pythonFullSuite": {
+    "completed": false,
+    "reportedBeforeStop": 53,
+    "reason": "Unrelated full content-production fixture rebuild stopped; no full-suite pass claimed."
+  },
+  "productionContacted": false,
+  "databaseModified": false,
+  "newCourseGenerated": false,
+  "physicalIPhone": false
+}
