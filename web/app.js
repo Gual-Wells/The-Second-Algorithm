@@ -257,10 +257,11 @@ async function route() {
     if (requestedAnchor && !contentHasAnchor(meta, content, requestedAnchor)) { routeUnavailable('这个阅读位置不存在或已撤回。'); return; }
     await document.fonts.ready; if (sequence !== S.sequence || !S.owner) return;
     const same = previous?.meta.id === meta.id && previous?.meta.revision === meta.revision;
+    if (same && wasRead) savePosition(false);
     let position = history.state?.readingOwner === S.owner && history.state?.readingDocument === meta.id ? history.state.readingPosition : null, local = positionFor(meta.id);
     const reloaded = initialRoute && performance.getEntriesByType('navigation')[0]?.type === 'reload';
     if (reloaded && readLocal('lastRoute') === raw && local?.capturedAt >= (position?.capturedAt || 0)) position = local;
-    if (!position) position = local; if (same && wasRead) savePosition(false);
+    if (!position) position = local;
     S.active = { collection, meta, content, route: canonical }; S.pendingRoute = null;
     $('chapterView').classList.remove('is-opening'); $('chapterView').removeAttribute('aria-busy');
     $('readerStatusbar').classList.remove('chapter-load-status'); delete $('readerStatusbar').dataset.tone;

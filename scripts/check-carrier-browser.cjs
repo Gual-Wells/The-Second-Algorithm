@@ -12,9 +12,10 @@ const owner = 'a'.repeat(43), otherOwner = 'b'.repeat(43);
 const output = path.resolve(process.env.ALGORITHM_QA_OUTPUT || path.join(root, '.local/refinement-qa'));
 const temporary = path.join(output, 'browser-temp'), qaLibrary = path.join(output, 'fixture');
 const digest = text => createHash('sha256').update(text).digest('hex');
-const probe = '\nglobalThis.__refinement = { get state() { return S; }, get reconnecting() { return reconnecting; }, get runtime() { return typeof runtime === "undefined" ? null : runtime; } };\n';
+const probe = '\nglobalThis.__refinement = { get state() { return S; }, get observedLocation() { return observedLocation; }, get reconnecting() { return reconnecting; }, get runtime() { return typeof runtime === "undefined" ? null : runtime; } };\n';
 let qaCatalog, makeIndex;
 const gestures = [],targetGeometry=[],viewportDiagnostics=[],settingsGeometry=[];
+const pendingPersistence=[];
 const watchedFiles = ['web/app.js','web/reader-runtime.js','web/manual-questions.js','web/chapter-dates.js','web/auth.js','web/worker-release.js','web/sw.js','web/index.html','web/styles.css','dist/index.html','dist/app.js','dist/library/catalog.json'];
 async function fingerprint() { return Object.fromEntries(await Promise.all(watchedFiles.map(async file=>[file,digest(await fs.readFile(path.join(root,file)))]))); }
 async function createCorpus() {
@@ -141,6 +142,22 @@ async function settingsPoint(p,label,reference) {
       block:{tag:block.tagName,id:block.id,rect:block.getBoundingClientRect().toJSON(),text:block.textContent.slice(0,80)},font:getComputedStyle(document.querySelector('#article p')).fontSize};
   },{label,reference});
   settingsGeometry.push({...geometry,readingPoint:point});
+}
+async function installPositionPersistenceGate(context) {
+  // Deterministically exercise the legitimate pre-debounce window. Only the
+  // existing 180ms position-persistence callback is held; rendering, route
+  // promises, network, history, and every other browser timer run normally.
+  await context.addInitScript(()=>{
+    const schedule=window.setTimeout.bind(window),cancel=window.clearTimeout.bind(window),held=new Map();let next=-1,holding=true;
+    window.setTimeout=(callback,delay,...args)=>{
+      if(holding&&delay===180&&typeof callback==='function'&&callback.toString().includes('storePosition(')){
+        const id=next--;held.set(id,()=>callback(...args));return id;
+      }
+      return schedule(callback,delay,...args);
+    };
+    window.clearTimeout=id=>held.has(id)?held.delete(id):cancel(id);
+    window.__positionPersistenceGate={get count(){return held.size;},release(){holding=false;const callbacks=[...held.values()];held.clear();for(const callback of callbacks)callback();}};
+  });
 }
 async function blankDoubleClick(p) { const point=await p.evaluate(()=>{const a=document.querySelector('#article').getBoundingClientRect(),r=document.querySelector('#readingPane').getBoundingClientRect();const x=Math.max(r.left+2,a.left+3),y=r.top+Math.min(180,r.height/2);return{x,y,hit:document.elementFromPoint(x,y)?.tagName};}); await p.mouse.dblclick(point.x,point.y,{delay:40}); await settled(p,180); gestures.push({...point,...await p.evaluate(()=>({selection:getSelection().toString(),pure:__refinement.runtime.state.pure}))}); }
 async function geometry(p) { return p.evaluate(()=>{const pane=document.querySelector('#readingPane'),paper=document.querySelector('#article');return{outer:document.documentElement.scrollWidth,viewport:innerWidth,pane:pane.clientHeight,width:pane.clientWidth,paper:paper.getBoundingClientRect().width};}); }
@@ -285,12 +302,30 @@ async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries
       const before=await p.evaluate(()=>({html:document.querySelector('#article').innerHTML,top:document.querySelector('#readingPane').scrollTop,anchor:__refinement.runtime.position.anchor,document:__refinement.state.active.meta.id}));
       for(const hash of['#/read/absent-chapter/absent-document','#/read/practice-course/absent-document','#/chapter/absent-chapter','#/read/practice-course/practice-entry?anchor=absent-heading']){
         await p.evaluate(hash=>{location.hash=hash;},hash);
-        await p.waitForFunction(()=>/不存在|已撤回/.test(document.querySelector('#readingNotice').textContent)&&!document.querySelector('#readingNotice').hidden);
+        await p.waitForFunction(hash=>location.hash===hash&&__refinement.observedLocation===hash&&/不存在|已撤回/.test(document.querySelector('#readingNotice').textContent)&&!document.querySelector('#readingNotice').hidden,hash);
         const now=await p.evaluate(()=>({html:document.querySelector('#article').innerHTML,top:document.querySelector('#readingPane').scrollTop,anchor:__refinement.runtime.position.anchor,document:__refinement.state.active.meta.id}));
         assert.equal(now.html,before.html);assert.equal(now.document,before.document);assert.equal(now.anchor,before.anchor);assert(Math.abs(now.top-before.top)<2);
         assert.equal(await p.locator('#readingNotice [data-show-library]').count(),1);
-        await p.evaluate(()=>{location.hash='#/read/practice-course/practice-entry';});await p.waitForFunction(()=>document.querySelector('#readingNotice').hidden);await settled(p);
+        await p.evaluate(()=>{location.hash='#/read/practice-course/practice-entry';});await p.waitForFunction(()=>location.hash==='#/read/practice-course/practice-entry'&&__refinement.observedLocation===location.hash&&document.querySelector('#readingNotice').hidden);await settled(p);
       }
+    });
+    await check('same-document-invalid-route-return-before-position-debounce-preserves-live-paper',async env=>{
+      await installPositionPersistenceGate(env.context);const p=await env.page();
+      const snapshot=label=>p.evaluate(label=>({label,hash:location.hash,observed:__refinement.observedLocation,sequence:__refinement.state.sequence,
+        position:__refinement.runtime.position,top:document.getElementById('readingPane').scrollTop,history:history.state,
+        local:JSON.parse(localStorage.getItem('second-algorithm:'+__refinement.state.owner+':position:practice-entry')||'null'),
+        record:__refinement.state.records['position:practice-entry'],held:__positionPersistenceGate.count}),label);
+      await navigateHeading(p,'unit-3');await p.locator('#readingPane').evaluate(e=>e.scrollTop+=70);await settled(p);
+      const before=await snapshot('before-invalid-route');pendingPersistence.push(before);assert.equal(before.position.anchor,'unit-3');assert(before.held>0,'position debounce must actually be held');assert.notEqual(before.local?.anchor,'unit-3','the persisted coordinate must still be stale');
+      await p.evaluate(()=>{history.replaceState(null,'',location.href);location.hash='#/read/absent-chapter/absent-document';});
+      await p.waitForFunction(()=>__refinement.observedLocation===location.hash&&location.hash==='#/read/absent-chapter/absent-document'&&!document.getElementById('readingNotice').hidden);
+      pendingPersistence.push(await snapshot('invalid-route-rendered'));
+      await p.evaluate(()=>{location.hash='#/read/practice-course/practice-entry';});
+      await p.waitForFunction(()=>__refinement.observedLocation===location.hash&&location.hash==='#/read/practice-course/practice-entry'&&document.getElementById('readingNotice').hidden);await settled(p);
+      const returned=await snapshot('valid-route-before-debounce-release');pendingPersistence.push(returned);
+      assert.equal(returned.position.anchor,before.position.anchor);assert(Math.abs(returned.top-before.top)<2,JSON.stringify({before,returned}));
+      await p.evaluate(()=>__positionPersistenceGate.release());await settled(p);
+      const released=await snapshot('after-debounce-release');pendingPersistence.push(released);assert.equal(released.held,0);assert.equal(released.local.anchor,before.position.anchor);assert.equal(released.position.anchor,before.position.anchor);assert(Math.abs(released.top-before.top)<2);
     });
     await check('pending-old-scroll-cannot-write-new-document-history-position', async env => {
       const p = await env.page(), link = p.locator('[data-qa-link="cross-start"]');
@@ -451,6 +486,6 @@ async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries
   } finally {await browser.close();}
   const inputEnd = await fingerprint();
   if(JSON.stringify(inputStart)!==JSON.stringify(inputEnd)) failures.push({name:'immutable-test-inputs',error:'Reader or built publication bytes changed during regression; repeat on frozen inputs.'});
-  const report={passed:failures.length===0,results,failures,gestures,targetGeometry,viewportDiagnostics,settingsGeometry,inputStart,inputEnd,caseFilter:process.env.ALGORITHM_QA_CASE||null,browserSourceIntegration:true,builtPayloadIntegration:results.some(r=>r.name==='actual-built-publication-content-source-knowledge-index-integrity'&&r.passed),serviceWorker:'blocked; actual local HTTP worker tested separately',authentication:'mocked; system passkey not exercised',productionContacted:false,realDatabaseModified:false,paidServiceContacted:false,physicalIPhone:false,testedAt:new Date().toISOString()};
+  const report={passed:failures.length===0,results,failures,gestures,targetGeometry,viewportDiagnostics,settingsGeometry,pendingPersistence,inputStart,inputEnd,caseFilter:process.env.ALGORITHM_QA_CASE||null,browserSourceIntegration:true,builtPayloadIntegration:results.some(r=>r.name==='actual-built-publication-content-source-knowledge-index-integrity'&&r.passed),serviceWorker:'blocked; actual local HTTP worker tested separately',authentication:'mocked; system passkey not exercised',productionContacted:false,realDatabaseModified:false,paidServiceContacted:false,physicalIPhone:false,testedAt:new Date().toISOString()};
   await fs.writeFile(path.join(output,'results.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));if(failures.length)process.exitCode=1;
 })().catch(e=>{console.error(e);process.exitCode=1;});
