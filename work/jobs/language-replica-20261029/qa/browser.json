@@ -1,0 +1,1115 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "name": "anonymous-owner-gate-and-install-instructions-without-protected-requests",
+      "passed": true
+    },
+    {
+      "name": "guided-reader-compact-toolbar-and-responsive-paper",
+      "passed": true
+    },
+    {
+      "name": "single-h2-neighbors-source-status-index-and-native-boundaries",
+      "passed": true
+    },
+    {
+      "name": "source-section-index-filter-clear-original-order-and-jump",
+      "passed": true
+    },
+    {
+      "name": "semantic-knowledge-prerequisite-history-late-response-and-focus",
+      "passed": true
+    },
+    {
+      "name": "code-copy-horizontal-scroll-independent-size-and-wrap",
+      "passed": true
+    },
+    {
+      "name": "visual-viewport-keyboard-and-pinch-zoom-sheet-bounds",
+      "passed": true
+    },
+    {
+      "name": "safe-doubleclick-only-pure-preserves-width-text-and-native-selection",
+      "passed": true
+    },
+    {
+      "name": "pure-code-click-excluded-source-controls-only-and-pointer-hold",
+      "passed": true
+    },
+    {
+      "name": "same-document-link-browser-back-forward-and-quick-reload-keep-place",
+      "passed": true
+    },
+    {
+      "name": "slow-cross-document-preserves-paper-and-cancel-rejects-late-result",
+      "passed": true
+    },
+    {
+      "name": "invalid-explicit-route-preserves-paper-and-reports-unavailable-target",
+      "passed": true
+    },
+    {
+      "name": "pending-old-scroll-cannot-write-new-document-history-position",
+      "passed": true
+    },
+    {
+      "name": "grouped-settings-files-fonts-sheet-history-and-immediate-reopen",
+      "passed": true
+    },
+    {
+      "name": "manual-question-service-warning-draft-reload-owner-isolation-and-short-viewport",
+      "passed": true
+    },
+    {
+      "name": "legacy-notes-byte-preservation-two-tabs-and-unsent-logout-guard",
+      "passed": true
+    },
+    {
+      "name": "clean-logout-preserves-all-legacy-notes-and-prevents-offline-reentry",
+      "passed": true
+    },
+    {
+      "name": "same-page-expired-owner-and-reconnect-rebuild-the-current-route",
+      "passed": true
+    },
+    {
+      "name": "cross-owner-reconnect-never-shares-reader-private-state-or-legacy-notes",
+      "passed": true
+    },
+    {
+      "name": "actual-built-publication-content-source-knowledge-index-integrity",
+      "passed": true
+    }
+  ],
+  "failures": [],
+  "gestures": [
+    {
+      "x": 17,
+      "y": 371.6875,
+      "hit": "ARTICLE",
+      "selection": "",
+      "pure": true
+    },
+    {
+      "x": 17,
+      "y": 188,
+      "hit": "ARTICLE",
+      "selection": "",
+      "pure": false
+    },
+    {
+      "x": 17,
+      "y": 371.6875,
+      "hit": "ARTICLE",
+      "selection": "",
+      "pure": true
+    }
+  ],
+  "targetGeometry": [
+    {
+      "id": "section-0",
+      "firstNaturalCase": true,
+      "top": 51.390625,
+      "expected": 51.5,
+      "clearance": 7,
+      "expectedClearance": 7,
+      "current": "section-0",
+      "uncovered": true,
+      "toolsVisible": true,
+      "pane": {
+        "x": 7,
+        "y": 191.6875,
+        "width": 388,
+        "height": 645.3125,
+        "top": 191.6875,
+        "right": 395,
+        "bottom": 837,
+        "left": 7
+      },
+      "tools": {
+        "x": 14,
+        "y": 196.578125,
+        "width": 374,
+        "height": 39.5,
+        "top": 196.578125,
+        "right": 388,
+        "bottom": 236.078125,
+        "left": 14
+      },
+      "heading": {
+        "x": 22,
+        "y": 243.078125,
+        "width": 358,
+        "height": 26.34375,
+        "top": 243.078125,
+        "right": 380,
+        "bottom": 269.421875,
+        "left": 22
+      },
+      "computedTop": "0px",
+      "computedPosition": "sticky",
+      "scrollTop": 133,
+      "toolsOffsetTop": 330,
+      "articlePaddingTop": "7px",
+      "pure": false
+    },
+    {
+      "id": "section-2",
+      "firstNaturalCase": false,
+      "top": 51.609375,
+      "expected": 51.5,
+      "clearance": 12.109375,
+      "expectedClearance": 12,
+      "current": "section-2",
+      "uncovered": true,
+      "toolsVisible": true,
+      "pane": {
+        "x": 7,
+        "y": 191.6875,
+        "width": 388,
+        "height": 645.3125,
+        "top": 191.6875,
+        "right": 395,
+        "bottom": 837,
+        "left": 7
+      },
+      "tools": {
+        "x": 14,
+        "y": 191.6875,
+        "width": 374,
+        "height": 39.5,
+        "top": 191.6875,
+        "right": 388,
+        "bottom": 231.1875,
+        "left": 14
+      },
+      "heading": {
+        "x": 22,
+        "y": 243.296875,
+        "width": 358,
+        "height": 43.34375,
+        "top": 243.296875,
+        "right": 380,
+        "bottom": 286.640625,
+        "left": 22
+      },
+      "computedTop": "0px",
+      "computedPosition": "sticky",
+      "scrollTop": 3167,
+      "toolsOffsetTop": 3359,
+      "articlePaddingTop": "7px",
+      "pure": false
+    },
+    {
+      "id": "code-15",
+      "firstNaturalCase": false,
+      "top": 51.484375,
+      "expected": 51.5,
+      "clearance": 11.984375,
+      "expectedClearance": 12,
+      "current": "code-15",
+      "uncovered": true,
+      "toolsVisible": true,
+      "pane": {
+        "x": 7,
+        "y": 191.6875,
+        "width": 388,
+        "height": 645.3125,
+        "top": 191.6875,
+        "right": 395,
+        "bottom": 837,
+        "left": 7
+      },
+      "tools": {
+        "x": 14,
+        "y": 191.6875,
+        "width": 374,
+        "height": 39.5,
+        "top": 191.6875,
+        "right": 388,
+        "bottom": 231.1875,
+        "left": 14
+      },
+      "heading": {
+        "x": 22,
+        "y": 243.171875,
+        "width": 358,
+        "height": 23.25,
+        "top": 243.171875,
+        "right": 380,
+        "bottom": 266.421875,
+        "left": 22
+      },
+      "computedTop": "0px",
+      "computedPosition": "sticky",
+      "scrollTop": 23130,
+      "toolsOffsetTop": 23322,
+      "articlePaddingTop": "7px",
+      "pure": false
+    },
+    {
+      "id": "section-0",
+      "firstNaturalCase": true,
+      "top": 51.390625,
+      "expected": 51.5,
+      "clearance": 7,
+      "expectedClearance": 7,
+      "current": "section-0",
+      "uncovered": true,
+      "toolsVisible": true,
+      "pane": {
+        "x": 7,
+        "y": 189.296875,
+        "width": 306,
+        "height": 513.703125,
+        "top": 189.296875,
+        "right": 313,
+        "bottom": 703,
+        "left": 7
+      },
+      "tools": {
+        "x": 14,
+        "y": 194.1875,
+        "width": 292,
+        "height": 39.5,
+        "top": 194.1875,
+        "right": 306,
+        "bottom": 233.6875,
+        "left": 14
+      },
+      "heading": {
+        "x": 22,
+        "y": 240.6875,
+        "width": 276,
+        "height": 26.34375,
+        "top": 240.6875,
+        "right": 298,
+        "bottom": 267.03125,
+        "left": 22
+      },
+      "computedTop": "0px",
+      "computedPosition": "sticky",
+      "scrollTop": 133,
+      "toolsOffsetTop": 327,
+      "articlePaddingTop": "7px",
+      "pure": false
+    },
+    {
+      "id": "section-2",
+      "firstNaturalCase": false,
+      "top": 51.109375,
+      "expected": 51.5,
+      "clearance": 11.609375,
+      "expectedClearance": 12,
+      "current": "section-2",
+      "uncovered": true,
+      "toolsVisible": true,
+      "pane": {
+        "x": 7,
+        "y": 189.296875,
+        "width": 306,
+        "height": 513.703125,
+        "top": 189.296875,
+        "right": 313,
+        "bottom": 703,
+        "left": 7
+      },
+      "tools": {
+        "x": 14,
+        "y": 189.296875,
+        "width": 292,
+        "height": 39.5,
+        "top": 189.296875,
+        "right": 306,
+        "bottom": 228.796875,
+        "left": 14
+      },
+      "heading": {
+        "x": 22,
+        "y": 240.40625,
+        "width": 276,
+        "height": 43.34375,
+        "top": 240.40625,
+        "right": 298,
+        "bottom": 283.75,
+        "left": 22
+      },
+      "computedTop": "0px",
+      "computedPosition": "sticky",
+      "scrollTop": 3808,
+      "toolsOffsetTop": 3997,
+      "articlePaddingTop": "7px",
+      "pure": false
+    },
+    {
+      "id": "code-15",
+      "firstNaturalCase": false,
+      "top": 51.421875,
+      "expected": 51.5,
+      "clearance": 11.921875,
+      "expectedClearance": 12,
+      "current": "code-15",
+      "uncovered": true,
+      "toolsVisible": true,
+      "pane": {
+        "x": 7,
+        "y": 189.296875,
+        "width": 306,
+        "height": 513.703125,
+        "top": 189.296875,
+        "right": 313,
+        "bottom": 703,
+        "left": 7
+      },
+      "tools": {
+        "x": 14,
+        "y": 189.296875,
+        "width": 292,
+        "height": 39.5,
+        "top": 189.296875,
+        "right": 306,
+        "bottom": 228.796875,
+        "left": 14
+      },
+      "heading": {
+        "x": 22,
+        "y": 240.71875,
+        "width": 276,
+        "height": 23.25,
+        "top": 240.71875,
+        "right": 298,
+        "bottom": 263.96875,
+        "left": 22
+      },
+      "computedTop": "0px",
+      "computedPosition": "sticky",
+      "scrollTop": 28174,
+      "toolsOffsetTop": 28363,
+      "articlePaddingTop": "7px",
+      "pure": false
+    },
+    {
+      "id": "section-0",
+      "firstNaturalCase": true,
+      "top": 51.390625,
+      "expected": 51.5,
+      "clearance": 11.890625,
+      "expectedClearance": 12,
+      "current": "section-0",
+      "uncovered": true,
+      "toolsVisible": true,
+      "pane": {
+        "x": 170,
+        "y": 199,
+        "width": 940,
+        "height": 564,
+        "top": 199,
+        "right": 1110,
+        "bottom": 763,
+        "left": 170
+      },
+      "tools": {
+        "x": 226,
+        "y": 199,
+        "width": 828,
+        "height": 39.5,
+        "top": 199,
+        "right": 1054,
+        "bottom": 238.5,
+        "left": 226
+      },
+      "heading": {
+        "x": 239,
+        "y": 250.390625,
+        "width": 802,
+        "height": 26.34375,
+        "top": 250.390625,
+        "right": 1041,
+        "bottom": 276.734375,
+        "left": 239
+      },
+      "computedTop": "0px",
+      "computedPosition": "sticky",
+      "scrollTop": 155,
+      "toolsOffsetTop": 354,
+      "articlePaddingTop": "12px",
+      "pure": false
+    },
+    {
+      "id": "section-2",
+      "firstNaturalCase": false,
+      "top": 51.609375,
+      "expected": 51.5,
+      "clearance": 12.109375,
+      "expectedClearance": 12,
+      "current": "section-2",
+      "uncovered": true,
+      "toolsVisible": true,
+      "pane": {
+        "x": 170,
+        "y": 199,
+        "width": 940,
+        "height": 564,
+        "top": 199,
+        "right": 1110,
+        "bottom": 763,
+        "left": 170
+      },
+      "tools": {
+        "x": 226,
+        "y": 199,
+        "width": 828,
+        "height": 39.5,
+        "top": 199,
+        "right": 1054,
+        "bottom": 238.5,
+        "left": 226
+      },
+      "heading": {
+        "x": 239,
+        "y": 250.609375,
+        "width": 802,
+        "height": 43.34375,
+        "top": 250.609375,
+        "right": 1041,
+        "bottom": 293.953125,
+        "left": 239
+      },
+      "computedTop": "0px",
+      "computedPosition": "sticky",
+      "scrollTop": 1908,
+      "toolsOffsetTop": 2107,
+      "articlePaddingTop": "12px",
+      "pure": false
+    },
+    {
+      "id": "code-15",
+      "firstNaturalCase": false,
+      "top": 51.609375,
+      "expected": 51.5,
+      "clearance": 12.109375,
+      "expectedClearance": 12,
+      "current": "code-15",
+      "uncovered": true,
+      "toolsVisible": true,
+      "pane": {
+        "x": 170,
+        "y": 199,
+        "width": 940,
+        "height": 564,
+        "top": 199,
+        "right": 1110,
+        "bottom": 763,
+        "left": 170
+      },
+      "tools": {
+        "x": 226,
+        "y": 199,
+        "width": 828,
+        "height": 39.5,
+        "top": 199,
+        "right": 1054,
+        "bottom": 238.5,
+        "left": 226
+      },
+      "heading": {
+        "x": 239,
+        "y": 250.609375,
+        "width": 802,
+        "height": 23.25,
+        "top": 250.609375,
+        "right": 1041,
+        "bottom": 273.859375,
+        "left": 239
+      },
+      "computedTop": "0px",
+      "computedPosition": "sticky",
+      "scrollTop": 13064,
+      "toolsOffsetTop": 13263,
+      "articlePaddingTop": "12px",
+      "pure": false
+    },
+    {
+      "id": "unit-8",
+      "firstNaturalCase": false,
+      "top": 51.359375,
+      "expected": 51.5,
+      "clearance": 11.859375,
+      "expectedClearance": 12,
+      "current": "unit-8",
+      "uncovered": true,
+      "toolsVisible": true,
+      "pane": {
+        "x": 7,
+        "y": 191.6875,
+        "width": 388,
+        "height": 645.3125,
+        "top": 191.6875,
+        "right": 395,
+        "bottom": 837,
+        "left": 7
+      },
+      "tools": {
+        "x": 14,
+        "y": 191.6875,
+        "width": 374,
+        "height": 39.5,
+        "top": 191.6875,
+        "right": 388,
+        "bottom": 231.1875,
+        "left": 14
+      },
+      "heading": {
+        "x": 22,
+        "y": 243.046875,
+        "width": 358,
+        "height": 24.796875,
+        "top": 243.046875,
+        "right": 380,
+        "bottom": 267.84375,
+        "left": 22
+      },
+      "computedTop": "0px",
+      "computedPosition": "sticky",
+      "scrollTop": 12419,
+      "toolsOffsetTop": 12611,
+      "articlePaddingTop": "7px",
+      "pure": false
+    },
+    {
+      "id": "unit-6",
+      "firstNaturalCase": false,
+      "top": 51.890625,
+      "expected": 51.5,
+      "clearance": 12.390625,
+      "expectedClearance": 12,
+      "current": "unit-6",
+      "uncovered": true,
+      "toolsVisible": true,
+      "pane": {
+        "x": 7,
+        "y": 191.6875,
+        "width": 388,
+        "height": 645.3125,
+        "top": 191.6875,
+        "right": 395,
+        "bottom": 837,
+        "left": 7
+      },
+      "tools": {
+        "x": 14,
+        "y": 191.6875,
+        "width": 374,
+        "height": 39.5,
+        "top": 191.6875,
+        "right": 388,
+        "bottom": 231.1875,
+        "left": 14
+      },
+      "heading": {
+        "x": 22,
+        "y": 243.578125,
+        "width": 358,
+        "height": 24.796875,
+        "top": 243.578125,
+        "right": 380,
+        "bottom": 268.375,
+        "left": 22
+      },
+      "computedTop": "0px",
+      "computedPosition": "sticky",
+      "scrollTop": 9502,
+      "toolsOffsetTop": 9694,
+      "articlePaddingTop": "7px",
+      "pure": false
+    }
+  ],
+  "viewportDiagnostics": [
+    {
+      "chain": [
+        {
+          "tag": "ARTICLE",
+          "id": "article",
+          "classes": "paper article",
+          "touchAction": "auto",
+          "inline": ""
+        },
+        {
+          "tag": "SECTION",
+          "id": "reader",
+          "classes": "reader",
+          "touchAction": "auto",
+          "inline": ""
+        },
+        {
+          "tag": "DIV",
+          "id": "readingPane",
+          "classes": "reading-pane reading-scroll",
+          "touchAction": "manipulation",
+          "inline": ""
+        },
+        {
+          "tag": "DIV",
+          "id": "readingLayout",
+          "classes": "reading-layout",
+          "touchAction": "auto",
+          "inline": ""
+        },
+        {
+          "tag": "SECTION",
+          "id": "readerView",
+          "classes": "reader-view",
+          "touchAction": "auto",
+          "inline": ""
+        },
+        {
+          "tag": "SECTION",
+          "id": "readerFrame",
+          "classes": "reader-frame",
+          "touchAction": "auto",
+          "inline": ""
+        },
+        {
+          "tag": "MAIN",
+          "id": "app",
+          "classes": "app-shell app-frame",
+          "touchAction": "auto",
+          "inline": ""
+        },
+        {
+          "tag": "BODY",
+          "id": "",
+          "classes": "",
+          "touchAction": "auto",
+          "inline": ""
+        },
+        {
+          "tag": "HTML",
+          "id": "",
+          "classes": "",
+          "touchAction": "auto",
+          "inline": ""
+        }
+      ],
+      "viewport": "width=device-width,initial-scale=1,viewport-fit=cover",
+      "standalone": false
+    }
+  ],
+  "settingsGeometry": [
+    {
+      "label": "before-settings",
+      "position": {
+        "schema": 3,
+        "anchor": "unit-3",
+        "offset": 51.1875,
+        "revision": "680bbdfdc3f4858c1a799b66a2574cd657c77ba1647804fc4f112d945d22a223",
+        "capturedAt": 1793282130595,
+        "block": {
+          "index": 27,
+          "ratio": 0,
+          "offset": 51.1875
+        }
+      },
+      "reference": {
+        "schema": 3,
+        "anchor": "unit-3",
+        "offset": 51.1875,
+        "revision": "680bbdfdc3f4858c1a799b66a2574cd657c77ba1647804fc4f112d945d22a223",
+        "capturedAt": 1793282130595,
+        "block": {
+          "index": 27,
+          "ratio": 0,
+          "offset": 51.1875
+        }
+      },
+      "pane": {
+        "x": 7,
+        "y": 191.6875,
+        "width": 388,
+        "height": 645.3125,
+        "top": 191.6875,
+        "right": 395,
+        "bottom": 837,
+        "left": 7
+      },
+      "tools": {
+        "x": 14,
+        "y": 191.6875,
+        "width": 374,
+        "height": 39.5,
+        "top": 191.6875,
+        "right": 388,
+        "bottom": 231.1875,
+        "left": 14
+      },
+      "heading": {
+        "x": 22,
+        "y": 242.875,
+        "width": 358,
+        "height": 24.796875,
+        "top": 242.875,
+        "right": 380,
+        "bottom": 267.671875,
+        "left": 22
+      },
+      "scrollTop": 5128,
+      "block": {
+        "tag": "H3",
+        "id": "unit-3",
+        "rect": {
+          "x": 22,
+          "y": 242.875,
+          "width": 358,
+          "height": 24.796875,
+          "top": 242.875,
+          "right": 380,
+          "bottom": 267.671875,
+          "left": 22
+        },
+        "text": "（1）方法：有效范围与严格边界"
+      },
+      "font": "15px",
+      "readingPoint": {
+        "position": {
+          "schema": 3,
+          "anchor": "unit-3",
+          "offset": 51.1875,
+          "revision": "680bbdfdc3f4858c1a799b66a2574cd657c77ba1647804fc4f112d945d22a223",
+          "capturedAt": 1793282130595,
+          "block": {
+            "index": 27,
+            "ratio": 0,
+            "offset": 51.1875
+          }
+        },
+        "anchor": "unit-3",
+        "block": 27,
+        "point": 0,
+        "headingTop": 51.1875,
+        "scrollTop": 5128,
+        "paperWidth": 372
+      }
+    },
+    {
+      "label": "reading-detail-before-font",
+      "position": {
+        "schema": 3,
+        "anchor": "unit-3",
+        "offset": 51.1875,
+        "revision": "680bbdfdc3f4858c1a799b66a2574cd657c77ba1647804fc4f112d945d22a223",
+        "capturedAt": 1793282130798,
+        "block": {
+          "index": 27,
+          "ratio": 0,
+          "offset": 51.1875
+        }
+      },
+      "reference": {
+        "schema": 3,
+        "anchor": "unit-3",
+        "offset": 51.1875,
+        "revision": "680bbdfdc3f4858c1a799b66a2574cd657c77ba1647804fc4f112d945d22a223",
+        "capturedAt": 1793282130595,
+        "block": {
+          "index": 27,
+          "ratio": 0,
+          "offset": 51.1875
+        }
+      },
+      "pane": {
+        "x": 7,
+        "y": 191.6875,
+        "width": 388,
+        "height": 645.3125,
+        "top": 191.6875,
+        "right": 395,
+        "bottom": 837,
+        "left": 7
+      },
+      "tools": {
+        "x": 14,
+        "y": 191.6875,
+        "width": 374,
+        "height": 39.5,
+        "top": 191.6875,
+        "right": 388,
+        "bottom": 231.1875,
+        "left": 14
+      },
+      "heading": {
+        "x": 22,
+        "y": 242.875,
+        "width": 358,
+        "height": 24.796875,
+        "top": 242.875,
+        "right": 380,
+        "bottom": 267.671875,
+        "left": 22
+      },
+      "scrollTop": 5128,
+      "block": {
+        "tag": "H3",
+        "id": "unit-3",
+        "rect": {
+          "x": 22,
+          "y": 242.875,
+          "width": 358,
+          "height": 24.796875,
+          "top": 242.875,
+          "right": 380,
+          "bottom": 267.671875,
+          "left": 22
+        },
+        "text": "（1）方法：有效范围与严格边界"
+      },
+      "font": "15px",
+      "readingPoint": {
+        "position": {
+          "schema": 3,
+          "anchor": "unit-3",
+          "offset": 51.1875,
+          "revision": "680bbdfdc3f4858c1a799b66a2574cd657c77ba1647804fc4f112d945d22a223",
+          "capturedAt": 1793282130595,
+          "block": {
+            "index": 27,
+            "ratio": 0,
+            "offset": 51.1875
+          }
+        },
+        "anchor": "unit-3",
+        "block": 27,
+        "point": 0,
+        "headingTop": 51.1875,
+        "scrollTop": 5128,
+        "paperWidth": 372
+      }
+    },
+    {
+      "label": "font-increased-sheet-open",
+      "position": {
+        "schema": 3,
+        "anchor": "unit-3",
+        "offset": 51.1875,
+        "revision": "680bbdfdc3f4858c1a799b66a2574cd657c77ba1647804fc4f112d945d22a223",
+        "capturedAt": 1793282130798,
+        "block": {
+          "index": 27,
+          "ratio": 0,
+          "offset": 51.1875
+        }
+      },
+      "reference": {
+        "schema": 3,
+        "anchor": "unit-3",
+        "offset": 51.1875,
+        "revision": "680bbdfdc3f4858c1a799b66a2574cd657c77ba1647804fc4f112d945d22a223",
+        "capturedAt": 1793282130595,
+        "block": {
+          "index": 27,
+          "ratio": 0,
+          "offset": 51.1875
+        }
+      },
+      "pane": {
+        "x": 7,
+        "y": 191.6875,
+        "width": 388,
+        "height": 645.3125,
+        "top": 191.6875,
+        "right": 395,
+        "bottom": 837,
+        "left": 7
+      },
+      "tools": {
+        "x": 14,
+        "y": 191.6875,
+        "width": 374,
+        "height": 39.5,
+        "top": 191.6875,
+        "right": 388,
+        "bottom": 231.1875,
+        "left": 14
+      },
+      "heading": {
+        "x": 22,
+        "y": 242.5,
+        "width": 358,
+        "height": 26.34375,
+        "top": 242.5,
+        "right": 380,
+        "bottom": 268.84375,
+        "left": 22
+      },
+      "scrollTop": 5500,
+      "block": {
+        "tag": "H3",
+        "id": "unit-3",
+        "rect": {
+          "x": 22,
+          "y": 242.5,
+          "width": 358,
+          "height": 26.34375,
+          "top": 242.5,
+          "right": 380,
+          "bottom": 268.84375,
+          "left": 22
+        },
+        "text": "（1）方法：有效范围与严格边界"
+      },
+      "font": "16px",
+      "readingPoint": {
+        "position": {
+          "schema": 3,
+          "anchor": "unit-3",
+          "offset": 51.1875,
+          "revision": "680bbdfdc3f4858c1a799b66a2574cd657c77ba1647804fc4f112d945d22a223",
+          "capturedAt": 1793282130595,
+          "block": {
+            "index": 27,
+            "ratio": 0,
+            "offset": 51.1875
+          }
+        },
+        "anchor": "unit-3",
+        "block": 27,
+        "point": -0.375,
+        "headingTop": 50.8125,
+        "scrollTop": 5500,
+        "paperWidth": 372
+      }
+    },
+    {
+      "label": "font-increased-sheet-closed",
+      "position": {
+        "schema": 3,
+        "anchor": "unit-3",
+        "offset": 50.8125,
+        "revision": "680bbdfdc3f4858c1a799b66a2574cd657c77ba1647804fc4f112d945d22a223",
+        "capturedAt": 1793282131862,
+        "block": {
+          "index": 27,
+          "ratio": 0,
+          "offset": 50.8125
+        }
+      },
+      "reference": {
+        "schema": 3,
+        "anchor": "unit-3",
+        "offset": 51.1875,
+        "revision": "680bbdfdc3f4858c1a799b66a2574cd657c77ba1647804fc4f112d945d22a223",
+        "capturedAt": 1793282130595,
+        "block": {
+          "index": 27,
+          "ratio": 0,
+          "offset": 51.1875
+        }
+      },
+      "pane": {
+        "x": 7,
+        "y": 191.6875,
+        "width": 388,
+        "height": 645.3125,
+        "top": 191.6875,
+        "right": 395,
+        "bottom": 837,
+        "left": 7
+      },
+      "tools": {
+        "x": 14,
+        "y": 191.6875,
+        "width": 374,
+        "height": 39.5,
+        "top": 191.6875,
+        "right": 388,
+        "bottom": 231.1875,
+        "left": 14
+      },
+      "heading": {
+        "x": 22,
+        "y": 242.5,
+        "width": 358,
+        "height": 26.34375,
+        "top": 242.5,
+        "right": 380,
+        "bottom": 268.84375,
+        "left": 22
+      },
+      "scrollTop": 5500,
+      "block": {
+        "tag": "H3",
+        "id": "unit-3",
+        "rect": {
+          "x": 22,
+          "y": 242.5,
+          "width": 358,
+          "height": 26.34375,
+          "top": 242.5,
+          "right": 380,
+          "bottom": 268.84375,
+          "left": 22
+        },
+        "text": "（1）方法：有效范围与严格边界"
+      },
+      "font": "16px",
+      "readingPoint": {
+        "position": {
+          "schema": 3,
+          "anchor": "unit-3",
+          "offset": 51.1875,
+          "revision": "680bbdfdc3f4858c1a799b66a2574cd657c77ba1647804fc4f112d945d22a223",
+          "capturedAt": 1793282130595,
+          "block": {
+            "index": 27,
+            "ratio": 0,
+            "offset": 51.1875
+          }
+        },
+        "anchor": "unit-3",
+        "block": 27,
+        "point": -0.375,
+        "headingTop": 50.8125,
+        "scrollTop": 5500,
+        "paperWidth": 372
+      }
+    }
+  ],
+  "inputStart": {
+    "web/app.js": "32bedf4e5bf9c65eb09ec459b1ad632e53ca45596e3b4bd144478c1e160fcc05",
+    "web/reader-runtime.js": "bb308ebf21c8e67bbc38b904b769aa21774543afcf3a9a98c930aaaa03bc9315",
+    "web/manual-questions.js": "e32145d51a399ea5cc7510798b027ff8cfabd99ee816383bb4e4ad0fe9f6bc78",
+    "web/chapter-dates.js": "6f0d0e526780f6a4f0929b9c2a0083d59aa5ba00650bde64c77c864949f1794c",
+    "web/auth.js": "9f8db119e19cc7ac887e96aa6cefe8bc153759c316bb611472b91a2507b2fd87",
+    "web/worker-release.js": "f79451187b86d84e0bc5260e82f02ae6759cd4fda8a62576309abad39234c776",
+    "web/sw.js": "93e5b90c93d01133d23f001aa2c6062fead9e71ede4f7b1b999c1d86dc6765bb",
+    "web/index.html": "42074fdc7269258f111d72ceb6c6dd0ce0a76edfe642a139553737f1a01be956",
+    "web/styles.css": "bcf958ec59960235c92a73f9c33bc9ccd2c215f6ca45017ddac36c4c90678e06",
+    "dist/index.html": "0bb0949c6e9ef553bc1dcdfa06518959029bb09bbf716faf61bb2a995cf7674a",
+    "dist/app.js": "3e3d724745f5d65789249857b5c9a45467b3159876548a432a4c0999cc30fca2",
+    "dist/library/catalog.json": "43520aeb314b7e26884c23037e455b9d62cbf1bd8f9558638722ad9ba58a1ae5"
+  },
+  "inputEnd": {
+    "web/app.js": "32bedf4e5bf9c65eb09ec459b1ad632e53ca45596e3b4bd144478c1e160fcc05",
+    "web/reader-runtime.js": "bb308ebf21c8e67bbc38b904b769aa21774543afcf3a9a98c930aaaa03bc9315",
+    "web/manual-questions.js": "e32145d51a399ea5cc7510798b027ff8cfabd99ee816383bb4e4ad0fe9f6bc78",
+    "web/chapter-dates.js": "6f0d0e526780f6a4f0929b9c2a0083d59aa5ba00650bde64c77c864949f1794c",
+    "web/auth.js": "9f8db119e19cc7ac887e96aa6cefe8bc153759c316bb611472b91a2507b2fd87",
+    "web/worker-release.js": "f79451187b86d84e0bc5260e82f02ae6759cd4fda8a62576309abad39234c776",
+    "web/sw.js": "93e5b90c93d01133d23f001aa2c6062fead9e71ede4f7b1b999c1d86dc6765bb",
+    "web/index.html": "42074fdc7269258f111d72ceb6c6dd0ce0a76edfe642a139553737f1a01be956",
+    "web/styles.css": "bcf958ec59960235c92a73f9c33bc9ccd2c215f6ca45017ddac36c4c90678e06",
+    "dist/index.html": "0bb0949c6e9ef553bc1dcdfa06518959029bb09bbf716faf61bb2a995cf7674a",
+    "dist/app.js": "3e3d724745f5d65789249857b5c9a45467b3159876548a432a4c0999cc30fca2",
+    "dist/library/catalog.json": "43520aeb314b7e26884c23037e455b9d62cbf1bd8f9558638722ad9ba58a1ae5"
+  },
+  "caseFilter": null,
+  "browserSourceIntegration": true,
+  "builtPayloadIntegration": true,
+  "serviceWorker": "blocked; actual local HTTP worker tested separately",
+  "authentication": "mocked; system passkey not exercised",
+  "productionContacted": false,
+  "realDatabaseModified": false,
+  "paidServiceContacted": false,
+  "physicalIPhone": false,
+  "testedAt": "2026-10-29T13:56:21.663Z"
+}

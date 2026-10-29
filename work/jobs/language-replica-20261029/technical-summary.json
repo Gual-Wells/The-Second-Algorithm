@@ -1,0 +1,42 @@
+{
+  "command": "node scripts/check-project.mjs --without-browser",
+  "exitCode": 0,
+  "python": {
+    "passed": 198,
+    "seconds": 943.597
+  },
+  "node": {
+    "passed": 118,
+    "failed": 0,
+    "skipped": 0
+  },
+  "cppTargets": [
+    {
+      "id": "chapter01-boundary",
+      "standard": "c++17",
+      "passed": true
+    },
+    {
+      "id": "chapter01-decision",
+      "standard": "c++17",
+      "passed": true
+    },
+    {
+      "id": "chapter01-selection",
+      "standard": "c++17",
+      "passed": true
+    },
+    {
+      "id": "chapter01-advanced",
+      "standard": "c++17",
+      "passed": true
+    }
+  ],
+  "cppReceiptInputHash": "a1167528838187528b97b7e37724610c5320053c0438aad84e7180ffcf1bce1d",
+  "buildID": "e2ce4684db3722fadd765f274fc8a55b9c5440503fc99e0bc7ce33b5353f5595",
+  "log": {
+    "localPath": ".local/language-replica/technical.log",
+    "sha256": "fdd705a279e4fb0107654bf66ab73ef560e5b2b0ef91175a3c9cd05652f96db4"
+  },
+  "scope": "Full technical script excluding browser; browser, calendar, startup and actual HTTP/SW receipts archived separately."
+}

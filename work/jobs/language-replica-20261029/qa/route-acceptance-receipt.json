@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-10-29T14:19:46.078Z",
+  "build": "0fb499daf0a0f9b3d342d4f7a407e74a22dea71d40d2704dd49c389a99768c30",
+  "passed": true,
+  "cases": 21,
+  "failures": [],
+  "inputStartEqualsEnd": true,
+  "currentInputMatchesAtReceipt": true,
+  "browserReport": "qa/browser-route-verified.json",
+  "reproductionReport": "qa/route-race-reproduction.json",
+  "headingGeometryReport": "qa/route-heading-geometry.json",
+  "actualPublication": {
+    "headings": 278,
+    "neighborControls": 556,
+    "currentSectionsChecked": 278,
+    "errors": 0
+  },
+  "pendingPersistence": [
+    {
+      "label": "before-invalid-route",
+      "hash": "#/read/practice-course/practice-entry",
+      "observed": "#/read/practice-course/practice-entry",
+      "sequence": 2,
+      "liveAnchor": "unit-3",
+      "localAnchor": "section-0",
+      "recordAnchor": "section-0",
+      "scrollTop": 5198,
+      "heldPositionCallbacks": 1
+    },
+    {
+      "label": "invalid-route-rendered",
+      "hash": "#/read/absent-chapter/absent-document",
+      "observed": "#/read/absent-chapter/absent-document",
+      "sequence": 3,
+      "liveAnchor": "unit-3",
+      "localAnchor": "section-0",
+      "recordAnchor": "section-0",
+      "scrollTop": 5198,
+      "heldPositionCallbacks": 1
+    },
+    {
+      "label": "valid-route-before-debounce-release",
+      "hash": "#/read/practice-course/practice-entry",
+      "observed": "#/read/practice-course/practice-entry",
+      "sequence": 4,
+      "liveAnchor": "unit-3",
+      "localAnchor": "unit-3",
+      "recordAnchor": "unit-3",
+      "scrollTop": 5198,
+      "heldPositionCallbacks": 1
+    },
+    {
+      "label": "after-debounce-release",
+      "hash": "#/read/practice-course/practice-entry",
+      "observed": "#/read/practice-course/practice-entry",
+      "sequence": 4,
+      "liveAnchor": "unit-3",
+      "localAnchor": "unit-3",
+      "recordAnchor": "unit-3",
+      "scrollTop": 5198,
+      "heldPositionCallbacks": 0
+    }
+  ],
+  "publicationUnchanged": true,
+  "productionContacted": false,
+  "paidServiceContacted": false,
+  "realDatabaseModified": false,
+  "physicalIPhone": false,
+  "serviceWorker": "blocked in this suite; root will independently rerun actual local HTTP/SW",
+  "previousChecks": "Existing 31 calendar and 50 startup checks remain recorded separately; this receipt does not pretend to rerun them"
+}

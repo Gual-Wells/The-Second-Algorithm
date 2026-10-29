@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "id": "language-replica-20261029",
+  "goal": "按用户最新要求全面移植复刻第二语言页面与交互：源标题栏及独立四按钮行、蓝底Logo、词条索引式篇节索引、薄状态栏和各自然窗口；保全完整教材、私人状态、原生代码与版本边界并发布",
+  "createdAt": "2026-10-29T13:26:24.420220+00:00",
+  "evidence": [
+    {
+      "id": "3be346e3ea3c4569ac91dec004a833eb",
+      "kind": "research",
+      "path": "work/jobs/language-replica-20261029/research.md",
+      "summary": "固定实际第二语言源与线上字节核验，逐页直接移植，真实几何/缩放/读位/同步问题定点修复，完整教学保全和已完成各组验证分开记录",
+      "outcome": "accepted",
+      "sha256": "326dd4065c1ec748db858f2bb62cbbd12a35300118414bf563482c5747312d59",
+      "inputHash": "6fd637136189608fbaaa388f2642231b84ee731da81dae57fd4f1cf58186471f",
+      "recordedAt": "2026-10-29T14:04:04.152977+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "a9577accccfc465585ad9921fb350820",
+      "kind": "review",
+      "path": "work/jobs/language-replica-20261029/independent-review.md",
+      "summary": "独立核验真实源式读者表面与字体/缩放/同步修正、20/31/50回归和实际HTTP-SW、教学60文件及16载荷保全；用户真机审美与发布另记",
+      "outcome": "accepted",
+      "sha256": "804449f3d21d2affb9e0b0261b9d4cefbdba62d6cb5dc92b3b58762dedde148d",
+      "inputHash": "6fd637136189608fbaaa388f2642231b84ee731da81dae57fd4f1cf58186471f",
+      "recordedAt": "2026-10-29T14:07:31.236991+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "8b6f76ee61a44bc9a1564b62b8305ed9",
+      "kind": "research",
+      "path": "work/jobs/language-replica-20261029/route-followup.md",
+      "summary": "真实Linux CI读位竞态：旧新受控180ms实证、一处保存调用前移、21旅程及新HTTP-SW通过；原视觉与教学保全，旧发布和失败不覆盖",
+      "outcome": "accepted",
+      "sha256": "922682974ef57ce80902c3ab6cbed94e8a00d3ecdd6fb06314056e2f2f4a9442",
+      "inputHash": "ca1735b5f2340091b3effae3a7571be995a3a41fe495cb643fb918d9015135ec",
+      "recordedAt": "2026-10-29T14:21:41.802775+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "419717f91ed34de7ac31ef3a8b9d22e0",
+      "kind": "review",
+      "path": "work/jobs/language-replica-20261029/route-review.md",
+      "summary": "独立核验真实CI日志、旧新180ms受控差异、保存前移的history/anchor/owner兼容及21旅程/新HTTP-SW，后续CI与部署另记",
+      "outcome": "accepted",
+      "sha256": "13e6a285cc7cb113ab01398b15dd0b0322be95574cfb9405ce8e6275f2706403",
+      "inputHash": "ca1735b5f2340091b3effae3a7571be995a3a41fe495cb643fb918d9015135ec",
+      "recordedAt": "2026-10-29T14:22:11.730053+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    }
+  ],
+  "lastGoodVerification": {
+    "path": "work/jobs/language-replica-20261029/verifications/1c50d0fe47bc4c1b8e5a43db3d4afcc9.json",
+    "sha256": "124806d6f5a8fa14ce541af80b1fdf486a4bcc8ee0c6aa1228123d15b99ac0b8",
+    "inputHash": "ca1735b5f2340091b3effae3a7571be995a3a41fe495cb643fb918d9015135ec"
+  },
+  "lastPreparedRelease": {
+    "path": "work/jobs/language-replica-20261029/releases/6ff255df0c3b4a52b857b9f79f9c1337.json",
+    "sha256": "723a40372dd61205b4a0c18bd78000d47c8e5cff0d782cae6d326841de48c591",
+    "inputHash": "ca1735b5f2340091b3effae3a7571be995a3a41fe495cb643fb918d9015135ec"
+  },
+  "lastVerificationAttempt": {
+    "path": "work/jobs/language-replica-20261029/verifications/1c50d0fe47bc4c1b8e5a43db3d4afcc9.json",
+    "sha256": "124806d6f5a8fa14ce541af80b1fdf486a4bcc8ee0c6aa1228123d15b99ac0b8",
+    "inputHash": "ca1735b5f2340091b3effae3a7571be995a3a41fe495cb643fb918d9015135ec"
+  }
+}

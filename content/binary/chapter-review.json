@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "chapter": "chapter-01",
-  "inputHash": "76d6cae4a51ac2c01a77bd39ac92008bf6b32d9f0592275eeabb10ab57f04e87",
+  "inputHash": "bda0a8dbc59c6c7fa8f8baadda59698f1ca277b11e90174f99b9ac37db1e3214",
   "verdict": "accepted",
   "comparison": {
     "baseline": "main@ef103d3ec3e5bbaeb75fcc4a4065f0f6e80b31f0；上一成功reader-convergence部署1793278775481；第二语言当前源pin6fc3a272155f78d8c7cc440bce883f4a126e4d30。",
-    "findings": "本轮按用户新决定直接移植第二语言，取代前轮自造H2底栏、层级目录和中转页。更新本审阅前61份教学/编纂权威逐字节相等，正文、Markdown、CPP、知识及文档不可变revision未改；全库catalog.version包含构建Git提交而正常更新，不能与正文身份混同。实际源前端8页面与目标真实二分章8页面比对，29组共用角色实测，章节、长推导、长标题、Hcode/Scode及全部窗口已回读；源截图为自写隔离材料，目标使用完整成品。首H2自然流7px和非首吸顶12px实际核实，字号恢复改用可见阅读线；缩放、同步失败误绿、知识重试和日历局部比例定点修复。源码与语义审阅、浏览器回归、编译、准备包、实际部署及用户视觉认可分别留证，不以此pass代替后四者。 后续真实Linux CI发现快速无效路线往返时先读取旧local再保存当前读位的竞态；已有same-document保存前移，history/anchor/fromStart/reload优先级不变。受控拦180ms持久化证明旧app退PRE而新app保unit-3/5198；新增第21旅程与原20同时通过，视觉及教材不变，旧部署/失败收据保留。"
+    "findings": "本轮按用户新决定直接移植第二语言，取代前轮自造H2底栏、层级目录和中转页。更新本审阅前61份教学/编纂权威逐字节相等，正文、Markdown、CPP、知识及文档不可变revision未改；全库catalog.version包含构建Git提交而正常更新，不能与正文身份混同。实际源前端8页面与目标真实二分章8页面比对，29组共用角色实测，章节、长推导、长标题、Hcode/Scode及全部窗口已回读；源截图为自写隔离材料，目标使用完整成品。首H2自然流7px和非首吸顶12px实际核实，字号恢复改用可见阅读线；缩放、同步失败误绿、知识重试和日历局部比例定点修复。源码与语义审阅、浏览器回归、编译、准备包、实际部署及用户视觉认可分别留证，不以此pass代替后四者。 后续真实Linux CI发现快速无效路线往返时先读取旧local再保存当前读位的竞态；已有same-document保存前移，history/anchor/fromStart/reload优先级不变。受控拦180ms持久化证明旧app退PRE而新app保unit-3/5198；新增第21旅程与原20同时通过，视觉及教材不变，旧部署/失败收据保留。 后续Linux全流程已过21浏览器与真实HTTP/SW，随后发现两份测试脚本在无显式浏览器配置时仍写个人Windows路径；只改为Playwright受管浏览器默认查找，产品运行时、视觉及测试判据均未改。本机日期31/启动50重新通过，Linux默认分支由新CI实际验证。"
   },
   "outsideChallenge": {
     "materialIds": [

@@ -1,0 +1,41 @@
+{
+  "deployment": "work/jobs/language-replica-20261029/deployments/1793283885950.json",
+  "build": "6e096ba2800c5ecab5f85217772efbc621058ec79beee3f57e5a7e54fadbc4f1",
+  "teachingFilesByteIdentical": 16,
+  "catalogOnlyChangedKeys": [
+    "version"
+  ],
+  "catalogOtherwiseIdentical": true,
+  "authorityFilesUnchanged": 60,
+  "intentionalAuthorityChange": [
+    "content/binary/chapter-review.json"
+  ],
+  "originalIconAssetsUnchanged": [
+    "web/icons/apple-touch-icon-series1.png",
+    "web/icons/apple-touch-icon.png",
+    "web/icons/build.json",
+    "web/icons/icon-192.png",
+    "web/icons/icon-512.png",
+    "web/icons/icon.svg"
+  ],
+  "newLogo": "web/icons/header-logo.svg",
+  "files": {
+    "catalog.json": "d67eb6eba07cabb085c0d4e33d00f920c88eefaa04303cbe6eb75a97202d2716",
+    "knowledge/Q100001/dc22c2384ed01152.json": "ffe135a03336ae336ede3f81ee01ee6c84054630bd99d8a6435f55f57af65708",
+    "knowledge/Q100002/d3c060d83a8c4c63.json": "adb997ac2c9f6875e121a63951c4bb549390e92dba980788f105536acb1ebabd",
+    "knowledge/Q100003/b72349b11959719a.json": "4d332237d0131d4b946382368df8f23373b217e709390c633d9afc2694856032",
+    "knowledge/Q100004/e7b483e238122170.json": "f85aaaf8d5fb905b7de9ece3ca159f12a25d64b1ba4698ff1dc0b2ab23002fe1",
+    "knowledge/Q100005/bd683d93c15ddee7.json": "06ae275ce97e456ce6ac6c13248857f042fe8320b12c069d4efccc9d601a599c",
+    "knowledge/Q100006/7d54f65237dfcbad.json": "ad16b88ffa2380269b31babe24e88b32321793627286e9e76c1b4c7d5e20145e",
+    "knowledge/Q100007/6f9688b256739cbb.json": "a37b455bbd139f618477b6edd4185d6f5687757b38b5993b0ff67f3812f52445",
+    "knowledge/Q100008/3b1a3fb7dc3758a6.json": "9748eee39a0f7c4f1dc871c248adafdb25c05629e941e6ef5082ecb79d748cbe",
+    "knowledge/Q100009/d8b98f290f3be5e0.json": "5d006e3507223f5f27f65879fb764e80ef8ffb6dea44f861cd0a90cd8d1825f8",
+    "knowledge/Q100010/39bddfdb56c0bb02.json": "c9cc38abfc0d2899f46474f3a1b2d8237eeee5b48bfc03e4b497b038c1c06139",
+    "knowledge/Q100011/41ca4eccc695456b.json": "d0f6cd87b9e86b7c8b76ff5434866208960212d4694f0c059e5ba7f78880d2bd",
+    "knowledge/Q100012/0825e9dfd540e34f.json": "538486be309983f1ac79d8ab37c24b0b45b5accb0bda076475cf4267b284f71d",
+    "knowledge/Q100013/277616d4652ce862.json": "2ace25f5ad2997f62baafce92173aa997332102eaa7c47d1588544213abda247",
+    "chapter-01/binary-search/73fc1b514ce44d89.cpp": "979b63e50271fcb7e6a80ed55ec05ce4663754dcbe3858e300155ea7707ecb42",
+    "chapter-01/binary-search/73fc1b514ce44d89.md": "201cc3138b76ab2833d392448285d1ee8809aa0de8768bb4611c39ea8e2d25e3",
+    "chapter-01/binary-search/ad18abc79391a8da.json": "f9c6efbeb2ce5b8d4dc39021e9759d81c9b5c41dbb56d8397847013bf1b1079c"
+  }
+}

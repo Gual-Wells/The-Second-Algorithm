@@ -18,7 +18,7 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
   const index = {version:catalog.version,questions:[],chapters:Object.fromEntries(catalog.collections.map(c=>[c.id,{date:c.date}])),collections:Object.fromEntries(catalog.collections.map(c=>[c.id,{[c.documents[0].id]:c.documents[0].revision}]))};
   const source = await fs.readFile(path.join(root,'web/app.js'),'utf8');
   const built = await esbuild.build({stdin:{contents:source+'\nglobalThis.__calendarQA={runtime,S};',resolveDir:path.join(root,'web'),sourcefile:'app.js'},bundle:true,format:'esm',platform:'browser',target:'es2022',write:false,define:{__PUBLICATION_INDEX__:JSON.stringify(index)}});
-  const browser = await chromium.launch({headless:true,executablePath:process.env.ALGORITHM_QA_CHROME || 'C:/Users/huawei/AppData/Local/ms-playwright/chromium-1223/chrome-win64/chrome.exe'});
+  const browser = await chromium.launch({headless:true,...(process.env.ALGORITHM_QA_CHROME ? {executablePath:process.env.ALGORITHM_QA_CHROME} : {})});
   async function pageFor(scenario='normal', hash='') {
     const context = await browser.newContext({viewport:{width:402,height:874},isMobile:true,hasTouch:true,serviceWorkers:'block'});
     await context.addInitScript(()=>{ delete Navigator.prototype.serviceWorker; });

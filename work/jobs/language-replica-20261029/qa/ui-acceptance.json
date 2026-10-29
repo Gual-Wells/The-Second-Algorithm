@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-10-29T13:59:03.290Z",
+  "sourceCommit": "6fc3a272155f78d8c7cc440bce883f4a126e4d30",
+  "builtRelease": "e2ce4684db3722fadd765f274fc8a55b9c5440503fc99e0bc7ce33b5353f5595",
+  "browser": {
+    "report": ".local/language-replica/qa/browser-verified/results.json",
+    "passed": true,
+    "cases": 20,
+    "inputStartEqualsEnd": true,
+    "currentInputMatchesAtSummary": true,
+    "inputDigests": {
+      "web/app.js": "32bedf4e5bf9c65eb09ec459b1ad632e53ca45596e3b4bd144478c1e160fcc05",
+      "web/reader-runtime.js": "bb308ebf21c8e67bbc38b904b769aa21774543afcf3a9a98c930aaaa03bc9315",
+      "web/manual-questions.js": "e32145d51a399ea5cc7510798b027ff8cfabd99ee816383bb4e4ad0fe9f6bc78",
+      "web/chapter-dates.js": "6f0d0e526780f6a4f0929b9c2a0083d59aa5ba00650bde64c77c864949f1794c",
+      "web/auth.js": "9f8db119e19cc7ac887e96aa6cefe8bc153759c316bb611472b91a2507b2fd87",
+      "web/worker-release.js": "f79451187b86d84e0bc5260e82f02ae6759cd4fda8a62576309abad39234c776",
+      "web/sw.js": "93e5b90c93d01133d23f001aa2c6062fead9e71ede4f7b1b999c1d86dc6765bb",
+      "web/index.html": "42074fdc7269258f111d72ceb6c6dd0ce0a76edfe642a139553737f1a01be956",
+      "web/styles.css": "bcf958ec59960235c92a73f9c33bc9ccd2c215f6ca45017ddac36c4c90678e06",
+      "dist/index.html": "0bb0949c6e9ef553bc1dcdfa06518959029bb09bbf716faf61bb2a995cf7674a",
+      "dist/app.js": "3e3d724745f5d65789249857b5c9a45467b3159876548a432a4c0999cc30fca2",
+      "dist/library/catalog.json": "43520aeb314b7e26884c23037e455b9d62cbf1bd8f9558638722ad9ba58a1ae5"
+    }
+  },
+  "actualPublication": {
+    "report": ".local/language-replica/qa/browser-verified/binary-search-all-neighbor-targets.json",
+    "headings": 278,
+    "neighborControls": 556,
+    "currentSectionsChecked": 278,
+    "errors": [],
+    "firstNaturalGeometry": {
+      "id": "二分的基本方法",
+      "firstNaturalCase": true,
+      "headingTop": 243.03125,
+      "paneTop": 191.6875,
+      "toolsTop": 196.53125,
+      "toolsHeight": 39.5,
+      "toolsBottom": 236.03125,
+      "expectedTop": 243.1875,
+      "expectedClearance": 7,
+      "actualClearance": 7,
+      "uncovered": true
+    }
+  },
+  "calendar": {
+    "report": ".local/language-replica/qa/calendar-verified/results.json",
+    "passed": true,
+    "checks": 31,
+    "errors": []
+  },
+  "startup": {
+    "report": ".local/language-replica/qa/startup/results.json",
+    "passed": true,
+    "checks": 50,
+    "errors": [],
+    "externalRequests": []
+  },
+  "sourceVisualCapture": {
+    "report": ".local/language-replica/source-ui/surfaces.json",
+    "surfaces": 8,
+    "selectors": 82,
+    "missing": [],
+    "errors": []
+  },
+  "diagnosticsPreserved": [
+    {
+      "report": ".local/language-replica/qa/browser/results.json",
+      "result": "16/20 at first adaptation; first-heading source-flow geometry, display:none pure chrome, and actual paragraph font role required corrected assertions; not a passing run"
+    },
+    {
+      "report": ".local/language-replica/qa/browser-final/results.json",
+      "result": "18/20; exact-anchor font failure was real visible-block sampling mismatch; pinch string failure was Chromium manipulation serialization"
+    },
+    {
+      "report": ".local/language-replica/qa/geometry-first/results.json",
+      "result": "First H2 source gap is 7px while index toolbar remains 5px below scrollport; source padding preserved"
+    },
+    {
+      "report": ".local/language-replica/qa/geometry-nonfirst/results.json",
+      "result": "Later headings see sticky bar; 12px reveal gap checked independently"
+    },
+    {
+      "report": ".local/language-replica/qa/diagnose-font/results.json",
+      "result": "Four stages prove a hidden preceding paragraph was selected behind toolbar; runtime now samples blocks at same visible reveal line while preserving schema3 physical coordinate semantics"
+    },
+    {
+      "report": ".local/language-replica/qa/diagnose-pinch/results.json",
+      "result": "Entire ancestor chain inspected; manipulation is standards-equivalent to pan-x pan-y pinch-zoom; final check rejects pan-only/none restrictions"
+    },
+    {
+      "report": ".local/language-replica/qa/calendar/results.json",
+      "result": "Initial opacity-only assertion failed; source uses display:none plus inert; final calendar retains paper width and physical position checks"
+    }
+  ],
+  "limits": {
+    "productionContacted": false,
+    "paidServiceContacted": false,
+    "realDatabaseModified": false,
+    "physicalIPhone": false,
+    "authentication": "isolated mock, no system passkey enrollment",
+    "serviceWorker": "blocked here; parent runs actual local HTTP SW suite separately"
+  },
+  "testInputScope": "Fingerprint covers web runtime/styles/auth/worker/SW/index plus dist index/app/catalog; calendar/startup use actual frozen web source with isolated self-written fixtures"
+}

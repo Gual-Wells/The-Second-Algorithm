@@ -1,0 +1,20 @@
+{
+  "checkedAt": "2026-10-29T14:24:37.388602+00:00",
+  "sourceCommit": "2f99b28e54405c913f0e22119083fda6839d5d2a",
+  "runId": 40888357027,
+  "jobId": 123498054317,
+  "url": "https://github.com/Gual-Wells/The-Second-Algorithm/actions/runs/40888357027",
+  "conclusion": "failure",
+  "failedCase": "invalid-explicit-route-preserves-paper-and-reports-unavailable-target",
+  "expectedAnchor": "unit-3",
+  "actualAnchor": "section-0",
+  "browserPassedBeforeFix": 19,
+  "python": 198,
+  "node": 118,
+  "cppTargets": 4,
+  "cause": "Current same-document coordinate saved after reading local restore candidate. Controlled pending180ms old/new proof archived separately.",
+  "fixCommit": "d376d48ee1a72591d914084b12a255d59310312d",
+  "newRunId": 40890597054,
+  "newRunUrl": "https://github.com/Gual-Wells/The-Second-Algorithm/actions/runs/40890597054",
+  "scope": "Actual GitHub job log read via connected account; no raw large logs or machine paths published."
+}

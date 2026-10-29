@@ -1,0 +1,32 @@
+[
+  {
+    "original": ".local/language-replica/qa/acceptance-summary.json",
+    "archive": "work/jobs/language-replica-20261029/qa/ui-acceptance.json",
+    "sha256": "633697b289c16e51b4e6f0e5c6b01d33deed34c550fe2b45dcd61282c2453a4c"
+  },
+  {
+    "original": ".local/language-replica/qa/browser-verified/results.json",
+    "archive": "work/jobs/language-replica-20261029/qa/browser.json",
+    "sha256": "98879d80b9d3372273959515f96b33ff6389662d3d02a8c528f0b372350bc239"
+  },
+  {
+    "original": ".local/language-replica/qa/browser-verified/binary-search-all-neighbor-targets.json",
+    "archive": "work/jobs/language-replica-20261029/qa/actual-chapter-geometry.json",
+    "sha256": "7b9a282815bc1beaaa2eb90a02bc6efb8663d044383445ef33a08966713911bf"
+  },
+  {
+    "original": ".local/language-replica/qa/calendar-verified/results.json",
+    "archive": "work/jobs/language-replica-20261029/qa/calendar.json",
+    "sha256": "5b01a9cb44718d81de519b66742cb3784999fd1e323318173c3978b237310dc3"
+  },
+  {
+    "original": ".local/language-replica/qa/startup/results.json",
+    "archive": "work/jobs/language-replica-20261029/qa/startup.json",
+    "sha256": "32ee93a5dc7826134bae7aa94ae616b06362bae1972070ac34868e636e18ddd8"
+  },
+  {
+    "original": ".local/language-replica/qa/upgrade/results.json",
+    "archive": "work/jobs/language-replica-20261029/qa/upgrade.json",
+    "sha256": "ff0bb0ed9ae7eeb25c986b4d3d8d24f25863136d58b1e1bff211f1efd7cc6e9e"
+  }
+]

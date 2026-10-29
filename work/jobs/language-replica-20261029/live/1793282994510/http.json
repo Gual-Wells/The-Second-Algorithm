@@ -1,0 +1,75 @@
+{
+  "checkedAt": "2026-10-29T14:12:02.003Z",
+  "deployment": "work/jobs/language-replica-20261029/deployments/1793282994510.json",
+  "sourceCommit": "2f99b28e54405c913f0e22119083fda6839d5d2a",
+  "artifact": ".local/releases/0e4c4c34-8b4e-479a-a76d-9fe814f960c9",
+  "origin": "https://second-algorithm.pages.dev",
+  "buildID": "0e7d675c95afc53d0a07dda873a52539070a8dc0ce1df6aabf77f93b48d34741",
+  "checks": [
+    {
+      "path": "/",
+      "status": 200,
+      "liveSha256": "257f90f88161687d3bbbf037fb556976879cd6713b87edd60f92b3fb75175a2c",
+      "artifactSha256": "257f90f88161687d3bbbf037fb556976879cd6713b87edd60f92b3fb75175a2c",
+      "matches": true
+    },
+    {
+      "path": "/app.js",
+      "status": 200,
+      "liveSha256": "117678e073b0ecd7891b1022b279a240e93a9ee58c658d0bbfee35ed7900dc7e",
+      "artifactSha256": "117678e073b0ecd7891b1022b279a240e93a9ee58c658d0bbfee35ed7900dc7e",
+      "matches": true
+    },
+    {
+      "path": "/styles.css",
+      "status": 200,
+      "liveSha256": "bcf958ec59960235c92a73f9c33bc9ccd2c215f6ca45017ddac36c4c90678e06",
+      "artifactSha256": "bcf958ec59960235c92a73f9c33bc9ccd2c215f6ca45017ddac36c4c90678e06",
+      "matches": true
+    },
+    {
+      "path": "/sw.js",
+      "status": 200,
+      "liveSha256": "2d4e6eb017cf0abc4ac94de05d9c00979fb8bd9b2651b897cd122071590d4ba9",
+      "artifactSha256": "2d4e6eb017cf0abc4ac94de05d9c00979fb8bd9b2651b897cd122071590d4ba9",
+      "matches": true
+    },
+    {
+      "path": "/icons/header-logo.svg",
+      "status": 200,
+      "liveSha256": "cc49d65a1ba6911a2874f9e03efd7b8eded41c2fcd7f0d88c6ec118515b6c893",
+      "artifactSha256": "cc49d65a1ba6911a2874f9e03efd7b8eded41c2fcd7f0d88c6ec118515b6c893",
+      "matches": true
+    },
+    {
+      "path": "/icons/apple-touch-icon-series1.png",
+      "status": 200,
+      "liveSha256": "dc478907d0c2866312e8f6cc2db15824c7badff3c6d4f4882438092a00e6e664",
+      "artifactSha256": "dc478907d0c2866312e8f6cc2db15824c7badff3c6d4f4882438092a00e6e664",
+      "matches": true
+    },
+    {
+      "path": "/api/library",
+      "status": 401,
+      "expected": 401
+    },
+    {
+      "path": "/api/state",
+      "status": 401,
+      "expected": 401
+    },
+    {
+      "path": "/library/catalog.json",
+      "status": 401,
+      "expected": 401
+    },
+    {
+      "path": "/%6cibrary/catalog.json",
+      "status": 401,
+      "expected": 401
+    }
+  ],
+  "passed": true,
+  "scope": "Actual anonymous HTTP byte hashes and private authentication boundaries; no real passkey or private full chapter accessed.",
+  "probeNote": "One earlier independent urllib request returned 403 on /api/library (access denied). The same UA, Mozilla UA and subsequent Node fetches returned the expected JSON 401. Cause of that single external denial was not established; no application change or relaxed assertion was made."
+}

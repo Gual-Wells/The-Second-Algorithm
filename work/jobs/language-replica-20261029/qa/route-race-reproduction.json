@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-10-29T14:17:47.044Z",
+  "ci": {
+    "run": 40888357027,
+    "job": 123498054317,
+    "sourceCommit": "2f99b28e54405c913f0e22119083fda6839d5d2a"
+  },
+  "method": "Only queuePosition’s existing 180ms storePosition callback is held. All rendering, route promises, network, history and other timers run normally. Old app is read from the CI commit and compiled virtually with the same frozen current dependencies. No product files are replaced.",
+  "old": {
+    "passed": false,
+    "inputStable": true,
+    "virtualAppSHA256": "32bedf4e5bf9c65eb09ec459b1ad632e53ca45596e3b4bd144478c1e160fcc05",
+    "snapshots": [
+      {
+        "label": "before-invalid-route",
+        "hash": "#/read/practice-course/practice-entry",
+        "observed": "#/read/practice-course/practice-entry",
+        "sequence": 2,
+        "liveAnchor": "unit-3",
+        "localAnchor": "section-0",
+        "recordAnchor": "section-0",
+        "scrollTop": 5198,
+        "heldPositionCallbacks": 1
+      },
+      {
+        "label": "invalid-route-rendered",
+        "hash": "#/read/absent-chapter/absent-document",
+        "observed": "#/read/absent-chapter/absent-document",
+        "sequence": 3,
+        "liveAnchor": "unit-3",
+        "localAnchor": "section-0",
+        "recordAnchor": "section-0",
+        "scrollTop": 5198,
+        "heldPositionCallbacks": 1
+      },
+      {
+        "label": "valid-route-before-debounce-release",
+        "hash": "#/read/practice-course/practice-entry",
+        "observed": "#/read/practice-course/practice-entry",
+        "sequence": 4,
+        "liveAnchor": "section-0",
+        "localAnchor": "unit-3",
+        "recordAnchor": "unit-3",
+        "scrollTop": 0,
+        "heldPositionCallbacks": 1
+      }
+    ],
+    "originalLocalReport": ".local/language-replica/qa/ci-invalid-route/old/results.json",
+    "failure": {
+      "expectedLiveAnchor": "unit-3",
+      "actualLiveAnchor": "section-0",
+      "expectedScrollTop": 5198,
+      "actualScrollTop": 0
+    }
+  },
+  "fixed": {
+    "passed": true,
+    "inputStable": true,
+    "appSHA256": "bb8d0930bc62e0ae4239a785c78224e09bca998422f7dc05275bbe98c636c2f1",
+    "snapshots": [
+      {
+        "label": "before-invalid-route",
+        "hash": "#/read/practice-course/practice-entry",
+        "observed": "#/read/practice-course/practice-entry",
+        "sequence": 2,
+        "liveAnchor": "unit-3",
+        "localAnchor": "section-0",
+        "recordAnchor": "section-0",
+        "scrollTop": 5198,
+        "heldPositionCallbacks": 1
+      },
+      {
+        "label": "invalid-route-rendered",
+        "hash": "#/read/absent-chapter/absent-document",
+        "observed": "#/read/absent-chapter/absent-document",
+        "sequence": 3,
+        "liveAnchor": "unit-3",
+        "localAnchor": "section-0",
+        "recordAnchor": "section-0",
+        "scrollTop": 5198,
+        "heldPositionCallbacks": 1
+      },
+      {
+        "label": "valid-route-before-debounce-release",
+        "hash": "#/read/practice-course/practice-entry",
+        "observed": "#/read/practice-course/practice-entry",
+        "sequence": 4,
+        "liveAnchor": "unit-3",
+        "localAnchor": "unit-3",
+        "recordAnchor": "unit-3",
+        "scrollTop": 5198,
+        "heldPositionCallbacks": 1
+      },
+      {
+        "label": "after-debounce-release",
+        "hash": "#/read/practice-course/practice-entry",
+        "observed": "#/read/practice-course/practice-entry",
+        "sequence": 4,
+        "liveAnchor": "unit-3",
+        "localAnchor": "unit-3",
+        "recordAnchor": "unit-3",
+        "scrollTop": 5198,
+        "heldPositionCallbacks": 0
+      }
+    ],
+    "originalLocalReport": ".local/language-replica/qa/ci-invalid-route/new/results.json"
+  },
+  "conclusion": "Confirmed real read-before-save race, not solely an old-notice QA wait. Same-document live paper must be captured before choosing local fallback; valid owner/document history snapshots remain authoritative. Existing ordinary invalid-route journey remains and now waits for the exact hash identity. New deterministic regression is journey 21.",
+  "productionContacted": false,
+  "paidServiceContacted": false,
+  "realDatabaseModified": false,
+  "physicalIPhone": false,
+  "formalRegression": "scripts/check-carrier-browser.cjs: same-document-invalid-route-return-before-position-debounce-preserves-live-paper",
+  "platform": "Windows headless Chromium with controlled pending persistence; not a claim of Linux execution"
+}

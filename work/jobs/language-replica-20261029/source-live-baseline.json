@@ -1,0 +1,27 @@
+{
+  "origin": "https://the-second-language.pages.dev",
+  "sourceCommit": "6fc3a272155f78d8c7cc440bce883f4a126e4d30",
+  "checks": [
+    {
+      "file": "index.html",
+      "status": 200,
+      "liveSha256": "5912326596010f905bbcb8c9adb2c612ee7df5a39b7cc2df027be78eaa5adad3",
+      "pinnedSha256": "5912326596010f905bbcb8c9adb2c612ee7df5a39b7cc2df027be78eaa5adad3",
+      "matchesPinned": true
+    },
+    {
+      "file": "styles.css",
+      "status": 200,
+      "liveSha256": "87873da7052c5f4c49d323f7c075bcc3e58d76601353796872e78c863449d17a",
+      "pinnedSha256": "87873da7052c5f4c49d323f7c075bcc3e58d76601353796872e78c863449d17a",
+      "matchesPinned": true
+    },
+    {
+      "file": "app.js",
+      "status": 200,
+      "liveSha256": "b616926758ff264243aee2625f5430d47cda226104c109f47b1fd5338874b328",
+      "pinnedSha256": "b616926758ff264243aee2625f5430d47cda226104c109f47b1fd5338874b328",
+      "matchesPinned": true
+    }
+  ]
+}

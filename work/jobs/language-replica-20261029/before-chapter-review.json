@@ -1,0 +1,435 @@
+{
+  "schemaVersion": 1,
+  "chapter": "chapter-01",
+  "inputHash": "e2cbe4eaee18dbbbfcb53f835ac6d755cecc0ecb990ffdacd809423fd4db52fa",
+  "verdict": "accepted",
+  "comparison": {
+    "baseline": "main@65b4eb9129f81b88926d94ad292bf01bebd4ffbf；上一成功启动/日期部署1bb092b05bbe79412d8ae3ac70ac4715964aaf0446425e99ff55c20ae297237d。",
+    "findings": "本轮按第二语言移植指导收敛阅读器，并逐段合并b4cd5c314c6e52a3d9c202403ee58db7291ff899启动修复。基线61份内容权威文件在更新本审阅前逐字节相同，正式JSON读件、Markdown、C++及正文revision与上一成功artifact相同；未改领域、题型、教材叙述、标题身份、代码、知识或练习。真实章首、长推导、长标题与相邻Hcode/Scode视觉回读及设置文件页已实查，旧四向/父链换成H2节导航与完整层级目录，字号恢复正常阅读字重。启动和日期专项在合并输入下实跑；技术、正式准备和成功部署另有记录，不以本内容审阅追认用户视觉验收。 最终独立审阅包括VERSION失回应的有界恢复及两项回归、QA新增gate文件指纹/真实登录态等待/设置图，以及启动两阶段设计归并。其他换行及可选BOM归一不改变教学原件；原混合换行不以全CRLF逆还原失败冒称新语义变化。"
+  },
+  "outsideChallenge": {
+    "materialIds": [
+      "book-editorial-study",
+      "book-independent-reader",
+      "challenge-aliens-official-method",
+      "challenge-abc216e-official-editorial"
+    ],
+    "findings": "沿用未变教材所绑定的原二分研究、教材/独立读者及参数搜索外部挑战，原精确交接与采用证据保留。本轮没有新算法材料或范围变动，不冒充重新完成七阶段研究。实际对照第二语言固定源、仓库完整指导和真实长章阅读；发现显式无效链接静默换章、未连答疑到发送才提示、启动按钮闪现及首次加载空壳等实际交互问题，并定点修订。自动化结果、异常与最后状态绑定见本轮job，不用截图/节点数量证明教学穷尽或用户已经理解。"
+  },
+  "assessments": [
+    {
+      "commitment": "domain-coverage",
+      "outcome": "pass",
+      "reason": "本轮保留原已采用二分领域及其分支和37正式题型。作者、合同、登记、C++、知识与生成成品均有基线字节保全，且JSON读件/Markdown/C++/revision与上一成功部署相同；没有因简化工具壳或目录默认折叠删减领域内容。这是原研究采用的延续，不是本轮重新认证全网穷尽。",
+      "locations": [
+        {
+          "document": "binary-search",
+          "anchor": "ordered-boundaries"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "predicate-access"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "transformed-index"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "rotated-search"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "paired-break"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "local-peak"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "matrix-membership"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "integer-root"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "capacity-partition"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "maximin-spacing"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "cumulative-production"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "ordered-simulation"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "graph-threshold"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "prefix-activation"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "weighted-inverse"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "pigeonhole-domain"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "matrix-rank"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "multiplication-rank"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "pair-distance-rank"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "two-sorted-partition"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "ordered-dp-frontier"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "weighted-predecessor"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "resource-queries"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "matrix-peak"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "string-prefix"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "continuous-root"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "average-transform"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "ratio-selection"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "convex-location"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "matching-threshold"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "fenwick-rank"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "summary-descent"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "ancestor-boundary"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "cyclic-jump"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "time-parallel-search"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "dynamic-range-kth"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "marginal-penalty"
+        }
+      ]
+    },
+    {
+      "commitment": "hard-variants",
+      "outcome": "pass",
+      "reason": "原困难变型、交叉思想、参数搜索和结构内查找等原件、对应代码及知识未改，原locations仍定位同一正文。新的H2前后节不取代H3/H4目录，困难内容及相关练习仍按真实层级可达；不把减少常驻按钮扩张成减少教材范围。",
+      "locations": [
+        {
+          "document": "binary-search",
+          "anchor": "ordered-dp-frontier"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "resource-queries"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "matching-threshold"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "fenwick-rank"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "time-parallel-search"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "dynamic-range-kth"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "marginal-penalty"
+        }
+      ]
+    },
+    {
+      "commitment": "complete-type-chain",
+      "outcome": "pass",
+      "reason": "各题型的问题/推理/双实现/工程知识/练习链条沿原已采用稿保留，所有代码与链接仍来自同一受保护权威。Hcode/Scode不更名、不重造实现，不用文件页详情代替正文中的相邻代码，也不因关闭笔记UI删除原私人记录。",
+      "locations": [
+        {
+          "document": "binary-search",
+          "anchor": "ordered-boundaries"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "predicate-access"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "transformed-index"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "rotated-search"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "paired-break"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "local-peak"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "matrix-membership"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "integer-root"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "capacity-partition"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "maximin-spacing"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "cumulative-production"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "ordered-simulation"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "graph-threshold"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "prefix-activation"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "weighted-inverse"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "pigeonhole-domain"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "matrix-rank"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "multiplication-rank"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "pair-distance-rank"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "two-sorted-partition"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "ordered-dp-frontier"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "weighted-predecessor"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "resource-queries"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "matrix-peak"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "string-prefix"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "continuous-root"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "average-transform"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "ratio-selection"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "convex-location"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "matching-threshold"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "fenwick-rank"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "summary-descent"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "ancestor-boundary"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "cyclic-jump"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "time-parallel-search"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "dynamic-range-kth"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "marginal-penalty"
+        }
+      ]
+    },
+    {
+      "commitment": "reader-flow",
+      "outcome": "pass",
+      "reason": "按读者顺序回看实际章首、长推导、长标题和相邻手写/标准实现，原叙述和首次知识关系未变。调整深字正常字重、标题间距、紧凑工具壳、单H2导航和任务分组设置；完整目录的展开/跳转/当前位置职责分开。推荐尺寸及浏览器通过不是用户认可。来源指导、设计取舍、实际失败和定点诊断均保存于本轮任务；技术验证和部署仍另有门禁。",
+      "locations": [
+        {
+          "document": "binary-search",
+          "anchor": "prelude"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "ordered-boundaries"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "capacity-partition"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "ordered-dp-frontier"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "fenwick-rank"
+        },
+        {
+          "document": "binary-search",
+          "anchor": "dynamic-range-kth"
+        }
+      ]
+    }
+  ],
+  "readerBoundary": {
+    "outcome": "pass",
+    "findings": "实际检查完整正文及原H2/H3/H4、代码工具与下载、技术名知识浮窗、章入口和完整目录、日期章节册、设置文件详情、答疑及启动状态。教材/源码/Markdown/知识均保留同一受保护版本；内部研究、作者分工、验证状态及Q身份未作为读者内容。问答打开即说明未连接且发送能力一致，草稿保留，不制造受理/回复。未登录阶段无正文工具及账户动作闪现；首章等待/失败留在纸内，后续慢切保留旧文，显式无效目标不跳别章冒充成功。公开壳只留必要版本白名单与标题元数据，不嵌完整教材。旧notes原件和owner隔离继续保护。实际技术检查、SW失败/诊断、最后部署及真机边界单独记录；本项pass只表达本轮读者表面的语义回查，不是自动完整性或用户视觉验收。 已实读新gate：只有VERSION无回应且controller未变才在原总期限内再查，正确build匹配、owner与白名单不变，不重复网络update；结算清监听和定时器。其受控缺口与两次HTTP并发失败的未知因果分别记录，不冒称同根修复。",
+    "locations": [
+      {
+        "document": "binary-search",
+        "anchor": "prelude"
+      },
+      {
+        "document": "binary-search",
+        "anchor": "ordered-boundaries"
+      },
+      {
+        "document": "binary-search",
+        "anchor": "ordered-dp-frontier"
+      },
+      {
+        "document": "binary-search",
+        "anchor": "continuous-root"
+      },
+      {
+        "document": "binary-search",
+        "anchor": "matching-threshold"
+      },
+      {
+        "document": "binary-search",
+        "anchor": "fenwick-rank"
+      },
+      {
+        "document": "binary-search",
+        "anchor": "dynamic-range-kth"
+      },
+      {
+        "document": "binary-search",
+        "anchor": "marginal-penalty"
+      }
+    ]
+  }
+}

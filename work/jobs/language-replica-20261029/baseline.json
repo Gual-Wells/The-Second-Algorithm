@@ -1,0 +1,274 @@
+{
+  "capturedAt": "2026-10-29T13:26:29.688809+00:00",
+  "baseHead": "ef103d3ec3e5bbaeb75fcc4a4065f0f6e80b31f0",
+  "initialTrackedChanges": [],
+  "initialStatusBasis": "Initial status in this turn contained only prior untracked work; target frontend edits began after that observation.",
+  "sourceRepository": "Gual-Wells/The-Second-Language",
+  "sourceMainVerified": "6fc3a272155f78d8c7cc440bce883f4a126e4d30",
+  "sourceFiles": [
+    {
+      "path": "web/DESIGN.md",
+      "bytes": 15944,
+      "sha256": "ca5c2b43245161da0a777ab7ec57c9caba8f6cb17340434cd4f033b69ade0561"
+    },
+    {
+      "path": "web/annotations.js",
+      "bytes": 7761,
+      "sha256": "7df8d1c0159f6c2d7a6967fa07976bd677f8b6a704176155285bbdb9c3e4feee"
+    },
+    {
+      "path": "web/app.js",
+      "bytes": 55673,
+      "sha256": "b616926758ff264243aee2625f5430d47cda226104c109f47b1fd5338874b328"
+    },
+    {
+      "path": "web/audio-config.js",
+      "bytes": 6428,
+      "sha256": "0c0a6252d7e61fa8bfa949c99beed34cd4317c449f93e50ff8cc387e9176e268"
+    },
+    {
+      "path": "web/audio-library.js",
+      "bytes": 3317,
+      "sha256": "cc725f2b57d0743c025de97f071c8e1aefdf40ae129cc84c360fb17d56e92239"
+    },
+    {
+      "path": "web/audio-plan.js",
+      "bytes": 4980,
+      "sha256": "fe4e8b85b6be0a2cc57def09e80dd5ad33ebba4877d88aa347e49b8900cda4a9"
+    },
+    {
+      "path": "web/balances.js",
+      "bytes": 4373,
+      "sha256": "22adcbfc58da9bde2aa24bc6f6c807cba0c2e3765fc15a16879bc8525f8cb45c"
+    },
+    {
+      "path": "web/certification-reader.js",
+      "bytes": 16067,
+      "sha256": "a79513f104b1f2bc70faed88cce87612c9d3e5d328ef74eb47b6a73c57cb7c6f"
+    },
+    {
+      "path": "web/chapter-certification.js",
+      "bytes": 3881,
+      "sha256": "2d55d6f08a3606fb28323a7a7a1f48231b438866b440e0f637f9ad52d64a96a6"
+    },
+    {
+      "path": "web/chapter-quality.js",
+      "bytes": 8431,
+      "sha256": "0e0ff651342ddd165325d478b5445ebcd3ae174c206ed863c05f1af065a30890"
+    },
+    {
+      "path": "web/chapter-test-recorder.js",
+      "bytes": 6403,
+      "sha256": "6f6ef850141784f819130846b278ff7ec1e5358c5f45c99a8cea416d1398b57c"
+    },
+    {
+      "path": "web/chapter-tests.js",
+      "bytes": 13529,
+      "sha256": "6c94723bc7322878d917dddc065149eafcd9d74803fd910fe46e67098cd2fc7e"
+    },
+    {
+      "path": "web/chapters.js",
+      "bytes": 3824,
+      "sha256": "d16d9429dda60052481cc2dd6ed5d71eccf96df98616923fd5c199fc3618f019"
+    },
+    {
+      "path": "web/context-translations.js",
+      "bytes": 2443,
+      "sha256": "ceb595ccf206fd93a2a4fdd849bce86db421ad1f06ed864dea08d13a645619be"
+    },
+    {
+      "path": "web/exam-spec.js",
+      "bytes": 1751,
+      "sha256": "6d0050b920917f7806ea0c8fab7b930ea949e8f2168a3d8c5e3856a978f28241"
+    },
+    {
+      "path": "web/icon.svg",
+      "bytes": 551,
+      "sha256": "a6187d27e9c733a2470bedcefbe3947166706b06fa9c4be05a6dd577cba25b2b"
+    },
+    {
+      "path": "web/index.html",
+      "bytes": 32139,
+      "sha256": "5912326596010f905bbcb8c9adb2c612ee7df5a39b7cc2df027be78eaa5adad3"
+    },
+    {
+      "path": "web/listening.js",
+      "bytes": 12878,
+      "sha256": "83575739eae407c1773791645945b8b2d987df1ed0dd70c34ca21178a7a6e2ee"
+    },
+    {
+      "path": "web/native-speech.js",
+      "bytes": 3451,
+      "sha256": "bca771c23b1e28f7499678ab8134e3a9f307a2b2458a429e6ec3883ad23affba"
+    },
+    {
+      "path": "web/objective.js",
+      "bytes": 3230,
+      "sha256": "13c7ce4eb9f74002e43fcb391a06f23c2d1cd0ae7433cfb0439b28d9efc13cd0"
+    },
+    {
+      "path": "web/owner-identity.js",
+      "bytes": 251,
+      "sha256": "26ed977f96217f9978d18ceea3277eb1ec4bb4c3a99548bdb6b1ee539b803a0d"
+    },
+    {
+      "path": "web/practice-workspace.js",
+      "bytes": 5902,
+      "sha256": "af259de73afebbfc91ab9aa54690ef37214a96e12ee7526898e80d448ee80329"
+    },
+    {
+      "path": "web/practice.js",
+      "bytes": 21033,
+      "sha256": "a31d88faa2fe20a140d2a96b7ea7ddcfa8b043d2fc2ee14944d09a8399f67146"
+    },
+    {
+      "path": "web/pure-reader.js",
+      "bytes": 6319,
+      "sha256": "80008bf9f1311666b166ed9fe987e1a7910c182942b4095e67d8a55332cef38e"
+    },
+    {
+      "path": "web/question-pairs.js",
+      "bytes": 390,
+      "sha256": "9d48e50045d222403f7e7521ae9c82ff36917b8bf7162383899abd80e86b1df9"
+    },
+    {
+      "path": "web/questions.js",
+      "bytes": 10456,
+      "sha256": "20f62d2802dea5164e722e88e84d6736bb9adf96e3fd7ebe4c68acc10948f7c3"
+    },
+    {
+      "path": "web/reader-focus.js",
+      "bytes": 5218,
+      "sha256": "12c5dad071a756e75bb64d72f3f7bf62830673aa81a30b17d0235d91324d124d"
+    },
+    {
+      "path": "web/reader-jump.js",
+      "bytes": 2658,
+      "sha256": "d228be8baa42d9ddfb7bef838c80789ddc3e5915f079239626c3a3b9d6f760fa"
+    },
+    {
+      "path": "web/reader-speech.js",
+      "bytes": 5216,
+      "sha256": "8516bae12764f7a99c7b7f59109c68f05cad5e0fc182abe584d54f881edeefc8"
+    },
+    {
+      "path": "web/reading.js",
+      "bytes": 9604,
+      "sha256": "58d05fe3a53e5851cd309dd79a16c3bc6f7a972252d2a09cad041ebd72ef03eb"
+    },
+    {
+      "path": "web/recorder.js",
+      "bytes": 7311,
+      "sha256": "4b8ec3aff0465edb4f17b3023ec544f8dc8c5c7cda6a5ea1d7dfebfb0a356dc3"
+    },
+    {
+      "path": "web/render.js",
+      "bytes": 15536,
+      "sha256": "db0fd2b9eee739e96781ce8644c2c2b7881bae7e48f7046d7cb61bd64d03e022"
+    },
+    {
+      "path": "web/settings.js",
+      "bytes": 2372,
+      "sha256": "9c647e1a65a9dd6aa8173a9633bc6d84d0101ec1724d1d124b34f76647e8b3d7"
+    },
+    {
+      "path": "web/storage-usage.js",
+      "bytes": 2792,
+      "sha256": "c719e96cdf6eaf16a630866924d1d0bc188ced9ff1967618b193f25ec1888a35"
+    },
+    {
+      "path": "web/styles.css",
+      "bytes": 66119,
+      "sha256": "87873da7052c5f4c49d323f7c075bcc3e58d76601353796872e78c863449d17a"
+    },
+    {
+      "path": "web/sw.js",
+      "bytes": 4718,
+      "sha256": "b9eee05db26c066d03cc9d1b7683650578f8725aeb50391300b66d220dbec8e3"
+    },
+    {
+      "path": "web/teaching-units.js",
+      "bytes": 2829,
+      "sha256": "4227077ba804ca4e6bf6964db8ae05ca3a5d9f8b782a75e436aceb131303e8e1"
+    },
+    {
+      "path": "web/text.js",
+      "bytes": 2113,
+      "sha256": "8c4f3c17e6d1f45f32bb892307cff4a4a5a08d3af76c0a1e67b355ddf7d419b8"
+    },
+    {
+      "path": "web/usage-context.js",
+      "bytes": 10138,
+      "sha256": "44a5475d29af09b16c50662ea507326d38d87081209e9beb9ae325a71926e794"
+    },
+    {
+      "path": "protocol/READER_INTERACTION.md",
+      "bytes": 16326,
+      "sha256": "4ec981f743ddbbc1ae63848cf26db0e150d183a50b899930ff97064b8320d481"
+    }
+  ],
+  "teachingAuthorities": {
+    "carrier/chapter-calendar.json": "d48de7ff2b0ea159b597d1762bb27eff93e4a22d70359d776e588dfe984df51f",
+    "carrier/publications.json": "7a0f9e012fcbe71228443287536ea4e8af7a0544acba697adf70cf159cf9ce5b",
+    "catalog/README.md": "60da502efdd526656da3ad13d4470aac1d65f33ee2cd6be1c190034ce3707492",
+    "catalog/books.json": "328c854281bad24d982c830ec73944ce00c65d233579a7b821820ad7d79a96d8",
+    "catalog/cases.jsonl": "8ccf050fc6ccc35be2221d78e1a8cbc33228a76b2185fae29c747c0fb185f3f0",
+    "catalog/chapters.json": "002345f48f47767f648bf55c6f0f40d2dae36d3e7722332f4aa0c94a3923fd3e",
+    "catalog/inventories/ac-library/documentation/20261026T075530.991045+0000-3774617ad6f8.json": "f585cd2fbae705e78a7acc1d61f91839c492ed7b1c6f5651bb4573d3d2b84489",
+    "catalog/inventories/atcoder/educational-dp/20261026T075511.764801+0000-ed41712e60fa.json": "d74f58efc08b7a157ff3857ba6a90c75ef4549357cb41bf18802dae404d1a1da",
+    "catalog/inventories/codility/binary-search/20261026T075510.401686+0000-59199f3c9a47.json": "deeae7c341a3815ffdab46dbee60592cdc0ff1aee1df3458d100c2ee41563bc6",
+    "catalog/inventories/codility/lessons/20261026T075508.749875+0000-1b19c4053cd5.json": "cc4a06e3355a096b965cab7bb4ad10041b70575beeec3d24e812a77bc5007464",
+    "catalog/inventories/cp-algorithms/navigation/20261026T075513.706063+0000-b387ea377cd4.json": "40116dbac0c079ae4b6798273a8dba18b78c11bfeb37bc9548c61fb58d687c64",
+    "catalog/inventories/cpbook/problem-classification/20261026T075527.088605+0000-c7edbd4550a4.json": "924eea931b607e65a63669245e65bbb6fa6f4de41b198150940464bda61056e8",
+    "catalog/inventories/cpbook/problem-classification/20261026T080139.479160+0000-c7edbd4550a4.json": "8d397e0660a628665c5cf99cac91598aebe3ca4300325bf91fb60887813120b5",
+    "catalog/inventories/cpbook/problem-classification/20261026T083207.751282+0000-c7edbd4550a4-e2f040b09e324596944c1d20ab2b7cb7.json": "343d280010f6426b230bb0c161ff36b6f05d56e1cd68b8ba7cb492fce007f1d7",
+    "catalog/inventories/cses/problemset/20261026T075505.516368+0000-42c1963578a2.json": "a05969988036d15e9f17f7d5f65a3ba159c626664bce6af5539fa63329673eb6",
+    "catalog/inventories/liu-tddd38/exercise-index/20261026T124549.089723+0000-e29a4a6dce85-cda55a8505334ea5b5642dfe8bd7820f.json": "0792d6dc8f71962091a62a5266b6aca456e3f7fe278f77d184cb03a8bd9bdb5b",
+    "catalog/inventories/sei-cert-cpp/rules/20261026T124359.936568+0000-a4b1204016d7-a076dca026eb407ba5afc8242797a8c8.json": "01da1ecae7ff474f74ba16e3761cdd84a9fba996fb9b00ad3ea45dff0b834e72",
+    "catalog/inventories/sei-cert-cpp/rules/20261026T124549.116383+0000-a4b1204016d7-8440fb95a3b743d0a71cd5f4eb2a3b37.json": "3e13be2c91d4e242ba7afae38d1362f3eab0f1973475535c7756b6e71ce249ef",
+    "catalog/inventories/sutter-gotw/revised-index/20261026T124351.917430+0000-980ef9f3b70f-8316681c5a7d4061b3332c95e72c38f4.json": "10ca092a8ffc8b1d7bdbe506bd0caa9276d799e330ae95b3003bcb65e158a8ed",
+    "catalog/inventories/usaco-guide/binary-search/20261026T075529.834523+0000-df88c65fa82a.json": "f324cdeced78bf59e0ff519ab1f4f7f3d98db4d1aee3c9df8aa1854d6ff8ad19",
+    "catalog/inventories/usaco-guide/binary-search/20261026T080141.575436+0000-df88c65fa82a.json": "40b2860a5bf6cfe44cf89d2acadcc84f2a1efdd261b5761df88a7a18683704b6",
+    "catalog/inventories/usaco-guide/binary-search/20261026T092623.139378+0000-df88c65fa82a-ad65f438de8341829ee3db15c3c2563a.json": "6df2a4a20c97b441395bec226aa743d5837567a5a5ac92697806decc18716548",
+    "catalog/inventories/usaco-guide/binary-search/20261026T092737.814516+0000-df88c65fa82a-07d4412eaf6b4c4e85551a1a577f54f2.json": "5c4b2d46047bb02014bc6afcf00830ce2513635c7831d498ef44a32084e3cab5",
+    "catalog/inventory-heads.json": "56b8f542c659a6f0ffb5ae5fabdd7781d1f395a0f4399a2c6ab8389ea22cb32c",
+    "catalog/learning.json": "dba241f5b72f5cff90badcb776678896db08c99f8a5b9e007767aa4a2dfae62f",
+    "catalog/patterns.jsonl": "01085c79c16ff1eee7577257b12e7ab998094d14c6dc8e0625af2314d8b854de",
+    "catalog/query-plans.json": "017c62cf0b91eda63161fe394bc3a26371df9a5a59a87538c8efff1906f1c74f",
+    "catalog/scope.json": "3087e534c4236c642ba1edcef56d088110840da578e054cfcc8b704ffee56bff",
+    "catalog/sources.json": "cd3695b0569fda6c6091fb01c3a346d2a97ac733ddc6632b68d4357c8bee76f3",
+    "catalog/subheadings.json": "95bc45b9b2a836c107a384db089e5ef8958208dcbbef0698de404923674d4fb7",
+    "content/binary/advanced.cpp": "6bd17b582f1ac1eea42dd360b73ee10e870a7e01cf4334168fb5c7c05b546988",
+    "content/binary/advanced.source.md": "dc695964fae49478b069dbf5c16fa1e4c3ad919b950690a144fda84025acc75e",
+    "content/binary/boundary.cpp": "d33ebf32477c6fc0ce93a39269866c97c762b7c339e755b828923feb5b0a3475",
+    "content/binary/boundary.source.md": "453be6c7b0c9775aa128e5f380a8a784ef97d6213b18a9c375e9625a5dd72150",
+    "content/binary/build/chapter.json": "e2499a1f1dc422b46f8612a03d50800d087206fd0c789cce0eb33435ae942155",
+    "content/binary/chapter-contract.json": "57e1ed255e63240e2ec29492ea03d53f8c4517a42633ae8e616ad26e9df22e0e",
+    "content/binary/chapter-review.json": "0b3e5d579df33a6b6da764b6fbf224de1aa206127eadcd977ccc2245ba421230",
+    "content/binary/chapter.authoring.json": "d8863b57143b9bc238e7bc8690cd3385bcc0bf8b22b98ee64a0e26aa467de24d",
+    "content/binary/chapter.cpp": "75fff25f5192947b4b0cd10b184eb82fd1dc20d57268ce1d70909e952b367d5f",
+    "content/binary/chapter.html": "7633f8f5c1bd465cc7dfb8960028112428a882edff69b74b1578332a0afe30d0",
+    "content/binary/chapter.md": "201cc3138b76ab2833d392448285d1ee8809aa0de8768bb4611c39ea8e2d25e3",
+    "content/binary/chapter.reader.cpp": "979b63e50271fcb7e6a80ed55ec05ce4663754dcbe3858e300155ea7707ecb42",
+    "content/binary/chapter.source.md": "d6cf4a5d6543ec3cb42e7d5e495bf23dd233183c01e946b31aed27c10d7f17f4",
+    "content/binary/chapter.subheadings.json": "60567214298a5ce6b1ab7d808a6520bf24711c4b5ef44a0355bbcee6db1c06a6",
+    "content/binary/decision.cpp": "576fd6fd6c0b2b22be12562debe1728c026f814522a6871b11ac5e5e947767fd",
+    "content/binary/decision.source.md": "7473d5f80aea7e477e0fdbc41ebde651775edee17659cf29c7ff5e2c4ed1d850",
+    "content/binary/selection.cpp": "ff819911911e1ef6666f6597d3b8ea9ada0e4f6126bfee5116537a2cea3aa37f",
+    "content/binary/selection.source.md": "8f93b764d675c965366b676afe9ed4ffc512aa188d41ae6db3c01002e36d5359",
+    "content/knowledge/binary-library.md": "0142e7ed6ea36a6cc70ad46a4369b23090ef9b664d45d91b7cae30c951186806",
+    "content/knowledge/borrowing-vector.md": "fb8b73b4ce35b685633ff88932fab177b8062b641eaadbd373b79b787149f6d8",
+    "content/knowledge/floating-search.md": "40bea37a72316cd8cafd214c2a98b8349826c01cc6017e7a39ba7573a164768d",
+    "content/knowledge/integer-budget.md": "38b434ec68676372c152acc126517194d4a6a6eeaeba4205ce19be0e8cd087f7",
+    "content/knowledge/ordering.md": "54cc56b8b95c82dce1ee49050bf49fdf7bd1ba45679c608e1a9b80f924322e05",
+    "content/knowledge/predicate-capture.md": "9402e5dbaabd4a9e8ce7997db13ce5a07dee53fbdaa18042fd59ff8a2fee1129",
+    "content/knowledge/priority-queue.md": "cf0dc5a824f17c0917269a4224beb6ac0b3dfd249ea1bf0391ac55a993c7d84a",
+    "content/knowledge/queue-deque.md": "b08c07700f6e45a9bdc9441fd067c264471bfb388c79cee3e5cacd8090a849fb",
+    "content/knowledge/random-integers.md": "14de285609b68aa10e5f1c577c10ecca47971e1070cc3223302de10bcd85eac7",
+    "content/knowledge/recursive-callback.md": "809ead82e47dd32828eaddc02f55689c033d8fbba96fea0716f28c4cfdcd8246",
+    "content/knowledge/selection-reorder.md": "84792030c3d56703a40d63e5eefe674ca09400cb7d2f6005ba42c4d9bb345882",
+    "content/knowledge/stable-events.md": "ca54cf0d96f2520731bf0ba0974eb0dc4147d5db1ca222380300ba0d7e8c8d9c",
+    "content/knowledge/vector-validity.md": "969507ed3168b6d4d930c03a8170526d4a9c16907248022d2f115f805d7e73bb"
+  },
+  "previousDeployment": "work/jobs/reader-convergence-20261029/deployments/1793278775481.json"
+}

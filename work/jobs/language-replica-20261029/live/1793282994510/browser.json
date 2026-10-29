@@ -1,0 +1,29 @@
+{
+  "checkedAt": "2026-10-29T14:11:02.347Z",
+  "origin": "https://second-algorithm.pages.dev",
+  "viewport": {
+    "width": 402,
+    "height": 874
+  },
+  "browser": "156.0.8078.48",
+  "authentication": "actual anonymous HTTP; no passkey or private user session",
+  "loginVisible": true,
+  "headerActionsVisible": false,
+  "protectedRequests": [],
+  "errors": [],
+  "authStatuses": [
+    200
+  ],
+  "requests": [
+    "/",
+    "/styles.css",
+    "/app.js",
+    "/icons/header-logo.svg",
+    "/icons/icon.svg",
+    "/auth/status",
+    "/icons/icon.svg"
+  ],
+  "physicalIPhone": false,
+  "serviceWorker": "blocked here; actual HTTP/SW checked in the isolated upgrade test",
+  "passed": true
+}

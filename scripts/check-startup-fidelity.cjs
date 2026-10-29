@@ -21,7 +21,7 @@ const frame = page => page.evaluate(() => new Promise(done => requestAnimationFr
   const index = { version: catalog.version, questions: [], chapters: Object.fromEntries(catalog.collections.map(c => [c.id, { date: c.date }])), collections: Object.fromEntries(catalog.collections.map(c => [c.id, { [c.documents[0].id]: c.documents[0].revision }])) };
   const source = await fs.readFile(path.join(root, 'web/app.js'), 'utf8');
   const built = await esbuild.build({ stdin: { contents: source + '\nglobalThis.__startupQA={S,runtime};', resolveDir: path.join(root, 'web'), sourcefile: 'app.js' }, bundle: true, platform: 'browser', format: 'esm', target: 'es2022', write: false, define: { __PUBLICATION_INDEX__: JSON.stringify(index) } });
-  const browser = await chromium.launch({ headless: true, executablePath: process.env.ALGORITHM_QA_CHROME || 'C:/Users/huawei/AppData/Local/ms-playwright/chromium-1223/chrome-win64/chrome.exe' });
+  const browser = await chromium.launch({ headless: true, ...(process.env.ALGORITHM_QA_CHROME ? { executablePath: process.env.ALGORITHM_QA_CHROME } : {}) });
   async function fixture({ scenario = 'normal', width = 402, hold = [], holdOwner = false, failFirstDocument = false, routeHash = '#/chapter/first' } = {}) {
     const context = await browser.newContext({ viewport: { width, height: 874 }, isMobile: true, hasTouch: true, serviceWorkers: 'block' }); contexts.push(context);
     const gates = Object.fromEntries(hold.map(name => [name, deferred()])), seen = Object.fromEntries(['app', 'auth', 'library', 'state', 'doc1', 'doc2'].map(name => [name, deferred()]));
