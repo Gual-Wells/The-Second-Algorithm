@@ -96,7 +96,6 @@ async function connect() {
   showStartup('loading');
   try {
     const status = await api('/auth/status'); if (connection !== S.connectionSequence) return;
-    $('enrollForm').hidden = !status.enrollmentOpen; $('loginButton').hidden = !status.enrolled;
     if (!status.authenticated) {
       if (S.owner) lock();
       showStartup(status.enrollmentOpen ? 'enroll' : 'login', status.enrollmentOpen ? '为此阅读器创建通行密钥。' : status.enrolled ? '使用已登记的通行密钥登录，继续按日期阅读。' : '尚未登记通行密钥。');
@@ -121,6 +120,19 @@ function showStartup(kind, message = '') {
   $('startupDescription').textContent = loading ? '正在检查登录状态与已发布章节。' : failed ? '连接暂不可用，请检查网络后重试。' : message;
   $('loginMessage').textContent = failed ? message : '';
   $('enrollForm').hidden = $('loginButton').hidden = true; $('retryButton').hidden = !failed;
+  $('startupInstall').hidden = loading || matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  $('chapterView').classList.remove('is-opening'); $('chapterView').removeAttribute('aria-busy');
+  $('readingNotice').hidden = true;
+}
+function showReaderShell() {
+  $('loginView').hidden = true; $('headerActions').hidden = false; $('app').classList.remove('login-mode');
+  renderChapterNavigation();
+}
+function showChapterOpening(collection, error = null, route = '') {
+  showReaderShell(); $('readerView').hidden = true; $('chapterView').hidden = false;
+  $('chapterView').classList.add('is-opening'); $('chapterView').setAttribute('aria-busy', String(!error));
+  $('readingNotice').hidden = true;
+  $('chapterView').innerHTML = `<div class="chapter-opening-body"><section class="state-card opening-card" data-state="${error ? 'error' : 'loading'}"><div class="state-band"><span>第二算法</span><small>SECOND ALGORITHM</small></div><div class="state-body"><img class="state-icon" src="/icons/icon.svg" width="56" height="56" alt=""><h2>${error ? '本章暂时无法打开' : '正在打开章节'}</h2><p>${esc(error || `正在载入《${collection.title}》。`)}</p>${error ? `<div class="action-row"><button type="button" data-show-library>章节册</button><button type="button" class="primary" data-retry-route="${esc(route)}">重新打开</button></div>` : ''}</div></section></div><div class="chapter-load-status"${error ? ' data-tone="error"' : ''} role="status"><span>${error ? '章节未能打开。' : '正在打开章节…'}</span></div>`;
 }
 function mergeRemoteState(state) {
   for (const [key, record] of Object.entries(state || {})) {
@@ -149,14 +161,16 @@ async function enter(owner, offline, connection) {
   S.settings = { fontSize: 17, codeSize: 13.5, wrapCode: false, preload: true, ...(S.records.preferences?.value || readLocal('preferences', {})) };
   S.settings.fontSize = Math.max(14, Math.min(24, Number(S.settings.fontSize) || 17));
   S.settings.codeSize = Math.max(10, Math.min(20, Number(S.settings.codeSize) || 13.5)); applySettings();
-  $('loginView').hidden = true; $('headerActions').hidden = false; $('app').classList.remove('login-mode'); renderChapterNavigation();
   questions ||= createReaderQuestions({ getContext: () => ({ owner: S.owner, chapterId: S.active?.collection.id, title: S.active?.collection.title, revision: S.active?.meta.revision }), toast, transport: null });
   let verifiedAt = Date.now(); if (offline) { try { verifiedAt = JSON.parse(localStorage.getItem(SESSION_KEY)).verifiedAt; } catch {} }
   await swMessage({ type: 'OWNER', owner, verifiedAt }); if (connection !== S.connectionSequence || S.owner !== owner) return;
   if (!location.hash || location.hash === '#/' || location.hash === '#/library') {
     const previous = readLocal('lastRoute'), chapters = orderedChapters(S.library.collections), today = shanghaiDate();
     const first = chapters.filter(item => item.date === today).at(-1) || chapters.at(-1) || S.library.collections[0];
-    history.replaceState(null, '', previous?.startsWith('#/read/') || previous?.startsWith('#/chapter/') ? previous : first ? `#/chapter/${first.id}` : '#/library');
+    const saved = typeof previous === 'string' && previous.match(/^#\/(read|chapter)\/([^/?]+)(?:\/([^/?]+))?$/);
+    const savedChapter = saved && S.library.collections.find(item => item.id === saved[2]);
+    const savedValid = savedChapter && (saved[1] === 'chapter' ? !saved[3] : savedChapter.documents.some(item => item.id === saved[3]));
+    history.replaceState(null, '', savedValid ? previous : first ? `#/chapter/${first.id}` : '#/library');
   }
   await route(); if (!offline) void syncPending();
 }
@@ -181,23 +195,61 @@ async function getDocument(meta) {
   if (content.id !== meta.id || content.revision !== meta.revision) throw Error('内容版本已更新，请重新打开章节册。');
   S.docs.set(meta.id, content); return content;
 }
+function contentHasAnchor(meta, content, anchor) {
+  const permitted = new Set((meta.headings || []).filter(item => [2, 3, 4].includes(item.depth)).map(item => item.id));
+  if (permitted.has(anchor)) return true;
+  const template = document.createElement('template'); template.innerHTML = content.html;
+  const alias = template.content.querySelector('#' + CSS.escape(anchor));
+  if (!alias?.matches('a[id]:not([href])')) return false;
+  let next = alias.nextElementSibling;
+  if (!next && alias.parentElement?.tagName === 'P') next = alias.parentElement.nextElementSibling;
+  while (next?.tagName === 'A' && !next.getAttribute('href')) next = next.nextElementSibling;
+  return Boolean(next && permitted.has(next.id));
+}
+function routeUnavailable(message) {
+  S.pendingRoute = null; showReaderShell();
+  $('chapterView').classList.remove('is-opening'); $('chapterView').removeAttribute('aria-busy');
+  const action = '<button type="button" data-show-library>打开章节册</button>';
+  if (S.active) {
+    const wasReader = runtime.state.view === 'reader'; $('readerView').hidden = !wasReader; $('chapterView').hidden = wasReader;
+    $('readingNotice').innerHTML = `<span>${esc(message)}</span>${action}<button type="button" data-cancel-route>关闭</button>`;
+    $('readingNotice').hidden = false;
+  } else {
+    runtime.clear(); $('readerView').hidden = true; $('chapterView').hidden = false;
+    $('chapterView').innerHTML = `<section class="state-card empty-card route-error"><div class="state-band"><span>阅读位置不可用</span></div><div class="state-body"><h2>无法打开这个位置</h2><p>${esc(message)}</p>${action}</div></section>`;
+    $('readingNotice').hidden = true;
+  }
+  renderChapterNavigation();
+}
 async function route() {
   if (!S.owner || !S.library || sheetHistory) return;
   const raw = location.hash || '#/library'; if (raw === observedLocation) return; observedLocation = raw;
   const sequence = ++S.sequence, [pathname, query = ''] = raw.slice(1).split('?'), [, section, collectionId, documentId] = pathname.split('/');
-  const collection = S.library.collections.find(item => item.id === collectionId) || S.library.collections[0];
-  if (!collection) {
+  const rows = S.library.collections;
+  const libraryRoute = pathname === '/library' || pathname === '/';
+  const collection = libraryRoute ? S.active?.collection || rows[0] : rows.find(item => item.id === collectionId);
+  if (!rows.length) {
+    showReaderShell(); $('chapterView').classList.remove('is-opening'); $('chapterView').removeAttribute('aria-busy');
     S.active = null; runtime.clear(); $('readerView').hidden = true; $('chapterView').hidden = false;
     $('chapterView').innerHTML = '<section class="state-card empty-card"><div class="state-band"><span>算法章节</span><small>CHAPTERS</small></div><div class="state-body"><img class="state-icon" src="/icons/icon.svg" alt=""><h2>暂无已发布章节</h2><p>正式发布的章节会出现在章节册与日历中。</p></div></section>'; renderChapterNavigation(); return;
   }
+  const routeDepth = pathname.split('/').length;
+  if (!collection || !libraryRoute && (!['read', 'chapter'].includes(section) || routeDepth !== (section === 'read' ? 4 : 3))) { routeUnavailable('这个章节不存在或已撤回。'); return; }
+  if (libraryRoute && S.active) { $('readingNotice').hidden = true; showLibrary(); return; }
   const meta = section === 'read' ? collection.documents.find(item => item.id === documentId) : selectedDocument(collection);
-  if (!meta) { navigate(`#/chapter/${collection.id}`, { replace: true }); return; }
+  if (!meta) { routeUnavailable('这个阅读位置不存在或已撤回。'); return; }
   const isRead = section === 'read' && collection.id === collectionId;
   const canonical = isRead ? `#/read/${collection.id}/${meta.id}` : `#/chapter/${collection.id}`;
   const previous = S.active, wasRead = runtime.state.view === 'reader'; S.pendingRoute = raw;
-  $('readingNotice').innerHTML = `<span>正在打开${esc(collection.title)}…</span>${previous ? '<button type="button" data-cancel-route>取消</button>' : ''}`; $('readingNotice').hidden = false;
+  if (!previous) showChapterOpening(collection);
+  else {
+    showReaderShell(); $('readerView').hidden = !wasRead; $('chapterView').hidden = wasRead;
+    $('readingNotice').innerHTML = `<span>正在打开${esc(collection.title)}…</span><button type="button" data-cancel-route>取消</button>`; $('readingNotice').hidden = false;
+  }
   try {
     const content = await getDocument(meta); if (sequence !== S.sequence || !S.owner) return;
+    const requestedAnchor = new URLSearchParams(query).get('anchor');
+    if (requestedAnchor && !contentHasAnchor(meta, content, requestedAnchor)) { routeUnavailable('这个阅读位置不存在或已撤回。'); return; }
     await document.fonts.ready; if (sequence !== S.sequence || !S.owner) return;
     const same = previous?.meta.id === meta.id && previous?.meta.revision === meta.revision;
     let position = history.state?.readingOwner === S.owner && history.state?.readingDocument === meta.id ? history.state.readingPosition : null, local = positionFor(meta.id);
@@ -205,7 +257,8 @@ async function route() {
     if (reloaded && readLocal('lastRoute') === raw && local?.capturedAt >= (position?.capturedAt || 0)) position = local;
     if (!position) position = local; if (same && wasRead) savePosition(false);
     S.active = { collection, meta, content, route: canonical }; S.pendingRoute = null;
-    renderChapterNavigation();
+    $('chapterView').classList.remove('is-opening'); $('chapterView').removeAttribute('aria-busy');
+    showReaderShell();
     if (!same) position = runtime.setChapter(S.active, position); else if (!isRead) runtime.capture();
     applySettings(); if (isRead) runtime.showReader(position, new URLSearchParams(query).get('anchor')); else runtime.showChapter();
     initialRoute = false; $('readingNotice').hidden = true; writeLocal(`last-document:${collection.id}`, meta.id); writeLocal('lastRoute', canonical);
@@ -214,6 +267,7 @@ async function route() {
     updateConnection(); if (S.settings.preload && !S.offline) void downloadCollection(collection, false);
   } catch (error) {
     if (sequence !== S.sequence || !S.owner) return; S.pendingRoute = null;
+    if (!previous) { showChapterOpening(collection, error.message, raw); return; }
     $('readingNotice').innerHTML = `<span>${esc(error.message)}</span><button type="button" data-retry-route="${esc(raw)}">重试</button>${previous ? '<button type="button" data-cancel-route>关闭</button>' : ''}`; $('readingNotice').hidden = false;
     if (previous) { history.replaceState(history.state, '', previous.route); observedLocation = previous.route; }
   }
@@ -263,7 +317,7 @@ async function syncRecord(key) {
 async function syncPending() { for (const [key, record] of Object.entries(S.records)) if (record.dirty && !key.startsWith('notes:')) await syncRecord(key); }
 function updateConnection() {
   $('app').dataset.offline = String(S.offline);
-  const status = $('offlineStatus'); if (status) status.textContent = S.offline ? '当前离线；已下载章节仍可阅读。' : '已连接；阅读位置自动保存。';
+  const status = $('offlineStatus'); if (status) { status.hidden = !S.offline; status.textContent = S.offline ? '当前离线，已下载章节仍可阅读。' : ''; }
 }
 function applySettings() {
   document.documentElement.style.setProperty('--reading-size', S.settings.fontSize + 'px'); document.documentElement.style.setProperty('--code-size', S.settings.codeSize + 'px');
@@ -287,15 +341,16 @@ function waitForSheetClose(action) {
   if ($('sheetDialog').open || !sheetHistory) return false; afterSheetClose = action; if (!sheetClosing) { sheetClosing = true; history.back(); } return true;
 }
 function rememberSheet(render) { const top = $('sheetBody').scrollTop; return () => { render(); $('sheetBody').scrollTop = top; }; }
-function showToc() {
-  if (waitForSheetClose(showToc) || !S.active) return;
-  if (!$('sheetDialog').open && runtime.toggleDesktopToc()) return;
+function showToc(reveal = false) {
+  if (waitForSheetClose(() => showToc(reveal)) || !S.active) return;
+  if (!$('sheetDialog').open && (reveal ? runtime.revealDesktopToc() : runtime.toggleDesktopToc())) return;
   showSheet('本章目录', runtime.tocHTML('sheet-toc'), 'toc'); requestAnimationFrame(() => runtime.scrollCurrentToc($('sheetBody')));
 }
-function showQuestions() { if (waitForSheetClose(showQuestions) || !S.active) return; showSheet('问答', '', 'questions'); questions.render($('sheetBody')); }
+function showQuestions() { if (waitForSheetClose(showQuestions) || !S.active) return; showSheet('本章答疑', '', 'questions'); questions.render($('sheetBody')); }
 function chapterTitle(collection) { return `第 ${collection.chapterNumber} 章 · ${collection.title}`; }
 function renderChapterNavigation() {
   const rows = orderedChapters(S.library?.collections), current = S.active?.collection;
+  $('tocButton').disabled = $('questionsButton').disabled = !current;
   $('chapterNav').hidden = !S.owner || !rows.length;
   if (!S.owner) { $('dayStrip').replaceChildren(); $('currentDateLabel').textContent = '选择阅读日期'; $('chapterNavSubtitle').textContent = '章节册与日历'; return; }
   const index = rows.findIndex(row => row.id === current?.id);
@@ -355,12 +410,22 @@ function openCalendarChapter(collection, resume = true) {
 }
 function showSettings() {
   if (waitForSheetClose(showSettings)) return;
-  showSheet('阅读设置', `<button type="button" class="settings-row settings-library" data-show-library><span>章节册</span></button>
-    <div class="settings-row"><span>正文字号</span><div class="setting-stepper"><button type="button" data-font="-1" aria-label="缩小正文字号">−</button><output id="bodySizeOutput">${S.settings.fontSize}</output><button type="button" data-font="1" aria-label="放大正文字号">＋</button></div></div>
-    <div class="settings-row"><span>代码字号</span><div class="setting-stepper"><button type="button" data-code-font="-0.5" aria-label="缩小代码字号">−</button><output id="codeSizeOutput">${S.settings.codeSize}</output><button type="button" data-code-font="0.5" aria-label="放大代码字号">＋</button></div></div>
-    <label class="settings-row"><span>代码折行</span><input id="wrapCode" type="checkbox"${S.settings.wrapCode ? ' checked' : ''}></label><label class="settings-row"><span>打开时下载章节</span><input id="preloadContent" type="checkbox"${S.settings.preload ? ' checked' : ''}></label>
-    ${S.active ? `<button type="button" class="settings-row" data-current-chapter><span>本章目录页</span><span aria-hidden="true">›</span></button><button type="button" class="settings-row" data-download-current><span>下载本章供离线阅读</span><span aria-hidden="true">↓</span></button><p id="downloadStatus" class="setting-status" role="status">${esc(downloadStatus.get(S.active.collection.id) || '本次尚未确认整章离线包；可手动下载。')}</p><div class="action-row"><a class="button-link" href="${esc(S.active.meta.sourceUrl)}" download="${esc(S.active.collection.title)}.cpp">下载 C++</a>${S.active.meta.markdownUrl ? `<a class="button-link" href="${esc(S.active.meta.markdownUrl)}" download="${esc(S.active.collection.title)}.md">下载 Markdown</a>` : ''}<button type="button" data-show-source>查看源码</button></div>` : ''}
-    <p id="offlineStatus" class="setting-status" role="status"></p><button type="button" class="settings-row" data-check-updates><span>检查内容更新</span><span aria-hidden="true">↻</span></button><button type="button" class="settings-row" data-reload-app${S.updateReady ? '' : ' hidden'}><span>重新载入应用</span><span aria-hidden="true">↻</span></button><button type="button" class="settings-row" data-install-info><span>添加到主屏幕</span><span aria-hidden="true">›</span></button><button type="button" class="settings-row" data-logout><span>退出登录</span><span aria-hidden="true">›</span></button>`, 'settings'); updateConnection();
+  showSheet('阅读设置', `<section class="settings-group"><h3 class="settings-group-title">阅读</h3><div class="settings-list">
+    <div class="settings-row setting-value"><span>正文字号</span><div class="setting-stepper"><button type="button" data-font="-1" aria-label="缩小正文字号">−</button><output id="bodySizeOutput">${S.settings.fontSize}</output><button type="button" data-font="1" aria-label="放大正文字号">＋</button></div></div>
+    <div class="settings-row setting-value"><span>代码字号</span><div class="setting-stepper"><button type="button" data-code-font="-0.5" aria-label="缩小代码字号">−</button><output id="codeSizeOutput">${S.settings.codeSize}</output><button type="button" data-code-font="0.5" aria-label="放大代码字号">＋</button></div></div>
+    <label class="settings-row setting-switch"><span>代码折行</span><input id="wrapCode" role="switch" type="checkbox"${S.settings.wrapCode ? ' checked' : ''}></label>
+    </div></section><section class="settings-group"><h3 class="settings-group-title">离线与文件</h3><div class="settings-list">
+    <label class="settings-row setting-switch"><span>打开时下载本章</span><input id="preloadContent" role="switch" type="checkbox"${S.settings.preload ? ' checked' : ''}></label>
+    ${S.active ? `<button type="button" class="settings-row setting-action" data-download-current><span>下载本章供离线阅读</span><span class="row-direction" aria-hidden="true">↓</span></button><p id="downloadStatus" class="setting-status" role="status">${esc(downloadStatus.get(S.active.collection.id) || '离线包尚未确认')}</p><button type="button" class="settings-row setting-navigation" data-show-files><span>本章文件</span><span class="row-direction" aria-hidden="true">›</span></button>` : ''}
+    <p id="offlineStatus" class="setting-status" role="status" hidden></p>
+    </div></section><section class="settings-group"><h3 class="settings-group-title">应用与账户</h3><div class="settings-list">
+    <button type="button" class="settings-row setting-action" data-check-updates><span>检查内容更新</span><span class="row-direction" aria-hidden="true">↻</span></button><button type="button" class="settings-row setting-action" data-reload-app${S.updateReady ? '' : ' hidden'}><span>重新载入应用</span><span class="row-direction" aria-hidden="true">↻</span></button><button type="button" class="settings-row setting-navigation" data-install-info><span>添加到主屏幕</span><span class="row-direction" aria-hidden="true">›</span></button><button type="button" class="settings-row setting-action" data-logout><span>退出登录</span></button>
+    </div></section>`, 'settings'); updateConnection();
+}
+function showFiles(parent = null) {
+  if (waitForSheetClose(() => showFiles(parent)) || !S.active) return;
+  const { collection, meta } = S.active;
+  showSheet('本章文件', `<p class="file-chapter">${esc(chapterTitle(collection))}</p><div class="settings-list"><a class="settings-row button-link setting-action" href="${esc(meta.sourceUrl)}" download="${esc(collection.title)}.cpp"><span>下载完整 C++</span><span class="row-direction" aria-hidden="true">↓</span></a>${meta.markdownUrl ? `<a class="settings-row button-link setting-action" href="${esc(meta.markdownUrl)}" download="${esc(collection.title)}.md"><span>下载 Markdown</span><span class="row-direction" aria-hidden="true">↓</span></a>` : ''}<button type="button" class="settings-row setting-navigation" data-show-source><span>查看 C++ 源码</span><span class="row-direction" aria-hidden="true">›</span></button></div>`, 'files', parent || rememberSheet(showSettings));
 }
 async function showKnowledge(id, anchor = '', retry = false) {
   if (sheetClosing || (!$('sheetDialog').open && sheetHistory)) { afterSheetClose = () => { void showKnowledge(id, anchor, retry); }; return; }
@@ -395,7 +460,8 @@ async function showKnowledge(id, anchor = '', retry = false) {
 }
 async function showSource() {
   if (waitForSheetClose(showSource)) return; const meta = S.active?.meta; if (!meta) return;
-  showSheet('C++源码', '<p role="status">正在打开…</p>', 'source', rememberSheet(showSettings)); const sequence = sheetSequence, owner = S.owner;
+  const filesParent = sheetView === 'files' ? sheetParent : null;
+  showSheet('C++源码', '<p role="status">正在打开…</p>', 'source', rememberSheet(() => showFiles(filesParent))); const sequence = sheetSequence, owner = S.owner;
   try {
     await ensureContentRelease(); if (sequence !== sheetSequence || S.owner !== owner) return;
     const response = await fetch(meta.sourceUrl, { credentials: 'same-origin', signal: AbortSignal.timeout(30_000) });
@@ -483,22 +549,25 @@ document.addEventListener('click', event => {
   if (button?.dataset.bookTab) { book.tab = button.dataset.bookTab; showLibrary(); return; }
   if (button?.dataset.monthOffset) { try { const month = shiftMonth(book.month, Number(button.dataset.monthOffset)); if (/^\d{4}-\d{2}$/.test(month)) { book.month = month; showLibrary(); } } catch { toast('无法打开这个月份。'); } return; }
   if (button?.hasAttribute('data-current-month')) { book.month = shanghaiDate().slice(0, 7); showLibrary(); return; }
-  if (button?.matches('[data-sheet-close]')) { dismissSheet(); return; } if (button?.matches('[data-cancel-route]')) { cancelPendingRoute(); return; } if (!S.owner) return;
+  if (button?.matches('[data-sheet-close]')) { dismissSheet(); return; } if (button?.matches('[data-cancel-route]')) { cancelPendingRoute(); return; }
+  if (button?.hasAttribute('data-install-info')) { showSheet('添加到主屏幕', '<p>iPhone：在Safari中点“分享”，选择“添加到主屏幕”。</p><p>电脑：使用浏览器地址栏中的安装入口。</p>', 'install', S.owner ? rememberSheet(showSettings) : null); return; }
+  if (!S.owner) return;
   if (button?.dataset.retryRoute) { navigate(button.dataset.retryRoute, { replace: true }); return; }
   if (button?.dataset.openChapter) { navigate(`#/chapter/${button.dataset.openChapter}`); return; }
   if (button?.hasAttribute('data-show-library')) { book.tab = 'list'; book.month = (isChapterDate(S.active?.collection.date) ? S.active.collection.date : shanghaiDate()).slice(0, 7); showLibrary(); return; }
   if (button?.hasAttribute('data-current-chapter') && S.active) { navigate(`#/chapter/${S.active.collection.id}`); return; }
   if (button?.dataset.action === 'toc') { showToc(); return; }
+  if (button?.dataset.action === 'current-section') { showToc(true); return; }
   if (button?.dataset.font || button?.dataset.codeFont) {
     const position = sheetPosition || runtime.capture();
     if (button.dataset.font) S.settings.fontSize = Math.max(14, Math.min(24, S.settings.fontSize + Number(button.dataset.font))); else S.settings.codeSize = Math.max(10, Math.min(20, S.settings.codeSize + Number(button.dataset.codeFont)));
     runtime.settle(position, applySettings); saveSettings(); if ($('bodySizeOutput')) $('bodySizeOutput').value = S.settings.fontSize; if ($('codeSizeOutput')) $('codeSizeOutput').value = S.settings.codeSize; return;
   }
+  if (button?.hasAttribute('data-show-files')) { showFiles(); return; }
   if (button?.hasAttribute('data-show-source')) { void showSource(); return; }
   if (button?.hasAttribute('data-copy-source')) { void copyText($('sheetBody').querySelector('code').textContent, button); return; }
   if (button?.hasAttribute('data-download-current') && S.active) { button.disabled = true; if ($('downloadStatus')) $('downloadStatus').textContent = '正在下载…'; void downloadCollection(S.active.collection).finally(() => { button.disabled = false; }); return; }
   if (button?.hasAttribute('data-check-updates')) { void checkUpdates(); return; } if (button?.hasAttribute('data-reload-app')) { void reloadApp(button); return; }
-  if (button?.hasAttribute('data-install-info')) { showSheet('添加到主屏幕', '<p>iPhone：在Safari中点“分享”，选择“添加到主屏幕”。</p><p>电脑：使用浏览器地址栏中的安装入口。</p>', 'install', rememberSheet(showSettings)); return; }
   if (button?.hasAttribute('data-logout')) { void logout(); return; }
   const link = event.target.closest('#article a');
   if (link?.getAttribute('href')?.startsWith('#')) { const href = link.getAttribute('href'); event.preventDefault(); if (href.startsWith('#/read/')) navigate(href); else try { runtime.go(decodeURIComponent(href.slice(1))); } catch { toast('这个阅读位置暂不可用。'); } }

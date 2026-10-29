@@ -128,7 +128,7 @@ export function createReaderQuestions({getContext, toast = () => {}, transport =
 
     function updateSending(state) {
       if (mounted?.state === state) {
-        mounted.send.disabled = state.sending;
+        mounted.send.disabled = state.sending || !transport;
         mounted.form.setAttribute('aria-busy', String(state.sending));
       }
     }
@@ -201,6 +201,8 @@ export function createReaderQuestions({getContext, toast = () => {}, transport =
       const document = host.ownerDocument, state = load(currentContext());
       const root = element(document, 'div', 'reader-questions');
       const context = element(document, 'div', 'reader-question-context', state.context.title || '当前章节');
+      const serviceStatus = element(document, 'p', 'reader-question-service-status', !transport ? '尚未连接答疑服务，问题不会发送；草稿保存在本机。' : '');
+      serviceStatus.hidden = Boolean(transport);
       const messages = element(document, 'div', 'reader-question-messages');
       messages.tabIndex = 0;
       messages.setAttribute('role', 'region');
@@ -224,7 +226,7 @@ export function createReaderQuestions({getContext, toast = () => {}, transport =
       send.type = 'submit';
       row.append(status, send);
       form.append(label, input, row);
-      root.append(context, messages, form);
+      root.append(context, serviceStatus, messages, form);
       const view = {document, host, root, context, messages, form, input, status, send, state};
       view.onInput = () => {
         state.text = input.value;

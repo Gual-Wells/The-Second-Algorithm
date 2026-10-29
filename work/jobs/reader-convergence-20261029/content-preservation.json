@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-29T12:40:38.350412+00:00",
+  "baselineAuthorityFiles": 61,
+  "authorityFilesUnchanged": false,
+  "reviewFilesUpdated": [
+    "content/binary/chapter-review.json"
+  ],
+  "unchangedTeachingAuthorityFiles": 60,
+  "unexpectedChanges": [],
+  "missing": [],
+  "teachingAuthoritiesPreserved": true,
+  "documents": [
+    {
+      "id": "binary-search",
+      "sameRevision": true,
+      "files": [
+        {
+          "kind": "url",
+          "unchanged": true,
+          "sha256": "f9c6efbeb2ce5b8d4dc39021e9759d81c9b5c41dbb56d8397847013bf1b1079c"
+        },
+        {
+          "kind": "sourceUrl",
+          "unchanged": true,
+          "sha256": "979b63e50271fcb7e6a80ed55ec05ce4663754dcbe3858e300155ea7707ecb42"
+        },
+        {
+          "kind": "markdownUrl",
+          "unchanged": true,
+          "sha256": "201cc3138b76ab2833d392448285d1ee8809aa0de8768bb4611c39ea8e2d25e3"
+        }
+      ]
+    }
+  ],
+  "previousDeployment": "work/jobs/startup-calendar-20261029/deployments/1793269119250.json",
+  "previousBuild": "1bb092b05bbe79412d8ae3ac70ac4715964aaf0446425e99ff55c20ae297237d",
+  "currentBuild": "6cf462bad8bb81ecbe77c638f47c1ca008c3fa1a435656bb5dcdacc4658ac759",
+  "scope": "Content-only preservation comparison. Current dist may predate final startup integration; refresh this comparison after the final carrier build. The current review is intentionally changed and is not misreported as byte-identical."
+}

@@ -16,7 +16,6 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
   const expanded = new Map();
   const revision = () => chapter?.meta.revision;
   const sectionFor = id => byId.get(byId.get(id)?.sectionId);
-  const pathFor = id => { const item = byId.get(id); return item ? [...item.ancestors.map(parent => byId.get(parent)), item] : []; };
 
   function resolveAnchor(anchor) {
     return aliases.get(anchor) || (byId.has(anchor) ? anchor : null);
@@ -115,7 +114,7 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
     const current = cursor && byId.get(cursor.anchor), { collection, meta } = chapter;
     const name = collection.kind === 'chapter' ? `第${collection.chapterNumber}章　${collection.title}` : collection.title;
     const extra = collection.documents.length > 1 ? `<small>${esc(meta.title)}</small>` : '';
-    $('chapterView').innerHTML = `<div class="chapter-inner"><div class="chapter-heading"><h1>${esc(name)}</h1>${extra}</div><div class="resume-line">${current ? `<span>上次读到：${esc(current.title)}</span><button type="button" data-reader-resume>继续阅读</button>` : headings[0] ? `<button type="button" data-go="${esc(headings[0].id)}">从头阅读</button>` : '<span>暂无正文</span>'}</div><h2 class="toc-title">本章目录</h2><div class="chapter-toc">${tocHTML('chapter-toc')}</div></div>`;
+    $('chapterView').innerHTML = `<div class="chapter-inner"><div class="chapter-heading"><h1>${esc(name)}</h1>${extra}</div><div class="resume-line">${current ? `<span>上次读到：${esc(current.title)}</span><div class="resume-actions"><button type="button" data-reader-resume>继续阅读</button><button type="button" class="secondary" data-go="${esc(headings[0].id)}">从头阅读</button></div>` : headings[0] ? `<button type="button" data-go="${esc(headings[0].id)}">从头阅读</button>` : '<span>暂无正文</span>'}</div><h2 class="toc-title">本章目录</h2><div class="chapter-toc">${tocHTML('chapter-toc')}</div></div>`;
   }
   function setGroupOpen(group, open) {
     const button = group.querySelector('[data-toggle-section]');
@@ -186,24 +185,24 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
   function navigationTargets() {
     const item = byId.get(cursor?.anchor) || headings[0]; if (!item) return {};
     const section = sectionFor(item.id);
-    return { previousSection: sections[section?.sectionIndex - 1] || null, previousHeading: headings[item.index - 1] || null,
-      nextSection: sections[section?.sectionIndex + 1] || null, nextHeading: headings[item.index + 1] || null, current: item };
+    return { previousSection: sections[section?.sectionIndex - 1] || null,
+      nextSection: sections[section?.sectionIndex + 1] || null, current: item, currentSection: section };
   }
   function updateStatus() {
     const targets = navigationTargets();
-    for (const [key, target, label] of [['previous-major', targets.previousSection, '前一级'], ['previous-heading', targets.previousHeading, '前标题'], ['next-major', targets.nextSection, '后一级'], ['next-heading', targets.nextHeading, '后标题']]) {
+    for (const [key, target, label] of [['previous-major', targets.previousSection, '上一节'], ['next-major', targets.nextSection, '下一节']]) {
       const button = document.querySelector(`[data-nav="${key}"]`); if (!button) continue;
       button.disabled = !target; button.dataset.target = target?.id || '';
-      button.querySelector('.nav-target').textContent = target?.localNumber || '—';
-      const description = target ? `${label}：${target.number} ${target.title}` : `${label}：已是本章${key.startsWith('previous') ? '首' : '末'}个${key.endsWith('major') ? '一级' : ''}标题`;
+      const description = target ? `${label}：${target.title}` : `${label}：已是本章${key.startsWith('previous') ? '首' : '末'}节`;
       button.setAttribute('aria-label', description); button.title = description;
     }
-    if (targets.current && pathAnchor !== targets.current.id) {
-      pathAnchor = targets.current.id;
-      $('headingPath').innerHTML = pathFor(pathAnchor).map(item => `<span class="path-item" data-depth="${item.depth}" title="${esc(item.title)}">${esc(item.title)}</span>`).join('');
-      $('headingPathButton').dataset.target = pathAnchor;
-      const description = '回到当前标题：' + pathFor(pathAnchor).map(item => item.title).join('，');
-      $('headingPathButton').setAttribute('aria-label', description); $('headingPathButton').title = description;
+    const current = targets.current, section = targets.currentSection, button = $('headingPathButton');
+    button.disabled = !section;
+    button.dataset.currentAnchor = current?.id || ''; button.dataset.target = section?.id || '';
+    if (current && pathAnchor !== current.id) {
+      pathAnchor = current.id; $('headingPath').textContent = section?.title || '';
+      const description = `打开本章目录，当前节：${section?.title || ''}；当前位置：${current.title}`;
+      button.setAttribute('aria-label', description); button.title = description;
     }
   }
   function showReader(position, anchor = null) {
@@ -225,12 +224,14 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
     const bounds = root.getBoundingClientRect(), location = active.getBoundingClientRect();
     if (location.top < bounds.top || location.bottom > bounds.bottom) root.scrollTop += location.top - bounds.top - root.clientHeight / 3;
   }
-  function toggleDesktopToc() {
+  function setDesktopToc(open) {
     if (view !== 'reader' || pure || !matchMedia('(min-width:1100px)').matches) return false;
-    const position = capture(); tocCollapsed = !tocCollapsed;
-    settle(position, () => { $('readingLayout').classList.toggle('toc-collapsed', tocCollapsed); $('tocButton').setAttribute('aria-expanded', String(!tocCollapsed)); }, () => scrollCurrentToc($('desktopTocBody')));
+    const position = capture(); tocCollapsed = !open;
+    settle(position, () => { $('readingLayout').classList.toggle('toc-collapsed', tocCollapsed); $('tocButton').setAttribute('aria-expanded', String(open)); }, () => scrollCurrentToc($('desktopTocBody')));
     return true;
   }
+  function toggleDesktopToc() { return setDesktopToc(tocCollapsed); }
+  function revealDesktopToc() { return setDesktopToc(true); }
   function chromeInert(hidden) {
     for (const node of chrome) { node.inert = hidden; if (hidden) node.setAttribute('aria-hidden', 'true'); else node.removeAttribute('aria-hidden'); }
   }
@@ -264,7 +265,6 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
     }
     if (button?.dataset.go) { go(button.dataset.go); return; }
     if (button?.hasAttribute('data-reader-resume')) { onNavigate?.(null, clone(cursor)); return; }
-    if (button?.id === 'headingPathButton') go(cursor?.anchor || headings[0]?.id);
   });
   pane.addEventListener('scroll', () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(() => capture(true)); }, { passive: true });
   const excluded = 'button,a,input,textarea,select,label,summary,pre,code,table';
@@ -288,7 +288,7 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
   app.addEventListener('focusin', wakeControls);
   document.addEventListener('keydown', () => { if (pure) wakeControls(); });
   window.addEventListener('resize', () => { clearTimeout(resizeTimer); const position = capture() || cursor; resizeTimer = setTimeout(() => { if (chapter) settle(position); }, 100); });
-  return Object.freeze({ setChapter, clear, capture, settle, showReader, showChapter, go, tocHTML, scrollCurrentToc, toggleDesktopToc,
+  return Object.freeze({ setChapter, clear, capture, settle, showReader, showChapter, go, tocHTML, scrollCurrentToc, toggleDesktopToc, revealDesktopToc,
     enhanceCodes, resolveAnchor, normalizePosition, updateTOC, wakeControls, setPure,
     get position() { return clone(cursor); }, get state() { return { view, pure, restoring, tocCollapsed, cursor: clone(cursor) }; },
     get headings() { return clone(headings); }, get sections() { return clone(sections); }, get navigation() { return clone(navigationTargets()); } });

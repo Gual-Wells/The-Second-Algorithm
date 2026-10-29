@@ -1,0 +1,102 @@
+{
+  "onlyLineEndingsAndOptionalBom": true,
+  "initialPasses": "Earlier guarded passes stopped at HTML then CSS after normalizing preceding text files; this final pass preflights the full list and completes all edited text files. No teaching source was changed.",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "changedInFinalPass": false,
+      "beforeFinalPassSha256": "95e3b40581f5ee94fb16d1eeca18204627dcd5e43ba328dc4340e97dc9490ccb",
+      "afterSha256": "95e3b40581f5ee94fb16d1eeca18204627dcd5e43ba328dc4340e97dc9490ccb"
+    },
+    {
+      "path": "content/binary/chapter-review.json",
+      "changedInFinalPass": false,
+      "beforeFinalPassSha256": "3e4013c53f641ebccc10765867e114e1dc49ee34a1c3cbb3ccdd9b4af729d36a",
+      "afterSha256": "3e4013c53f641ebccc10765867e114e1dc49ee34a1c3cbb3ccdd9b4af729d36a"
+    },
+    {
+      "path": "docs/READER.md",
+      "changedInFinalPass": false,
+      "beforeFinalPassSha256": "c5603b5742df74aefa65511e0185ccf37d6a1f3f9232d67c830886e322da3ac4",
+      "afterSha256": "c5603b5742df74aefa65511e0185ccf37d6a1f3f9232d67c830886e322da3ac4"
+    },
+    {
+      "path": "docs/SECOND_LANGUAGE_DESIGN_GUIDANCE.md",
+      "changedInFinalPass": false,
+      "beforeFinalPassSha256": "039a65dcc448ef9145d175257a7085bba0496d6daab333866ba66974071fa72d",
+      "afterSha256": "039a65dcc448ef9145d175257a7085bba0496d6daab333866ba66974071fa72d"
+    },
+    {
+      "path": "protocol/CHAPTER_DATES.md",
+      "changedInFinalPass": false,
+      "beforeFinalPassSha256": "a49c7d223db65f8d980bde8b6661eeb89a7e2823471a256f93221030db2e92a6",
+      "afterSha256": "a49c7d223db65f8d980bde8b6661eeb89a7e2823471a256f93221030db2e92a6"
+    },
+    {
+      "path": "scripts/check-carrier-browser.cjs",
+      "changedInFinalPass": false,
+      "beforeFinalPassSha256": "ea3a20e7e0cc903470282251a86e5a62353b338f8f32995eefe5178eba2fabe9",
+      "afterSha256": "ea3a20e7e0cc903470282251a86e5a62353b338f8f32995eefe5178eba2fabe9"
+    },
+    {
+      "path": "scripts/check-project.mjs",
+      "changedInFinalPass": false,
+      "beforeFinalPassSha256": "1a722f94af017b0a808362c1ff1dc7223e7926e2ad3fa03a5590a49701c1a792",
+      "afterSha256": "1a722f94af017b0a808362c1ff1dc7223e7926e2ad3fa03a5590a49701c1a792"
+    },
+    {
+      "path": "test/carrier-worker-release.test.mjs",
+      "changedInFinalPass": false,
+      "beforeFinalPassSha256": "e746ca2a116b4707c3fb0848d34d965c9f4317696155a9479d61bee71de372f4",
+      "afterSha256": "e746ca2a116b4707c3fb0848d34d965c9f4317696155a9479d61bee71de372f4"
+    },
+    {
+      "path": "web/DESIGN.md",
+      "changedInFinalPass": false,
+      "beforeFinalPassSha256": "4634758acd9fae0c926ca6dc2baebcfe8afa17cc318b0e811a5fdc60ffb08d53",
+      "afterSha256": "4634758acd9fae0c926ca6dc2baebcfe8afa17cc318b0e811a5fdc60ffb08d53"
+    },
+    {
+      "path": "web/app.js",
+      "changedInFinalPass": false,
+      "beforeFinalPassSha256": "23d44f7dfc0bbe80bf759b38b54e7f3f52bd4c9c3e2c7c7320b06d768a5c716f",
+      "afterSha256": "23d44f7dfc0bbe80bf759b38b54e7f3f52bd4c9c3e2c7c7320b06d768a5c716f"
+    },
+    {
+      "path": "web/index.html",
+      "changedInFinalPass": false,
+      "beforeFinalPassSha256": "482dfe708d2f84d97bb24338a76bfea61d42bf4b917f9f75a9f7db438ee1bf3e",
+      "afterSha256": "482dfe708d2f84d97bb24338a76bfea61d42bf4b917f9f75a9f7db438ee1bf3e"
+    },
+    {
+      "path": "web/manual-questions.js",
+      "changedInFinalPass": false,
+      "beforeFinalPassSha256": "72018d622cfca25bf66cbd570caf52678e3f744123412b1d55a85c664c17dcdb",
+      "afterSha256": "72018d622cfca25bf66cbd570caf52678e3f744123412b1d55a85c664c17dcdb"
+    },
+    {
+      "path": "web/reader-runtime.js",
+      "changedInFinalPass": false,
+      "beforeFinalPassSha256": "2e3b60c40a69721cbc7bb7ba15fe0d2c5b72f8e10b3921de202d89066c260870",
+      "afterSha256": "2e3b60c40a69721cbc7bb7ba15fe0d2c5b72f8e10b3921de202d89066c260870"
+    },
+    {
+      "path": "web/styles.css",
+      "changedInFinalPass": true,
+      "beforeFinalPassSha256": "e31dd0b2dedb81ea89d369424fe6c5923203236b3d84b45e31a61b69ebd9090e",
+      "afterSha256": "b6c2a85c54bec62008962f430fce00f56d854cece565c17fc6c9c8ea1b1ba8c4"
+    },
+    {
+      "path": "web/worker-release.js",
+      "changedInFinalPass": true,
+      "beforeFinalPassSha256": "36f471cea6b8d63a62f4d86bc48ffbf1763757fef74d18f057e81a1abdd4f728",
+      "afterSha256": "f79451187b86d84e0bc5260e82f02ae6759cd4fda8a62576309abad39234c776"
+    },
+    {
+      "path": "scripts/check-startup-fidelity.cjs",
+      "changedInFinalPass": false,
+      "beforeFinalPassSha256": "bb3851a20ed22f04c010660afc5528e7c04c9ac9dab8859c9e051d571e8b5174",
+      "afterSha256": "bb3851a20ed22f04c010660afc5528e7c04c9ac9dab8859c9e051d571e8b5174"
+    }
+  ]
+}

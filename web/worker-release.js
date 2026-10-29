@@ -24,11 +24,11 @@ export async function waitForWorkerRelease({ serviceWorker, build, different = f
   const matches = version => Boolean(version && (different ? version !== build : version === build));
   return new Promise((resolve, reject) => {
     let settled = false, checking = false, again = false, requested = false;
-    let registration = null, updateComplete = false;
+    let registration = null, updateComplete = false, retryTimer = null;
     const timer = setTimeout(() => finish(null), timeoutMs);
     const finish = result => {
       if (settled) return;
-      settled = true; clearTimeout(timer);
+      settled = true; clearTimeout(timer); clearTimeout(retryTimer); retryTimer = null;
       serviceWorker.removeEventListener('controllerchange', check);
       if (result) resolve(result);
       else {
@@ -38,6 +38,7 @@ export async function waitForWorkerRelease({ serviceWorker, build, different = f
     };
     async function check() {
       if (settled) return;
+      clearTimeout(retryTimer); retryTimer = null;
       if (checking) { again = true; return; }
       checking = true;
       const controller = serviceWorker.controller;
@@ -61,6 +62,12 @@ export async function waitForWorkerRelease({ serviceWorker, build, different = f
           .then(() => { updateComplete = true; void check(); });
       }
       if (again) { again = false; void check(); }
+      else if (version === null && controller === serviceWorker.controller && Date.now() < deadline) {
+        // A controller can miss one VERSION reply after its takeover event.
+        // Retry only that unanswered identity check, within the original bound;
+        // a healthy but wrong version still waits for a real lifecycle event.
+        retryTimer = setTimeout(() => { retryTimer = null; void check(); }, Math.min(100, deadline - Date.now()));
+      }
     }
     serviceWorker.addEventListener('controllerchange', check);
     void check();
