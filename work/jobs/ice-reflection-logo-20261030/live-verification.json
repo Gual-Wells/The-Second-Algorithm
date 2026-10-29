@@ -1,0 +1,50 @@
+{
+  "verified": true,
+  "sourceCommit": "fc01fd699f126dfc6d445c2efb6fb38257a041d7",
+  "checkedAt": "2026-10-29T18:32:14.427Z",
+  "checks": [
+    {
+      "base": "https://7916ae3e.second-algorithm.pages.dev",
+      "file": "index.html",
+      "matched": true
+    },
+    {
+      "base": "https://7916ae3e.second-algorithm.pages.dev",
+      "file": "styles.css",
+      "matched": true
+    },
+    {
+      "base": "https://7916ae3e.second-algorithm.pages.dev",
+      "file": "sw.js",
+      "matched": true
+    },
+    {
+      "base": "https://7916ae3e.second-algorithm.pages.dev",
+      "file": "app.js",
+      "matched": true
+    },
+    {
+      "base": "https://second-algorithm.pages.dev",
+      "file": "index.html",
+      "matched": true
+    },
+    {
+      "base": "https://second-algorithm.pages.dev",
+      "file": "styles.css",
+      "matched": true
+    },
+    {
+      "base": "https://second-algorithm.pages.dev",
+      "file": "sw.js",
+      "matched": true
+    },
+    {
+      "base": "https://second-algorithm.pages.dev",
+      "file": "app.js",
+      "matched": true
+    }
+  ],
+  "paidCalls": 0,
+  "backendChanged": false,
+  "physicalIPhone": false
+}
