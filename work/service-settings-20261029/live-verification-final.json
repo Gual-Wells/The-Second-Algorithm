@@ -1,0 +1,83 @@
+{
+  "passed": true,
+  "source": "8075880cc66132d377d96d12af0bf3ad291d1bff",
+  "build": "ddd1fd1a41d635602078915cfd1990b115871102c853dd6c45c1ba110e7f5a93",
+  "deploymentReceipt": "work/jobs/service-settings-20261029/deployments/1793293780998.json",
+  "publicAssets": [
+    {
+      "file": "index.html",
+      "status": 200,
+      "shaMatch": true,
+      "securityHeaders": true
+    },
+    {
+      "file": "app.js",
+      "status": 200,
+      "shaMatch": true,
+      "securityHeaders": true
+    },
+    {
+      "file": "styles.css",
+      "status": 200,
+      "shaMatch": true,
+      "securityHeaders": true
+    },
+    {
+      "file": "sw.js",
+      "status": 200,
+      "shaMatch": true,
+      "securityHeaders": true
+    },
+    {
+      "file": "icons/header-logo.svg",
+      "status": 200,
+      "shaMatch": true,
+      "securityHeaders": true
+    }
+  ],
+  "privateBoundaries": [
+    {
+      "route": "/api/library",
+      "status": 401
+    },
+    {
+      "route": "/api/state",
+      "status": 401
+    },
+    {
+      "route": "/api/settings",
+      "status": 401
+    },
+    {
+      "route": "/api/balances",
+      "status": 401
+    },
+    {
+      "route": "/api/storage/usage",
+      "status": 401
+    },
+    {
+      "route": "/api/push/status",
+      "status": 401
+    },
+    {
+      "route": "/api/push/public-key",
+      "status": 401
+    },
+    {
+      "route": "/library/catalog.json",
+      "status": 401
+    },
+    {
+      "route": "/%6cibrary/catalog.json",
+      "status": 401
+    }
+  ],
+  "existingEnrollmentPreserved": true,
+  "ci": {
+    "id": 40916914795,
+    "conclusion": "success",
+    "url": "https://github.com/Gual-Wells/The-Second-Algorithm/actions/runs/40916914795"
+  },
+  "checkedAt": "2026-10-29T17:12:23.124Z"
+}

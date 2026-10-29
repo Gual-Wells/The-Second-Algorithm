@@ -1,0 +1,29 @@
+{
+  "verifiedAt": "2026-10-29T17:12:23.124Z",
+  "background": {
+    "registered": true,
+    "hiddenLauncher": true,
+    "defaultRestVerified": true,
+    "actualModelTaskStarted": false,
+    "auth": "existing ChatGPT sign-in"
+  },
+  "privateCredits": {
+    "registered": true,
+    "remainingVerified": false,
+    "remainingUnknown": true,
+    "perTaskEstimates": false,
+    "openAIInferenceCalled": false
+  },
+  "storage": {
+    "chapterBytes": 856311,
+    "d1Bytes": 126976,
+    "archive": {
+      "source": "8075880cc66132d377d96d12af0bf3ad291d1bff",
+      "bytes": 6710950,
+      "sha256": "82d467c90f2e03ee3e087125fe9de8d71a703e1a497041b2c9f0123a3a7e13d7",
+      "downloadVerifiedAt": 1793293803566
+    },
+    "oneDriveProjectBytes": 13369453
+  },
+  "restRequestRetentionMigrationVerified": true
+}
