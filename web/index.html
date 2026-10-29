@@ -25,12 +25,12 @@
     <div id="dayStrip" class="day-strip" aria-label="本周已发布章节"></div>
   </nav>
   <section id="loginView" class="login-view">
-    <div class="state-card login-card" data-state="loading"><div class="state-band"><span>个人章节</span><small>SECOND ALGORITHM</small></div><div class="state-body">
-      <img class="state-icon login-icon" src="/icons/icon.svg" width="44" height="44" alt="">
+    <div class="state-card login-card" data-state="loading"><div class="state-band"><span>第二算法</span><small>SECOND ALGORITHM</small></div><div class="state-body">
+      <img class="state-icon login-icon" src="/icons/icon.svg" width="56" height="56" alt="">
       <h2 id="startupTitle">正在打开章节</h2><p id="startupDescription">正在检查登录状态与已发布章节。</p><p id="loginMessage" class="state-message" role="status"></p>
       <form id="enrollForm" hidden><label for="setupKey">初始化密钥</label><input id="setupKey" type="password" autocomplete="off" autocapitalize="none" spellcheck="false"><button type="submit">创建通行密钥</button></form>
       <button type="button" id="loginButton" class="primary login-primary" hidden>使用通行密钥登录</button><button type="button" id="retryButton" class="primary login-primary" hidden>重新连接</button>
-      <button type="button" class="login-install" data-install-info>如何加入 iPhone 主屏幕</button>
+      <button type="button" id="startupInstall" class="login-install" data-install-info hidden>如何加入 iPhone 主屏幕</button>
     </div></div>
   </section>
   <main id="chapterView" class="chapter-view" aria-label="本章目录" hidden></main>

@@ -249,13 +249,25 @@ input::placeholder{color:#60758a;opacity:1}
 
 /* Native authenticated carrier surfaces. Private assets are never embedded here. */
 .login-mode .app-header{display:none}.login-view{flex:1;min-height:0;overflow:auto}
-.state-card{width:min(440px,calc(100% - 24px));margin:clamp(24px,9svh,76px) auto 24px;border:2px solid #365f88;background:#f0f5fa;box-shadow:0 7px 20px #173b6270}
-.state-band{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid #0b3b6b;background:var(--header-gradient);color:#fff;text-shadow:0 1px #173f69;font-size:16px;font-weight:700}.state-band small{font-size:9px;letter-spacing:.07em;color:#d6e8f8}
-.state-body{padding:23px 21px 25px}.state-icon{display:block;width:44px;height:44px;margin:0 0 18px}
-.state-body h2{margin:0 0 11px;color:#174f84;font-size:19px;line-height:1.5}.state-body p{margin:9px 0 15px;color:#526b83;font-size:14px;line-height:1.7}
-.state-body .state-message{margin:9px 0;color:#9a4837;font-size:13px}.state-message:empty{display:none}
-.login-primary{display:block;width:100%;margin-top:12px;font-size:14px}.login-install{margin-top:12px;font-size:12px;min-height:38px;padding:6px 9px}
-.login-card form{display:grid;gap:12px}.login-card label{display:grid;gap:6px;color:#2e506b;font-size:14px}.login-card input,.login-card form button{width:100%}
+.login-mode .state-card{margin-top:clamp(24px,9svh,78px)}
+.state-card{width:min(440px,calc(100% - 28px));margin:clamp(24px,9svh,76px) auto 24px;border:2px solid #365f88;background:#f0f5fa;box-shadow:0 7px 20px #173b6270;font:12px/1.45 Verdana,Tahoma,"Microsoft YaHei","PingFang SC",sans-serif}
+.state-band{display:flex;justify-content:space-between;align-items:baseline;gap:8px;min-height:48px;padding:10px 13px;border-bottom:1px solid #0b3766;background:linear-gradient(#6b9dc9,#2866a3 48%,#1b528a 49%,#104374);color:#fff;text-shadow:0 1px #123f72}
+.state-band span{font-size:17px;font-weight:700}.state-band small{color:#dbeafa;font-size:9px;font-weight:400;letter-spacing:.1em;white-space:nowrap}
+.state-body{display:grid;gap:10px;padding:17px 14px}.state-icon{display:block;width:56px;height:56px;margin:0}
+.state-body h2{margin:0;color:#174f84;font-size:17px;line-height:1.45}.state-body p{margin:0;color:#365675;font-size:12px;line-height:1.65}
+.state-body .state-message{min-height:1.5em;margin:0;color:#9d351b;font-size:12px}.state-message:empty{display:none}
+.login-primary{display:block;width:100%;min-height:38px;margin:0;padding:9px 13px;font-size:11px;font-weight:700}.login-install{justify-self:start;min-height:0;margin:0;padding:6px 9px;font-size:11px;font-weight:700}
+.login-card form{display:grid;gap:10px}.login-card label{display:grid;gap:6px;color:#244c73;font-size:11px;font-weight:700}.login-card input,.login-card form button{width:100%}
+.login-card[data-state=loading] form,.login-card[data-state=loading] button{display:none!important}
+.login-card[data-state=loading] .state-icon,.opening-card[data-state=loading] .state-icon{animation:startup-breathe 1.8s ease-in-out infinite}
+@keyframes startup-breathe{50%{opacity:.55}}
+.chapter-view.is-opening{display:flex;flex-direction:column;overflow:hidden;background:#fff}
+.chapter-opening-body{flex:1;min-height:0;overflow:auto}
+.chapter-load-status{display:flex;flex:none;align-items:center;gap:6px;min-height:28px;border-top:1px solid #9fb4c8;padding:4px 8px;background:#e1ebf4;color:#52708b;font:9px/1.45 Verdana,Tahoma,"Microsoft YaHei","PingFang SC",sans-serif}
+.chapter-load-status::before{content:"";width:7px;height:7px;flex:none;border:1px solid #48844d;border-radius:50%;background:#72ad6e}
+.chapter-load-status[data-tone=error]::before{border-color:#9d4c3d;background:#bd7061}
+@media(max-width:560px){.app-frame.login-mode{padding-inline:5px}}
+@media(prefers-reduced-motion:reduce){.login-card[data-state=loading] .state-icon,.opening-card[data-state=loading] .state-icon{animation:none}}
 .empty-card{box-shadow:0 2px 6px #45617e25}.chapter-view:has(.empty-card){background:var(--shell)}
 dialog.sheet{position:fixed;inset:var(--sheet-offset-top,0px) 0 var(--sheet-offset-bottom,0px);margin:auto;padding:0;max-width:calc(100vw - 20px);height:min(760px,calc(var(--sheet-viewport-height,100dvh) - max(24px,var(--safe-top)) - max(24px,var(--safe-bottom))));max-height:calc(var(--sheet-viewport-height,100dvh) - max(24px,var(--safe-top)) - max(24px,var(--safe-bottom)));grid-template-columns:minmax(0,1fr)}
 dialog.sheet:not([open]){display:none}dialog.sheet[open]{display:grid;grid-template-rows:auto minmax(0,1fr)}dialog.sheet::backdrop{background:#223f5b65}

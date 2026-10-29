@@ -96,7 +96,6 @@ async function connect() {
   showStartup('loading');
   try {
     const status = await api('/auth/status'); if (connection !== S.connectionSequence) return;
-    $('enrollForm').hidden = !status.enrollmentOpen; $('loginButton').hidden = !status.enrolled;
     if (!status.authenticated) {
       if (S.owner) lock();
       showStartup(status.enrollmentOpen ? 'enroll' : 'login', status.enrollmentOpen ? '为此阅读器创建通行密钥。' : status.enrolled ? '使用已登记的通行密钥登录，继续按日期阅读。' : '尚未登记通行密钥。');
@@ -121,6 +120,19 @@ function showStartup(kind, message = '') {
   $('startupDescription').textContent = loading ? '正在检查登录状态与已发布章节。' : failed ? '连接暂不可用，请检查网络后重试。' : message;
   $('loginMessage').textContent = failed ? message : '';
   $('enrollForm').hidden = $('loginButton').hidden = true; $('retryButton').hidden = !failed;
+  $('startupInstall').hidden = loading || matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  $('chapterView').classList.remove('is-opening'); $('chapterView').removeAttribute('aria-busy');
+  $('readingNotice').hidden = true;
+}
+function showReaderShell() {
+  $('loginView').hidden = true; $('headerActions').hidden = false; $('app').classList.remove('login-mode');
+  renderChapterNavigation();
+}
+function showChapterOpening(collection, error = null, route = '') {
+  showReaderShell(); $('readerView').hidden = true; $('chapterView').hidden = false;
+  $('chapterView').classList.add('is-opening'); $('chapterView').setAttribute('aria-busy', String(!error));
+  $('readingNotice').hidden = true;
+  $('chapterView').innerHTML = `<div class="chapter-opening-body"><section class="state-card opening-card" data-state="${error ? 'error' : 'loading'}"><div class="state-band"><span>第二算法</span><small>SECOND ALGORITHM</small></div><div class="state-body"><img class="state-icon" src="/icons/icon.svg" width="56" height="56" alt=""><h2>${error ? '本章暂时无法打开' : '正在打开章节'}</h2><p>${esc(error || `正在载入《${collection.title}》。`)}</p>${error ? `<div class="action-row"><button type="button" data-show-library>章节册</button><button type="button" class="primary" data-retry-route="${esc(route)}">重新打开</button></div>` : ''}</div></section></div><div class="chapter-load-status"${error ? ' data-tone="error"' : ''} role="status"><span>${error ? '章节未能打开。' : '正在打开章节…'}</span></div>`;
 }
 function mergeRemoteState(state) {
   for (const [key, record] of Object.entries(state || {})) {
@@ -149,7 +161,6 @@ async function enter(owner, offline, connection) {
   S.settings = { fontSize: 17, codeSize: 13.5, wrapCode: false, preload: true, ...(S.records.preferences?.value || readLocal('preferences', {})) };
   S.settings.fontSize = Math.max(14, Math.min(24, Number(S.settings.fontSize) || 17));
   S.settings.codeSize = Math.max(10, Math.min(20, Number(S.settings.codeSize) || 13.5)); applySettings();
-  $('loginView').hidden = true; $('headerActions').hidden = false; $('app').classList.remove('login-mode'); renderChapterNavigation();
   questions ||= createReaderQuestions({ getContext: () => ({ owner: S.owner, chapterId: S.active?.collection.id, title: S.active?.collection.title, revision: S.active?.meta.revision }), toast, transport: null });
   let verifiedAt = Date.now(); if (offline) { try { verifiedAt = JSON.parse(localStorage.getItem(SESSION_KEY)).verifiedAt; } catch {} }
   await swMessage({ type: 'OWNER', owner, verifiedAt }); if (connection !== S.connectionSequence || S.owner !== owner) return;
@@ -187,6 +198,7 @@ async function route() {
   const sequence = ++S.sequence, [pathname, query = ''] = raw.slice(1).split('?'), [, section, collectionId, documentId] = pathname.split('/');
   const collection = S.library.collections.find(item => item.id === collectionId) || S.library.collections[0];
   if (!collection) {
+    showReaderShell(); $('chapterView').classList.remove('is-opening'); $('chapterView').removeAttribute('aria-busy');
     S.active = null; runtime.clear(); $('readerView').hidden = true; $('chapterView').hidden = false;
     $('chapterView').innerHTML = '<section class="state-card empty-card"><div class="state-band"><span>算法章节</span><small>CHAPTERS</small></div><div class="state-body"><img class="state-icon" src="/icons/icon.svg" alt=""><h2>暂无已发布章节</h2><p>正式发布的章节会出现在章节册与日历中。</p></div></section>'; renderChapterNavigation(); return;
   }
@@ -195,7 +207,10 @@ async function route() {
   const isRead = section === 'read' && collection.id === collectionId;
   const canonical = isRead ? `#/read/${collection.id}/${meta.id}` : `#/chapter/${collection.id}`;
   const previous = S.active, wasRead = runtime.state.view === 'reader'; S.pendingRoute = raw;
-  $('readingNotice').innerHTML = `<span>正在打开${esc(collection.title)}…</span>${previous ? '<button type="button" data-cancel-route>取消</button>' : ''}`; $('readingNotice').hidden = false;
+  if (!previous) showChapterOpening(collection);
+  else {
+    $('readingNotice').innerHTML = `<span>正在打开${esc(collection.title)}…</span><button type="button" data-cancel-route>取消</button>`; $('readingNotice').hidden = false;
+  }
   try {
     const content = await getDocument(meta); if (sequence !== S.sequence || !S.owner) return;
     await document.fonts.ready; if (sequence !== S.sequence || !S.owner) return;
@@ -205,6 +220,7 @@ async function route() {
     if (reloaded && readLocal('lastRoute') === raw && local?.capturedAt >= (position?.capturedAt || 0)) position = local;
     if (!position) position = local; if (same && wasRead) savePosition(false);
     S.active = { collection, meta, content, route: canonical }; S.pendingRoute = null;
+    $('chapterView').classList.remove('is-opening'); $('chapterView').removeAttribute('aria-busy');
     renderChapterNavigation();
     if (!same) position = runtime.setChapter(S.active, position); else if (!isRead) runtime.capture();
     applySettings(); if (isRead) runtime.showReader(position, new URLSearchParams(query).get('anchor')); else runtime.showChapter();
@@ -214,6 +230,7 @@ async function route() {
     updateConnection(); if (S.settings.preload && !S.offline) void downloadCollection(collection, false);
   } catch (error) {
     if (sequence !== S.sequence || !S.owner) return; S.pendingRoute = null;
+    if (!previous) { showChapterOpening(collection, error.message, raw); return; }
     $('readingNotice').innerHTML = `<span>${esc(error.message)}</span><button type="button" data-retry-route="${esc(raw)}">重试</button>${previous ? '<button type="button" data-cancel-route>关闭</button>' : ''}`; $('readingNotice').hidden = false;
     if (previous) { history.replaceState(history.state, '', previous.route); observedLocation = previous.route; }
   }
