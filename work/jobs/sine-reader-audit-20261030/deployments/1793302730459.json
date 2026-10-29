@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "packet": "work/jobs/sine-reader-audit-20261030/releases/d294a53c71504369ac3b2d37eb708f46.json",
+  "packetSha256": "586774bdd019e9c6b217fff1bb814ea881330f3641a836ff5f70c17c52fd670c",
+  "researchHandoffs": [
+    {
+      "chapter": "chapter-01",
+      "path": "work/jobs/first-chapter-20261028/study/handoffs/30fca997eabc41e0a39dd8eff7adaf45.json",
+      "sha256": "678a8224a593e49e10100c6befb9dd926fbb521221380cefd17cf8a40156275c",
+      "current": true,
+      "adopted": true,
+      "adoptionProof": {
+        "deployment": "work/jobs/first-chapter-20261028/deployments/1793195153435.json",
+        "packet": "work/jobs/first-chapter-20261028/releases/31f196de91894f14af75dfde16135d95.json"
+      }
+    }
+  ],
+  "inputHash": "ca01a4844b3c720ab0eae2c48ea7cd65731645748d55a7c230417bd1758f19e0",
+  "artifact": ".local/releases/7394aed5-2184-4134-a089-c77af2851a7a",
+  "origin": "https://second-algorithm.pages.dev",
+  "deployedAt": "2026-10-29T19:38:50.459Z",
+  "build": "6268aa19a3266ee818ee917165a62bfe35898fda71c900c07d62b91b10b6e0ca",
+  "anonymousBoundaryVerified": true,
+  "passed": true
+}
