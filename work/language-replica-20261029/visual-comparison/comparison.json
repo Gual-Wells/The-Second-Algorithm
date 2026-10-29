@@ -1,0 +1,992 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-29T13:55:27.585137+00:00",
+  "source": {
+    "repository": "Gual-Wells/The-Second-Language",
+    "commit": "6fc3a272155f78d8c7cc440bce883f4a126e4d30",
+    "capture": "source-surfaces.json",
+    "corpus": "Independent self-written source UI fixture; no production user data."
+  },
+  "target": {
+    "project": "The Second Algorithm",
+    "build": {
+      "version": "bcddffa77b8e33d2ad3e87d12cf4c3d893319d5531bc8ac78c677f1f73c26ea5",
+      "buildID": "e2ce4684db3722fadd765f274fc8a55b9c5440503fc99e0bc7ce33b5353f5595",
+      "gitRevision": "ef103d3ec3e5bbaeb75fcc4a4065f0f6e80b31f0",
+      "publicationState": "active",
+      "operation": "content-release",
+      "mode": "full",
+      "documents": 1,
+      "codeBlocks": 89
+    },
+    "capture": "target-surfaces.json",
+    "corpus": "Actual built chapter-01/binary-search JSON and current bundled app/runtime; authenticated API responses isolated in browser.",
+    "sourceInputHashes": {
+      "web/app.js": "32bedf4e5bf9c65eb09ec459b1ad632e53ca45596e3b4bd144478c1e160fcc05",
+      "web/auth.js": "9f8db119e19cc7ac887e96aa6cefe8bc153759c316bb611472b91a2507b2fd87",
+      "web/chapter-dates.js": "6f0d0e526780f6a4f0929b9c2a0083d59aa5ba00650bde64c77c864949f1794c",
+      "web/DESIGN.md": "247b3e6c86573c02bd63a86bccdd35fe2038e3c69399d022d6980d8edbbd2adc",
+      "web/icons/apple-touch-icon-series1.png": "dc478907d0c2866312e8f6cc2db15824c7badff3c6d4f4882438092a00e6e664",
+      "web/icons/apple-touch-icon.png": "dc478907d0c2866312e8f6cc2db15824c7badff3c6d4f4882438092a00e6e664",
+      "web/icons/build.json": "36aae61c67a67af97f2377eb4125663cea2ca0d8950aa646b8644b0cb3e813c9",
+      "web/icons/header-logo.svg": "cc49d65a1ba6911a2874f9e03efd7b8eded41c2fcd7f0d88c6ec118515b6c893",
+      "web/icons/icon-192.png": "7dc931fd40e3513017a6e3a8f6cce7cbd156f43bfe1ac273858a5e80a1b545aa",
+      "web/icons/icon-512.png": "6e2c002fc0cbe0cd97f560a808be06e24898260b550098848aaeee5fc1240353",
+      "web/icons/icon.svg": "497c4629840c349d1a23d27cb4a2bf9330c7f097974be9ab906a2253a6638ed3",
+      "web/index.html": "42074fdc7269258f111d72ceb6c6dd0ce0a76edfe642a139553737f1a01be956",
+      "web/manifest.webmanifest": "7c159b2c915dd26ce30bc5a457c835c6ea23a786c6ceded66930e5443ed74caf",
+      "web/manual-questions.js": "e32145d51a399ea5cc7510798b027ff8cfabd99ee816383bb4e4ad0fe9f6bc78",
+      "web/notes-journal.js": "f744ecd13a41cc472ae49de132a4e93bf72b92c6ead06b55734c5c4957afe0a6",
+      "web/reader-runtime.js": "bb308ebf21c8e67bbc38b904b769aa21774543afcf3a9a98c930aaaa03bc9315",
+      "web/robots.txt": "331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1",
+      "web/styles.css": "bcf958ec59960235c92a73f9c33bc9ccd2c215f6ca45017ddac36c4c90678e06",
+      "web/sw.js": "93e5b90c93d01133d23f001aa2c6062fead9e71ede4f7b1b999c1d86dc6765bb",
+      "web/worker-release.js": "f79451187b86d84e0bc5260e82f02ae6759cd4fda8a62576309abad39234c776",
+      "scripts/build-carrier.mjs": "c04540101b448908d73440427da1d5c74bcb362ddf22d866831a132c19ef6278",
+      "tools/reader-boundary.mjs": "74ea33a6e5bd6152b116889823390664c458c863215abb5f9d7b11d81b7fdc95"
+    },
+    "builtSurfaceHashes": {
+      "dist/index.html": "0bb0949c6e9ef553bc1dcdfa06518959029bb09bbf716faf61bb2a995cf7674a",
+      "dist/app.js": "3e3d724745f5d65789249857b5c9a45467b3159876548a432a4c0999cc30fca2",
+      "dist/styles.css": "bcf958ec59960235c92a73f9c33bc9ccd2c215f6ca45017ddac36c4c90678e06",
+      "dist/icons/header-logo.svg": "cc49d65a1ba6911a2874f9e03efd7b8eded41c2fcd7f0d88c6ec118515b6c893",
+      "dist/carrier-build.json": "c1761f62d3fa4d989a7c5c50ba35669e11cc6a5b5585e23f8c9dddd221364381"
+    },
+    "inputHashNote": "Snapshot taken from the frozen actual sources after final target capture; relative paths are repository-relative. Build ID comes from that capture, not inferred from Git HEAD."
+  },
+  "captureEnvironment": {
+    "source": "Windows Chromium via Playwright; original source capture did not record browser version.",
+    "target": {
+      "engine": "Chromium",
+      "version": "156.0.8078.48",
+      "platform": "win32",
+      "isMobile": true,
+      "hasTouch": true,
+      "deviceScaleFactor": 1
+    },
+    "screenshotScale": "CSS pixel screenshots, source/target mobile 402x874 and desktop 1280x800.",
+    "externalOrPaidRequests": false,
+    "physicalIPhoneVerified": false,
+    "userAestheticAccepted": false
+  },
+  "verdict": "The shared blue-and-silver shell, paper, modal, date rail, settings navigation, book and index now visibly follow the source product. This is a visual comparison of current source-backed implementations, not a claim of pixel identity or physical iPhone acceptance.",
+  "observations": [
+    {
+      "area": "Reader chrome",
+      "finding": "At 402x874 both headers are 390x91, title rows 38px, date rows 47.6875px, tools 374x39.5, and status bars 388x28 with 9px text. Colors, gradients and padding agree on these roles."
+    },
+    {
+      "area": "Body",
+      "finding": "Both paragraph roles use 15px / 26.7px (1.78), weight 400 and rgb(41,63,83). Source word cards add inner margins; algorithm body remains a continuous paper, so paragraph width/height are not expected to match. Reader title uses 22px / 27.5px in both. Source has a subtitle and quality buttons, so its reader-head is 96.484px versus target 75px."
+    },
+    {
+      "area": "Index",
+      "finding": "Both dialogs are 390x622.578px; search 80.891px and list 480.688px. Source single-word rows are 31.938px; current algorithm first row is 65.594px because adjacent long headings and parent context need wrapping. Source strong text is 11px / 15.95px, target 11px / 17.05px. Selected target entry intentionally uses the source day-selection blue treatment."
+    },
+    {
+      "area": "Settings",
+      "finding": "Common navigation row is 386x54.891px, font14px / 20.3px in both; arrow22px. Target dialog is shorter because unrelated English-learning settings are absent. Reading controls are task-specific, using the same sheet and switch materials."
+    },
+    {
+      "area": "Book/calendar",
+      "finding": "Both book dialogs are 390x690; tabs51px and search82.328px. Calendar controls59.188px, weekdays24.5px, grid212px, and cells37px agree. Final monthly section band is exactly31.938px / 11px / 7px9px padding; monthly entry now uses source compact spacing8px11px, date9px and title11px, count aligned right. Actual one-row list is47.984px in both."
+    },
+    {
+      "area": "Questions",
+      "finding": "Both frames are390x826 and textarea362x72 /16px /22.4px. Source has a chapter selector; target is current-chapter-only. Target visibly retains the unconnected-service notice and disabled sending, rather than suggesting backend availability. Composer is134.938px versus source127.328px, due the target button/form roles. Final computed textarea resize is none."
+    },
+    {
+      "area": "Logo and desktop header",
+      "finding": "A static transparent silver-white derivative preserves the original three-node geometry. Its76x38 slot follows the source speech control footprint; no fifth action is introduced. Desktop actions intentionally remain a separate row, as explicitly requested, so source61px flex header versus target95px grid header is expected."
+    }
+  ],
+  "measurementCaveats": [
+    "Raw source surfaces used document.querySelector, which sometimes selected a hidden first matching control. Source .header-button, .text-input, .sheet-head, .settings-section and .section-band can therefore have 0x0/display:none or belong to another surface. Those differences are retained in raw data but must not be interpreted as missing target UI or proof of exact visible-role mismatch.",
+    "Source .settings-detail wrapper versus target settings-section is a different DOM role; raw missing wrapper is not a missing reading preference page.",
+    "Source and target corpora differ deliberately. Text lengths, titles, total list contents and optional subtitle metadata change geometry.",
+    "Both image sets use Windows fonts through Chromium; no Safari rasterization, native passkey sheet, actual keyboard or installed iPhone screenshot is represented.",
+    "A successful style/layout check is separate from transport, offline, release and learning-content validation. Source and target APIs in this capture were isolated."
+  ],
+  "resolvedVisualIssues": [
+    "First H2 now uses first-of-type because empty compatibility anchors precede it; fixes excess blank space without deleting anchors.",
+    "Monthly calendar list now follows the source compact chapter-list rather than reusing the larger book row.",
+    "Textarea resize:none now has enough specificity to override textarea.text-input.",
+    "The two touch-action declarations now permit pinch zoom; Chromium normalizes the computed pan-x pan-y pinch-zoom value to manipulation."
+  ],
+  "extraTargetFacts": {
+    "calendar": {
+      "calendarEntry": {
+        "fontSize": "12px",
+        "lineHeight": "17.4px",
+        "padding": "8px 11px",
+        "height": 46.984375,
+        "width": 386,
+        "x": 8,
+        "right": 394,
+        "resize": "none",
+        "touchAction": "manipulation",
+        "display": "block"
+      },
+      "calendarDate": {
+        "fontSize": "9px",
+        "lineHeight": "13.05px",
+        "padding": "0px",
+        "height": 13.046875,
+        "width": 364,
+        "x": 19,
+        "right": 383,
+        "resize": "none",
+        "touchAction": "auto",
+        "display": "block"
+      },
+      "calendarTitle": {
+        "fontSize": "11px",
+        "lineHeight": "15.95px",
+        "padding": "0px",
+        "height": 15.9375,
+        "width": 364,
+        "x": 19,
+        "right": 383,
+        "resize": "none",
+        "touchAction": "auto",
+        "display": "block"
+      },
+      "calendarCount": {
+        "fontSize": "9px",
+        "lineHeight": "13.05px",
+        "padding": "0px",
+        "height": 13.046875,
+        "width": 17.890625,
+        "x": 367.109375,
+        "right": 385,
+        "resize": "none",
+        "touchAction": "auto",
+        "display": "block"
+      },
+      "calendarBand": {
+        "fontSize": "11px",
+        "lineHeight": "15.95px",
+        "padding": "7px 9px",
+        "height": 31.9375,
+        "width": 386,
+        "x": 8,
+        "right": 394,
+        "resize": "none",
+        "touchAction": "auto",
+        "display": "flex"
+      },
+      "questionInput": null,
+      "readingPane": {
+        "fontSize": "12px",
+        "lineHeight": "17.4px",
+        "padding": "0px",
+        "height": 645.3125,
+        "width": 388,
+        "x": 7,
+        "right": 395,
+        "resize": "none",
+        "touchAction": "manipulation",
+        "display": "block"
+      }
+    },
+    "questions": {
+      "calendarEntry": null,
+      "calendarDate": null,
+      "calendarTitle": null,
+      "calendarCount": null,
+      "calendarBand": null,
+      "questionInput": {
+        "fontSize": "16px",
+        "lineHeight": "22.4px",
+        "padding": "9px",
+        "height": 72,
+        "width": 362,
+        "x": 20,
+        "right": 382,
+        "resize": "none",
+        "touchAction": "auto",
+        "display": "block"
+      },
+      "readingPane": {
+        "fontSize": "12px",
+        "lineHeight": "17.4px",
+        "padding": "0px",
+        "height": 645.3125,
+        "width": 388,
+        "x": 7,
+        "right": 395,
+        "resize": "none",
+        "touchAction": "manipulation",
+        "display": "block"
+      }
+    }
+  },
+  "measuredPairs": [
+    {
+      "surface": "reader",
+      "role": ".app-shell",
+      "source": {
+        "width": 402,
+        "height": 874,
+        "fontSize": "12px",
+        "padding": [
+          "8px",
+          "5px",
+          "8px",
+          "5px"
+        ]
+      },
+      "target": {
+        "width": 402,
+        "height": 874,
+        "fontSize": "12px",
+        "padding": [
+          "8px",
+          "5px",
+          "8px",
+          "5px"
+        ]
+      }
+    },
+    {
+      "surface": "reader",
+      "role": ".app-header",
+      "source": {
+        "width": 390,
+        "height": 91,
+        "background": "linear-gradient(rgb(101, 160, 210) 0%, rgb(61, 123, 184) 46%, rgb(34, 100, 165) 47%, rgb(13, 71, 133) 100%)",
+        "padding": [
+          "7px",
+          "9px",
+          "7px",
+          "9px"
+        ]
+      },
+      "target": {
+        "width": 390,
+        "height": 91,
+        "background": "linear-gradient(rgb(101, 160, 210) 0%, rgb(61, 123, 184) 46%, rgb(34, 100, 165) 47%, rgb(13, 71, 133) 100%)",
+        "padding": [
+          "7px",
+          "9px",
+          "7px",
+          "9px"
+        ]
+      }
+    },
+    {
+      "surface": "reader",
+      "role": ".title-row",
+      "source": {
+        "height": 38,
+        "gap": "10px"
+      },
+      "target": {
+        "height": 38,
+        "gap": "10px"
+      }
+    },
+    {
+      "surface": "reader",
+      "role": ".chapter-nav-row",
+      "source": {
+        "height": 47.6875,
+        "columns": "36px 290px 36px"
+      },
+      "target": {
+        "height": 47.6875,
+        "columns": "36px 290px 36px"
+      }
+    },
+    {
+      "surface": "reader",
+      "role": ".day-chip",
+      "source": {
+        "height": 37,
+        "fontSize": "12px"
+      },
+      "target": {
+        "height": 37,
+        "fontSize": "12px"
+      }
+    },
+    {
+      "surface": "reader",
+      "role": ".reader-head h2",
+      "source": {
+        "fontSize": "22px",
+        "lineHeight": "27.5px",
+        "color": "rgb(23, 79, 132)"
+      },
+      "target": {
+        "fontSize": "22px",
+        "lineHeight": "27.5px",
+        "color": "rgb(23, 79, 132)"
+      }
+    },
+    {
+      "surface": "reader",
+      "role": ".article-tools",
+      "source": {
+        "width": 374,
+        "height": 39.5,
+        "background": "linear-gradient(rgb(248, 251, 254), rgb(230, 240, 249))",
+        "padding": [
+          "6px",
+          "9px",
+          "6px",
+          "9px"
+        ]
+      },
+      "target": {
+        "width": 374,
+        "height": 39.5,
+        "background": "linear-gradient(rgb(248, 251, 254), rgb(230, 240, 249))",
+        "padding": [
+          "6px",
+          "9px",
+          "6px",
+          "9px"
+        ]
+      }
+    },
+    {
+      "surface": "reader",
+      "role": ".article p",
+      "source": {
+        "fontSize": "15px",
+        "lineHeight": "26.7px",
+        "fontWeight": "400",
+        "color": "rgb(41, 63, 83)"
+      },
+      "target": {
+        "fontSize": "15px",
+        "lineHeight": "26.7px",
+        "fontWeight": "400",
+        "color": "rgb(41, 63, 83)"
+      }
+    },
+    {
+      "surface": "reader",
+      "role": ".reader-statusbar",
+      "source": {
+        "width": 388,
+        "height": 28,
+        "fontSize": "9px",
+        "background": "rgb(225, 235, 244)",
+        "padding": [
+          "4px",
+          "8px",
+          "4px",
+          "8px"
+        ]
+      },
+      "target": {
+        "width": 388,
+        "height": 28,
+        "fontSize": "9px",
+        "background": "rgb(225, 235, 244)",
+        "padding": [
+          "4px",
+          "8px",
+          "4px",
+          "8px"
+        ]
+      }
+    },
+    {
+      "surface": "index",
+      "role": ".sheet-dialog[open]",
+      "source": {
+        "width": 390,
+        "height": 622.578125
+      },
+      "target": {
+        "width": 390,
+        "height": 622.578125
+      }
+    },
+    {
+      "surface": "index",
+      "role": ".index-search",
+      "source": {
+        "width": 386,
+        "height": 80.890625,
+        "fontSize": "10px",
+        "padding": [
+          "10px",
+          "10px",
+          "10px",
+          "10px"
+        ]
+      },
+      "target": {
+        "width": 386,
+        "height": 80.890625,
+        "fontSize": "10px",
+        "padding": [
+          "10px",
+          "10px",
+          "10px",
+          "10px"
+        ]
+      }
+    },
+    {
+      "surface": "index",
+      "role": ".index-list",
+      "source": {
+        "width": 386,
+        "height": 480.6875,
+        "background": "rgb(219, 230, 240)",
+        "padding": [
+          "7px",
+          "7px",
+          "7px",
+          "7px"
+        ]
+      },
+      "target": {
+        "width": 386,
+        "height": 480.6875,
+        "background": "rgb(219, 230, 240)",
+        "padding": [
+          "7px",
+          "7px",
+          "7px",
+          "7px"
+        ]
+      }
+    },
+    {
+      "surface": "index",
+      "role": ".index-item",
+      "source": {
+        "width": 185.5,
+        "height": 31.9375,
+        "background": "linear-gradient(rgb(255, 255, 255), rgb(240, 246, 251))",
+        "display": "flex"
+      },
+      "target": {
+        "width": 185.5,
+        "height": 65.59375,
+        "background": "linear-gradient(rgb(217, 235, 250), rgb(191, 216, 239))",
+        "display": "grid"
+      }
+    },
+    {
+      "surface": "index",
+      "role": ".index-item strong",
+      "source": {
+        "fontSize": "11px",
+        "lineHeight": "15.95px"
+      },
+      "target": {
+        "fontSize": "11px",
+        "lineHeight": "17.05px"
+      }
+    },
+    {
+      "surface": "settings",
+      "role": ".settings-row",
+      "source": {
+        "width": 386,
+        "height": 54.890625,
+        "fontSize": "14px",
+        "color": "rgb(39, 78, 112)",
+        "background": "linear-gradient(rgb(255, 255, 255), rgb(248, 251, 253))",
+        "padding": [
+          "11px",
+          "14px",
+          "11px",
+          "14px"
+        ]
+      },
+      "target": {
+        "width": 386,
+        "height": 54.890625,
+        "fontSize": "14px",
+        "color": "rgb(39, 78, 112)",
+        "background": "linear-gradient(rgb(255, 255, 255), rgb(248, 251, 253))",
+        "padding": [
+          "11px",
+          "14px",
+          "11px",
+          "14px"
+        ]
+      }
+    },
+    {
+      "surface": "chapter-book",
+      "role": "#calendarDialog",
+      "source": {
+        "width": 390,
+        "height": 690
+      },
+      "target": {
+        "width": 390,
+        "height": 690
+      }
+    },
+    {
+      "surface": "chapter-book",
+      "role": ".chapter-book-tabs",
+      "source": {
+        "width": 386,
+        "height": 51,
+        "padding": [
+          "7px",
+          "10px",
+          "7px",
+          "10px"
+        ]
+      },
+      "target": {
+        "width": 386,
+        "height": 51,
+        "padding": [
+          "7px",
+          "10px",
+          "7px",
+          "10px"
+        ]
+      }
+    },
+    {
+      "surface": "chapter-book",
+      "role": ".chapter-book-search",
+      "source": {
+        "width": 386,
+        "height": 82.328125,
+        "padding": [
+          "9px",
+          "11px",
+          "9px",
+          "11px"
+        ]
+      },
+      "target": {
+        "width": 386,
+        "height": 82.328125,
+        "padding": [
+          "9px",
+          "11px",
+          "9px",
+          "11px"
+        ]
+      }
+    },
+    {
+      "surface": "calendar",
+      "role": ".month-controls",
+      "source": {
+        "width": 386,
+        "height": 59.1875,
+        "padding": [
+          "10px",
+          "10px",
+          "10px",
+          "10px"
+        ]
+      },
+      "target": {
+        "width": 386,
+        "height": 59.1875,
+        "padding": [
+          "10px",
+          "10px",
+          "10px",
+          "10px"
+        ]
+      }
+    },
+    {
+      "surface": "calendar",
+      "role": ".calendar-weekdays",
+      "source": {
+        "width": 386,
+        "height": 24.5,
+        "fontSize": "10px",
+        "padding": [
+          "8px",
+          "10px",
+          "2px",
+          "10px"
+        ]
+      },
+      "target": {
+        "width": 386,
+        "height": 24.5,
+        "fontSize": "10px",
+        "padding": [
+          "8px",
+          "10px",
+          "2px",
+          "10px"
+        ]
+      }
+    },
+    {
+      "surface": "calendar",
+      "role": ".calendar",
+      "source": {
+        "width": 386,
+        "height": 212,
+        "background": "rgb(248, 251, 254)",
+        "padding": [
+          "3px",
+          "10px",
+          "12px",
+          "10px"
+        ]
+      },
+      "target": {
+        "width": 386,
+        "height": 212,
+        "background": "rgb(248, 251, 254)",
+        "padding": [
+          "3px",
+          "10px",
+          "12px",
+          "10px"
+        ]
+      }
+    },
+    {
+      "surface": "calendar",
+      "role": ".calendar button",
+      "source": {
+        "width": 49.703125,
+        "height": 37,
+        "fontSize": "12px",
+        "padding": [
+          "1px",
+          "6px",
+          "1px",
+          "6px"
+        ]
+      },
+      "target": {
+        "width": 49.703125,
+        "height": 37,
+        "fontSize": "12px",
+        "padding": [
+          "2px",
+          "2px",
+          "2px",
+          "2px"
+        ]
+      }
+    },
+    {
+      "surface": "calendar",
+      "role": "#chapterCalendarPanel .section-band",
+      "source": {
+        "width": 386,
+        "height": 31.9375,
+        "fontSize": "11px",
+        "background": "linear-gradient(rgb(248, 251, 255), rgb(215, 230, 245))",
+        "padding": [
+          "7px",
+          "9px",
+          "7px",
+          "9px"
+        ],
+        "display": "flex"
+      },
+      "target": {
+        "width": 386,
+        "height": 31.9375,
+        "fontSize": "11px",
+        "background": "linear-gradient(rgb(248, 251, 255), rgb(215, 230, 245))",
+        "padding": [
+          "7px",
+          "9px",
+          "7px",
+          "9px"
+        ],
+        "display": "flex"
+      }
+    },
+    {
+      "surface": "calendar",
+      "role": ".chapter-list",
+      "source": {
+        "width": 386,
+        "height": 47.984375,
+        "background": "rgb(255, 255, 255)"
+      },
+      "target": {
+        "width": 386,
+        "height": 47.984375,
+        "background": "rgb(255, 255, 255)"
+      }
+    },
+    {
+      "surface": "questions",
+      "role": "#questionsDialog",
+      "source": {
+        "width": 390,
+        "height": 826
+      },
+      "target": {
+        "width": 390,
+        "height": 826
+      }
+    },
+    {
+      "surface": "questions",
+      "role": ".question-context",
+      "source": {
+        "height": 52,
+        "fontSize": "12px",
+        "lineHeight": "17.4px"
+      },
+      "target": {
+        "height": 37,
+        "fontSize": "12px",
+        "lineHeight": "18px"
+      }
+    },
+    {
+      "surface": "questions",
+      "role": ".question-compose",
+      "source": {
+        "height": 127.328125,
+        "padding": [
+          "10px",
+          "12px",
+          "10px",
+          "12px"
+        ]
+      },
+      "target": {
+        "height": 134.9375,
+        "padding": [
+          "10px",
+          "12px",
+          "10px",
+          "12px"
+        ]
+      }
+    },
+    {
+      "surface": "questions",
+      "role": "#questionText",
+      "source": {
+        "width": 362,
+        "height": 72,
+        "fontSize": "16px",
+        "lineHeight": "22.4px"
+      },
+      "target": {
+        "width": 362,
+        "height": 72,
+        "fontSize": "16px",
+        "lineHeight": "22.4px"
+      }
+    },
+    {
+      "surface": "reader-desktop",
+      "role": ".app-header",
+      "source": {
+        "width": 942,
+        "height": 61,
+        "display": "flex"
+      },
+      "target": {
+        "width": 942,
+        "height": 95,
+        "display": "grid"
+      }
+    }
+  ],
+  "images": [
+    {
+      "surface": "reader",
+      "viewport": {
+        "width": 402,
+        "height": 874
+      },
+      "source": {
+        "image": "source/source-reader.png",
+        "sha256": "61324ccdf3a464109b25e742c07274c3894f872e2259445cdac8fb92b39bcd70",
+        "pixels": [
+          402,
+          874
+        ]
+      },
+      "target": {
+        "image": "target/target-reader.png",
+        "sha256": "3f10b170dcd9ee26abd7a1192e583486ca7f532bb05aba4a3b1413cb066d67a2",
+        "pixels": [
+          402,
+          874
+        ]
+      }
+    },
+    {
+      "surface": "index",
+      "viewport": {
+        "width": 402,
+        "height": 874
+      },
+      "source": {
+        "image": "source/source-index.png",
+        "sha256": "335c6d4375913c316eb0461bc0c1971baca8481b403ad10bebfcc5d6e3cd7705",
+        "pixels": [
+          402,
+          874
+        ]
+      },
+      "target": {
+        "image": "target/target-index.png",
+        "sha256": "38c01295c71ebd011476ec01320f5015678bdc9fdb5f107d2015c06ce22a9e09",
+        "pixels": [
+          402,
+          874
+        ]
+      }
+    },
+    {
+      "surface": "settings",
+      "viewport": {
+        "width": 402,
+        "height": 874
+      },
+      "source": {
+        "image": "source/source-settings.png",
+        "sha256": "45d023df53bdf80d014f45140061d428ff22cd08915bd6497c8bacbc4b884a78",
+        "pixels": [
+          402,
+          874
+        ]
+      },
+      "target": {
+        "image": "target/target-settings.png",
+        "sha256": "b44f92b39caf06e3f7dac6b179d536bc4af2104383ec7c5a4d987411322ea374",
+        "pixels": [
+          402,
+          874
+        ]
+      }
+    },
+    {
+      "surface": "settings-detail",
+      "viewport": {
+        "width": 402,
+        "height": 874
+      },
+      "source": {
+        "image": "source/source-settings-detail.png",
+        "sha256": "bde91c6ef7d583a1d99aed5b03d3beb061a7c50d745f2d2c62498f7f78a97bf9",
+        "pixels": [
+          402,
+          874
+        ]
+      },
+      "target": {
+        "image": "target/target-settings-detail.png",
+        "sha256": "7990f61df7ce1c306fe20fbb1f187db9dee2fd2fcf702f3712b008efb0006ad4",
+        "pixels": [
+          402,
+          874
+        ]
+      }
+    },
+    {
+      "surface": "chapter-book",
+      "viewport": {
+        "width": 402,
+        "height": 874
+      },
+      "source": {
+        "image": "source/source-chapter-book.png",
+        "sha256": "29b803027529a9232400d98cb210a2191a98ca56db00c34e9d5002fe04f5316e",
+        "pixels": [
+          402,
+          874
+        ]
+      },
+      "target": {
+        "image": "target/target-chapter-book.png",
+        "sha256": "5010635bfaacefebbe00841204ce6256c599f63f8284419b82d5f93c8df1ceed",
+        "pixels": [
+          402,
+          874
+        ]
+      }
+    },
+    {
+      "surface": "calendar",
+      "viewport": {
+        "width": 402,
+        "height": 874
+      },
+      "source": {
+        "image": "source/source-calendar.png",
+        "sha256": "b027597a14c5f1393b300431a38a67da341a548aeb34a86331a48f99ace169b8",
+        "pixels": [
+          402,
+          874
+        ]
+      },
+      "target": {
+        "image": "target/target-calendar.png",
+        "sha256": "7b3268fd69896b92c5c19f113a33c763aa0152d79494b4674f8023360a6fd42a",
+        "pixels": [
+          402,
+          874
+        ]
+      }
+    },
+    {
+      "surface": "questions",
+      "viewport": {
+        "width": 402,
+        "height": 874
+      },
+      "source": {
+        "image": "source/source-questions.png",
+        "sha256": "3c748d5b43149180e02d526eb7bad441b79d1d2fd1151f9ae907457c31ce26d6",
+        "pixels": [
+          402,
+          874
+        ]
+      },
+      "target": {
+        "image": "target/target-questions.png",
+        "sha256": "8f3ac3606cc2fa869909b2e555e9b07640bbd646fb78cce411691259d65cb1f9",
+        "pixels": [
+          402,
+          874
+        ]
+      }
+    },
+    {
+      "surface": "reader-desktop",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "source": {
+        "image": "source/source-reader-desktop.png",
+        "sha256": "79e96e99a7a8cbce55e87de739b0ae630f41d2a9ce02d733689bd5b126025ad7",
+        "pixels": [
+          1280,
+          800
+        ]
+      },
+      "target": {
+        "image": "target/target-reader-desktop.png",
+        "sha256": "c33174c4372ab5c64d9b56d52e1e9b4f5121c5094a3e126c15707acef0ffadd6",
+        "pixels": [
+          1280,
+          800
+        ]
+      }
+    }
+  ],
+  "finalErrors": [],
+  "allPathsAreRelative": true
+}

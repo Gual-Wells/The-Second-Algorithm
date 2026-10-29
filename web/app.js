@@ -8,8 +8,8 @@ import { isChapterDate, shanghaiDate, formatChapterDate, shiftMonth, weekDates, 
 const $ = id => document.getElementById(id);
 const esc = text => String(text ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
 const S = { owner: null, library: null, records: {}, docs: new Map(), knowledge: new Map(), active: null,
-  offline: false, sequence: 0, connectionSequence: 0, pendingRoute: null, updateReady: false,
-  settings: { fontSize: 17, codeSize: 13.5, wrapCode: false, preload: true } };
+  offline: false, stateSyncFailed: false, sequence: 0, connectionSequence: 0, pendingRoute: null, updateReady: false,
+  settings: { fontSize: 15, codeSize: 12, wrapCode: false, preload: true } };
 const SESSION_KEY = 'second-algorithm:last-session';
 const prefix = () => `second-algorithm:${S.owner}:`;
 const readLocal = (key, fallback = null) => { try { return JSON.parse(localStorage.getItem(prefix() + key)) ?? fallback; } catch { return fallback; } };
@@ -82,7 +82,7 @@ function lock(message = '使用通行密钥进入阅读室。') {
   book.query = ''; book.tab = 'list'; book.month = shanghaiDate().slice(0, 7);
   questions?.destroy(); questions = null;
   S.sequence++; S.connectionSequence++; S.owner = null; S.active = null; S.library = null; S.docs.clear(); S.knowledge.clear(); S.records = {};
-  S.pendingRoute = null; downloads.clear(); downloadStatus.clear(); afterSheetClose = null; sheetOpener = null; sheetPosition = null; observedLocation = ''; initialRoute = true;
+  S.pendingRoute = null; S.stateSyncFailed = false; downloads.clear(); downloadStatus.clear(); afterSheetClose = null; sheetOpener = null; sheetPosition = null; observedLocation = ''; initialRoute = true;
   clearTimeout(reconnectTimer); clearTimeout(positionTimer); clearTimeout(positionSaveTimer); journalInstance = null;
   localStorage.removeItem(SESSION_KEY); runtime.clear();
   // Expired identity must not leave protected prose in the closed dialog.
@@ -113,7 +113,7 @@ async function connect() {
 }
 function showStartup(kind, message = '') {
   const loading = kind === 'loading', failed = kind === 'error';
-  $('app').classList.add('login-mode'); $('loginView').hidden = false; $('chapterNav').hidden = true;
+  $('app').classList.add('login-mode'); $('loginView').hidden = false; $('chapterNav').hidden = true; $('readerFrame').hidden = true;
   $('chapterView').hidden = $('readerView').hidden = true; $('headerActions').hidden = true;
   $('loginView').querySelector('.state-card').dataset.state = kind;
   $('startupTitle').textContent = loading ? '正在打开章节' : '打开你的算法读书器';
@@ -122,17 +122,20 @@ function showStartup(kind, message = '') {
   $('enrollForm').hidden = $('loginButton').hidden = true; $('retryButton').hidden = !failed;
   $('startupInstall').hidden = loading || matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
   $('chapterView').classList.remove('is-opening'); $('chapterView').removeAttribute('aria-busy');
-  $('readingNotice').hidden = true;
+  $('readingNotice').hidden = true; $('readerStatusbar').classList.remove('chapter-load-status'); delete $('readerStatusbar').dataset.tone;
 }
 function showReaderShell() {
-  $('loginView').hidden = true; $('headerActions').hidden = false; $('app').classList.remove('login-mode');
-  renderChapterNavigation();
+  $('loginView').hidden = true; $('readerFrame').hidden = false; $('headerActions').hidden = false; $('app').classList.remove('login-mode');
+  renderChapterNavigation(); updateConnection();
 }
 function showChapterOpening(collection, error = null, route = '') {
   showReaderShell(); $('readerView').hidden = true; $('chapterView').hidden = false;
   $('chapterView').classList.add('is-opening'); $('chapterView').setAttribute('aria-busy', String(!error));
   $('readingNotice').hidden = true;
-  $('chapterView').innerHTML = `<div class="chapter-opening-body"><section class="state-card opening-card" data-state="${error ? 'error' : 'loading'}"><div class="state-band"><span>第二算法</span><small>SECOND ALGORITHM</small></div><div class="state-body"><img class="state-icon" src="/icons/icon.svg" width="56" height="56" alt=""><h2>${error ? '本章暂时无法打开' : '正在打开章节'}</h2><p>${esc(error || `正在载入《${collection.title}》。`)}</p>${error ? `<div class="action-row"><button type="button" data-show-library>章节册</button><button type="button" class="primary" data-retry-route="${esc(route)}">重新打开</button></div>` : ''}</div></section></div><div class="chapter-load-status"${error ? ' data-tone="error"' : ''} role="status"><span>${error ? '章节未能打开。' : '正在打开章节…'}</span></div>`;
+  $('chapterView').innerHTML = `<div class="chapter-opening-body"><section class="state-card opening-card" data-state="${error ? 'error' : 'loading'}"><div class="state-band"><span>第二算法</span><small>SECOND ALGORITHM</small></div><div class="state-body"><img class="state-icon" src="/icons/icon.svg" width="56" height="56" alt=""><h2>${error ? '本章暂时无法打开' : '正在打开章节'}</h2><p>${esc(error || `正在载入《${collection.title}》。`)}</p>${error ? `<div class="button-row"><button class="bevel-button" type="button" data-show-library>章节册</button><button type="button" class="primary-button" data-retry-route="${esc(route)}">重新打开</button></div>` : ''}</div></section></div>`;
+  $('readerStatusbar').classList.add('chapter-load-status'); $('readerStatusbar').dataset.tone = error ? 'error' : 'loading';
+  $('syncStatus').textContent = error ? '章节未能打开。' : '正在打开章节…'; $('readingPosition').textContent = '';
+
 }
 function mergeRemoteState(state) {
   for (const [key, record] of Object.entries(state || {})) {
@@ -152,15 +155,15 @@ async function enter(owner, offline, connection) {
   S.owner = owner; S.offline = offline;
   const catalog = offline ? readLocal('catalog') : await api('/api/library');
   if (connection !== S.connectionSequence || S.owner !== owner) return;
-  S.library = publishedLibrary(catalog); writeLocal('catalog', S.library); S.records = readLocal('records', {});
+  S.library = publishedLibrary(catalog); writeLocal('catalog', S.library); S.records = readLocal('records', {}); S.stateSyncFailed = false;
   if (!offline) {
     try { const { state } = await api('/api/state'); if (connection !== S.connectionSequence || S.owner !== owner) return; mergeRemoteState(state); }
-    catch (error) { if (error.status === 401) throw error; toast('同步暂不可用，阅读位置先保存在本机。'); }
+    catch (error) { if (error.status === 401) throw error; S.stateSyncFailed = true; toast('同步暂不可用，阅读位置先保存在本机。'); }
     writeLocal('records', S.records); localStorage.setItem(SESSION_KEY, JSON.stringify({ owner, verifiedAt: Date.now() }));
   }
-  S.settings = { fontSize: 17, codeSize: 13.5, wrapCode: false, preload: true, ...(S.records.preferences?.value || readLocal('preferences', {})) };
-  S.settings.fontSize = Math.max(14, Math.min(24, Number(S.settings.fontSize) || 17));
-  S.settings.codeSize = Math.max(10, Math.min(20, Number(S.settings.codeSize) || 13.5)); applySettings();
+  S.settings = { fontSize: 15, codeSize: 12, wrapCode: false, preload: true, ...(S.records.preferences?.value || readLocal('preferences', {})) };
+  S.settings.fontSize = Math.max(14, Math.min(24, Number(S.settings.fontSize) || 15));
+  S.settings.codeSize = Math.max(10, Math.min(20, Number(S.settings.codeSize) || 12)); applySettings();
   questions ||= createReaderQuestions({ getContext: () => ({ owner: S.owner, chapterId: S.active?.collection.id, title: S.active?.collection.title, revision: S.active?.meta.revision }), toast, transport: null });
   let verifiedAt = Date.now(); if (offline) { try { verifiedAt = JSON.parse(localStorage.getItem(SESSION_KEY)).verifiedAt; } catch {} }
   await swMessage({ type: 'OWNER', owner, verifiedAt }); if (connection !== S.connectionSequence || S.owner !== owner) return;
@@ -219,7 +222,8 @@ function routeUnavailable(message) {
     $('chapterView').innerHTML = `<section class="state-card empty-card route-error"><div class="state-band"><span>阅读位置不可用</span></div><div class="state-body"><h2>无法打开这个位置</h2><p>${esc(message)}</p>${action}</div></section>`;
     $('readingNotice').hidden = true;
   }
-  renderChapterNavigation();
+  $('readerStatusbar').classList.remove('chapter-load-status'); delete $('readerStatusbar').dataset.tone;
+  renderChapterNavigation(); updateConnection();
 }
 async function route() {
   if (!S.owner || !S.library || sheetHistory) return;
@@ -231,15 +235,16 @@ async function route() {
   if (!rows.length) {
     showReaderShell(); $('chapterView').classList.remove('is-opening'); $('chapterView').removeAttribute('aria-busy');
     S.active = null; runtime.clear(); $('readerView').hidden = true; $('chapterView').hidden = false;
-    $('chapterView').innerHTML = '<section class="state-card empty-card"><div class="state-band"><span>算法章节</span><small>CHAPTERS</small></div><div class="state-body"><img class="state-icon" src="/icons/icon.svg" alt=""><h2>暂无已发布章节</h2><p>正式发布的章节会出现在章节册与日历中。</p></div></section>'; renderChapterNavigation(); return;
+    $('chapterView').innerHTML = '<section class="state-card empty-card"><div class="state-band"><span>算法章节</span><small>CHAPTERS</small></div><div class="state-body"><img class="state-icon" src="/icons/icon.svg" alt=""><h2>暂无已发布章节</h2><p>正式发布的章节会出现在章节册与日历中。</p></div></section>';
+    $('readerStatusbar').classList.remove('chapter-load-status'); delete $('readerStatusbar').dataset.tone; renderChapterNavigation(); updateConnection(); return;
   }
   const routeDepth = pathname.split('/').length;
   if (!collection || !libraryRoute && (!['read', 'chapter'].includes(section) || routeDepth !== (section === 'read' ? 4 : 3))) { routeUnavailable('这个章节不存在或已撤回。'); return; }
   if (libraryRoute && S.active) { $('readingNotice').hidden = true; showLibrary(); return; }
   const meta = section === 'read' ? collection.documents.find(item => item.id === documentId) : selectedDocument(collection);
   if (!meta) { routeUnavailable('这个阅读位置不存在或已撤回。'); return; }
-  const isRead = section === 'read' && collection.id === collectionId;
-  const canonical = isRead ? `#/read/${collection.id}/${meta.id}` : `#/chapter/${collection.id}`;
+  const fromStart = section === 'chapter' || libraryRoute;
+  const canonical = `#/read/${collection.id}/${meta.id}`;
   const previous = S.active, wasRead = runtime.state.view === 'reader'; S.pendingRoute = raw;
   if (!previous) showChapterOpening(collection);
   else {
@@ -258,12 +263,13 @@ async function route() {
     if (!position) position = local; if (same && wasRead) savePosition(false);
     S.active = { collection, meta, content, route: canonical }; S.pendingRoute = null;
     $('chapterView').classList.remove('is-opening'); $('chapterView').removeAttribute('aria-busy');
+    $('readerStatusbar').classList.remove('chapter-load-status'); delete $('readerStatusbar').dataset.tone;
     showReaderShell();
-    if (!same) position = runtime.setChapter(S.active, position); else if (!isRead) runtime.capture();
-    applySettings(); if (isRead) runtime.showReader(position, new URLSearchParams(query).get('anchor')); else runtime.showChapter();
+    if (!same) position = runtime.setChapter(S.active, position);
+    applySettings(); runtime.showReader(position, new URLSearchParams(query).get('anchor'), fromStart);
     initialRoute = false; $('readingNotice').hidden = true; writeLocal(`last-document:${collection.id}`, meta.id); writeLocal('lastRoute', canonical);
-    if (isRead) writeLocal('resume', { collection: collection.id, document: meta.id, route: canonical });
-    if (raw !== canonical) { history.replaceState(isRead ? { ...history.state, readingPosition: runtime.position, readingOwner: S.owner, readingDocument: meta.id } : null, '', canonical); observedLocation = canonical; }
+    writeLocal('resume', { collection: collection.id, document: meta.id, route: canonical });
+    if (raw !== canonical) { history.replaceState({ ...history.state, readingPosition: runtime.position, readingOwner: S.owner, readingDocument: meta.id }, '', canonical); observedLocation = canonical; }
     updateConnection(); if (S.settings.preload && !S.offline) void downloadCollection(collection, false);
   } catch (error) {
     if (sequence !== S.sequence || !S.owner) return; S.pendingRoute = null;
@@ -291,7 +297,7 @@ function storePosition(value) {
   // A delayed old-document save may update its local coordinate while a new
   // chapter is loading, but must not overwrite that new history entry.
   if (!S.pendingRoute) history.replaceState({ ...history.state, readingPosition: value, readingOwner: S.owner, readingDocument: S.active.meta.id }, '', location.href);
-  writeLocal(key, value); S.records[key] = { ...S.records[key], value, dirty: true }; writeLocal('records', S.records);
+  writeLocal(key, value); S.records[key] = { ...S.records[key], value, dirty: true }; writeLocal('records', S.records); updateConnection();
   clearTimeout(positionTimer); positionTimer = setTimeout(() => { void syncRecord(key); }, 1400);
 }
 function savePosition(historyEntry = true) {
@@ -312,21 +318,30 @@ async function syncRecord(key) {
       } catch { return; }
     }
   })();
-  syncing.set(key, job); try { await job; } finally { if (syncing.get(key) === job) syncing.delete(key); }
+  syncing.set(key, job); updateConnection(); try { await job; } finally { if (syncing.get(key) === job) syncing.delete(key); if (S.owner === owner) updateConnection(); }
 }
 async function syncPending() { for (const [key, record] of Object.entries(S.records)) if (record.dirty && !key.startsWith('notes:')) await syncRecord(key); }
 function updateConnection() {
   $('app').dataset.offline = String(S.offline);
+  $('headerMeta').textContent = `算法实战 · ${S.owner ? S.offline ? '离线阅读' : `${S.library?.collections.length || 0}章已发布` : '正在连接'}`;
+  const pending = Object.entries(S.records).some(([key, record]) => !key.startsWith('notes:') && record.dirty);
+  $('statusLamp').classList.toggle('offline', S.offline || S.stateSyncFailed || pending);
+  if (!$('chapterView').classList.contains('is-opening')) $('syncStatus').textContent = !S.owner ? '正在连接章节…' : S.offline ? '离线阅读 · 已保存在本机' : S.stateSyncFailed ? '同步暂不可用 · 已保存在本机' : syncing.size ? '正在同步…' : pending ? '已保存在本机，等待同步' : '已同步';
   const status = $('offlineStatus'); if (status) { status.hidden = !S.offline; status.textContent = S.offline ? '当前离线，已下载章节仍可阅读。' : ''; }
 }
 function applySettings() {
   document.documentElement.style.setProperty('--reading-size', S.settings.fontSize + 'px'); document.documentElement.style.setProperty('--code-size', S.settings.codeSize + 'px');
   $('app').classList.toggle('wrap-code', Boolean(S.settings.wrapCode)); $('sheetDialog').classList.toggle('wrap-code', Boolean(S.settings.wrapCode));
 }
-function saveSettings() { writeLocal('preferences', S.settings); S.records.preferences = { value: { ...S.settings }, dirty: true }; writeLocal('records', S.records); void syncRecord('preferences'); }
+function saveSettings() { writeLocal('preferences', S.settings); S.records.preferences = { value: { ...S.settings }, dirty: true }; writeLocal('records', S.records); updateConnection(); void syncRecord('preferences'); }
 function showSheet(title, html, view, parent = null) {
   cancelPendingRoute(); questions?.captureDraft(); sheetSequence++; sheetView = view; sheetParent = parent;
-  $('sheetDialog').dataset.view = view; $('sheetTitle').textContent = title; $('sheetBody').innerHTML = html; $('sheetBack').hidden = !parent;
+  $('sheetDialog').dataset.view = view; $('sheetFrame').dataset.view = view;
+  const kind = view === 'index' ? 'index-sheet' : view === 'questions' ? 'questions-sheet' : ['library', 'calendar-day'].includes(view) ? 'chapter-book-sheet' : ['settings', 'reading-settings', 'device-settings', 'files', 'source'].includes(view) ? 'settings-sheet' : 'help-sheet';
+  $('sheetFrame').className = 'sheet ' + kind;
+  $('sheetKicker').textContent = ({ index: 'SECTION INDEX', library: 'CHAPTER LIBRARY', 'calendar-day': 'CHAPTER LIBRARY', questions: 'CHAPTER QUESTIONS', settings: 'READER SETTINGS', 'reading-settings': 'READING', 'device-settings': 'THIS DEVICE', files: 'CHAPTER FILES', source: 'C++ SOURCE', knowledge: 'REFERENCE', install: 'HOME SCREEN' })[view] || 'READER';
+  $('sheetTitle').textContent = title; $('sheetBody').innerHTML = html; $('sheetBack').hidden = !parent;
+  $('sheetBack').textContent = view === 'source' ? '‹ 本章文件' : ['reading-settings', 'device-settings', 'files'].includes(view) ? '‹ 设置' : view === 'install' ? '‹ 主屏幕与账户' : view === 'calendar-day' ? '‹ 章节册' : '‹ 返回';
   if (!$('sheetDialog').open) {
     sheetPosition = runtime.capture(); savePosition(); sheetOpener = document.activeElement;
     history.pushState({ ...history.state, algorithmSheet: true }, '', location.href); sheetHistory = true; sheetClosing = false; $('sheetDialog').showModal();
@@ -341,16 +356,17 @@ function waitForSheetClose(action) {
   if ($('sheetDialog').open || !sheetHistory) return false; afterSheetClose = action; if (!sheetClosing) { sheetClosing = true; history.back(); } return true;
 }
 function rememberSheet(render) { const top = $('sheetBody').scrollTop; return () => { render(); $('sheetBody').scrollTop = top; }; }
-function showToc(reveal = false) {
-  if (waitForSheetClose(() => showToc(reveal)) || !S.active) return;
-  if (!$('sheetDialog').open && (reveal ? runtime.revealDesktopToc() : runtime.toggleDesktopToc())) return;
-  showSheet('本章目录', runtime.tocHTML('sheet-toc'), 'toc'); requestAnimationFrame(() => runtime.scrollCurrentToc($('sheetBody')));
+function showIndex() {
+  if (waitForSheetClose(showIndex) || !S.active) return;
+  showSheet('篇节索引', `<div class="index-search"><label for="indexFilter">查找本章篇节</label><input class="text-input" id="indexFilter" type="search" placeholder="输入标题筛选"></div><div class="index-list" id="indexList">${runtime.indexHTML()}</div>`, 'index');
+  requestAnimationFrame(() => runtime.scrollCurrentIndex($('indexList')));
 }
-function showQuestions() { if (waitForSheetClose(showQuestions) || !S.active) return; showSheet('本章答疑', '', 'questions'); questions.render($('sheetBody')); }
+function showQuestions() { if (waitForSheetClose(showQuestions) || !S.active) return; showSheet('章节答疑', '', 'questions'); questions.render($('sheetBody')); }
 function chapterTitle(collection) { return `第 ${collection.chapterNumber} 章 · ${collection.title}`; }
 function renderChapterNavigation() {
   const rows = orderedChapters(S.library?.collections), current = S.active?.collection;
-  $('tocButton').disabled = $('questionsButton').disabled = !current;
+  $('app').classList.toggle('empty-mode', Boolean(S.owner) && !rows.length);
+  $('questionsButton').disabled = !current; if (!current) $('previousMajor').disabled = $('nextMajor').disabled = true;
   $('chapterNav').hidden = !S.owner || !rows.length;
   if (!S.owner) { $('dayStrip').replaceChildren(); $('currentDateLabel').textContent = '选择阅读日期'; $('chapterNavSubtitle').textContent = '章节册与日历'; return; }
   const index = rows.findIndex(row => row.id === current?.id);
@@ -364,21 +380,21 @@ function renderChapterNavigation() {
   const today = shanghaiDate(), byDate = chaptersByDate(rows), anchor = isChapterDate(current?.date) ? current.date : rows.filter(row => isChapterDate(row.date)).at(-1)?.date || today;
   $('dayStrip').innerHTML = weekDates(anchor).map((date, i) => {
     const entries = byDate.get(date) || [], label = `${formatChapterDate(date)}，${entries.length ? entries.map(chapterTitle).join('；') : '尚未发布'}`;
-    return `<button type="button" class="day-chip${entries.length ? ' has-chapter' : ''}${date === current?.date ? ' selected' : ''}${date === today ? ' today' : ''}" data-calendar-day="${date}"${entries.length ? '' : ' disabled'} aria-label="${esc(label)}"><span>${'一二三四五六日'[i]}</span><strong>${Number(date.slice(-2))}</strong>${entries.length > 1 ? `<small>${entries.length}章</small>` : ''}</button>`;
+    return `<button type="button" class="day-chip${entries.length ? ' has-chapter' : ''}${date === current?.date ? ' selected' : ''}${date === today ? ' today' : ''}" data-calendar-day="${date}"${entries.length ? '' : ' disabled'} aria-label="${esc(label)}"><span class="dow">${'一二三四五六日'[i]}</span><span class="dom">${Number(date.slice(-2))}</span>${entries.length > 1 ? `<small>${entries.length}章</small>` : ''}</button>`;
   }).join('');
 }
 function bookRow(collection) {
-  return `<button type="button" class="library-row" data-open-chapter="${esc(collection.id)}"><span><small>${esc(`第 ${collection.chapterNumber} 章 · ${isChapterDate(collection.date) ? collection.date.slice(2) : '日期未登记'}`)}</small><strong>${esc(collection.title)}</strong></span><span aria-hidden="true">›</span></button>`;
+  return `<section class="chapter-book-entry${S.active?.collection.id === collection.id ? ' active' : ''}"><button type="button" class="chapter-book-title library-row" data-open-chapter="${esc(collection.id)}" aria-label="打开第${collection.chapterNumber}章：${esc(collection.title)}"><span class="chapter-book-label"><small>${esc(`第 ${collection.chapterNumber} 章 · ${isChapterDate(collection.date) ? collection.date.slice(2) : '日期未登记'}`)}</small><strong>${esc(collection.title)}</strong></span><b aria-hidden="true">›</b></button></section>`;
 }
 function bookList(rows) {
   const query = book.query.trim().toLocaleLowerCase(), matches = orderedChapters(rows, true).filter(row => [row.title, row.chapterNumber, row.date, chapterTitle(row)].join(' ').toLocaleLowerCase().includes(query));
   let group = '';
   const html = matches.map(row => {
     const month = isChapterDate(row.date) ? row.date.slice(0, 7) : '', title = month ? `${month.slice(0, 4)} 年 ${Number(month.slice(5))} 月` : '日期未登记';
-    const band = group !== title ? `<h3 class="book-month">${title}</h3>` : ''; group = title;
+    const band = group !== title ? `<h3 class="chapter-book-month book-month">${title}</h3>` : ''; group = title;
     return band + bookRow(row);
   }).join('');
-  return { count: matches.length, html: html || `<p class="book-empty">${query ? '没有匹配的章节，试试标题、编号或日期。' : '第一章发布后会出现在这里。'}</p>` };
+  return { count: matches.length, html: html || `<p class="chapter-list-empty book-empty">${query ? '没有匹配的章节，试试标题、编号或日期。' : '第一章发布后会出现在这里。'}</p>` };
 }
 function calendarPanel() {
   const rows = orderedChapters(S.library?.collections), byDate = chaptersByDate(rows), today = shanghaiDate(), current = S.active?.collection;
@@ -389,20 +405,20 @@ function calendarPanel() {
     return `<button type="button" class="calendar-day${entries.length ? ' has-chapter' : ''}${date === current?.date ? ' selected' : ''}${date === today ? ' today' : ''}" data-book-day="${date}"${entries.length ? '' : ' disabled'} aria-label="${esc(`${formatChapterDate(date)}，${entries.length ? entries.map(chapterTitle).join('；') : '尚未发布'}`)}"><strong>${i + 1}</strong>${entries.length > 1 ? `<small>${entries.length}章</small>` : ''}</button>`;
   }).join('');
   const monthly = rows.filter(row => row.date?.startsWith(book.month));
-  return `<div class="calendar-controls"><button type="button" data-month-offset="-1" aria-label="上个月">‹</button><input id="monthPicker" type="month" value="${book.month}" aria-label="跳转月份"><button type="button" data-current-month>本月</button><button type="button" data-month-offset="1" aria-label="下个月">›</button></div><div class="calendar-weekdays" aria-hidden="true">${[...'一二三四五六日'].map(day => `<span>${day}</span>`).join('')}</div><div class="chapter-calendar">${'<span></span>'.repeat(blanks)}${days}</div><h3 class="book-month">本月章节 <small>${monthly.length} 章</small></h3>${monthly.map(bookRow).join('') || '<p class="book-empty">这个月还没有已发布的章节。</p>'}`;
+  return `<div class="chapter-calendar-panel"><div class="month-controls calendar-controls"><button class="bevel-button month-arrow" type="button" data-month-offset="-1" aria-label="上个月">‹</button><input id="monthPicker" type="month" value="${book.month}" aria-label="跳转月份"><button class="bevel-button" type="button" data-current-month>本月</button><button class="bevel-button month-arrow" type="button" data-month-offset="1" aria-label="下个月">›</button></div><div class="calendar-weekdays" aria-hidden="true">${[...'一二三四五六日'].map(day => `<span>${day}</span>`).join('')}</div><div class="calendar chapter-calendar">${'<span></span>'.repeat(blanks)}${days}</div><div class="section-band"><strong>本月章节</strong><span>${monthly.length} 章</span></div><div class="chapter-list">${monthly.map(bookRow).join('') || '<p class="chapter-list-empty book-empty">这个月还没有已发布的章节。</p>'}</div></div>`;
 }
 function showLibrary() {
   const withinBook = ['library', 'calendar-day'].includes(sheetView) && $('sheetDialog').open && !sheetClosing;
   if (!withinBook && waitForSheetClose(showLibrary)) return;
   const list = bookList(S.library?.collections);
-  showSheet('章节册', `<div class="book-tabs" role="tablist" aria-label="章节册视图"><button type="button" role="tab" data-book-tab="list" aria-selected="${book.tab === 'list'}" tabindex="${book.tab === 'list' ? 0 : -1}">章节目录</button><button type="button" role="tab" data-book-tab="calendar" aria-selected="${book.tab === 'calendar'}" tabindex="${book.tab === 'calendar' ? 0 : -1}">日历</button></div>${book.tab === 'list' ? `<label class="book-search" for="chapterBookSearch"><span>全部章节 <small id="chapterBookCount">${list.count} 章</small></span><input id="chapterBookSearch" type="search" value="${esc(book.query)}" placeholder="查找标题、编号或日期"></label><div id="chapterBookList">${list.html}</div>` : calendarPanel()}`, 'library');
+  showSheet('章节册', `<div class="chapter-book-tabs book-tabs" role="tablist" aria-label="章节册视图"><button type="button" role="tab" data-book-tab="list" aria-selected="${book.tab === 'list'}" tabindex="${book.tab === 'list' ? 0 : -1}">章节目录</button><button type="button" role="tab" data-book-tab="calendar" aria-selected="${book.tab === 'calendar'}" tabindex="${book.tab === 'calendar' ? 0 : -1}">日历</button></div>${book.tab === 'list' ? `<label class="chapter-book-search book-search" for="chapterBookSearch"><span>全部章节 <small id="chapterBookCount">${list.count} 章</small></span><input class="text-input" id="chapterBookSearch" type="search" value="${esc(book.query)}" placeholder="查找标题、编号或日期"></label><div class="chapter-book-scroll" id="chapterBookList">${list.html}</div>` : calendarPanel()}`, 'library');
 }
 function openCalendarDay(date, fromBook = false) {
   const rows = chaptersByDate(S.library?.collections).get(date) || [];
   if (!rows.length) return;
   if (rows.length === 1) { openCalendarChapter(rows[0], !fromBook); return; }
   const entries = rows.map(row => fromBook ? bookRow(row) : bookRow(row).replace('data-open-chapter=', 'data-resume-chapter='));
-  showSheet(formatChapterDate(date), `<p class="book-empty">选择这一天的章节</p>${entries.join('')}`, 'calendar-day', fromBook ? rememberSheet(showLibrary) : null);
+  showSheet(formatChapterDate(date), `<p class="chapter-list-empty book-empty">选择这一天的章节</p>${entries.join('')}`, 'calendar-day', fromBook ? rememberSheet(showLibrary) : null);
 }
 function openCalendarChapter(collection, resume = true) {
   const meta = selectedDocument(collection);
@@ -410,22 +426,29 @@ function openCalendarChapter(collection, resume = true) {
 }
 function showSettings() {
   if (waitForSheetClose(showSettings)) return;
-  showSheet('阅读设置', `<section class="settings-group"><h3 class="settings-group-title">阅读</h3><div class="settings-list">
-    <div class="settings-row setting-value"><span>正文字号</span><div class="setting-stepper"><button type="button" data-font="-1" aria-label="缩小正文字号">−</button><output id="bodySizeOutput">${S.settings.fontSize}</output><button type="button" data-font="1" aria-label="放大正文字号">＋</button></div></div>
-    <div class="settings-row setting-value"><span>代码字号</span><div class="setting-stepper"><button type="button" data-code-font="-0.5" aria-label="缩小代码字号">−</button><output id="codeSizeOutput">${S.settings.codeSize}</output><button type="button" data-code-font="0.5" aria-label="放大代码字号">＋</button></div></div>
-    <label class="settings-row setting-switch"><span>代码折行</span><input id="wrapCode" role="switch" type="checkbox"${S.settings.wrapCode ? ' checked' : ''}></label>
-    </div></section><section class="settings-group"><h3 class="settings-group-title">离线与文件</h3><div class="settings-list">
-    <label class="settings-row setting-switch"><span>打开时下载本章</span><input id="preloadContent" role="switch" type="checkbox"${S.settings.preload ? ' checked' : ''}></label>
-    ${S.active ? `<button type="button" class="settings-row setting-action" data-download-current><span>下载本章供离线阅读</span><span class="row-direction" aria-hidden="true">↓</span></button><p id="downloadStatus" class="setting-status" role="status">${esc(downloadStatus.get(S.active.collection.id) || '离线包尚未确认')}</p><button type="button" class="settings-row setting-navigation" data-show-files><span>本章文件</span><span class="row-direction" aria-hidden="true">›</span></button>` : ''}
-    <p id="offlineStatus" class="setting-status" role="status" hidden></p>
-    </div></section><section class="settings-group"><h3 class="settings-group-title">应用与账户</h3><div class="settings-list">
-    <button type="button" class="settings-row setting-action" data-check-updates><span>检查内容更新</span><span class="row-direction" aria-hidden="true">↻</span></button><button type="button" class="settings-row setting-action" data-reload-app${S.updateReady ? '' : ' hidden'}><span>重新载入应用</span><span class="row-direction" aria-hidden="true">↻</span></button><button type="button" class="settings-row setting-navigation" data-install-info><span>添加到主屏幕</span><span class="row-direction" aria-hidden="true">›</span></button><button type="button" class="settings-row setting-action" data-logout><span>退出登录</span></button>
-    </div></section>`, 'settings'); updateConnection();
+  showSheet('阅读器设置', `<div class="settings-home"><div class="section-band">阅读</div><button type="button" class="settings-row" data-show-reading-settings><span>阅读偏好</span><b aria-hidden="true">›</b></button>
+    <section class="settings-section settings-audio-row"><div class="section-band"><strong>离线下载</strong><span>OFFLINE</span></div><div class="settings-body"><label class="switch-row" for="preloadContent"><span>打开时下载本章已有文件</span><input id="preloadContent" role="switch" type="checkbox"${S.settings.preload ? ' checked' : ''}></label>${S.active ? `<div class="button-row"><button class="bevel-button" type="button" data-download-current>下载本章</button></div><p id="downloadStatus" role="status">${esc(downloadStatus.get(S.active.collection.id) || '已有正文、代码与知识按需读取。')}</p>` : ''}<p id="offlineStatus" role="status" hidden></p></div></section>
+    <div class="section-band">章节文件</div><button type="button" class="settings-row" data-show-files${S.active ? '' : ' disabled'}><span>本章文件</span><b aria-hidden="true">›</b></button>
+    <div class="section-band">应用与账户</div><button type="button" class="settings-row" data-show-device-settings><span>主屏幕与账户</span><b aria-hidden="true">›</b></button></div>`, 'settings'); updateConnection();
+}
+function showReadingSettings() {
+  if (waitForSheetClose(showReadingSettings)) return;
+  showSheet('阅读偏好', `<section class="settings-section"><div class="section-band"><strong>正文与代码</strong><span>READING</span></div><div class="settings-body"><div class="settings-value"><span>正文字号</span><div class="setting-stepper"><button class="bevel-button" type="button" data-font="-1" aria-label="缩小正文字号">−</button><output id="bodySizeOutput">${S.settings.fontSize}</output><button class="bevel-button" type="button" data-font="1" aria-label="放大正文字号">＋</button></div></div><div class="settings-value"><span>代码字号</span><div class="setting-stepper"><button class="bevel-button" type="button" data-code-font="-0.5" aria-label="缩小代码字号">−</button><output id="codeSizeOutput">${S.settings.codeSize}</output><button class="bevel-button" type="button" data-code-font="0.5" aria-label="放大代码字号">＋</button></div></div><label class="switch-row" for="wrapCode"><span>代码折行</span><input id="wrapCode" role="switch" type="checkbox"${S.settings.wrapCode ? ' checked' : ''}></label></div></section>`, 'reading-settings', rememberSheet(showSettings));
+}
+function showDeviceSettings() {
+  if (waitForSheetClose(showDeviceSettings)) return;
+  const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  showSheet('主屏幕与账户', `<section class="settings-section"><div class="section-band"><strong>本机应用</strong><span>THIS DEVICE</span></div><div class="settings-body"><p id="installStatus">${standalone ? '已从主屏幕打开。' : '可将第二算法加入主屏幕。'}</p><div class="button-row"><button class="bevel-button" type="button" data-install-info>加入主屏幕</button><button class="bevel-button" type="button" data-logout>退出登录</button></div></div></section><section class="settings-section"><div class="section-band"><strong>应用更新</strong><span>UPDATES</span></div><div class="settings-body"><div class="button-row"><button class="bevel-button" type="button" data-check-updates>检查内容更新</button><button class="bevel-button" type="button" data-reload-app${S.updateReady ? '' : ' hidden'}>重新载入应用</button></div><p id="updateStatus" role="status">${S.updateReady ? '应用有新版本，可重新载入。' : '已发布内容可在联网后更新。'}</p></div></section>`, 'device-settings', rememberSheet(showSettings));
+}
+function showInstall() {
+  if (waitForSheetClose(showInstall)) return;
+  const parent = S.owner && sheetView === 'device-settings' ? rememberSheet(showDeviceSettings) : null;
+  showSheet('加入主屏幕', '<div class="install-guide"><img src="/icons/icon-192.png" alt="第二算法图标"><div><strong>在 iPhone 的 Safari 中</strong><ol><li>打开本站并点按分享按钮（也可能位于浏览器菜单中）。</li><li>选择“添加到主屏幕”。</li><li>从主屏幕启动“第二算法”。</li></ol></div></div>', 'install', parent);
 }
 function showFiles(parent = null) {
   if (waitForSheetClose(() => showFiles(parent)) || !S.active) return;
   const { collection, meta } = S.active;
-  showSheet('本章文件', `<p class="file-chapter">${esc(chapterTitle(collection))}</p><div class="settings-list"><a class="settings-row button-link setting-action" href="${esc(meta.sourceUrl)}" download="${esc(collection.title)}.cpp"><span>下载完整 C++</span><span class="row-direction" aria-hidden="true">↓</span></a>${meta.markdownUrl ? `<a class="settings-row button-link setting-action" href="${esc(meta.markdownUrl)}" download="${esc(collection.title)}.md"><span>下载 Markdown</span><span class="row-direction" aria-hidden="true">↓</span></a>` : ''}<button type="button" class="settings-row setting-navigation" data-show-source><span>查看 C++ 源码</span><span class="row-direction" aria-hidden="true">›</span></button></div>`, 'files', parent || rememberSheet(showSettings));
+  showSheet('本章文件', `<p class="file-chapter">${esc(chapterTitle(collection))}</p><div class="settings-detail"><a class="settings-row button-link" href="${esc(meta.sourceUrl)}" download="${esc(collection.title)}.cpp"><span>下载完整 C++</span><b aria-hidden="true">↓</b></a>${meta.markdownUrl ? `<a class="settings-row button-link" href="${esc(meta.markdownUrl)}" download="${esc(collection.title)}.md"><span>下载 Markdown</span><b aria-hidden="true">↓</b></a>` : ''}<button type="button" class="settings-row" data-show-source><span>查看 C++ 源码</span><b aria-hidden="true">›</b></button></div>`, 'files', parent || rememberSheet(showSettings));
 }
 async function showKnowledge(id, anchor = '', retry = false) {
   if (sheetClosing || (!$('sheetDialog').open && sheetHistory)) { afterSheetClose = () => { void showKnowledge(id, anchor, retry); }; return; }
@@ -454,7 +477,7 @@ async function showKnowledge(id, anchor = '', retry = false) {
   } catch (error) {
     if (owner === S.owner && sequence === sheetSequence) {
       const message = error instanceof TypeError ? S.offline || navigator.onLine === false ? '此知识尚未下载，请联网重试。' : '知识暂时载入失败，请重试。' : error.message;
-      $('sheetBody').innerHTML = `<p role="status">${esc(message)}</p><button type="button" data-knowledge="${esc(id)}" data-knowledge-anchor="${esc(anchor)}" data-knowledge-retry>重试</button>`;
+      $('sheetBody').innerHTML = `<p role="status">${esc(message)}</p><button class="bevel-button" type="button" data-knowledge="${esc(id)}" data-knowledge-anchor="${esc(anchor)}" data-knowledge-retry>重试</button>`;
     }
   }
 }
@@ -467,7 +490,7 @@ async function showSource() {
     const response = await fetch(meta.sourceUrl, { credentials: 'same-origin', signal: AbortSignal.timeout(30_000) });
     if (response.status === 401) { if (S.owner === owner) lock(); return; } if (!response.ok) throw Error('源码暂时不可用。');
     const text = await response.text(); if (sequence !== sheetSequence || S.owner !== owner) return;
-    $('sheetBody').innerHTML = '<div class="action-row"><button type="button" data-copy-source>复制全部</button></div><div class="knowledge-prose"><pre class="source-view"><code></code></pre></div>'; $('sheetBody').querySelector('code').textContent = text; runtime.enhanceCodes($('sheetBody'));
+    $('sheetBody').innerHTML = '<div class="button-row action-row"><button class="bevel-button" type="button" data-copy-source>复制全部</button></div><div class="knowledge-prose"><pre class="source-view"><code></code></pre></div>'; $('sheetBody').querySelector('code').textContent = text; runtime.enhanceCodes($('sheetBody'));
   } catch (error) { if (sequence === sheetSequence && S.owner === owner) $('sheetBody').innerHTML = `<p>${esc(error.message)}</p>`; }
 }
 async function copyText(text, button = null) {
@@ -499,7 +522,7 @@ async function checkUpdates() {
       await waitForWorkerRelease({ serviceWorker: 'serviceWorker' in navigator ? navigator.serviceWorker : null, build: BUILD, different: true, onWait: () => toast('应用正在更新，请稍候…') });
       if (S.owner !== owner) return; S.updateReady = true; const reload = document.querySelector('[data-reload-app]'); if (reload) reload.hidden = false; toast('有内容更新，请重新载入应用。'); return;
     }
-    S.library = publishedLibrary(library); S.offline = false; writeLocal('catalog', S.library); mergeRemoteState(state); writeLocal('records', S.records);
+    S.library = publishedLibrary(library); S.offline = false; S.stateSyncFailed = false; writeLocal('catalog', S.library); mergeRemoteState(state); writeLocal('records', S.records);
     for (const [id, content] of S.docs) if (!allDocuments().some(pair => pair.document.id === id && pair.document.revision === content.revision)) S.docs.delete(id);
     updateConnection(); toast('已是最新内容。'); if ('serviceWorker' in navigator) void navigator.serviceWorker.getRegistration().then(registration => registration?.update()).catch(() => {});
   } catch (error) { if (S.owner === owner) toast(error.code === 'WORKER_RELEASE_PENDING' ? error.message : '暂时无法检查更新，请联网重试。'); } finally { if (button) button.disabled = false; }
@@ -550,19 +573,21 @@ document.addEventListener('click', event => {
   if (button?.dataset.monthOffset) { try { const month = shiftMonth(book.month, Number(button.dataset.monthOffset)); if (/^\d{4}-\d{2}$/.test(month)) { book.month = month; showLibrary(); } } catch { toast('无法打开这个月份。'); } return; }
   if (button?.hasAttribute('data-current-month')) { book.month = shanghaiDate().slice(0, 7); showLibrary(); return; }
   if (button?.matches('[data-sheet-close]')) { dismissSheet(); return; } if (button?.matches('[data-cancel-route]')) { cancelPendingRoute(); return; }
-  if (button?.hasAttribute('data-install-info')) { showSheet('添加到主屏幕', '<p>iPhone：在Safari中点“分享”，选择“添加到主屏幕”。</p><p>电脑：使用浏览器地址栏中的安装入口。</p>', 'install', S.owner ? rememberSheet(showSettings) : null); return; }
+  if (button?.hasAttribute('data-install-info')) { showInstall(); return; }
   if (!S.owner) return;
   if (button?.dataset.retryRoute) { navigate(button.dataset.retryRoute, { replace: true }); return; }
   if (button?.dataset.openChapter) { navigate(`#/chapter/${button.dataset.openChapter}`); return; }
   if (button?.hasAttribute('data-show-library')) { book.tab = 'list'; book.month = (isChapterDate(S.active?.collection.date) ? S.active.collection.date : shanghaiDate()).slice(0, 7); showLibrary(); return; }
   if (button?.hasAttribute('data-current-chapter') && S.active) { navigate(`#/chapter/${S.active.collection.id}`); return; }
-  if (button?.dataset.action === 'toc') { showToc(); return; }
-  if (button?.dataset.action === 'current-section') { showToc(true); return; }
+  if (button?.hasAttribute('data-open-index')) { showIndex(); return; }
+  if (button?.dataset.indexGo) { runtime.go(button.dataset.indexGo); return; }
   if (button?.dataset.font || button?.dataset.codeFont) {
     const position = sheetPosition || runtime.capture();
     if (button.dataset.font) S.settings.fontSize = Math.max(14, Math.min(24, S.settings.fontSize + Number(button.dataset.font))); else S.settings.codeSize = Math.max(10, Math.min(20, S.settings.codeSize + Number(button.dataset.codeFont)));
     runtime.settle(position, applySettings); saveSettings(); if ($('bodySizeOutput')) $('bodySizeOutput').value = S.settings.fontSize; if ($('codeSizeOutput')) $('codeSizeOutput').value = S.settings.codeSize; return;
   }
+  if (button?.hasAttribute('data-show-reading-settings')) { showReadingSettings(); return; }
+  if (button?.hasAttribute('data-show-device-settings')) { showDeviceSettings(); return; }
   if (button?.hasAttribute('data-show-files')) { showFiles(); return; }
   if (button?.hasAttribute('data-show-source')) { void showSource(); return; }
   if (button?.hasAttribute('data-copy-source')) { void copyText($('sheetBody').querySelector('code').textContent, button); return; }
@@ -578,6 +603,7 @@ document.addEventListener('change', event => {
   if (event.target.id === 'preloadContent') { S.settings.preload = event.target.checked; saveSettings(); if (S.settings.preload && S.active) void downloadCollection(S.active.collection, false); }
 });
 document.addEventListener('input', event => {
+  if (event.target.id === 'indexFilter') { $('indexList').innerHTML = runtime.indexHTML(event.target.value); return; }
   if (event.target.id !== 'chapterBookSearch') return;
   book.query = event.target.value; const list = bookList(S.library?.collections);
   $('chapterBookList').innerHTML = list.html; $('chapterBookCount').textContent = `${list.count} 章`;
@@ -596,14 +622,14 @@ $('enrollForm').addEventListener('submit', async event => {
   try { await passkey('enroll', api, $('setupKey').value); $('setupKey').value = ''; await connect(); $('loginMessage').textContent = '通行密钥已创建，请登录。'; } catch (error) { $('loginMessage').textContent = error.name === 'NotAllowedError' ? '已取消创建，请重试。' : error.message; } finally { button.disabled = false; }
 });
 $('retryButton').addEventListener('click', () => { void connect(); });
-$('settingsButton').addEventListener('click', showSettings); $('tocButton').addEventListener('click', event => { event.stopPropagation(); showToc(); }); $('questionsButton').addEventListener('click', showQuestions);
+$('settingsButton').addEventListener('click', showSettings); $('sectionIndexButton').addEventListener('click', showIndex); $('questionsButton').addEventListener('click', showQuestions);
 $('sheetBack').addEventListener('click', () => { sheetParent?.(); });
 $('sheetDialog').addEventListener('close', () => { if ($('sheetDialog').open) return; questions?.captureDraft(); sheetSequence++; runtime.wakeControls(); if (sheetHistory && !sheetClosing) { sheetClosing = true; history.back(); } });
 $('sheetDialog').addEventListener('click', event => { if (event.target !== $('sheetDialog')) return; const bounds = event.target.getBoundingClientRect(); if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) dismissSheet(); });
 window.addEventListener('popstate', () => {
   if (sheetHistory) {
     sheetHistory = false; sheetClosing = false; sheetSequence++; if ($('sheetDialog').open) $('sheetDialog').close();
-    const opener = sheetOpener, position = sheetPosition; sheetOpener = null; sheetPosition = null; const action = afterSheetClose; afterSheetClose = null; sheetView = null; $('sheetDialog').removeAttribute('data-view');
+    const opener = sheetOpener, position = sheetPosition; sheetOpener = null; sheetPosition = null; const action = afterSheetClose; afterSheetClose = null; sheetView = null; $('sheetDialog').removeAttribute('data-view'); $('sheetFrame').removeAttribute('data-view');
     if (action) action(); else runtime.settle(position, null, () => { if (opener?.isConnected && !opener.closest('[inert]')) opener.focus({ preventScroll: true }); }); return;
   }
   observedLocation = ''; void route();
@@ -612,12 +638,17 @@ window.addEventListener('hashchange', () => { void route(); });
 async function reconnect(attempt = 0) {
   if (reconnecting) return; if (!S.owner) { void connect(); return; } reconnecting = true; const owner = S.owner;
   try { const status = await api('/auth/status'); if (S.owner !== owner) return; if (!status.authenticated || status.ownerScope !== owner) { lock(); return; }
-    S.offline = false; updateConnection(); const verifiedAt = Date.now(); localStorage.setItem(SESSION_KEY, JSON.stringify({ owner, verifiedAt })); await swMessage({ type: 'OWNER', owner, verifiedAt }); await syncPending();
-  } catch { if (S.owner === owner && navigator.onLine && attempt < 2) { clearTimeout(reconnectTimer); reconnectTimer = setTimeout(() => { void reconnect(attempt + 1); }, 1200 * (attempt + 1)); } } finally { reconnecting = false; }
+    S.offline = false;
+    if (S.stateSyncFailed) {
+      const { state } = await api('/api/state'); if (S.owner !== owner) return;
+      mergeRemoteState(state); writeLocal('records', S.records); S.stateSyncFailed = false;
+    }
+    updateConnection(); const verifiedAt = Date.now(); localStorage.setItem(SESSION_KEY, JSON.stringify({ owner, verifiedAt })); await swMessage({ type: 'OWNER', owner, verifiedAt }); await syncPending();
+  } catch { if (S.owner === owner && navigator.onLine && attempt < 2) { clearTimeout(reconnectTimer); reconnectTimer = setTimeout(() => { void reconnect(attempt + 1); }, 1200 * (attempt + 1)); } } finally { reconnecting = false; if (S.owner === owner) updateConnection(); }
 }
-window.addEventListener('online', () => { void reconnect(); }); window.addEventListener('focus', () => { if (navigator.onLine && S.owner) S.offline ? void reconnect() : void syncPending(); });
+window.addEventListener('online', () => { void reconnect(); }); window.addEventListener('focus', () => { if (navigator.onLine && S.owner) S.offline || S.stateSyncFailed ? void reconnect() : void syncPending(); });
 window.addEventListener('offline', () => { S.offline = true; updateConnection(); });
-document.addEventListener('visibilitychange', () => { if (document.hidden) { savePosition(); questions?.captureDraft(); void syncPending(); } else if (navigator.onLine && S.owner) S.offline ? void reconnect() : void syncPending(); });
+document.addEventListener('visibilitychange', () => { if (document.hidden) { savePosition(); questions?.captureDraft(); void syncPending(); } else if (navigator.onLine && S.owner) S.offline || S.stateSyncFailed ? void reconnect() : void syncPending(); });
 window.addEventListener('beforeunload', event => { if (S.owner && hasPendingLegacy()) { event.preventDefault(); event.returnValue = ''; } });
 window.addEventListener('pagehide', () => { savePosition(); questions?.captureDraft(); });
 function fitSheetViewport() {

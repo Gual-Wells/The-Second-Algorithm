@@ -9,7 +9,7 @@ const META = new URL('/__offline_owner__', self.location.origin).href;
 const MAX_AGE = 90 * 86400_000;
 const FILES = ['/', '/index.html', `/styles.css?v=${BUILD}`, `/app.js?v=${BUILD}`, '/auth.js',
   `/manifest.webmanifest?v=${BUILD}`, '/icons/icon.svg', `/icons/apple-touch-icon-series1.png?v=${BUILD}`,
-  '/icons/icon-192.png', '/icons/icon-512.png'];
+  '/icons/icon-192.png', '/icons/icon-512.png', '/icons/header-logo.svg'];
 const PUBLIC = new Set(['/', '/index.html', '/styles.css', '/app.js', '/auth.js', '/manifest.webmanifest',
   '/robots.txt', '/favicon.ico']);
 let owner = null, generation = 0;

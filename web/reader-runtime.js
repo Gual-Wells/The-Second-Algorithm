@@ -2,20 +2,32 @@ const $ = id => document.getElementById(id);
 const all = (selector, root = document) => [...root.querySelectorAll(selector)];
 const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
 const clone = value => value && JSON.parse(JSON.stringify(value));
+// Stored offsets retain their original physical coordinate. New explicit
+// destinations use the visible source-style index bar plus its reveal gap.
 const NAV_LINE = 24;
+const REVEAL_GAP = 12;
 
 // The book surface has no authority over identity, transport or publication.
 // Its caller supplies the one authenticated, revision-checked chapter.
 export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpen = () => false, toast = () => {} }) {
   const app = $('app'), pane = $('readingPane'), article = $('article');
-  const chrome = [$('appHeader'), $('chapterNav'), $('readerFooter')].filter(Boolean);
+  const hiddenChrome = [$('appHeader'), $('chapterNav'), $('readerHead'), $('partHeading')].filter(Boolean);
+  const chrome = [$('articleTools'), $('readerStatusbar')].filter(Boolean);
   let chapter = null, headings = [], sections = [], byId = new Map(), aliases = new Map();
-  let rendered = [], blocks = [], cursor = null, view = 'chapter', restoring = false, pure = false, tocCollapsed = true;
-  let layoutToken = 0, frame = 0, resizeTimer = 0, awakeTimer = 0, pointerHeld = false, pathAnchor = null;
+  let rendered = [], blocks = [], cursor = null, view = 'chapter', restoring = false, pure = false;
+  let layoutToken = 0, frame = 0, resizeTimer = 0, awakeTimer = 0, pointerHeld = false;
   let gestureSelection = false, gestureStarted = -Infinity;
-  const expanded = new Map();
   const revision = () => chapter?.meta.revision;
   const sectionFor = id => byId.get(byId.get(id)?.sectionId);
+
+  function revealLine() {
+    // Pure controls are a temporary overlay: waking them must not change the
+    // reading boundary, paper layout, or the section currently being read.
+    if (pure) return REVEAL_GAP;
+    const tools = $('articleTools');
+    return tools && !tools.hidden && getComputedStyle(tools).display !== 'none'
+      ? tools.getBoundingClientRect().height + REVEAL_GAP : REVEAL_GAP;
+  }
 
   function resolveAnchor(anchor) {
     return aliases.get(anchor) || (byId.has(anchor) ? anchor : null);
@@ -65,7 +77,7 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
   function setChapter(value, position = null) {
     layoutToken++; restoring = false; view = 'chapter'; pure = false; clearTimeout(awakeTimer);
     app.classList.remove('pure', 'controls-awake'); app.style.removeProperty('--pure-paper-width'); chromeInert(false);
-    chapter = value; pathAnchor = null; expanded.clear(); headings = []; sections = []; byId = new Map(); aliases = new Map();
+    chapter = value; headings = []; sections = []; byId = new Map(); aliases = new Map();
     article.style.removeProperty('padding-bottom'); article.innerHTML = value.content.html;
     // Preserve the previous reader's exact block numbering for safe migration.
     let legacyIndex = 0;
@@ -97,44 +109,34 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
     blocks = all('h2,h3,h4,p,pre,table,blockquote,li', article).filter(node => !node.closest('.code-toolbar'));
     blocks.forEach((node, index) => { node.dataset.readBlock = String(index); });
     cursor = normalizePosition(position);
-    $('desktopTocBody').innerHTML = tocHTML('desktop-toc');
-    $('readingLayout').classList.toggle('toc-collapsed', tocCollapsed);
-    renderChapter(); updateStatus();
+    setChapterIdentity(); updateStatus();
     return clone(cursor);
   }
-  function tocHTML(prefix) {
-    const current = cursor?.anchor, parent = sectionFor(current)?.id;
-    return `<div class="toc-groups">${sections.map((section, index) => {
-      const active = parent === section.id, open = expanded.has(section.id) ? expanded.get(section.id) : active;
-      return `<section class="toc-group${active ? ' is-current-parent' : ''}" data-section="${esc(section.id)}"><div class="toc-parent"><button type="button" class="toc-expander" data-toggle-section="${esc(section.id)}" aria-expanded="${open}" aria-controls="${prefix}-${index}" aria-label="${open ? '收起' : '展开'}${esc(section.title)}">${open ? '−' : '＋'}</button><button type="button" class="toc-parent-link${current === section.id ? ' is-current' : ''}" data-go="${esc(section.id)}"${current === section.id ? ' aria-current="location"' : ''}>${esc(section.title)}</button></div><div class="toc-children" id="${prefix}-${index}"${open ? '' : ' hidden'}>${section.units.map(item => `<button type="button" class="toc-item depth-${item.depth}${current === item.id ? ' is-current' : ''}" data-go="${esc(item.id)}"${current === item.id ? ' aria-current="location"' : ''}>${esc(item.title)}</button>`).join('')}</div></section>`;
-    }).join('')}</div>`;
-  }
-  function renderChapter() {
+  function setChapterIdentity() {
     if (!chapter) return;
-    const current = cursor && byId.get(cursor.anchor), { collection, meta } = chapter;
-    const name = collection.kind === 'chapter' ? `第${collection.chapterNumber}章　${collection.title}` : collection.title;
-    const extra = collection.documents.length > 1 ? `<small>${esc(meta.title)}</small>` : '';
-    $('chapterView').innerHTML = `<div class="chapter-inner"><div class="chapter-heading"><h1>${esc(name)}</h1>${extra}</div><div class="resume-line">${current ? `<span>上次读到：${esc(current.title)}</span><div class="resume-actions"><button type="button" data-reader-resume>继续阅读</button><button type="button" class="secondary" data-go="${esc(headings[0].id)}">从头阅读</button></div>` : headings[0] ? `<button type="button" data-go="${esc(headings[0].id)}">从头阅读</button>` : '<span>暂无正文</span>'}</div><h2 class="toc-title">本章目录</h2><div class="chapter-toc">${tocHTML('chapter-toc')}</div></div>`;
+    const { collection, meta } = chapter;
+    $('readerChapterDate').textContent = collection.date || '日期未登记';
+    $('readerChapterNumber').textContent = collection.kind === 'chapter' ? `第 ${collection.chapterNumber} 章` : '阅读材料';
+    $('readerChapterTitle').textContent = collection.title;
+    $('readerChapterSubtitle').textContent = meta.title && meta.title !== collection.title ? meta.title : '';
+    $('readerPartNumber').textContent = collection.kind === 'chapter' ? 'CHAPTER ' + String(collection.chapterNumber).padStart(2, '0') : 'READING';
+    $('readerPartTitle').textContent = '算法思想与题型';
+    $('readerPartSummary').textContent = '按篇节阅读';
   }
-  function setGroupOpen(group, open) {
-    const button = group.querySelector('[data-toggle-section]');
-    group.querySelector('.toc-children').hidden = !open;
-    button.setAttribute('aria-expanded', String(open)); button.textContent = open ? '−' : '＋';
-    button.setAttribute('aria-label', (open ? '收起' : '展开') + (byId.get(group.dataset.section)?.title || '目录'));
+  function indexHTML(filter = '') {
+    const query = String(filter).trim().toLocaleLowerCase();
+    const items = headings.filter(item => [item.title, ...item.ancestors.map(id => byId.get(id)?.title || '')].join(' ').toLocaleLowerCase().includes(query));
+    return items.length ? items.map(item => {
+      const context = item.ancestors.map(id => byId.get(id)?.title).filter(Boolean).join(' · ');
+      return `<button type="button" class="index-item${cursor?.anchor === item.id ? ' is-current' : ''}" data-index-go="${esc(item.id)}"${cursor?.anchor === item.id ? ' aria-current="location"' : ''} aria-label="${esc(context ? context + ' · ' + item.title : item.title)}"><span>${String(item.index + 1).padStart(2, '0')}</span><strong>${esc(item.title)}</strong>${context ? `<small>${esc(context)}</small>` : ''}</button>`;
+    }).join('') : '<p class="chapter-list-empty">没有匹配的篇节。</p>';
   }
-  function updateTOC() {
-    const current = cursor?.anchor, parent = sectionFor(current)?.id;
-    for (const root of [$('desktopTocBody'), $('chapterView').querySelector('.chapter-toc'), $('sheetDialog').dataset.view === 'toc' && $('sheetBody')].filter(Boolean)) {
-      for (const button of all('[data-go]', root)) {
-        const active = button.dataset.go === current; button.classList.toggle('is-current', active);
-        if (active) button.setAttribute('aria-current', 'location'); else button.removeAttribute('aria-current');
-      }
-      const changed = root.dataset.currentParent !== parent;
-      for (const group of all('.toc-group', root)) {
-        const active = group.dataset.section === parent; group.classList.toggle('is-current-parent', active);
-        if (active && changed) { expanded.set(parent, true); setGroupOpen(group, true); }
-      }
-      root.dataset.currentParent = parent || '';
+  function updateIndex() {
+    const root = $('indexList'); if (!root) return;
+    for (const button of all('[data-index-go]', root)) {
+      const active = button.dataset.indexGo === cursor?.anchor;
+      button.classList.toggle('is-current', active);
+      if (active) button.setAttribute('aria-current', 'location'); else button.removeAttribute('aria-current');
     }
   }
   function updateTailSpace() {
@@ -142,13 +144,13 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
     article.style.removeProperty('padding-bottom');
     const base = parseFloat(getComputedStyle(article).paddingBottom) || 0;
     const contentAfter = article.getBoundingClientRect().bottom - base - rendered.at(-1).getBoundingClientRect().top;
-    article.style.paddingBottom = Math.max(base, pane.clientHeight - NAV_LINE - contentAfter) + 'px';
+    article.style.paddingBottom = Math.max(base, pane.clientHeight - revealLine() - contentAfter) + 'px';
   }
   function readCursor() {
     if (view !== 'reader' || !rendered.length || !pane.clientHeight) return cursor;
-    const top = pane.getBoundingClientRect().top; let heading = rendered[0], block = blocks[0];
-    for (const node of rendered) { if (node.getBoundingClientRect().top <= top + NAV_LINE + 1) heading = node; else break; }
-    for (const node of blocks) { if (node.getBoundingClientRect().top <= top + 1) block = node; else break; }
+    const top = pane.getBoundingClientRect().top, line = revealLine(); let heading = rendered[0], block = blocks[0];
+    for (const node of rendered) { if (node.getBoundingClientRect().top <= top + line + 1) heading = node; else break; }
+    for (const node of blocks) { if (node.getBoundingClientRect().top <= top + line + 1) block = node; else break; }
     const bounds = block.getBoundingClientRect();
     return { schema: 3, anchor: heading.id, offset: heading.getBoundingClientRect().top - top, revision: revision(), capturedAt: Date.now(),
       block: { index: Number(block.dataset.readBlock), ratio: bounds.top <= top && bounds.bottom > top ? (top - bounds.top) / Math.max(1, bounds.height) : 0,
@@ -156,7 +158,7 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
   }
   function capture(save = false) {
     if (restoring || isSheetOpen() || view !== 'reader') return clone(cursor);
-    cursor = readCursor(); updateStatus(); updateTOC(); if (save && cursor) onPosition?.(clone(cursor)); return clone(cursor);
+    cursor = readCursor(); updateStatus(); updateIndex(); if (save && cursor) onPosition?.(clone(cursor)); return clone(cursor);
   }
   function restoreSnapshot(position) {
     if (!position || view !== 'reader') return;
@@ -178,7 +180,7 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
       updateTailSpace(); restoreSnapshot(position);
       if (previousPaneTop !== null && view === 'reader') pane.scrollTop += pane.getBoundingClientRect().top - previousPaneTop;
       restoring = false;
-      if (view === 'reader' && !isSheetOpen()) { cursor = readCursor(); updateStatus(); updateTOC(); if (cursor) onPosition?.(clone(cursor)); }
+      if (view === 'reader' && !isSheetOpen()) { cursor = readCursor(); updateStatus(); updateIndex(); if (cursor) onPosition?.(clone(cursor)); }
       after?.();
     }));
   }
@@ -192,47 +194,41 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
     const targets = navigationTargets();
     for (const [key, target, label] of [['previous-major', targets.previousSection, '上一节'], ['next-major', targets.nextSection, '下一节']]) {
       const button = document.querySelector(`[data-nav="${key}"]`); if (!button) continue;
-      button.disabled = !target; button.dataset.target = target?.id || '';
+      button.disabled = view !== 'reader' || !target; button.dataset.target = target?.id || '';
       const description = target ? `${label}：${target.title}` : `${label}：已是本章${key.startsWith('previous') ? '首' : '末'}节`;
       button.setAttribute('aria-label', description); button.title = description;
     }
-    const current = targets.current, section = targets.currentSection, button = $('headingPathButton');
-    button.disabled = !section;
-    button.dataset.currentAnchor = current?.id || ''; button.dataset.target = section?.id || '';
-    if (current && pathAnchor !== current.id) {
-      pathAnchor = current.id; $('headingPath').textContent = section?.title || '';
-      const description = `打开本章目录，当前节：${section?.title || ''}；当前位置：${current.title}`;
-      button.setAttribute('aria-label', description); button.title = description;
-    }
+    const section = targets.currentSection;
+    const label = chapter && section && (view === 'reader' || cursor) ? `${section.sectionIndex + 1} / ${sections.length} · ${section.title}` : chapter ? `${sections.length} 节` : '';
+    $('readingPosition').textContent = label; $('readingPosition').title = label;
+    $('sectionIndexButton').disabled = !chapter;
   }
-  function showReader(position, anchor = null) {
+  function showReader(position, anchor = null, fromStart = false) {
     view = 'reader'; $('chapterView').hidden = true; $('readerView').hidden = false;
-    cursor = anchor ? { schema: 3, anchor: resolveAnchor(anchor) || headings[0]?.id, offset: NAV_LINE, revision: revision() }
-      : normalizePosition(position) || { schema: 3, anchor: headings[0]?.id, offset: NAV_LINE, revision: revision() };
-    updateStatus(); settle(cursor, () => pane.focus({ preventScroll: true }));
+    const saved = normalizePosition(position), atStart = fromStart || !anchor && !saved;
+    cursor = atStart ? { schema: 3, anchor: headings[0]?.id, offset: NAV_LINE, revision: revision() }
+      : anchor ? { schema: 3, anchor: resolveAnchor(anchor) || headings[0]?.id, offset: revealLine(), revision: revision() }
+      : saved || { schema: 3, anchor: headings[0]?.id, offset: NAV_LINE, revision: revision() };
+    updateStatus(); settle(atStart ? null : cursor, () => {
+      if (atStart) pane.scrollTop = 0;
+      pane.focus({ preventScroll: true });
+      // A pure-mode index jump reveals its destination on clean paper. The
+      // temporary tools can still be awakened by the next deliberate tap.
+      if (anchor && pure) { clearTimeout(awakeTimer); app.classList.remove('controls-awake'); chromeInert(true); }
+    });
   }
-  function showChapter() {
-    capture(true); if (pure) setPure(false); view = 'chapter';
-    layoutToken++; restoring = false; $('readerView').hidden = true; $('chapterView').hidden = false; renderChapter();
-  }
+  function showChapter() { showReader(null, null, true); }
   function go(anchor) {
     const id = resolveAnchor(anchor); if (!id) { toast('这个阅读位置暂不可用，当前内容已保留。'); return; }
     capture(true); onNavigate?.(id);
   }
-  function scrollCurrentToc(root) {
-    updateTOC(); const active = root.querySelector('[aria-current="location"]'); if (!active) return;
+  function scrollCurrentIndex(root) {
+    updateIndex(); const active = root.querySelector('[aria-current="location"]'); if (!active) return;
     const bounds = root.getBoundingClientRect(), location = active.getBoundingClientRect();
     if (location.top < bounds.top || location.bottom > bounds.bottom) root.scrollTop += location.top - bounds.top - root.clientHeight / 3;
   }
-  function setDesktopToc(open) {
-    if (view !== 'reader' || pure || !matchMedia('(min-width:1100px)').matches) return false;
-    const position = capture(); tocCollapsed = !open;
-    settle(position, () => { $('readingLayout').classList.toggle('toc-collapsed', tocCollapsed); $('tocButton').setAttribute('aria-expanded', String(open)); }, () => scrollCurrentToc($('desktopTocBody')));
-    return true;
-  }
-  function toggleDesktopToc() { return setDesktopToc(tocCollapsed); }
-  function revealDesktopToc() { return setDesktopToc(true); }
   function chromeInert(hidden) {
+    for (const node of hiddenChrome) { node.inert = pure; if (pure) node.setAttribute('aria-hidden', 'true'); else node.removeAttribute('aria-hidden'); }
     for (const node of chrome) { node.inert = hidden; if (hidden) node.setAttribute('aria-hidden', 'true'); else node.removeAttribute('aria-hidden'); }
   }
   function sleepControls() {
@@ -246,23 +242,21 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
   function setPure(on) {
     if (on && view !== 'reader') return;
     const position = capture() || cursor, previous = pane.getBoundingClientRect().top;
-    if (on) app.style.setProperty('--pure-paper-width', article.getBoundingClientRect().width + 'px'); pure = on;
+    if (on) app.style.setProperty('--pure-paper-width', $('reader').getBoundingClientRect().width + 'px'); pure = on;
     settle(position, () => { app.classList.toggle('pure', on); clearTimeout(awakeTimer); app.classList.remove('controls-awake'); chromeInert(on); if (!on) app.style.removeProperty('--pure-paper-width'); }, () => { if (view === 'reader') pane.focus({ preventScroll: true }); }, previous);
   }
   function clear() {
     layoutToken++; restoring = false; clearTimeout(awakeTimer); pure = false; view = 'chapter'; chapter = null; cursor = null;
-    app.classList.remove('pure', 'controls-awake'); app.style.removeProperty('--pure-paper-width'); chromeInert(false); article.replaceChildren(); $('chapterView').replaceChildren(); $('desktopTocBody').replaceChildren(); $('headingPath').replaceChildren();
-    headings = []; sections = []; rendered = []; blocks = []; byId.clear(); aliases.clear(); pathAnchor = null;
+    app.classList.remove('pure', 'controls-awake'); app.style.removeProperty('--pure-paper-width'); chromeInert(false);
+    article.replaceChildren(); $('chapterView').replaceChildren(); $('readingPosition').textContent = '';
+    for (const id of ['readerChapterDate', 'readerChapterNumber', 'readerChapterTitle', 'readerChapterSubtitle']) $(id).textContent = '';
+    headings = []; sections = []; rendered = []; blocks = []; byId.clear(); aliases.clear();
   }
   document.addEventListener('click', event => {
     if (!chapter) return;
     const button = event.target.closest('button');
     if (button?.hasAttribute('data-copy')) { void onCopy?.(button.closest('.code-block').querySelector('pre').textContent, button); return; }
     if (button?.dataset.nav) { if (button.dataset.target) go(button.dataset.target); return; }
-    if (button?.dataset.toggleSection) {
-      const open = button.getAttribute('aria-expanded') !== 'true', id = button.dataset.toggleSection; expanded.set(id, open);
-      for (const group of all('.toc-group').filter(group => group.dataset.section === id)) setGroupOpen(group, open); return;
-    }
     if (button?.dataset.go) { go(button.dataset.go); return; }
     if (button?.hasAttribute('data-reader-resume')) { onNavigate?.(null, clone(cursor)); return; }
   });
@@ -288,8 +282,8 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
   app.addEventListener('focusin', wakeControls);
   document.addEventListener('keydown', () => { if (pure) wakeControls(); });
   window.addEventListener('resize', () => { clearTimeout(resizeTimer); const position = capture() || cursor; resizeTimer = setTimeout(() => { if (chapter) settle(position); }, 100); });
-  return Object.freeze({ setChapter, clear, capture, settle, showReader, showChapter, go, tocHTML, scrollCurrentToc, toggleDesktopToc, revealDesktopToc,
-    enhanceCodes, resolveAnchor, normalizePosition, updateTOC, wakeControls, setPure,
-    get position() { return clone(cursor); }, get state() { return { view, pure, restoring, tocCollapsed, cursor: clone(cursor) }; },
+  return Object.freeze({ setChapter, clear, capture, settle, showReader, showChapter, go, indexHTML, scrollCurrentIndex,
+    enhanceCodes, resolveAnchor, normalizePosition, updateIndex, wakeControls, setPure,
+    get position() { return clone(cursor); }, get state() { return { view, pure, restoring, cursor: clone(cursor) }; },
     get headings() { return clone(headings); }, get sections() { return clone(sections); }, get navigation() { return clone(navigationTargets()); } });
 }

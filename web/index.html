@@ -1,54 +1,43 @@
 <!doctype html>
 <html lang="zh-CN"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#2264a5"><meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="第二算法">
+<meta name="theme-color" content="#174b84"><meta name="color-scheme" content="light"><meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="第二算法"><meta name="format-detection" content="telephone=no">
 <title>第二算法</title><link rel="manifest" href="/manifest.webmanifest?v=__BUILD__">
-<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon-series1.png?v=__BUILD__">
-<link rel="icon" type="image/svg+xml" href="/icons/icon.svg"><link rel="stylesheet" href="/styles.css?v=__BUILD__">
-<script type="module" src="/app.js?v=__BUILD__"></script></head><body>
-<div id="app" class="app-frame login-mode">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon-series1.png?v=__BUILD__"><link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+<link rel="stylesheet" href="/styles.css?v=__BUILD__"><script type="module" src="/app.js?v=__BUILD__"></script></head><body>
+<main id="app" class="app-shell app-frame login-mode">
   <header id="appHeader" class="app-header">
-    <div class="brand"><h1>第二算法</h1></div>
+    <div class="title-row"><div class="app-title"><p id="headerMeta" class="header-meta">算法实战 · 正在连接</p><h1>第二算法 <small>SECOND ALGORITHM</small></h1></div><div class="header-logo" id="headerLogo" role="img" aria-label="第二算法标志"><img src="/icons/header-logo.svg" alt=""></div></div>
     <div class="header-actions" id="headerActions" hidden>
-      <button id="tocButton" class="header-tool" data-action="toc" aria-label="本章目录" title="本章目录"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h8"/></svg><span>目录</span></button>
-      <button id="questionsButton" class="header-tool" data-action="questions" aria-label="本章问答" title="本章问答"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v12H10l-5 4v-4H4z"/><path d="M8 8h8M8 12h5"/></svg><span>答疑</span><i id="questionsDot" class="unread-dot" hidden></i></button>
-      <button id="settingsButton" class="header-tool" data-action="settings" aria-label="阅读设置" title="阅读设置"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/><path d="M8 3v6M16 9v6M10 15v6"/></svg><span>设置</span></button>
+      <button id="previousMajor" class="header-button" data-nav="previous-major" type="button" disabled>上一节</button>
+      <button id="nextMajor" class="header-button" data-nav="next-major" type="button" disabled>下一节</button>
+      <button id="questionsButton" class="header-button" type="button" disabled>章节答疑<span id="questionsDot" class="unread-dot" hidden></span></button>
+      <button id="settingsButton" class="header-button" type="button">设置</button>
     </div>
   </header>
-  <nav id="chapterNav" class="chapter-nav" aria-label="章节日期" hidden>
-    <div class="chapter-nav-row">
-      <button id="previousChapter" class="chapter-arrow" type="button" aria-label="上一章" disabled>‹</button>
-      <button id="chapterJump" class="chapter-jump" data-show-library type="button" aria-haspopup="dialog"><strong id="currentDateLabel">选择阅读日期</strong><span id="chapterNavSubtitle">章节册与日历</span><svg class="chapter-jump-caret" viewBox="0 0 12 8" aria-hidden="true"><path d="M2 2l4 4 4-4"/></svg></button>
-      <button id="nextChapter" class="chapter-arrow" type="button" aria-label="下一章" disabled>›</button>
-    </div>
+  <section id="chapterNav" class="chapter-nav" aria-label="章节日期" hidden>
+    <div class="chapter-nav-row"><button id="previousChapter" class="bevel-button nav-arrow" type="button" aria-label="上一章" disabled>‹</button><button id="chapterJump" class="chapter-jump" data-show-library type="button" aria-label="打开章节册与日历" aria-haspopup="dialog"><strong id="currentDateLabel">今日章节</strong><span id="chapterNavSubtitle">按日期阅读已发布章节</span></button><button id="nextChapter" class="bevel-button nav-arrow" type="button" aria-label="下一章" disabled>›</button></div>
     <div id="dayStrip" class="day-strip" aria-label="本周已发布章节"></div>
-  </nav>
+  </section>
   <section id="loginView" class="login-view">
     <div class="state-card login-card" data-state="loading"><div class="state-band"><span>第二算法</span><small>SECOND ALGORITHM</small></div><div class="state-body">
-      <img class="state-icon login-icon" src="/icons/icon.svg" width="56" height="56" alt="">
-      <h2 id="startupTitle">正在打开章节</h2><p id="startupDescription">正在检查登录状态与已发布章节。</p><p id="loginMessage" class="state-message" role="status"></p>
-      <form id="enrollForm" hidden><label for="setupKey">初始化密钥</label><input id="setupKey" type="password" autocomplete="off" autocapitalize="none" spellcheck="false"><button type="submit">创建通行密钥</button></form>
-      <button type="button" id="loginButton" class="primary login-primary" hidden>使用通行密钥登录</button><button type="button" id="retryButton" class="primary login-primary" hidden>重新连接</button>
-      <button type="button" id="startupInstall" class="login-install" data-install-info hidden>如何加入 iPhone 主屏幕</button>
+      <img class="state-icon login-icon" src="/icons/icon.svg" width="56" height="56" alt=""><h2 id="startupTitle">正在打开章节</h2><p id="startupDescription">正在检查登录状态与已发布章节。</p><p id="loginMessage" class="state-message" role="status"></p>
+      <form id="enrollForm" hidden><label class="field-label" for="setupKey">初始化密钥</label><input class="text-input" id="setupKey" type="password" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="输入初始化密钥"><button class="primary-button wide-button" type="submit">创建通行密钥</button></form>
+      <button type="button" id="loginButton" class="primary-button wide-button login-primary" hidden>使用通行密钥登录</button><button type="button" id="retryButton" class="primary-button wide-button login-primary" hidden>重新连接</button><button type="button" id="startupInstall" class="bevel-button login-install" data-install-info hidden>如何加入 iPhone 主屏幕</button>
     </div></div>
   </section>
-  <main id="chapterView" class="chapter-view" aria-label="本章目录" hidden></main>
-  <main id="readerView" class="reader-view" hidden>
-    <div id="readingLayout" class="reading-layout">
-      <aside id="desktopToc" class="desktop-toc" aria-label="章目录"><div class="toc-heading"><strong>目录</strong><button data-action="toc" aria-label="收起目录">收起</button></div><div id="desktopTocBody" class="toc-body"></div></aside>
-      <div id="readingPane" class="reading-pane" tabindex="0" aria-label="正文"><article id="article" class="paper"></article></div>
-    </div>
-    <nav id="readerFooter" class="reader-footer" aria-label="节导航">
-      <button id="previousMajor" class="section-nav-button previous" data-nav="previous-major" aria-label="上一节"><svg viewBox="0 0 12 16" aria-hidden="true"><path d="M8 3l-5 5 5 5"/></svg><span>上一节</span></button>
-      <button id="headingPathButton" class="current-section-button" data-action="current-section" aria-label="打开本章目录"><span id="headingPath"></span><svg class="section-caret" viewBox="0 0 12 8" aria-hidden="true"><path d="M2 2l4 4 4-4"/></svg></button>
-      <button id="nextMajor" class="section-nav-button next" data-nav="next-major" aria-label="下一节"><span>下一节</span><svg viewBox="0 0 12 16" aria-hidden="true"><path d="M4 3l5 5-5 5"/></svg></button>
-    </nav>
-  </main>
-  <div id="readingNotice" class="reading-notice" role="status" hidden></div>
-</div>
-<dialog id="sheetDialog" class="sheet" aria-labelledby="sheetTitle">
- <header class="sheet-header"><button type="button" id="sheetBack" data-action="sheet-back" hidden>返回</button><h2 id="sheetTitle" tabindex="-1"></h2><button type="button" id="sheetClose" data-sheet-close>关闭</button></header>
- <div id="sheetBody" class="sheet-body" tabindex="0"></div>
-</dialog><div id="toast" class="toast" role="status" hidden></div>
-<noscript>请启用JavaScript以使用阅读器。</noscript></body></html>
+  <section id="readerFrame" class="reader-frame" aria-label="算法章节读书器" hidden>
+    <section id="chapterView" class="chapter-view" aria-label="章节首页" hidden></section>
+    <section id="readerView" class="reader-view" hidden><div id="readingLayout" class="reading-layout"><div id="readingPane" class="reading-pane reading-scroll" tabindex="0" aria-label="正文"><section id="reader" class="reader">
+      <div class="reader-head" id="readerHead"><div class="chapter-label"><span id="readerChapterDate"></span><span class="label-separator">/</span><span id="readerChapterNumber"></span></div><div class="chapter-title-row"><h2 id="readerChapterTitle"></h2></div><p id="readerChapterSubtitle"></p></div>
+      <div class="part-heading" id="partHeading"><span id="readerPartNumber"></span><strong id="readerPartTitle"></strong><span id="readerPartSummary"></span></div>
+      <div class="article-tools" id="articleTools"><button class="bevel-button" id="sectionIndexButton" type="button" aria-haspopup="dialog">篇节索引</button><span id="articleToolsHint">按篇节定位本章内容</span></div>
+      <article id="article" class="paper article"></article>
+    </section></div></div></section>
+    <div id="readerStatusbar" class="reader-statusbar" role="status"><span id="statusLamp" class="status-lamp"></span><span id="syncStatus">正在连接章节…</span><span id="readingPosition"></span></div>
+  </section>
+  <div id="readingNotice" class="reading-notice reader-jump-status" role="status" hidden></div>
+</main>
+<dialog id="sheetDialog" class="sheet-dialog" aria-labelledby="sheetTitle"><div id="sheetFrame" class="sheet"><div class="sheet-head"><button type="button" id="sheetBack" class="bevel-button settings-back" data-action="sheet-back" hidden>返回</button><div><small id="sheetKicker"></small><h2 id="sheetTitle" tabindex="-1"></h2></div><button type="button" id="sheetClose" class="sheet-close" data-sheet-close aria-label="关闭">×</button></div><div id="sheetBody" class="sheet-body" tabindex="0"></div></div></dialog>
+<div id="toast" class="toast" role="status" hidden></div><noscript>请启用JavaScript以使用阅读器。</noscript></body></html>

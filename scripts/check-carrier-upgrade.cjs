@@ -156,7 +156,7 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
     assert(switched.names.includes('second-algorithm-private-' + secondOwner));
     assert.match(switched.priorNote, /unsent lesson note/);
     assert.equal(switched.priorQuestionVisible, false);
-    await page.locator('#settingsButton').click(); await page.locator('[data-logout]').click();
+    await page.locator('#settingsButton').click(); await page.locator('[data-show-device-settings]').click(); await page.locator('[data-logout]').click();
     await page.locator('#loginView').waitFor({ state: 'visible' });
     await page.waitForFunction(async () => !(await caches.keys()).some(name => name.startsWith('second-algorithm-private-')));
     assert.equal(await page.evaluate(() => localStorage.getItem('second-algorithm:last-session')), null);
@@ -170,9 +170,13 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
     const updatePage = await updateContext.newPage(); updatePage.on('pageerror', error => errors.push(error.message)); updatePage.on('dialog', dialog => dialog.type() === 'beforeunload' ? dialog.accept() : dialog.dismiss());
     await updatePage.goto(origin + '/setup'); await updatePage.waitForFunction(() => document.body.dataset.ready === 'true');
     await updatePage.goto(origin + '/#/library');
+    // This phase intentionally starts with the genuinely empty old catalog.
+    // Its paper state remains chapterView; only a published chapter goes
+    // directly into readerView after the later user-requested reload.
     await updatePage.locator('#chapterView').waitFor({ state: 'visible' });
     published = true;
     await updatePage.locator('#settingsButton').click();
+    await updatePage.locator('[data-show-device-settings]').click();
     await updatePage.locator('[data-check-updates]').click();
     const updateDeadline = Date.now() + 8000;
     while (!held.size && Date.now() < updateDeadline) await sleep(25);
@@ -185,8 +189,6 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
     await updatePage.locator('[data-reload-app]').waitFor({ state: 'visible' });
     assert.equal(await updatePage.evaluate(() => performance.getEntriesByType('navigation')[0].type), 'navigate');
     await updatePage.locator('[data-reload-app]').click();
-    await updatePage.locator('#chapterView [data-go]').first().waitFor();
-    await updatePage.locator('#chapterView [data-go]').first().click();
     await updatePage.locator('#article .code-block').first().waitFor();
     assert.match(await updatePage.locator('#article').innerText(), /answer = 42/);
     assert.deepEqual(errors, []);

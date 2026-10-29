@@ -108,17 +108,17 @@ export function createReaderQuestions({getContext, toast = () => {}, transport =
       const {document, messages, state} = view;
       messages.replaceChildren();
       if (!state.messages.length) {
-        messages.append(element(document, 'p', 'reader-question-empty', '暂无问答'));
+        messages.append(element(document, 'p', 'question-status reader-question-empty', '暂无问答'));
         return;
       }
       for (const turn of state.messages) {
-        const group = element(document, 'section', 'reader-question-turn');
+        const group = element(document, 'section', 'question-pair reader-question-turn');
         group.dataset.questionId = turn.id;
-        const question = element(document, 'div', 'reader-question-message reader-question-user');
+        const question = element(document, 'div', 'question-body reader-question-message reader-question-user');
         question.append(element(document, 'strong', '', '我的问题'), element(document, 'p', 'reader-question-content', turn.question));
         group.append(question);
         if (turn.answer) {
-          const answer = element(document, 'div', 'reader-question-message reader-question-assistant');
+          const answer = element(document, 'div', 'question-answer reader-question-message reader-question-assistant');
           answer.append(element(document, 'strong', '', '答疑'), element(document, 'p', 'reader-question-content', turn.answer));
           group.append(answer);
         }
@@ -199,30 +199,30 @@ export function createReaderQuestions({getContext, toast = () => {}, transport =
       captureDraft();
       unmount();
       const document = host.ownerDocument, state = load(currentContext());
-      const root = element(document, 'div', 'reader-questions');
-      const context = element(document, 'div', 'reader-question-context', state.context.title || '当前章节');
-      const serviceStatus = element(document, 'p', 'reader-question-service-status', !transport ? '尚未连接答疑服务，问题不会发送；草稿保存在本机。' : '');
+      const root = element(document, 'div', 'questions-content reader-questions');
+      const context = element(document, 'div', 'question-status reader-question-context', state.context.title || '当前章节');
+      const serviceStatus = element(document, 'p', 'question-status reader-question-service-status', !transport ? '尚未连接答疑服务，问题不会发送；草稿保存在本机。' : '');
       serviceStatus.hidden = Boolean(transport);
-      const messages = element(document, 'div', 'reader-question-messages');
+      const messages = element(document, 'div', 'question-list reader-question-messages');
       messages.tabIndex = 0;
       messages.setAttribute('role', 'region');
       messages.setAttribute('aria-label', '本章问答记录');
-      const form = element(document, 'form', 'reader-question-compose');
+      const form = element(document, 'form', 'question-form reader-question-compose');
       const fieldId = 'reader-question-input-' + (++fieldSequence);
-      const label = element(document, 'label', 'reader-question-label', '我的问题');
+      const label = element(document, 'label', 'field-label reader-question-label', '我的问题');
       label.htmlFor = fieldId;
-      const input = element(document, 'textarea', 'reader-question-input');
+      const input = element(document, 'textarea', 'text-input reader-question-input');
       input.id = fieldId;
       input.name = 'question';
       input.rows = 4;
       input.maxLength = 6000;
       input.placeholder = '写下对本章的问题';
       input.value = state.text;
-      const row = element(document, 'div', 'reader-question-send-row');
-      const status = element(document, 'p', 'reader-question-status', state.status);
+      const row = element(document, 'div', 'question-actions reader-question-send-row');
+      const status = element(document, 'p', 'question-status reader-question-status', state.status);
       status.setAttribute('role', 'status');
       status.setAttribute('aria-live', 'polite');
-      const send = element(document, 'button', 'reader-question-send', '发送');
+      const send = element(document, 'button', 'primary-button reader-question-send', '发送');
       send.type = 'submit';
       row.append(status, send);
       form.append(label, input, row);

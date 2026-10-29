@@ -101,18 +101,21 @@ const frame = page => page.evaluate(() => new Promise(done => requestAnimationFr
     check('initial chapter fetch shows shell', await staged.page.locator('#appHeader').isVisible() && await staged.page.locator('#chapterNav').isVisible());
     check('initial chapter fetch retains a visible in-paper state card', await staged.page.locator('#chapterView .state-card').isVisible());
     check('initial chapter fetch has inline status and no corner notice', await staged.page.locator('.chapter-load-status').isVisible() && await staged.page.locator('#readingNotice').isHidden());
-    const stage = await staged.page.locator('#chapterView').evaluate(node => ({ background: getComputedStyle(node).backgroundColor, height: node.getBoundingClientRect().height }));
+    // The transferred source gives its one reader-frame the paper material;
+    // opening/empty/error and ready text occupy that same white frame.
+    const stage = await staged.page.locator('#readerFrame').evaluate(node => ({ background: getComputedStyle(node).backgroundColor, height: node.getBoundingClientRect().height }));
     check('initial chapter fetch has a substantial white paper surface', stage.background === 'rgb(255, 255, 255)' && stage.height > 300);
-    await shot(staged.page, '03-paper-opening'); staged.release('doc1'); await staged.page.locator('.chapter-inner').waitFor();
+    await shot(staged.page, '03-paper-opening'); staged.release('doc1'); await staged.page.locator('#article h2').waitFor();await staged.page.waitForFunction(()=>!__startupQA.runtime.state.restoring);
     check('completed chapter removes opening status', await staged.page.locator('.chapter-load-status').count() === 0 && !(await staged.page.locator('#chapterView').getAttribute('class')).includes('is-opening'));
+    check('completed chapter goes directly to actual paper start',await staged.page.locator('#readerView').isVisible()&&await staged.page.locator('#chapterView').isHidden()&&await staged.page.locator('#readingPane').evaluate(e=>e.scrollTop===0));
     await shot(staged.page, '04-chapter-ready'); check('all initial loading phases had no button flashes', await staged.page.evaluate(() => __loadingLeaks.length === 0)); await staged.context.close();
 
     const failed = await fixture({ failFirstDocument: true });
     await failed.page.locator('#chapterView [data-retry-route]').waitFor();
     check('first document failure stays in the paper, not a floating notice', await failed.page.locator('#chapterView .state-card').isVisible() && await failed.page.locator('#readingNotice').isHidden());
     check('first document failure has truthful text', (await failed.page.locator('#chapterView').innerText()).includes('暂时无法打开'));
-    await shot(failed.page, '05-first-chapter-error'); await failed.page.locator('#chapterView [data-retry-route]').click(); await failed.page.locator('.chapter-inner').waitFor();
-    check('first document failure retry reaches real chapter', (await failed.page.locator('.chapter-inner').innerText()).includes('核验章节1')); await failed.context.close();
+    await shot(failed.page, '05-first-chapter-error'); await failed.page.locator('#chapterView [data-retry-route]').click(); await failed.page.locator('#article h2').waitFor();
+    check('first document failure retry reaches real chapter', (await failed.page.locator('#article h2').innerText()).includes('启动核验1')); await failed.context.close();
 
     const switching = await fixture({ hold: ['doc2'], routeHash: '#/read/first/doc-1' }); await switching.page.locator('#article h2').waitFor();
     await switching.page.locator('#nextChapter').click(); await switching.seen.doc2.promise;
