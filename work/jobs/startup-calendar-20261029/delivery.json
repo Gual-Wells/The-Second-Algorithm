@@ -1,0 +1,63 @@
+{
+  "completedAt": "2026-10-29T10:27:01.829Z",
+  "sourceCommit": "ebcc0d2d71ce10c25864b8ba06686788d0632377",
+  "origin": "https://second-algorithm.pages.dev",
+  "deploymentReceipt": "work/jobs/startup-calendar-20261029/deployments/1793269119250.json",
+  "liveBuild": "1bb092b05bbe79412d8ae3ac70ac4715964aaf0446425e99ff55c20ae297237d",
+  "gitArchiveReconstruction": {
+    "courseBuild": true,
+    "courseValidation": true,
+    "courseQuality": true,
+    "carrierBuild": true,
+    "releasePacketCheck": true,
+    "declaredDependencyVersionsInstalledInIsolatedDDirectory": true
+  },
+  "contentPreserved": [
+    {
+      "kind": "url",
+      "sha256": "f9c6efbeb2ce5b8d4dc39021e9759d81c9b5c41dbb56d8397847013bf1b1079c",
+      "unchanged": true
+    },
+    {
+      "kind": "sourceUrl",
+      "sha256": "979b63e50271fcb7e6a80ed55ec05ce4663754dcbe3858e300155ea7707ecb42",
+      "unchanged": true
+    },
+    {
+      "kind": "markdownUrl",
+      "sha256": "201cc3138b76ab2833d392448285d1ee8809aa0de8768bb4611c39ea8e2d25e3",
+      "unchanged": true
+    }
+  ],
+  "publicArtifacts": [
+    {
+      "file": "index.html",
+      "status": 200,
+      "sha256": "9178a851dc2b590416432171e3235478e27fd081085875f52734d709a6bf3631",
+      "matchesDeployedArtifact": true
+    },
+    {
+      "file": "styles.css",
+      "status": 200,
+      "sha256": "5a889db9b46dcbe62450f61717b1d32136ef918e964b1804518ce606fbe7a38f",
+      "matchesDeployedArtifact": true
+    },
+    {
+      "file": "app.js",
+      "status": 200,
+      "sha256": "2620348a993664d6e0ae41fdd85d01a8b280836b79bb2bd5b3e3dd6c163a3602",
+      "matchesDeployedArtifact": true
+    },
+    {
+      "file": "sw.js",
+      "status": 200,
+      "sha256": "b3262de4ca06290ad51edc389513180a4b0f0a5f0529571cd462acd7772cbb89",
+      "matchesDeployedArtifact": true
+    }
+  ],
+  "visualAcceptance": {
+    "physicalIPhoneTested": false,
+    "overallPreviousTestLayoutAccepted": false
+  },
+  "newRecurringCost": 0
+}
