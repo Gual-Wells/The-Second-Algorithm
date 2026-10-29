@@ -1,0 +1,114 @@
+{
+  "reference": {
+    ".state-card": {
+      "x": 20,
+      "y": 86,
+      "width": 362,
+      "height": 206.4375,
+      "fontSize": "12px",
+      "lineHeight": "17.4px",
+      "color": "rgb(24, 49, 77)"
+    },
+    ".state-band": {
+      "x": 22,
+      "y": 88,
+      "width": 358,
+      "height": 48,
+      "fontSize": "12px",
+      "lineHeight": "17.4px",
+      "color": "rgb(255, 255, 255)"
+    },
+    ".state-body": {
+      "x": 22,
+      "y": 136,
+      "width": 358,
+      "height": 154.4375,
+      "fontSize": "12px",
+      "lineHeight": "17.4px",
+      "color": "rgb(24, 49, 77)"
+    },
+    ".state-icon": {
+      "x": 36,
+      "y": 153,
+      "width": 56,
+      "height": 56,
+      "fontSize": "12px",
+      "lineHeight": "17.4px",
+      "color": "rgb(24, 49, 77)"
+    },
+    ".state-body h2": {
+      "x": 36,
+      "y": 219,
+      "width": 330,
+      "height": 24.640625,
+      "fontSize": "17px",
+      "lineHeight": "24.65px",
+      "color": "rgb(23, 79, 132)"
+    },
+    ".state-body p": {
+      "x": 36,
+      "y": 253.640625,
+      "width": 330,
+      "height": 19.796875,
+      "fontSize": "12px",
+      "lineHeight": "19.8px",
+      "color": "rgb(54, 86, 117)"
+    }
+  },
+  "target": {
+    ".state-card": {
+      "x": 20,
+      "y": 86,
+      "width": 362,
+      "height": 206.4375,
+      "fontSize": "12px",
+      "lineHeight": "17.4px",
+      "color": "rgb(24, 49, 77)"
+    },
+    ".state-band": {
+      "x": 22,
+      "y": 88,
+      "width": 358,
+      "height": 48,
+      "fontSize": "12px",
+      "lineHeight": "17.4px",
+      "color": "rgb(255, 255, 255)"
+    },
+    ".state-body": {
+      "x": 22,
+      "y": 136,
+      "width": 358,
+      "height": 154.4375,
+      "fontSize": "12px",
+      "lineHeight": "17.4px",
+      "color": "rgb(24, 49, 77)"
+    },
+    ".state-icon": {
+      "x": 36,
+      "y": 153,
+      "width": 56,
+      "height": 56,
+      "fontSize": "12px",
+      "lineHeight": "17.4px",
+      "color": "rgb(24, 49, 77)"
+    },
+    ".state-body h2": {
+      "x": 36,
+      "y": 219,
+      "width": 330,
+      "height": 24.640625,
+      "fontSize": "17px",
+      "lineHeight": "24.65px",
+      "color": "rgb(23, 79, 132)"
+    },
+    ".state-body p": {
+      "x": 36,
+      "y": 253.640625,
+      "width": 330,
+      "height": 19.796875,
+      "fontSize": "12px",
+      "lineHeight": "19.8px",
+      "color": "rgb(54, 86, 117)"
+    }
+  }
+}
