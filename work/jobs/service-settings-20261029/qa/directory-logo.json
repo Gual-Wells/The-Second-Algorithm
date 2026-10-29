@@ -1,0 +1,147 @@
+{
+  "passed": true,
+  "checks": [
+    "logo follows source 52 canvas and original 1.8s breathe",
+    "logo reaches source .55 midpoint",
+    "source pause class holds decorative phase",
+    "system reduced-motion disables header animation",
+    "all actual heading anchors retained",
+    "actual major sections grouped",
+    "H3 and H4 remain real subordinate targets",
+    "current parent initially expanded",
+    "collapse is distinct from navigation",
+    "H4 direct jump closes window and retains actual anchor",
+    "reopen reveals current H4 in its expanded parent",
+    "directory stays within viewport 320",
+    "directory stays within viewport 402",
+    "directory stays within viewport 1280",
+    "no runtime errors",
+    "frozen owned input bytes"
+  ],
+  "sourcePin": "929d42df391f4538c906e743f146cc579e655c0f",
+  "inputStart": {
+    "web/reader-runtime.js": "b8d69bae6d2fadaa48bf9135a96a0fef6aaa8ac98784ca9a7a3ec765334f5045",
+    "web/styles.css": "b89fe7eef487335cf5c57acf258c1af857a48a944e262ef98c2ba0026645a7b8",
+    "web/index.html": "76dbb81e5f5c9e91a8708c2b07574a0c405f02e669478834f0721d2e40a323ce",
+    "web/icons/header-logo.svg": "6cac12ff3b1c24c0799c09a31d054bcaf3e690df9a7693f55e5fbfe4c6ebf135"
+  },
+  "inputEnd": {
+    "web/reader-runtime.js": "b8d69bae6d2fadaa48bf9135a96a0fef6aaa8ac98784ca9a7a3ec765334f5045",
+    "web/styles.css": "b89fe7eef487335cf5c57acf258c1af857a48a944e262ef98c2ba0026645a7b8",
+    "web/index.html": "76dbb81e5f5c9e91a8708c2b07574a0c405f02e669478834f0721d2e40a323ce",
+    "web/icons/header-logo.svg": "6cac12ff3b1c24c0799c09a31d054bcaf3e690df9a7693f55e5fbfe4c6ebf135"
+  },
+  "headingCount": 278,
+  "logo": {
+    "width": 52,
+    "height": 52,
+    "animation": "breathe",
+    "duration": "1.8s",
+    "timing": "ease-in-out",
+    "keyframes": [
+      {
+        "offset": 0,
+        "opacity": "1"
+      },
+      {
+        "offset": 0.5,
+        "opacity": "0.55"
+      },
+      {
+        "offset": 1,
+        "opacity": "1"
+      }
+    ]
+  },
+  "geometry": [
+    {
+      "viewport": {
+        "width": 320,
+        "height": 740
+      },
+      "root": {
+        "x": 8,
+        "y": 139.5,
+        "width": 304,
+        "height": 518
+      },
+      "dialog": {
+        "x": 6,
+        "y": 80.5,
+        "width": 308,
+        "height": 579
+      },
+      "overflow": false,
+      "children": [
+        {
+          "font": "13px",
+          "padding": "20px"
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "width": 402,
+        "height": 874
+      },
+      "root": {
+        "x": 8,
+        "y": 159.59375,
+        "width": 386,
+        "height": 611.796875
+      },
+      "dialog": {
+        "x": 6,
+        "y": 100.59375,
+        "width": 390,
+        "height": 672.796875
+      },
+      "overflow": false,
+      "children": [
+        {
+          "font": "13px",
+          "padding": "25px"
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "root": {
+        "x": 372,
+        "y": 148.5,
+        "width": 536,
+        "height": 560
+      },
+      "dialog": {
+        "x": 370,
+        "y": 89.5,
+        "width": 540,
+        "height": 621
+      },
+      "overflow": false,
+      "children": [
+        {
+          "font": "13px",
+          "padding": "25px"
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "requests": [
+    "/",
+    "/styles.css",
+    "/app.js",
+    "/icons/header-logo.svg",
+    "/icons/icon.svg",
+    "/fixture.json",
+    "/icons/icon.svg"
+  ],
+  "scope": "Actual current reader-runtime and CSS with complete published chapter; root app, auth, backend, real document visibility event and physical iPhone not exercised here.",
+  "productionContacted": false,
+  "paidServiceContacted": false,
+  "physicalIPhone": false
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "path": "web/icons/apple-touch-icon-series1.png",
+    "unchanged": true,
+    "sha256": "dc478907d0c2866312e8f6cc2db15824c7badff3c6d4f4882438092a00e6e664"
+  },
+  {
+    "path": "web/icons/icon-192.png",
+    "unchanged": true,
+    "sha256": "7dc931fd40e3513017a6e3a8f6cce7cbd156f43bfe1ac273858a5e80a1b545aa"
+  },
+  {
+    "path": "web/icons/icon-512.png",
+    "unchanged": true,
+    "sha256": "6e2c002fc0cbe0cd97f560a808be06e24898260b550098848aaeee5fc1240353"
+  },
+  {
+    "path": "web/icons/icon.svg",
+    "unchanged": true,
+    "sha256": "497c4629840c349d1a23d27cb4a2bf9330c7f097974be9ab906a2253a6638ed3"
+  }
+]

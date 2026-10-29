@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "pythonTests": 198,
+  "nodeTests": 129,
+  "cppTargets": 4,
+  "fullTechnicalCommand": "node scripts/check-project.mjs --without-browser",
+  "logSha256": "b61144adae4f6f24073b62c993f253d8e4faf4cb3d75dc99dabaa520df8b84eb",
+  "logLocation": "local task log, preserved on D",
+  "browserSeparately": 21,
+  "readingSyncJourneys": 6,
+  "calendarChecks": 31,
+  "startupChecks": 50,
+  "serviceUiChecks": 44,
+  "directoryLogoChecks": 16,
+  "actualHttpServiceWorkerUpgrade": true,
+  "physicalIPhone": false,
+  "liveModelTaskStarted": false,
+  "lastAdjustment": "dedicated database projectBytes derives from measured database_size; service tests and formal C++ binding repeated"
+}

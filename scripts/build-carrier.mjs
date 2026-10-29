@@ -622,9 +622,12 @@ export async function buildCarrier({ root = process.cwd(), contentOnly = false, 
   let movedPrevious = false;
   try {
     const result = await buildLibrary(root, staging, publications, gitRevision);
-    let buildID;
+    let buildID, publicShellRoutes=[];
     if (!contentOnly) {
       const shellFiles = await copyShell(root, staging);
+      const publicShell=new Set(['index.html','styles.css','app.js','auth.js','sw.js','manifest.webmanifest','robots.txt','favicon.ico']);
+      publicShellRoutes=['/',...shellFiles.filter(file=>publicShell.has(file)||file.startsWith('icons/')||file.startsWith('assets/')).map(file=>'/'+file)];
+      if(publicShellRoutes.length>100)throw Error('Public shell route exclusions exceed the Pages limit; review exact routes without broadening access.');
       // Disable Pages' implicit SPA fallback for retired library URLs.
       await fs.writeFile(path.join(staging, '404.html'), '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>未找到内容</title><body><p>未找到内容。</p></body></html>\n');
       if (!shellFiles.includes('404.html')) shellFiles.push('404.html');
@@ -653,8 +656,8 @@ export async function buildCarrier({ root = process.cwd(), contentOnly = false, 
         "export default {fetch(){return new Response('Content-only build; application bundle required',{status:503,headers:{'Cache-Control':'no-store'}})}};\n");
       buildID = hash(JSON.stringify({ library: result.catalog.version, mode: 'content-only' }));
     }
-    await fs.writeFile(path.join(staging, '_routes.json'), JSON.stringify({ version: 1, include: ['/*'], exclude: [] }) + '\n');
-    await fs.writeFile(path.join(staging, '_headers'), '/*\n  X-Content-Type-Options: nosniff\n  X-Robots-Tag: noindex, nofollow\n/library/*\n  Cache-Control: private, no-store\n  Cross-Origin-Resource-Policy: same-origin\n/api/*\n  Cache-Control: no-store\n');
+    await fs.writeFile(path.join(staging, '_routes.json'), JSON.stringify({ version: 1, include: ['/*'], exclude: publicShellRoutes }) + '\n');
+    await fs.writeFile(path.join(staging, '_headers'), '/*\n  X-Content-Type-Options: nosniff\n  X-Frame-Options: DENY\n  Referrer-Policy: no-referrer\n  X-Robots-Tag: noindex, nofollow\n/library/*\n  Cache-Control: private, no-store\n  Cross-Origin-Resource-Policy: same-origin\n/api/*\n  Cache-Control: no-store\n');
     await fs.writeFile(path.join(staging, 'carrier-build.json'), JSON.stringify({ version: result.catalog.version, buildID, gitRevision,
       publicationState: result.catalog.state, operation: result.catalog.state === 'withdrawn' ? 'withdrawal' : 'content-release',
       mode: contentOnly ? 'content-only' : 'full', documents: result.documents, codeBlocks: result.codeBlocks }) + '\n');

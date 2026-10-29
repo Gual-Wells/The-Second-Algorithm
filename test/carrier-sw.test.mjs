@@ -32,7 +32,7 @@ function storage() {
 }
 
 function worker({ caches = storage(), now = 1_800_000_000_000 } = {}) {
-  const handlers = new Map(), calls = [], notifications = [];
+  const handlers = new Map(), calls = [], notifications = [], pushes=[], opened=[];
   const controls = { now, identity: alice, online: true, contentStatus: 200, fetch: null };
   const globals = {
     Request, Response, URL, console, caches,
@@ -48,12 +48,14 @@ function worker({ caches = storage(), now = 1_800_000_000_000 } = {}) {
       location: { origin },
       addEventListener(type, handler) { handlers.set(type, handler); },
       async skipWaiting() {},
-      clients: { async claim() {}, async matchAll() { return [{ postMessage(data) { notifications.push(data); } }]; } }
+      registration:{async showNotification(title,options){pushes.push({title,options});}},
+      clients: { async claim() {}, async openWindow(url){opened.push(url);},async matchAll() { return [{url:origin+'/',async navigate(url){opened.push(url);},async focus(){},postMessage(data) { notifications.push(data); }}]; } }
     }
   };
   vm.runInNewContext(source, globals, { filename: 'sw.js' });
   return {
-    controls, caches, calls, notifications,
+    controls, caches, calls, notifications,pushes,opened,
+    async event(type,event){let pending;handlers.get(type)({...event,waitUntil(value){pending=value;}});await pending;},
     async message(data, sourceUrl = origin + '/') {
       let result, pending;
       handlers.get('message')({ data, source: { url: sourceUrl }, ports: [{ postMessage(value) { result = value; } }],
@@ -88,6 +90,16 @@ test('versioned public shell installs and replaces only old shell caches', async
   assert.equal(await sw.fetch('/api/state'), null);
   assert.equal(await sw.fetch('/sw.js'), null);
   assert.equal(await sw.fetch('/unknown-private-file'), null);
+});
+
+test('push displays a bounded same-origin notice without creating offline authorization; clicks reject external destinations',async()=>{
+ const sw=worker();await sw.lifecycle('install');const before=await sw.caches.keys();
+ await sw.event('push',{data:{json(){return{title:'新章',body:'正文已发布',url:'https://evil.example/#/steal',owner:alice};}}});
+ assert.equal(sw.pushes.length,1);assert.equal(sw.pushes[0].options.data.url,'/#/');assert.deepEqual(await sw.caches.keys(),before);
+ sw.controls.online=false;assert.equal((await sw.fetch(doc)).status,503,'push must not establish private cache permission');
+ await sw.event('notificationclick',{notification:{data:{url:'https://evil.example/#/'},close(){}}});assert.deepEqual(sw.opened,[]);
+ await sw.event('notificationclick',{notification:{data:{url:'/#/read/chapter-01/binary-search'},close(){}}});
+ assert.equal(sw.opened[0],origin+'/#/read/chapter-01/binary-search');
 });
 
 test('upgrade removes unregistered content revisions and catalog without deleting owner or unrelated records', async () => {

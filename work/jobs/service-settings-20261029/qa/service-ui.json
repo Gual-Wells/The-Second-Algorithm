@@ -1,0 +1,288 @@
+{
+  "passed": true,
+  "checks": [
+    "default rest has a checked switch and no automatic writes",
+    "rest write is partial with observed revision",
+    "conflict preserves typed text and shows latest server values",
+    "explicit conflict retry uses new revision and current text",
+    "next request is initially disabled and hidden",
+    "next request updates only request fields with revision",
+    "issued credits do not become remaining credits",
+    "read failure retains same-owner snapshot with a stale notice",
+    "nonverified numeric remaining is not falsely verified",
+    "independent remaining verification appears only when explicit",
+    "account and project usage remain separate",
+    "unknown storage capacity has no made-up zero or meter",
+    "opening reminders never asks permission or subscribes",
+    "other devices do not make this device enabled",
+    "permission comes directly from real user click",
+    "standard subscription JSON and fresh device count sent on explicit enable",
+    "reopening confirms this device by local endpoint hash without registering again",
+    "disable removes server and browser registrations",
+    "unconfigured service disables native prompt without requesting a key",
+    "iPhone browser preserves necessary install guidance",
+    "installed iPhone can explicitly enable configured reminders",
+    "study-goal fits viewport 320",
+    "study-next fits viewport 320",
+    "study-rest fits viewport 320",
+    "balances fits viewport 320",
+    "storage fits viewport 320",
+    "reminders fits viewport 320",
+    "study-goal fits viewport 402",
+    "study-next fits viewport 402",
+    "study-rest fits viewport 402",
+    "balances fits viewport 402",
+    "storage fits viewport 402",
+    "reminders fits viewport 402",
+    "study-goal fits viewport 1280",
+    "study-next fits viewport 1280",
+    "study-rest fits viewport 1280",
+    "balances fits viewport 1280",
+    "storage fits viewport 1280",
+    "reminders fits viewport 1280",
+    "late response cannot replace a different active view",
+    "owner reset discards late private responses",
+    "there is no background service polling",
+    "no runtime errors",
+    "source inputs unchanged during QA"
+  ],
+  "sourceStart": {
+    "web/service-settings.js": "0e3a5cfd66b6707b77cdd574f4cd154207f37f3f4a91e3d6e6de6409c1a2f2d3",
+    "web/styles.css": "607b97b87d45d3d9689829fc4af003ce1ce2ab2e939afa8307376197e1a019f3"
+  },
+  "sourceEnd": {
+    "web/service-settings.js": "0e3a5cfd66b6707b77cdd574f4cd154207f37f3f4a91e3d6e6de6409c1a2f2d3",
+    "web/styles.css": "607b97b87d45d3d9689829fc4af003ce1ce2ab2e939afa8307376197e1a019f3"
+  },
+  "errors": [],
+  "geometry": [
+    {
+      "kind": "study-goal",
+      "viewport": {
+        "width": 320,
+        "height": 550
+      },
+      "x": 6,
+      "y": 111.390625,
+      "right": 314,
+      "bottom": 438.609375,
+      "overflow": false
+    },
+    {
+      "kind": "study-next",
+      "viewport": {
+        "width": 320,
+        "height": 550
+      },
+      "x": 6,
+      "y": 86.5625,
+      "right": 314,
+      "bottom": 463.4375,
+      "overflow": false
+    },
+    {
+      "kind": "study-rest",
+      "viewport": {
+        "width": 320,
+        "height": 550
+      },
+      "x": 6,
+      "y": 126.5625,
+      "right": 314,
+      "bottom": 423.421875,
+      "overflow": false
+    },
+    {
+      "kind": "balances",
+      "viewport": {
+        "width": 320,
+        "height": 550
+      },
+      "x": 6,
+      "y": 119.46875,
+      "right": 314,
+      "bottom": 430.515625,
+      "overflow": false
+    },
+    {
+      "kind": "storage",
+      "viewport": {
+        "width": 320,
+        "height": 550
+      },
+      "x": 6,
+      "y": 24,
+      "right": 314,
+      "bottom": 526,
+      "overflow": false
+    },
+    {
+      "kind": "reminders",
+      "viewport": {
+        "width": 320,
+        "height": 550
+      },
+      "x": 6,
+      "y": 173.28125,
+      "right": 314,
+      "bottom": 376.703125,
+      "overflow": false
+    },
+    {
+      "kind": "study-goal",
+      "viewport": {
+        "width": 402,
+        "height": 874
+      },
+      "x": 6,
+      "y": 273.390625,
+      "right": 396,
+      "bottom": 600.609375,
+      "overflow": false
+    },
+    {
+      "kind": "study-next",
+      "viewport": {
+        "width": 402,
+        "height": 874
+      },
+      "x": 6,
+      "y": 248.5625,
+      "right": 396,
+      "bottom": 625.4375,
+      "overflow": false
+    },
+    {
+      "kind": "study-rest",
+      "viewport": {
+        "width": 402,
+        "height": 874
+      },
+      "x": 6,
+      "y": 297.09375,
+      "right": 396,
+      "bottom": 576.90625,
+      "overflow": false
+    },
+    {
+      "kind": "balances",
+      "viewport": {
+        "width": 402,
+        "height": 874
+      },
+      "x": 6,
+      "y": 281.46875,
+      "right": 396,
+      "bottom": 592.515625,
+      "overflow": false
+    },
+    {
+      "kind": "storage",
+      "viewport": {
+        "width": 402,
+        "height": 874
+      },
+      "x": 6,
+      "y": 112.984375,
+      "right": 396,
+      "bottom": 761.015625,
+      "overflow": false
+    },
+    {
+      "kind": "reminders",
+      "viewport": {
+        "width": 402,
+        "height": 874
+      },
+      "x": 6,
+      "y": 335.28125,
+      "right": 396,
+      "bottom": 538.703125,
+      "overflow": false
+    },
+    {
+      "kind": "study-goal",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "x": 370,
+      "y": 236.390625,
+      "right": 910,
+      "bottom": 563.609375,
+      "overflow": false
+    },
+    {
+      "kind": "study-next",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "x": 370,
+      "y": 211.5625,
+      "right": 910,
+      "bottom": 588.4375,
+      "overflow": false
+    },
+    {
+      "kind": "study-rest",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "x": 370,
+      "y": 260.09375,
+      "right": 910,
+      "bottom": 539.90625,
+      "overflow": false
+    },
+    {
+      "kind": "balances",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "x": 370,
+      "y": 244.46875,
+      "right": 910,
+      "bottom": 555.515625,
+      "overflow": false
+    },
+    {
+      "kind": "storage",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "x": 370,
+      "y": 75.984375,
+      "right": 910,
+      "bottom": 724.015625,
+      "overflow": false
+    },
+    {
+      "kind": "reminders",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "x": 370,
+      "y": 298.28125,
+      "right": 910,
+      "bottom": 501.703125,
+      "overflow": false
+    }
+  ],
+  "requests": [
+    "https://service-ui.test/",
+    "https://service-ui.test/styles.css",
+    "https://service-ui.test/app.js",
+    "https://service-ui.test/icons/header-logo.svg",
+    "https://service-ui.test/icons/icon.svg",
+    "https://service-ui.test/icons/icon.svg"
+  ],
+  "scope": "Actual service-settings module and source CSS/HTML with isolated stub owner API and simulated native Push. No production backend, passkey, real permission or real device exercised.",
+  "productionContacted": false,
+  "paidServiceContacted": false,
+  "physicalIPhone": false
+}

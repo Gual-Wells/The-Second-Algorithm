@@ -1,6 +1,6 @@
 # 研究任务与发布任务运行手册
 
-本手册描述实际CLI。无周期任务、付费模型调用或自动语义认证；Agent负责资料和内容判断，脚本/CI负责可重跑的确定性步骤。
+本手册描述实际CLI。Agent负责资料和内容判断，脚本/CI负责可重跑的确定性步骤；可配置默认休息、单次许可的本机后台出版，不自动语义认证或调用OpenAI API。后台与任务末尾服务核对按[SERVICES_STORAGE](SERVICES_STORAGE.md)。
 
 ## 启动与恢复
 
@@ -125,5 +125,7 @@ npm run deploy -- --release work/jobs/task-id/releases/<id>.json
 部署检查包、串行锁、构建后再次校验、使用已有Cloudflare授权上传、检查线上匿名边界和SW build身份，成功另存deployment记录，不修改不可变准备包。记录包含packet及其字节packetSha256、inputHash、researchHandoffs、origin、build、deployedAt、anonymousBoundaryVerified与passed；上传期间packet改变不得记录成功。字段见CONTENT_MODEL。它为精确已出版研究提供操作证据，不能提前伪造收据或给旧缺字段收据补写成功。
 
 任何步骤失败停止；若源码/协议/页面改变，回到受影响研究和审阅后重验，不能禁掉门禁。异常退出先查部署是否实际发生与锁所属进程，未知结果不能伪称成功。
+
+实际发布成功后，按SERVICES_STORAGE更新私人服务快照、把已验证提交分组归档到本项目OneDrive目录，并向已主动订阅设备发送真实完成提醒；未知余额/容量不编造。后台任务另保存`.local/services/publication-result.json`，包含runId、published:true及本次真实deployment回执的repo相对receiptPath；只供runner核验，不进入Git。
 
 CI在push/PR验证当前目标并保存检查产物；workflow_dispatch可指定已有研究job运行验证/发布准备。生产发布仅main、显式publish输入、已有CF secrets及相同门禁，concurrency防同一生产项目重叠。不自动创造研究证据，不提交教材原件/凭据。无云授权时仍保留可复现本地流程并如实报告。

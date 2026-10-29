@@ -1,0 +1,75 @@
+{
+  "baselineDeployment": "work/jobs/language-replica-20261029/deployments/1793284360689.json",
+  "allSameExceptCatalogGlobalVersion": true,
+  "files": [
+    {
+      "file": "catalog.json",
+      "unchanged": true
+    },
+    {
+      "file": "chapter-01/binary-search/73fc1b514ce44d89.cpp",
+      "unchanged": true
+    },
+    {
+      "file": "chapter-01/binary-search/73fc1b514ce44d89.md",
+      "unchanged": true
+    },
+    {
+      "file": "chapter-01/binary-search/ad18abc79391a8da.json",
+      "unchanged": true
+    },
+    {
+      "file": "knowledge/Q100001/dc22c2384ed01152.json",
+      "unchanged": true
+    },
+    {
+      "file": "knowledge/Q100002/d3c060d83a8c4c63.json",
+      "unchanged": true
+    },
+    {
+      "file": "knowledge/Q100003/b72349b11959719a.json",
+      "unchanged": true
+    },
+    {
+      "file": "knowledge/Q100004/e7b483e238122170.json",
+      "unchanged": true
+    },
+    {
+      "file": "knowledge/Q100005/bd683d93c15ddee7.json",
+      "unchanged": true
+    },
+    {
+      "file": "knowledge/Q100006/7d54f65237dfcbad.json",
+      "unchanged": true
+    },
+    {
+      "file": "knowledge/Q100007/6f9688b256739cbb.json",
+      "unchanged": true
+    },
+    {
+      "file": "knowledge/Q100008/3b1a3fb7dc3758a6.json",
+      "unchanged": true
+    },
+    {
+      "file": "knowledge/Q100009/d8b98f290f3be5e0.json",
+      "unchanged": true
+    },
+    {
+      "file": "knowledge/Q100010/39bddfdb56c0bb02.json",
+      "unchanged": true
+    },
+    {
+      "file": "knowledge/Q100011/41ca4eccc695456b.json",
+      "unchanged": true
+    },
+    {
+      "file": "knowledge/Q100012/0825e9dfd540e34f.json",
+      "unchanged": true
+    },
+    {
+      "file": "knowledge/Q100013/277616d4652ce862.json",
+      "unchanged": true
+    }
+  ],
+  "newUnexpectedFiles": []
+}

@@ -1,11 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="56 72 400 360" role="img" aria-label="第二算法">
-  <defs>
-    <linearGradient id="silver" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ffffff"/><stop offset=".46" stop-color="#e5f0fa"/><stop offset=".5" stop-color="#c1d5e8"/><stop offset="1" stop-color="#f0f6fc"/></linearGradient>
-    <mask id="details" maskUnits="userSpaceOnUse" x="56" y="72" width="400" height="360"><path fill="#fff" d="M56 72H456V432H56z"/><g fill="none" stroke="#000" stroke-width="13" stroke-linecap="round"><path d="M224 148H288"/><path d="M112 356H176"/><path d="M336 356H400"/></g></mask>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="第二算法">
+  <defs><mask id="details" maskUnits="userSpaceOnUse" x="0" y="0" width="512" height="512"><path fill="#fff" d="M0 0H512V512H0z"/><g fill="none" stroke="#000" stroke-width="13" stroke-linecap="round"><path d="M224 148H288"/><path d="M112 356H176"/><path d="M336 356H400"/></g></mask></defs>
   <g mask="url(#details)">
-    <g fill="none" stroke="#285581" stroke-width="28" stroke-linecap="round" opacity=".7"><path d="M256 208V248M144 248H368M144 248V296M368 248V296"/></g>
-    <g fill="none" stroke="url(#silver)" stroke-width="24" stroke-linecap="round"><path d="M256 208V248M144 248H368M144 248V296M368 248V296"/></g>
-    <g fill="url(#silver)" stroke="#285581" stroke-opacity=".7" stroke-width="2"><rect x="184" y="88" width="144" height="120" rx="14"/><rect x="72" y="296" width="144" height="120" rx="14"/><rect x="296" y="296" width="144" height="120" rx="14"/></g>
+    <g fill="#cfe8ff"><rect x="184" y="88" width="144" height="120" rx="14"/><rect x="72" y="296" width="144" height="120" rx="14"/><rect x="296" y="296" width="144" height="120" rx="14"/></g>
+    <g fill="none" stroke="#cfe8ff" stroke-width="24" stroke-linecap="round"><path d="M256 208V248M144 248H368M144 248V296M368 248V296"/></g>
   </g>
 </svg>

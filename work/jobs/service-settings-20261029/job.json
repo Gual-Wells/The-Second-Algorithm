@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "id": "service-settings-20261029",
+  "goal": "目录索引、源Logo动效、读位同步修复、默认恢复、学习安排与服务账户/分层存储和默认关闭自动化建设",
+  "createdAt": "2026-10-29T15:49:32.443708+00:00",
+  "evidence": [
+    {
+      "id": "73834bb3d4394906b4fd4f85bc86bfaf",
+      "kind": "research",
+      "path": "work/service-settings-20261029/research.md",
+      "summary": "核对固定第二语言源与当前目标，研究目录语义、实际同步频率及轻量服务/存储分工",
+      "outcome": "accepted",
+      "sha256": "7178fb4d88e2f95e4a5364117a73e4f0fe552ff00d83006064c11991b4b6e54a",
+      "inputHash": "08eb0a832b350ef630c9379a1ed7884d1465f22e23b1341a17342d08311e8ced",
+      "recordedAt": "2026-10-29T16:20:58.305623+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "ebe6f703b0684896be3c78046ca2d49c",
+      "kind": "review",
+      "path": "work/service-settings-20261029/review.md",
+      "summary": "整合回读新目录与服务边界，出版资产保真、离线/身份/恢复及服务快照语义分别核验",
+      "outcome": "accepted",
+      "sha256": "a4199fed849df867cc26c886b5861a0a66a58e117be20db94d79eb4c8a3ac7ce",
+      "inputHash": "08eb0a832b350ef630c9379a1ed7884d1465f22e23b1341a17342d08311e8ced",
+      "recordedAt": "2026-10-29T16:21:03.281106+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "f2f5c718ccb0462d9fd40ab8efcf9b93",
+      "kind": "research",
+      "path": "work/service-settings-20261029/research.md",
+      "summary": "原研究结论保持；同步专项新增默认全检执行入口，当前输入重新绑定",
+      "outcome": "accepted",
+      "sha256": "7178fb4d88e2f95e4a5364117a73e4f0fe552ff00d83006064c11991b4b6e54a",
+      "inputHash": "c6dce42f3bf9d2954e1b75e2d038e276b9a0befd3e731125d624221f270a9a6c",
+      "recordedAt": "2026-10-29T16:24:34.274949+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "6a50104ca1724a71bb110bfe48039e22",
+      "kind": "review",
+      "path": "work/service-settings-20261029/review.md",
+      "summary": "复核同一载体审阅与新增CI同步检查入口；内容、运行时和既有验收判据不变",
+      "outcome": "accepted",
+      "sha256": "a4199fed849df867cc26c886b5861a0a66a58e117be20db94d79eb4c8a3ac7ce",
+      "inputHash": "c6dce42f3bf9d2954e1b75e2d038e276b9a0befd3e731125d624221f270a9a6c",
+      "recordedAt": "2026-10-29T16:24:38.432738+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "d9802aaed1b7440d8d061c03feab4caa",
+      "kind": "research",
+      "path": "work/service-settings-20261029/research.md",
+      "summary": "独立项目D1实测字节同时记为本项目占用，分层与资源登记研究保持",
+      "outcome": "accepted",
+      "sha256": "7178fb4d88e2f95e4a5364117a73e4f0fe552ff00d83006064c11991b4b6e54a",
+      "inputHash": "1c76ecfcd3176d546b6cf13f598c9d5367c9e9d67ba38295488f58ef286c364d",
+      "recordedAt": "2026-10-29T16:28:03.505802+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "8713180ff3ae4242aeda17140f18bdf6",
+      "kind": "review",
+      "path": "work/service-settings-20261029/review.md",
+      "summary": "复核独立数据库实测来源字段，其他运行时/教材未改；服务10项定向复验通过",
+      "outcome": "accepted",
+      "sha256": "a4199fed849df867cc26c886b5861a0a66a58e117be20db94d79eb4c8a3ac7ce",
+      "inputHash": "1c76ecfcd3176d546b6cf13f598c9d5367c9e9d67ba38295488f58ef286c364d",
+      "recordedAt": "2026-10-29T16:28:06.601900+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    }
+  ],
+  "lastGoodVerification": {
+    "path": "work/jobs/service-settings-20261029/verifications/6534d3ae01624a7c86f09bd4bf7fb5aa.json",
+    "sha256": "9bcbee324dfce892fdb22ba3a7bfb1fcc03f1d967d28737eadb59d429ac8afb5",
+    "inputHash": "1c76ecfcd3176d546b6cf13f598c9d5367c9e9d67ba38295488f58ef286c364d"
+  },
+  "lastPreparedRelease": {
+    "path": "work/jobs/service-settings-20261029/releases/f7ff312005544cdd8126d1a5885f1808.json",
+    "sha256": "7c8184b2ac02e8062a6b0f2e36c7d36916ab5589fc99e2e81102fb8a273e43bc",
+    "inputHash": "1c76ecfcd3176d546b6cf13f598c9d5367c9e9d67ba38295488f58ef286c364d"
+  },
+  "lastVerificationAttempt": {
+    "path": "work/jobs/service-settings-20261029/verifications/6534d3ae01624a7c86f09bd4bf7fb5aa.json",
+    "sha256": "9bcbee324dfce892fdb22ba3a7bfb1fcc03f1d967d28737eadb59d429ac8afb5",
+    "inputHash": "1c76ecfcd3176d546b6cf13f598c9d5367c9e9d67ba38295488f58ef286c364d"
+  }
+}

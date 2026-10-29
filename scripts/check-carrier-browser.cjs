@@ -16,7 +16,7 @@ const probe = '\nglobalThis.__refinement = { get state() { return S; }, get obse
 let qaCatalog, makeIndex;
 const gestures = [],targetGeometry=[],viewportDiagnostics=[],settingsGeometry=[];
 const pendingPersistence=[];
-const watchedFiles = ['web/app.js','web/reader-runtime.js','web/manual-questions.js','web/chapter-dates.js','web/auth.js','web/worker-release.js','web/sw.js','web/index.html','web/styles.css','dist/index.html','dist/app.js','dist/library/catalog.json'];
+const watchedFiles = ['web/app.js','web/reader-runtime.js','web/manual-questions.js','web/service-settings.js','web/chapter-dates.js','web/auth.js','web/worker-release.js','web/sw.js','web/index.html','web/styles.css','dist/index.html','dist/app.js','dist/library/catalog.json'];
 async function fingerprint() { return Object.fromEntries(await Promise.all(watchedFiles.map(async file=>[file,digest(await fs.readFile(path.join(root,file)))]))); }
 async function createCorpus() {
   const catalog = { schemaVersion: 2, state: 'active', version: 'qa-course-v3', collections: [], questions: [
@@ -83,6 +83,12 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
       const input = req.postDataJSON(), previous = mock.state[input.key];
       const record = { value:input.value, revision:(previous?.revision||0)+1, updatedAt:Date.now() }; mock.state[input.key] = record; return json({...record,record});
     }
+    // Explicit unknown snapshots. These isolated fixtures never contain a
+    // provider key, personal balance, actual storage usage, or model call.
+    if (url.pathname === '/api/settings') return json({ revision:1, goal:'', temporaryRequested:false, temporaryRequestText:'', restRequested:true, automation:{ configured:false, schedule:null, activeRun:null } });
+    if (url.pathname === '/api/balances') return json({ verified:false, remainingAmount:null, issuedAmount:null, expiresAt:null, updatedAt:null });
+    if (url.pathname === '/api/storage/usage') return json({ verified:false, pools:[] });
+    if (url.pathname === '/api/push/status') return json({ configured:false, deviceCount:0 });
     if (mock.unavailable.has(url.pathname)) return route.abort('internetdisconnected');
     if (mock.delayDocument === url.pathname) { mock.delayDocument = null; await new Promise(r => {mock.heldDocument=r;}); }
     if (url.pathname === '/app.js') return route.fulfill({ contentType:'text/javascript',body:app });
@@ -96,9 +102,12 @@ async function settled(p,ms=140) { await p.waitForFunction(()=>!window.__refinem
 async function closeSheet(p) { if(await p.locator('#sheetDialog').evaluate(e=>e.open)) { await p.locator('[data-sheet-close]').click(); await p.waitForFunction(()=>!document.querySelector('#sheetDialog').open); await settled(p); } }
 async function navigateHeading(p,id) {
   await closeSheet(p); await p.locator('#sectionIndexButton').click();
-  const title=await p.locator('#article #'+id).textContent();
-  await p.locator('#indexFilter').fill(title);
-  await p.locator(`#indexList .index-item[data-index-go="${id}"]`).click(); await settled(p);
+  const target=p.locator(`#indexList [data-index-go="${id}"]`);
+  if(!await target.isVisible()) {
+    const parent=await target.evaluate(e=>e.closest('[data-directory-section]').dataset.directorySection);
+    await p.locator(`#indexList [data-toggle-index-section="${parent}"]`).click();
+  }
+  await target.click(); await settled(p);
 }
 async function currentAnchor(p) { return p.evaluate(()=>__refinement.runtime.position?.anchor); }
 async function assertTarget(p,id) {
@@ -235,17 +244,26 @@ async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries
         await navigateHeading(p,'code-15');assert(await p.locator('#nextMajor').isDisabled());await assertTarget(p,'code-15');
       }
     });
-    await check('source-section-index-filter-clear-original-order-and-jump',async env=>{
+    await check('hierarchical-directory-index-expand-is-not-jump-and-preserves-original-order',async env=>{
       const p=await env.page();await navigateHeading(p,'code-5');await p.locator('#sectionIndexButton').click();
-      assert.equal(await p.locator('#sheetTitle').innerText(),'篇节索引');assert.equal(await p.locator('#sheetBody .toc-group,#desktopToc').count(),0);
+      assert.equal(await p.locator('#sheetTitle').innerText(),'目录索引');assert.equal(await p.locator('#sheetBody #indexFilter,input[type="search"],#desktopToc').count(),0);
       const current=p.locator('#indexList [data-index-go][aria-current="location"]');assert.equal(await current.count(),1);assert.equal(await current.getAttribute('data-index-go'),'code-5');
       const expected=await p.evaluate(()=>__refinement.runtime.headings.map(h=>({id:h.id,title:h.title})));
-      const rows=()=>p.locator('#indexList .index-item').evaluateAll(xs=>xs.map(x=>({id:x.dataset.indexGo,title:x.querySelector('strong').textContent})));
+      const rows=()=>p.locator('#indexList [data-index-go]').evaluateAll(xs=>xs.map(x=>({id:x.dataset.indexGo,title:x.textContent})));
       assert.deepEqual(await rows(),expected);assert.equal(expected.length,48);
+      assert.equal(await p.locator('#indexList [data-directory-section]').count(),16);
+      for(let i=0;i<16;i++) {
+        const group=p.locator(`#indexList [data-directory-section="section-${i}"]`);
+        assert.deepEqual(await group.locator('[data-index-go]').evaluateAll(xs=>xs.map(x=>x.dataset.indexGo)),[`section-${i}`,`unit-${i}`,`code-${i}`]);
+        assert.equal(await group.locator('.depth-3').count(),1);assert.equal(await group.locator('.depth-4').count(),1);
+      }
       const before=await p.evaluate(()=>({hash:location.hash,top:document.querySelector('#readingPane').scrollTop}));
-      await p.locator('#indexFilter').fill('第5节');assert.deepEqual((await rows()).map(h=>h.id),['section-5','unit-5','code-5']);
-      await p.locator('#indexFilter').fill('不存在的篇节');assert.equal(await p.locator('#indexList .index-item').count(),0);assert.match(await p.locator('#indexList').innerText(),/没有|未找到/);
-      await p.locator('#indexFilter').fill('');assert.deepEqual(await rows(),expected);assert.deepEqual(await p.evaluate(()=>({hash:location.hash,top:document.querySelector('#readingPane').scrollTop})),before);
+      const toggle=p.locator('[data-toggle-index-section="section-8"]');
+      assert.equal(await toggle.getAttribute('aria-expanded'),'false');await toggle.click();assert.equal(await toggle.getAttribute('aria-expanded'),'true');
+      assert(await p.locator('#indexList [data-index-go="unit-8"]').isVisible());
+      await toggle.click();assert.equal(await toggle.getAttribute('aria-expanded'),'false');assert.equal(await p.locator('#indexList [data-index-go="unit-8"]').isVisible(),false);
+      assert.deepEqual(await rows(),expected);assert.deepEqual(await p.evaluate(()=>({hash:location.hash,top:document.querySelector('#readingPane').scrollTop})),before,'directory expansion only changes the directory');
+      await toggle.click();
       await p.screenshot({path:path.join(output,'section-index.png')});await p.locator('#indexList [data-index-go="unit-8"]').click();await settled(p);
       assert.equal(await p.locator('#sheetDialog').evaluate(e=>e.open),false);await assertTarget(p,'unit-8');
       await p.locator('#sectionIndexButton').click();await closeSheet(p);assert(await p.locator('#sectionIndexButton').evaluate(e=>e===document.activeElement));
@@ -340,7 +358,7 @@ async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries
       await p.goBack(); await p.waitForFunction(() => __refinement.state.active?.meta.id === 'practice-entry'); await settled(p);
       assert(Math.abs(await p.locator('#readingPane').evaluate(e => e.scrollTop) - before) < 2);
     });
-    await check('grouped-settings-files-fonts-sheet-history-and-immediate-reopen',async env=>{
+    await check('grouped-service-settings-reading-defaults-sheet-history-and-immediate-reopen',async env=>{
       const p=await env.page();await navigateHeading(p,'unit-3');const anchor=await currentAnchor(p),reference=(await readingPoint(p)).position;await settingsPoint(p,'before-settings',reference);await p.locator('#settingsButton').click();
       assert.equal(await p.locator('#headerActions [data-action="library"],#headerActions #libraryButton').count(),0);
       assert.equal(await p.locator('#sheetBody [data-show-library],#sheetBody [data-current-chapter],#sheetBody [data-show-source]').count(),0);
@@ -349,8 +367,10 @@ async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries
       assert.equal(await p.locator('#sheetBody #bodySizeOutput,#sheetBody #codeSizeOutput').count(),0);
       assert.equal(await p.locator('#sheetBody [data-show-device-settings]').count(),1);
       assert.equal(await p.locator('#sheetBody [data-check-updates],#sheetBody [data-reload-app],#sheetBody [data-logout]').count(),0);
-      assert.deepEqual((await p.locator('#sheetBody .section-band').allTextContents()).map(s=>s.replace(/\s+/g,' ').trim()),['阅读','离线下载OFFLINE','章节文件','应用与账户']);
-      assert.equal(await p.locator('#sheetBody [data-show-files]').count(),1);
+      assert.deepEqual((await p.locator('#sheetBody .section-band').allTextContents()).map(s=>s.replace(/\s+/g,' ').trim()),['阅读','离线下载OFFLINE','学习安排','服务与账户']);
+      assert.equal(await p.locator('#sheetBody [data-show-files]').count(),0);
+      assert.deepEqual(await p.locator('#sheetBody [data-service-view]').evaluateAll(xs=>xs.map(x=>x.dataset.serviceView)),['study-goal','study-next','study-rest','balances','storage','reminders']);
+      await p.locator('#preloadContent').uncheck();assert.equal(await p.evaluate(()=>__refinement.state.settings.preload),false);
       await p.screenshot({path:path.join(output,'settings-home-402.png')});
       const font=await p.locator('#article p').first().evaluate(e=>getComputedStyle(e).fontSize);await p.locator('[data-show-reading-settings]').click();
       await settingsPoint(p,'reading-detail-before-font',reference);
@@ -358,14 +378,24 @@ async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries
       await p.screenshot({path:path.join(output,'reading-preferences-402.png')});await p.locator('[data-font="1"]').click();await settled(p);await settingsPoint(p,'font-increased-sheet-open',reference);await closeSheet(p);await settingsPoint(p,'font-increased-sheet-closed',reference);
       assert.notEqual(await p.locator('#article p').first().evaluate(e=>getComputedStyle(e).fontSize),font);assert.equal(await currentAnchor(p),anchor);
       assert(await p.locator('#settingsButton').evaluate(e=>e===document.activeElement));
-      await p.setViewportSize({width:402,height:540});await settled(p);await p.locator('#settingsButton').click();await p.locator('[data-show-files]').scrollIntoViewIfNeeded();
-      const settingsScroll=await p.locator('#sheetBody').evaluate(e=>e.scrollTop);await p.locator('[data-show-files]').click();assert.equal(await p.locator('#sheetTitle').innerText(),'本章文件');
-      await p.screenshot({path:path.join(output,'chapter-files-402x540.png')});
-      await p.locator('[data-show-source]').click();await p.locator('.source-view code').waitFor();
-      assert.equal(await p.locator('.source-view code').textContent(),await fs.readFile(path.join(qaLibrary,qaCatalog.collections[0].documents[0].sourceUrl.slice(1)),'utf8'));
-      await p.locator('#sheetBack').click();assert.equal(await p.locator('#sheetTitle').innerText(),'本章文件');
+      await p.locator('#settingsButton').click();await p.locator('[data-show-reading-settings]').click();
+      await p.locator('[data-code-font="0.5"]').click();await p.locator('#wrapCode').check();await p.locator('[data-reset-reading]').click();await settled(p);
+      assert.deepEqual(await p.evaluate(()=>({fontSize:__refinement.state.settings.fontSize,codeSize:__refinement.state.settings.codeSize,wrapCode:__refinement.state.settings.wrapCode,preload:__refinement.state.settings.preload})),{fontSize:15,codeSize:12,wrapCode:false,preload:false},'restore defaults affects only reading preferences');
+      assert.equal(await p.locator('#bodySizeOutput').textContent(),'15');assert.equal(await p.locator('#codeSizeOutput').textContent(),'12');assert.equal(await p.locator('#wrapCode').isChecked(),false);
+      await closeSheet(p);const resetLocation=await readingPoint(p,reference);assert.equal(resetLocation.anchor,anchor);assert(Math.abs(resetLocation.point)<2,JSON.stringify({reference,resetLocation}));
+      await p.setViewportSize({width:402,height:540});await settled(p);await p.locator('#settingsButton').click();await p.locator('[data-service-view="balances"]').scrollIntoViewIfNeeded();
+      const settingsScroll=await p.locator('#sheetBody').evaluate(e=>e.scrollTop);await p.locator('[data-service-view="balances"]').click();await p.locator('.balance-card').waitFor();assert.equal(await p.locator('#sheetTitle').innerText(),'服务额度');
+      assert.match(await p.locator('#sheetBody').innerText(),/ChatGPT API.*赠送额度[\s\S]*未核验/);assert.doesNotMatch(await p.locator('#sheetBody').innerText(),/\$\d/);
+      await p.screenshot({path:path.join(output,'service-balances-unknown-402x540.png')});
       await p.locator('#sheetBack').click();assert.equal(await p.locator('#sheetTitle').innerText(),'阅读器设置');
       await p.waitForFunction(top=>Math.abs(document.getElementById('sheetBody').scrollTop-top)<2,settingsScroll);
+      for(const[kind,title,ready]of[['study-goal','学习目标','[data-service-form="study-goal"]'],['study-next','下次安排','[data-service-form="study-next"]'],['study-rest','休息安排','[data-service-form="study-rest"]'],['storage','存储空间','[data-service-action="reload"]'],['reminders','提醒','[data-service-action="push-enable"]']]){
+        await p.locator(`[data-service-view="${kind}"]`).click();await p.locator(ready).waitFor();assert.equal(await p.locator('#sheetTitle').innerText(),title);
+        if(kind==='study-rest')assert(await p.locator('#serviceRestRequested').isChecked(),'default automation remains at rest');
+        if(kind==='storage')assert.match(await p.locator('#sheetBody').innerText(),/尚无存储记录/);
+        if(kind==='reminders')assert(await p.locator('[data-service-action="push-enable"]').isDisabled(),'an unconfigured push service is never presented as enabled');
+        await p.locator('#sheetBack').click();assert.equal(await p.locator('#sheetTitle').innerText(),'阅读器设置');
+      }
       await p.locator('[data-show-device-settings]').click();assert.equal(await p.locator('#sheetDialog').getAttribute('data-view'),'device-settings');
       assert.equal(await p.locator('#sheetBody [data-check-updates],#sheetBody [data-logout]').count(),2);await p.screenshot({path:path.join(output,'device-account-settings-402x540.png')});
       await p.locator('#sheetBack').click();assert.equal(await p.locator('#sheetTitle').innerText(),'阅读器设置');
@@ -410,7 +440,8 @@ async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries
       assert(await p.locator('#statusLamp').evaluate(e=>e.classList.contains('offline')));
       env.mock.failStateRead=false;const beforeRecovery=stateReads();await p.evaluate(()=>window.dispatchEvent(new Event('online')));
       await poll(()=>stateReads()>beforeRecovery,'successful state recovery reads the remote state');
-      await p.waitForFunction(()=>__refinement.state.stateSyncFailed===false&&!document.getElementById('statusLamp').classList.contains('offline')&&/已同步/.test(document.getElementById('syncStatus').textContent));
+      await p.waitForFunction(()=>__refinement.state.stateSyncFailed===false&&!document.getElementById('statusLamp').classList.contains('offline')&&/已同步|阅读位置已保存在本机/.test(document.getElementById('syncStatus').textContent));
+      assert.equal(await p.evaluate(()=>Object.entries(__refinement.state.records).some(([key,record])=>!key.startsWith('position:')&&!key.startsWith('notes:')&&record.dirty)),false,'foreground state recovery still completes; only the scheduled position checkpoint may remain local');
       assert.equal(await p.evaluate(()=>location.hash),hash);assert.equal(await p.evaluate(()=>__refinement.state.owner),owner);
     });
     await check('cross-owner-reconnect-never-shares-reader-private-state-or-legacy-notes',async env=>{const p=await env.page(),keys=Object.keys(noteSeed()),before=await snapshotKeys(p,keys);await navigateHeading(p,'unit-8');await p.locator('#questionsButton').click();await p.locator('.reader-question-input').fill('owner A only draft');await closeSheet(p);env.mock.identity=otherOwner;await p.reload();await p.locator('#article .code-block').first().waitFor();await settled(p);assert.equal(await p.evaluate(()=>window.__refinement.state.owner),otherOwner);assert.notEqual(await currentAnchor(p),'unit-8');await p.locator('#questionsButton').click();assert.equal(await p.locator('.reader-question-input').inputValue(),'');assert.doesNotMatch(await p.locator('body').innerText(),/legacy local note|unsent other tab|different owner private note|owner A only draft/);assert.deepEqual(await snapshotKeys(p,keys),before);},{initial:noteSeed()});
@@ -475,8 +506,11 @@ async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries
           },payload.headings);
           for(const sample of visualSamples){await navigateHeading(p,sample.id);await p.screenshot({path:path.join(output,`${meta.id}-${sample.category}-402.png`)});}
           await fs.writeFile(path.join(output,meta.id+'-visual-samples.json'),JSON.stringify({viewport:{width:402,height:874},samples:visualSamples,physicalIPhone:false,visualAcceptance:'requires human review'},null,2)+'\n');
-          await p.setViewportSize({width:402,height:874});await p.locator('#sectionIndexButton').click();assert.deepEqual(await p.locator('#indexList [data-index-go]').evaluateAll(xs=>xs.map(x=>({id:x.dataset.indexGo,text:x.querySelector('strong').textContent}))),payload.headings.map(h=>({id:h.id,text:h.text})));assert.equal(await p.locator('#sheetBody #indexFilter').count(),1);await closeSheet(p);
-          await p.locator('#settingsButton').click();await p.locator('[data-show-files]').click();await p.locator('[data-show-source]').click();await p.locator('.source-view code').waitFor();const shown=await p.locator('.source-view code').textContent();assert.equal(shown,await fs.readFile(path.join(root,'dist',meta.sourceUrl.slice(1)),'utf8'));absentFromPublic(shown,meta.id+' full source');boundary.assertReaderSource(shown,meta.id+' displayed source');await closeSheet(p);
+          await p.setViewportSize({width:402,height:874});await p.locator('#sectionIndexButton').click();assert.equal(await p.locator('#sheetTitle').innerText(),'目录索引');assert.deepEqual(await p.locator('#indexList [data-index-go]').evaluateAll(xs=>xs.map(x=>({id:x.dataset.indexGo,text:x.textContent}))),payload.headings.map(h=>({id:h.id,text:h.text})));assert.equal(await p.locator('#sheetBody #indexFilter,input[type="search"]').count(),0);assert.equal(await p.locator('#indexList [data-directory-section]').count(),payload.headings.filter(h=>h.depth===2).length);await closeSheet(p);
+          // The files UI was deliberately removed. Verify the real protected
+          // asset directly, without inventing a reader button or bypassing HTTP.
+          const sourceResult=await p.evaluate(async url=>{const response=await fetch(url,{credentials:'same-origin'});return{status:response.status,text:await response.text()};},meta.sourceUrl);assert.equal(sourceResult.status,200);const shown=sourceResult.text;assert.equal(shown,await fs.readFile(path.join(root,'dist',meta.sourceUrl.slice(1)),'utf8'));absentFromPublic(shown,meta.id+' full source');boundary.assertReaderSource(shown,meta.id+' protected source');
+          env.mock.identity=null;const denied=await p.evaluate(async url=>(await fetch(url,{credentials:'same-origin'})).status,meta.sourceUrl);assert.equal(denied,401,'protected source requires the owner session');env.mock.identity=owner;
           const link=p.locator('#article [data-knowledge]').first();if(await link.count()){const id=await link.getAttribute('data-knowledge'),q=catalog.questions.find(q=>q.id===id);assert(q);await link.scrollIntoViewIfNeeded();const before=await p.locator('#readingPane').evaluate(e=>e.scrollTop);await link.click();await p.locator('.knowledge-paper').waitFor();assert.equal(await p.locator('#sheetTitle').innerText(),q.title);boundary.assertReaderText(await p.locator('.knowledge-paper').innerText(),'displayed knowledge');await closeSheet(p);assert(Math.abs(await p.locator('#readingPane').evaluate(e=>e.scrollTop)-before)<2);}
           await p.close();}
         for(const q of catalog.questions){const payload=JSON.parse(await fs.readFile(path.join(root,'dist',q.url.slice(1)),'utf8'));absentFromPublic(payload.html,q.id+' full knowledge');}

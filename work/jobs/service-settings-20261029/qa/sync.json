@@ -1,0 +1,968 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "name": "unchanged-resize-never-dirties-or-uploads-position",
+      "passed": true,
+      "evidence": {
+        "before": {
+          "id": "sync-a",
+          "owner": "sssssssssssssssssssssssssssssssssssssssssss",
+          "hash": "#/read/sync-first/sync-a",
+          "scrollTop": 0,
+          "position": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": 184.390625,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290334983,
+            "block": {
+              "index": 0,
+              "ratio": 0,
+              "offset": 184.390625
+            }
+          },
+          "local": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": 184.390625,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290334983,
+            "block": {
+              "index": 0,
+              "ratio": 0,
+              "offset": 184.390625
+            }
+          },
+          "record": {
+            "value": {
+              "schema": 3,
+              "anchor": "section-0",
+              "offset": 184.390625,
+              "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+              "capturedAt": 1793290334983,
+              "block": {
+                "index": 0,
+                "ratio": 0,
+                "offset": 184.390625
+              }
+            },
+            "revision": 1,
+            "updatedAt": 1793290334983,
+            "dirty": false
+          },
+          "history": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": 184.390625,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290334983,
+            "block": {
+              "index": 0,
+              "ratio": 0,
+              "offset": 184.390625
+            }
+          },
+          "footer": "已同步",
+          "lampOffline": false,
+          "virtualAt": 1793290579241
+        },
+        "after": {
+          "id": "sync-a",
+          "owner": "sssssssssssssssssssssssssssssssssssssssssss",
+          "hash": "#/read/sync-first/sync-a",
+          "scrollTop": 0,
+          "position": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": 184.390625,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290589841,
+            "block": {
+              "index": 0,
+              "ratio": 0,
+              "offset": 184.390625
+            }
+          },
+          "local": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": 184.390625,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290334983,
+            "block": {
+              "index": 0,
+              "ratio": 0,
+              "offset": 184.390625
+            }
+          },
+          "record": {
+            "value": {
+              "schema": 3,
+              "anchor": "section-0",
+              "offset": 184.390625,
+              "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+              "capturedAt": 1793290334983,
+              "block": {
+                "index": 0,
+                "ratio": 0,
+                "offset": 184.390625
+              }
+            },
+            "revision": 1,
+            "updatedAt": 1793290334983,
+            "dirty": false
+          },
+          "history": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": 184.390625,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290334983,
+            "block": {
+              "index": 0,
+              "ratio": 0,
+              "offset": 184.390625
+            }
+          },
+          "footer": "已同步",
+          "lampOffline": false,
+          "virtualAt": 1793290591817
+        },
+        "resizeEvents": 6
+      },
+      "positionPuts": 0,
+      "requestTrace": [],
+      "unexpectedApis": []
+    },
+    {
+      "name": "continuous-scrolling-uses-bounded-sixty-second-checkpoint",
+      "passed": true,
+      "evidence": {
+        "started": 1793290582389,
+        "before": {
+          "id": "sync-a",
+          "owner": "sssssssssssssssssssssssssssssssssssssssssss",
+          "hash": "#/read/sync-first/sync-a",
+          "scrollTop": 0,
+          "position": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": 184.390625,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290338000,
+            "block": {
+              "index": 0,
+              "ratio": 0,
+              "offset": 184.390625
+            }
+          },
+          "local": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": 184.390625,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290338000,
+            "block": {
+              "index": 0,
+              "ratio": 0,
+              "offset": 184.390625
+            }
+          },
+          "record": {
+            "value": {
+              "schema": 3,
+              "anchor": "section-0",
+              "offset": 184.390625,
+              "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+              "capturedAt": 1793290338000,
+              "block": {
+                "index": 0,
+                "ratio": 0,
+                "offset": 184.390625
+              }
+            },
+            "revision": 1,
+            "updatedAt": 1793290338000,
+            "dirty": false
+          },
+          "history": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": 184.390625,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290338000,
+            "block": {
+              "index": 0,
+              "ratio": 0,
+              "offset": 184.390625
+            }
+          },
+          "footer": "已同步",
+          "lampOffline": false,
+          "virtualAt": 1793290582389
+        },
+        "after": {
+          "id": "sync-a",
+          "owner": "sssssssssssssssssssssssssssssssssssssssssss",
+          "hash": "#/read/sync-first/sync-a",
+          "scrollTop": 390,
+          "position": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": -205.609375,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290643549,
+            "block": {
+              "index": 1,
+              "ratio": 0.1392792089513401,
+              "offset": -167.265625
+            }
+          },
+          "local": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": -205.609375,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290643549,
+            "block": {
+              "index": 1,
+              "ratio": 0.1392792089513401,
+              "offset": -167.265625
+            }
+          },
+          "record": {
+            "value": {
+              "schema": 3,
+              "anchor": "section-0",
+              "offset": -205.609375,
+              "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+              "capturedAt": 1793290643549,
+              "block": {
+                "index": 1,
+                "ratio": 0.1392792089513401,
+                "offset": -167.265625
+              }
+            },
+            "revision": 2,
+            "updatedAt": 1793290638461,
+            "dirty": true
+          },
+          "history": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": -205.609375,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290643549,
+            "block": {
+              "index": 1,
+              "ratio": 0.1392792089513401,
+              "offset": -167.265625
+            }
+          },
+          "footer": "阅读位置已保存在本机",
+          "lampOffline": false,
+          "virtualAt": 1793290648637
+        },
+        "automaticPuts": 1,
+        "firstCheckpointMs": 60188
+      },
+      "positionPuts": 1,
+      "requestTrace": [
+        {
+          "at": 1793290642577,
+          "data": {
+            "key": "position:sync-a",
+            "value": {
+              "schema": 3,
+              "anchor": "section-0",
+              "offset": -175.609375,
+              "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+              "capturedAt": 1793290638461,
+              "block": {
+                "index": 1,
+                "ratio": 0.11429872495446267,
+                "offset": -137.265625
+              }
+            }
+          }
+        }
+      ],
+      "unexpectedApis": []
+    },
+    {
+      "name": "slow-request-coalesces-new-position-without-immediate-followup-loop",
+      "passed": true,
+      "evidence": {
+        "newest": {
+          "id": "sync-a",
+          "owner": "sssssssssssssssssssssssssssssssssssssssssss",
+          "hash": "#/read/sync-first/sync-a",
+          "scrollTop": 150,
+          "position": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": 34.390625,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290596489,
+            "block": {
+              "index": 0,
+              "ratio": 0,
+              "offset": 34.390625
+            }
+          },
+          "local": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": 34.390625,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290596489,
+            "block": {
+              "index": 0,
+              "ratio": 0,
+              "offset": 34.390625
+            }
+          },
+          "record": {
+            "value": {
+              "schema": 3,
+              "anchor": "section-0",
+              "offset": 34.390625,
+              "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+              "capturedAt": 1793290596489,
+              "block": {
+                "index": 0,
+                "ratio": 0,
+                "offset": 34.390625
+              }
+            },
+            "revision": 1,
+            "updatedAt": 1793290343597,
+            "dirty": true
+          },
+          "history": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": 34.390625,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290596489,
+            "block": {
+              "index": 0,
+              "ratio": 0,
+              "offset": 34.390625
+            }
+          },
+          "footer": "阅读位置已保存在本机",
+          "lampOffline": false,
+          "virtualAt": 1793290597469
+        },
+        "retained": {
+          "id": "sync-a",
+          "owner": "sssssssssssssssssssssssssssssssssssssssssss",
+          "hash": "#/read/sync-first/sync-a",
+          "scrollTop": 150,
+          "position": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": 34.390625,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290596489,
+            "block": {
+              "index": 0,
+              "ratio": 0,
+              "offset": 34.390625
+            }
+          },
+          "local": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": 34.390625,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290596489,
+            "block": {
+              "index": 0,
+              "ratio": 0,
+              "offset": 34.390625
+            }
+          },
+          "record": {
+            "value": {
+              "schema": 3,
+              "anchor": "section-0",
+              "offset": 34.390625,
+              "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+              "capturedAt": 1793290596489,
+              "block": {
+                "index": 0,
+                "ratio": 0,
+                "offset": 34.390625
+              }
+            },
+            "revision": 2,
+            "updatedAt": 1793290587865,
+            "dirty": true
+          },
+          "history": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": 34.390625,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290596489,
+            "block": {
+              "index": 0,
+              "ratio": 0,
+              "offset": 34.390625
+            }
+          },
+          "footer": "阅读位置已保存在本机",
+          "lampOffline": false,
+          "virtualAt": 1793290598517
+        },
+        "remote": {
+          "value": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": 34.390625,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290596489,
+            "block": {
+              "index": 0,
+              "ratio": 0,
+              "offset": 34.390625
+            }
+          },
+          "revision": 3,
+          "updatedAt": 1793290596489
+        }
+      },
+      "positionPuts": 2,
+      "requestTrace": [
+        {
+          "at": 1793290588405,
+          "data": {
+            "key": "position:sync-a",
+            "value": {
+              "schema": 3,
+              "anchor": "section-0",
+              "offset": 114.390625,
+              "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+              "capturedAt": 1793290587865,
+              "block": {
+                "index": 0,
+                "ratio": 0,
+                "offset": 114.390625
+              }
+            }
+          }
+        },
+        {
+          "at": 1793290598517,
+          "data": {
+            "key": "position:sync-a",
+            "value": {
+              "schema": 3,
+              "anchor": "section-0",
+              "offset": 34.390625,
+              "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+              "capturedAt": 1793290596489,
+              "block": {
+                "index": 0,
+                "ratio": 0,
+                "offset": 34.390625
+              }
+            }
+          }
+        }
+      ],
+      "unexpectedApis": []
+    },
+    {
+      "name": "offline-reading-keeps-local-history-and-recovers-one-latest-snapshot",
+      "passed": true,
+      "evidence": {
+        "offline": {
+          "id": "sync-a",
+          "owner": "sssssssssssssssssssssssssssssssssssssssssss",
+          "hash": "#/read/sync-first/sync-a",
+          "scrollTop": 225,
+          "position": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": -40.609375,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290602585,
+            "block": {
+              "index": 1,
+              "ratio": 0.0018865469685141816,
+              "offset": -2.265625
+            }
+          },
+          "local": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": -40.609375,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290602585,
+            "block": {
+              "index": 1,
+              "ratio": 0.0018865469685141816,
+              "offset": -2.265625
+            }
+          },
+          "record": {
+            "value": {
+              "schema": 3,
+              "anchor": "section-0",
+              "offset": -40.609375,
+              "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+              "capturedAt": 1793290602585,
+              "block": {
+                "index": 1,
+                "ratio": 0.0018865469685141816,
+                "offset": -2.265625
+              }
+            },
+            "revision": 1,
+            "updatedAt": 1793290347690,
+            "dirty": true
+          },
+          "history": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": -40.609375,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290602585,
+            "block": {
+              "index": 1,
+              "ratio": 0.0018865469685141816,
+              "offset": -2.265625
+            }
+          },
+          "footer": "离线阅读 · 已保存在本机",
+          "lampOffline": true,
+          "virtualAt": 1793290670221
+        },
+        "resumed": {
+          "id": "sync-a",
+          "owner": "sssssssssssssssssssssssssssssssssssssssssss",
+          "hash": "#/read/sync-first/sync-a",
+          "scrollTop": 225,
+          "position": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": -40.609375,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290602585,
+            "block": {
+              "index": 1,
+              "ratio": 0.0018865469685141816,
+              "offset": -2.265625
+            }
+          },
+          "local": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": -40.609375,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290602585,
+            "block": {
+              "index": 1,
+              "ratio": 0.0018865469685141816,
+              "offset": -2.265625
+            }
+          },
+          "record": {
+            "value": {
+              "schema": 3,
+              "anchor": "section-0",
+              "offset": -40.609375,
+              "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+              "capturedAt": 1793290602585,
+              "block": {
+                "index": 1,
+                "ratio": 0.0018865469685141816,
+                "offset": -2.265625
+              }
+            },
+            "revision": 2,
+            "updatedAt": 1793290602585,
+            "dirty": false
+          },
+          "history": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": -40.609375,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290602585,
+            "block": {
+              "index": 1,
+              "ratio": 0.0018865469685141816,
+              "offset": -2.265625
+            }
+          },
+          "footer": "已同步",
+          "lampOffline": false,
+          "virtualAt": 1793290735269
+        },
+        "remote": {
+          "value": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": -40.609375,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290602585,
+            "block": {
+              "index": 1,
+              "ratio": 0.0018865469685141816,
+              "offset": -2.265625
+            }
+          },
+          "revision": 2,
+          "updatedAt": 1793290602585
+        }
+      },
+      "positionPuts": 1,
+      "requestTrace": [
+        {
+          "at": 1793290670221,
+          "data": {
+            "key": "position:sync-a",
+            "value": {
+              "schema": 3,
+              "anchor": "section-0",
+              "offset": -40.609375,
+              "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+              "capturedAt": 1793290602585,
+              "block": {
+                "index": 1,
+                "ratio": 0.0018865469685141816,
+                "offset": -2.265625
+              }
+            }
+          }
+        }
+      ],
+      "unexpectedApis": []
+    },
+    {
+      "name": "chapter-change-flushes-old-document-and-new-local-position-stays-separate",
+      "passed": true,
+      "evidence": {
+        "old": {
+          "id": "sync-a",
+          "owner": "sssssssssssssssssssssssssssssssssssssssssss",
+          "hash": "#/read/sync-first/sync-a",
+          "scrollTop": 120,
+          "position": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": 64.390625,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290595072,
+            "block": {
+              "index": 0,
+              "ratio": 0,
+              "offset": 64.390625
+            }
+          },
+          "local": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": 64.390625,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290595072,
+            "block": {
+              "index": 0,
+              "ratio": 0,
+              "offset": 64.390625
+            }
+          },
+          "record": {
+            "value": {
+              "schema": 3,
+              "anchor": "section-0",
+              "offset": 64.390625,
+              "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+              "capturedAt": 1793290595072,
+              "block": {
+                "index": 0,
+                "ratio": 0,
+                "offset": 64.390625
+              }
+            },
+            "revision": 1,
+            "updatedAt": 1793290350611,
+            "dirty": true
+          },
+          "history": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": 64.390625,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290595072,
+            "block": {
+              "index": 0,
+              "ratio": 0,
+              "offset": 64.390625
+            }
+          },
+          "footer": "阅读位置已保存在本机",
+          "lampOffline": false,
+          "virtualAt": 1793290595612
+        },
+        "next": {
+          "id": "sync-b",
+          "owner": "sssssssssssssssssssssssssssssssssssssssssss",
+          "hash": "#/read/sync-second/sync-b",
+          "scrollTop": 0,
+          "position": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": 184.390625,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290596416,
+            "block": {
+              "index": 0,
+              "ratio": 0,
+              "offset": 184.390625
+            }
+          },
+          "local": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": 184.390625,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290595632,
+            "block": {
+              "index": 0,
+              "ratio": 0,
+              "offset": 184.390625
+            }
+          },
+          "record": {
+            "value": {
+              "schema": 3,
+              "anchor": "section-0",
+              "offset": 184.390625,
+              "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+              "capturedAt": 1793290595632,
+              "block": {
+                "index": 0,
+                "ratio": 0,
+                "offset": 184.390625
+              }
+            },
+            "dirty": true
+          },
+          "history": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": 184.390625,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290595632,
+            "block": {
+              "index": 0,
+              "ratio": 0,
+              "offset": 184.390625
+            }
+          },
+          "footer": "阅读位置已保存在本机",
+          "lampOffline": false,
+          "virtualAt": 1793290596460
+        },
+        "writtenKeys": [
+          "position:sync-a",
+          "position:sync-b"
+        ]
+      },
+      "positionPuts": 2,
+      "requestTrace": [
+        {
+          "at": 1793290595612,
+          "data": {
+            "key": "position:sync-a",
+            "value": {
+              "schema": 3,
+              "anchor": "section-0",
+              "offset": 64.390625,
+              "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+              "capturedAt": 1793290595072,
+              "block": {
+                "index": 0,
+                "ratio": 0,
+                "offset": 64.390625
+              }
+            }
+          }
+        },
+        {
+          "at": 1793290596460,
+          "data": {
+            "key": "position:sync-b",
+            "value": {
+              "schema": 3,
+              "anchor": "section-0",
+              "offset": 184.390625,
+              "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+              "capturedAt": 1793290595632,
+              "block": {
+                "index": 0,
+                "ratio": 0,
+                "offset": 184.390625
+              }
+            }
+          }
+        }
+      ],
+      "unexpectedApis": []
+    },
+    {
+      "name": "pagehide-and-user-preferences-flush-without-waiting-a-minute",
+      "passed": true,
+      "evidence": {
+        "current": {
+          "id": "sync-a",
+          "owner": "sssssssssssssssssssssssssssssssssssssssssss",
+          "hash": "#/read/sync-first/sync-a",
+          "scrollTop": 90,
+          "position": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": 94.390625,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290597738,
+            "block": {
+              "index": 0,
+              "ratio": 0,
+              "offset": 94.390625
+            }
+          },
+          "local": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": 94.390625,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290597738,
+            "block": {
+              "index": 0,
+              "ratio": 0,
+              "offset": 94.390625
+            }
+          },
+          "record": {
+            "value": {
+              "schema": 3,
+              "anchor": "section-0",
+              "offset": 94.390625,
+              "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+              "capturedAt": 1793290597738,
+              "block": {
+                "index": 0,
+                "ratio": 0,
+                "offset": 94.390625
+              }
+            },
+            "revision": 1,
+            "updatedAt": 1793290353341,
+            "dirty": true
+          },
+          "history": {
+            "schema": 3,
+            "anchor": "section-0",
+            "offset": 94.390625,
+            "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+            "capturedAt": 1793290597738,
+            "block": {
+              "index": 0,
+              "ratio": 0,
+              "offset": 94.390625
+            }
+          },
+          "footer": "阅读位置已保存在本机",
+          "lampOffline": false,
+          "virtualAt": 1793290598278
+        },
+        "preferences": {
+          "value": {
+            "fontSize": 16,
+            "codeSize": 12,
+            "wrapCode": false,
+            "preload": true
+          },
+          "revision": 1,
+          "updatedAt": 1793290414383
+        },
+        "positionPuts": 1,
+        "preferencePuts": 1
+      },
+      "positionPuts": 1,
+      "requestTrace": [
+        {
+          "at": 1793290598278,
+          "data": {
+            "key": "position:sync-a",
+            "value": {
+              "schema": 3,
+              "anchor": "section-0",
+              "offset": 94.390625,
+              "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0",
+              "capturedAt": 1793290597738,
+              "block": {
+                "index": 0,
+                "ratio": 0,
+                "offset": 94.390625
+              }
+            }
+          }
+        },
+        {
+          "at": 1793290599122,
+          "data": {
+            "key": "preferences",
+            "value": {
+              "fontSize": 16,
+              "codeSize": 12,
+              "wrapCode": false,
+              "preload": true
+            }
+          }
+        }
+      ],
+      "unexpectedApis": []
+    }
+  ],
+  "failures": [],
+  "inputStart": {
+    "web/app.js": "f7fa51f8bf9aec8bd733b6875b7d4c2440cbbf517fb18760a1a51136d4bcfd72",
+    "web/reader-runtime.js": "b8d69bae6d2fadaa48bf9135a96a0fef6aaa8ac98784ca9a7a3ec765334f5045",
+    "web/styles.css": "607b97b87d45d3d9689829fc4af003ce1ce2ab2e939afa8307376197e1a019f3",
+    "web/index.html": "76dbb81e5f5c9e91a8708c2b07574a0c405f02e669478834f0721d2e40a323ce",
+    "web/manual-questions.js": "e32145d51a399ea5cc7510798b027ff8cfabd99ee816383bb4e4ad0fe9f6bc78",
+    "web/auth.js": "9f8db119e19cc7ac887e96aa6cefe8bc153759c316bb611472b91a2507b2fd87",
+    "web/chapter-dates.js": "6f0d0e526780f6a4f0929b9c2a0083d59aa5ba00650bde64c77c864949f1794c",
+    "web/worker-release.js": "f79451187b86d84e0bc5260e82f02ae6759cd4fda8a62576309abad39234c776",
+    "web/service-settings.js": "0e3a5cfd66b6707b77cdd574f4cd154207f37f3f4a91e3d6e6de6409c1a2f2d3",
+    "server/worker.mjs": "626d9362d2a6ddcf9c3bf3b83e9c9db91bd38fd510ad4dd1d4104a6fad4ca34a"
+  },
+  "inputEnd": {
+    "web/app.js": "f7fa51f8bf9aec8bd733b6875b7d4c2440cbbf517fb18760a1a51136d4bcfd72",
+    "web/reader-runtime.js": "b8d69bae6d2fadaa48bf9135a96a0fef6aaa8ac98784ca9a7a3ec765334f5045",
+    "web/styles.css": "607b97b87d45d3d9689829fc4af003ce1ce2ab2e939afa8307376197e1a019f3",
+    "web/index.html": "76dbb81e5f5c9e91a8708c2b07574a0c405f02e669478834f0721d2e40a323ce",
+    "web/manual-questions.js": "e32145d51a399ea5cc7510798b027ff8cfabd99ee816383bb4e4ad0fe9f6bc78",
+    "web/auth.js": "9f8db119e19cc7ac887e96aa6cefe8bc153759c316bb611472b91a2507b2fd87",
+    "web/chapter-dates.js": "6f0d0e526780f6a4f0929b9c2a0083d59aa5ba00650bde64c77c864949f1794c",
+    "web/worker-release.js": "f79451187b86d84e0bc5260e82f02ae6759cd4fda8a62576309abad39234c776",
+    "web/service-settings.js": "0e3a5cfd66b6707b77cdd574f4cd154207f37f3f4a91e3d6e6de6409c1a2f2d3",
+    "server/worker.mjs": "626d9362d2a6ddcf9c3bf3b83e9c9db91bd38fd510ad4dd1d4104a6fad4ca34a"
+  },
+  "testedAt": "2026-10-29T16:13:35.089Z",
+  "runtime": "actual current web app bundled with a synthetic immutable two-chapter catalog",
+  "time": "Playwright virtual clock runs original production timers, including the full 60-second checkpoint; no timer duration substitution",
+  "network": "actual fetch calls with isolated in-memory responses; delayed ACKs explicitly held and released",
+  "productionContacted": false,
+  "realDatabaseModified": false,
+  "paidServiceContacted": false,
+  "serviceWorker": "blocked; tested separately",
+  "physicalIPhone": false
+}

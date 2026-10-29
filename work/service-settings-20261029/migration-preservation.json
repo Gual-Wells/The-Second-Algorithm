@@ -1,0 +1,32 @@
+{
+  "migration": "0002_services.sql",
+  "existingOwnerRowsPreserved": true,
+  "before": [
+    {
+      "table_name": "auth_control",
+      "rows": 1
+    },
+    {
+      "table_name": "auth_credential",
+      "rows": 1
+    },
+    {
+      "table_name": "reader_state",
+      "rows": 14
+    }
+  ],
+  "after": [
+    {
+      "table_name": "auth_control",
+      "rows": 1
+    },
+    {
+      "table_name": "auth_credential",
+      "rows": 1
+    },
+    {
+      "table_name": "reader_state",
+      "rows": 14
+    }
+  ]
+}

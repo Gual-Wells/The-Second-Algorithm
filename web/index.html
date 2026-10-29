@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="/styles.css?v=__BUILD__"><script type="module" src="/app.js?v=__BUILD__"></script></head><body>
 <main id="app" class="app-shell app-frame login-mode">
   <header id="appHeader" class="app-header">
-    <div class="title-row"><div class="app-title"><p id="headerMeta" class="header-meta">算法实战 · 正在连接</p><h1>第二算法 <small>SECOND ALGORITHM</small></h1></div><div class="header-logo" id="headerLogo" role="img" aria-label="第二算法标志"><img src="/icons/header-logo.svg" alt=""></div></div>
+    <div class="title-row"><div class="app-title"><p id="headerMeta" class="header-meta">算法实战 · 正在连接</p><h1>第二算法 <small>SECOND ALGORITHM</small></h1></div><div class="header-logo" id="headerLogo" aria-hidden="true"><img src="/icons/header-logo.svg" alt=""></div></div>
     <div class="header-actions" id="headerActions" hidden>
       <button id="previousMajor" class="header-button" data-nav="previous-major" type="button" disabled>上一节</button>
       <button id="nextMajor" class="header-button" data-nav="next-major" type="button" disabled>下一节</button>
@@ -32,7 +32,7 @@
     <section id="readerView" class="reader-view" hidden><div id="readingLayout" class="reading-layout"><div id="readingPane" class="reading-pane reading-scroll" tabindex="0" aria-label="正文"><section id="reader" class="reader">
       <div class="reader-head" id="readerHead"><div class="chapter-label"><span id="readerChapterDate"></span><span class="label-separator">/</span><span id="readerChapterNumber"></span></div><div class="chapter-title-row"><h2 id="readerChapterTitle"></h2></div><p id="readerChapterSubtitle"></p></div>
       <div class="part-heading" id="partHeading"><span id="readerPartNumber"></span><strong id="readerPartTitle"></strong><span id="readerPartSummary"></span></div>
-      <div class="article-tools" id="articleTools"><button class="bevel-button" id="sectionIndexButton" type="button" aria-haspopup="dialog">篇节索引</button><span id="articleToolsHint">按篇节定位本章内容</span></div>
+      <div class="article-tools" id="articleTools"><button class="bevel-button" id="sectionIndexButton" type="button" aria-haspopup="dialog">目录索引</button><span id="articleToolsHint">按目录定位本章内容</span></div>
       <article id="article" class="paper article"></article>
     </section></div></div></section>
     <div id="readerStatusbar" class="reader-statusbar" role="status"><span id="statusLamp" class="status-lamp"></span><span id="syncStatus">正在连接章节…</span><span id="readingPosition"></span></div>

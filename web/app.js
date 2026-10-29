@@ -3,13 +3,15 @@ import { NotesJournal } from './notes-journal.js';
 import { waitForWorkerRelease } from './worker-release.js';
 import { createReaderRuntime } from './reader-runtime.js';
 import { createReaderQuestions } from './manual-questions.js';
+import { createServiceSettings } from './service-settings.js';
 import { isChapterDate, shanghaiDate, formatChapterDate, shiftMonth, weekDates, orderedChapters, chaptersByDate } from './chapter-dates.js';
 
 const $ = id => document.getElementById(id);
 const esc = text => String(text ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+const READING_DEFAULTS = Object.freeze({ fontSize: 15, codeSize: 12, wrapCode: false });
 const S = { owner: null, library: null, records: {}, docs: new Map(), knowledge: new Map(), active: null,
   offline: false, stateSyncFailed: false, sequence: 0, connectionSequence: 0, pendingRoute: null, updateReady: false,
-  settings: { fontSize: 15, codeSize: 12, wrapCode: false, preload: true } };
+  settings: { ...READING_DEFAULTS, preload: true } };
 const SESSION_KEY = 'second-algorithm:last-session';
 const prefix = () => `second-algorithm:${S.owner}:`;
 const readLocal = (key, fallback = null) => { try { return JSON.parse(localStorage.getItem(prefix() + key)) ?? fallback; } catch { return fallback; } };
@@ -19,8 +21,10 @@ const CLIENT_ID = crypto.randomUUID();
 const BUILD = new URL(import.meta.url).searchParams.get('v');
 const PUBLICATION_INDEX = typeof __PUBLICATION_INDEX__ === 'undefined' ? { version: '', collections: {} } : __PUBLICATION_INDEX__;
 let journalInstance, questions, sheetView, sheetParent, sheetSequence = 0, sheetHistory = false, sheetClosing = false, sheetOpener = null;
-let afterSheetClose = null, sheetPosition = null, toastTimer, positionTimer, positionSaveTimer, reconnectTimer, reconnecting = false, observedLocation = '', initialRoute = true;
+let afterSheetClose = null, sheetPosition = null, toastTimer, positionSaveTimer, reconnectTimer, reconnecting = false, observedLocation = '', initialRoute = true;
 const syncing = new Map(), downloads = new Map(), downloadStatus = new Map();
+const positionCheckpoints = new Map();
+const POSITION_CHECKPOINT_MS = 60_000;
 const book = { tab: 'list', month: shanghaiDate().slice(0, 7), query: '' };
 let contentController = null, contentReleaseJob = null;
 const runtime = createReaderRuntime({ onPosition: queuePosition, onNavigate: (anchor, position) => {
@@ -28,6 +32,7 @@ const runtime = createReaderRuntime({ onPosition: queuePosition, onNavigate: (an
   const route = `#/read/${S.active.collection.id}/${S.active.meta.id}`;
   navigate(anchor ? route + '?anchor=' + encodeURIComponent(anchor) : route, { position });
 }, onCopy: copyText, isSheetOpen: () => $('sheetDialog').open || sheetHistory, toast });
+const serviceSettings = createServiceSettings({ api, getOwner: () => S.owner, showSheet, rememberSheet, showSettings, toast, getSheetView: () => sheetView });
 
 function publishedLibrary(catalog) {
   if (catalog?.schemaVersion !== 2) throw Error('课程目录版本与当前应用不符，请联网更新。');
@@ -79,11 +84,14 @@ async function ensureContentRelease() {
   await contentReleaseJob;
 }
 function lock(message = '使用通行密钥进入阅读室。') {
+  serviceSettings.reset();
+  for (const timer of positionCheckpoints.values()) clearTimeout(timer); positionCheckpoints.clear();
+  syncing.clear();
   book.query = ''; book.tab = 'list'; book.month = shanghaiDate().slice(0, 7);
   questions?.destroy(); questions = null;
   S.sequence++; S.connectionSequence++; S.owner = null; S.active = null; S.library = null; S.docs.clear(); S.knowledge.clear(); S.records = {};
   S.pendingRoute = null; S.stateSyncFailed = false; downloads.clear(); downloadStatus.clear(); afterSheetClose = null; sheetOpener = null; sheetPosition = null; observedLocation = ''; initialRoute = true;
-  clearTimeout(reconnectTimer); clearTimeout(positionTimer); clearTimeout(positionSaveTimer); journalInstance = null;
+  clearTimeout(reconnectTimer); clearTimeout(positionSaveTimer); journalInstance = null;
   localStorage.removeItem(SESSION_KEY); runtime.clear();
   // Expired identity must not leave protected prose in the closed dialog.
   sheetSequence++; sheetHistory = false; sheetClosing = false; if ($('sheetDialog').open) $('sheetDialog').close(); $('sheetBody').replaceChildren();
@@ -147,6 +155,7 @@ function mergeRemoteState(state) {
 }
 async function enter(owner, offline, connection) {
   if (S.owner !== owner) {
+    serviceSettings.reset(); for (const timer of positionCheckpoints.values()) clearTimeout(timer); positionCheckpoints.clear(); syncing.clear();
     book.query = ''; book.tab = 'list'; book.month = shanghaiDate().slice(0, 7);
     questions?.destroy(); questions = null; S.docs.clear(); S.knowledge.clear(); S.records = {}; S.active = null; downloadStatus.clear(); observedLocation = ''; initialRoute = true; runtime.clear();
     sheetHistory = false; sheetClosing = false; sheetSequence++; if ($('sheetDialog').open) $('sheetDialog').close(); $('sheetBody').replaceChildren();
@@ -161,7 +170,7 @@ async function enter(owner, offline, connection) {
     catch (error) { if (error.status === 401) throw error; S.stateSyncFailed = true; toast('同步暂不可用，阅读位置先保存在本机。'); }
     writeLocal('records', S.records); localStorage.setItem(SESSION_KEY, JSON.stringify({ owner, verifiedAt: Date.now() }));
   }
-  S.settings = { fontSize: 15, codeSize: 12, wrapCode: false, preload: true, ...(S.records.preferences?.value || readLocal('preferences', {})) };
+  S.settings = { ...READING_DEFAULTS, preload: true, ...(S.records.preferences?.value || readLocal('preferences', {})) };
   S.settings.fontSize = Math.max(14, Math.min(24, Number(S.settings.fontSize) || 15));
   S.settings.codeSize = Math.max(10, Math.min(20, Number(S.settings.codeSize) || 12)); applySettings();
   questions ||= createReaderQuestions({ getContext: () => ({ owner: S.owner, chapterId: S.active?.collection.id, title: S.active?.collection.title, revision: S.active?.meta.revision }), toast, transport: null });
@@ -175,7 +184,7 @@ async function enter(owner, offline, connection) {
     const savedValid = savedChapter && (saved[1] === 'chapter' ? !saved[3] : savedChapter.documents.some(item => item.id === saved[3]));
     history.replaceState(null, '', savedValid ? previous : first ? `#/chapter/${first.id}` : '#/library');
   }
-  await route(); if (!offline) void syncPending();
+  await route(); if (!offline) void syncPending({ forcePositions: true });
 }
 function selectedDocument(collection) {
   return collection.documents.find(document => document.id === readLocal(`last-document:${collection.id}`))
@@ -183,7 +192,9 @@ function selectedDocument(collection) {
 }
 function navigate(hash, { replace = false, position = null } = {}) {
   if ($('sheetDialog').open || sheetHistory) { dismissSheet(() => navigate(hash, { replace, position })); return; }
-  savePosition(); const snapshot = position ? { readingPosition: position, readingOwner: S.owner, readingDocument: S.active?.meta.id } : null;
+  savePosition();
+  if (S.active && !hash.startsWith(`#/read/${S.active.collection.id}/${S.active.meta.id}`)) void syncRecord(`position:${S.active.meta.id}`, { force: true });
+  const snapshot = position ? { readingPosition: position, readingOwner: S.owner, readingDocument: S.active?.meta.id } : null;
   if (replace) history.replaceState(snapshot, '', hash); else history.pushState(snapshot, '', hash);
   observedLocation = ''; void route();
 }
@@ -257,7 +268,8 @@ async function route() {
     if (requestedAnchor && !contentHasAnchor(meta, content, requestedAnchor)) { routeUnavailable('这个阅读位置不存在或已撤回。'); return; }
     await document.fonts.ready; if (sequence !== S.sequence || !S.owner) return;
     const same = previous?.meta.id === meta.id && previous?.meta.revision === meta.revision;
-    if (same && wasRead) savePosition(false);
+    if (wasRead) savePosition(false);
+    if (!same && previous) void syncRecord(`position:${previous.meta.id}`, { force: true });
     let position = history.state?.readingOwner === S.owner && history.state?.readingDocument === meta.id ? history.state.readingPosition : null, local = positionFor(meta.id);
     const reloaded = initialRoute && performance.getEntriesByType('navigation')[0]?.type === 'reload';
     if (reloaded && readLocal('lastRoute') === raw && local?.capturedAt >= (position?.capturedAt || 0)) position = local;
@@ -291,43 +303,87 @@ function queuePosition(value) {
   clearTimeout(positionSaveTimer); const owner = S.owner, id = S.active?.meta.id;
   positionSaveTimer = setTimeout(() => { if (S.owner === owner && S.active?.meta.id === id) storePosition(value); }, 180);
 }
-function storePosition(value) {
+function samePosition(a, b) {
+  if (!a || !b) return a === b;
+  const { capturedAt: _a, ...coordinateA } = a, { capturedAt: _b, ...coordinateB } = b;
+  return JSON.stringify(coordinateA) === JSON.stringify(coordinateB);
+}
+function schedulePositionCheckpoint(key) {
+  if (positionCheckpoints.has(key) || !S.owner) return;
+  const owner = S.owner;
+  positionCheckpoints.set(key, setTimeout(() => {
+    positionCheckpoints.delete(key); if (S.owner === owner) void syncRecord(key);
+  }, POSITION_CHECKPOINT_MS));
+}
+function storePosition(value, historyEntry = true) {
   if (!S.owner || !S.active || runtime.state.view !== 'reader' || !value) return;
   clearTimeout(positionSaveTimer);
   const key = `position:${S.active.meta.id}`;
   // A delayed old-document save may update its local coordinate while a new
   // chapter is loading, but must not overwrite that new history entry.
-  if (!S.pendingRoute) history.replaceState({ ...history.state, readingPosition: value, readingOwner: S.owner, readingDocument: S.active.meta.id }, '', location.href);
+  const previous = S.records[key]?.value || readLocal(key);
+  const coordinate = samePosition(previous, value) ? previous : value;
+  if (historyEntry && !S.pendingRoute) history.replaceState({ ...history.state, readingPosition: coordinate, readingOwner: S.owner, readingDocument: S.active.meta.id }, '', location.href);
+  if (samePosition(previous, value)) return;
   writeLocal(key, value); S.records[key] = { ...S.records[key], value, dirty: true }; writeLocal('records', S.records); updateConnection();
-  clearTimeout(positionTimer); positionTimer = setTimeout(() => { void syncRecord(key); }, 1400);
+  // A checkpoint has a maximum wait; ordinary scrolling never restarts it.
+  schedulePositionCheckpoint(key);
 }
 function savePosition(historyEntry = true) {
   if (sheetHistory || $('sheetDialog').open || !S.owner || !S.active || runtime.state.view !== 'reader') return;
   const position = runtime.capture(); if (!position || runtime.state.restoring) return;
-  if (historyEntry) storePosition(position);
-  else { const key = `position:${S.active.meta.id}`; writeLocal(key, position); S.records[key] = { ...S.records[key], value: position, dirty: true }; writeLocal('records', S.records); }
+  storePosition(position, historyEntry);
 }
-async function syncRecord(key) {
-  if (key.startsWith('notes:') || syncing.has(key)) return syncing.get(key);
+async function syncRecord(key, { force = false, keepalive = false } = {}) {
+  if (key.startsWith('notes:')) return;
+  const position = key.startsWith('position:');
+  if (syncing.has(key)) {
+    const owner = S.owner; await syncing.get(key);
+    if (position && force && S.owner === owner && S.records[key]?.dirty) return syncRecord(key, { keepalive });
+    return;
+  }
+  if (!S.owner || S.offline || !S.records[key]?.dirty) return;
+  if (position) { clearTimeout(positionCheckpoints.get(key)); positionCheckpoints.delete(key); }
   const owner = S.owner, connection = S.connectionSequence;
   const job = (async () => {
     while (owner && S.owner === owner && connection === S.connectionSequence && !S.offline && S.records[key]?.dirty) {
       const value = S.records[key].value, snapshot = JSON.stringify(value);
       try {
-        const result = await api('/api/state', { method: 'PUT', body: { key, value } }); if (S.owner !== owner || connection !== S.connectionSequence) return;
-        if (JSON.stringify(S.records[key]?.value) === snapshot) S.records[key] = { ...result.record, dirty: false }; writeLocal('records', S.records);
+        const result = await api('/api/state', { method: 'PUT', body: { key, value }, ...(keepalive ? { keepalive: true } : {}) }); if (S.owner !== owner || connection !== S.connectionSequence) return;
+        if (JSON.stringify(S.records[key]?.value) === snapshot) S.records[key] = { ...result.record, dirty: false };
+        else S.records[key] = { ...S.records[key], revision: result.record.revision, updatedAt: result.record.updatedAt };
+        writeLocal('records', S.records);
       } catch { return; }
+      // Positions send one captured value. New scrolling waits for the next
+      // checkpoint instead of chasing a moving cursor in this request loop.
+      if (position) break;
     }
   })();
-  syncing.set(key, job); updateConnection(); try { await job; } finally { if (syncing.get(key) === job) syncing.delete(key); if (S.owner === owner) updateConnection(); }
+  syncing.set(key, job); updateConnection(); try { await job; } finally {
+    if (syncing.get(key) === job) syncing.delete(key);
+    if (S.owner === owner) {
+      if (position && S.records[key]?.dirty) {
+        schedulePositionCheckpoint(key);
+      }
+      updateConnection();
+    }
+  }
 }
-async function syncPending() { for (const [key, record] of Object.entries(S.records)) if (record.dirty && !key.startsWith('notes:')) await syncRecord(key); }
+async function syncPending({ forcePositions = false, keepalive = false } = {}) {
+  for (const [key, record] of Object.entries(S.records)) {
+    if (!record.dirty || key.startsWith('notes:')) continue;
+    if (!key.startsWith('position:') || forcePositions) await syncRecord(key, { force: forcePositions, keepalive });
+    else schedulePositionCheckpoint(key);
+  }
+}
 function updateConnection() {
   $('app').dataset.offline = String(S.offline);
   $('headerMeta').textContent = `算法实战 · ${S.owner ? S.offline ? '离线阅读' : `${S.library?.collections.length || 0}章已发布` : '正在连接'}`;
-  const pending = Object.entries(S.records).some(([key, record]) => !key.startsWith('notes:') && record.dirty);
+  const pending = Object.entries(S.records).some(([key, record]) => !key.startsWith('notes:') && !key.startsWith('position:') && record.dirty);
+  const positionPending = Object.entries(S.records).some(([key, record]) => key.startsWith('position:') && record.dirty);
+  const foregroundSync = [...syncing.keys()].some(key => !key.startsWith('position:'));
   $('statusLamp').classList.toggle('offline', S.offline || S.stateSyncFailed || pending);
-  if (!$('chapterView').classList.contains('is-opening')) $('syncStatus').textContent = !S.owner ? '正在连接章节…' : S.offline ? '离线阅读 · 已保存在本机' : S.stateSyncFailed ? '同步暂不可用 · 已保存在本机' : syncing.size ? '正在同步…' : pending ? '已保存在本机，等待同步' : '已同步';
+  if (!$('chapterView').classList.contains('is-opening')) { const statusText = !S.owner ? '正在连接章节…' : S.offline ? '离线阅读 · 已保存在本机' : S.stateSyncFailed ? '同步暂不可用 · 已保存在本机' : foregroundSync ? '正在同步…' : pending ? '已保存在本机，等待同步' : positionPending ? '阅读位置已保存在本机' : '已同步'; if ($('syncStatus').textContent !== statusText) $('syncStatus').textContent = statusText; }
   const status = $('offlineStatus'); if (status) { status.hidden = !S.offline; status.textContent = S.offline ? '当前离线，已下载章节仍可阅读。' : ''; }
 }
 function applySettings() {
@@ -338,11 +394,12 @@ function saveSettings() { writeLocal('preferences', S.settings); S.records.prefe
 function showSheet(title, html, view, parent = null) {
   cancelPendingRoute(); questions?.captureDraft(); sheetSequence++; sheetView = view; sheetParent = parent;
   $('sheetDialog').dataset.view = view; $('sheetFrame').dataset.view = view;
-  const kind = view === 'index' ? 'index-sheet' : view === 'questions' ? 'questions-sheet' : ['library', 'calendar-day'].includes(view) ? 'chapter-book-sheet' : ['settings', 'reading-settings', 'device-settings', 'files', 'source'].includes(view) ? 'settings-sheet' : 'help-sheet';
+  const serviceViews = ['study-goal', 'study-next', 'study-rest', 'balances', 'storage', 'reminders'];
+  const kind = view === 'index' ? 'index-sheet' : view === 'questions' ? 'questions-sheet' : ['library', 'calendar-day'].includes(view) ? 'chapter-book-sheet' : ['settings', 'reading-settings', 'device-settings', 'files', 'source', ...serviceViews].includes(view) ? 'settings-sheet' : 'help-sheet';
   $('sheetFrame').className = 'sheet ' + kind;
-  $('sheetKicker').textContent = ({ index: 'SECTION INDEX', library: 'CHAPTER LIBRARY', 'calendar-day': 'CHAPTER LIBRARY', questions: 'CHAPTER QUESTIONS', settings: 'READER SETTINGS', 'reading-settings': 'READING', 'device-settings': 'THIS DEVICE', files: 'CHAPTER FILES', source: 'C++ SOURCE', knowledge: 'REFERENCE', install: 'HOME SCREEN' })[view] || 'READER';
+  $('sheetKicker').textContent = ({ index: 'CONTENTS', library: 'CHAPTER LIBRARY', 'calendar-day': 'CHAPTER LIBRARY', questions: 'CHAPTER QUESTIONS', settings: 'READER SETTINGS', 'reading-settings': 'READING', 'device-settings': 'THIS DEVICE', files: 'CHAPTER FILES', source: 'C++ SOURCE', knowledge: 'REFERENCE', install: 'HOME SCREEN', 'study-goal': 'STUDY PLAN', 'study-next': 'NEXT PUBLICATION', 'study-rest': 'REST', balances: 'API CREDITS', storage: 'STORAGE', reminders: 'NOTIFICATIONS' })[view] || 'READER';
   $('sheetTitle').textContent = title; $('sheetBody').innerHTML = html; $('sheetBack').hidden = !parent;
-  $('sheetBack').textContent = view === 'source' ? '‹ 本章文件' : ['reading-settings', 'device-settings', 'files'].includes(view) ? '‹ 设置' : view === 'install' ? '‹ 主屏幕与账户' : view === 'calendar-day' ? '‹ 章节册' : '‹ 返回';
+  $('sheetBack').textContent = view === 'source' ? '‹ 本章文件' : ['reading-settings', 'device-settings', 'files', ...serviceViews].includes(view) ? '‹ 设置' : view === 'install' ? '‹ 主屏幕与账户' : view === 'calendar-day' ? '‹ 章节册' : '‹ 返回';
   if (!$('sheetDialog').open) {
     sheetPosition = runtime.capture(); savePosition(); sheetOpener = document.activeElement;
     history.pushState({ ...history.state, algorithmSheet: true }, '', location.href); sheetHistory = true; sheetClosing = false; $('sheetDialog').showModal();
@@ -359,7 +416,7 @@ function waitForSheetClose(action) {
 function rememberSheet(render) { const top = $('sheetBody').scrollTop; return () => { render(); $('sheetBody').scrollTop = top; }; }
 function showIndex() {
   if (waitForSheetClose(showIndex) || !S.active) return;
-  showSheet('篇节索引', `<div class="index-search"><label for="indexFilter">查找本章篇节</label><input class="text-input" id="indexFilter" type="search" placeholder="输入标题筛选"></div><div class="index-list" id="indexList">${runtime.indexHTML()}</div>`, 'index');
+  showSheet('目录索引', `<div class="directory-list" id="indexList">${runtime.indexHTML()}</div>`, 'index');
   requestAnimationFrame(() => runtime.scrollCurrentIndex($('indexList')));
 }
 function showQuestions() { if (waitForSheetClose(showQuestions) || !S.active) return; showSheet('章节答疑', '', 'questions'); questions.render($('sheetBody')); }
@@ -429,12 +486,12 @@ function showSettings() {
   if (waitForSheetClose(showSettings)) return;
   showSheet('阅读器设置', `<div class="settings-home"><div class="section-band">阅读</div><button type="button" class="settings-row" data-show-reading-settings><span>阅读偏好</span><b aria-hidden="true">›</b></button>
     <section class="settings-section settings-audio-row"><div class="section-band"><strong>离线下载</strong><span>OFFLINE</span></div><div class="settings-body"><label class="switch-row" for="preloadContent"><span>打开时下载本章已有文件</span><input id="preloadContent" role="switch" type="checkbox"${S.settings.preload ? ' checked' : ''}></label>${S.active ? `<div class="button-row"><button class="bevel-button" type="button" data-download-current>下载本章</button></div><p id="downloadStatus" role="status">${esc(downloadStatus.get(S.active.collection.id) || '已有正文、代码与知识按需读取。')}</p>` : ''}<p id="offlineStatus" role="status" hidden></p></div></section>
-    <div class="section-band">章节文件</div><button type="button" class="settings-row" data-show-files${S.active ? '' : ' disabled'}><span>本章文件</span><b aria-hidden="true">›</b></button>
-    <div class="section-band">应用与账户</div><button type="button" class="settings-row" data-show-device-settings><span>主屏幕与账户</span><b aria-hidden="true">›</b></button></div>`, 'settings'); updateConnection();
+    <div class="section-band">学习安排</div><button type="button" class="settings-row" data-service-view="study-goal"><span>学习目标</span><b aria-hidden="true">›</b></button><button type="button" class="settings-row" data-service-view="study-next"><span>下次出版</span><b aria-hidden="true">›</b></button><button type="button" class="settings-row" data-service-view="study-rest"><span>休息安排</span><b aria-hidden="true">›</b></button>
+    <div class="section-band">服务与账户</div><button type="button" class="settings-row" data-service-view="balances"><span>服务额度</span><b aria-hidden="true">›</b></button><button type="button" class="settings-row" data-service-view="storage"><span>存储空间</span><b aria-hidden="true">›</b></button><button type="button" class="settings-row" data-service-view="reminders"><span>提醒</span><b aria-hidden="true">›</b></button><button type="button" class="settings-row" data-show-device-settings><span>主屏幕与账户</span><b aria-hidden="true">›</b></button></div>`, 'settings'); updateConnection();
 }
 function showReadingSettings() {
   if (waitForSheetClose(showReadingSettings)) return;
-  showSheet('阅读偏好', `<section class="settings-section"><div class="section-band"><strong>正文与代码</strong><span>READING</span></div><div class="settings-body"><div class="settings-value"><span>正文字号</span><div class="setting-stepper"><button class="bevel-button" type="button" data-font="-1" aria-label="缩小正文字号">−</button><output id="bodySizeOutput">${S.settings.fontSize}</output><button class="bevel-button" type="button" data-font="1" aria-label="放大正文字号">＋</button></div></div><div class="settings-value"><span>代码字号</span><div class="setting-stepper"><button class="bevel-button" type="button" data-code-font="-0.5" aria-label="缩小代码字号">−</button><output id="codeSizeOutput">${S.settings.codeSize}</output><button class="bevel-button" type="button" data-code-font="0.5" aria-label="放大代码字号">＋</button></div></div><label class="switch-row" for="wrapCode"><span>代码折行</span><input id="wrapCode" role="switch" type="checkbox"${S.settings.wrapCode ? ' checked' : ''}></label></div></section>`, 'reading-settings', rememberSheet(showSettings));
+  showSheet('阅读偏好', `<section class="settings-section"><div class="section-band"><strong>正文与代码</strong><span>READING</span></div><div class="settings-body"><div class="settings-value"><span>正文字号</span><div class="setting-stepper"><button class="bevel-button" type="button" data-font="-1" aria-label="缩小正文字号">−</button><output id="bodySizeOutput">${S.settings.fontSize}</output><button class="bevel-button" type="button" data-font="1" aria-label="放大正文字号">＋</button></div></div><div class="settings-value"><span>代码字号</span><div class="setting-stepper"><button class="bevel-button" type="button" data-code-font="-0.5" aria-label="缩小代码字号">−</button><output id="codeSizeOutput">${S.settings.codeSize}</output><button class="bevel-button" type="button" data-code-font="0.5" aria-label="放大代码字号">＋</button></div></div><label class="switch-row" for="wrapCode"><span>代码折行</span><input id="wrapCode" role="switch" type="checkbox"${S.settings.wrapCode ? ' checked' : ''}></label><div class="button-row"><button class="bevel-button" type="button" data-reset-reading>恢复默认</button></div></div></section>`, 'reading-settings', rememberSheet(showSettings));
 }
 function showDeviceSettings() {
   if (waitForSheetClose(showDeviceSettings)) return;
@@ -543,7 +600,7 @@ async function reloadApp(button) {
   catch (error) { toast(error.message); } finally { button.disabled = false; }
 }
 async function logout() {
-  savePosition(); questions?.captureDraft(); await syncPending();
+  savePosition(); questions?.captureDraft(); await syncPending({ forcePositions: true });
   if (hasPendingLegacy()) { toast('本机仍有旧的未同步记录，原件已保留，暂未退出。'); return; }
   const owner = S.owner; if (!owner) return;
   try { await api('/auth/logout', { method: 'POST', body: {} }); } catch { toast('暂时无法退出，请联网重试。'); return; } if (S.owner !== owner) return;
@@ -587,6 +644,12 @@ document.addEventListener('click', event => {
     if (button.dataset.font) S.settings.fontSize = Math.max(14, Math.min(24, S.settings.fontSize + Number(button.dataset.font))); else S.settings.codeSize = Math.max(10, Math.min(20, S.settings.codeSize + Number(button.dataset.codeFont)));
     runtime.settle(position, applySettings); saveSettings(); if ($('bodySizeOutput')) $('bodySizeOutput').value = S.settings.fontSize; if ($('codeSizeOutput')) $('codeSizeOutput').value = S.settings.codeSize; return;
   }
+  if (button?.hasAttribute('data-reset-reading')) {
+    Object.assign(S.settings, READING_DEFAULTS); runtime.settle(sheetPosition || runtime.capture(), applySettings); saveSettings();
+    $('bodySizeOutput').value = S.settings.fontSize; $('codeSizeOutput').value = S.settings.codeSize; $('wrapCode').checked = false;
+    toast('已恢复默认阅读偏好。'); return;
+  }
+  if (button?.dataset.serviceView) { serviceSettings.show(button.dataset.serviceView); return; }
   if (button?.hasAttribute('data-show-reading-settings')) { showReadingSettings(); return; }
   if (button?.hasAttribute('data-show-device-settings')) { showDeviceSettings(); return; }
   if (button?.hasAttribute('data-show-files')) { showFiles(); return; }
@@ -604,7 +667,6 @@ document.addEventListener('change', event => {
   if (event.target.id === 'preloadContent') { S.settings.preload = event.target.checked; saveSettings(); if (S.settings.preload && S.active) void downloadCollection(S.active.collection, false); }
 });
 document.addEventListener('input', event => {
-  if (event.target.id === 'indexFilter') { $('indexList').innerHTML = runtime.indexHTML(event.target.value); return; }
   if (event.target.id !== 'chapterBookSearch') return;
   book.query = event.target.value; const list = bookList(S.library?.collections);
   $('chapterBookList').innerHTML = list.html; $('chapterBookCount').textContent = `${list.count} 章`;
@@ -644,14 +706,16 @@ async function reconnect(attempt = 0) {
       const { state } = await api('/api/state'); if (S.owner !== owner) return;
       mergeRemoteState(state); writeLocal('records', S.records); S.stateSyncFailed = false;
     }
-    updateConnection(); const verifiedAt = Date.now(); localStorage.setItem(SESSION_KEY, JSON.stringify({ owner, verifiedAt })); await swMessage({ type: 'OWNER', owner, verifiedAt }); await syncPending();
+    updateConnection(); const verifiedAt = Date.now(); localStorage.setItem(SESSION_KEY, JSON.stringify({ owner, verifiedAt })); await swMessage({ type: 'OWNER', owner, verifiedAt }); await syncPending({ forcePositions: true });
   } catch { if (S.owner === owner && navigator.onLine && attempt < 2) { clearTimeout(reconnectTimer); reconnectTimer = setTimeout(() => { void reconnect(attempt + 1); }, 1200 * (attempt + 1)); } } finally { reconnecting = false; if (S.owner === owner) updateConnection(); }
 }
 window.addEventListener('online', () => { void reconnect(); }); window.addEventListener('focus', () => { if (navigator.onLine && S.owner) S.offline || S.stateSyncFailed ? void reconnect() : void syncPending(); });
 window.addEventListener('offline', () => { S.offline = true; updateConnection(); });
-document.addEventListener('visibilitychange', () => { if (document.hidden) { savePosition(); questions?.captureDraft(); void syncPending(); } else if (navigator.onLine && S.owner) S.offline || S.stateSyncFailed ? void reconnect() : void syncPending(); });
+function updateHeaderMotion() { document.documentElement.classList.toggle('header-motion-paused', document.hidden); }
+updateHeaderMotion();
+document.addEventListener('visibilitychange', () => { updateHeaderMotion(); if (document.hidden) { savePosition(); questions?.captureDraft(); void syncPending({ forcePositions: true, keepalive: true }); } else if (navigator.onLine && S.owner) S.offline || S.stateSyncFailed ? void reconnect() : void syncPending(); });
 window.addEventListener('beforeunload', event => { if (S.owner && hasPendingLegacy()) { event.preventDefault(); event.returnValue = ''; } });
-window.addEventListener('pagehide', () => { savePosition(); questions?.captureDraft(); });
+window.addEventListener('pagehide', () => { savePosition(); questions?.captureDraft(); void syncPending({ forcePositions: true, keepalive: true }); });
 function fitSheetViewport() {
   const viewport = window.visualViewport, style = document.documentElement.style;
   if (!viewport || viewport.scale > 1.02) { for (const name of ['--sheet-viewport-height', '--sheet-offset-top', '--sheet-offset-bottom']) style.removeProperty(name); return; }

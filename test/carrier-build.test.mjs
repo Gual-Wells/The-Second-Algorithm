@@ -558,6 +558,11 @@ test('full bundle embeds relative auth before fingerprinting and invalidates unc
     await fs.writeFile(path.join(f.root, 'server/worker.mjs'), "export default {fetch(){return new Response('worker-one')}};\n");
     const first = await buildCarrier({ root: f.root });
     assert.equal(first.mode, 'full'); assert.match(first.buildID, /^[a-f0-9]{64}$/);
+    const routes=JSON.parse(await fs.readFile(path.join(f.root,'dist/_routes.json'),'utf8'));
+    assert.ok(routes.exclude.includes('/')&&routes.exclude.includes('/app.js'));
+    assert.ok(routes.exclude.every(url=>!url.includes('*')&&!url.startsWith('/library/')&&!url.startsWith('/api/')&&!url.includes('%')));
+    assert.ok(!routes.exclude.includes('/404.html')&&!routes.exclude.includes('/unknown.json'));
+    assert.match(await fs.readFile(path.join(f.root,'dist/_headers'),'utf8'),/X-Frame-Options: DENY/);
     const notFound = await fs.readFile(path.join(f.root, 'dist/404.html'), 'utf8');
     assert.match(notFound, /未找到内容/); assert.doesNotMatch(notFound, /app\.js|Fixture|__BUILD__/);
     await assert.rejects(fs.access(path.join(f.root, 'dist/DESIGN.md')));

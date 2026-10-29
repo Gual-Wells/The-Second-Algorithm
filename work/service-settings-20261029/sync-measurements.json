@@ -1,0 +1,293 @@
+{
+  "baselineCommit": "0d896f742ee3a677d09e8ab3f40d968f092adeff",
+  "sourcePin": "929d42df391f4538c906e743f146cc579e655c0f",
+  "rawLocalReport": ".local/service-settings-20261029/sync-baseline/qa/results.json",
+  "rawSha256": "4a54209e505e9aaacc0c8d3762b874f69de9553de1c24c1cf457d82cf6178b1b",
+  "sources": {
+    "app.js": "bb8d0930bc62e0ae4239a785c78224e09bca998422f7dc05275bbe98c636c2f1",
+    "reader-runtime.js": "bb308ebf21c8e67bbc38b904b769aa21774543afcf3a9a98c930aaaa03bc9315"
+  },
+  "findings": [
+    {
+      "name": "five-stationary-resize-settles",
+      "durationMs": 9558,
+      "positionPuts": 5,
+      "uniqueCoordinateSignatures": 1,
+      "requestDeltasMs": [
+        null,
+        1923,
+        1882,
+        1931,
+        1898
+      ],
+      "statusTransitions": [
+        {
+          "text": "已同步",
+          "offline": false
+        },
+        {
+          "text": "已保存在本机，等待同步",
+          "offline": true
+        },
+        {
+          "text": "正在同步…",
+          "offline": true
+        },
+        {
+          "text": "已同步",
+          "offline": false
+        },
+        {
+          "text": "已保存在本机，等待同步",
+          "offline": true
+        },
+        {
+          "text": "正在同步…",
+          "offline": true
+        },
+        {
+          "text": "已同步",
+          "offline": false
+        },
+        {
+          "text": "已保存在本机，等待同步",
+          "offline": true
+        },
+        {
+          "text": "正在同步…",
+          "offline": true
+        },
+        {
+          "text": "已同步",
+          "offline": false
+        },
+        {
+          "text": "已保存在本机，等待同步",
+          "offline": true
+        },
+        {
+          "text": "正在同步…",
+          "offline": true
+        },
+        {
+          "text": "已同步",
+          "offline": false
+        },
+        {
+          "text": "已保存在本机，等待同步",
+          "offline": true
+        },
+        {
+          "text": "正在同步…",
+          "offline": true
+        },
+        {
+          "text": "已同步",
+          "offline": false
+        }
+      ],
+      "errors": []
+    },
+    {
+      "name": "five-actual-scroll-pauses",
+      "durationMs": 9632,
+      "positionPuts": 5,
+      "uniqueCoordinateSignatures": 5,
+      "requestDeltasMs": [
+        null,
+        1915,
+        1921,
+        1929,
+        1917
+      ],
+      "statusTransitions": [
+        {
+          "text": "已同步",
+          "offline": false
+        },
+        {
+          "text": "已保存在本机，等待同步",
+          "offline": true
+        },
+        {
+          "text": "正在同步…",
+          "offline": true
+        },
+        {
+          "text": "已同步",
+          "offline": false
+        },
+        {
+          "text": "已保存在本机，等待同步",
+          "offline": true
+        },
+        {
+          "text": "正在同步…",
+          "offline": true
+        },
+        {
+          "text": "已同步",
+          "offline": false
+        },
+        {
+          "text": "已保存在本机，等待同步",
+          "offline": true
+        },
+        {
+          "text": "正在同步…",
+          "offline": true
+        },
+        {
+          "text": "已同步",
+          "offline": false
+        },
+        {
+          "text": "已保存在本机，等待同步",
+          "offline": true
+        },
+        {
+          "text": "正在同步…",
+          "offline": true
+        },
+        {
+          "text": "已同步",
+          "offline": false
+        },
+        {
+          "text": "已保存在本机，等待同步",
+          "offline": true
+        },
+        {
+          "text": "正在同步…",
+          "offline": true
+        },
+        {
+          "text": "已同步",
+          "offline": false
+        }
+      ],
+      "errors": []
+    },
+    {
+      "name": "unchanged-resize-during-inflight-slow-put",
+      "durationMs": 8584,
+      "positionPuts": 4,
+      "uniqueCoordinateSignatures": 1,
+      "requestDeltasMs": [
+        null,
+        1518,
+        1514,
+        1505
+      ],
+      "statusTransitions": [
+        {
+          "text": "已同步",
+          "offline": false
+        },
+        {
+          "text": "已保存在本机，等待同步",
+          "offline": true
+        },
+        {
+          "text": "正在同步…",
+          "offline": true
+        },
+        {
+          "text": "已同步",
+          "offline": false
+        }
+      ],
+      "errors": []
+    }
+  ],
+  "realBrowser": true,
+  "realDatabase": false,
+  "productionContacted": false,
+  "physicalIPhone": false,
+  "testedAt": "2026-10-29T15:50:39.845Z",
+  "after": {
+    "rawLocalReport": ".local/service-settings-20261029/sync-after/attempt-3/results.json",
+    "rawSha256": "686303d0aee1e4ac2c250aa8d132ad3e067d91f8b58fc51995ff67607f93d586",
+    "passed": true,
+    "testedAt": "2026-10-29T16:13:35.089Z",
+    "inputStart": {
+      "web/app.js": "f7fa51f8bf9aec8bd733b6875b7d4c2440cbbf517fb18760a1a51136d4bcfd72",
+      "web/reader-runtime.js": "b8d69bae6d2fadaa48bf9135a96a0fef6aaa8ac98784ca9a7a3ec765334f5045",
+      "web/styles.css": "607b97b87d45d3d9689829fc4af003ce1ce2ab2e939afa8307376197e1a019f3",
+      "web/index.html": "76dbb81e5f5c9e91a8708c2b07574a0c405f02e669478834f0721d2e40a323ce",
+      "web/manual-questions.js": "e32145d51a399ea5cc7510798b027ff8cfabd99ee816383bb4e4ad0fe9f6bc78",
+      "web/auth.js": "9f8db119e19cc7ac887e96aa6cefe8bc153759c316bb611472b91a2507b2fd87",
+      "web/chapter-dates.js": "6f0d0e526780f6a4f0929b9c2a0083d59aa5ba00650bde64c77c864949f1794c",
+      "web/worker-release.js": "f79451187b86d84e0bc5260e82f02ae6759cd4fda8a62576309abad39234c776",
+      "web/service-settings.js": "0e3a5cfd66b6707b77cdd574f4cd154207f37f3f4a91e3d6e6de6409c1a2f2d3",
+      "server/worker.mjs": "626d9362d2a6ddcf9c3bf3b83e9c9db91bd38fd510ad4dd1d4104a6fad4ca34a"
+    },
+    "inputEnd": {
+      "web/app.js": "f7fa51f8bf9aec8bd733b6875b7d4c2440cbbf517fb18760a1a51136d4bcfd72",
+      "web/reader-runtime.js": "b8d69bae6d2fadaa48bf9135a96a0fef6aaa8ac98784ca9a7a3ec765334f5045",
+      "web/styles.css": "607b97b87d45d3d9689829fc4af003ce1ce2ab2e939afa8307376197e1a019f3",
+      "web/index.html": "76dbb81e5f5c9e91a8708c2b07574a0c405f02e669478834f0721d2e40a323ce",
+      "web/manual-questions.js": "e32145d51a399ea5cc7510798b027ff8cfabd99ee816383bb4e4ad0fe9f6bc78",
+      "web/auth.js": "9f8db119e19cc7ac887e96aa6cefe8bc153759c316bb611472b91a2507b2fd87",
+      "web/chapter-dates.js": "6f0d0e526780f6a4f0929b9c2a0083d59aa5ba00650bde64c77c864949f1794c",
+      "web/worker-release.js": "f79451187b86d84e0bc5260e82f02ae6759cd4fda8a62576309abad39234c776",
+      "web/service-settings.js": "0e3a5cfd66b6707b77cdd574f4cd154207f37f3f4a91e3d6e6de6409c1a2f2d3",
+      "server/worker.mjs": "626d9362d2a6ddcf9c3bf3b83e9c9db91bd38fd510ad4dd1d4104a6fad4ca34a"
+    },
+    "cases": [
+      {
+        "name": "unchanged-resize-never-dirties-or-uploads-position",
+        "passed": true,
+        "positionPuts": 0
+      },
+      {
+        "name": "continuous-scrolling-uses-bounded-sixty-second-checkpoint",
+        "passed": true,
+        "positionPuts": 1,
+        "firstCheckpointMs": 60188
+      },
+      {
+        "name": "slow-request-coalesces-new-position-without-immediate-followup-loop",
+        "passed": true,
+        "positionPuts": 2
+      },
+      {
+        "name": "offline-reading-keeps-local-history-and-recovers-one-latest-snapshot",
+        "passed": true,
+        "positionPuts": 1
+      },
+      {
+        "name": "chapter-change-flushes-old-document-and-new-local-position-stays-separate",
+        "passed": true,
+        "positionPuts": 2
+      },
+      {
+        "name": "pagehide-and-user-preferences-flush-without-waiting-a-minute",
+        "passed": true,
+        "positionPuts": 1
+      }
+    ],
+    "initialAttempts": [
+      {
+        "report": ".local/service-settings-20261029/sync-after/results.json",
+        "result": "not accepted; host scroll delivery and virtual-time-before-fetch errors; service module also changed during run"
+      },
+      {
+        "report": ".local/service-settings-20261029/sync-after/attempt-2/results.json",
+        "result": "5 of 6 pass; online host auth response was overtaken by virtual 20s timeout; product inputs stayed unchanged"
+      }
+    ],
+    "validationBoundary": {
+      "actualReaderSources": true,
+      "productionTimerDurationsUnchanged": true,
+      "virtualBrowserClock": true,
+      "realNativeScrollEvents": true,
+      "isolatedFetchResponses": true,
+      "realDatabaseModified": false,
+      "productionContacted": false,
+      "paidServiceContacted": false,
+      "physicalIPhone": false,
+      "serviceWorker": "blocked; separate full browser and HTTP SW regression"
+    }
+  }
+}

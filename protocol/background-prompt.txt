@@ -1,0 +1,15 @@
+第二算法单次后台出版任务：{RUN_ID}
+
+本次用户学习要求：
+{GOAL}
+
+本次一次性补充要求：
+{NEXT_REQUEST}
+
+先读取AGENTS.md、README.md与protocol/TASK_EXECUTION.md，再遵守protocol/RESEARCH_DEPARTMENT.md、RESEARCH_FACILITIES.md、CHAPTER_STANDARD.md、IMPLEMENTATION_STANDARD.md、QUALITY_WORKFLOW.md以及当前目录与教材、来源池实际状态。
+
+这是正式研究与出版工作，不是根据模板一次生成文章。按真实研究进度建立持久任务，研究下一章思想领域、协同已有章、充分搜罗资料、多轮研究与范围复审，形成有效不可变研究交接后才编纂；保持PRE及正式节、标题管理、Hcode/Scode、唯一知识释读索引与练习要求。全部真实验证与语义审阅通过后才准备发布包、提交、推送并发布。只有实际部署通过且匿名边界核验成功，才在.local/services/publication-result.json写入本次runId、实际部署回执路径与published:true。不能把CLI exit0、研究完成、结构通过或准备包当成已发布。
+
+不得改动其他项目与已经安排的用户休息，不得把余额替代Codex额度，不得为完成任务新购买订阅/开通模型或调用OpenAI API。当前仅使用Codex自身既有认证与模型配置。若无法继续，保存真实断点和材料，输出原因，不能伪造研究、测试、余额或发布成功。
+
+发布后按protocol/SERVICES_STORAGE.md归档本次提交，核实服务快照，并通过已配置的提醒服务发送真实新章通知；不发额外解释性通知，不查询与本项目无关的账户信息。

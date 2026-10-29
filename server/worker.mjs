@@ -1,4 +1,5 @@
 import { authRoute, sessionFor } from './auth.mjs';
+import { servicesRoute, publisherServiceRoute, publisherPaths } from './services.mjs';
 
 const MAX_BODY = 65_536;
 const encoder = new TextEncoder();
@@ -135,6 +136,7 @@ async function stateRoute(request, env, session) {
 async function route(request, env) {
   const path = normalizedPath(request);
   if (path.startsWith('/auth/')) return authRoute(request, env, request.method === 'POST' ? await inputJson(request) : {});
+  if (publisherPaths.has(path)) return publisherServiceRoute(request, env, inputJson);
   if (publicPath(path)) {
     if (!['GET', 'HEAD'].includes(request.method)) return json({ error: '不支持此操作' }, 405);
     return env.ASSETS.fetch(assetRequest(request, path));
@@ -143,7 +145,9 @@ async function route(request, env) {
   const session = await sessionFor(request, env);
   if (!session) return json({ error: '请先登录' }, 401);
   let response;
-  if (path === '/api/library' && request.method === 'GET') {
+  const service=path.startsWith('/api/')?await servicesRoute(request,env,session,inputJson,path):null;
+  if(service) response=service;
+  else if (path === '/api/library' && request.method === 'GET') {
     response = await env.ASSETS.fetch(new Request(new URL('/library/catalog.json', request.url)));
   } else if (path === '/api/state') {
     response = await stateRoute(request, env, session);

@@ -230,3 +230,24 @@ self.addEventListener('fetch', event => {
     }
   })());
 });
+
+// Push has its own explicit device subscription; it never alters private offline grants.
+self.addEventListener('push', event => {
+  event.waitUntil((async()=>{
+    let value;try{value=event.data?.json();}catch{return;}
+    if(!value||typeof value.title!=='string'||typeof value.body!=='string')return;
+    const url=typeof value.url==='string'&&value.url.startsWith('/#/')?value.url:'/#/';
+    await self.registration.showNotification(value.title.slice(0,80),{body:value.body.slice(0,200),
+      icon:'/icons/icon-192.png',badge:'/icons/icon-192.png',data:{url},tag:'second-algorithm-publication'});
+  })());
+});
+self.addEventListener('notificationclick', event=>{
+  event.notification.close();
+  event.waitUntil((async()=>{
+    let url;try{url=new URL(event.notification.data?.url||'/#/',self.location.origin);}catch{return;}
+    if(url.origin!==self.location.origin||!url.hash.startsWith('#/'))return;
+    const windows=await self.clients.matchAll({type:'window',includeUncontrolled:true});
+    for(const client of windows){if(new URL(client.url).origin===self.location.origin){await client.navigate(url.href);await client.focus();return;}}
+    await self.clients.openWindow(url.href);
+  })());
+});

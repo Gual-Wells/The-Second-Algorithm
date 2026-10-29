@@ -19,6 +19,7 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
   let gestureSelection = false, gestureStarted = -Infinity;
   const revision = () => chapter?.meta.revision;
   const sectionFor = id => byId.get(byId.get(id)?.sectionId);
+  const indexExpanded = new Map();
 
   function revealLine() {
     // Pure controls are a temporary overlay: waking them must not change the
@@ -77,7 +78,7 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
   function setChapter(value, position = null) {
     layoutToken++; restoring = false; view = 'chapter'; pure = false; clearTimeout(awakeTimer);
     app.classList.remove('pure', 'controls-awake'); app.style.removeProperty('--pure-paper-width'); chromeInert(false);
-    chapter = value; headings = []; sections = []; byId = new Map(); aliases = new Map();
+    chapter = value; headings = []; sections = []; byId = new Map(); aliases = new Map(); indexExpanded.clear();
     article.style.removeProperty('padding-bottom'); article.innerHTML = value.content.html;
     // Preserve the previous reader's exact block numbering for safe migration.
     let legacyIndex = 0;
@@ -124,20 +125,44 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
     $('readerPartSummary').textContent = '按篇节阅读';
   }
   function indexHTML(filter = '') {
-    const query = String(filter).trim().toLocaleLowerCase();
-    const items = headings.filter(item => [item.title, ...item.ancestors.map(id => byId.get(id)?.title || '')].join(' ').toLocaleLowerCase().includes(query));
-    return items.length ? items.map(item => {
-      const context = item.ancestors.map(id => byId.get(id)?.title).filter(Boolean).join(' · ');
-      return `<button type="button" class="index-item${cursor?.anchor === item.id ? ' is-current' : ''}" data-index-go="${esc(item.id)}"${cursor?.anchor === item.id ? ' aria-current="location"' : ''} aria-label="${esc(context ? context + ' · ' + item.title : item.title)}"><span>${String(item.index + 1).padStart(2, '0')}</span><strong>${esc(item.title)}</strong>${context ? `<small>${esc(context)}</small>` : ''}</button>`;
-    }).join('') : '<p class="chapter-list-empty">没有匹配的篇节。</p>';
+    const query = String(filter).trim().toLocaleLowerCase(), current = cursor?.anchor, parent = sectionFor(current)?.id;
+    const matches = item => !query || [item.title, ...item.ancestors.map(id => byId.get(id)?.title || '')].join(' ').toLocaleLowerCase().includes(query);
+    const groups = sections.filter(section => matches(section) || section.units.some(matches));
+    return groups.length ? groups.map(section => {
+      const active = parent === section.id, open = query ? true : indexExpanded.has(section.id) ? indexExpanded.get(section.id) : active;
+      const childrenId = `directory-section-${section.index}`;
+      return `<section class="directory-group${active ? ' is-current-parent' : ''}" data-directory-section="${esc(section.id)}"><div class="directory-parent"><button type="button" class="directory-toggle" data-toggle-index-section="${esc(section.id)}" aria-expanded="${open}" aria-controls="${childrenId}" aria-label="${open ? '收起' : '展开'}${esc(section.title)}">${open ? '−' : '＋'}</button><button type="button" class="directory-section-link${current === section.id ? ' is-current' : ''}" data-index-go="${esc(section.id)}"${current === section.id ? ' aria-current="location"' : ''}>${esc(section.title)}</button></div><div class="directory-children" id="${childrenId}"${open ? '' : ' hidden'}>${section.units.filter(matches).map(item => {
+        const context = item.ancestors.map(id => byId.get(id)?.title).filter(Boolean).join(' · ');
+        return `<button type="button" class="directory-item depth-${item.depth}${current === item.id ? ' is-current' : ''}" data-index-go="${esc(item.id)}"${current === item.id ? ' aria-current="location"' : ''} aria-label="${esc(context ? context + ' · ' + item.title : item.title)}">${esc(item.title)}</button>`;
+      }).join('')}</div></section>`;
+    }).join('') : '<p class="chapter-list-empty">没有匹配的目录项。</p>';
+  }
+  function setIndexSectionOpen(group, open) {
+    const button = group.querySelector('[data-toggle-index-section]'), children = group.querySelector('.directory-children');
+    if (!button || !children) return;
+    children.hidden = !open; button.setAttribute('aria-expanded', String(open)); button.textContent = open ? '−' : '＋';
+    button.setAttribute('aria-label', (open ? '收起' : '展开') + (byId.get(group.dataset.directorySection)?.title || '目录'));
   }
   function updateIndex() {
-    const root = $('indexList'); if (!root) return;
+    const root = $('indexList'); if (!root || !$('sheetDialog').open) return;
+    const parent = sectionFor(cursor?.anchor)?.id;
     for (const button of all('[data-index-go]', root)) {
       const active = button.dataset.indexGo === cursor?.anchor;
       button.classList.toggle('is-current', active);
       if (active) button.setAttribute('aria-current', 'location'); else button.removeAttribute('aria-current');
     }
+    const changed = root.dataset.currentParent !== parent;
+    for (const group of all('[data-directory-section]', root)) {
+      const active = group.dataset.directorySection === parent; group.classList.toggle('is-current-parent', active);
+      if (active && changed) { indexExpanded.set(parent, true); setIndexSectionOpen(group, true); }
+    }
+    root.dataset.currentParent = parent || '';
+  }
+  function toggleIndexSection(id, root = $('indexList')) {
+    const group = root && all('[data-directory-section]', root).find(item => item.dataset.directorySection === id);
+    if (!group) return;
+    const open = group.querySelector('[data-toggle-index-section]').getAttribute('aria-expanded') !== 'true';
+    indexExpanded.set(id, open); setIndexSectionOpen(group, open);
   }
   function updateTailSpace() {
     if (view !== 'reader' || !rendered.length || !pane.clientHeight) return;
@@ -224,6 +249,8 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
   }
   function scrollCurrentIndex(root) {
     updateIndex(); const active = root.querySelector('[aria-current="location"]'); if (!active) return;
+    const group = active.closest('[data-directory-section]');
+    if (group) { indexExpanded.set(group.dataset.directorySection, true); setIndexSectionOpen(group, true); }
     const bounds = root.getBoundingClientRect(), location = active.getBoundingClientRect();
     if (location.top < bounds.top || location.bottom > bounds.bottom) root.scrollTop += location.top - bounds.top - root.clientHeight / 3;
   }
@@ -250,11 +277,12 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
     app.classList.remove('pure', 'controls-awake'); app.style.removeProperty('--pure-paper-width'); chromeInert(false);
     article.replaceChildren(); $('chapterView').replaceChildren(); $('readingPosition').textContent = '';
     for (const id of ['readerChapterDate', 'readerChapterNumber', 'readerChapterTitle', 'readerChapterSubtitle']) $(id).textContent = '';
-    headings = []; sections = []; rendered = []; blocks = []; byId.clear(); aliases.clear();
+    headings = []; sections = []; rendered = []; blocks = []; byId.clear(); aliases.clear(); indexExpanded.clear();
   }
   document.addEventListener('click', event => {
     if (!chapter) return;
     const button = event.target.closest('button');
+    if (button?.dataset.toggleIndexSection) { toggleIndexSection(button.dataset.toggleIndexSection); return; }
     if (button?.hasAttribute('data-copy')) { void onCopy?.(button.closest('.code-block').querySelector('pre').textContent, button); return; }
     if (button?.dataset.nav) { if (button.dataset.target) go(button.dataset.target); return; }
     if (button?.dataset.go) { go(button.dataset.go); return; }
@@ -283,7 +311,7 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
   document.addEventListener('keydown', () => { if (pure) wakeControls(); });
   window.addEventListener('resize', () => { clearTimeout(resizeTimer); const position = capture() || cursor; resizeTimer = setTimeout(() => { if (chapter) settle(position); }, 100); });
   return Object.freeze({ setChapter, clear, capture, settle, showReader, showChapter, go, indexHTML, scrollCurrentIndex,
-    enhanceCodes, resolveAnchor, normalizePosition, updateIndex, wakeControls, setPure,
+    enhanceCodes, resolveAnchor, normalizePosition, updateIndex, toggleIndexSection, wakeControls, setPure,
     get position() { return clone(cursor); }, get state() { return { view, pure, restoring, cursor: clone(cursor) }; },
     get headings() { return clone(headings); }, get sections() { return clone(sections); }, get navigation() { return clone(navigationTargets()); } });
 }
