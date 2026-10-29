@@ -214,8 +214,15 @@ input::placeholder, textarea::placeholder { color: #60758a; opacity: 1; }
 .login-mode .app-header, .login-mode .chapter-nav, .login-mode .reader-frame { display: none; }
 .header-logo { display: flex; flex: none; align-items: center; justify-content: center; width: 76px; height: 38px; pointer-events: none; user-select: none; }
 .header-logo svg { display: block; flex: none; width: 52px; height: 52px; filter: drop-shadow(0 1px 1px #082e5870); }
-.header-logo-reflection { opacity: .02; animation: header-reflection 4.8s ease-in-out infinite; }
-@keyframes header-reflection { 0%,100% { opacity: .02; } 50% { opacity: .68; } }
+/* Closed highlight: matching segment slopes keep every join smooth, with no white hold. */
+.header-logo-reflection { opacity: 0; animation: header-reflection 4.8s linear infinite; }
+@keyframes header-reflection {
+  0% { opacity: 0; animation-timing-function: cubic-bezier(.4,0,.8,.4); }
+  25% { opacity: .08; animation-timing-function: cubic-bezier(.2,.2,.6,1); }
+  50% { opacity: .32; animation-timing-function: cubic-bezier(.4,0,.8,.8); }
+  75% { opacity: .08; animation-timing-function: cubic-bezier(.2,.6,.6,1); }
+  100% { opacity: 0; }
+}
 .header-motion-paused .header-logo-reflection { animation-play-state: paused; }
 .day-chip { position: relative; }
 .day-chip > small { position: absolute; right: 2px; top: 1px; color: #60778e; font-size: 8px; }
@@ -372,7 +379,7 @@ input::placeholder, textarea::placeholder { color: #60758a; opacity: 1; }
   * { scroll-behavior: auto !important; }
   .login-card[data-state="loading"] .state-icon, .opening-card[data-state="loading"] .state-icon { animation: none; }
   .switch-row input, .switch-row input::after { transition: none; }
-  .header-logo-reflection { animation: none; opacity: .10; }
+  .header-logo-reflection { animation: none; opacity: 0; }
 }
 @media print {
   html, body { height: auto; overflow: visible; background: #fff; }

@@ -231,7 +231,7 @@ async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries
       assert(Math.abs(initial.shape.top-106)<.001&&Math.abs(initial.shape.bottom-397)<.001);
       assert.equal(initial.base,'rgb(207, 232, 255)');assert.equal(initial.actions,0);
       assert.equal(await reflection.evaluate(e=>e.getAnimations()[0].effect.getTiming().duration),4800);
-      const phases=[[0,.02],[1200,.35],[2400,.68],[3600,.35],[4800,.02]];
+      const phases=[[0,0],[1200,.08],[2400,.32],[3600,.08],[4800,0]];
       for(const[time,opacity]of phases){
         await reflection.evaluate((e,time)=>{const a=e.getAnimations()[0];a.pause();a.currentTime=time;},time);
         await p.evaluate(()=>new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done))));
@@ -242,7 +242,7 @@ async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries
         if(time===0||time===2400)await p.screenshot({path:path.join(output,`header-logo-${time===0?'ice':'white-reflection'}-402.png`)});
       }
       const pixels=await p.locator('#headerLogo svg').evaluate(async svg=>{
-        const copy=svg.cloneNode(true);copy.setAttribute('xmlns','http://www.w3.org/2000/svg');copy.setAttribute('width','512');copy.setAttribute('height','512');copy.querySelector('.header-logo-reflection').setAttribute('opacity','.68');
+        const copy=svg.cloneNode(true);copy.setAttribute('xmlns','http://www.w3.org/2000/svg');copy.setAttribute('width','512');copy.setAttribute('height','512');copy.querySelector('.header-logo-reflection').setAttribute('opacity','.32');
         const image=new Image();image.src='data:image/svg+xml;base64,'+btoa(new XMLSerializer().serializeToString(copy));await image.decode();
         const canvas=document.createElement('canvas');canvas.width=canvas.height=512;const ctx=canvas.getContext('2d');ctx.drawImage(image,0,0);
         const at=(x,y)=>{const p=new DOMPoint(x,y).matrixTransform(svg.querySelector('#algorithm-header-shape').transform.baseVal.consolidate().matrix);return[...ctx.getImageData(Math.round(p.x),Math.round(p.y),1,1).data];};
@@ -261,13 +261,17 @@ async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries
       assert.equal(await reflection.evaluate(e=>getComputedStyle(e).animationPlayState),'running');
       await reflection.evaluate(async e=>{await e.getAnimations()[0].ready;});
       await p.waitForTimeout(90);assert(await reflection.evaluate(e=>e.getAnimations()[0].currentTime)>paused);
+      await p.evaluate(()=>{globalThis.__logoHidden=true;document.dispatchEvent(new Event('visibilitychange'));globalThis.__logoHidden=false;window.dispatchEvent(new PageTransitionEvent('pageshow',{persisted:true}));});
+      assert.equal(await reflection.evaluate(e=>getComputedStyle(e).animationPlayState),'running');
+      await p.evaluate(()=>{document.documentElement.classList.add('header-motion-paused');window.dispatchEvent(new Event('focus'));});
+      assert.equal(await reflection.evaluate(e=>getComputedStyle(e).animationPlayState),'running');
       await p.emulateMedia({reducedMotion:'reduce'});
-      assert.equal(await reflection.evaluate(e=>getComputedStyle(e).animationName),'none');assert.equal(await reflection.evaluate(e=>getComputedStyle(e).opacity),'0.1');
+      assert.equal(await reflection.evaluate(e=>getComputedStyle(e).animationName),'none');assert.equal(await reflection.evaluate(e=>getComputedStyle(e).opacity),'0');
       assert.deepEqual((await measure()).slot,initial.slot);await p.screenshot({path:path.join(output,'header-logo-reduced-motion-402.png')});
       await p.emulateMedia({reducedMotion:'no-preference'});
       const startup=await p.evaluate(()=>{const card=document.createElement('div');card.className='opening-card';card.dataset.state='loading';card.innerHTML='<span class="state-icon"></span>';document.body.append(card);const style=getComputedStyle(card.firstElementChild),result={animation:style.animationName,duration:style.animationDuration};card.remove();delete document.hidden;return result;});
       assert.deepEqual(startup,{animation:'breathe',duration:'1.8s'});
-      headerLogoMotion.push({maskPixels:pixels,backgroundPaused:true,resumes:true,reducedMotion:{reflection:.1,animated:false},startup});
+      headerLogoMotion.push({maskPixels:pixels,backgroundPaused:true,resumes:true,reducedMotion:{reflection:0,animated:false},startup});
     });
     await check('single-h2-neighbors-source-status-index-and-native-boundaries',async env=>{
       const p=await env.page();

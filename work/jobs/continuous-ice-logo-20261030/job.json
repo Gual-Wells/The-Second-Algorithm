@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "continuous-ice-logo-20261030",
+  "goal": "修复标题Logo恢复暂停并将两项目白反光改为冰蓝贯穿的连续周期曲线，不改教学与存储/问答功能",
+  "createdAt": "2026-10-29T18:47:33.521397+00:00",
+  "evidence": [
+    {
+      "id": "f3315dd0bfa14a40b50f59422e8fc9f1",
+      "kind": "research",
+      "path": "work/jobs/continuous-ice-logo-20261030/research.md",
+      "summary": "实际复现页面恢复漏事件的暂停路径，研究闭合蓝色周期及自然渲染验证",
+      "outcome": "accepted",
+      "sha256": "7a309db84b764f28c070160b83bdf16c955dd483154f9a3ae4ad8e270e04a543",
+      "inputHash": "6ee86e3d73fc348afa866a031fcb87c97d81055a76547a700c79df62caa7fc90",
+      "recordedAt": "2026-10-29T18:54:54.689203+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "ca0ce7cc6217485e9bbabc8261a3c60f",
+      "kind": "review",
+      "path": "work/jobs/continuous-ice-logo-20261030/review.md",
+      "summary": "直接审阅当前Logo与全部阅读回归，保留教材和尺寸，连续像素及恢复保护通过",
+      "outcome": "accepted",
+      "sha256": "4638132fe03746c2971201a4429f006060d974c731887ae4f114c81ce7b60525",
+      "inputHash": "6ee86e3d73fc348afa866a031fcb87c97d81055a76547a700c79df62caa7fc90",
+      "recordedAt": "2026-10-29T18:54:57.849894+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    }
+  ],
+  "lastGoodVerification": {
+    "path": "work/jobs/continuous-ice-logo-20261030/verifications/cc79e4b625474a95815bc44cc2053de7.json",
+    "sha256": "ac9c23e8654ac2364ecc93e5219a8bf582763300e4f7cbc8068205d6d6767c8d",
+    "inputHash": "6ee86e3d73fc348afa866a031fcb87c97d81055a76547a700c79df62caa7fc90"
+  },
+  "lastPreparedRelease": {
+    "path": "work/jobs/continuous-ice-logo-20261030/releases/86c28b4746b54d28a2803966b0327f9f.json",
+    "sha256": "d92f0fbdd0ea96676ec6cfd237616669b93a75489647e2f61de3f1ece6b4aab9",
+    "inputHash": "6ee86e3d73fc348afa866a031fcb87c97d81055a76547a700c79df62caa7fc90"
+  },
+  "lastVerificationAttempt": {
+    "path": "work/jobs/continuous-ice-logo-20261030/verifications/cc79e4b625474a95815bc44cc2053de7.json",
+    "sha256": "ac9c23e8654ac2364ecc93e5219a8bf582763300e4f7cbc8068205d6d6767c8d",
+    "inputHash": "6ee86e3d73fc348afa866a031fcb87c97d81055a76547a700c79df62caa7fc90"
+  }
+}

@@ -713,6 +713,8 @@ window.addEventListener('online', () => { void reconnect(); }); window.addEventL
 window.addEventListener('offline', () => { S.offline = true; updateConnection(); });
 function updateHeaderMotion() { document.documentElement.classList.toggle('header-motion-paused', document.hidden); }
 updateHeaderMotion();
+window.addEventListener('pageshow', updateHeaderMotion);
+window.addEventListener('focus', updateHeaderMotion);
 document.addEventListener('visibilitychange', () => { updateHeaderMotion(); if (document.hidden) { savePosition(); questions?.captureDraft(); void syncPending({ forcePositions: true, keepalive: true }); } else if (navigator.onLine && S.owner) S.offline || S.stateSyncFailed ? void reconnect() : void syncPending(); });
 window.addEventListener('beforeunload', event => { if (S.owner && hasPendingLegacy()) { event.preventDefault(); event.returnValue = ''; } });
 window.addEventListener('pagehide', () => { savePosition(); questions?.captureDraft(); void syncPending({ forcePositions: true, keepalive: true }); });

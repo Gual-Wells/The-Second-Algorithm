@@ -1,0 +1,36 @@
+{
+  "sourceBaseline": "1396e29",
+  "validation": {
+    "readerJourneys": 22,
+    "readerPassed": true,
+    "carrierTests": 134,
+    "realServiceWorkerUpgrade": true,
+    "courseQuality": true,
+    "compilerReceipt": {
+      "path": "work/jobs/continuous-ice-logo-20261030/verifications/cc79e4b625474a95815bc44cc2053de7.json",
+      "sha256": "ac9c23e8654ac2364ecc93e5219a8bf582763300e4f7cbc8068205d6d6767c8d",
+      "inputHash": "6ee86e3d73fc348afa866a031fcb87c97d81055a76547a700c79df62caa7fc90"
+    }
+  },
+  "naturalPlayback": [
+    {
+      "engine": "chromium",
+      "durationMs": 11733.196000000002,
+      "brightFraction": 0.23684210526315788,
+      "maxSeamOpacity": 1.85142e-07
+    },
+    {
+      "engine": "webkit",
+      "durationMs": 14163,
+      "brightFraction": 0.21052631578947367,
+      "maxSeamOpacity": 0
+    }
+  ],
+  "paidCalls": 0,
+  "physicalIPhone": false,
+  "notClaimed": [
+    "full 198 Python suite",
+    "physical iPhone rendering",
+    "the user device exact original failure cause"
+  ]
+}
