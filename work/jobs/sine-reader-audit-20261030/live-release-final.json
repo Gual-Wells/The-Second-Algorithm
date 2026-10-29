@@ -1,0 +1,89 @@
+{
+  "project": "second-algorithm",
+  "verifiedAt": "2026-10-29T19:54:15Z",
+  "passed": true,
+  "files": [
+    {
+      "origin": "https://second-algorithm.pages.dev",
+      "file": "index.html",
+      "status": 200,
+      "sha256": "1e2baeeda21f65917315859266de39a06699451f24f8dc1b0987cc258c17fef9",
+      "matches": true
+    },
+    {
+      "origin": "https://second-algorithm.pages.dev",
+      "file": "styles.css",
+      "status": 200,
+      "sha256": "bdd85c3775b00778ba8fdcdc7bbc62f44268ed192d27336487bd9b594ae9a128",
+      "matches": true
+    },
+    {
+      "origin": "https://second-algorithm.pages.dev",
+      "file": "app.js",
+      "status": 200,
+      "sha256": "5247e49d245bb44c589770953b869958e481a189c353bb34ac73654e9f5f18d3",
+      "matches": true
+    },
+    {
+      "origin": "https://second-algorithm.pages.dev",
+      "file": "sw.js",
+      "status": 200,
+      "sha256": "3fc9e2aadbaad9cd3312cebecab9c81088a7440a8b54f03f67d011886a098765",
+      "matches": true
+    },
+    {
+      "origin": "https://5c31343c.second-algorithm.pages.dev",
+      "file": "index.html",
+      "status": 200,
+      "sha256": "1e2baeeda21f65917315859266de39a06699451f24f8dc1b0987cc258c17fef9",
+      "matches": true
+    },
+    {
+      "origin": "https://5c31343c.second-algorithm.pages.dev",
+      "file": "styles.css",
+      "status": 200,
+      "sha256": "bdd85c3775b00778ba8fdcdc7bbc62f44268ed192d27336487bd9b594ae9a128",
+      "matches": true
+    },
+    {
+      "origin": "https://5c31343c.second-algorithm.pages.dev",
+      "file": "app.js",
+      "status": 200,
+      "sha256": "5247e49d245bb44c589770953b869958e481a189c353bb34ac73654e9f5f18d3",
+      "matches": true
+    },
+    {
+      "origin": "https://5c31343c.second-algorithm.pages.dev",
+      "file": "sw.js",
+      "status": 200,
+      "sha256": "3fc9e2aadbaad9cd3312cebecab9c81088a7440a8b54f03f67d011886a098765",
+      "matches": true
+    }
+  ],
+  "anonymousBoundaries": [
+    {
+      "origin": "https://second-algorithm.pages.dev",
+      "route": "/auth/status",
+      "status": 200
+    },
+    {
+      "origin": "https://second-algorithm.pages.dev",
+      "route": "/api/library",
+      "status": 401
+    },
+    {
+      "origin": "https://5c31343c.second-algorithm.pages.dev",
+      "route": "/auth/status",
+      "status": 200
+    },
+    {
+      "origin": "https://5c31343c.second-algorithm.pages.dev",
+      "route": "/api/library",
+      "status": 401
+    }
+  ],
+  "physicalIPhone": false,
+  "paidCalls": 0,
+  "sourceCommit": "70d50bdbab585365a3f9ba4d7e1022b4dfb9c858",
+  "immutable": "https://5c31343c.second-algorithm.pages.dev"
+}

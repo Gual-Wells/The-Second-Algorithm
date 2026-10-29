@@ -1,0 +1,14 @@
+{
+  "coreRun": {
+    "sha": "17851946b008f9b39af4428bd54003a39d67758b",
+    "url": "https://github.com/Gual-Wells/The-Second-Algorithm/actions/runs/40942832713",
+    "status": "completed",
+    "conclusion": "success"
+  },
+  "finalRun": {
+    "head_sha": "70d50bdbab585365a3f9ba4d7e1022b4dfb9c858",
+    "status": "in_progress",
+    "conclusion": null,
+    "html_url": "https://github.com/Gual-Wells/The-Second-Algorithm/actions/runs/40943833886"
+  }
+}
