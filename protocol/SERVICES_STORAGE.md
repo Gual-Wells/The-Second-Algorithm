@@ -18,7 +18,7 @@ OpenAI只登记ChatGPT附赠API credits：issuedAmount是发放额，remainingAm
 
 ## 默认关闭的后台出版
 
-复用第二语言单次许可语义，独立任务`SecondAlgorithm-DailyCodex`于北京时间05:00检查。服务端默认`restRequested=true`；新日期claim在同一SQLite写入触发器中消费许可与一次说明，恢复休息。同日重试返回原claim，不吃之后新安排；任务失败不自动重跑模型或跨日偷偷续费。下一次出版补充说明不是48小时临时资产业务。
+复用第二语言单次许可语义，独立任务`SecondAlgorithm-DailyCodex`于北京时间05:00检查。服务端默认`restRequested=true`；只有`rest_requested=0`的获许可新claim才在同一SQLite写入触发器中消费许可与一次说明、恢复休息，休息日检查保留补充要求及设置revision。同日重试返回原claim，不吃之后新安排；任务失败不自动重跑模型或跨日偷偷续费。下一次出版补充说明不是48小时临时资产业务。
 
 启动器是WindowsApplication→Node并设置CreateNoWindow，不使用可见PowerShell窗口、不依靠每分钟Codex监测。Node领取到rest时直接完成，不启动Codex；实际有许可才运行既有Codex CLI的订阅认证与当前模型配置。电脑必须开机且用户登录；任务不能保证离线电脑实时执行。原始研究与出版流程必须完整，不因自动化省略研究链、语义审阅或确定性检查。
 

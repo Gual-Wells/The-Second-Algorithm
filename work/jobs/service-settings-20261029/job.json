@@ -91,21 +91,43 @@
       "inputHash": "865bf08377fd2379fad6d608798c03d0f6d1f6618f3175f11d2dc1321a6c31d3",
       "recordedAt": "2026-10-29T16:42:02.549940+00:00",
       "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "50b88f83eb454eb6b08398d4f495ea39",
+      "kind": "research",
+      "path": "work/service-settings-20261029/rest-requirements-research.md",
+      "summary": "内存与API复现休息日丢未来要求，新增迁移只在实际许可领取时消费",
+      "outcome": "accepted",
+      "sha256": "30530d2a47ed8d9c2b77424d1eb9459bc74f38ff19a07b89d2f7a5f04258bf7b",
+      "inputHash": "6bd7d3510c77ad48a4d1491667833817ba50e946033ebfbccf5ed23efeb293dd",
+      "recordedAt": "2026-10-29T16:57:21.593782+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "cae865693f4b47158e6ae89780cd5245",
+      "kind": "review",
+      "path": "work/service-settings-20261029/rest-requirements-review.md",
+      "summary": "验证休息不改要求及版本、下一日许可一次消费、旧claim重试不吃新安排，保留旧迁移字节",
+      "outcome": "accepted",
+      "sha256": "8d564646af2d8df634614b6144a33e094ce4f5265ebb3e80b64ce871f8b6a45a",
+      "inputHash": "6bd7d3510c77ad48a4d1491667833817ba50e946033ebfbccf5ed23efeb293dd",
+      "recordedAt": "2026-10-29T16:57:24.356051+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
     }
   ],
   "lastGoodVerification": {
-    "path": "work/jobs/service-settings-20261029/verifications/d905d397efcc47929a8cab2cc6ccc48b.json",
-    "sha256": "040f623a3ac01969698bdccba850578855106c59a05578749009b59e8637b442",
-    "inputHash": "865bf08377fd2379fad6d608798c03d0f6d1f6618f3175f11d2dc1321a6c31d3"
+    "path": "work/jobs/service-settings-20261029/verifications/3f9c7debecd64e15bb46cefc9173ddea.json",
+    "sha256": "dd4d715b57cc726c5699121bc267f6539f4c719e99d2c19bdc92097695a434c0",
+    "inputHash": "6bd7d3510c77ad48a4d1491667833817ba50e946033ebfbccf5ed23efeb293dd"
   },
   "lastPreparedRelease": {
-    "path": "work/jobs/service-settings-20261029/releases/cdd71a51c1cd40d299001fe422d9cee9.json",
-    "sha256": "ceb55ca45eefdfdbbed859ae345ab05a64de014e71ad934ca219c94612d48397",
-    "inputHash": "865bf08377fd2379fad6d608798c03d0f6d1f6618f3175f11d2dc1321a6c31d3"
+    "path": "work/jobs/service-settings-20261029/releases/9de2f99db07a4e74a8010571482aedce.json",
+    "sha256": "c5f3b6ae6a0cb5757cf58430bfe2645642a06e749af3b4e1f20665e76a54715b",
+    "inputHash": "6bd7d3510c77ad48a4d1491667833817ba50e946033ebfbccf5ed23efeb293dd"
   },
   "lastVerificationAttempt": {
-    "path": "work/jobs/service-settings-20261029/verifications/d905d397efcc47929a8cab2cc6ccc48b.json",
-    "sha256": "040f623a3ac01969698bdccba850578855106c59a05578749009b59e8637b442",
-    "inputHash": "865bf08377fd2379fad6d608798c03d0f6d1f6618f3175f11d2dc1321a6c31d3"
+    "path": "work/jobs/service-settings-20261029/verifications/3f9c7debecd64e15bb46cefc9173ddea.json",
+    "sha256": "dd4d715b57cc726c5699121bc267f6539f4c719e99d2c19bdc92097695a434c0",
+    "inputHash": "6bd7d3510c77ad48a4d1491667833817ba50e946033ebfbccf5ed23efeb293dd"
   }
 }

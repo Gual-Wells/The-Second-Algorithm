@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "tests": 134,
+  "fail": 0,
+  "logSha256": "00fe1a866386e6967edc0f4b21272408e4d2b8aec970e43be0dc18d71a2f9917",
+  "restDoesNotConsumeNextPublicationRequirements": true,
+  "legacyMigrationUnchanged": true
+}

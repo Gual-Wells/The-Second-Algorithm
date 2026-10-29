@@ -8,7 +8,7 @@ import {parseWranglerInfo} from '../scripts/collect-service-snapshot.mjs';
 import {runDecision} from '../scripts/run-background.mjs';
 const origin='https://second-algorithm.pages.dev';
 function environment(){
- const sql=new DatabaseSync(':memory:');for(const file of ['0001_owner_state.sql','0002_services.sql'])sql.exec(readFileSync(new URL('../migrations/'+file,import.meta.url),'utf8'));
+ const sql=new DatabaseSync(':memory:');for(const file of ['0001_owner_state.sql','0002_services.sql','0003_preserve_rest_arrangements.sql'])sql.exec(readFileSync(new URL('../migrations/'+file,import.meta.url),'utf8'));
  const DB={prepare(text){let args=[];return{bind(...v){args=v;return this;},async first(){return sql.prepare(text).get(...args)||null;},async all(){return{results:sql.prepare(text).all(...args)};},async run(){return{meta:{changes:Number(sql.prepare(text).run(...args).changes)}};}};},async batch(v){sql.exec('BEGIN');try{const result=[];for(const s of v)result.push(await s.run());sql.exec('COMMIT');return result;}catch(e){sql.exec('ROLLBACK');throw e;}}};
  return{sql,DB,APP_ORIGIN:origin,PUBLISH_TOKEN:'test-publisher-token-never-production',ASSETS:{fetch(){return new Response('fixture');}}};
 }
@@ -39,6 +39,22 @@ test('settings default to rest, enforce CAS/origin and consume one permission at
  current=await read(e,'/api/settings',cookie);assert.equal(current.restRequested,false);assert.equal(current.revision,3);
  assert.equal((await call(e,'/api/automation/complete',{publisher:true,method:'POST',body:{runId:'2026-10-29',outcome:'failed'}})).status,200);
  const second=await (await call(e,'/api/automation/complete',{publisher:true,method:'POST',body:{runId:'2026-10-29',outcome:'published'}})).json();assert.equal(second.outcome,'failed');e.sql.close();
+});
+test('rest-day claims preserve future publication requirements and revision until an authorized next-day claim consumes once',async()=>{
+ const e=environment(),cookie=await owner(e);
+ const saved=await (await call(e,'/api/settings',{cookie,method:'PUT',body:{baseRevision:0,goal:'synthetic learning goal',temporaryRequested:true,temporaryRequestText:'synthetic next publication request'}})).json();
+ assert.equal(saved.restRequested,true);assert.equal(saved.revision,1);const requestId=saved.temporaryRequestId;
+ const rest=await (await call(e,'/api/automation/claim',{publisher:true,method:'POST',body:{runId:'2026-10-30'}})).json();assert.equal(rest.rest,true);
+ let current=await read(e,'/api/settings',cookie);assert.equal(current.temporaryRequestId,requestId);assert.equal(current.temporaryRequestText,saved.temporaryRequestText);assert.equal(current.revision,1);assert.equal(current.updatedAt,saved.updatedAt);
+ await call(e,'/api/automation/complete',{publisher:true,method:'POST',body:{runId:'2026-10-30',outcome:'rest'}});
+ await call(e,'/api/settings',{cookie,method:'PUT',body:{baseRevision:1,restRequested:false}});
+ const oldRetry=await (await call(e,'/api/automation/claim',{publisher:true,method:'POST',body:{runId:'2026-10-30'}})).json();assert.equal(oldRetry.rest,true);
+ current=await read(e,'/api/settings',cookie);assert.equal(current.restRequested,false);assert.equal(current.revision,2);assert.equal(current.temporaryRequestId,requestId);
+ const authorized=await (await call(e,'/api/automation/claim',{publisher:true,method:'POST',body:{runId:'2026-10-31'}})).json();assert.equal(authorized.rest,false);assert.equal(authorized.temporaryRequest.id,requestId);
+ current=await read(e,'/api/settings',cookie);assert.equal(current.restRequested,true);assert.equal(current.temporaryRequested,false);assert.equal(current.revision,3);assert.equal(current.goal,saved.goal);
+ const later=await (await call(e,'/api/settings',{cookie,method:'PUT',body:{baseRevision:3,temporaryRequested:true,temporaryRequestText:'synthetic later request'}})).json();
+ const activeRetry=await (await call(e,'/api/automation/claim',{publisher:true,method:'POST',body:{runId:'2026-10-31'}})).json();assert.equal(activeRetry.temporaryRequest.id,requestId);
+ current=await read(e,'/api/settings',cookie);assert.equal(current.temporaryRequestId,later.temporaryRequestId);assert.equal(current.temporaryRequestText,later.temporaryRequestText);assert.equal(current.revision,4);e.sql.close();
 });
 test('quota issuance never becomes an invented remaining balance, failed/out-of-order reports preserve verified values',async()=>{
  const now=Date.now(),base={verified:true,issuedAmount:12.5,remainingAmount:null,expiresAt:'2027-01-01',updatedAt:now,source:'synthetic-test-fixture',claim:'unknown'};
