@@ -3,9 +3,15 @@
 <a id="fenwick-rank"></a>
 ## 动态频数的第 k 个位置：树状数组内查找
 
+<a id="fenwick-rank-foundation"></a>
+### 用累计频数表示动态秩
+
 给 n 个位置分别保存一个非负频数，允许修改频数，并查询“累计第 k 个单位出现在哪个位置”。例如动态删除序列时，原位置不移动：存活位置记1，删除位置记0，第 k 个存活元素就是前缀和首次达到 k 的位置。
 
 这里的顺序来自累计频数，而非元素值。下面用树状数组（Fenwick tree）维护频数；代码中的 `i64`表示64位有符号整数，外部位置从0开始。
+
+<a id="fenwick-rank-blocks"></a>
+### 从树状数组的整块频数直接定位
 
 先看树状数组保存了什么。内部采用1基编号，`tree[t]`记录最后 `lowbit(t)`个位置的频数之和，即区间 `(t−lowbit(t),t]`，其中 `lowbit(t)=t&−t`。
 
@@ -42,7 +48,10 @@
 `remove_by_rank`反复选择并将对应频数减1。原数组只用于读取删除值，位置本身不移动，因而不必承担 `vector::erase`导致的后缀搬移。用 n 次点加初始化后，整套删除耗时 O(n log n)；单次点加或选择均为 O(log n)，空间为 O(n)。
 
 <a id="fenwick-rank-standard"></a>
-### 静态累计量与动态结构
+### 频数不变时的静态累计量
+
+<a id="fenwick-static-standard"></a>
+#### 使用 partial_sum 与 lower_bound 查累计秩
 
 {{advanced-fenwick-standard}}
 
@@ -57,10 +66,16 @@
 
 调用期间只读借用原值数组，返回向量拥有复制出的删除值，见 [[Q100005|借用参数与结果所有权]]。
 
-练习：[List Removals](https://cses.fi/problemset/task/1749)。输出的是删除值，而非原下标；把下标与存活秩分开才能迁用。
+<a id="fenwick-rank-practice"></a>
+### 按存活秩删除并输出原值
+
+[List Removals](https://cses.fi/problemset/task/1749)。输出的是删除值，而非原下标；把下标与存活秩分开才能迁用。
 
 <a id="summary-descent"></a>
 ## 线段树内查找：从指定位置找首个达标值
+
+<a id="summary-descent-foundation"></a>
+### 用区间摘要排除整块不可能的位置
 
 长度为 n 的数组允许点修改。给定起点 s 和阈值 V，求首个满足 `j≥s`且 `a[j]≥V`的位置；不存在则返回 n。
 
@@ -84,11 +99,17 @@
 <a id="summary-descent-standard"></a>
 ### 线性查找与结构库的选择
 
+<a id="summary-linear-standard"></a>
+#### 使用 find_if 线性寻找首个达标值
+
 {{advanced-summary-standard}}
 
 `std::find_if`可以从 s 开始线性寻找同一个答案，最坏检查 n−s 项。这里的 [[Q100003|谓词与lambda捕获]]只固定 V，并判断当前单个值。
 
 线性版不需要区间摘要；线段树版用额外维护成本换取更快的重复查询。应按修改、查询次数选择，而不是把库函数名称看作复杂度保证。
+
+<a id="summary-acl-interface"></a>
+### AtCoder Library 的结构内查找接口
 
 [AtCoder Library `segtree::max_right/min_left`](https://atcoder.github.io/ac-library/production/document_en/segtree.html)提供了通用的结构内边界搜索。它是外部算法库，不是C++标准库。
 
@@ -103,10 +124,16 @@
 
 查询返回 n 时应先判无解，再访问元素。递归只沿对数层高下降，资源区别见 [[Q100009|递归与调用栈]]；结点数和摘要数值的类型仍须按输入上界选择，见 [[Q100002|类型范围]]。
 
-练习：[AtCoder practice2 J — Segment Tree](https://atcoder.jp/contests/practice2/tasks/practice2_j)。它还包含点赋值、区间最大值；原题用1基且无解输出N+1，需在入口出口转换。
+<a id="summary-descent-practice"></a>
+### 点修改、区间摘要与首个达标位置
+
+[AtCoder practice2 J — Segment Tree](https://atcoder.jp/contests/practice2/tasks/practice2_j)。它还包含点赋值、区间最大值；原题用1基且无解输出N+1，需在入口出口转换。
 
 <a id="ancestor-boundary"></a>
 ## 最近公共祖先与路径边界的倍增查找
+
+<a id="ancestor-boundary-foundation"></a>
+### 把祖先复合转成可接受的倍增跳跃
 
 给定一棵有根树，查询两点的最近公共祖先，即共同祖先中深度最大的结点，简称LCA。可先保存倍增表：`up[b][v]`表示结点 v 向上走2^b步到达的祖先。
 
@@ -128,7 +155,10 @@
 预处理耗时 O(n log n)，每次LCA或k级祖先查询为 O(log n)，空间为 O(n log n)。根指向自身只是表内安全哨兵；`kth`先比较实际深度，超出时返回−1，不把根的自指算作真实祖先。
 
 <a id="ancestor-boundary-standard"></a>
-### 链上求交与有序路径查询
+### 直接求交两条祖先链
+
+<a id="ancestor-chain-standard"></a>
+#### 使用 find 查找第一个共同祖先
 
 {{advanced-ancestor-standard}}
 
@@ -136,9 +166,15 @@ C++标准库没有直接的LCA查询。对照实现先保存a的祖先链，再�
 
 它说明祖先链的直接求交方式，但大量查询时，应使用已预处理的结构。
 
+<a id="ancestor-threshold-variant"></a>
+### 单调权值路径上的最浅达标祖先
+
 祖先查询还可能由结点权值产生另一种顺序。若每条边都满足父权不大于子权，根到当前结点的路径权值就非降；给定阈值，可在该路径上寻找首个权值≥阈值的结点，也就是符合条件的最浅祖先。
 
 这里搜索的是路径权值的边界，目标与LCA不同。没有这条权值条件的树，不能直接在根路径上二分。
+
+<a id="ancestor-threshold-standard"></a>
+#### 维护当前根路径并调用 lower_bound
 
 {{advanced-ancestor-threshold}}
 
@@ -155,10 +191,16 @@ C++标准库没有直接的LCA查询。对照实现先保存a的祖先链，再�
 
 路径查询拿到边界迭代器后立即转成下标，再进行下一次 `push/pop`，避免使用失效位置，见 [[Q100013|vector修改与失效]]。原树与权值只读借用，见 [[Q100005|借用与生命周期]]；显式事件栈和递归函数栈的资源区别见 [[Q100009|调用栈边界]]。
 
-练习：[Company Queries II](https://cses.fi/problemset/task/1688/)、[Company Queries I](https://cses.fi/problemset/task/1687)、[Planets Queries I](https://cses.fi/problemset/task/1750)、[Cyclic Array](https://cses.fi/problemset/task/1191)。Company I核对不存在祖先，Planets核对有环精确复合；Cyclic的边界提升在下一节展开，不表示四题有同一种二分谓词。
+<a id="ancestor-boundary-practice"></a>
+### 祖先查询、函数跳跃与环形分段
+
+[Company Queries II](https://cses.fi/problemset/task/1688/)、[Company Queries I](https://cses.fi/problemset/task/1687)、[Planets Queries I](https://cses.fi/problemset/task/1750)、[Cyclic Array](https://cses.fi/problemset/task/1191)。Company I核对不存在祖先，Planets核对有环精确复合；Cyclic的边界提升在下一节展开，不表示四题有同一种二分谓词。
 
 <a id="cyclic-jump"></a>
 ## 正数环形序列的最少连续分段
+
+<a id="cyclic-jump-foundation"></a>
+### 从最远合法段构造环上的跳跃
 
 给定一个正数环，每个元素都不超过容量 C。把环切成若干连续段，每段和至多为 C，求最少段数。切点并未给定，因此需要同时考虑从哪里开始和每段延伸多远。
 
@@ -203,10 +245,16 @@ next在2n处自指，使复合查表始终有界；每个真实位置的单项�
 
 原题 Ai≤10⁹、2n≤4×10⁵，前缀和至多4×10¹⁴；加上 C≤10¹⁸后仍可放入64位。滑窗通过 `value≤C−sum`判断是否可加入，范围分析见 [[Q100002|整数表达式与溢出预算]]。两版都只读借用原数组，见 [[Q100005|借用参数]]。
 
-练习：[Cyclic Array](https://cses.fi/problemset/task/1191)。切点不是给定，不能只对原数组从0贪心一次。
+<a id="cyclic-jump-practice"></a>
+### 切点未知的环形连续分段
+
+[Cyclic Array](https://cses.fi/problemset/task/1191)。切点不是给定，不能只对原数组从0贪心一次。
 
 <a id="time-parallel-search"></a>
 ## 并行二分：批量查询最早连通时间
+
+<a id="time-parallel-search-foundation"></a>
+### 让各查询共用一次时间前缀重放
 
 图有 n 个结点，最初没有边，此后每天加入一条无向边。给出许多点对，分别询问两点最早在哪一天连通。设一共加入 m 条边，有 q 个查询。
 
@@ -236,15 +284,23 @@ next在2n处自指，使复合查表始终有界；每个真实位置的单项�
 同一点与自身在空图中已连通，因此其答案是第0天。各轮从空图重放，重复边、自环和始终不连通的点对也按同一含义处理。
 
 <a id="time-parallel-search-standard"></a>
-### 两次查询如何逐轮分开
+### 用标准设施组织查询状态
 
 C++标准库提供容器与初始化算法，没有直接的并查集或并行二分接口。这里 `std::vector`保存查询桶和父数组，`std::iota`建立初值，`std::swap`调整合并方向；路径压缩、合并规则与日期边界仍由前面的算法实现。
+
+这些设施已在[前面的共享实现](#time-parallel-search-manual)中使用，查询分桶与 DSU 核心继续复用该实现，不再复制第二份求解代码。
+
+<a id="time-parallel-search-example"></a>
+### 两次查询如何逐轮分开
 
 例如道路依次加入 `(0,1)、(1,2)、(2,3)`，查询A=(0,2)、B=(0,3)。初始两问都是 `low=-1、high=4`。
 
 第一轮mid均为1，只有第一条边，两问都不连通，low均改为1。第二轮mid均为2：加入前两条边后，A连通，high_A改为2；B仍不连通，low_B改为2。A的边界已相邻，B再检查第3天得到连通，答案分别为2和3。
 
 这一过程每轮只扫描一条时间线，没有为A、B各重建一次前缀。若另问(2,2)，它的真边界最终会缩到第0天。
+
+<a id="time-parallel-search-cost"></a>
+### 共享重放的成本与回滚版本的区别
 
 每轮重建n个父结点需 O(n)，加边和回答查询需 O((m+q)α(n))。共进行 O(log(m+2))轮，因此总时间为 O((n+(m+q)α(n)) log(m+2))，空间为 O(n+m+q)。m=0时仍要检查第0天，轮数界中的常数项不能省掉。
 
@@ -257,16 +313,25 @@ C++标准库提供容器与初始化算法，没有直接的并查集或并行�
 
 `low=-1`而所有真实日期非负，支持这里的中点计算；换成极大整数域时，应重算 [[Q100002|差值与中点预算]]。操作桶与查询向量时，也要避免扩容后复用失效引用，见 [[Q100013|vector扩容与引用失效]]。
 
-练习：[New Roads Queries](https://cses.fi/problemset/task/2101)。这是一套多问共享状态算法；只有一个钉木板前缀查询时，不必为术语而引入它。
+<a id="time-parallel-search-practice"></a>
+### 多点对的最早连通日期
+
+[New Roads Queries](https://cses.fi/problemset/task/2101)。这是一套多问共享状态算法；只有一个钉木板前缀查询时，不必为术语而引入它。
 
 <a id="dynamic-range-kth"></a>
 ## 整体二分：带修改的区间第 k 小查询
+
+<a id="dynamic-range-kth-foundation"></a>
+### 用时间事件表达赋值和区间秩
 
 长度为 n 的数组交错执行两类操作：把某个位置赋成新值，以及查询当前闭区间的第 k 小元素，重复出现的值分别计数。所有操作已知，可离线处理。
 
 对一次固定查询，统计“区间内≤v的元素个数”，随值阈值 v 单调增加。但查询发生的时刻不同，一次赋值也可能把答案变大或变小。因此，应沿**答案值域**分治，同时保留操作时间顺序。
 
 先把每个初始元素写成一次插入。位置赋值则拆为两个相邻事件：删除该位置当时的旧值，再插入新值。这样，在时间顺序上扫描时，区间内当前有哪些值可由增减计数表示。
+
+<a id="dynamic-range-kth-partition"></a>
+### 稳定分流与回滚如何维持查询时刻
 
 进入某个值域 `[lo,hi]`的子问题时，其中更新事件的数值和查询答案都在这个域内，查询的 rank 表示该域内的剩余秩；位置树状数组从空状态开始。令mid为值域中点，只把值≤mid的更新加入树状数组。
 
@@ -278,6 +343,7 @@ C++标准库提供容器与初始化算法，没有直接的并查集或并行�
 
 删除事件的贡献为−1，但实际多重集中各位置的有效频数仍非负；这里不是允许任意负频数的秩查询。
 
+<a id="advanced-subheading-23"></a>
 ### 先追踪一次值域划分
 
 以初值 `[4,1,3]`为例，依次执行：查询全区间第2小Q1，把零基位置1赋为5，再查询全区间第2小Q2。压缩表为 `[1,3,4,5]`，顶层左半的最大值为3。
@@ -289,15 +355,28 @@ C++标准库提供容器与初始化算法，没有直接的并查集或并行�
 <a id="dynamic-range-kth-manual"></a>
 ### 事件表示、值压缩与稳定递归
 
+<a id="dynamic-kth-model-manual"></a>
+#### 表示外部操作与内部事件
+
 实现用两类记录分开外部操作与内部事件。`RangeOperation`保存原始赋值或查询；`RankEvent`中的 `delta`表示插入/删除的±1贡献，`rank`只用于查询的剩余秩。`left/right`描述位置，`value`保存压缩后的值下标。
 
 {{advanced-kth-model}}
+
+<a id="dynamic-range-kth-standard"></a>
+#### 排序去重并压缩全部可能值
 
 先收集初值和**全部未来赋值**，排序去重，得到从小到大的不同值表。`value_rank`用 `lower_bound`将真实值映到表中下标；递归只在这些下标上分治，最终再映回原值。
 
 压缩只替换值的表示，不合并元素的出现次数。两个相等元素仍分别产生更新事件。
 
 {{advanced-kth-standard}}
+
+`sort`排好值序，`unique`把不重复的值压到前段，并返回新的逻辑末尾；`erase`删除尾段，才真正缩短容器。随后用 `lower_bound`取得值下标。仅压缩初值会漏掉未来修改目标，所以收集阶段必须包含所有新值。
+
+标准库承担压缩和范围复制；稳定的时间流、剩余秩变化及回滚规则，仍需要由值域分治算法组织。
+
+<a id="dynamic-kth-recursion-manual"></a>
+#### 稳定分流事件并回滚位置统计
 
 {{advanced-kth-manual}}
 
@@ -310,13 +389,6 @@ C++标准库提供容器与初始化算法，没有直接的并查集或并行�
 设赋值数为 A、查询数为 Q，事件总数上界为 `E=n+2A+Q`，不同值数为 U。压缩需要 O((n+A) log(n+A+1))时间；值域递归每层处理所有事件，每次位置查询/更新为 O(log(n+1))，因此另需 O(E log(U+1) log(n+1))。两部分应相加，即使U=1也仍要读取、整理操作。
 
 空间为 O(E+n+U+log(U+1))。递归深度取决于不同值数，而不是数组长度；共享缓冲区避免为每个递归结点保留整份事件副本。
-
-<a id="dynamic-range-kth-standard"></a>
-### 排序压缩与库设施的职责
-
-`sort`排好值序，`unique`把不重复的值压到前段，并返回新的逻辑末尾；`erase`删除尾段，才真正缩短容器。随后用 `lower_bound`取得值下标。仅压缩初值会漏掉未来修改目标，所以收集阶段必须包含所有新值。
-
-标准库承担压缩和范围复制；稳定的时间流、剩余秩变化及回滚规则，仍需要由值域分治算法组织。
 
 <a id="dynamic-range-kth-engineering"></a>
 ### 离线条件、输入范围与借用
@@ -331,10 +403,16 @@ C++标准库提供容器与初始化算法，没有直接的并查集或并行�
 
 {{knowledge:Q100012}}
 
-练习：[静态区间第k小](https://www.luogu.com.cn/problem/P3834)、[Dynamic Rankings](https://www.luogu.com.cn/problem/P2617)。前者题名虽指向可持久化树，并不禁止其他正确算法；后者才核验真实赋值时序。
+<a id="dynamic-range-kth-practice"></a>
+### 静态与带修改的区间第 k 小
+
+[静态区间第k小](https://www.luogu.com.cn/problem/P3834)、[Dynamic Rankings](https://www.luogu.com.cn/problem/P2617)。前者题名虽指向可持久化树，并不禁止其他正确算法；后者才核验真实赋值时序。
 
 <a id="marginal-penalty"></a>
 ## 惩罚参数搜索：递减边际收益下的资源分配
+
+<a id="marginal-penalty-foundation"></a>
+### 把资源使用化成递减收益的全局选择
 
 有 N 个设施，第 i 个初始收益为 A_i。每使用一次，先获得当前收益，再将该设施收益减1。最多使用 K 次，求最大总收益。原题中 A_i、K可到2×10⁹，N可到10⁵。
 
@@ -346,6 +424,9 @@ C++标准库提供容器与初始化算法，没有直接的并查集或并行�
 
 全部正收益的数量为 `T=ΣA_i`。由于允许少于K次，零收益和负收益都不必取，实际应选 `K′=min(K,T)`个正收益。若K′=0，直接返回0；以下讨论K′>0。
 
+<a id="marginal-penalty-threshold"></a>
+### 用收益阈值补齐实际使用次数
+
 对阈值 v，设施 i 提供的不小于v的收益有 `max(A_i−v+1,0)`个。因此定义
 
 `C_ge(v)=Σmax(A_i−v+1,0)`。
@@ -356,7 +437,8 @@ C++标准库提供容器与初始化算法，没有直接的并查集或并行�
 
 严格大于h的S项全部取，剩余K′−S项从等于h的收益中补足。大量同值时只取所需数量，而非全部取或全部舍弃。例如 A=[5,5]、K=3，先取两个5，再取一个4，答案为14。
 
-### 参数不是答案：惩罚与精确恢复
+<a id="advanced-subheading-29"></a>
+### 由惩罚目标精确恢复原收益
 
 还可以把阈值理解成每次操作的统一惩罚。设施 i 使用 t_i次的总收益为等差和
 
@@ -386,7 +468,10 @@ C++标准库提供容器与初始化算法，没有直接的并查集或并行�
 返回结果同时保存原收益、阈值、严格大于阈值的数量、同值数量、实际使用量和惩罚价值，便于核对上述恢复关系。
 
 <a id="marginal-penalty-standard"></a>
-### 逐次取堆顶的另一种解法
+### 逐次选取最大收益的堆解法
+
+<a id="penalty-heap-standard"></a>
+#### 使用 priority_queue 维护当前收益
 
 {{advanced-penalty-standard}}
 
@@ -396,7 +481,8 @@ C++标准库提供容器与初始化算法，没有直接的并查集或并行�
 
 堆复制并拥有收益值，不随原数组自动变化，相关机制见 [[Q100005|借用与容器所有权]]。
 
-### 数量单调仍不足以保证任意问题精确恢复
+<a id="advanced-subheading-33"></a>
+### 数量单调为何不足以保证精确恢复
 
 一般情况下，令 F(k)表示恰好选择k项时的最小成本，加上惩罚后得到 `G(λ)=min_k(F(k)+λk)`。最优数量随λ增大而非增，但某些数量可能从未成为惩罚问题的最优解。
 
@@ -419,4 +505,7 @@ C++标准库提供容器与初始化算法，没有直接的并查集或并行�
 
 数量判定只读借用当前used与initial，捕获方式见 [[Q100003|判定器与lambda捕获]]。
 
-练习：[ABC216E — Amusement Park](https://atcoder.jp/contests/abc216/tasks/abc216_e)。重点核验同值补足与至多次数，而不只是while循环。
+<a id="marginal-penalty-practice"></a>
+### 同值收益补足与使用次数上限
+
+[ABC216E — Amusement Park](https://atcoder.jp/contests/abc216/tasks/abc216_e)。重点核验同值补足与至多次数，而不只是while循环。

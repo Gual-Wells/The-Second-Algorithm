@@ -7,7 +7,7 @@ const assert = require('node:assert/strict');
 const { chromium } = require(process.env.ALGORITHM_QA_PLAYWRIGHT || 'playwright');
 const esbuild = require(process.env.ALGORITHM_QA_ESBUILD || 'esbuild');
 const root = path.resolve(__dirname, '..');
-const owner = 'a'.repeat(43), oldBuild = 'upgrade-old', newBuild = 'upgrade-new', withdrawnBuild = 'upgrade-withdrawn';
+const owner = 'a'.repeat(43), secondOwner = 'b'.repeat(43), oldBuild = 'upgrade-old', newBuild = 'upgrade-new', withdrawnBuild = 'upgrade-withdrawn';
 const documentURL = '/library/formal-first/first-document/new.json';
 const knowledge = { id: 'Q000001', title: '有效范围', url: '/library/knowledge/Q000001/new.json', revision: 'knowledge-new', prerequisites: [] };
 const meta = { id: 'first-document', title: '正文', revision: 'new', url: documentURL,
@@ -24,14 +24,14 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 (async () => {
   const physical = await fs.realpath(root);
   if (process.platform === 'win32' && !/^D:[\\/]/i.test(physical)) throw Error('Upgrade QA must reside on D.');
-  const temporary = path.join(root, '.local/carrier-upgrade-tmp');
-  const output = path.join(root, '.local/carrier-upgrade-qa');
+  const output = path.resolve(process.env.ALGORITHM_UPGRADE_QA_OUTPUT || path.join(root, '.local/carrier-upgrade-qa'));
+  const temporary = path.join(output, 'browser-temp');
   await fs.mkdir(temporary, { recursive: true }); await fs.mkdir(output, { recursive: true });
   process.env.TEMP = process.env.TMP = process.env.TMPDIR = temporary;
   const bundle = await esbuild.build({ entryPoints: [path.join(root, 'web/app.js')], bundle: true, write: false,
     format: 'esm', platform: 'browser', target: 'es2022', logLevel: 'silent',
     define: { __PUBLICATION_INDEX__: JSON.stringify(index) } });
-  const app = bundle.outputFiles[0].text + '\nglobalThis.__carrierUpgrade = { get state() { return S; }, get downloading() { return downloads.size; } };\n';
+  const app = bundle.outputFiles[0].text + '\nglobalThis.__carrierUpgrade = { get state() { return S; }, get runtime() { return runtime; }, get downloading() { return downloads.size; } };\n';
   const oldBundle = await esbuild.build({ entryPoints: [path.join(root, 'web/app.js')], bundle: true, write: false,
     format: 'esm', platform: 'browser', target: 'es2022', logLevel: 'silent',
     define: { __PUBLICATION_INDEX__: JSON.stringify({ version: oldCatalog.version, questions: [], collections: {} }) } });
@@ -42,7 +42,7 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
   const withdrawnApp = withdrawnBundle.outputFiles[0].text + '\nglobalThis.__carrierUpgrade = { get state() { return S; } };\n';
   const sw = await fs.readFile(path.join(root, 'web/sw.js'), 'utf8');
   const manifest = await fs.readFile(path.join(root, 'web/manifest.webmanifest'));
-  let published = false, withdrawn = false, networkOffline = false, documentRequests = 0;
+  let published = false, withdrawn = false, networkOffline = false, documentRequests = 0, sessionIdentity = owner;
   const currentBuild = () => withdrawn ? withdrawnBuild : published ? newBuild : oldBuild;
   const held = new Set(), errors = [], requests = [];
   const server = http.createServer(async (request, response) => {
@@ -69,7 +69,11 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
         // Keep the replacement installing while the new app is already running.
         held.add(response); response.on('close', () => held.delete(response)); return;
       }
-      if (url.pathname === '/auth/status') return json({ authenticated: true, enrolled: true, enrollmentOpen: false, ownerScope: owner });
+      if (url.pathname === '/auth/status') return json({ authenticated: Boolean(sessionIdentity), enrolled: true, enrollmentOpen: false, ownerScope: sessionIdentity });
+      if (url.pathname === '/auth/logout') { sessionIdentity = null; return json({ ok: true }); }
+      if ((url.pathname.startsWith('/library/') || url.pathname.startsWith('/api/')) && !sessionIdentity) {
+        response.writeHead(401, { 'Content-Type': 'application/json' }); response.end(JSON.stringify({ error: 'Unauthorized' })); return;
+      }
       if (url.pathname === '/api/library' || url.pathname === '/library/catalog.json') return json(withdrawn ? withdrawnCatalog : published ? catalog : oldCatalog);
       if (url.pathname === '/api/state') return json({ state: {} });
       if ([documentURL, meta.sourceUrl, meta.markdownUrl, knowledge.url].includes(url.pathname) && withdrawn) {
@@ -98,10 +102,11 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
   try {
     const context = await browser.newContext({ viewport: { width: 402, height: 874 } });
     await context.addInitScript(owner => {
+      if (location.protocol !== 'http:') return;
       const key = 'second-algorithm:' + owner + ':notes:formal-first';
       if (!localStorage.getItem(key)) localStorage.setItem(key, JSON.stringify({ text: 'unsent lesson note', revision: 2, dirty: true }));
     }, owner);
-    const page = await context.newPage(); page.on('pageerror', error => errors.push(error.message));
+    const page = await context.newPage(); page.on('pageerror', error => errors.push(error.message)); page.on('dialog', dialog => dialog.type() === 'beforeunload' ? dialog.accept() : dialog.dismiss());
     await page.goto(origin + '/setup'); await page.waitForFunction(() => document.body.dataset.ready === 'true');
     published = true;
     await page.goto(origin + '/#/read/formal-first/first-document');
@@ -120,29 +125,52 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
     assert.equal(build, oldBuild);
     for (const response of held) { response.writeHead(200, { 'Content-Type': 'application/manifest+json' }); response.end(manifest); }
     held.clear();
-    await page.locator('#readingArticle .code-block').first().waitFor();
-    await page.waitForFunction(() => !window.__carrierUpgrade.state.restoring && !window.__carrierUpgrade.downloading);
-    assert.match(await page.locator('#readingArticle').innerText(), /answer = 42/);
+    await page.locator('#article .code-block').first().waitFor();
+    await page.waitForFunction(() => !window.__carrierUpgrade.runtime.state.restoring && !window.__carrierUpgrade.downloading);
+    assert.match(await page.locator('#article').innerText(), /answer = 42/);
     assert.equal(documentRequests, 1);
     assert.match(await page.evaluate(owner => localStorage.getItem('second-algorithm:' + owner + ':notes:formal-first'), owner), /unsent lesson note/);
     assert.equal(await page.evaluate(() => performance.getEntriesByType('navigation')[0].type), 'navigate', 'upgrade must not automatically reload the page');
     networkOffline = true; await context.setOffline(true);
     await page.reload();
-    await page.locator('#readingArticle .code-block').first().waitFor();
-    assert.match(await page.locator('#readingArticle').innerText(), /answer = 42/);
+    await page.locator('#article .code-block').first().waitFor();
+    assert.match(await page.locator('#article').innerText(), /answer = 42/);
     assert.equal(documentRequests, 1, 'same-version offline restart reuses downloaded content');
     await page.locator('[data-knowledge]').click();
     await page.locator('.knowledge-paper').waitFor();
     assert.match(await page.locator('.knowledge-paper').innerText(), /离线也可以查看/);
     await page.locator('[data-sheet-close]').click();
     assert.deepEqual(errors, []);
+    // The same real worker must drop A's private cache on verified owner change.
+    // This is separate from the mocked-auth/browser-source suite.
+    networkOffline = false; await context.setOffline(false); sessionIdentity = secondOwner;
+    await page.reload(); await page.locator('#article .code-block').first().waitFor();
+    await page.waitForFunction(() => !globalThis.__carrierUpgrade.runtime.state.restoring && !globalThis.__carrierUpgrade.downloading);
+    const switched = await page.evaluate(async ({ owner, secondOwner }) => ({
+      owner: globalThis.__carrierUpgrade.state.owner, names: await caches.keys(),
+      priorNote: localStorage.getItem('second-algorithm:' + owner + ':notes:formal-first'),
+      priorQuestionVisible: document.body.innerText.includes('unsent lesson note')
+    }), { owner, secondOwner });
+    assert.equal(switched.owner, secondOwner);
+    assert(!switched.names.includes('second-algorithm-private-' + owner));
+    assert(switched.names.includes('second-algorithm-private-' + secondOwner));
+    assert.match(switched.priorNote, /unsent lesson note/);
+    assert.equal(switched.priorQuestionVisible, false);
+    await page.locator('#settingsButton').click(); await page.locator('[data-logout]').click();
+    await page.locator('#loginView').waitFor({ state: 'visible' });
+    await page.waitForFunction(async () => !(await caches.keys()).some(name => name.startsWith('second-algorithm-private-')));
+    assert.equal(await page.evaluate(() => localStorage.getItem('second-algorithm:last-session')), null);
+    networkOffline = true; await context.setOffline(true); await page.reload();
+    await page.locator('#loginView').waitFor({ state: 'visible' });
+    assert.equal(await page.locator('#readerView').isVisible(), false);
+    assert.match(await page.evaluate(owner => localStorage.getItem('second-algorithm:' + owner + ':notes:formal-first'), owner), /unsent lesson note/);
     await context.close();
-    networkOffline = false; published = false; documentRequests = 0;
+    networkOffline = false; published = false; documentRequests = 0; sessionIdentity = owner;
     const updateContext = await browser.newContext();
-    const updatePage = await updateContext.newPage(); updatePage.on('pageerror', error => errors.push(error.message));
+    const updatePage = await updateContext.newPage(); updatePage.on('pageerror', error => errors.push(error.message)); updatePage.on('dialog', dialog => dialog.type() === 'beforeunload' ? dialog.accept() : dialog.dismiss());
     await updatePage.goto(origin + '/setup'); await updatePage.waitForFunction(() => document.body.dataset.ready === 'true');
     await updatePage.goto(origin + '/#/library');
-    await updatePage.locator('#libraryView').waitFor({ state: 'visible' });
+    await updatePage.locator('#chapterView').waitFor({ state: 'visible' });
     published = true;
     await updatePage.locator('#settingsButton').click();
     await updatePage.locator('[data-check-updates]').click();
@@ -157,10 +185,10 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
     await updatePage.locator('[data-reload-app]').waitFor({ state: 'visible' });
     assert.equal(await updatePage.evaluate(() => performance.getEntriesByType('navigation')[0].type), 'navigate');
     await updatePage.locator('[data-reload-app]').click();
-    await updatePage.locator('#bookList .book-row').first().waitFor();
-    await updatePage.locator('#bookList .book-row').first().click();
-    await updatePage.locator('#readingArticle .code-block').first().waitFor();
-    assert.match(await updatePage.locator('#readingArticle').innerText(), /answer = 42/);
+    await updatePage.locator('#chapterView [data-go]').first().waitFor();
+    await updatePage.locator('#chapterView [data-go]').first().click();
+    await updatePage.locator('#article .code-block').first().waitFor();
+    assert.match(await updatePage.locator('#article').innerText(), /answer = 42/);
     assert.deepEqual(errors, []);
     // Upgrade a genuinely cached publication to the empty withdrawal. The new
     // policy must purge all three payload forms without clearing private notes.
@@ -175,7 +203,7 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
     assert.deepEqual(beforeWithdrawal, [true, true, true, true], 'all retired payloads were cached by the real old worker');
     withdrawn = true;
     await updatePage.reload();
-    await updatePage.locator('#libraryView').waitFor({ state: 'visible' });
+    await updatePage.locator('#chapterView').waitFor({ state: 'visible' });
     await updatePage.evaluate(async () => { await (await navigator.serviceWorker.getRegistration()).update(); });
     const withdrawalDeadline = Date.now() + 10000;
     let withdrawalActivated = false;
@@ -191,9 +219,9 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
       if (!withdrawalActivated) await sleep(25);
     }
     assert(withdrawalActivated, 'withdrawn worker must actually activate and control the page before cache inspection');
-    await updatePage.waitForURL('**/#/library');
-    assert.match(await updatePage.locator('#bookList').innerText(), /暂无章节/);
-    assert.equal(await updatePage.locator('#bookList .book-row').count(), 0);
+    await updatePage.locator('#chapterView').waitFor({ state: 'visible' });
+    assert.match(await updatePage.locator('#chapterView').innerText(), /暂无已发布章节/);
+    assert.equal(await updatePage.locator('#chapterView [data-go]').count(), 0);
     const afterWithdrawal = await updatePage.evaluate(async ({ owner, retiredPaths }) => {
       const cache = await caches.open('second-algorithm-private-' + owner);
       return { cached: await Promise.all(retiredPaths.map(async url => Boolean(await cache.match(url)))),
@@ -209,11 +237,11 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
     assert.equal(await updatePage.evaluate(async () => (await fetch('/library/catalog.json')).status), 200);
     networkOffline = true; await updateContext.setOffline(true);
     await updatePage.reload();
-    await updatePage.locator('#libraryView').waitFor({ state: 'visible' });
-    assert.match(await updatePage.locator('#bookList').innerText(), /暂无章节/);
+    await updatePage.locator('#chapterView').waitFor({ state: 'visible' });
+    assert.match(await updatePage.locator('#chapterView').innerText(), /暂无已发布章节/);
     await updatePage.evaluate(() => { location.hash = '#/read/formal-first/first-document'; });
-    await updatePage.waitForURL('**/#/library');
-    assert.equal(await updatePage.locator('#readingArticle .code-block').count(), 0);
+    await updatePage.locator('#chapterView').waitFor({ state: 'visible' });
+    assert.equal(await updatePage.locator('#article .code-block').count(), 0);
     assert.deepEqual(await updatePage.evaluate(async urls => Promise.all(urls.map(async url => (await fetch(url)).status)), retiredPaths), [404, 404, 404, 404]);
     assert.match(await updatePage.evaluate(owner => localStorage.getItem('second-algorithm:' + owner + ':notes:formal-first'), owner), /withdrawal unsent note/);
     assert.deepEqual(errors, []);
@@ -222,7 +250,10 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
       checkUpdatesWaitsForTakeover: true, manualReloadOpensFormalChapter: true,
       withdrawalPurgedCachedJsonCppMarkdown: true, withdrawnOldRoutesOffline404: true,
       withdrawnEmptyCatalogOfflineRestart: true, withdrawalUnsentNotesPreserved: true,
-      automaticReload: false, productionContacted: false, databaseModified: false };
+      actualOwnerSwitchPurgedPriorCache: true, actualLogoutClearedPrivateCache: true,
+      loggedOutOfflineRestartLocked: true, priorOwnerNotesPreserved: true,
+      authentication: 'isolated in-memory local HTTP fixture; no system passkey enrollment',
+      physicalIPhone: false, automaticReload: false, productionContacted: false, databaseModified: false };
     await updateContext.close();
   } catch (error) {
     const pages = [];

@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "id": "startup-calendar-20261029",
+  "goal": "移植第二语言启动状态卡及日期章节管理；保留算法章身份、正文、源码与读位，验证真实目录、日历、同日多章及版本/离线闭环并发布",
+  "createdAt": "2026-10-29T09:50:53.990106+00:00",
+  "evidence": [
+    {
+      "id": "87fefd90b0234b49a9eedfcc05d455f1",
+      "kind": "research",
+      "path": "work/jobs/startup-calendar-20261029/research-continuity.md",
+      "summary": "实读第二语言启动/日期机制；核定二分首次出版日期与同日多章适配，独立元数据保留教材版本，沿真实已采用研究交接",
+      "outcome": "accepted",
+      "sha256": "7fa11b379fee8c53e2011a416ab1c35f881690a8c078644cfcbe8451e30b8e64",
+      "inputHash": "243b712f96284e7090eda6483501fff19a0f7adf311b23cbccd5ed70e953b73e",
+      "recordedAt": "2026-10-29T10:06:35.057640+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "4f7e533b393a45b3a19433ace05ce0e2",
+      "kind": "review",
+      "path": "work/jobs/startup-calendar-20261029/implementation-review.md",
+      "summary": "核对启动/日期交互、原件字节与发布边界；完整198/116/19回归、SW升级及26项专项，失败与恢复如实保留，不冒称用户真机审美验收",
+      "outcome": "accepted",
+      "sha256": "8a57fee8a01049f806287d7e4a96465e867c22356356491673bacd654091bbc3",
+      "inputHash": "243b712f96284e7090eda6483501fff19a0f7adf311b23cbccd5ed70e953b73e",
+      "recordedAt": "2026-10-29T10:06:37.746008+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "89271aa6f39b452db163407095d2fe43",
+      "kind": "research",
+      "path": "work/jobs/startup-calendar-20261029/research-continuity.md",
+      "summary": "最终源绑定：日期独立登记，真实历史依据与同日多章适配；教学原件、源码及revision保全，不新增算法研究或日程任务",
+      "outcome": "accepted",
+      "sha256": "7fa11b379fee8c53e2011a416ab1c35f881690a8c078644cfcbe8451e30b8e64",
+      "inputHash": "7bfbb4a2a9ad46c4286b2bd86498abb7ea14e5aa7ceeed67f9ec56feb751c064",
+      "recordedAt": "2026-10-29T10:13:06.576648+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "8800d301f3444110aa406b1bbef8204e",
+      "kind": "review",
+      "path": "work/jobs/startup-calendar-20261029/implementation-review.md",
+      "summary": "最终源绑定：198/116/19完整基线、真实SW升级、最终28项专项和owner定点；补同窗不关闭断言，修复索引换行差异，未冒称用户真机审美验收",
+      "outcome": "accepted",
+      "sha256": "2efa2e97cc5bfb2490334c6d187d17081cd89644450aa163b99ddcbcca7fb25e",
+      "inputHash": "7bfbb4a2a9ad46c4286b2bd86498abb7ea14e5aa7ceeed67f9ec56feb751c064",
+      "recordedAt": "2026-10-29T10:13:09.678081+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    }
+  ],
+  "lastGoodVerification": {
+    "path": "work/jobs/startup-calendar-20261029/verifications/4bd80565bb934f178754bd9a2b8ce829.json",
+    "sha256": "62deee37d6df4f4b9827bc2e0acfb6a2639b125226c7c39ff0a2225964c0e965",
+    "inputHash": "7bfbb4a2a9ad46c4286b2bd86498abb7ea14e5aa7ceeed67f9ec56feb751c064"
+  },
+  "lastPreparedRelease": {
+    "path": "work/jobs/startup-calendar-20261029/releases/ac492a5c654548f8aa96cc812bd8b89d.json",
+    "sha256": "e11c7b86c28ff382911312a44f5584d2192a33d25241ba2850561ac4a25257ba",
+    "inputHash": "7bfbb4a2a9ad46c4286b2bd86498abb7ea14e5aa7ceeed67f9ec56feb751c064"
+  },
+  "lastVerificationAttempt": {
+    "path": "work/jobs/startup-calendar-20261029/verifications/4bd80565bb934f178754bd9a2b8ce829.json",
+    "sha256": "62deee37d6df4f4b9827bc2e0acfb6a2639b125226c7c39ff0a2225964c0e965",
+    "inputHash": "7bfbb4a2a9ad46c4286b2bd86498abb7ea14e5aa7ceeed67f9ec56feb751c064"
+  }
+}

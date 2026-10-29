@@ -1,0 +1,33 @@
+{
+  "originalDeployedBuild": "89d899f17956f1893d78d023a970b351053d86990ae940193e5678489f0af281",
+  "originalDocument": "binary-search",
+  "originalRevision": "ad18abc79391a8daa389e3e658d0a6f8295111bb164520f0b79e7001d40297c2",
+  "currentRevision": "ad18abc79391a8daa389e3e658d0a6f8295111bb164520f0b79e7001d40297c2",
+  "revisionPreserved": true,
+  "chapterDate": "2026-10-28",
+  "objects": [
+    {
+      "kind": "reader-json",
+      "before": "f9c6efbeb2ce5b8d4dc39021e9759d81c9b5c41dbb56d8397847013bf1b1079c",
+      "after": "f9c6efbeb2ce5b8d4dc39021e9759d81c9b5c41dbb56d8397847013bf1b1079c",
+      "unchanged": true
+    },
+    {
+      "kind": "cpp",
+      "before": "979b63e50271fcb7e6a80ed55ec05ce4663754dcbe3858e300155ea7707ecb42",
+      "after": "979b63e50271fcb7e6a80ed55ec05ce4663754dcbe3858e300155ea7707ecb42",
+      "unchanged": true
+    },
+    {
+      "kind": "markdown",
+      "before": "201cc3138b76ab2833d392448285d1ee8809aa0de8768bb4611c39ea8e2d25e3",
+      "after": "201cc3138b76ab2833d392448285d1ee8809aa0de8768bb4611c39ea8e2d25e3",
+      "unchanged": true
+    }
+  ],
+  "dateEvidence": {
+    "receipt": "work/jobs/first-chapter-20261028/deployments/1793195153435.json",
+    "chapter": "二分",
+    "document": "binary-boundary"
+  }
+}

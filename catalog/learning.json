@@ -2652,7 +2652,7 @@
             },
             {
               "id": "advanced-dsu-support",
-              "kind": "standard",
+              "kind": "manual",
               "symbol": "DisjointSet",
               "regions": [
                 "advanced-pbs-standard"

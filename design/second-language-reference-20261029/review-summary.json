@@ -1,0 +1,160 @@
+{
+  "generatedAt": "2026-10-29T08:49:29.117Z",
+  "secondLanguage": {
+    "legacyAndGeneralUiChecks": 103,
+    "contextUiChecks": 49,
+    "errors": [],
+    "paidCalls": 0
+  },
+  "secondAlgorithm": {
+    "h2": 38,
+    "h3": 214,
+    "h4": 26,
+    "codeBlocks": 89,
+    "errors": [],
+    "measurements": [
+      {
+        "name": "normal-402",
+        "appHeader": {
+          "x": 9,
+          "y": 8,
+          "width": 384,
+          "height": 62,
+          "scrollWidth": 382,
+          "fontSize": "16px"
+        },
+        "readingPane": {
+          "x": 10,
+          "y": 70,
+          "width": 382,
+          "height": 696,
+          "scrollWidth": 382,
+          "fontSize": "16px"
+        },
+        "article": {
+          "x": 10,
+          "y": 70,
+          "width": 382,
+          "height": 149635.65625,
+          "scrollWidth": 382,
+          "fontSize": "17px"
+        },
+        "readerFooter": {
+          "x": 9,
+          "y": 766,
+          "width": 384,
+          "height": 100,
+          "scrollWidth": 382,
+          "fontSize": "16px"
+        }
+      },
+      {
+        "name": "short-402",
+        "appHeader": {
+          "x": 9,
+          "y": 8,
+          "width": 384,
+          "height": 62,
+          "scrollWidth": 382,
+          "fontSize": "16px"
+        },
+        "readingPane": {
+          "x": 10,
+          "y": 70,
+          "width": 382,
+          "height": 382,
+          "scrollWidth": 382,
+          "fontSize": "16px"
+        },
+        "article": {
+          "x": 10,
+          "y": -8331,
+          "width": 382,
+          "height": 149321.65625,
+          "scrollWidth": 382,
+          "fontSize": "17px"
+        },
+        "readerFooter": {
+          "x": 9,
+          "y": 452,
+          "width": 384,
+          "height": 100,
+          "scrollWidth": 382,
+          "fontSize": "16px"
+        }
+      },
+      {
+        "name": "narrow-320",
+        "appHeader": {
+          "x": 9,
+          "y": 8,
+          "width": 302,
+          "height": 62,
+          "scrollWidth": 300,
+          "fontSize": "16px"
+        },
+        "readingPane": {
+          "x": 10,
+          "y": 70,
+          "width": 300,
+          "height": 562,
+          "scrollWidth": 300,
+          "fontSize": "16px"
+        },
+        "article": {
+          "x": 10,
+          "y": -8331,
+          "width": 300,
+          "height": 173647.296875,
+          "scrollWidth": 300,
+          "fontSize": "17px"
+        },
+        "readerFooter": {
+          "x": 9,
+          "y": 632,
+          "width": 302,
+          "height": 100,
+          "scrollWidth": 300,
+          "fontSize": "16px"
+        }
+      },
+      {
+        "name": "after-double-click",
+        "appHeader": {
+          "x": 9,
+          "y": 8,
+          "width": 384,
+          "height": 62,
+          "scrollWidth": 382,
+          "fontSize": "16px"
+        },
+        "readingPane": {
+          "x": 10,
+          "y": 8,
+          "width": 382,
+          "height": 858,
+          "scrollWidth": 382,
+          "fontSize": "16px"
+        },
+        "article": {
+          "x": 10,
+          "y": -8331,
+          "width": 382,
+          "height": 149797.65625,
+          "scrollWidth": 382,
+          "fontSize": "17px"
+        },
+        "readerFooter": {
+          "x": 9,
+          "y": 766,
+          "width": 384,
+          "height": 100,
+          "scrollWidth": 382,
+          "fontSize": "16px"
+        }
+      }
+    ]
+  },
+  "scope": "Research and criticism only; no application source, protocol, production record, service, or subscription changes. Algorithm design is wholly unaccepted test layout.",
+  "evidenceRole": "Background checks from the same-day independent design review; not a new test run or design acceptance."
+}

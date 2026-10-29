@@ -1,0 +1,102 @@
+{
+  "capturedAt": "2026-10-29T08:48:19.621Z",
+  "algorithmStatus": "Entire current layout is an unaccepted test design per direct user clarification. Existing implementation and design documents are not acceptance authority.",
+  "inputs": [
+    {
+      "project": "language",
+      "file": "web/DESIGN.md",
+      "bytes": 15944,
+      "sha256": "ca5c2b43245161da0a777ab7ec57c9caba8f6cb17340434cd4f033b69ade0561"
+    },
+    {
+      "project": "language",
+      "file": "protocol/READER_INTERACTION.md",
+      "bytes": 16326,
+      "sha256": "4ec981f743ddbbc1ae63848cf26db0e150d183a50b899930ff97064b8320d481"
+    },
+    {
+      "project": "language",
+      "file": "web/index.html",
+      "bytes": 32139,
+      "sha256": "5912326596010f905bbcb8c9adb2c612ee7df5a39b7cc2df027be78eaa5adad3"
+    },
+    {
+      "project": "language",
+      "file": "web/styles.css",
+      "bytes": 66119,
+      "sha256": "87873da7052c5f4c49d323f7c075bcc3e58d76601353796872e78c863449d17a"
+    },
+    {
+      "project": "language",
+      "file": "web/app.js",
+      "bytes": 55673,
+      "sha256": "b616926758ff264243aee2625f5430d47cda226104c109f47b1fd5338874b328"
+    },
+    {
+      "project": "language",
+      "file": "web/settings.js",
+      "bytes": 2372,
+      "sha256": "9c647e1a65a9dd6aa8173a9633bc6d84d0101ec1724d1d124b34f76647e8b3d7"
+    },
+    {
+      "project": "language",
+      "file": "web/pure-reader.js",
+      "bytes": 6319,
+      "sha256": "80008bf9f1311666b166ed9fe987e1a7910c182942b4095e67d8a55332cef38e"
+    },
+    {
+      "project": "language",
+      "file": "web/questions.js",
+      "bytes": 10456,
+      "sha256": "20f62d2802dea5164e722e88e84d6736bb9adf96e3fd7ebe4c68acc10948f7c3"
+    },
+    {
+      "project": "algorithm",
+      "file": "AGENTS.md",
+      "bytes": 13228,
+      "sha256": "f73f28b51e3ff0b19e0ce038ef96f78316e484daed8e174331d827c240d1e184"
+    },
+    {
+      "project": "algorithm",
+      "file": "web/DESIGN.md",
+      "bytes": 14467,
+      "sha256": "d64f5751894741c86a824b56a1afff15dbea1b1d25398130e98427f8efe86b18"
+    },
+    {
+      "project": "algorithm",
+      "file": "web/index.html",
+      "bytes": 5228,
+      "sha256": "1672a79e6b4821d43f7809dcb80139e01702a9967de7ae41bd90412eea432e7b"
+    },
+    {
+      "project": "algorithm",
+      "file": "web/styles.css",
+      "bytes": 29375,
+      "sha256": "82dfa15135c1d37f7631c5a3b5596e1429e20b5ab7abb6bca9882587e250a6b6"
+    },
+    {
+      "project": "algorithm",
+      "file": "web/app.js",
+      "bytes": 43363,
+      "sha256": "c95bc5837353299b3ceab9dc581539e6176b7034ecd16611f081ffbf4718ad76"
+    },
+    {
+      "project": "algorithm",
+      "file": "web/reader-runtime.js",
+      "bytes": 21612,
+      "sha256": "87ff45beb80b91fe14641753e6dc091cfc0ea0b92b88147a8e2cf7b25f8e3e3a"
+    },
+    {
+      "project": "algorithm",
+      "file": "web/manual-questions.js",
+      "bytes": 11636,
+      "sha256": "d37ee60b0b745d956540c436f974dab4d4cbfc2969376849ba5c3c1444321da6"
+    },
+    {
+      "project": "algorithm",
+      "file": "dist/carrier-build.json",
+      "bytes": 315,
+      "sha256": "3f6a31d59a19b7f274b609c81e0d3d314c6d018d72f712d8fbd4293e5fe9da3c"
+    }
+  ]
+}

@@ -111,6 +111,32 @@ def _state(value, label: str, errors: list[str]) -> str | None:
     return state
 
 
+def _practice_prose(document, outline, start, end, label, errors):
+    """Return only a managed section's exercise units, never its other links.
+
+    Historical technical fixtures without the authoring facility retain their
+    earlier semantics. Real managed chapters must expose their practice units
+    as H3, using the coordinated role rather than a heading keyword guess.
+    """
+    types = document.get("subheadingTypes")
+    if types is None:
+        return None
+    candidates = [heading for heading in outline["headings"]
+                  if start["line"] < heading["line"] < end
+                  and any(types.get(anchor) == "practice" for anchor in heading["anchors"])]
+    if not candidates or any(heading["level"] != 3 for heading in candidates):
+        errors.append(label + ": managed formal section requires an independent H3 practice unit")
+    parts = []
+    for heading in candidates:
+        if heading["level"] != 3:
+            continue
+        stop = min((other["line"] for other in outline["headings"]
+                    if heading["line"] < other["line"] < end and other["level"] <= 3), default=end)
+        parts.extend(line for number, line in _prose_lines(document.get("draft", ""))
+                     if heading["line"] < number < stop)
+    return "\n".join(parts)
+
+
 def _paradigm_contract(contract, cid, model, documents, permitted, material_ids, errors):
     """Deterministic editorial relationships; no automatic taxonomy judgement."""
     version = contract.get("schemaVersion")
@@ -265,7 +291,8 @@ def _paradigm_contract(contract, cid, model, documents, permitted, material_ids,
             errors.append(label + ": each formal problem-type section needs 1 to 5 exercises")
         available = set().union(*(task_urls.get(tid, set()) for tid in unit_tasks))
         seen_urls = set()
-        section_prose = []
+        section_prose, practice_prose = [], []
+        managed_practice = False
         for point in locations:
             did = point.get("document")
             outline = outlines.get(did, {})
@@ -275,7 +302,11 @@ def _paradigm_contract(contract, cid, model, documents, permitted, material_ids,
                            if heading["level"] <= 2 and heading["line"] > start["line"]), default=float("inf"))
                 section_prose.extend(line for number, line in _prose_lines(documents[did].get("draft", ""))
                                      if start["line"] <= number < end)
-        visible_prose = "\n".join(section_prose)
+                actual_practice = _practice_prose(documents[did], outline, start, end, label, errors)
+                if actual_practice is not None:
+                    managed_practice = True
+                    practice_prose.append(actual_practice)
+        visible_prose = "\n".join(practice_prose if managed_practice else section_prose)
         for exercise in exercises:
             _text(exercise.get("title"), label + ".exercise.title", errors)
             url = exercise.get("url")
@@ -288,7 +319,8 @@ def _paradigm_contract(contract, cid, model, documents, permitted, material_ids,
                 errors.append(label + ": exercise URL must come from this section's actual task sourceUrls")
             if isinstance(url, str):
                 if not re.search(r"\]\(\s*<?" + re.escape(url) + r">?(?:\s+[\"'][^\n]*?[\"'])?\s*\)", visible_prose):
-                    errors.append(label + ": exercise needs an actual visible link in this problem-type section")
+                    errors.append(label + (": exercise needs an actual visible link in its H3 practice unit"
+                                           if managed_practice else ": exercise needs an actual visible link in this problem-type section"))
                 if url in seen_urls:
                     errors.append(label + ": duplicate exercise URL")
                 seen_urls.add(url)

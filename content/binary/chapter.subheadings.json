@@ -1,0 +1,2373 @@
+{
+  "schemaVersion": 1,
+  "document": "binary-search",
+  "candidateSnapshot": {
+    "path": "work/chapter-navigation-20261029/candidates/structured.json",
+    "sha256": "b4ea7bbc19290517c58e6cf505fc178d79423d510973e4056f6b98d28c632256"
+  },
+  "registryEntries": {
+    "alternative": "d9866c6029631f20fd674a7716614d250427e0837bafa9d5391ffb1a6f544b69",
+    "boundary": "cb55855e9326aeac4994e5353fbf4e6149f5e8d310386297450172f27cb541b5",
+    "combination": "1b0dff427dc59ec0987f0ef7e55e38ad0fe0341afbf13b5054e198c7ec220d43",
+    "complexity": "9a553aee18f8594baf723bf37225065e86eeb17fbdcde60000f80e398cecefd7",
+    "concept": "be9812cc9bc655ae2dc5dd5d1737404ec38756c401e969add07ffde8bf9bad42",
+    "derivation": "d3608d4f9dab7ea2a97a979c4ed222cab36b0671d5aabf43c71b68fa951b8f75",
+    "engineering": "d8ee9bf1021c906b8c2eafad9dd9807fdad6f6c1aa8284e1f50c8850a792e1e7",
+    "example": "830221869dda4df211d56b960ba2e4633b87cf2fbb02e7e8d9305c5d27956dd2",
+    "hcode": "71f2ad2822c31cd097331d8622a2568383f0c31b5a7a06d920503af9236dd2b3",
+    "model": "bad2cc999cfb630c56af9fb2b03cdcf3875262144ae0282d7361c363a41a6fcb",
+    "navigation": "32cb9fe0ccd733cb25439bbc8b4f540a7c44ff9d9d81d9464c8ec0616de901bb",
+    "practice": "3c1ee5e4111938f2e3e0cd07f7fd37fcee39b037a2c65fdcd958a197ec976b41",
+    "proof": "8b3a192660bb024eb5bfa2d4c867712d04e07658bdafe7c8bb22ed7e0b6a339b",
+    "scode": "36057df5f374c8f6d30a0a9bdcb87d62ea066733b4d90d3e97026778d4b964c4",
+    "variant": "4666f9a645b4b42702ee69e7e18ab9d6d20f9f31c6ffc51b5cbf1081e8f55980"
+  },
+  "decisions": [
+    {
+      "id": "prelude-foundation",
+      "typeId": "concept",
+      "subject": "从重复值查找认识二分",
+      "depth": 3,
+      "reason": "以查找重复值建立二分的共同含义，先认识搜索对象和安全排除，再进入各具体机制。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "boundary-subheading-01",
+      "typeId": "derivation",
+      "subject": "从一次查找建立边界",
+      "depth": 3,
+      "reason": "从查找第一个4的具体过程推出半开区间不变式、相等时继续搜索和尾后返回值，重点是机制推导而非单纯定义。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "boundary-subheading-02",
+      "typeId": "model",
+      "subject": "将优化目标转成可行性边界",
+      "depth": 3,
+      "reason": "把分段最优化改写成容量可行性，分别建立判定器正确性与外层单调性，属于优化目标的建模转换。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "boundary-subheading-03",
+      "typeId": "boundary",
+      "subject": "区分单调分界、结构存在性与异号夹逼",
+      "depth": 3,
+      "reason": "并列比较有序分区、结构中的峰存在性及连续函数异号夹逼，指出三种保留依据不能互换。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "prelude-search-contract",
+      "typeId": "engineering",
+      "subject": "实现前确定搜索范围与终止方式",
+      "depth": 3,
+      "reason": "本单元确定实现前的搜索域、无解表示、中点前进和查询上限，属于实现契约而非单纯复杂度。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "boundary-subheading-04",
+      "typeId": "complexity",
+      "subject": "搜索代价与判定代价",
+      "depth": 3,
+      "reason": "以数值域宽W和单次检查成本解释总复杂度，并联系中点、无解和浮点停止条件，主线是搜索实际代价。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "prelude-numeric-choices",
+      "typeId": "engineering",
+      "subject": "整数与浮点搜索的表示限制",
+      "depth": 3,
+      "reason": "整数中间式与浮点停止条件是不同表示选择的实现限制，不再挂在复杂度标题下面。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "boundary-subheading-05",
+      "typeId": "navigation",
+      "subject": "本章的问题版图与学习线索",
+      "depth": 3,
+      "reason": "通过已有正式节链接交代位置、答案值、状态、结构与批量搜索的阅读关系，不新增算法结论。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "ordered-boundaries-foundation",
+      "typeId": "derivation",
+      "subject": "用左右边界表达计数与前驱",
+      "depth": 3,
+      "reason": "这段导入从当前问题的结构推得更新、状态或判定规则，保留其中例子和成立理由，作为一段完整机制推导。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "ordered-boundaries-manual",
+      "typeId": "hcode",
+      "subject": "手写边界查找",
+      "depth": 3,
+      "reason": "自行维护半开区间以实现首次大于等于和首次严格大于，计数、成员与前驱由两个边界组合。",
+      "implementationIds": [
+        "boundary-lower",
+        "boundary-upper",
+        "boundary-equal",
+        "boundary-predecessor"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "ordered-boundaries-library",
+      "typeId": "scode",
+      "subject": "用标准库表达同一组边界",
+      "depth": 3,
+      "reason": "equal_range等设施替换同一组有序边界循环；迭代器对需转换为下标、长度或前驱，算法语义保持不变。",
+      "implementationIds": [
+        "boundary-equal-library"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "ordered-time-variant",
+      "typeId": "variant",
+      "subject": "查询指定时刻之前的最后一条记录",
+      "depth": 3,
+      "reason": "由有序值范围查询变为每键历史中time不超过query的最后记录，并引入递增写入和空历史条件。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "ordered-time-manual",
+      "typeId": "hcode",
+      "subject": "手写时间前驱查找",
+      "depth": 4,
+      "reason": "手工查找第一个time大于query的位置并退一格，散列表只负责键到历史的路由。",
+      "implementationIds": [
+        "boundary-time"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "ordered-time-standard",
+      "typeId": "scode",
+      "subject": "使用 upper_bound 查找时间前驱",
+      "depth": 4,
+      "reason": "upper_bound替换时间前驱的边界定位，比较器参数方向与begin处无前驱的处理属于这份实际库用法。",
+      "implementationIds": [
+        "boundary-time-library"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "ordered-boundaries-engineering",
+      "typeId": "engineering",
+      "subject": "返回值所有权与比较规则",
+      "depth": 3,
+      "reason": "主要解释字符串副本的结果所有权、比较器等价关系与借用接口成本；前面边界规律只作为接口背景。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "ordered-boundaries-practice",
+      "typeId": "practice",
+      "subject": "有序边界与时间记录",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "predicate-access-foundation",
+      "typeId": "model",
+      "subject": "把接口返回值转成可搜索的分界",
+      "depth": 3,
+      "reason": "这段完整导入将题目目标、限制和对象组织成可搜索的状态或阈值，主要职责是问题到计算模型的转换。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "predicate-access-manual",
+      "typeId": "hcode",
+      "subject": "倍增建立上界，再收缩区间",
+      "depth": 3,
+      "reason": "自行倍增探测上界再二分，维护cap与无解返回并规避翻倍溢出，不能靠有界容器查找函数直接完成。",
+      "implementationIds": [
+        "boundary-first-true",
+        "boundary-unknown-first"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "predicate-access-library",
+      "typeId": "scode",
+      "subject": "用访问器表示越界",
+      "depth": 3,
+      "reason": "vector::at与optional仅实现取值/域结束适配，未知界的扩张和定位仍复用手造核心，属于设施支持层。",
+      "implementationIds": [
+        "boundary-unknown-at"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "predicate-access-engineering",
+      "typeId": "engineering",
+      "subject": "域结束、接口错误与查询状态",
+      "depth": 3,
+      "reason": "已有尾段主要说明本实现的接口、类型、所有权或失效约定；建立独立入口，避免被上一实现或另解标题吞并。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "predicate-access-practice",
+      "typeId": "practice",
+      "subject": "查询接口中的首次满足位置",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "transformed-index-foundation",
+      "typeId": "derivation",
+      "subject": "由值与下标的差得到固定点边界",
+      "depth": 3,
+      "reason": "这段导入从当前问题的结构推得更新、状态或判定规则，保留其中例子和成立理由，作为一段完整机制推导。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "transformed-index-manual",
+      "typeId": "hcode",
+      "subject": "严格递增时查找差值边界",
+      "depth": 3,
+      "reason": "利用严格递增整数使a[i]-i非降，手工寻找首次a[i]不小于i后检验固定点。",
+      "implementationIds": [
+        "boundary-fixed-distinct"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "fixed-duplicates-variant",
+      "typeId": "variant",
+      "subject": "允许重复值时的固定点查找",
+      "depth": 3,
+      "reason": "允许重复破坏差值单调性，必须改用中点值推导两侧可排除位置，问题条件改变而非普通代码优化。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "fixed-duplicates-manual",
+      "typeId": "hcode",
+      "subject": "按中点值剪枝并搜索两侧",
+      "depth": 4,
+      "reason": "分别递归保留下来的左右区间；手造剪枝保留可能固定点，最坏允许退化线性。",
+      "implementationIds": [
+        "boundary-fixed-duplicates"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "missing-positive-variant",
+      "typeId": "variant",
+      "subject": "第 k 个缺失正整数",
+      "depth": 3,
+      "reason": "目标由a[i]=i变为第k个缺失正整数，新的单调量是a[i]-i-1，答案恢复为k+p。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "missing-positive-manual",
+      "typeId": "hcode",
+      "subject": "按缺失数量寻找边界",
+      "depth": 4,
+      "reason": "手工搜索缺失数量首次达到k的位置并恢复数值；尾部和空数组由同一缺失计数关系覆盖。",
+      "implementationIds": [
+        "boundary-missing"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "transformed-index-library",
+      "typeId": "scode",
+      "subject": "预先构造缺失数量表，再用库查找",
+      "depth": 4,
+      "reason": "先显式保存缺失数量表再lower_bound，库替换边界定位；O(n)预构造使其适合复用查询而非冒称单次对数。",
+      "implementationIds": [
+        "boundary-missing-library"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "transformed-index-engineering",
+      "typeId": "engineering",
+      "subject": "固定点与缺失查询的类型及返回约定",
+      "depth": 3,
+      "reason": "同时讨论固定点递归与缺失值查询的类型范围和返回含义，不能归在缺失数Scode之下，设为两种问题共有的工程说明。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "transformed-index-practice",
+      "typeId": "practice",
+      "subject": "第 k 个缺失正整数",
+      "depth": 3,
+      "reason": "当前练习仅为LC1539缺失正整数，标题不暗示另有固定点练习；候选措辞保留于独立快照。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "rotated-search-foundation",
+      "typeId": "derivation",
+      "subject": "从有序半区与下降切点定位答案",
+      "depth": 3,
+      "reason": "这段导入从当前问题的结构推得更新、状态或判定规则，保留其中例子和成立理由，作为一段完整机制推导。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "rotated-search-manual",
+      "typeId": "hcode",
+      "subject": "依据有序半区更新范围",
+      "depth": 3,
+      "reason": "手工识别有序半区并处理重复端点，成员与最小值的更新规则来自旋转结构。",
+      "implementationIds": [
+        "boundary-rotation-min",
+        "boundary-rotation-member"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "rotated-search-library",
+      "typeId": "scode",
+      "subject": "先找出有序分段，再调用库查找",
+      "depth": 3,
+      "reason": "is_sorted_until先线性分段，再在有序子区间调用binary_search，是不同搜索组织，保留最坏线性代价。",
+      "implementationIds": [
+        "boundary-rotation-member-library",
+        "boundary-rotation-min-library"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "rotated-search-engineering",
+      "typeId": "engineering",
+      "subject": "返回含义与重复下标的约定",
+      "depth": 3,
+      "reason": "已有尾段主要说明本实现的接口、类型、所有权或失效约定；建立独立入口，避免被上一实现或另解标题吞并。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "rotated-search-practice",
+      "typeId": "practice",
+      "subject": "旋转数组的成员和最小值",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "paired-break-foundation",
+      "typeId": "derivation",
+      "subject": "单次值怎样改变配对位置",
+      "depth": 3,
+      "reason": "这段导入从当前问题的结构推得更新、状态或判定规则，保留其中例子和成立理由，作为一段完整机制推导。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "paired-break-manual",
+      "typeId": "hcode",
+      "subject": "对齐中点，或按位运算取得配偶",
+      "depth": 3,
+      "reason": "自行把中点对齐到偶下标或用m^1定位配偶，再按配对断点收缩，核心利用有序配对结构。",
+      "implementationIds": [
+        "boundary-paired-aligned",
+        "boundary-paired-xor-index"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "paired-break-library",
+      "typeId": "alternative",
+      "subject": "异或归约的线性解",
+      "depth": 3,
+      "reason": "同题改用成对值异或抵消，不利用排序且需线性扫描，先声明其与对数定位的算法差别。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "paired-break-xor-standard",
+      "typeId": "scode",
+      "subject": "用 accumulate 合并异或结果",
+      "depth": 4,
+      "reason": "accumulate与bit_xor承担整段异或归约；代码归库设施实现，外层关系明确为线性另解。",
+      "implementationIds": [
+        "boundary-paired-xor-library"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "paired-break-engineering",
+      "typeId": "boundary",
+      "subject": "配对规律依赖哪些输入条件",
+      "depth": 3,
+      "reason": "正文主要解释单次值和成对频次假设为何支撑配对规律，而非语言设施，复用边界类型。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "paired-break-practice",
+      "typeId": "practice",
+      "subject": "配对位置中的单次值",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "local-peak-foundation",
+      "typeId": "proof",
+      "subject": "保留的一侧为什么仍然有峰",
+      "depth": 3,
+      "reason": "导入的关键认识是为什么保留区域仍有目标，使用存在性或连续性依据，不把它误写成普通真假分界。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "local-peak-manual",
+      "typeId": "hcode",
+      "subject": "保持两端朝向区间内部上升",
+      "depth": 3,
+      "reason": "比较相邻斜率并保持区间两端向内上升，自行维护存在峰的一侧而非搜索全局单调谓词。",
+      "implementationIds": [
+        "boundary-peak"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "local-peak-library",
+      "typeId": "alternative",
+      "subject": "扫描全局最大值寻找局部峰",
+      "depth": 3,
+      "reason": "在邻项不等条件下全局最大值也是局部峰，改成线性扫描是同题另一算法，不能混称二分的库版。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "local-peak-maximum-standard",
+      "typeId": "scode",
+      "subject": "用 max_element 取得全局最大值",
+      "depth": 4,
+      "reason": "max_element实际完成全范围最大值扫描并返回迭代器；复杂度与定位路径均不同于手造峰二分。",
+      "implementationIds": [
+        "boundary-peak-library"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "local-peak-engineering",
+      "typeId": "engineering",
+      "subject": "空输入、严格峰与借用结果",
+      "depth": 3,
+      "reason": "已有尾段主要说明本实现的接口、类型、所有权或失效约定；建立独立入口，避免被上一实现或另解标题吞并。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "local-peak-practice",
+      "typeId": "practice",
+      "subject": "满足局部峰条件的位置",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "matrix-peak-foundation",
+      "typeId": "proof",
+      "subject": "用中列最大值确定搜索方向",
+      "depth": 3,
+      "reason": "导入的关键认识是为什么保留区域仍有目标，使用存在性或连续性依据，不把它误写成普通真假分界。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "matrix-peak-manual",
+      "typeId": "hcode",
+      "subject": "扫描列最大值，再决定搜索方向",
+      "depth": 3,
+      "reason": "手工扫描中列最大值再决定左右区域，行内最大保证上下方向安全，结构存在性与列搜索共同构成核心。",
+      "implementationIds": [
+        "boundary-matrix-peak"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "matrix-peak-library",
+      "typeId": "scode",
+      "subject": "用库寻找当前列的最大行号",
+      "depth": 3,
+      "reason": "iota建立行号、max_element选当前列最大行，替换的是一轮列扫描，主二分方向仍保留且额外占O(m)空间。",
+      "implementationIds": [
+        "boundary-matrix-peak-library"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "matrix-peak-engineering",
+      "typeId": "engineering",
+      "subject": "比较器状态与矩阵输入约定",
+      "depth": 3,
+      "reason": "已有尾段主要说明本实现的接口、类型、所有权或失效约定；建立独立入口，避免被上一实现或另解标题吞并。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "matrix-peak-practice",
+      "typeId": "practice",
+      "subject": "二维相邻比较与局部峰",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "matrix-membership-foundation",
+      "typeId": "model",
+      "subject": "区分全局有序与行列分别有序",
+      "depth": 3,
+      "reason": "这段完整导入将题目目标、限制和对象组织成可搜索的状态或阈值，主要职责是问题到计算模型的转换。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "matrix-membership-manual",
+      "typeId": "hcode",
+      "subject": "展平二分与阶梯搜索的两种实现",
+      "depth": 3,
+      "reason": "分别实现整体有序的虚拟展平二分和仅行列有序的阶梯排除；两套条件与时间界在同一实现组明确区分。",
+      "implementationIds": [
+        "boundary-matrix-flat",
+        "boundary-matrix-staircase"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "matrix-membership-library",
+      "typeId": "scode",
+      "subject": "对每一行独立调用二分查找",
+      "depth": 3,
+      "reason": "对每行用lower_bound并以any_of组合命中；只依赖行序，是与展平/阶梯不同的查询组织。",
+      "implementationIds": [
+        "boundary-matrix-row-library"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "matrix-membership-engineering",
+      "typeId": "engineering",
+      "subject": "展平索引与尾后位置的预算",
+      "depth": 3,
+      "reason": "已有尾段主要说明本实现的接口、类型、所有权或失效约定；建立独立入口，避免被上一实现或另解标题吞并。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "matrix-membership-practice",
+      "typeId": "practice",
+      "subject": "两类有序矩阵的成员查询",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "integer-root-foundation",
+      "typeId": "model",
+      "subject": "把平方根转成最后可行整数",
+      "depth": 3,
+      "reason": "这段完整导入将题目目标、限制和对象组织成可搜索的状态或阈值，主要职责是问题到计算模型的转换。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "integer-root-manual",
+      "typeId": "hcode",
+      "subject": "用上中点寻找最后一个可行整数",
+      "depth": 3,
+      "reason": "用除法表达平方判定并维护最后可行值，上中点和完整uint64_t范围由手造循环保证。",
+      "implementationIds": [
+        "boundary-integer-root"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "integer-root-library",
+      "typeId": "alternative",
+      "subject": "浮点估计后作整数修正",
+      "depth": 3,
+      "reason": "先用浮点平方根得到近似，再用整数条件修正，属于同题另一求解路径而非仅替换二分辅助设施。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "integer-root-estimate-standard",
+      "typeId": "scode",
+      "subject": "用 sqrt 估计并检查整数边界",
+      "depth": 4,
+      "reason": "sqrt提供初始估计，整数检查负责精确边界；不能把库浮点返回值直接视作完整整数根答案。",
+      "implementationIds": [
+        "boundary-integer-root-library"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "integer-root-engineering",
+      "typeId": "engineering",
+      "subject": "宽类型运算与中点表达式",
+      "depth": 3,
+      "reason": "已有尾段主要说明本实现的接口、类型、所有权或失效约定；建立独立入口，避免被上一实现或另解标题吞并。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "integer-root-practice",
+      "typeId": "practice",
+      "subject": "整数平方根的精确边界",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "continuous-root-foundation",
+      "typeId": "proof",
+      "subject": "连续性与异号如何保证区间含根",
+      "depth": 3,
+      "reason": "导入的关键认识是为什么保留区域仍有目标，使用存在性或连续性依据，不把它误写成普通真假分界。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "continuous-root-manual",
+      "typeId": "hcode",
+      "subject": "返回实际含根区间",
+      "depth": 3,
+      "reason": "手工维护异号含根区间并返回RootBracket，步数上限和中点停滞不会被误当作误差已达标。",
+      "implementationIds": [
+        "boundary-continuous-root"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "continuous-root-library",
+      "typeId": "variant",
+      "subject": "隔离三次方程的三个实根",
+      "depth": 3,
+      "reason": "增加三个互异实根、根域与最小间距条件后要求找全根，必须先通过导数临界点隔离而非一次夹逼。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "cubic-root-standard",
+      "typeId": "scode",
+      "subject": "导数分段、Horner 求值与逐根夹逼",
+      "depth": 4,
+      "reason": "sqrt求导数零点、fma/Horner降低求值误差，再复用逐区间夹逼；库设施不代替根隔离证明。",
+      "implementationIds": [
+        "boundary-cubic-critical-library"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "salary-cap-alternative",
+      "typeId": "alternative",
+      "subject": "利用分段线性关系直接恢复工资封顶值",
+      "depth": 3,
+      "reason": "工资封顶在相邻断点间线性，排序/区间定位后可代公式直接恢复，展示不必继续数值迭代的解析路径。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "continuous-root-engineering",
+      "typeId": "engineering",
+      "subject": "误差指标与停止条件",
+      "depth": 3,
+      "reason": "比较绝对误差、相对误差与残差，并说明停止容差和输出格式不同，主职责是数值接口的精度约定。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "continuous-root-practice",
+      "typeId": "practice",
+      "subject": "三次方程的分段求根",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "string-prefix-foundation",
+      "typeId": "model",
+      "subject": "把字典序前缀匹配转成连续区间",
+      "depth": 3,
+      "reason": "这段完整导入将题目目标、限制和对象组织成可搜索的状态或阈值，主要职责是问题到计算模型的转换。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "string-prefix-manual",
+      "typeId": "hcode",
+      "subject": "查找前缀匹配的两个边界",
+      "depth": 3,
+      "reason": "自行以截断前缀比较构造两个边界，不依赖字符能安全加一的字典序后继假设。",
+      "implementationIds": [
+        "boundary-prefix-range"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "string-prefix-library",
+      "typeId": "scode",
+      "subject": "使用库边界查找前缀范围",
+      "depth": 3,
+      "reason": "lower_bound和upper_bound各使用正确参数方向的前缀比较器，替换同一匹配区间的手工定位。",
+      "implementationIds": [
+        "boundary-prefix-range-library"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "lcp-length-variant",
+      "typeId": "variant",
+      "subject": "二分最长公共前缀的长度",
+      "depth": 3,
+      "reason": "搜索对象由词表位置改为两串的公共长度，长度可行性和字符比较成本必须重新分析。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "lcp-length-manual",
+      "typeId": "hcode",
+      "subject": "手写长度判定与二分",
+      "depth": 4,
+      "reason": "手工二分公共长度并反复比较前缀，明确O(L log L)字符成本，不将判定轮数误作总成本。",
+      "implementationIds": [
+        "boundary-lcp-binary"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "lcp-length-standard",
+      "typeId": "scode",
+      "subject": "以 mismatch 线性扫描替代长度二分",
+      "depth": 4,
+      "reason": "mismatch直接顺序寻找首个不同字符，是O(L)的另一算法；标题和正文明确替代的是长度二分路径。",
+      "implementationIds": [
+        "boundary-lcp-library"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "prefix-suggestions-variant",
+      "typeId": "variant",
+      "subject": "逐前缀生成搜索建议",
+      "depth": 3,
+      "reason": "在每个已输入前缀上返回字典序前三项，增加连续多次查询与拥有结果字符串的产品目标。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "prefix-suggestions-standard",
+      "typeId": "scode",
+      "subject": "复用库边界查找生成建议",
+      "depth": 4,
+      "reason": "复用库前缀边界后截取前三项，排序、结果复制与各前缀比较共同计入实际成本。",
+      "implementationIds": [
+        "boundary-suggestions-library"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "string-prefix-engineering",
+      "typeId": "engineering",
+      "subject": "前缀比较与字符串视图的接口约定",
+      "depth": 3,
+      "reason": "string_view借用字符，排序规则必须与前缀定义一致；编码规范化和生命周期是接口职责而非新的查找算法。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "string-prefix-practice",
+      "typeId": "practice",
+      "subject": "逐前缀生成搜索建议",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "convex-location-foundation",
+      "typeId": "model",
+      "subject": "用扇形与叉积定位查询点",
+      "depth": 3,
+      "reason": "这段完整导入将题目目标、限制和对象组织成可搜索的状态或阈值，主要职责是问题到计算模型的转换。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "convex-location-manual",
+      "typeId": "hcode",
+      "subject": "先检查边界射线，再定位所在三角形",
+      "depth": 3,
+      "reason": "自行处理两条边界射线、二分扇区及第三边叉积，利用严格凸逆时针结构保证角度顺序。",
+      "implementationIds": [
+        "boundary-convex-location"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "convex-location-library",
+      "typeId": "scode",
+      "subject": "用 partition_point 定位角度分界",
+      "depth": 3,
+      "reason": "partition_point只替换真前缀结束位置的定位，扇形合法性、相邻顶点读取和几何判断仍复用原逻辑。",
+      "implementationIds": [
+        "boundary-convex-location-library"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "convex-location-engineering",
+      "typeId": "engineering",
+      "subject": "叉积中间式的整数范围",
+      "depth": 3,
+      "reason": "已有尾段主要说明本实现的接口、类型、所有权或失效约定；建立独立入口，避免被上一实现或另解标题吞并。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "convex-location-practice",
+      "typeId": "practice",
+      "subject": "凸多边形内外与边界判断",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "capacity-partition-foundation",
+      "typeId": "model",
+      "subject": "试定容量后怎样判断最少分段数",
+      "depth": 3,
+      "reason": "这段完整导入将题目目标、限制和对象组织成可搜索的状态或阈值，主要职责是问题到计算模型的转换。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "capacity-partition-manual",
+      "typeId": "hcode",
+      "subject": "手写容量判定与二分",
+      "depth": 3,
+      "reason": "共享首次/最后满足搜索核心，再自行贪心统计容量所需段数；判定与二分两层逻辑均有实际实现。",
+      "implementationIds": [
+        "decision-capacity-manual"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "capacity-partition-standard",
+      "typeId": "scode",
+      "subject": "用标准库计算上下界",
+      "depth": 3,
+      "reason": "max_element和accumulate仅提供容量上下界，贪心判定和二分继续共享手造核心，不复制整份求解器。",
+      "implementationIds": [
+        "decision-capacity-bounds-standard"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "capacity-partition-engineering",
+      "typeId": "engineering",
+      "subject": "累加类型与方案恢复",
+      "depth": 3,
+      "reason": "重点是0LL决定累加器类型及判定器借用数组；恢复恰好k段仅作简短结果扩展提醒，不冒称已实现完整恢复。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "capacity-partition-practice",
+      "typeId": "practice",
+      "subject": "允许零值与大规模分段",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "maximin-spacing-foundation",
+      "typeId": "model",
+      "subject": "固定间距后怎样选择最多位置",
+      "depth": 3,
+      "reason": "这段完整导入将题目目标、限制和对象组织成可搜索的状态或阈值，主要职责是问题到计算模型的转换。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "maximin-spacing-manual",
+      "typeId": "hcode",
+      "subject": "在有序位置上贪心检查",
+      "depth": 3,
+      "reason": "手工在有序位置上尽早放置并二分最后可行间距，正确性由领先性比较支撑。",
+      "implementationIds": [
+        "decision-spacing-sorted-manual"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "maximin-spacing-standard",
+      "typeId": "scode",
+      "subject": "排序后复用检查函数",
+      "depth": 3,
+      "reason": "sort在按值参数的副本上建立坐标顺序，再复用相同贪心检查；设施替换层是预处理与输入管理。",
+      "implementationIds": [
+        "decision-spacing-standard"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "maximin-spacing-engineering",
+      "typeId": "boundary",
+      "subject": "位置约束改变时重新检查贪心",
+      "depth": 3,
+      "reason": "主论点是区间、容量或冲突约束改变后原贪心可能失效，属于算法成立边界；排序和复制索引只是关联实现提示。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "maximin-spacing-practice",
+      "typeId": "practice",
+      "subject": "给定位置中的最大最小间距",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "cumulative-production-foundation",
+      "typeId": "model",
+      "subject": "按完成时间统计产量而非逐件模拟",
+      "depth": 3,
+      "reason": "这段完整导入将题目目标、限制和对象组织成可搜索的状态或阈值，主要职责是问题到计算模型的转换。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "cumulative-production-manual",
+      "typeId": "hcode",
+      "subject": "累计产量达到目标就停止",
+      "depth": 3,
+      "reason": "用整数floor产量检查与remaining缺口饱和，自行搜索首次达标时间并避免不必要累计。",
+      "implementationIds": [
+        "decision-production-manual"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "cumulative-production-standard",
+      "typeId": "scode",
+      "subject": "用 min_element 构造上界",
+      "depth": 3,
+      "reason": "min_element仅找到最快机器以建立可行上界，产量公式和二分过程继续复用。",
+      "implementationIds": [
+        "decision-production-upper-standard"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "cumulative-production-engineering",
+      "typeId": "engineering",
+      "subject": "整数完成时刻与计数范围",
+      "depth": 3,
+      "reason": "主线是整数完成边界与紧上界下的中间计数预算；独立机器条件在末尾说明数值计数模型的适用背景。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "cumulative-production-practice",
+      "typeId": "practice",
+      "subject": "大量目标产品的完成时间",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "ordered-simulation-foundation",
+      "typeId": "model",
+      "subject": "固定台位数后如何模拟完成时间",
+      "depth": 3,
+      "reason": "这段完整导入将题目目标、限制和对象组织成可搜索的状态或阈值，主要职责是问题到计算模型的转换。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "ordered-simulation-manual",
+      "typeId": "hcode",
+      "subject": "用最小堆模拟台位释放",
+      "depth": 3,
+      "reason": "手造最小堆维护台位释放时间，完整模拟固定顺序任务并搜索最少台位，而非用总时长均摊近似。",
+      "implementationIds": [
+        "decision-stage-slots-manual"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "ordered-simulation-standard",
+      "typeId": "scode",
+      "subject": "用 priority_queue 管理结束时间",
+      "depth": 3,
+      "reason": "priority_queue以greater维护最早结束时间，top/pop/push替换堆操作层，模拟规则不变。",
+      "implementationIds": [
+        "decision-stage-slots-standard"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "ordered-simulation-engineering",
+      "typeId": "engineering",
+      "subject": "堆元素寿命与台位身份",
+      "depth": 3,
+      "reason": "说明top引用在pop后的寿命、每轮堆状态及恢复台位身份所需字段，主要是容器状态与接口结果设计。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "ordered-simulation-practice",
+      "typeId": "practice",
+      "subject": "固定演出顺序与最少台位",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "graph-threshold-foundation",
+      "typeId": "model",
+      "subject": "阈值删边把瓶颈路径转成可达性",
+      "depth": 3,
+      "reason": "这段完整导入将题目目标、限制和对象组织成可搜索的状态或阈值，主要职责是问题到计算模型的转换。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "graph-threshold-manual",
+      "typeId": "hcode",
+      "subject": "用数组队列检查可达性",
+      "depth": 3,
+      "reason": "手工数组队列在边权阈值下检查可达性，入队时标记确保每格只入队一次，外层查首次可达阈值。",
+      "implementationIds": [
+        "decision-path-effort-manual"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "graph-threshold-standard",
+      "typeId": "scode",
+      "subject": "用 queue 保存待处理格子",
+      "depth": 3,
+      "reason": "queue替换BFS的先进先出容器，阈值删边、四方向邻接与访问标记仍由图算法组织。",
+      "implementationIds": [
+        "decision-path-effort-standard"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "graph-threshold-engineering",
+      "typeId": "engineering",
+      "subject": "高度差计算与访问状态",
+      "depth": 3,
+      "reason": "这里只保留高度差提升类型和每轮访问状态重建，两者是当前BFS检查器的数值与状态管理。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "graph-threshold-alternative",
+      "typeId": "alternative",
+      "subject": "DSU 与瓶颈 Dijkstra 的对照",
+      "depth": 3,
+      "reason": "DSU排序连通和瓶颈Dijkstra是同题不同算法，专门与仅替换queue的实现层区分。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "graph-threshold-practice",
+      "typeId": "practice",
+      "subject": "最大边权最小的网格路径",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "prefix-activation-foundation",
+      "typeId": "model",
+      "subject": "完整事件前缀怎样形成单调判定",
+      "depth": 3,
+      "reason": "这段完整导入将题目目标、限制和对象组织成可搜索的状态或阈值，主要职责是问题到计算模型的转换。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "prefix-activation-manual",
+      "typeId": "hcode",
+      "subject": "查找钉子前缀与首个失败订单",
+      "depth": 3,
+      "reason": "手工二分采用的事件前缀，并分别用坐标前缀和或差分恢复完成钉子/订单检查，哨兵含义随目标区分。",
+      "implementationIds": [
+        "decision-first-nails-manual",
+        "decision-first-failed-order-manual"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "prefix-activation-standard",
+      "typeId": "scode",
+      "subject": "用 partial_sum 恢复前缀",
+      "depth": 3,
+      "reason": "partial_sum承担前缀恢复，带关系equal承担逐日容量检查；事件选择与外层边界仍复用原核心。",
+      "implementationIds": [
+        "decision-first-nails-standard",
+        "decision-first-failed-order-standard"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "prefix-activation-engineering",
+      "typeId": "boundary",
+      "subject": "保持事件方向与检查状态一致",
+      "depth": 3,
+      "reason": "重点是负需求、撤销或跳单破坏前缀单调性，重置检查数组同时保证判定事实稳定，故归算法边界而非泛C++说明。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "prefix-activation-practice",
+      "typeId": "practice",
+      "subject": "首次成功与首次失败的事件前缀",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "matching-threshold-foundation",
+      "typeId": "model",
+      "subject": "把第 k 大阈值转成互斥匹配",
+      "depth": 3,
+      "reason": "这段完整导入将题目目标、限制和对象组织成可搜索的状态或阈值，主要职责是问题到计算模型的转换。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "decision-subheading-20",
+      "typeId": "proof",
+      "subject": "为什么增广路可以完成匹配判定",
+      "depth": 3,
+      "reason": "用增广路与匹配对称差解释Kuhn不是局部贪心，给出判定未达need时能确定拒绝的正确性依据。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "matching-threshold-manual",
+      "typeId": "hcode",
+      "subject": "用增广路检查给定阈值",
+      "depth": 3,
+      "reason": "手工维护right_owner与seen并递归改派，阈值下的最大匹配是实际判定核心。",
+      "implementationIds": [
+        "decision-matching-threshold-manual"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "matching-threshold-standard",
+      "typeId": "scode",
+      "subject": "离散化阈值，并恢复完整选择",
+      "depth": 3,
+      "reason": "sort/unique/erase只离散候选阈值，随后复用Kuhn并补齐空列恢复完整选择，属于实用支持与输出组合。",
+      "implementationIds": [
+        "decision-matching-standard"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "matching-threshold-engineering",
+      "typeId": "engineering",
+      "subject": "匹配性能与递归状态",
+      "depth": 3,
+      "reason": "讨论Kuhn性能、可替换Hopcroft-Karp及递归局部状态，主要落在求解器实现成本和状态寿命。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "matching-threshold-practice",
+      "typeId": "practice",
+      "subject": "行列互斥下的最优阈值",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "average-transform-foundation",
+      "typeId": "model",
+      "subject": "减去候选平均值并保留原集合限制",
+      "depth": 3,
+      "reason": "这段完整导入将题目目标、限制和对象组织成可搜索的状态或阈值，主要职责是问题到计算模型的转换。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "decision-subheading-24",
+      "typeId": "model",
+      "subject": "长度受限的最大平均值",
+      "depth": 3,
+      "reason": "将受限长度平均值转成前缀差，并推出合法左端滑动窗口与最小前缀条件，属于变换后的具体建模。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "decision-subheading-25",
+      "typeId": "model",
+      "subject": "删除内部非空段后的最小平均值",
+      "depth": 3,
+      "reason": "把删内部非空段后的剩余平均转换为内部最大子段和，明确保留端点和非空约束的集合模型。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "average-transform-manual",
+      "typeId": "hcode",
+      "subject": "实现长度窗口与内部非空最大子段",
+      "depth": 3,
+      "reason": "共享浮点搜索核心后手工实现单调队列与非空Kadane，两题搜索方向和合法集合在实现旁明确说明。",
+      "implementationIds": [
+        "decision-max-average-manual",
+        "decision-min-remaining-average-manual"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "average-transform-standard",
+      "typeId": "scode",
+      "subject": "用 deque 管理窗口，用 transform 生成变换值",
+      "depth": 3,
+      "reason": "deque替换双端窗口存储，transform显式生成阈值变换数组，保留原判定机制并说明额外O(n)空间。",
+      "implementationIds": [
+        "decision-max-average-standard",
+        "decision-shifted-values-standard"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "average-transform-engineering",
+      "typeId": "engineering",
+      "subject": "判定方向与数值误差",
+      "depth": 3,
+      "reason": "主线是两种平均值方向对应的数值误差、long double与停止/格式精度；负数及端点条件说明为何不能套错判定模型。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "average-transform-practice",
+      "typeId": "practice",
+      "subject": "长度窗口与内部非空删除",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "ratio-selection-foundation",
+      "typeId": "model",
+      "subject": "用变换分数优化总和之比",
+      "depth": 3,
+      "reason": "这段完整导入将题目目标、限制和对象组织成可搜索的状态或阈值，主要职责是问题到计算模型的转换。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "ratio-selection-manual",
+      "typeId": "hcode",
+      "subject": "计算变换分数，再选前 m 项",
+      "depth": 3,
+      "reason": "自行变换value-lambda*cost并用插入排序选择恰好m项，外层搜索最后可行总比值。",
+      "implementationIds": [
+        "decision-ratio-manual"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "ratio-selection-standard",
+      "typeId": "scode",
+      "subject": "用 nth_element 分出最大的 m 项",
+      "depth": 3,
+      "reason": "nth_element替换完整排序以划出最大的m项而不保证内部顺序，sum前m项即可完成同一判定。",
+      "implementationIds": [
+        "decision-ratio-standard"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "ratio-selection-engineering",
+      "typeId": "boundary",
+      "subject": "保留数量与成本条件",
+      "depth": 3,
+      "reason": "正成本、恰选m项及无额外集合冲突决定top-m归约是否成立，属于主要算法边界；浮点比较器提示服务这一判定。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "ratio-selection-practice",
+      "typeId": "practice",
+      "subject": "固定数量下的总和之比",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "pigeonhole-domain-foundation",
+      "typeId": "model",
+      "subject": "用容量与计数定位唯一重复值",
+      "depth": 3,
+      "reason": "这段完整导入将题目目标、限制和对象组织成可搜索的状态或阈值，主要职责是问题到计算模型的转换。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "pigeonhole-domain-manual",
+      "typeId": "hcode",
+      "subject": "计数驱动的值域收缩",
+      "depth": 3,
+      "reason": "手工搜索C(x)>x首次成立值，线性回调计数和唯一重复值的容量论证共同决定值域收缩。",
+      "implementationIds": [
+        "selection-duplicate-manual"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "pigeonhole-domain-standard",
+      "typeId": "scode",
+      "subject": "用标准算法表达计数",
+      "depth": 3,
+      "reason": "count_if只替换每轮计数循环；Floyd段明确只是函数图线性另解的短对照，不冒充库设施等价。",
+      "implementationIds": [
+        "selection-duplicate-standard"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "missing-domain-variant",
+      "typeId": "variant",
+      "subject": "在欠满整数域中寻找任意缺失值",
+      "depth": 3,
+      "reason": "由唯一重复值改为容量欠满时找任意缺失值，允许重复记录且目标不是第k缺失，需新的半域容量论证。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "missing-domain-manual",
+      "typeId": "hcode",
+      "subject": "按容量保留必有缺失值的半域",
+      "depth": 4,
+      "reason": "每轮计数并保留确定欠满的半域，手工实现容量比较和域缩小，实际支持重复输入记录。",
+      "implementationIds": [
+        "selection-missing-domain"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "pigeonhole-domain-engineering",
+      "typeId": "engineering",
+      "subject": "IPv4 容量与多遍输入成本",
+      "depth": 4,
+      "reason": "以IPv4域2^32说明边界/容量宽类型，并把可重复扫描输入的I/O成本纳入实现预算。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "pigeonhole-domain-practice",
+      "typeId": "practice",
+      "subject": "唯一重复值与容量判定",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "weighted-inverse-foundation",
+      "typeId": "model",
+      "subject": "把整数票号映回权重区间",
+      "depth": 3,
+      "reason": "这段完整导入将题目目标、限制和对象组织成可搜索的状态或阈值，主要职责是问题到计算模型的转换。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "weighted-inverse-manual",
+      "typeId": "hcode",
+      "subject": "构建累计量并查位置",
+      "depth": 3,
+      "reason": "手工建累计量并定位首个达到票号的位置，映射区间长度等于权重，概率结论依赖均匀票号。",
+      "implementationIds": [
+        "selection-ticket-manual"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "weighted-inverse-standard",
+      "typeId": "scode",
+      "subject": "前缀算法、边界算法与整数分布",
+      "depth": 3,
+      "reason": "partial_sum、lower_bound和uniform_int_distribution分别完成累计、逆查和无偏整数抽样，设施层分工清晰。",
+      "implementationIds": [
+        "selection-ticket-standard",
+        "selection-sample"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "weighted-inverse-engineering",
+      "typeId": "engineering",
+      "subject": "票号范围、总权重与映射核对",
+      "depth": 3,
+      "reason": "已有尾段主要说明本实现的接口、类型、所有权或失效约定；建立独立入口，避免被上一实现或另解标题吞并。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "weighted-inverse-practice",
+      "typeId": "practice",
+      "subject": "离散权重的随机选择",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "matrix-rank-foundation",
+      "typeId": "model",
+      "subject": "以值域计数反查第 k 小",
+      "depth": 3,
+      "reason": "这段完整导入将题目目标、限制和对象组织成可搜索的状态或阈值，主要职责是问题到计算模型的转换。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "matrix-rank-manual",
+      "typeId": "hcode",
+      "subject": "值域边界与楼梯判定",
+      "depth": 3,
+      "reason": "手工楼梯扫描统计不大于阈值的出现次数，再搜索第k小值边界，重复项按出现次数累计。",
+      "implementationIds": [
+        "selection-matrix-manual"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "matrix-rank-standard",
+      "typeId": "scode",
+      "subject": "每行用上界计数",
+      "depth": 3,
+      "reason": "对每行upper_bound计算行内贡献，替换计数器而保留值域搜索，复杂度和列序依赖均与楼梯法不同。",
+      "implementationIds": [
+        "selection-matrix-standard"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "matrix-rank-engineering",
+      "typeId": "engineering",
+      "subject": "矩阵形状、合法秩与重复计数",
+      "depth": 3,
+      "reason": "已有尾段主要说明本实现的接口、类型、所有权或失效约定；建立独立入口，避免被上一实现或另解标题吞并。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "matrix-rank-practice",
+      "typeId": "practice",
+      "subject": "包含重复值的矩阵秩",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "pair-distance-rank-foundation",
+      "typeId": "derivation",
+      "subject": "排序后用双指针累计合法数对",
+      "depth": 3,
+      "reason": "这段导入从当前问题的结构推得更新、状态或判定规则，保留其中例子和成立理由，作为一段完整机制推导。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "pair-distance-rank-manual",
+      "typeId": "hcode",
+      "subject": "双指针判定",
+      "depth": 3,
+      "reason": "排序后手工双指针统计距离不超过阈值的下标对数，再在距离值域定位所需秩。",
+      "implementationIds": [
+        "selection-pairs-manual"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "pair-distance-rank-standard",
+      "typeId": "scode",
+      "subject": "每个左端查一个上界",
+      "depth": 3,
+      "reason": "逐左端upper_bound替换双指针计数器，保留同一值域判定并明确额外对数成本。",
+      "implementationIds": [
+        "selection-pairs-standard"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "pair-distance-rank-engineering",
+      "typeId": "engineering",
+      "subject": "排序副本与数对计数的类型",
+      "depth": 3,
+      "reason": "已有尾段主要说明本实现的接口、类型、所有权或失效约定；建立独立入口，避免被上一实现或另解标题吞并。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "pair-distance-rank-practice",
+      "typeId": "practice",
+      "subject": "按下标对计数的距离秩",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "multiplication-rank-foundation",
+      "typeId": "derivation",
+      "subject": "不构造乘法表也能逐行计数",
+      "depth": 3,
+      "reason": "这段导入从当前问题的结构推得更新、状态或判定规则，保留其中例子和成立理由，作为一段完整机制推导。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "multiplication-rank-manual",
+      "typeId": "hcode",
+      "subject": "解析计数",
+      "depth": 3,
+      "reason": "不用存表而手工累计各行min(n,floor(x/i))，利用隐式公式生成秩判定。",
+      "implementationIds": [
+        "selection-multiply-manual"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "multiplication-rank-standard",
+      "typeId": "scode",
+      "subject": "用min截断每行计数",
+      "depth": 3,
+      "reason": "swap收紧扫描维度，min只截断单行贡献，求和与kth搜索仍复用原核心，属于小范围支持设施。",
+      "implementationIds": [
+        "selection-multiply-standard"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "multiplication-rank-engineering",
+      "typeId": "engineering",
+      "subject": "乘积上界与每轮扫描规模",
+      "depth": 3,
+      "reason": "已有尾段主要说明本实现的接口、类型、所有权或失效约定；建立独立入口，避免被上一实现或另解标题吞并。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "multiplication-rank-practice",
+      "typeId": "practice",
+      "subject": "隐式乘法表中的元素秩",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "two-sorted-partition-foundation",
+      "typeId": "model",
+      "subject": "把秩查询转成两数组的交叉切分",
+      "depth": 3,
+      "reason": "这段完整导入将题目目标、限制和对象组织成可搜索的状态或阈值，主要职责是问题到计算模型的转换。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "two-sorted-partition-manual",
+      "typeId": "hcode",
+      "subject": "交叉边界驱动切分",
+      "depth": 3,
+      "reason": "手工二分从A取多少个并检查两处交叉边界，直接定位合法切分而不生成合并数组。",
+      "implementationIds": [
+        "selection-two-kth",
+        "selection-two-median"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "two-sorted-partition-standard",
+      "typeId": "alternative",
+      "subject": "线性合并后读取所需秩",
+      "depth": 3,
+      "reason": "完整合并再读取秩是同题线性路径，先声明时间和空间与对数切分不等价。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "two-sorted-merge-standard",
+      "typeId": "scode",
+      "subject": "用 merge 获得完整合并结果",
+      "depth": 4,
+      "reason": "merge实际生成拥有元素的完整有序结果；适合需要整表或小规模对照，不能冒称满足LC4对数要求。",
+      "implementationIds": [
+        "selection-two-merge"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "two-sorted-partition-engineering",
+      "typeId": "engineering",
+      "subject": "合法秩、空侧与域外哨兵",
+      "depth": 3,
+      "reason": "已有尾段主要说明本实现的接口、类型、所有权或失效约定；建立独立入口，避免被上一实现或另解标题吞并。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "two-sorted-partition-practice",
+      "typeId": "practice",
+      "subject": "两个有序数组的中位数",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "ordered-dp-frontier-foundation",
+      "typeId": "derivation",
+      "subject": "为什么只保留每种长度的最小末值",
+      "depth": 3,
+      "reason": "这段导入从当前问题的结构推得更新、状态或判定规则，保留其中例子和成立理由，作为一段完整机制推导。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "ordered-dp-frontier-manual",
+      "typeId": "hcode",
+      "subject": "保存真实前驱，恢复可行序列",
+      "depth": 3,
+      "reason": "手工边界查找维护最小末值，并保存tail_index和parent，恢复真实下标链而非误用摘要为原子序列。",
+      "implementationIds": [
+        "selection-lis-manual"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "ordered-dp-frontier-standard",
+      "typeId": "scode",
+      "subject": "使用库边界查找维护最小末值",
+      "depth": 3,
+      "reason": "lower_bound替换严格LIS的边界定位，upper_bound解释非降目标，相同父链恢复逻辑继续复用。",
+      "implementationIds": [
+        "selection-lis-standard"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "envelopes-variant",
+      "typeId": "variant",
+      "subject": "将二维信封嵌套归约为 LIS",
+      "depth": 3,
+      "reason": "二维宽高严格约束先按宽升序同宽高降序归约，避免等宽被LIS错误连选，问题条件有实质增加。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "envelopes-standard",
+      "typeId": "scode",
+      "subject": "同宽降序排序后复用 LIS",
+      "depth": 4,
+      "reason": "sort执行归约要求的比较顺序，之后复用高度LIS；排序规则属于该变型正确性而非装饰性稳定排序。",
+      "implementationIds": [
+        "selection-envelopes"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "lis-count-variant",
+      "typeId": "variant",
+      "subject": "统计最长递增子序列的个数",
+      "depth": 3,
+      "reason": "由求长度/一条链改为统计全部最长链，最小末值摘要不足，必须保留末位置与方案数。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "lis-count-manual",
+      "typeId": "hcode",
+      "subject": "按末位置合并最优长度与方案数",
+      "depth": 4,
+      "reason": "手工二次DP按更长覆盖、同长累加合并不相交方案，并用饱和计数处理可表示性边界。",
+      "implementationIds": [
+        "selection-lis-count"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "ordered-dp-frontier-engineering",
+      "typeId": "engineering",
+      "subject": "容器失效与恢复结果检查",
+      "depth": 3,
+      "reason": "主要解释push_back前保存下标、reserve不生成元素及恢复结果检查，属于容器失效和接口结果验证。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "ordered-dp-frontier-practice",
+      "typeId": "practice",
+      "subject": "LIS长度、信封嵌套与方案数",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "weighted-predecessor-foundation",
+      "typeId": "model",
+      "subject": "将兼容前驱前缀接入收益 DP",
+      "depth": 3,
+      "reason": "这段完整导入将题目目标、限制和对象组织成可搜索的状态或阈值，主要职责是问题到计算模型的转换。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "weighted-predecessor-manual",
+      "typeId": "hcode",
+      "subject": "前驱数量直接作为 DP 下标",
+      "depth": 3,
+      "reason": "手工寻找兼容前驱数量p后用dp[p]转移，二分只加速前驱定位，选或不选由DP决定。",
+      "implementationIds": [
+        "selection-jobs-manual"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "weighted-predecessor-standard",
+      "typeId": "scode",
+      "subject": "原题端点决定 lower 还是 upper",
+      "depth": 3,
+      "reason": "lower_bound与upper_bound分别实现end<start和end<=start，库设施表达不同原题端点合同。",
+      "implementationIds": [
+        "selection-jobs-standard"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "weighted-predecessor-engineering",
+      "typeId": "engineering",
+      "subject": "收益类型、排序副本与移动",
+      "depth": 3,
+      "reason": "已有尾段主要说明本实现的接口、类型、所有权或失效约定；建立独立入口，避免被上一实现或另解标题吞并。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "weighted-predecessor-practice",
+      "typeId": "practice",
+      "subject": "两种兼容端点规则的带权调度",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "resource-queries-foundation",
+      "typeId": "derivation",
+      "subject": "从最坏试投次数反推覆盖楼层",
+      "depth": 3,
+      "reason": "这段导入从当前问题的结构推得更新、状态或判定规则，保留其中例子和成立理由，作为一段完整机制推导。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "selection-subheading-25",
+      "typeId": "derivation",
+      "subject": "由覆盖递推得到组合判定",
+      "depth": 3,
+      "reason": "从cover递推与Pascal恒等式推出组合求和，并说明可执行投掷策略支撑覆盖量，不是直接罗列公式。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "resource-queries-manual",
+      "typeId": "hcode",
+      "subject": "组合计数作为判定器",
+      "depth": 3,
+      "reason": "手工按精确组合数计算给定次数的覆盖量，再搜索首次足够次数，提前达标避免无用大数。",
+      "implementationIds": [
+        "selection-eggs-search"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "resource-queries-standard",
+      "typeId": "alternative",
+      "subject": "逐次推进覆盖 DP",
+      "depth": 3,
+      "reason": "取消对次数的二分而逐次推进cover状态，属于同题另一算法，成本取决于实际答案。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "resource-coverage-standard",
+      "typeId": "scode",
+      "subject": "饱和覆盖量与倒序更新",
+      "depth": 4,
+      "reason": "vector存储各鸡蛋数覆盖量，min进行饱和，倒序更新确保读取上一轮状态，库设施服务直接DP实现。",
+      "implementationIds": [
+        "selection-eggs-dp"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "resource-queries-engineering",
+      "typeId": "boundary",
+      "subject": "试探资源与最坏情况目标",
+      "depth": 3,
+      "reason": "资源消耗改变后续可辨识能力，最坏次数与期望次数目标不同，属于信息模型与算法适用边界。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "resource-queries-practice",
+      "typeId": "practice",
+      "subject": "鸡蛋资源与最坏试投次数",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "fenwick-rank-foundation",
+      "typeId": "model",
+      "subject": "用累计频数表示动态秩",
+      "depth": 3,
+      "reason": "这段完整导入将题目目标、限制和对象组织成可搜索的状态或阈值，主要职责是问题到计算模型的转换。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "fenwick-rank-blocks",
+      "typeId": "derivation",
+      "subject": "从树状数组的整块频数直接定位",
+      "depth": 3,
+      "reason": "在秩模型之后单独推导已保存整块和、步长对齐和选择过程，含必要过程实例与条件，不另造结构专用类型。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "fenwick-rank-manual",
+      "typeId": "hcode",
+      "subject": "维护频数并按当前秩删除",
+      "depth": 3,
+      "reason": "手造树状数组频数维护及结构内跳块查秩，删除按存活秩定位而不搬移原序列后缀。",
+      "implementationIds": [
+        "advanced-fenwick-lift"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "fenwick-rank-standard",
+      "typeId": "alternative",
+      "subject": "频数不变时的静态累计量",
+      "depth": 3,
+      "reason": "无修改时可用静态累计量，修改后需重建，按操作分布对照而不伪装完整动态等价实现。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "fenwick-static-standard",
+      "typeId": "scode",
+      "subject": "使用 partial_sum 与 lower_bound 查累计秩",
+      "depth": 4,
+      "reason": "partial_sum和lower_bound实现静态累计秩查找，明确重建O(n)与树状数组增量更新不同。",
+      "implementationIds": [
+        "advanced-frequency-prefix"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "fenwick-rank-engineering",
+      "typeId": "engineering",
+      "subject": "合法频数、返回值与数据所有权",
+      "depth": 3,
+      "reason": "主要预算总频数类型，约定合法位置/秩与n哨兵，并区分借用原数组与拥有返回值的接口存储。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "fenwick-rank-practice",
+      "typeId": "practice",
+      "subject": "按存活秩删除并输出原值",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "summary-descent-foundation",
+      "typeId": "model",
+      "subject": "用区间摘要排除整块不可能的位置",
+      "depth": 3,
+      "reason": "这段完整导入将题目目标、限制和对象组织成可搜索的状态或阈值，主要职责是问题到计算模型的转换。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "summary-descent-manual",
+      "typeId": "hcode",
+      "subject": "根据区间最大值逐层定位",
+      "depth": 3,
+      "reason": "手工维护区间最大摘要并优先下降左子树，利用整块排除与起点裁剪寻找首个达标位置。",
+      "implementationIds": [
+        "advanced-max-summary"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "summary-descent-standard",
+      "typeId": "alternative",
+      "subject": "用线性扫描替代结构内定位",
+      "depth": 3,
+      "reason": "find_if逐项扫描是相同定位问题的另一算法；不把后续同类区间结构的成熟库接口混称另一算法。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "summary-linear-standard",
+      "typeId": "scode",
+      "subject": "使用 find_if 线性寻找首个达标值",
+      "depth": 4,
+      "reason": "find_if从s顺序检查当前值，实际是同题线性库解，不声称具有结构内O(log n)搜索。",
+      "implementationIds": [
+        "advanced-first-linear"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "summary-acl-interface",
+      "typeId": "engineering",
+      "subject": "AtCoder Library 的结构内查找接口",
+      "depth": 3,
+      "reason": "max_right是当前区间结构内搜索的成熟库接口说明，不是线性扫描的另一算法；提升为并列工程单元避免归属在线性替代解法之下。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "summary-descent-engineering",
+      "typeId": "engineering",
+      "subject": "更新、无解返回与资源开销",
+      "depth": 3,
+      "reason": "主要是set与原数组副本关系、n无解哨兵、重建需求与调用栈资源，属于结构的实现接口管理。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "summary-descent-practice",
+      "typeId": "practice",
+      "subject": "点修改、区间摘要与首个达标位置",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "ancestor-boundary-foundation",
+      "typeId": "derivation",
+      "subject": "把祖先复合转成可接受的倍增跳跃",
+      "depth": 3,
+      "reason": "这段导入从当前问题的结构推得更新、状态或判定规则，保留其中例子和成立理由，作为一段完整机制推导。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "ancestor-boundary-manual",
+      "typeId": "hcode",
+      "subject": "先等深，再同步提升",
+      "depth": 3,
+      "reason": "手工建倍增表、先等深再同步提升，利用会合后不分开建立跳跃接受条件。",
+      "implementationIds": [
+        "advanced-ancestor-lift"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "ancestor-boundary-standard",
+      "typeId": "alternative",
+      "subject": "直接求交两条祖先链",
+      "depth": 3,
+      "reason": "直接祖先链求交重新组织LCA求解，需先明确其链高乘积最坏成本与预处理路线不同。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "ancestor-chain-standard",
+      "typeId": "scode",
+      "subject": "使用 find 查找第一个共同祖先",
+      "depth": 4,
+      "reason": "find在线性祖先链内搜索交集，设施实际实现慢对照，不是标准库内置LCA。",
+      "implementationIds": [
+        "advanced-ancestor-find"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "ancestor-threshold-variant",
+      "typeId": "variant",
+      "subject": "单调权值路径上的最浅达标祖先",
+      "depth": 3,
+      "reason": "给路径增加父权不大于子权条件后，目标改为最浅达标祖先，不与两点LCA混作同一查询。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "ancestor-threshold-standard",
+      "typeId": "scode",
+      "subject": "维护当前根路径并调用 lower_bound",
+      "depth": 4,
+      "reason": "显式进入退出事件维护当前根路径，再lower_bound权值，库设施服务有序路径变型。",
+      "implementationIds": [
+        "advanced-threshold-path"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "ancestor-boundary-engineering",
+      "typeId": "boundary",
+      "subject": "树查询与函数跳跃的边界",
+      "depth": 3,
+      "reason": "主要区分同深树会合与有环函数图精确跳跃，指出表层数和拒绝规则的模型条件；失效/生命周期索引作附带实现提示。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "ancestor-boundary-practice",
+      "typeId": "practice",
+      "subject": "祖先查询、函数跳跃与环形分段",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "cyclic-jump-foundation",
+      "typeId": "model",
+      "subject": "从最远合法段构造环上的跳跃",
+      "depth": 3,
+      "reason": "这段完整导入将题目目标、限制和对象组织成可搜索的状态或阈值，主要职责是问题到计算模型的转换。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "cyclic-jump-manual",
+      "typeId": "hcode",
+      "subject": "用最远段建立跳跃表",
+      "depth": 3,
+      "reason": "手工滑窗建立最远next，再复合跳跃表并对全部起点计数，关键是严格小于目标的最后可跳位置。",
+      "implementationIds": [
+        "advanced-cyclic-window"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "cyclic-jump-standard",
+      "typeId": "scode",
+      "subject": "用前缀和构造最远终点",
+      "depth": 3,
+      "reason": "partial_sum与upper_bound替换最远终点的建立，后续倍增核心共用，指出预处理由线性变对数。",
+      "implementationIds": [
+        "advanced-cyclic-bounds"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "cyclic-jump-engineering",
+      "typeId": "boundary",
+      "subject": "正数条件与整数范围",
+      "depth": 3,
+      "reason": "正数及单项不超C决定滑窗前进、前缀单调与合法截短，属于主要算法边界；64位预算是这些条件下的支持分析。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "cyclic-jump-practice",
+      "typeId": "practice",
+      "subject": "切点未知的环形连续分段",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "time-parallel-search-foundation",
+      "typeId": "combination",
+      "subject": "让各查询共用一次时间前缀重放",
+      "depth": 3,
+      "reason": "导入解释独立日期边界、按中点分桶与增量并查集状态怎样共享一次重放，主要是算法协同分工。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "time-parallel-search-manual",
+      "typeId": "hcode",
+      "subject": "按候选日期分桶，共享加边过程",
+      "depth": 3,
+      "reason": "手造DSU与查询中点分桶共享每轮加边重放，advanced-pbs-standard虽旧名standard仍是手造DSU核心。",
+      "implementationIds": [
+        "advanced-time-pbs",
+        "advanced-dsu-support"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "time-parallel-search-standard",
+      "typeId": "scode",
+      "subject": "用标准设施组织查询状态",
+      "depth": 3,
+      "reason": "vector/iota/swap提供查询状态容器与初始化，显式链接共享手造核心，不虚构标准DSU或重复印求解代码。",
+      "implementationIds": [],
+      "action": "reuse",
+      "reuses": [
+        "time-parallel-search-manual"
+      ]
+    },
+    {
+      "id": "time-parallel-search-example",
+      "typeId": "example",
+      "subject": "两次查询如何逐轮分开",
+      "depth": 3,
+      "reason": "逐轮跟踪两点对查询的low/high分离，展示共享同一时间线而保持各问边界独立。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "time-parallel-search-cost",
+      "typeId": "complexity",
+      "subject": "共享重放的成本与回滚版本的区别",
+      "depth": 3,
+      "reason": "计算共享重放的每轮与总成本，并说明改用回滚版本需要另一状态恢复契约；从过程实例中独立出来。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "time-parallel-search-engineering",
+      "typeId": "boundary",
+      "subject": "重置状态与只增边条件",
+      "depth": 3,
+      "reason": "只增边保证时间单调，按轮重建保证判定看到正确事件前缀，主要是批处理方法成立条件而非一般容器技巧。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "time-parallel-search-practice",
+      "typeId": "practice",
+      "subject": "多点对的最早连通日期",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "dynamic-range-kth-foundation",
+      "typeId": "model",
+      "subject": "用时间事件表达赋值和区间秩",
+      "depth": 3,
+      "reason": "这段完整导入将题目目标、限制和对象组织成可搜索的状态或阈值，主要职责是问题到计算模型的转换。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "dynamic-range-kth-partition",
+      "typeId": "derivation",
+      "subject": "稳定分流与回滚如何维持查询时刻",
+      "depth": 3,
+      "reason": "在事件模型之后解释值域分流、右转扣秩、稳定时序与回滚，属于算法执行和不变量的推导。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "advanced-subheading-23",
+      "typeId": "example",
+      "subject": "先追踪一次值域划分",
+      "depth": 3,
+      "reason": "在一次赋值前后跟踪左右值域计数、稳定分流和右转扣秩，用具体操作序列展示两条轴的职责。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "dynamic-range-kth-manual",
+      "typeId": "combination",
+      "subject": "事件表示、值压缩与稳定递归",
+      "depth": 3,
+      "reason": "把外部操作/内部事件、压缩设施与稳定递归串成同一实现流水，组内分别标明手造与库支持层。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "dynamic-kth-model-manual",
+      "typeId": "hcode",
+      "subject": "表示外部操作与内部事件",
+      "depth": 4,
+      "reason": "手造RangeOperation与RankEvent记录赋值、插删贡献和剩余秩，为时间流与值域递归提供数据模型。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "dynamic-range-kth-standard",
+      "typeId": "scode",
+      "subject": "排序去重并压缩全部可能值",
+      "depth": 4,
+      "reason": "sort/unique/erase与lower_bound压缩初值及全部未来新值，只替换值表示，不合并出现次数。",
+      "implementationIds": [
+        "advanced-kth-compress"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "dynamic-kth-recursion-manual",
+      "typeId": "hcode",
+      "subject": "稳定分流事件并回滚位置统计",
+      "depth": 4,
+      "reason": "手工按时间扫描稳定分流、右转扣秩并逆序回滚位置统计，保证两个子问题重放时序正确。",
+      "implementationIds": [
+        "advanced-dynamic-kth"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "dynamic-range-kth-engineering",
+      "typeId": "boundary",
+      "subject": "离线条件、输入范围与借用",
+      "depth": 3,
+      "reason": "离线读取全部操作和合法秩/区间决定该算法能否使用，位置轴与值域轴不能混同；借用/缓冲区索引是辅助实现约定。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "dynamic-range-kth-practice",
+      "typeId": "practice",
+      "subject": "静态与带修改的区间第 k 小",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "marginal-penalty-foundation",
+      "typeId": "model",
+      "subject": "把资源使用化成递减收益的全局选择",
+      "depth": 3,
+      "reason": "这段完整导入将题目目标、限制和对象组织成可搜索的状态或阈值，主要职责是问题到计算模型的转换。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "marginal-penalty-threshold",
+      "typeId": "derivation",
+      "subject": "用收益阈值补齐实际使用次数",
+      "depth": 3,
+      "reason": "从收益阈值计数推得第K大分界以及同值补足规则，并非输出实际路径或集合的构造。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "advanced-subheading-29",
+      "typeId": "derivation",
+      "subject": "由惩罚目标精确恢复原收益",
+      "depth": 3,
+      "reason": "从惩罚目标及收益阈值推导恢复原目标值的代数关系；没有构造路径、集合或操作见证，采用推导而非构造。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "marginal-penalty-manual",
+      "typeId": "hcode",
+      "subject": "搜索收益阈值，恢复最大收益",
+      "depth": 3,
+      "reason": "手工搜索第K大边际收益阈值并按同值补足，二分中仅计数、最终才算收益以满足数值预算。",
+      "implementationIds": [
+        "advanced-penalty-cutoff"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "marginal-penalty-standard",
+      "typeId": "alternative",
+      "subject": "逐次选取最大收益的堆解法",
+      "depth": 3,
+      "reason": "逐个取当前最高收益是同题堆算法，适用于K较小场景，不能与阈值计数的规模优势混同。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "penalty-heap-standard",
+      "typeId": "scode",
+      "subject": "使用 priority_queue 维护当前收益",
+      "depth": 4,
+      "reason": "priority_queue保存各设施当前最高收益，pop后减一再push，实际实现逐次贪心选取而非阈值搜索。",
+      "implementationIds": [
+        "advanced-marginal-heap"
+      ],
+      "action": "reuse"
+    },
+    {
+      "id": "advanced-subheading-33",
+      "typeId": "boundary",
+      "subject": "数量单调为何不足以保证精确恢复",
+      "depth": 3,
+      "reason": "用F(0),F(1),F(2)反例说明数量单调仍可能跳过目标数量，必须另外证明离散凸凹等无间隙结构。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "marginal-penalty-engineering",
+      "typeId": "engineering",
+      "subject": "只在最终阈值计算价值",
+      "depth": 3,
+      "reason": "区分最终答案可表示与任意H(lambda)中间值可表示，以最终阈值才计算价值的程序组织避免溢出。",
+      "implementationIds": [],
+      "action": "reuse"
+    },
+    {
+      "id": "marginal-penalty-practice",
+      "typeId": "practice",
+      "subject": "同值收益补足与使用次数上限",
+      "depth": 3,
+      "reason": "本正式节既有原题及针对性说明形成独立练习单元，复用练习类型；原URL与题型对应不变。",
+      "implementationIds": [],
+      "action": "reuse"
+    }
+  ]
+}

@@ -1,6 +1,10 @@
 * text=auto eol=lf
 # Research snapshots retain their recorded byte identities, including frozen challenge hashes.
 work/** -text
+# These registry bytes are part of existing content/research authority hashes.
+carrier/publications.json -text
+catalog/books.json -text
+catalog/sources.json -text
 *.png binary
 *.jpg binary
 *.jpeg binary

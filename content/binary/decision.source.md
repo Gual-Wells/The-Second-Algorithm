@@ -3,6 +3,9 @@
 <a id="capacity-partition"></a>
 ## 最小化连续分段的最大段和
 
+<a id="capacity-partition-foundation"></a>
+### 试定容量后怎样判断最少分段数
+
 把一个非负数组按原顺序分成恰好 `k` 个非空连续段，要求最大的段和尽可能小。排序会改变相邻关系，因此不能先重排数组。
 
 直接枚举切点很困难，但可以换一个问题：给定每段容量 `B`，至少需要多少段？例如数组 `[7,2,5,10,8]` 要分成两段。容量 `18` 时可取 `[7,2,5]` 与 `[10,8]`；容量 `17` 时，按顺序需要三段，便无法满足要求。
@@ -40,10 +43,16 @@ CSES中 `n<=2×10^5`，单项不超过 `10^9`，总和可达 `2×10^14`，所以
 
 判定函数借用原数组，多轮调用不会复制或重排它，参见[[Q100003|判定器与捕获的生命周期]]。若还要输出恰好 `k` 个切点，需要在恢复过程中为剩余段保留元素；贪心判定得到的最少段数划分未必已经恰有 `k` 段。
 
-练习：[Split Array Largest Sum](https://leetcode.com/problems/split-array-largest-sum/description/) 允许 0；[Array Division](https://cses.fi/problemset/task/1085/) 的正数与更大规模要求同一证明、不同数值预算。
+<a id="capacity-partition-practice"></a>
+### 允许零值与大规模分段
+
+[Split Array Largest Sum](https://leetcode.com/problems/split-array-largest-sum/description/) 允许 0；[Array Division](https://cses.fi/problemset/task/1085/) 的正数与更大规模要求同一证明、不同数值预算。
 
 <a id="maximin-spacing"></a>
 ## 最大化所选位置的最小间距
+
+<a id="maximin-spacing-foundation"></a>
+### 固定间距后怎样选择最多位置
 
 从给定的一维位置中选择 `m` 个，使所选位置之间的最小距离尽可能大。原题位置互异，`2<=m<=n<=10^5`，坐标在 `1..10^9`。
 
@@ -78,10 +87,16 @@ CSES中 `n<=2×10^5`，单项不超过 `10^9`，总和可达 `2×10^14`，所以
 
 若位置改为连续区间、每个点带容量，或点之间另有冲突限制，尽早放置就未必足够。即使距离可行性仍单调，也必须先重新构造正确的判定函数。
 
-练习：[Magnetic Force Between Two Balls](https://leetcode.com/problems/magnetic-force-between-two-balls/description/)。重点核对 `m=2`、`m=n` 和距离恰好等于 d。
+<a id="maximin-spacing-practice"></a>
+### 给定位置中的最大最小间距
+
+[Magnetic Force Between Two Balls](https://leetcode.com/problems/magnetic-force-between-two-balls/description/)。重点核对 `m=2`、`m=n` 和距离恰好等于 d。
 
 <a id="cumulative-production"></a>
 ## 达到目标产量的最短时间
+
+<a id="cumulative-production-foundation"></a>
+### 按完成时间统计产量而非逐件模拟
 
 若干机器同时独立生产，第 `i` 台每完成一件产品需要 `t[i]` 时间。给定目标产量 `target`，求最早达到目标的时刻。原题机器数不超过 `2×10^5`，目标与单件耗时均在 `1..10^9`。
 
@@ -112,10 +127,16 @@ CSES中 `n<=2×10^5`，单项不超过 `10^9`，总和可达 `2×10^14`，所以
 
 搜索上界和累计产量应分别预算。若把上界改成固定的 `10^18`，快速机器的中间产量和可能超界，不能继续套用当前紧界下的结论，见[[Q100002|整数预算]]。若机器共享资源或任务之间存在依赖，产量也未必能够直接相加。
 
-练习：[Factory Machines](https://cses.fi/problemset/task/1620/)。试比较“逐件最小堆模拟”和“按时间直接计数”在目标达到 `10^9` 时的差距。
+<a id="cumulative-production-practice"></a>
+### 大量目标产品的完成时间
+
+[Factory Machines](https://cses.fi/problemset/task/1620/)。试比较“逐件最小堆模拟”和“按时间直接计数”在目标达到 `10^9` 时的差距。
 
 <a id="ordered-simulation"></a>
 ## 固定顺序任务所需的最少并行台位
+
+<a id="ordered-simulation-foundation"></a>
+### 固定台位数后如何模拟完成时间
 
 Cow Dance给出固定的登台顺序和每段演出的时长。`K` 个台位可以同时使用；某台位结束后，下一位立即登台。要求全部演出在期限内完成，求最少需要多少台位。原题 `N<=10^4`，单段时长不超过 `10^5`，期限不超过 `10^6`。
 
@@ -152,10 +173,16 @@ Cow Dance给出固定的登台顺序和每段演出的时长。`K` 个台位可�
 
 {{knowledge:Q100007}}
 
-练习：[Cow Dance Show](https://usaco.org/index.php?page=viewproblem2&cpid=690)。原题文件输入输出需在提交包装层适配，这份核心不负责打开文件。
+<a id="ordered-simulation-practice"></a>
+### 固定演出顺序与最少台位
+
+[Cow Dance Show](https://usaco.org/index.php?page=viewproblem2&cpid=690)。原题文件输入输出需在提交包装层适配，这份核心不负责打开文件。
 
 <a id="graph-threshold"></a>
 ## 瓶颈路径：最小化路径上的最大边权
+
+<a id="graph-threshold-foundation"></a>
+### 阈值删边把瓶颈路径转成可达性
 
 从网格左上走到右下，路径代价定义为沿途最大的相邻高度差，要求使这个最大差最小。原题行列均不超过 `100`，高度在 `1..10^6`。
 
@@ -180,18 +207,27 @@ Cow Dance给出固定的登台顺序和每段演出的时长。`K` 个台位可�
 `queue` 负责先进先出的读写，四方向邻接、阈值限制和访问标记仍由搜索逻辑处理。读取队头后先复制到局部变量，再删除该元素，见[[Q100011|队列状态与元素寿命]]。
 
 <a id="graph-threshold-engineering"></a>
-### 高度差计算与其他解法
+### 高度差计算与访问状态
 
 计算高度差时，先提升类型再相减、取绝对值，见[[Q100002|表达式的整数预算]]。每次阈值检查都要使用新的访问状态。
+
+<a id="graph-threshold-alternative"></a>
+### DSU 与瓶颈 Dijkstra 的对照
 
 同题还可按边权排序并用DSU维护连通，或采用最小化最大边权的Dijkstra。它们是不同的求解算法；`queue` 版本只替换了BFS队列的实现。若路径目标改成高度差之和，当前的阈值删边判定就不再对应题目目标。
 
 {{knowledge:Q100011}}
 
-练习：[Path With Minimum Effort](https://leetcode.com/problems/path-with-minimum-effort/description/)。验证绕远更优、等高网格和单行/列，不要只测明显直线路径。
+<a id="graph-threshold-practice"></a>
+### 最大边权最小的网格路径
+
+[Path With Minimum Effort](https://leetcode.com/problems/path-with-minimum-effort/description/)。验证绕远更优、等高网格和单行/列，不要只测明显直线路径。
 
 <a id="prefix-activation"></a>
 ## 有序事件前缀的首次成功与首次失败
+
+<a id="prefix-activation-foundation"></a>
+### 完整事件前缀怎样形成单调判定
 
 当事件必须按顺序接受时，可以把“采用多少个事件”作为搜索对象。下面两个问题都固定前 `t` 个事件再作检查，但一个寻找首次成功，另一个寻找首次失败。
 
@@ -232,10 +268,16 @@ NailingPlanks要求按顺序使用前 `t` 颗钉子，使每块闭区间木板�
 
 每轮应清空计数或差分数组，按当前 `t` 重建状态，见[[Q100003|重复调用判定器的状态]]。手写扫描与库前缀累加都须满足[[Q100002|累计量的类型预算]]。
 
-练习：[NailingPlanks](https://app.codility.com/programmers/lessons/14-binary_search_algorithm/nailing_planks/)；[借教室](https://www.luogu.com.cn/problem/P1083)。后者提交时：全部成功输出 0，否则输出 -1 与返回的订单编号。
+<a id="prefix-activation-practice"></a>
+### 首次成功与首次失败的事件前缀
+
+[NailingPlanks](https://app.codility.com/programmers/lessons/14-binary_search_algorithm/nailing_planks/)；[借教室](https://www.luogu.com.cn/problem/P1083)。后者提交时：全部成功输出 0，否则输出 -1 与返回的订单编号。
 
 <a id="matching-threshold"></a>
 ## 互斥选择中的最优阈值：用匹配判定
+
+<a id="matching-threshold-foundation"></a>
+### 把第 k 大阈值转成互斥匹配
 
 从一个 `n×m` 的完整矩阵中选择 `n` 个元素，要求它们不同行、不同列，使所选数的第 `k` 大尽可能小。P4251中 `1<=k<=n<=m<=250`，元素在 `1..10^9`。
 
@@ -247,6 +289,7 @@ NailingPlanks要求按顺序使用前 `t` 颗钉子，使每块闭区间木板�
 
 低值匹配为何足以完成原题？必要性来自任何合法完整选择中的低值边。反过来，已经匹配 `need` 对后，余下行可以任意配给尚未使用的列：原矩阵没有禁选格，且 `m>=n`，所以一定补得齐。补出的值即使很大，低值的数量也不会减少。若矩阵存在禁选格，这一步就需要重新证明。
 
+<a id="decision-subheading-20"></a>
 ### 为什么增广路可以完成匹配判定
 
 Kuhn算法寻找一条交替经过未选边、已选边的路径，把原先占用某列的行重新安排到其他列，为新行腾出位置。找到这样一条增广路，匹配数就能增加 `1`。
@@ -280,15 +323,22 @@ Kuhn算法寻找一条交替经过未选边、已选边的路径，把原先占�
 
 {{knowledge:Q100009}}
 
-练习：[小凸玩矩阵](https://www.luogu.com.cn/problem/P4251)。重点理解为何是 `n−k+1`，以及为什么低权部分匹配足以补成完整答案。
+<a id="matching-threshold-practice"></a>
+### 行列互斥下的最优阈值
+
+[小凸玩矩阵](https://www.luogu.com.cn/problem/P4251)。重点理解为何是 `n−k+1`，以及为什么低权部分匹配足以补成完整答案。
 
 <a id="average-transform"></a>
 ## 带区间限制的平均值优化
+
+<a id="average-transform-foundation"></a>
+### 减去候选平均值并保留原集合限制
 
 平均值不是元素之和，不能直接靠增加一个元素判断好坏。可以先试一个平均值 `λ`，把每项变成 `b[i]=a[i]-λ`。对任意非空集合，都有 `sum(a)/count>=λ` 等价于 `sum(b)>=0`，因为元素个数为正。
 
 变换消除了除法，但没有放宽原题允许选择的集合。下面两类题的差别，正体现在变换后仍须保留的区间约束。
 
+<a id="decision-subheading-24"></a>
 ### 长度受限的最大平均值
 
 P1419要求在长度位于 `[S,T]` 的连续段中最大化平均值，条件为 `1<=S<=T<=n<=10^5`，元素在 `[-10^4,10^4]`。
@@ -297,6 +347,7 @@ P1419要求在长度位于 `[S,T]` 的连续段中最大化平均值，条件为
 
 只有最短长度限制时，可以一直保留历史最小前缀；加入最长长度后，过早的前缀会失效，需要用单调队列维护一个会滑动的窗口。
 
+<a id="decision-subheading-25"></a>
 ### 删除内部非空段后的最小平均值
 
 Sabotage要求删去一个非空内部连续段，保留首尾，使剩余平均值最小。原题 `3<=N<=10^5`，每项在 `1..10000`。
@@ -304,7 +355,7 @@ Sabotage要求删去一个非空内部连续段，保留首尾，使剩余平均
 仍令每项减去 `λ`。记全部变换值之和为 `U`，被删段的变换和为 `V`，剩余平均不超过 `λ` 当且仅当 `U-V<=0`。所以要检查：内部非空连续段的最大和是否至少为 `U`。这可以用Kadane算法求出，但必须限定在内部，并且不能允许空段。
 
 <a id="average-transform-manual"></a>
-### 实现合法窗口与非空最大子段
+### 实现长度窗口与内部非空最大子段
 
 两题的搜索方向相反：最大平均值保留可行下界，最小剩余平均值保留可行上界。下面的浮点核心根据中点结果保留对应半区，不使用整数搜索的加减 `1`；最多迭代80轮，并在中点无法区别于端点时停止。
 
@@ -334,10 +385,16 @@ P1419允许负数，不能用正数数组中“和超限就收缩”的滑动窗
 
 [[Q100006|浮点夹逼与误差]]不能由 `setprecision(3)` 替代；代码返回数值，输出层再格式化。若要求精确有理答案或严格区分舍入中点，就需要另外设计精度处理，固定轮数本身不提供这种保证。
 
-练习：[寻找段落](https://www.luogu.com.cn/problem/P1419)；[Sabotage](https://usaco.org/index.php?page=viewproblem2&cpid=419)。前者要同时处理 S/T，后者要保留端点和非空删除。
+<a id="average-transform-practice"></a>
+### 长度窗口与内部非空删除
+
+[寻找段落](https://www.luogu.com.cn/problem/P1419)；[Sabotage](https://usaco.org/index.php?page=viewproblem2&cpid=419)。前者要同时处理 S/T，后者要保留端点和非空删除。
 
 <a id="ratio-selection"></a>
 ## 固定数量选择的最大总比值
+
+<a id="ratio-selection-foundation"></a>
+### 用变换分数优化总和之比
 
 从 `n` 项中恰好选择 `m` 项，最大化 `sum(value)/sum(cost)`，其中每项 `cost>0`。目标是总和之比，不能预先按单项 `value/cost` 排序。
 
@@ -372,4 +429,7 @@ P1419允许负数，不能用正数数组中“和超限就收缩”的滑动窗
 
 {{knowledge:Q100008}}
 
-练习：[KC 喝咖啡](https://www.luogu.com.cn/problem/P1570)。对比 `m=1`、`m=n` 与成本极不均衡的输入，验证检查器确实优化总和之比。
+<a id="ratio-selection-practice"></a>
+### 固定数量下的总和之比
+
+[KC 喝咖啡](https://www.luogu.com.cn/problem/P1570)。对比 `m=1`、`m=n` 与成本极不均衡的输入，验证检查器确实优化总和之比。

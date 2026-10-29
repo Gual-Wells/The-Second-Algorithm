@@ -1,0 +1,68 @@
+{
+  "capturedAt": "2026-10-29T08:33:04.107Z",
+  "rows": [
+    {
+      "name": "language",
+      "resource": "index.html",
+      "status": 200,
+      "bytes": 32139,
+      "sha256": "5912326596010f905bbcb8c9adb2c612ee7df5a39b7cc2df027be78eaa5adad3",
+      "localSha256": "5912326596010f905bbcb8c9adb2c612ee7df5a39b7cc2df027be78eaa5adad3",
+      "localMatches": true
+    },
+    {
+      "name": "language",
+      "resource": "styles.css",
+      "status": 200,
+      "bytes": 66119,
+      "sha256": "87873da7052c5f4c49d323f7c075bcc3e58d76601353796872e78c863449d17a",
+      "localSha256": "87873da7052c5f4c49d323f7c075bcc3e58d76601353796872e78c863449d17a",
+      "localMatches": true
+    },
+    {
+      "name": "language",
+      "resource": "app.js",
+      "status": 200,
+      "bytes": 55673,
+      "sha256": "b616926758ff264243aee2625f5430d47cda226104c109f47b1fd5338874b328",
+      "localSha256": "b616926758ff264243aee2625f5430d47cda226104c109f47b1fd5338874b328",
+      "localMatches": true
+    },
+    {
+      "name": "algorithm",
+      "resource": "index.html",
+      "status": 200,
+      "bytes": 5448,
+      "sha256": "9d3fbbdc5ad6490f0ab7f3aacae515b3d392163bc08905ff135b4456f2815686",
+      "localSha256": "9d3fbbdc5ad6490f0ab7f3aacae515b3d392163bc08905ff135b4456f2815686",
+      "localMatches": true
+    },
+    {
+      "name": "algorithm",
+      "resource": "styles.css",
+      "status": 200,
+      "bytes": 29375,
+      "sha256": "82dfa15135c1d37f7631c5a3b5596e1429e20b5ab7abb6bca9882587e250a6b6",
+      "localSha256": "82dfa15135c1d37f7631c5a3b5596e1429e20b5ab7abb6bca9882587e250a6b6",
+      "localMatches": true
+    },
+    {
+      "name": "algorithm",
+      "resource": "app.js",
+      "status": 200,
+      "bytes": 94623,
+      "sha256": "8392fabbf6ef46e5d98431430e9af6cf8ddeecd7879ceb2cf97e130c1727294d",
+      "localSha256": "8392fabbf6ef46e5d98431430e9af6cf8ddeecd7879ceb2cf97e130c1727294d",
+      "localMatches": true
+    },
+    {
+      "name": "algorithm",
+      "resource": "carrier-build.json",
+      "status": 401,
+      "bytes": 24,
+      "sha256": "9ae5df81a66150b59c285b977d88c172ec17a2d4e79f7b0c6c7d234513589abf",
+      "localSha256": "3f6a31d59a19b7f274b609c81e0d3d314c6d018d72f712d8fbd4293e5fe9da3c",
+      "localMatches": false
+    }
+  ]
+}

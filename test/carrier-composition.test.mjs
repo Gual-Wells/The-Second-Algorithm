@@ -17,7 +17,7 @@ async function fixture() {
   const root = await fs.mkdtemp(path.join(PARENT, 'case-'));
   for (const directory of ['tools', 'content/unit', 'carrier', 'catalog'])
     await fs.mkdir(path.join(root, directory), { recursive: true });
-  for (const filename of ['compose-chapter.mjs', 'build_handbook.mjs', 'knowledge.mjs', 'reader-boundary.mjs'])
+  for (const filename of ['compose-chapter.mjs', 'subheadings.mjs', 'build_handbook.mjs', 'knowledge.mjs', 'reader-boundary.mjs'])
     await fs.copyFile(path.join(ROOT, 'tools', filename), path.join(root, 'tools', filename));
   const descriptor = { id: 'composed', title: '二分', path: 'content/unit/chapter', composition: 'content/unit/chapter.authoring.json' };
   const first = '# Internal one\r\n\r\n<a id="prelude"></a>\r\n## 前置\r\n\r\n前置原文。\r\n\r\n'
@@ -67,19 +67,25 @@ test('the current binary chapter composes its 38 real main sections into one rea
   const authorBlocks = new Map();
   for (const relative of composition.sourceFiles) authorBlocks.set(relative,
     chapterFragments(await fs.readFile(path.join(ROOT, relative), 'utf8'), relative));
-  let cursor = result.draft.indexOf('\n\n') + 2;
-  for (const [index, selection] of selections.entries()) {
-    const block = authorBlocks.get(selection.source).get(selection.anchor);
-    const numbered = block.replace(/^( {0,3})##[ \t]+/m, '$1## ' + (index ? chineseSectionNumber(index) : 'PRE') + '、');
-    assert.equal(result.draft.slice(cursor, cursor + numbered.length), numbered, selection.anchor);
-    cursor += numbered.length + (numbered.endsWith('\n') ? 0 : 1) + 1;
-  }
+  const generatedBlocks = chapterFragments(result.draft);
+  const withoutHeadings = block => block.replace(/^ {0,3}#{2,4}[ \t]+[^\r\n]*(?:\r\n|\r|\n|$)/gm, '').trimEnd();
+  for (const selection of selections)
+    assert.equal(withoutHeadings(generatedBlocks.get(selection.anchor)),
+      withoutHeadings(authorBlocks.get(selection.source).get(selection.anchor)), selection.anchor);
   for (const relative of composition.codeSources) {
     const original = await fs.readFile(path.join(ROOT, relative));
     assert(Buffer.from(result.source).includes(original), relative);
     assert.equal(result.dependencies[relative], hash(original));
   }
-  assert.equal(Object.keys(result.dependencies).length, 10);
+  const expected = new Set([chapter.documents[0].composition,...composition.sourceFiles,...composition.codeSources,
+    'tools/compose-chapter.mjs','tools/subheadings.mjs']);
+  if(composition.subheadings){
+    expected.add(composition.subheadings);
+    const plan=JSON.parse(await fs.readFile(path.join(ROOT,composition.subheadings),'utf8'));expected.add(plan.candidateSnapshot.path);
+  }
+  assert.deepEqual(Object.keys(result.dependencies).sort(),[...expected].sort());
+  for(const [relative, fingerprint] of Object.entries(result.dependencies))
+    assert.equal(fingerprint,hash(await fs.readFile(path.join(ROOT,relative))));
 });
 
 test('section numbering is generated from chapter order and cannot be handwritten into author fragments', async () => {
@@ -107,7 +113,7 @@ test('composition reorders original H2 blocks across files and preserves origina
     assert.equal(result.source, f.cppOne + '\n' + f.cppTwo);
     assert.equal(result.dependencies['content/unit/one.cpp'], hash(f.cppOne));
     assert.deepEqual(Object.keys(result.dependencies), ['content/unit/chapter.authoring.json', 'content/unit/one.cpp',
-      'content/unit/one.source.md', 'content/unit/two.cpp', 'content/unit/two.source.md', 'tools/compose-chapter.mjs']);
+      'content/unit/one.source.md', 'content/unit/two.cpp', 'content/unit/two.source.md', 'tools/compose-chapter.mjs','tools/subheadings.mjs']);
     await assert.rejects(fs.access(path.join(f.root, 'content/unit/chapter.source.md')), /ENOENT/,
       'pure composition does not write generated authorities');
     f.rebuild();

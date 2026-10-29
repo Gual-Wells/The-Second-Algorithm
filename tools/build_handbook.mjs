@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { marked } from 'marked';
 import { readKnowledge, knowledgeTokens, expandKnowledgeReferences, expandKnowledgeIntroductions } from './knowledge.mjs';
 import { composeDocument, semanticSectionTitle, assertSectionNumbering } from './compose-chapter.mjs';
+import { semanticSubheadingTitle } from './subheadings.mjs';
 import { assertReaderMarkdown, assertReaderHtml, assertReaderText, assertMainHeadings, assertRenderedMainHeadings, readerSourceView, assertReaderSource } from './reader-boundary.mjs';
 
 const REPOSITORY=path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -117,7 +118,8 @@ const decodeText=s=>s.replace(/&(amp|lt|gt|quot|#39);/g,(_,key)=>({amp:'&',lt:'<
 renderer.heading=function({tokens,depth}){
   const content=this.parser.parseInline(tokens);
   const text=decodeText(content.replace(/<[^>]+>/g,''));
-  const base=(depth===2?semanticSectionTitle(text):text).toLowerCase().replace(/[^\p{L}\p{N}]+/gu,'-').replace(/^-|-$/g,'');
+  const semantic=depth===2?semanticSectionTitle(text):semanticSubheadingTitle(text,depth);
+  const base=semantic.toLowerCase().replace(/[^\p{L}\p{N}]+/gu,'-').replace(/^-|-$/g,'');
   let id=base,i=2;while(ids.has(id))id=base+'-'+i++;
   ids.add(id);headings.push({depth,id,text});
   return `<h${depth} id="${id}">${content}</h${depth}>\n`;
@@ -134,10 +136,12 @@ assertReaderHtml(body, 'generated chapter HTML', {allowKnowledgeIds:learning.sch
 assertRenderedMainHeadings(body, headings, 'generated chapter HTML');
 body=body.replace(/<table>/g,'<div class="table-wrap"><table>').replace(/<\/table>/g,'</table></div>');
 body=body.replace(/<p>(求职(?:算法总册 · 题型与 C\+\+ 模板|C\+\+实战总册[^<]*))<\/p>/,'<p class="subtitle">$1</p>');
-let nav='';
-for(const h of headings.filter(h=>h.depth===2||h.depth===3)){
-  nav+='<a class="'+(h.depth===2?'group':'topic')+'" href="#'+h.id+'">'+esc(h.text)+'</a>';
+const outline=[];
+for(const h of headings){
+  if(h.depth===2)outline.push({heading:h,children:[]});
+  else if([3,4].includes(h.depth)&&outline.length)outline.at(-1).children.push(h);
 }
+const nav=outline.map(({heading,children},index)=>'<details class="toc-section"'+(index===0?' open':'')+'><summary><a class="group" href="#'+heading.id+'">'+esc(heading.text)+'</a></summary><div class="toc-children">'+children.map(h=>'<a class="topic depth-'+h.depth+'" href="#'+h.id+'">'+esc(h.text)+'</a>').join('')+'</div></details>').join('');
 const css=`
 :root{color-scheme:light;--ink:#202b34;--heading:#193b51;--blue:#1e5b80;--line:#d9e1e7;--paper:#fff;--back:#f2f5f7}
 *{box-sizing:border-box}html{scroll-padding-top:85px}body{margin:0;background:var(--back);font-family:'Noto Sans SC','Microsoft YaHei','Segoe UI',sans-serif;font-size:17px;line-height:1.78;color:var(--ink);font-weight:400}
@@ -149,6 +153,7 @@ a{color:var(--blue);text-underline-offset:3px;text-decoration-thickness:1px}a:ho
 .toc-title{font-size:13px;color:#526474;letter-spacing:.08em;margin:0 0 13px 10px;font-weight:600}
 .toc a{display:block;line-height:1.6;text-decoration:none;border-left:2px solid transparent;border-radius:0 3px 3px 0;padding:5px 8px 5px 11px;color:#445766;font-size:13px}
 .toc a.group{font-weight:600;color:#203f55;font-size:14px;margin-top:15px}.toc a.group:first-child{margin-top:0}.toc a.topic{padding-left:20px}.toc a:hover{background:#e5edf3}.toc a.active{color:#104d77;background:#e2ecf3;border-left-color:#2b688e;font-weight:600}
+.toc-section{margin:0 0 8px;border:1px solid #d9e1e7;border-radius:2px}.toc-section>summary{display:flex;align-items:center;gap:4px;cursor:pointer;list-style:none;background:#edf3f8;padding-right:7px}.toc-section>summary::-webkit-details-marker{display:none}.toc-section>summary:after{content:'▸';margin-left:auto;color:#365e80}.toc-section[open]>summary:after{content:'▾'}.toc-section>summary a.group{flex:1;min-height:36px;margin:0;padding:7px 8px}.toc-children{border-top:1px solid #d9e1e7}.toc a.topic.depth-4{padding-left:32px;font-size:12px}
 main{min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:36px 42px 42px;box-shadow:0 2px 7px #1f405006}
 h1,h2,h3,h4{color:var(--heading);line-height:1.45;font-weight:600;scroll-margin-top:85px}h1{font-size:32px;margin:0 0 8px}h2{font-size:25px;margin:48px 0 21px;text-wrap:balance;overflow-wrap:break-word;padding-top:30px;border-top:1px solid var(--line)}h2:first-of-type{margin-top:30px;padding-top:0;border-top:0}h3{font-size:20px;margin:34px 0 13px}h4{font-size:17px;margin:25px 0 12px;color:#253f52}
 p{margin:13px 0 17px}.subtitle{font-size:14px;color:#526878;margin:0 0 24px}strong{font-weight:600}li{margin:5px 0}main p,main li,main h2,main h3,main h4{overflow-wrap:anywhere}
@@ -165,10 +170,11 @@ pre code{font:inherit;color:inherit;background:transparent;padding:0;border-radi
 @media print{.topbar,.sidebar,.mobile-toc{display:none}.layout{display:block;max-width:none;margin:0;padding:0}main{border:0;box-shadow:none;padding:0}body{background:white;color:black;font-size:10.5pt;line-height:1.65}h1{font-size:22pt}h2{font-size:16pt}h3{font-size:13pt}h1,h2,h3,h4{break-after:avoid}pre{white-space:pre-wrap;overflow:visible;break-inside:avoid;font-size:8.5pt}pre code{white-space:pre-wrap}table{font-size:9pt}a{color:inherit}.table-wrap{overflow:visible}}
 `;
 const script=`
-const links=[...document.querySelectorAll('.sidebar a')];
-const targets=links.map(a=>document.getElementById(decodeURIComponent(a.hash.slice(1)))) .filter(Boolean);
+const links=[...document.querySelectorAll('.toc a')];
+const targets=[...new Set(links.map(a=>document.getElementById(decodeURIComponent(a.hash.slice(1)))) .filter(Boolean))];
 let scheduled=false,last='';
-function mark(){scheduled=false;let current=targets[0];for(const t of targets){if(t.getBoundingClientRect().top<=115)current=t;else break;}if(!current||last===current.id)return;last=current.id;for(const a of links){const active=decodeURIComponent(a.hash.slice(1))===last;a.classList.toggle('active',active);if(active){a.setAttribute('aria-current','location');const s=a.closest('.sidebar'),p=s.getBoundingClientRect(),r=a.getBoundingClientRect();if(r.top<p.top+8)s.scrollTop+=r.top-p.top-8;else if(r.bottom>p.bottom-8)s.scrollTop+=r.bottom-p.bottom+8;}else a.removeAttribute('aria-current');}}
+function mark(){scheduled=false;let current=targets[0];for(const t of targets){if(t.getBoundingClientRect().top<=115)current=t;else break;}if(!current||last===current.id)return;last=current.id;for(const nav of document.querySelectorAll('.toc')){const match=[...nav.querySelectorAll('a')].find(a=>decodeURIComponent(a.hash.slice(1))===last),group=match?.closest('.toc-section');for(const old of nav.querySelectorAll('.toc-section[data-auto-open]'))if(old!==group){old.open=false;delete old.dataset.autoOpen;}if(group&&!group.open){group.open=true;group.dataset.autoOpen='true';}}for(const a of links){const active=decodeURIComponent(a.hash.slice(1))===last;a.classList.toggle('active',active);if(active){a.setAttribute('aria-current','location');const s=a.closest('.sidebar');if(s){const p=s.getBoundingClientRect(),r=a.getBoundingClientRect();if(r.top<p.top+8)s.scrollTop+=r.top-p.top-8;else if(r.bottom>p.bottom-8)s.scrollTop+=r.bottom-p.bottom+8;}}else a.removeAttribute('aria-current');}}
+document.querySelectorAll('.toc-section>summary').forEach(summary=>summary.addEventListener('click',event=>{if(!event.target.closest('a'))delete summary.parentElement.dataset.autoOpen;}));
 addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(mark)}},{passive:true});mark();
 document.querySelectorAll('.mobile-toc a').forEach(a=>a.addEventListener('click',()=>{document.querySelector('.mobile-toc').open=false}));
 const knowledgeData=${JSON.stringify(Object.fromEntries(knowledgeRecords.map(record=>[record.id,{title:record.title,html:marked.parse(expandKnowledgeReferences(record.body,knowledge),{gfm:true})}]))).replaceAll('<','\\u003c')};

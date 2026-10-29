@@ -14,6 +14,8 @@ job在 `work/jobs/<id>/`，不可重复init覆盖；状态返回真实缺失/过
 
 ## 内容生产与检查
 
+日期登记按`CHAPTER_DATES.md`：新增可见章在首次准备正式出版时冻结北京时间章节日期，写入`carrier/chapter-calendar.json`，之后重建/重试/修订保留；同日可多章。不要改原出版清单或教材身份来补日期。日期文件参与准备包输入和构建校验；历史日期只有真实依据才补登。
+
 正文之前先执行与发布同等有效的RESEARCH_FACILITIES，研究状态不依赖课程已经有作者稿或通过结构校验。已有任务中开启研究设施，不重复init覆盖：
 
 ```sh
@@ -53,7 +55,25 @@ study-status、check-handoff与新seal默认检查当前基座，所以历史章
 
 作者随后在章合同以 `researchHandoff` 保存输出的交接path，承接其中的领域、分支、材料和题型计划；章节内容仍按CHAPTER_STANDARD逐项编纂和采用。内部知识身份不外显给读者；引用/首次内嵌语法见CONTENT_MODEL。研究完成与最终内容审阅是两个阶段，后者仍需在当前全部生产输入上留证。
 
-先按CHAPTER_STANDARD/QUALITY_WORKFLOW在 `catalog/chapters.json` 登记每章合同与审阅路径。新合同schema2保存思想机制与主要分支、真实材料归并证据、理论前置和正式题型节；每节有完整链条位置、真实双实现层次、依赖及1–5份在研究阶段取得且正文可见的练习。前置/题型须对应实际H2，机制/证明从属于题型。已有承诺用真实显式锚点定位，未完保留open/gap。结构可以有效而质量未通过；旧schema只供恢复，不得删除登记或追认旧通过来关闭门禁。
+### 小标题候选与协调
+
+作者先按实际内容写自然的H3/H4候选，每个小标题前使用稳定显式锚点。候选阶段先不查标题管理表，保存本次独立结果：
+
+```sh
+node scripts/manage-subheadings.mjs snapshot content/<unit>/chapter.authoring.json work/<task>/subheading-candidates-v1.json
+```
+
+snapshot只扫描当前作者源的真实小标题，不读取类型管理文件，也不自动决定标题职责；输出文件不覆盖。快照固定字节能够核查保存后的变化，不能仅凭命令运行声称Agent已独立判断。候选若实质变化，保存新快照并重新协调受影响内容，不倒写旧快照。
+
+之后读取`catalog/subheadings.json`，逐项语义查找同义、可涵盖或更适配项。复用时在章节协调文件登记`action:reuse`及实际理由；确无适合才完善管理项并记录`action:new`，不要因题目、算法或API名称不同就新建类型。编辑`content/<unit>/chapter.subheadings.json`，绑定候选快照及所用类型指纹，保存各锚点的typeId、subject、depth、reason和实际implementationIds，并在composition的`subheadings`字段引用它。具体字段见CONTENT_MODEL。
+
+```sh
+node scripts/manage-subheadings.mjs check content/<unit>/chapter.authoring.json
+```
+
+check与正式构建核完整对应和规范生成；通过不代替语义匹配、实现归属及连续阅读审阅。管理表无关扩充不重做旧章研究，修改已用类型或作者候选后须更新受影响协调与审阅。管理表、候选和协调文件不随读件公开；Hcode/Scode及其他规范前缀由同一构建路径生成，不能在PWA里另建一份名称表。
+
+先按CHAPTER_STANDARD/QUALITY_WORKFLOW在 `catalog/chapters.json` 登记每章合同与审阅路径。当前正式合同schema3保存思想机制与主要分支、真实材料归并证据、理论前置和正式题型节，并由`researchTypeIds`承接研究对象；每节有完整链条位置、真实双实现层次、依赖及1–5份在研究阶段取得且正文可见的练习。前置/题型须对应实际H2，机制/证明从属于题型。已有承诺用真实显式锚点定位，未完保留open/gap。结构可以有效而质量未通过；旧schema只供恢复，不得删除登记或追认旧通过来关闭门禁。
 
 ```sh
 npm run build:content

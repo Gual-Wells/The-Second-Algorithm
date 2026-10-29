@@ -51,6 +51,7 @@ const put = (env, cookie, key, value, baseRevision, requestOrigin) => call(env, 
 test('anonymous access cannot retrieve library, source, state or unknown assets', async () => {
   const env = environment();
   for (const path of ['/api/library', '/api/state', '/library/catalog.json', '/library/source.cpp',
+    '/library/knowledge/Q000001/private.json',
     '/%6cibrary/catalog.json', '/library%2Fsource.cpp', '/unknown.json', '/_worker.js']) {
     assert.equal((await call(env, path)).status, 401, path);
   }

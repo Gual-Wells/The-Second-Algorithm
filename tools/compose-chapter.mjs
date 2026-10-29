@@ -157,9 +157,20 @@ export async function composeDocument(root, descriptor) {
     if (codePaths.has(relative)) throw new Error('Duplicate composition code source: ' + relative);
     codePaths.add(relative);
   }
-  const fragments = new Map();
+  const sourceTexts = new Map(), codeTexts = new Map();
   for (const relative of authorSources) {
-    const blocks = chapterFragments(await read(relative, '.source.md'), relative);
+    sourceTexts.set(relative, await read(relative, '.source.md'));
+  }
+  for (const relative of codePaths) codeTexts.set(relative, await read(relative, '.cpp'));
+  const { applySubheadingPlan } = await import('./subheadings.mjs');
+  const subheadings = await applySubheadingPlan(root, descriptor, manifest, sourceTexts, codeTexts);
+  if (subheadings) Object.assign(dependencies, subheadings.dependencies);
+  const subheadingHelper = await fs.realpath(path.join(root, 'tools/subheadings.mjs'));
+  if (!inside(await fs.realpath(path.join(root, 'tools')), subheadingHelper)) throw new Error('Subheading helper escapes tools/');
+  dependencies['tools/subheadings.mjs'] = hash(await fs.readFile(subheadingHelper));
+  const fragments = new Map();
+  for (const [relative, text] of subheadings?.sources ?? sourceTexts) {
+    const blocks = chapterFragments(text, relative);
     for (const [anchor, block] of blocks) fragments.set(relative + '#' + anchor, block);
   }
   const ordered = selections.map((entry, index) => {
@@ -172,8 +183,7 @@ export async function composeDocument(root, descriptor) {
   });
   const omitted = [...fragments.keys()].filter(identity => !selected.has(identity));
   if (omitted.length) throw new Error('Unselected H2 composition fragments: ' + omitted.join(', '));
-  const code = [];
-  for (const relative of codePaths) code.push(await read(relative, '.cpp'));
+  const code = [...codeTexts.values()];
   const helper = 'tools/compose-chapter.mjs';
   const helperPath = await fs.realpath(path.join(root, helper));
   if (!inside(await fs.realpath(path.join(root, 'tools')), helperPath)) throw new Error('Composition helper escapes tools/');
@@ -184,5 +194,6 @@ export async function composeDocument(root, descriptor) {
     // bytes within each canonical C++ source are never rewritten.
     source: code.map(text => text + (text.endsWith('\n') ? '' : '\n')).join('\n'),
     dependencies: Object.fromEntries(Object.entries(dependencies).sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0)),
+    ...(subheadings ? { subheadings: { registryEntries: subheadings.registryEntries, headings: subheadings.headings } } : {}),
   };
 }

@@ -81,6 +81,21 @@ async function fixture({ questionHeading = 'Why a range?', questionTitle = 'Why 
   return { root, descriptor, collection, manifest, source, cpp, markdown, html, builder, learning };
 }
 
+test('calendar metadata is independent of teaching content identity', async () => {
+  const data = await fixture();
+  try {
+    const registry = JSON.parse(await fs.readFile(path.join(data.root, 'carrier/publications.json'), 'utf8'));
+    const before = await readAuthority(data.root, data.descriptor);
+    await fs.writeFile(path.join(data.root, 'carrier/chapter-calendar.json'), JSON.stringify({schemaVersion:1,timeZone:'Asia/Shanghai',chapters:{'fixture-course':{date:'2026-10-28'}}}));
+    const result = await buildLibrary(data.root, path.join(data.root, '.local/calendar-output'), registry, 'a'.repeat(40), data.learning);
+    const after = await readAuthority(data.root, data.descriptor);
+    assert.equal(result.catalog.collections[0].date, '2026-10-28');
+    assert.equal(after.revision, before.revision);
+    assert.equal(after.markdown, before.markdown);
+    assert.equal(after.source, before.source);
+  } finally { await dispose(data.root); }
+});
+
 test('the current publication schema has one course sequence and no track or trial compatibility', () => {
   validatePublications(publications);
   assert.equal(publications.schemaVersion, 2);

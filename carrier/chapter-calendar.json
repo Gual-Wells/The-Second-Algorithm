@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "timeZone": "Asia/Shanghai",
+  "chapters": {
+    "chapter-01": {
+      "date": "2026-10-28",
+      "basis": "work/jobs/first-chapter-20261028/deployments/1793195153435.json"
+    }
+  }
+}

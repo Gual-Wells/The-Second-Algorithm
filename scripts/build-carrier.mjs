@@ -9,6 +9,7 @@ import cpp from 'highlight.js/lib/languages/cpp';
 import { readKnowledge, knowledgeTokens, expandKnowledgeReferences } from '../tools/knowledge.mjs';
 import { composeDocument, compositionPath, assertSectionNumbering } from '../tools/compose-chapter.mjs';
 import { assertReaderMarkdown, assertReaderHtml, assertReaderText, assertMainHeadings, assertRenderedMainHeadings, readerSourceView, assertReaderSource } from '../tools/reader-boundary.mjs';
+import { isChapterDate } from '../web/chapter-dates.js';
 
 hljs.registerLanguage('cpp', cpp);
 
@@ -78,6 +79,21 @@ export function validatePublications(publications) {
     collection.visibility !== 'hidden' && collection.documents.length))
     throw new Error('Withdrawn publication requires no published documents');
   return publications;
+}
+
+export function validateChapterCalendar(calendar, publications) {
+  if (calendar === null) return null; // Legacy snapshots keep unknown dates unknown.
+  if (calendar?.schemaVersion !== 1 || calendar.timeZone !== 'Asia/Shanghai'
+    || !calendar.chapters || typeof calendar.chapters !== 'object' || Array.isArray(calendar.chapters))
+    throw new Error('Unsupported chapter calendar');
+  for (const [id, row] of Object.entries(calendar.chapters)) {
+    if (!ID.test(id) || !isChapterDate(row?.date)) throw new Error('Chapter calendar requires a valid date: ' + id);
+  }
+  for (const collection of publications.collections) {
+    if (collection.kind === 'chapter' && collection.visibility !== 'hidden' && !calendar.chapters[collection.id])
+      throw new Error('Published chapter is missing its calendar date: ' + collection.id);
+  }
+  return calendar;
 }
 
 export function validateLearning(learning, publications) {
@@ -390,6 +406,10 @@ export function renderAuthority(authority, rewriteLink, knowledge = new Map()) {
 
 export async function buildLibrary(root, output, publications, gitRevision, learning) {
   validatePublications(publications);
+  let calendar = null;
+  try { calendar = JSON.parse(await fs.readFile(path.join(root, 'carrier/chapter-calendar.json'), 'utf8')); }
+  catch (error) { if (error.code !== 'ENOENT') throw error; }
+  validateChapterCalendar(calendar, publications);
   learning ??= JSON.parse(await fs.readFile(path.join(root, 'catalog/learning.json'), 'utf8'));
   validateLearning(learning, publications);
   const knowledge = await readKnowledge(root, learning);
@@ -413,6 +433,8 @@ export async function buildLibrary(root, output, publications, gitRevision, lear
     assertReaderText(collection.title, 'collection title');
     const item = { id: collection.id, kind: collection.kind, title: collection.title, documents: [] };
     if (collection.kind === 'chapter') item.chapterNumber = collection.chapterNumber;
+    const date = calendar?.chapters[collection.id]?.date;
+    if (isChapterDate(date)) item.date = date;
     for (const { authority, entry } of documents) {
       assertReaderText(authority.title, 'document title');
       assertReaderMarkdown(authority.markdown, authority.id + ' downloadable Markdown', {allowKnowledgeIds:learning.schemaVersion===1});
@@ -526,7 +548,9 @@ export async function buildLibrary(root, output, publications, gitRevision, lear
 }
 
 export function publicationIndex(catalog) {
-  return { state: catalog.state ?? 'active', version: catalog.version, questions: catalog.questions, collections: Object.fromEntries(catalog.collections.map(collection =>
+  return { state: catalog.state ?? 'active', version: catalog.version, questions: catalog.questions,
+    chapters: Object.fromEntries(catalog.collections.map(collection => [collection.id, { date: collection.date || null }])),
+    collections: Object.fromEntries(catalog.collections.map(collection =>
     [collection.id, Object.fromEntries(collection.documents.map(document => [document.id, document.revision]))])) };
 }
 

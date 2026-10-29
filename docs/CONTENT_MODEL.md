@@ -112,7 +112,7 @@ reading.units保留id/title/taskIds/locations，并声明：
 - `standardRole`：kind为algorithm/structure/support/shared-core，explanation说明真实替代职责，不虚构整题库解。
 - `exercises`：1–5项title/url，来自本节task.sourceUrls并在所属正文中有实际可见链接；同节不能重复URL。
 
-正文位置为`{document,anchor}`，只认真实显式锚点，排除注释/代码示例假锚点。schema3每章只有一个逻辑文档，一个前置H2，每个正式节恰有一个归属唯一的H2。前置先于正式节，entry可省略从前置派生，显式提供时也须指向前置；facets在自己题型范围内。章内主结构只有前置/正式节，selectionMap非空即拒绝，不能让四篇、作者分工、证明/支撑或章末地图抢占主目录。
+正文位置为`{document,anchor}`，只认真实显式锚点，排除注释/代码示例假锚点。schema3每章只有一个逻辑文档，一个前置H2，每个正式节恰有一个归属唯一的H2。前置先于正式节，entry可省略从前置派生，显式提供时也须指向前置；facets在自己题型范围内。章内主结构只有前置/正式节，selectionMap非空即拒绝，不能让四篇、作者分工、证明/支撑或章末地图抢占H2一级目录；真实节内H3/H4仍必须进入从属目录。
 
 作者H2与`reading.units[].title`保留纯语义标题。`compose-chapter`根据prelude/sections顺序，唯一生成`PRE、`及连续中文序号；手写序号和“前置节：”制作标签拒绝进入作者H2。当前schema3的已完成正文按实际前置/正式位置检查该前缀，正式节去前缀后须与合同语义title一致。构建及载体另核真实渲染H2序列；标题ID从去序号语义派生，原显式anchor保留，UI与下载不二次编号。编号、结构与身份通过不构成语义可读性认证。
 
@@ -141,6 +141,48 @@ learning.schemaVersion=2：
 source为实际`content/knowledge/<name>.md`独立知识源，一文件一权威，首行`# 语义标题`与登记一致。完整正文非空，内部ID不进入读者标题。prerequisites须存在且无环，sources为实际HTTP(S)来源；同一内容不能换ID重复登记。精确知识小节使用语义显式锚点，不把旧算法章节路径当知识身份。
 
 实现regions对应权威cpp的BEGIN/END，symbol在区域中真实定位，target的依赖闭包包含实现源，验证标准不早于实现。文本定位不证明调用覆盖；Agent须核测试驱动实际调用。quoted include、additionalSources、显式dependencies及defines支持必要多文件目标，不为简单题造复杂工程。
+
+## 二级标题管理与章节协调
+
+`catalog/subheadings.json`是全项目章正文小标题的唯一类型管理文件，管理章作者源中真实H3/H4；知识唯一源内部标题不从展开后正文截取并再次分类。schemaVersion为1，`entries`包含下列字段：
+
+| 字段 | 职责 |
+|---|---|
+| `id` | 稳定内部类型身份，不向读者展示 |
+| `prefix` | 最终标题的规范前缀；`hcode/scode`分别固定为`Hcode/Scode` |
+| `purpose` | 类型承担的内容职责，供人工语义协调 |
+| `boundary` | 适用边界及与近邻类型的区别，不按关键词自动归类 |
+| `levels` | 可采用的Markdown小标题层级，当前为3、4 |
+| `aliases` | 检索旧叫法和同义表达；别名不另外成为正式标题类型 |
+| `examples` | 展示职责与具体标题内容的结合，不是强制套用模板 |
+
+composition新增`subheadings`，指向`content/<unit>/chapter.subheadings.json`。协调文件schemaVersion为1：
+
+| 字段 | 职责 |
+|---|---|
+| `document` | 所属逻辑文档身份 |
+| `candidateSnapshot:{path,sha256}` | 先于查表协调保存的独立候选文件及其精确字节身份 |
+| `registryEntries` | 本章所用`typeId`到规范化管理项SHA256的映射，只绑定所用类型 |
+| `decisions[]` | 每个实际作者小标题的一项协调决定，不能漏项或重复 |
+| `decisions[].id` | 当前小标题的稳定显式锚点，与候选及作者源对应 |
+| `typeId/subject/depth` | 所用类型、本题具体语义及3或4的层级；最终标题统一生成为H3的`（n）prefix：subject`或H4的`（a）prefix：subject` |
+| `action/reason` | reuse或new及实际语义判断理由；new须有不能被已有项适配覆盖的依据 |
+| `implementationIds` | 当前实现讲解单元对应learning中的实现；非实现职责通常为空，不把每个代码区域机械变成一项标题 |
+| `reuses` | 可选的共享实现单元锚点数组，仅供Hcode/Scode使用；须有正文真实链接且引用无环，沿引用最终能到达实际代码 |
+
+作者源保留独立提出的自然小标题和前置显式锚点；候选快照由snapshot命令读取真实H3/H4而不查管理表，输出不可覆盖。协调在之后进行，规范名称从管理项与subject组合覆盖生成读者标题；同一共享格式器依真实H2/H3顺序生成局部序号，管理项的语义示例不替代正式格式规则，不把序号写回不可变候选。不能仅登记typeId却让多套可见叫法继续存在。候选快照、协调决定和used-entry指纹共同参与当前输入核对；文件身份能核变化，不自动认证独立性或语义适配。
+
+标题层级保留章内从属关系：读者一级对应H2，节内二级对应H3；变型或方法组下面的实现可用H4，不能跳过父级。目录必须消费这些真实层级，PRE/正式题型构成主层、H3/H4构成可直接定位的从属节点，不能继续过滤成只有H2的清单。原显式锚点保持稳定，正文、目录、搜索、Markdown和预览消费同一规范标题。实现标题归属一个讲解单元，可以包含多个片段及其就近解析；同题不同算法不能因归到Scode而省略方法差异。
+
+每正式节至少有一个`typeId:practice`且`depth:3`的独立练习单元，拥有真实显式锚点。通过H2区间和后续同级标题确定该单元范围，确认本节合同要求的1–5份原题URL实际位于其练习单元，不能只在本节其他段落找到链接便算满足。PRE不作强制练习检查；知识卡内部标题不属于章级协调或目录。
+
+Python的`learning._inspect`在核对装配依赖后，从实际章节协调决定派生内部`subheadingTypes`上下文，供章合同检查按真实类型与锚点定位练习范围。它不是新增手写登记或第二份类型权威；来源仍是已绑定的协调文件，且该内部上下文不投影到读者payload或目录。
+
+目录父子关系由同一成品的规范heading序列按深度与出现顺序派生，不另手写第二份标题、顺序或锚点。H2起一组，H3归最近H2，H4归同H2下最近H3；折叠状态、当前子单元和搜索状态是交互状态，不改变内容身份。可以生成导航所需的父节点字段，但不能把后台facet、管理ID或制作证据投成读者目录。前端不得丢弃受管理的H3/H4，父节展开、独立跳转和当前项定位须按实际长章检查。
+
+共享核心只刊印一次；没有自有代码的实现讨论单元须以`reuses`指向真实Hcode/Scode单元，并在该段正文提供可点击链接。引用可跨物理作者源，但须在同一逻辑读件内可达且无环，最终能定位实际代码。每项learning实现身份仍只在真实代码所属单元的`implementationIds`声明一次，引用者不重复登记；不能用一个空讨论单元或悬空链接代替完整实现。
+
+只为未使用类型新增条目不会改变本章的used-entry指纹，也不要求旧章重做算法研究。实际修改已用管理项时，需重新审查受影响决定并更新其指纹、生成件和当前审阅，不能直接换hash追认。管理类型的增补、重命名或归并必须保留真实使用关系；管理ID、候选、理由和内部路径不投影到读者payload/目录/搜索/下载。
 
 ## 知识作者语法与成品语义
 
@@ -172,7 +214,7 @@ python -m second_algorithm course verify --compiler <已有编译器>
 
 输入快照覆盖登记、当前作者/源码/生成件、知识源、材料/合同/审阅依赖、实际实现/target闭包、来源池/书目、有效AGENTS/protocol/model及reader/worker/builder/验证/依赖锁/迁移等生产输入，排除node_modules/.local。系统头与宏include不能自动推导，须按实际声明与工具链判断。
 
-`chapter-inputs`排除审阅文件自身避免自引用；最终course_snapshot/发布包仍固定其字节。修改知识、正文、代码、规则或工具使旧证据过期，不能只换hash冒充重新审过。当前是全课程保守失效，不是细粒度影响分析。
+`chapter-inputs`排除审阅文件自身避免自引用；最终course_snapshot/发布包仍固定其字节。修改知识、正文、代码、规则或工具使旧证据过期，不能只换hash冒充重新审过。二级标题管理项按实际使用投影固定依赖，避免无关类型扩张使老章失效；其余输入仍按当前保守快照处理，不能据此宣称已具备全项目细粒度影响分析。
 
 审阅文件仍为schemaVersion1；针对schema3章合同增加必需`readerBoundary`对象：`outcome`仅为pass/gap，`findings`为非空实际发现，`locations`为本章真实`{document,anchor}`数组。quality要求pass与至少一个有效正文定位；字段缺失、gap或无效位置都不通过。审阅须覆盖正文、知识、可见目录/搜索、代码注释和下载件；定位可指它们在本章的实际承载处，不能用work记录或虚构生成锚点充数。该字段沿用review的当前inputHash及最终字节绑定，是人工语义审阅证据，不是Python自动认定无污染。结构validate可在无review时检查施工稿，旧schema历史读取不加此要求。
 

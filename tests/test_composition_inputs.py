@@ -22,12 +22,13 @@ class CompositionInputsTest(unittest.TestCase):
                          prelude=dict(source='content/unit/author.source.md', anchor='prelude'),
                          sections=[dict(id='type', source='content/unit/author.source.md', anchor='type')])
         self.write('tools/compose-chapter.mjs', '// current composer\n')
+        self.write('tools/subheadings.mjs', '// current subheading projection\n')
         self.write('content/unit/author.source.md', '<a id="prelude"></a>\n## Theory\n\n<a id="type"></a>\n## Type\n')
         self.write('content/unit/author.cpp', '// unique author code\n')
         self.write('content/unit/chapter.source.md', '# Example\n\n## Theory\n\n## Type\n')
         self.write('content/unit/chapter.cpp', '// generated delivery code\n')
         self.save_plan()
-        names = [self.doc['composition'], 'tools/compose-chapter.mjs', *self.plan['sourceFiles'], *self.plan['codeSources']]
+        names = [self.doc['composition'], 'tools/compose-chapter.mjs', 'tools/subheadings.mjs', *self.plan['sourceFiles'], *self.plan['codeSources']]
         self.build = dict(authoringDependencies={n: digest((self.root / n).read_bytes()) for n in names},
                           sourceSha256=digest((self.root / 'content/unit/chapter.source.md').read_bytes()),
                           codeSha256=digest((self.root / 'content/unit/chapter.cpp').read_bytes()))

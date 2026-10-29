@@ -3,13 +3,17 @@
 <a id="prelude"></a>
 ## PRE、二分的基本方法
 
+<a id="prelude-foundation"></a>
+### （1）概念：从重复值查找认识二分
+
 在有序数组 `[2, 4, 4, 4, 7, 9]` 中查找 4，找到中间的一个 4，就能回答“是否存在”。如果要求第一个 4 的位置，事情就不同了：命中以后仍要继续向左查找。
 
 排序在这里提供了缩小范围的依据。中间值小于 4，它及左边的值都不可能满足要求；中间值已经大于或等于 4，右边即使还有 4，也不可能更早。每次比较后，我们都能解释为什么可以舍去一部分位置，而不是仅凭模板决定向左还是向右。
 
 二分的共同方法正是这样：**确定还要搜索的范围，取得一次足以缩小范围的判断，并保证所需答案没有被舍去。** 当每次能舍去约一半候选时，搜索次数才是对数级。后面的题目会把搜索对象从数组位置扩展到容量、时间、第 k 小的数值、跳跃距离和惩罚参数；核心仍是先找清缩小范围的理由。
 
-### 从一次查找建立边界
+<a id="boundary-subheading-01"></a>
+### （2）推导：从一次查找建立边界
 
 先把“找到第一个 4”稍作推广：寻找第一个大于或等于给定值的位置。这样，即使给定值不在数组中，也能得到它的插入位置。
 
@@ -19,7 +23,8 @@
 
 这里有两个值得保留的细节。遇到相等值时，不能直接结束，因为更早的位置仍可能符合要求；搜索结束也不一定得到一个可访问的元素，返回 `n` 表示整个数组都不满足条件。若要找“第一个严格大于”，只需重新划定相等值属于哪一侧。成员判断、计数、首尾位置和前驱，都可以从这两个边界得到，正式节会分别展开。
 
-### 答案还没存下来，也可以搜索
+<a id="boundary-subheading-02"></a>
+### （3）建模：将优化目标转成可行性边界
 
 考虑把 `[7, 2, 5, 10, 8]` 分成两个非空连续段，希望最大段和尽量小。我们无法直接比较某个数组元素来决定答案，但可以先试一个容量：是否存在一种划分，让每段之和都不超过它？
 
@@ -29,7 +34,8 @@
 
 “最大化最小距离”“完成目标产量所需的最短时间”“边权阈值下是否连通”，都是类似的转换。不同题目真正不同的部分，往往是一次判定怎样完成，以及它为什么正确。
 
-### 不要把不同的缩小范围理由混在一起
+<a id="boundary-subheading-03"></a>
+### （4）边界：区分单调分界、结构存在性与异号夹逼
 
 前两类问题都可以把候选分成连续的两部分：不满足条件的一段，接着是满足条件的一段。通常所说的单调判定，指的就是这种分界。
 
@@ -39,15 +45,23 @@
 
 因此，写二分之前，先说明自己保留答案的理由：是有序边界、结构中的存在性，还是连续函数的异号夹逼。它决定了端点能否丢弃、相等如何处理，以及何时可以结束。
 
-### 将方法落实到代码和复杂度
+<a id="prelude-search-contract"></a>
+### （5）工程：实现前确定搜索范围与终止方式
 
 实现时，先确定搜索的是位置、数值还是某个参数，并找出包含答案的初始范围。没有解时如何返回、最大合法查询位置在哪里，也要同时确定。寻找最后一个可行整数时，如果更新采用 `lo = mid`，中点须向上取整，否则两端相邻时可能不再前进；未知上界则需要先扩大范围，直到建立可搜索的端点或达到查询上限。
 
+<a id="boundary-subheading-04"></a>
+### （6）复杂度：搜索代价与判定代价
+
 复杂度也要把判定计算在内。若数值搜索范围宽为 W，二分通常需要 `O(log W)` 次判定；一次判定要扫描 n 个元素，总成本就是 `O(n log W)`，还应另加预处理。判定若包含图搜索、匹配或数据结构查询，就代入它们各自的成本。不能看到外层用了二分，就把整题写成对数复杂度。
+
+<a id="prelude-numeric-choices"></a>
+### （7）工程：整数与浮点搜索的表示限制
 
 同样，整数中间式可能比最终答案大，乘积、差值与计数要分别检查类型范围；示例中的 `i64` 表示有符号64位整数。浮点夹逼则需要考虑舍入、累加误差和中点停滞，固定迭代次数只是在给定范围与输出精度下的实现选择。相关细节会放在实际需要的题型旁讲解。
 
-### 本章的几条学习线索
+<a id="boundary-subheading-05"></a>
+### （8）导读：本章的问题版图与学习线索
 
 本章先从[有序数据的边界](#ordered-boundaries)出发，逐步处理访问受限、下标与值的关系、旋转、配对和局部峰。重点是从数据结构中找出可舍去的范围。
 
@@ -63,6 +77,9 @@
 <a id="ordered-boundaries"></a>
 ## 一、有序数据的边界、计数与前驱
 
+<a id="ordered-boundaries-foundation"></a>
+### （1）推导：用左右边界表达计数与前驱
+
 在有序数组中，找到一个等于目标的元素，未必就完成了查找。例如数组 `[1,2,2,2,4]` 中，目标 `2` 出现了三次；若要统计次数，就需要找到这段相等元素的两端。
 
 设数组 `a` 非降排列，查询值为 `key`。记 `L` 为第一个满足 `a[i]>=key` 的位置，`R` 为第一个满足 `a[i]>key` 的位置。于是全部相等项恰好位于半开区间 `[L,R)`，数量是 `R-L`。上例得到 `L=1、R=4`；若 `L=R`，则目标不存在。插入位置、首尾位置和计数，都可以由这两个边界得到。
@@ -70,7 +87,7 @@
 前驱也只是边界的另一种用法：不大于 `key` 的最后一个值位于 `R-1`，严格小于 `key` 的最后一个值位于 `L-1`。只有相应边界大于 `0` 时，前驱才存在。
 
 <a id="ordered-boundaries-manual"></a>
-### 手写边界查找
+### （2）Hcode：手写边界查找
 
 两次搜索的区别集中在相等时如何处理。找 `L` 时，相等元素本身仍可能是答案，继续向左定位；找 `R` 时，相等元素都应归入左侧，继续向右定位。
 
@@ -109,11 +126,29 @@ std::optional<int> predecessor_manual(const std::vector<int>& a, int key) {
 
 若题目要求闭区间首尾位置，只在返回前把非空的 `[L,R)` 转成 `[L,R-1]`；不存在时再输出题定的 `[-1,-1]`。查找过程中保持同一种半开区间表示，边界情况更容易统一。
 
-### 变型：查询指定时刻之前的最后一条记录
+<a id="ordered-boundaries-library"></a>
+### （3）Scode：用标准库表达同一组边界
+
+```cpp
+std::pair<std::size_t, std::size_t>
+equal_standard(const std::vector<int>& a, int key) {
+    const auto range = std::equal_range(a.begin(), a.end(), key);
+    return {static_cast<std::size_t>(range.first - a.begin()),
+            static_cast<std::size_t>(range.second - a.begin())};
+}
+```
+
+`equal_range` 返回一对迭代器，分别对应 `L` 与 `R`，不是两个元素值。需要下标或次数时，在确认迭代器所属范围后再作差。
+
+<a id="ordered-time-variant"></a>
+### （4）变型：查询指定时刻之前的最后一条记录
 
 对每个键，保存一份按时间严格递增的 `TimedValue` 序列。查询时刻为 `query`，要求返回最后一条满足 `time<=query` 的记录；若查询早于所有记录，则返回空值。
 
 这仍然是前驱查询：先找第一个 `time>query` 的位置，再退一格。例如记录时间为 `[2,5,9]`，查询 `7` 时上界落在 `9`，所以应返回时刻 `5` 的记录；查询 `1` 时，上界就是开头，没有可返回的过去值。这里不寻找绝对时间距离最近的记录。
+
+<a id="ordered-time-manual"></a>
+#### （a）Hcode：手写时间前驱查找
 
 ```cpp
 struct TimedValue { int time; std::string value; };
@@ -132,21 +167,8 @@ std::optional<std::string> time_manual(const std::vector<TimedValue>& a, int que
 
 外层散列表负责找到对应键的历史序列，内层函数负责时间边界。该实现依赖写入时间递增；若允许乱序写入，就需要维护有序位置，简单追加不再足够。
 
-<a id="ordered-boundaries-library"></a>
-### 用标准库表达同一组边界
-
-```cpp
-std::pair<std::size_t, std::size_t>
-equal_standard(const std::vector<int>& a, int key) {
-    const auto range = std::equal_range(a.begin(), a.end(), key);
-    return {static_cast<std::size_t>(range.first - a.begin()),
-            static_cast<std::size_t>(range.second - a.begin())};
-}
-```
-
-`equal_range` 返回一对迭代器，分别对应 `L` 与 `R`，不是两个元素值。需要下标或次数时，在确认迭代器所属范围后再作差。
-
-时间记录的查找可以写成：
+<a id="ordered-time-standard"></a>
+#### （b）Scode：使用 upper_bound 查找时间前驱
 
 ```cpp
 std::optional<std::string> time_standard(const std::vector<TimedValue>& a, int query) {
@@ -161,6 +183,8 @@ std::optional<std::string> time_standard(const std::vector<TimedValue>& a, int q
 此处 `upper_bound` 的比较器按 `(查询值, 元素)` 接收参数；常见 `lower_bound` 重载使用的 `(元素, 查询值)` 方向不能直接照搬。先检查返回值是否等于 `begin()`，再调用 `prev()`，空历史也就自然得到空值。
 
 <a id="ordered-boundaries-engineering"></a>
+### （5）工程：返回值所有权与比较规则
+
 在 `vector` 上，边界定位需要 `O(log n)` 时间和 `O(1)` 额外空间。时间记录接口返回字符串副本，还要计入 `O(|value|)` 的复制时间和结果空间。副本独立拥有字符，原历史销毁后仍可读取；若改成返回索引或引用，则必须保证原容器继续存活，见<a class="knowledge-link" href="#knowledge-Q100005" data-knowledge="Q100005">借用参数与结果所有权</a>。
 
 库边界查找依据比较器定义的顺序与等价关系，不一定等同于 `operator==`，详见<a class="knowledge-link" href="#knowledge-Q100001" data-knowledge="Q100001">标准库二分的使用条件</a>。
@@ -183,11 +207,17 @@ std::optional<std::string> time_standard(const std::vector<TimedValue>& a, int q
 </aside>
 
 
-练习：[首尾位置](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/)、[插入位置](https://leetcode.com/problems/search-insert-position/)、[时间键值存储](https://leetcode.com/problems/time-based-key-value-store/)。
+<a id="ordered-boundaries-practice"></a>
+### （6）练习：有序边界与时间记录
+
+[首尾位置](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/)、[插入位置](https://leetcode.com/problems/search-insert-position/)、[时间键值存储](https://leetcode.com/problems/time-based-key-value-store/)。
 
 
 <a id="predicate-access"></a>
 ## 二、访问受限或上界未知时的查找
+
+<a id="predicate-access-foundation"></a>
+### （1）建模：把接口返回值转成可搜索的分界
 
 有些问题只提供查询接口，不提供可直接遍历的数组。例如已知共有 `n` 个版本，只能调用接口判断某一版本是否损坏，并且一旦损坏，后续版本也都损坏。要找第一个坏版本，实际搜索的是 `false…false,true…true` 的分界。
 
@@ -198,7 +228,7 @@ std::optional<std::string> time_standard(const std::vector<TimedValue>& a, int q
 “未知上界”仍须有查询范围。参数 `cap` 表示允许查询的最大下标；若到达 `cap` 仍不满足，只能报告此范围内无解，不能据此断言更远处也没有答案。
 
 <a id="predicate-access-manual"></a>
-### 倍增建立上界，再收缩区间
+### （2）Hcode：倍增建立上界，再收缩区间
 
 ```cpp
 template<class Predicate>
@@ -239,7 +269,7 @@ first_true_unknown(std::uint64_t cap, Predicate yes) {
 若答案下标为 `p`，倍增与二分合计需要 `O(log(p+1))` 次探测；若范围内无解，则需要 `O(log(cap+1))` 次，额外空间都是 `O(1)`。已经知道上界时直接二分即可；是否缓存远端查询结果，应由实际重复访问情况决定。
 
 <a id="predicate-access-library"></a>
-### 用访问器表示越界
+### （3）Scode：用访问器表示越界
 
 C++17没有直接遍历无界整数域的标准查找函数。下面仍保留同一搜索过程，只用 `vector::at` 与 `optional` 表示“取到值”或“到达数据末尾”。
 
@@ -266,6 +296,8 @@ find_unknown_at(const std::vector<int>& hidden, int key, std::uint64_t cap) {
 示例要求隐藏序列 `hidden` 非降。寻找第一个 `>=key` 的位置时，数据末尾可看作正无穷，从而保持判定方向；找到位置后，还要检查对应值是否真的等于 `key`。访问器负责取值与报告域结束，倍增和二分负责定位。
 
 <a id="predicate-access-engineering"></a>
+### （4）工程：域结束、接口错误与查询状态
+
 真实接口可能分别用状态码、异常或空值表示失败。只有接口约定的越界才能解释为域结束；内存不足、权限错误或I/O失败应继续作为错误处理。判定函数在一次搜索中也必须保持含义不变，不能让捕获的 `key` 或外部版本状态中途变化，见<a class="knowledge-link" href="#knowledge-Q100003" data-knowledge="Q100003">判定器与lambda捕获</a>。
 
 交互题还需按题目协议刷新输出、处理结束响应；写入换行符本身不保证 `flush`。
@@ -290,18 +322,24 @@ find_unknown_at(const std::vector<int>& hidden, int key, std::uint64_t cap) {
 </aside>
 
 
-练习：[首次坏版本](https://leetcode.com/problems/first-bad-version/)。
+<a id="predicate-access-practice"></a>
+### （5）练习：查询接口中的首次满足位置
+
+[首次坏版本](https://leetcode.com/problems/first-bad-version/)。
 
 
 <a id="transformed-index"></a>
 ## 三、固定点与缺失数：利用值和下标的关系
+
+<a id="transformed-index-foundation"></a>
+### （1）推导：由值与下标的差得到固定点边界
 
 给定严格递增的整数数组，寻找任意一个满足 `a[i]=i` 的位置，找不到则返回空值。这里没有预先给定的查询键，但可以把值与下标一起考虑。
 
 严格递增的整数至少相差 `1`，所以 `a[i+1]>=a[i]+1`，进而有 `a[i+1]-(i+1)>=a[i]-i`。也就是说，差值 `a[i]-i` 非降。先找第一个满足 `a[i]>=i` 的位置，再检查是否相等，便能确定固定点。差值不一定严格递增，例如 `[0,1,2]` 的差值全部为 `0`。
 
 <a id="transformed-index-manual"></a>
-### 严格递增时查找差值边界
+### （2）Hcode：严格递增时查找差值边界
 
 ```cpp
 std::optional<std::size_t> fixed_distinct(const std::vector<int>& a) {
@@ -319,11 +357,15 @@ std::optional<std::size_t> fixed_distinct(const std::vector<int>& a) {
 
 实现直接比较提升到宽类型后的数组值与下标，避免在窄类型中先相减。它只返回一个固定点；若要返回全部固定点，可继续对非降差值的零区间寻找左右边界。
 
-### 允许重复时，改为两侧剪枝
+<a id="fixed-duplicates-variant"></a>
+### （3）变型：允许重复值时的固定点查找
 
 重复值会破坏差值的单调性。例如相邻两个值都为 `2`，下标却增加了 `1`，差值就会下降，因此不能继续沿用前面的单边二分。
 
 排序仍能排除一部分位置。设中点为 `m`、中点值为 `v`：在中点左侧，若下标 `i>v`，则 `a[i]<=v<i`，不可能是固定点；在中点右侧，若 `i<v`，则 `a[i]>=v>i`，同样不可能。检查完中点后，只需继续搜索 `[lo,min(m-1,v)]` 与 `[max(m+1,v),hi]`。
+
+<a id="fixed-duplicates-manual"></a>
+#### （a）Hcode：按中点值剪枝并搜索两侧
 
 ```cpp
 std::optional<std::size_t>
@@ -345,11 +387,15 @@ std::optional<std::size_t> fixed_duplicates(const std::vector<int>& a) {
 
 此时两侧都可能继续搜索，最坏时间为 `O(n)`；每个子区间仍至多为原区间的一半，递归栈深为 `O(log n)`。
 
-### 变型：第 k 个缺失正整数
+<a id="missing-positive-variant"></a>
+### （4）变型：第 k 个缺失正整数
 
 现在要求数组由严格递增的正整数组成。到数值 `a[i]` 为止，共有 `a[i]` 个正整数，其中 `i+1` 个已经出现在数组中，所以缺失数量是 `a[i]-i-1`。这个数量随下标非降。
 
 令 `p` 为缺失数量首次达到 `k` 的位置。第 `k` 个缺失值之前恰有 `p` 个数组元素，因而答案为 `k+p`。例如数组 `[2,3,4,7,11]`、`k=5` 时，`p=4`，答案是 `9`。若 `p=n`，答案位于数组尾部之后；空数组则直接返回 `k`。
+
+<a id="missing-positive-manual"></a>
+#### （a）Hcode：按缺失数量寻找边界
 
 ```cpp
 std::int64_t kth_missing_manual(const std::vector<int>& a, std::int64_t k) {
@@ -368,7 +414,7 @@ std::int64_t kth_missing_manual(const std::vector<int>& a, std::int64_t k) {
 严格递增时，固定点和缺失查询都只需 `O(log n)` 时间、`O(1)` 额外空间。缺失公式计算的是不同的已出现值；若输入允许重复，须先去重或另行统计不同值的数量。
 
 <a id="transformed-index-library"></a>
-### 预先构造差值表，再用库查找
+#### （b）Scode：预先构造缺失数量表，再用库查找
 
 ```cpp
 std::int64_t kth_missing_precomputed(const std::vector<int>& a, std::int64_t k) {
@@ -385,15 +431,23 @@ std::int64_t kth_missing_precomputed(const std::vector<int>& a, std::int64_t k) 
 这里先把全部缺失数量存入 `gap`，再用 `lower_bound` 查找。因此一次完整调用仍需 `O(n)` 时间和空间，并不优于直接计算差值的单次查询。若同一数组要回答许多查询，可保留这张表，使之后每次查找只需 `O(log n)`。
 
 <a id="transformed-index-engineering"></a>
+### （5）工程：固定点与缺失查询的类型及返回约定
+
 固定点递归要求容器长度能用 `ptrdiff_t` 表示；缺失查询要求 `k>0`，且 `n+k` 能用 `int64_t` 表示。应先转换类型再作差，见<a class="knowledge-link" href="#knowledge-Q100002" data-knowledge="Q100002">整数运算与溢出</a>。
 
 重复值版本返回任意固定点。它先检查中点，再递归左侧，不能因此保证返回最左固定点。
 
-练习：[第k个缺失正整数](https://leetcode.com/problems/kth-missing-positive-number/)。
+<a id="transformed-index-practice"></a>
+### （6）练习：第 k 个缺失正整数
+
+[第k个缺失正整数](https://leetcode.com/problems/kth-missing-positive-number/)。
 
 
 <a id="rotated-search"></a>
 ## 四、旋转有序数组的查找与最小值
+
+<a id="rotated-search-foundation"></a>
+### （1）推导：从有序半区与下降切点定位答案
 
 把一个非降序列切开，再交换前后两段，就得到旋转序列。例如 `[1,2,3,4,5,6]` 可变成 `[4,5,6,1,2,3]`。它不再整体有序，但两段内部仍有序，下降处连接着最小值。
 
@@ -402,7 +456,7 @@ std::int64_t kth_missing_precomputed(const std::vector<int>& a, std::int64_t k) 
 成员查找则先识别哪一半有序，再判断目标值是否位于那一半的值域中。若相等使方向无法判断，同样要先缩去无法提供信息的重复端点。
 
 <a id="rotated-search-manual"></a>
-### 依据有序半区更新范围
+### （2）Hcode：依据有序半区更新范围
 
 ```cpp
 std::optional<int> rotated_min_manual(const std::vector<int>& a) {
@@ -439,7 +493,7 @@ bool rotated_member_manual(const std::vector<int>& a, int key) {
 成员函数只有在确认中点不等于 `key` 后才执行相等缩边，因此不会删掉最后一个匹配。空输入分别返回“无最小值”和“不存在”。
 
 <a id="rotated-search-library"></a>
-### 先找出有序分段，再调用库查找
+### （3）Scode：先找出有序分段，再调用库查找
 
 ```cpp
 bool rotated_member_standard(const std::vector<int>& a, int key) {
@@ -459,13 +513,21 @@ std::optional<int> rotated_min_standard(const std::vector<int>& a) {
 整个旋转数组通常不满足 `binary_search` 要求的分区条件，不能省略分段就直接调用。
 
 <a id="rotated-search-engineering"></a>
+### （4）工程：返回含义与重复下标的约定
+
 最小值接口返回的是值，不保证返回哪个重复最小值的位置；成员接口只返回 `bool`。若还需要某种“首个下标”，须先明确旋转后按什么索引顺序定义“首个”。数据的排序规则也必须与查询比较规则一致，见<a class="knowledge-link" href="#knowledge-Q100001" data-knowledge="Q100001">标准库二分的使用条件</a>。
 
-练习：[旋转数组成员，含重复](https://leetcode.com/problems/search-in-rotated-sorted-array-ii/)、[旋转数组最小值，含重复](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/)。
+<a id="rotated-search-practice"></a>
+### （5）练习：旋转数组的成员和最小值
+
+[旋转数组成员，含重复](https://leetcode.com/problems/search-in-rotated-sorted-array-ii/)、[旋转数组最小值，含重复](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/)。
 
 
 <a id="paired-break"></a>
 ## 五、成对有序数组中的单次值
+
+<a id="paired-break-foundation"></a>
+### （1）推导：单次值怎样改变配对位置
 
 有序数组中，只有一个值出现一次，其余值都恰好出现两次。要求找出这个单次值，且时间复杂度为 `O(log n)`。
 
@@ -474,7 +536,7 @@ std::optional<int> rotated_min_standard(const std::vector<int>& a) {
 把中点 `m` 对齐到偶下标。如果 `a[m]=a[m+1]`，这一对仍位于异常之前，答案必在 `m+1` 之后；否则答案就在 `m` 或其左侧。这里利用的是配对位置，而不是数值与目标键的大小关系。
 
 <a id="paired-break-manual"></a>
-### 对齐中点，或按位运算取得配偶
+### （2）Hcode：对齐中点，或按位运算取得配偶
 
 ```cpp
 int paired_unique_manual(const std::vector<int>& a) {
@@ -502,7 +564,10 @@ int paired_unique_xor_index(const std::vector<int>& a) {
 第一种实现把中点向偶数对齐，每次整对地排除。第二种用 `m^1` 得到配偶下标：偶数加一，奇数减一，再据两值是否相等判断分界方向。二者都需要 `O(log n)` 时间和 `O(1)` 额外空间。
 
 <a id="paired-break-library"></a>
-### 用异或求值的线性对照
+### （3）替代解法：异或归约的线性解
+
+<a id="paired-break-xor-standard"></a>
+#### （a）Scode：用 accumulate 合并异或结果
 
 ```cpp
 int paired_unique_standard(const std::vector<int>& a) {
@@ -514,22 +579,30 @@ int paired_unique_standard(const std::vector<int>& a) {
 `accumulate` 与 `bit_xor` 让成对值互相抵消，剩下单次值。这是另一种 `O(n)` 算法，不利用排序，因而不能满足原题的对数要求。C++17标准库没有配对位置的二分函数，利用该结构时仍需实现前面的定位过程。
 
 <a id="paired-break-engineering"></a>
+### （4）边界：配对规律依赖哪些输入条件
+
 二分实现依赖非空奇数长度、唯一单次值和其余值恰两次；函数不会再花 `O(n)` 时间预先验证这些条件。若有多个异常、不同频次或无序输入，配对位置的规律就可能失效。
 
 `m^1` 操作的是下标，并不要求数组值非负。异或对照也只在相应的奇偶频次条件下成立。
 
-练习：[有序数组中的单一元素](https://leetcode.com/problems/single-element-in-a-sorted-array/)。
+<a id="paired-break-practice"></a>
+### （5）练习：配对位置中的单次值
+
+[有序数组中的单一元素](https://leetcode.com/problems/single-element-in-a-sorted-array/)。
 
 
 <a id="local-peak"></a>
 ## 六、局部峰与单峰数组的峰值
+
+<a id="local-peak-foundation"></a>
+### （1）论证：保留的一侧为什么仍然有峰
 
 给定相邻元素不相等的数组，找一个严格大于两侧邻居的位置。数组之外视作负无穷，因此端点也可以成为峰。题目允许有多个峰，例如 `[1,4,2,5,3]` 中的 `4` 与 `5` 都满足要求。
 
 比较 `a[mid]` 与 `a[mid+1]`。若右邻更高，从右邻开始沿更高的方向走，最终会遇到下降或右边界，途中必有一个峰。因此可以保留右半；左邻方向的更新同理。斜率本身可以反复变化，这个过程依靠的是保留下来的区域一定有峰，而不是一个全局单调的斜率序列。
 
 <a id="local-peak-manual"></a>
-### 保持两端朝向区间内部上升
+### （2）Hcode：保持两端朝向区间内部上升
 
 ```cpp
 std::optional<std::size_t> peak_manual(const std::vector<int>& a) {
@@ -549,7 +622,10 @@ std::optional<std::size_t> peak_manual(const std::vector<int>& a) {
 若数组额外保证严格先升后降，唯一局部峰也是全局最大值，仍可使用此实现；一般局部峰问题不需要这个更强条件。
 
 <a id="local-peak-library"></a>
-### 全局最大值提供一个线性解
+### （3）替代解法：扫描全局最大值寻找局部峰
+
+<a id="local-peak-maximum-standard"></a>
+#### （a）Scode：用 max_element 取得全局最大值
 
 ```cpp
 std::optional<std::size_t> peak_standard(const std::vector<int>& a) {
@@ -564,15 +640,23 @@ std::optional<std::size_t> peak_standard(const std::vector<int>& a) {
 若允许相等，就要重新区分严格局部峰、弱局部峰和全局最大值。例如 `[1,1,1,2,1]` 中，遇到相等时任意舍弃一侧，可能删掉唯一全局最大值。不同目标需要不同的保留依据。
 
 <a id="local-peak-engineering"></a>
+### （4）工程：空输入、严格峰与借用结果
+
 当前接口把空数组扩展为 `nullopt`；原题保证非空时，可直接解包。若输入不满足邻项不等，也就未必存在严格峰，不能把任意返回下标视为正确结果。
 
 库函数返回迭代器，转成下标后也不拥有原元素；原容器的寿命仍需由调用方保证，见<a class="knowledge-link" href="#knowledge-Q100005" data-knowledge="Q100005">借用与结果所有权</a>。
 
-练习：[任意局部峰](https://leetcode.com/problems/find-peak-element/)。
+<a id="local-peak-practice"></a>
+### （5）练习：满足局部峰条件的位置
+
+[任意局部峰](https://leetcode.com/problems/find-peak-element/)。
 
 
 <a id="matrix-membership"></a>
 ## 七、二维有序矩阵中的查找
+
+<a id="matrix-membership-foundation"></a>
+### （1）建模：区分全局有序与行列分别有序
 
 矩阵“有序”有两种常见含义，能够使用的方法也不同。
 
@@ -581,7 +665,7 @@ std::optional<std::size_t> peak_standard(const std::vector<int>& a) {
 第二种只要求每行、每列各自非降。例如 `[[1,4,7],[2,5,8]]` 展开后为 `[1,4,7,2,5,8]`，已经无序，不能整段二分。
 
 <a id="matrix-membership-manual"></a>
-### 整体有序用展平下标，行列有序用阶梯搜索
+### （2）Hcode：展平二分与阶梯搜索的两种实现
 
 ```cpp
 bool matrix_flat_manual(const std::vector<std::vector<int>>& a, int key) {
@@ -617,7 +701,7 @@ bool matrix_staircase(const std::vector<std::vector<int>>& a, int key) {
 阶梯版本从右上角开始。若当前值小于目标，它左侧的整行都太小，可以向下；若当前值大于目标，它下方的整列都太大，可以向左。每步排除一行或一列，所以需要 `O(m+n)` 时间、`O(1)` 额外空间。它利用了两个方向的顺序，是另一种搜索算法。
 
 <a id="matrix-membership-library"></a>
-### 对每一行独立调用二分查找
+### （3）Scode：对每一行独立调用二分查找
 
 ```cpp
 bool matrix_row_standard(const std::vector<std::vector<int>>& a, int key) {
@@ -634,22 +718,30 @@ bool matrix_row_standard(const std::vector<std::vector<int>>& a, int key) {
 这一写法只要求各行有序，甚至允许行长不同，却没有利用列序。行列数量相差很大时，应比较逐行、逐列和阶梯搜索的实际代价，再选择实现。
 
 <a id="matrix-membership-engineering"></a>
+### （4）工程：展平索引与尾后位置的预算
+
 展平前先确认 `rows*cols` 不会在 `size_t` 中溢出，并在除以 `cols` 前排除空矩阵。形状和排序要求应由调用方保证；若每次先扫描全矩阵验证排序，整次调用就不再是对数时间。
 
 尾后迭代器与随机访问要求见<a class="knowledge-link" href="#knowledge-Q100001" data-knowledge="Q100001">标准库二分的使用条件</a>。
 
-练习：[全局行序矩阵](https://leetcode.com/problems/search-a-2d-matrix/)、[仅行列有序矩阵](https://leetcode.com/problems/search-a-2d-matrix-ii/)。
+<a id="matrix-membership-practice"></a>
+### （5）练习：两类有序矩阵的成员查询
+
+[全局行序矩阵](https://leetcode.com/problems/search-a-2d-matrix/)、[仅行列有序矩阵](https://leetcode.com/problems/search-a-2d-matrix-ii/)。
 
 
 <a id="integer-root"></a>
 ## 八、整数平方根：查找最后一个可行值
+
+<a id="integer-root-foundation"></a>
+### （1）建模：把平方根转成最后可行整数
 
 给定非负整数 `x`，求不超过其平方根的最大整数。例如 `x=21` 时，`4²<=21<5²`，答案为 `4`。这等价于寻找最后一个满足 `m²<=x` 的非负整数 `m`，并不要求 `x` 恰好是完全平方数。
 
 对64位输入，直接计算 `m*m` 可能溢出。当 `m>0` 时，可以把判定改写成 `m<=x/m`；这仍然是同一个整数不等式，却避免了乘法。
 
 <a id="integer-root-manual"></a>
-### 用上中点寻找最后一个可行整数
+### （2）Hcode：用上中点寻找最后一个可行整数
 
 ```cpp
 std::uint64_t isqrt_manual(std::uint64_t x) {
@@ -669,7 +761,10 @@ std::uint64_t isqrt_manual(std::uint64_t x) {
 `x=0` 时不进入循环，其余循环的中点至少为 `1`，不会发生除以零。算法最多检查64次，需要 `O(log(x+1))` 时间、`O(1)` 额外空间，适用于完整 `uint64_t` 范围。
 
 <a id="integer-root-library"></a>
-### 用浮点平方根估计，再作整数修正
+### （3）替代解法：浮点估计后作整数修正
+
+<a id="integer-root-estimate-standard"></a>
+#### （a）Scode：用 sqrt 估计并检查整数边界
 
 ```cpp
 std::uint64_t isqrt_estimate_standard(std::uint64_t x) {
@@ -686,15 +781,23 @@ std::uint64_t isqrt_estimate_standard(std::uint64_t x) {
 修正次数取决于初始估计的误差。浮点库函数提供估计，最终答案的确切性来自整数检查，而不是假定所有平台都不需要修正。
 
 <a id="integer-root-engineering"></a>
+### （4）工程：宽类型运算与中点表达式
+
 Windows中的 `long` 常为32位，不能用类型名称推断平方一定放得下。宽类型转换应发生在运算之前。
 
 最后可行值的中点也应避免写成 `(lo+hi+1)/2`，以免在求中点时产生新溢出，详见<a class="knowledge-link" href="#knowledge-Q100002" data-knowledge="Q100002">整数运算与溢出</a>。
 
-练习：[整数平方根](https://leetcode.com/problems/sqrtx/)。
+<a id="integer-root-practice"></a>
+### （5）练习：整数平方根的精确边界
+
+[整数平方根](https://leetcode.com/problems/sqrtx/)。
 
 
 <a id="capacity-partition"></a>
 ## 九、最小化连续分段的最大段和
+
+<a id="capacity-partition-foundation"></a>
+### （1）建模：试定容量后怎样判断最少分段数
 
 把一个非负数组按原顺序分成恰好 `k` 个非空连续段，要求最大的段和尽可能小。排序会改变相邻关系，因此不能先重排数组。
 
@@ -707,7 +810,7 @@ Windows中的 `long` 常为32位，不能用类型名称推断平方一定放得
 `B` 增大只会放宽限制，可行性由假变真。搜索下界是最大元素，上界是总和，寻找第一个可行容量。非负条件在这里不可少：`[-5,10,-5]` 的总和为 `0`，若允许负数，最大元素不再是下界，中途超限也不一定意味着整段超限。
 
 <a id="capacity-partition-manual"></a>
-### 手写容量判定与二分
+### （2）Hcode：手写容量判定与二分
 
 先给出之后反复使用的两个整数搜索函数，分别寻找首次满足和最后满足的位置。它们接收非负闭区间 `[lo,hi]`，要求差值可表示，且区间内确实存在满足条件的值；具体题型负责建立这样的上下界或无解标记。
 
@@ -767,7 +870,7 @@ i64 capacity_manual(const std::vector<i64>& a, int k) {
 `used` 保存当前段的和，`blocks` 保存已经开出的段数。段数超过 `k` 时即可结束检查。每轮扫描数组一次，总时间为 `O(n log(sum-max+1))`，额外空间为 `O(1)`。若全数组为 `0`，上下界相同，搜索无需执行循环。
 
 <a id="capacity-partition-standard"></a>
-### 用标准库计算上下界
+### （3）Scode：用标准库计算上下界
 
 ```cpp
 // 库只接管边界统计；它没有接管“为何贪心段数可作判定”。
@@ -780,17 +883,23 @@ std::pair<i64, i64> capacity_bounds_standard(const std::vector<i64>& a) {
 `max_element` 与 `accumulate` 分别计算最大元素和总和，两者都是线性扫描。用这段替换求解函数开头的统计过程即可；容量判定和二分继续复用前面的实现。
 
 <a id="capacity-partition-engineering"></a>
-### 累加类型与方案恢复
+### （4）工程：累加类型与方案恢复
 
 CSES中 `n<=2×10^5`，单项不超过 `10^9`，总和可达 `2×10^14`，所以必须从累加开始使用64位整数。`accumulate` 中的 `0LL` 决定累加器类型，见<a class="knowledge-link" href="#knowledge-Q100002" data-knowledge="Q100002">整数运算与溢出</a>。
 
 判定函数借用原数组，多轮调用不会复制或重排它，参见<a class="knowledge-link" href="#knowledge-Q100003" data-knowledge="Q100003">判定器与捕获的生命周期</a>。若还要输出恰好 `k` 个切点，需要在恢复过程中为剩余段保留元素；贪心判定得到的最少段数划分未必已经恰有 `k` 段。
 
-练习：[Split Array Largest Sum](https://leetcode.com/problems/split-array-largest-sum/description/) 允许 0；[Array Division](https://cses.fi/problemset/task/1085/) 的正数与更大规模要求同一证明、不同数值预算。
+<a id="capacity-partition-practice"></a>
+### （5）练习：允许零值与大规模分段
+
+[Split Array Largest Sum](https://leetcode.com/problems/split-array-largest-sum/description/) 允许 0；[Array Division](https://cses.fi/problemset/task/1085/) 的正数与更大规模要求同一证明、不同数值预算。
 
 
 <a id="maximin-spacing"></a>
 ## 十、最大化所选位置的最小间距
+
+<a id="maximin-spacing-foundation"></a>
+### （1）建模：固定间距后怎样选择最多位置
 
 从给定的一维位置中选择 `m` 个，使所选位置之间的最小距离尽可能大。原题位置互异，`2<=m<=n<=10^5`，坐标在 `1..10^9`。
 
@@ -803,7 +912,7 @@ CSES中 `n<=2×10^5`，单项不超过 `10^9`，总和可达 `2×10^14`，所以
 距离越大，条件越严格，故搜索最后一个可行距离。若总跨度为 `span`，必须有 `(m-1)d<=span`，所以可将上界收紧到 `span/(m-1)`。
 
 <a id="maximin-spacing-manual"></a>
-### 在有序位置上贪心检查
+### （2）Hcode：在有序位置上贪心检查
 
 ```cpp
 // sorted_position 已升序，至少两个互异位置；2 <= balls <= n。
@@ -827,7 +936,7 @@ i64 spacing_sorted_manual(const std::vector<i64>& sorted_position, int balls) {
 这段核心接收已经排序的位置。每次检查 `O(n)`，二分需要 `O(n log span)` 时间，额外空间为 `O(1)`。原始位置尚未排序时，必须先完成预处理。
 
 <a id="maximin-spacing-standard"></a>
-### 排序后复用检查函数
+### （3）Scode：排序后复用检查函数
 
 ```cpp
 // 值传递接管一份位置副本；调用方原序不变，手写核心获得有序前提。
@@ -842,17 +951,23 @@ i64 spacing_standard(std::vector<i64> position, int balls) {
 也可以不断用 `lower_bound(last+d)` 找下个位置，但每次放置都会引入查找成本，不一定优于一次前向扫描。
 
 <a id="maximin-spacing-engineering"></a>
-### 位置约束改变时重新检查贪心
+### （4）边界：位置约束改变时重新检查贪心
 
 <a class="knowledge-link" href="#knowledge-Q100004" data-knowledge="Q100004">排序规则</a>只负责建立坐标顺序，选择正确性来自上述领先性证明。是否复制输入则由接口决定，见<a class="knowledge-link" href="#knowledge-Q100005" data-knowledge="Q100005">借用与复制</a>。
 
 若位置改为连续区间、每个点带容量，或点之间另有冲突限制，尽早放置就未必足够。即使距离可行性仍单调，也必须先重新构造正确的判定函数。
 
-练习：[Magnetic Force Between Two Balls](https://leetcode.com/problems/magnetic-force-between-two-balls/description/)。重点核对 `m=2`、`m=n` 和距离恰好等于 d。
+<a id="maximin-spacing-practice"></a>
+### （5）练习：给定位置中的最大最小间距
+
+[Magnetic Force Between Two Balls](https://leetcode.com/problems/magnetic-force-between-two-balls/description/)。重点核对 `m=2`、`m=n` 和距离恰好等于 d。
 
 
 <a id="cumulative-production"></a>
 ## 十一、达到目标产量的最短时间
+
+<a id="cumulative-production-foundation"></a>
+### （1）建模：按完成时间统计产量而非逐件模拟
 
 若干机器同时独立生产，第 `i` 台每完成一件产品需要 `t[i]` 时间。给定目标产量 `target`，求最早达到目标的时刻。原题机器数不超过 `2×10^5`，目标与单件耗时均在 `1..10^9`。
 
@@ -861,7 +976,7 @@ i64 spacing_standard(std::vector<i64> position, int balls) {
 时间增加，累计产量不会减少，因此寻找首次达标时间。即使只让最快的机器工作，`min(t)×target` 也一定够用，它便是一个可行上界。
 
 <a id="cumulative-production-manual"></a>
-### 累计产量达到目标就停止
+### （2）Hcode：累计产量达到目标就停止
 
 ```cpp
 // times 非空且为正；target >= 1；min(times)*target 可用 i64 表示。
@@ -887,7 +1002,7 @@ i64 production_manual(const std::vector<i64>& times, i64 target) {
 在当前紧上界 `min(t)×target` 内，每台机器的产量都不超过 `target`，完整总和也不超过 `n×target<=2×10^14`，因此64位足够。采用剩余缺口写法，还能避免在更大搜索范围中累计不必要的大总和。总时间为 `O(n log(min(t)×target+1))`，额外空间为 `O(1)`。
 
 <a id="cumulative-production-standard"></a>
-### 用 min_element 构造上界
+### （3）Scode：用 min_element 构造上界
 
 ```cpp
 i64 production_upper_standard(const std::vector<i64>& times, i64 target) {
@@ -899,17 +1014,23 @@ i64 production_upper_standard(const std::vector<i64>& times, i64 target) {
 `min_element` 线性找到最快机器，使用常数额外空间；产能公式与二分过程保持不变。答案空间只需用两个端点表示，没有必要创建一个覆盖全部时刻的 `vector`。
 
 <a id="cumulative-production-engineering"></a>
-### 整数完成时刻与计数范围
+### （4）工程：整数完成时刻与计数范围
 
 产量必须用整数除法计算。浮点估计在整件完成的边界附近可能误判，从而改变二分方向。
 
 搜索上界和累计产量应分别预算。若把上界改成固定的 `10^18`，快速机器的中间产量和可能超界，不能继续套用当前紧界下的结论，见<a class="knowledge-link" href="#knowledge-Q100002" data-knowledge="Q100002">整数预算</a>。若机器共享资源或任务之间存在依赖，产量也未必能够直接相加。
 
-练习：[Factory Machines](https://cses.fi/problemset/task/1620/)。试比较“逐件最小堆模拟”和“按时间直接计数”在目标达到 `10^9` 时的差距。
+<a id="cumulative-production-practice"></a>
+### （5）练习：大量目标产品的完成时间
+
+[Factory Machines](https://cses.fi/problemset/task/1620/)。试比较“逐件最小堆模拟”和“按时间直接计数”在目标达到 `10^9` 时的差距。
 
 
 <a id="ordered-simulation"></a>
 ## 十二、固定顺序任务所需的最少并行台位
+
+<a id="ordered-simulation-foundation"></a>
+### （1）建模：固定台位数后如何模拟完成时间
 
 Cow Dance给出固定的登台顺序和每段演出的时长。`K` 个台位可以同时使用；某台位结束后，下一位立即登台。要求全部演出在期限内完成，求最少需要多少台位。原题 `N<=10^4`，单段时长不超过 `10^5`，期限不超过 `10^6`。
 
@@ -922,7 +1043,7 @@ Cow Dance给出固定的登台顺序和每段演出的时长。`K` 个台位可�
 这一单调性也可严格比较两套排程。把 `K` 个台位的可用时间排序为 `v`，把 `K+1` 个台位的可用时间排序为 `u`，保持 `u[i]<=v[i]`（`i<K`）。初始全为 `0`，条件成立。处理同一时长 `d` 时，有 `u[0]+d<=v[0]+d`；删去各自最早项再加入新结束时间，较多台位一侧仍有 `K` 项能逐项匹配到较少台位一侧且不更大，额外一项不会使前 `K` 小的时间变晚。归纳便知每个任务都不会更晚开始或结束。
 
 <a id="ordered-simulation-manual"></a>
-### 用最小堆模拟台位释放
+### （2）Hcode：用最小堆模拟台位释放
 
 ```cpp
 class MinHeap {
@@ -975,7 +1096,7 @@ int stage_slots_manual(const std::vector<i64>& duration, i64 deadline) {
 一次判定需要 `O(N log(K+1))` 时间，整体最坏为 `O(N log²N)`，堆空间为 `O(K)`。
 
 <a id="ordered-simulation-standard"></a>
-### 用 priority_queue 管理结束时间
+### （3）Scode：用 priority_queue 管理结束时间
 
 ```cpp
 int stage_slots_standard(const std::vector<i64>& duration, i64 deadline) {
@@ -997,7 +1118,7 @@ int stage_slots_standard(const std::vector<i64>& duration, i64 deadline) {
 `greater` 使堆顶保存最早结束时间。`top()` 读取它，`pop()` 删除旧状态，`push()` 放入安排下一位后的新状态。三个动作共同完成一次台位更新，详见<a class="knowledge-link" href="#knowledge-Q100007" data-knowledge="Q100007">优先队列与堆接口</a>。
 
 <a id="ordered-simulation-engineering"></a>
-### 堆元素寿命与台位身份
+### （4）工程：堆元素寿命与台位身份
 
 先复制 `top()` 的值再 `pop()`，不能在删除后继续使用指向原堆顶的引用。每次判定都重新构造堆，避免上一次模拟状态进入下一轮。
 
@@ -1011,11 +1132,17 @@ int stage_slots_standard(const std::vector<i64>& duration, i64 deadline) {
 </aside>
 
 
-练习：[Cow Dance Show](https://usaco.org/index.php?page=viewproblem2&cpid=690)。原题文件输入输出需在提交包装层适配，这份核心不负责打开文件。
+<a id="ordered-simulation-practice"></a>
+### （5）练习：固定演出顺序与最少台位
+
+[Cow Dance Show](https://usaco.org/index.php?page=viewproblem2&cpid=690)。原题文件输入输出需在提交包装层适配，这份核心不负责打开文件。
 
 
 <a id="graph-threshold"></a>
 ## 十三、瓶颈路径：最小化路径上的最大边权
+
+<a id="graph-threshold-foundation"></a>
+### （1）建模：阈值删边把瓶颈路径转成可达性
 
 从网格左上走到右下，路径代价定义为沿途最大的相邻高度差，要求使这个最大差最小。原题行列均不超过 `100`，高度在 `1..10^6`。
 
@@ -1024,7 +1151,7 @@ int stage_slots_standard(const std::vector<i64>& duration, i64 deadline) {
 给定阈值 `B`，只允许经过高度差不超过 `B` 的边。若仍能从左上到达右下，说明存在代价不超过 `B` 的路径；否则任何路径都要跨过更大的高度差。阈值增大只增加可用边，因此可以二分首次可达的阈值。一次检查只是可达性搜索，BFS无需记录最短距离。
 
 <a id="graph-threshold-manual"></a>
-### 用数组队列检查可达性
+### （2）Hcode：用数组队列检查可达性
 
 ```cpp
 int path_effort_manual(const std::vector<std::vector<int>>& height) {
@@ -1065,7 +1192,7 @@ int path_effort_manual(const std::vector<std::vector<int>>& height) {
 原题可在 `[0,999999]` 中搜索，单格网格的答案为 `0`。设网格为 `R×C`、高度差搜索宽度为 `W`，总时间为 `O(RC log W)`，空间为 `O(RC)`。
 
 <a id="graph-threshold-standard"></a>
-### 用 queue 保存待处理格子
+### （3）Scode：用 queue 保存待处理格子
 
 ```cpp
 int path_effort_standard(const std::vector<std::vector<int>>& height) {
@@ -1101,9 +1228,12 @@ int path_effort_standard(const std::vector<std::vector<int>>& height) {
 `queue` 负责先进先出的读写，四方向邻接、阈值限制和访问标记仍由搜索逻辑处理。读取队头后先复制到局部变量，再删除该元素，见<a class="knowledge-link" href="#knowledge-Q100011" data-knowledge="Q100011">队列状态与元素寿命</a>。
 
 <a id="graph-threshold-engineering"></a>
-### 高度差计算与其他解法
+### （4）工程：高度差计算与访问状态
 
 计算高度差时，先提升类型再相减、取绝对值，见<a class="knowledge-link" href="#knowledge-Q100002" data-knowledge="Q100002">表达式的整数预算</a>。每次阈值检查都要使用新的访问状态。
+
+<a id="graph-threshold-alternative"></a>
+### （5）替代解法：DSU 与瓶颈 Dijkstra 的对照
 
 同题还可按边权排序并用DSU维护连通，或采用最小化最大边权的Dijkstra。它们是不同的求解算法；`queue` 版本只替换了BFS队列的实现。若路径目标改成高度差之和，当前的阈值删边判定就不再对应题目目标。
 
@@ -1116,11 +1246,17 @@ int path_effort_standard(const std::vector<std::vector<int>>& height) {
 </aside>
 
 
-练习：[Path With Minimum Effort](https://leetcode.com/problems/path-with-minimum-effort/description/)。验证绕远更优、等高网格和单行/列，不要只测明显直线路径。
+<a id="graph-threshold-practice"></a>
+### （6）练习：最大边权最小的网格路径
+
+[Path With Minimum Effort](https://leetcode.com/problems/path-with-minimum-effort/description/)。验证绕远更优、等高网格和单行/列，不要只测明显直线路径。
 
 
 <a id="prefix-activation"></a>
 ## 十四、有序事件前缀的首次成功与首次失败
+
+<a id="prefix-activation-foundation"></a>
+### （1）建模：完整事件前缀怎样形成单调判定
 
 当事件必须按顺序接受时，可以把“采用多少个事件”作为搜索对象。下面两个问题都固定前 `t` 个事件再作检查，但一个寻找首次成功，另一个寻找首次失败。
 
@@ -1133,7 +1269,7 @@ NailingPlanks要求按顺序使用前 `t` 颗钉子，使每块闭区间木板�
 这里必须接受整个前缀，不能跳过其中某份订单再寻找任意最大订单集合。
 
 <a id="prefix-activation-manual"></a>
-### 查找钉子前缀与首个失败订单
+### （2）Hcode：查找钉子前缀与首个失败订单
 
 ```cpp
 int first_nails_manual(const std::vector<int>& left, const std::vector<int>& right,
@@ -1193,7 +1329,7 @@ int first_failed_order_manual(const std::vector<i64>& capacity,
 钉子题每轮检查 `O(N+M)`，总时间 `O((N+M)log M)`、空间 `O(M)`；借教室每轮 `O(n+t)`，总时间 `O((n+m)log m)`、空间 `O(n)`。
 
 <a id="prefix-activation-standard"></a>
-### 用 partial_sum 恢复前缀
+### （3）Scode：用 partial_sum 恢复前缀
 
 ```cpp
 int first_nails_standard(const std::vector<int>& left, const std::vector<int>& right,
@@ -1233,17 +1369,23 @@ int first_failed_order_standard(const std::vector<i64>& capacity,
 这里还用四参数 `equal` 配合自定义关系检查 `required<=available`。它执行的是逐日容量比较，不是数值相等；比较范围只有 `n` 个真实日期，不含差分尾格。普通循环能表达同一检查，选择更便于维护的写法即可。
 
 <a id="prefix-activation-engineering"></a>
-### 保持事件方向与检查状态一致
+### （4）边界：保持事件方向与检查状态一致
 
 若允许撤销订单、负需求或任意跳过订单，失败前缀的单调性可能消失。钉子题允许一颗钉子同时命中多块木板，也不等同于给木板分配互斥资源。
 
 每轮应清空计数或差分数组，按当前 `t` 重建状态，见<a class="knowledge-link" href="#knowledge-Q100003" data-knowledge="Q100003">重复调用判定器的状态</a>。手写扫描与库前缀累加都须满足<a class="knowledge-link" href="#knowledge-Q100002" data-knowledge="Q100002">累计量的类型预算</a>。
 
-练习：[NailingPlanks](https://app.codility.com/programmers/lessons/14-binary_search_algorithm/nailing_planks/)；[借教室](https://www.luogu.com.cn/problem/P1083)。后者提交时：全部成功输出 0，否则输出 -1 与返回的订单编号。
+<a id="prefix-activation-practice"></a>
+### （5）练习：首次成功与首次失败的事件前缀
+
+[NailingPlanks](https://app.codility.com/programmers/lessons/14-binary_search_algorithm/nailing_planks/)；[借教室](https://www.luogu.com.cn/problem/P1083)。后者提交时：全部成功输出 0，否则输出 -1 与返回的订单编号。
 
 
 <a id="weighted-inverse"></a>
 ## 十五、按累计权重查找与随机抽样
+
+<a id="weighted-inverse-foundation"></a>
+### （1）建模：把整数票号映回权重区间
 
 给每个元素一个非负整数权重 w[i]，希望第 i 项被选中的概率正比于 w[i]。先把权重变成累计量：`prefix[i]=w[0]+…+w[i]`。
 
@@ -1252,7 +1394,7 @@ int first_failed_order_standard(const std::vector<i64>& capacity,
 一般情况下，第 i 项对应 `(prefix[i−1],prefix[i]]`，恰好含 w[i] 个整数；首项之前的累计量在这个公式中记为0。于是二分负责把票号映回元素，随机数生成器负责等概率产生票号，两者合起来才得到所需分布。
 
 <a id="weighted-inverse-manual"></a>
-### 构建累计量并查位置
+### （2）Hcode：构建累计量并查位置
 
 ```cpp
 std::vector<i64> cumulative_manual(const std::vector<int>& weights) {
@@ -1276,7 +1418,7 @@ int ticket_manual(const std::vector<i64>& prefix, i64 ticket) {
 累计量构建需要 O(n) 时间和空间；此后每次定位需要 O(log n) 时间。原题权重为正。若允许零权重，累计量可能相等，但空的票号区间仍不会被选中；负权重则会破坏累计量的单调性。
 
 <a id="weighted-inverse-standard"></a>
-### 前缀算法、边界算法与整数分布
+### （3）Scode：前缀算法、边界算法与整数分布
 
 ```cpp
 std::vector<i64> cumulative_standard(const std::vector<int>& weights) {
@@ -1300,6 +1442,8 @@ int sample_index(const std::vector<i64>& prefix, std::mt19937_64& engine) {
 随机引擎通过引用传入，以便连续使用其状态。它应当在抽样开始前初始化一次，不在每次抽样时重新播种。<a class="knowledge-link" href="#knowledge-Q100010" data-knowledge="Q100010">整数随机分布与可复现性</a>说明整数分布和 `rand()%total` 的区别。
 
 <a id="weighted-inverse-engineering"></a>
+### （4）工程：票号范围、总权重与映射核对
+
 定位函数要求票号在 `[1,prefix.back()]` 内，所以输入不能为空，总权重必须为正。累计总和的类型预算应当在构建时确定。
 
 可以先独立检验“票号→元素”的确定性映射：穷举所有票号，核对第 i 项恰好得到 w[i] 张票。随机抽样的频率只能检验分布表现，不能代替这层正确性推导。权重频繁变化时，重建整份前缀会变贵；后文的树状数组选择可以直接维护动态累计量。
@@ -1312,11 +1456,17 @@ int sample_index(const std::vector<i64>& prefix, std::mt19937_64& engine) {
 </aside>
 
 
-练习：[LC528 · 按权重随机选择](https://leetcode.com/problems/random-pick-with-weight/)。
+<a id="weighted-inverse-practice"></a>
+### （5）练习：离散权重的随机选择
+
+[LC528 · 按权重随机选择](https://leetcode.com/problems/random-pick-with-weight/)。
 
 
 <a id="pigeonhole-domain"></a>
 ## 十六、在值域中寻找重复值或缺失值
+
+<a id="pigeonhole-domain-foundation"></a>
+### （1）建模：用容量与计数定位唯一重复值
 
 给定 n+1 个整数，每个数都在 1..n 内，只有一个数值重复出现。要求找出它，并且不能修改数组、只能使用常数额外空间。数组本身没有顺序，二分的对象应当是**可能的重复值**，而不是元素下标。
 
@@ -1325,7 +1475,7 @@ int sample_index(const std::vector<i64>& prefix, std::mt19937_64& engine) {
 例如 `[1,3,4,2,2]` 中，C(1)=1，C(2)=3；计数第一次超过可容纳的不同值数量，发生在重复值2处。这个推理依赖“只有一种数值重复”的限制；任意多重集不一定具有同一性质。
 
 <a id="pigeonhole-domain-manual"></a>
-### 计数驱动的值域收缩
+### （2）Hcode：计数驱动的值域收缩
 
 ```cpp
 template<class Count>
@@ -1353,7 +1503,7 @@ int duplicate_manual(const std::vector<int>& a) {
 回调在一次搜索中应表达同一计数事实，详见 <a class="knowledge-link" href="#knowledge-Q100003" data-knowledge="Q100003">判定器与lambda捕获</a>；复用工作区不等于可以残留上一轮状态。
 
 <a id="pigeonhole-domain-standard"></a>
-### 用标准算法表达计数
+### （3）Scode：用标准算法表达计数
 
 ```cpp
 int duplicate_standard(const std::vector<int>& a) {
@@ -1367,9 +1517,15 @@ int duplicate_standard(const std::vector<int>& a) {
 
 本题还可把数组值看作后继位置，用 Floyd 环检测在线性时间、常数额外空间内求解。那条路径利用的是函数图结构，而非值域计数。
 
+<a id="missing-domain-variant"></a>
+### （4）变型：在欠满整数域中寻找任意缺失值
+
 再看缺失值问题。若记录总数少于整数域的容量，就至少有一个值没有出现。把当前域分成左右两半：左半记录数小于其容量时，左半必有缺失值；否则，由于整个域尚未填满，右半必然欠满。
 
 据此，每轮保留一个确定含缺失值的半域。下面的实现允许重复记录，目标是返回**任意一个**缺失值，不是第 k 个缺失值。
+
+<a id="missing-domain-manual"></a>
+#### （a）Hcode：按容量保留必有缺失值的半域
 
 ```cpp
 // values均在[0,universe)，条数<universe；允许重复，返回任意缺失值。
@@ -1388,15 +1544,23 @@ std::uint64_t missing_domain(const std::vector<std::uint32_t>& values,
 ```
 
 <a id="pigeonhole-domain-engineering"></a>
+#### （b）工程：IPv4 容量与多遍输入成本
+
 IPv4 的完整地址域含 2³² 个值。因此，边界和容量用 `uint64_t`，单条地址仍可用 `uint32_t`，相关运算见 <a class="knowledge-link" href="#knowledge-Q100002" data-knowledge="Q100002">整数表达式与溢出预算</a>。
 
 这份实现每轮重新统计记录，约需 log₂U 遍扫描，U 是域容量。输入若只能读取一次，就不适用；能够顺序重读时，也应把多遍 I/O 的成本计入方法选择。
 
-练习：[LC287 · 寻找重复数](https://leetcode.com/problems/find-the-duplicate-number/)。重点区分值域容量与下标有序性；其线性 follow-up 需要另换环检测机制。
+<a id="pigeonhole-domain-practice"></a>
+### （5）练习：唯一重复值与容量判定
+
+[LC287 · 寻找重复数](https://leetcode.com/problems/find-the-duplicate-number/)。重点区分值域容量与下标有序性；其线性 follow-up 需要另换环检测机制。
 
 
 <a id="matrix-rank"></a>
 ## 十七、行列有序矩阵的第 k 小元素
+
+<a id="matrix-rank-foundation"></a>
+### （1）建模：以值域计数反查第 k 小
 
 给定行、列都非降的矩阵，求按出现次数计数的第 k 小元素。行列分别有序，并不意味着逐行拼接后整体有序，因而不能直接对展平下标二分。
 
@@ -1405,7 +1569,7 @@ IPv4 的完整地址域含 2³² 个值。因此，边界和容量用 `uint64_t`
 要快速计算 C(x)，从左下角开始。当前值≤x时，同列上方直到当前行都满足条件，可以整段计入，然后右移一列；当前值>x时，同一行右侧也都>x，只能向上移一行。每一步都排除尚未处理的一整段，形成楼梯式扫描。
 
 <a id="matrix-rank-manual"></a>
-### 值域边界与楼梯判定
+### （2）Hcode：值域边界与楼梯判定
 
 ```cpp
 // count返回<=x的重数；lo/hi有界且差可表示，k保证存在。
@@ -1438,7 +1602,7 @@ i64 matrix_kth_manual(const std::vector<std::vector<int>>& a, i64 k) {
 计数可能从 k 以下直接跳到 k 以上。例如多个元素等于同一个值时，不能要求“恰好数到 k”才返回。`kth_value`统一寻找首次达到 k 的值；乘法表和数对距离也会复用这个边界搜索，但各自需要不同的计数方法。
 
 <a id="matrix-rank-standard"></a>
-### 每行用上界计数
+### （3）Scode：每行用上界计数
 
 ```cpp
 i64 matrix_kth_standard(const std::vector<std::vector<int>>& a, i64 k) {
@@ -1458,15 +1622,23 @@ i64 matrix_kth_standard(const std::vector<std::vector<int>>& a, i64 k) {
 `upper_bound`在每一行内使用 <a class="knowledge-link" href="#knowledge-Q100001" data-knowledge="Q100001">二分库的分区与迭代器合同</a>，矩阵的整体计数关系仍由各行结果相加得到。
 
 <a id="matrix-rank-engineering"></a>
+### （4）工程：矩阵形状、合法秩与重复计数
+
 实现要求矩阵非空、各行等长、行列非降，且 `1≤k≤R×C`。乘积与计数的范围见 <a class="knowledge-link" href="#knowledge-Q100002" data-knowledge="Q100002">整数表达式与溢出预算</a>。判定借用矩阵，不需要每轮复制。
 
 “第 k 个元素”包含重复出现的元素；对输入调用 `unique`会改变问题。
 
-练习：[LC378 · 有序矩阵中第 k 小的元素](https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/description/)。
+<a id="matrix-rank-practice"></a>
+### （5）练习：包含重复值的矩阵秩
+
+[LC378 · 有序矩阵中第 k 小的元素](https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/description/)。
 
 
 <a id="multiplication-rank"></a>
 ## 十八、乘法表中的第 k 小数
+
+<a id="multiplication-rank-foundation"></a>
+### （1）推导：不构造乘法表也能逐行计数
 
 求 m×n 乘法表中的第 k 小元素，仍按出现次数计数。表可能很大，但每一行都由简单公式给出，不必真的保存下来。
 
@@ -1475,7 +1647,7 @@ i64 matrix_kth_standard(const std::vector<std::vector<int>>& a, i64 k) {
 不同位置可能得到相同乘积。例如3×3表中的2和3都各出现两次，计数时不能合并。交换两条边让较短边充当行数，则可减少每轮求和项数。
 
 <a id="multiplication-rank-manual"></a>
-### 解析计数
+### （2）Hcode：解析计数
 
 ```cpp
 i64 multiplication_count_manual(int rows, int cols, i64 x) {
@@ -1496,7 +1668,7 @@ i64 multiplication_kth_manual(int rows, int cols, i64 k) {
 设较短边为 min(m,n)。一次计数只扫描这么多行，答案位于1..mn，因此总时间为 O(min(m,n) log(mn))，额外空间为 O(1)。矩阵秩需要读取已存元素；这里直接计算一整行的贡献。
 
 <a id="multiplication-rank-standard"></a>
-### 用min截断每行计数
+### （3）Scode：用min截断每行计数
 
 ```cpp
 // 替换解析计数循环中一行的贡献，值域搜索与求和主体保持共用。
@@ -1510,13 +1682,21 @@ i64 multiplication_row_standard(int cols, i64 x, i64 row) {
 单行贡献耗时 O(1)，求和与 `kth_value`仍沿用上面的实现。标准库没有直接查询隐式乘法表第 k 小的接口；将答案域生成成容器反而丢失了这一问题的空间优势。
 
 <a id="multiplication-rank-engineering"></a>
+### （4）工程：乘积上界与每轮扫描规模
+
 原题 `m,n≤30000`，所以 mn≤9×10⁸；代码依然在乘法前用 `1LL`提升类型。推广到更大的表时，既要重算乘积与计数的范围，也要评估每轮扫描较短边的时间。改变输入类型本身并不会消除这两项限制。
 
-练习：[LC668 · 乘法表中第 k 小的数](https://leetcode.com/problems/kth-smallest-number-in-multiplication-table/description/)。
+<a id="multiplication-rank-practice"></a>
+### （5）练习：隐式乘法表中的元素秩
+
+[LC668 · 乘法表中第 k 小的数](https://leetcode.com/problems/kth-smallest-number-in-multiplication-table/description/)。
 
 
 <a id="pair-distance-rank"></a>
 ## 十九、数对距离的第 k 小值
+
+<a id="pair-distance-rank-foundation"></a>
+### （1）推导：排序后用双指针累计合法数对
 
 给定整数数组，把每个下标对 i<j 的绝对差组成一个多重集，求其中第 k 小。共有 O(n²) 个数对，逐一生成距离往往太贵。可以对距离上限 D 二分，只统计距离≤D的数对数。
 
@@ -1525,7 +1705,7 @@ i64 multiplication_row_standard(int cols, i64 x, i64 row) {
 例如 `[1,1,4]` 的三个距离是0、3、3。两个1虽然值相等，却是不同位置；它们之间的零距离和分别连向4的两个距离都要计入。
 
 <a id="pair-distance-rank-manual"></a>
-### 双指针判定
+### （2）Hcode：双指针判定
 
 ```cpp
 i64 pair_distance_manual(std::vector<int> a, i64 k) {
@@ -1545,7 +1725,7 @@ i64 pair_distance_manual(std::vector<int> a, i64 k) {
 排序耗时 O(n log n)，每次距离判定耗时 O(n)，总时间为 O(n log n+n log V)，V 为最大可能距离。双指针只是在加速计数；第 k 小的定位仍由外层值域二分完成。
 
 <a id="pair-distance-rank-standard"></a>
-### 每个左端查一个上界
+### （3）Scode：每个左端查一个上界
 
 ```cpp
 i64 pair_distance_standard(std::vector<int> a, i64 k) {
@@ -1565,15 +1745,23 @@ i64 pair_distance_standard(std::vector<int> a, i64 k) {
 逐左端查上界需要 O(n log n) 时间，比双指针判定多一层对数。小规模时，还可生成全部距离后用 <a class="knowledge-link" href="#knowledge-Q100008" data-knowledge="Q100008">nth_element</a>求出结果来核对，但其二次空间和时间准备成本不适合大输入。
 
 <a id="pair-distance-rank-engineering"></a>
+### （4）工程：排序副本与数对计数的类型
+
 函数按值接收数组，因此排序的是副本，以 O(n) 额外空间保留调用者原顺序。允许原地修改时，可以改为引用参数。
 
 数对总数最多为 n(n−1)/2，乘法前要提升类型；大坐标的 `a[i]+D` 和两坐标之差也应先在宽类型内计算。
 
-练习：[LC719 · 找出第 k 小的数对距离](https://leetcode.com/problems/find-k-th-smallest-pair-distance/description/)。
+<a id="pair-distance-rank-practice"></a>
+### （5）练习：按下标对计数的距离秩
+
+[LC719 · 找出第 k 小的数对距离](https://leetcode.com/problems/find-k-th-smallest-pair-distance/description/)。
 
 
 <a id="two-sorted-partition"></a>
 ## 二十、两个有序数组的第 k 小与中位数
+
+<a id="two-sorted-partition-foundation"></a>
+### （1）建模：把秩查询转成两数组的交叉切分
 
 两个非降数组 A、B 的长度分别为 m、n，允许重复，求合并后第 k 小。直接合并需要线性时间。若只求一个秩，可以改为寻找：前 k 个元素中，应当从 A 取多少个？
 
@@ -1582,7 +1770,7 @@ i64 pair_distance_standard(std::vector<int> a, i64 k) {
 i 还必须让两边实际可取，因此搜索区间为 `[max(0,k−n),min(k,m)]`。例如 A=[1,4,7]、B=[2,3,8]、k=4，取 i=2、j=2时，左半是1、4与2、3，交叉条件成立，答案为4。
 
 <a id="two-sorted-partition-manual"></a>
-### 交叉边界驱动切分
+### （2）Hcode：交叉边界驱动切分
 
 ```cpp
 // k为1基；至少一数组非空，输入元素int，64位哨兵不与真实值混淆。
@@ -1617,7 +1805,10 @@ double two_array_median(const std::vector<int>& a,const std::vector<int>& b) {
 中位数可归为秩查询：总长为奇数，取第 `(m+n)/2+1`项；总长为偶数，取中间两项的平均。两项先转成64位后相加，避免32位加法先溢出。
 
 <a id="two-sorted-partition-standard"></a>
-### 线性合并是另一条真实路径
+### （3）替代解法：线性合并后读取所需秩
+
+<a id="two-sorted-merge-standard"></a>
+#### （a）Scode：用 merge 获得完整合并结果
 
 ```cpp
 i64 two_array_merge(const std::vector<int>& a,const std::vector<int>& b,int k) {
@@ -1632,15 +1823,23 @@ i64 two_array_merge(const std::vector<int>& a,const std::vector<int>& b,int k) {
 若只顺序推进到第 k 项就停，可以将合并时间减到 O(k)；当 k 接近总长时仍是线性的。它与上面直接定位切分位置的方法有不同的成本。
 
 <a id="two-sorted-partition-engineering"></a>
+### （4）工程：合法秩、空侧与域外哨兵
+
 函数要求两数组非降、总长度非零，且 k 是合法的1基秩。当前元素类型为 `int`，用64位最小值、最大值代替不存在的边界，能够严格包住真实元素范围。
 
 若元素本身可为任意64位极值，边界应改成显式条件；不能继续把同样的两个极值看作域外哨兵。
 
-练习：[LC4 · 寻找两个正序数组的中位数](https://leetcode.com/problems/median-of-two-sorted-arrays/description/)。
+<a id="two-sorted-partition-practice"></a>
+### （5）练习：两个有序数组的中位数
+
+[LC4 · 寻找两个正序数组的中位数](https://leetcode.com/problems/median-of-two-sorted-arrays/description/)。
 
 
 <a id="ordered-dp-frontier"></a>
 ## 二十一、最长递增子序列：维护每个长度的最小末值
+
+<a id="ordered-dp-frontier-foundation"></a>
+### （1）推导：为什么只保留每种长度的最小末值
 
 给定任意序列，选出下标递增、数值也严格递增的最长子序列，通常简称 LIS。原序列没有整体顺序，二分要作用在我们维护的状态上。
 
@@ -1653,7 +1852,7 @@ i64 two_array_merge(const std::vector<int>& a,const std::vector<int>& b,int k) {
 例如依次处理 `[3,5,6,2]`，tail 从 `[3]`扩为 `[3,5]`、`[3,5,6]`，最后变成 `[2,5,6]`。长度仍为3，但最后的摘要不是输入中的真实子序列。这也说明恢复答案需要额外保存前驱。
 
 <a id="ordered-dp-frontier-manual"></a>
-### 保存真实前驱，恢复可行序列
+### （2）Hcode：保存真实前驱，恢复可行序列
 
 为恢复一条真实序列，另用 `tail_index`记录每个长度当前的末位置，并用 `parent[i]`记录位置 i 选定的前驱。先取得前一长度的末位置，再更新当前长度：
 
@@ -1692,7 +1891,7 @@ std::vector<int> lis_manual(const std::vector<int>& a,bool nondecreasing=false) 
 代码先保存父链，再更新当前长度对应的末位置，使恢复关系明确指向先前处理过的输入位置。时间为 O(n log n)，空间为 O(n)。
 
 <a id="ordered-dp-frontier-standard"></a>
-### 使用库二分，并推广到信封嵌套
+### （3）Scode：使用库边界查找维护最小末值
 
 ```cpp
 std::vector<int> lis_standard(const std::vector<int>& a,bool nondecreasing=false) {
@@ -1706,9 +1905,15 @@ std::vector<int> lis_standard(const std::vector<int>& a,bool nondecreasing=false
 
 严格递增时，相等值不能延长序列，所以用 `lower_bound`替换首个≥x的位置。若目标改为非降子序列，相等值可以延长，应改用 `upper_bound`替换首个>x的位置；此时 tail 只保证非降，恢复出的相邻值关系也变成≤。
 
+<a id="envelopes-variant"></a>
+### （4）变型：将二维信封嵌套归约为 LIS
+
 俄罗斯套娃信封要求宽和高都严格增加。先按宽升序后，对高度求严格LIS，仍有一个障碍：相同宽度的信封不能彼此嵌套，却可能被高度LIS连续选中。
 
 解决办法是把同宽信封按高降序排列。这样同宽组中至多选一个高度进入严格LIS；不同宽度之间又保持宽递增。二维限制于是归约为排序之后的一维LIS。
+
+<a id="envelopes-standard"></a>
+#### （a）Scode：同宽降序排序后复用 LIS
 
 ```cpp
 int envelopes_standard(std::vector<std::pair<int,int>> envelopes) {
@@ -1731,7 +1936,8 @@ int envelopes_standard(std::vector<std::pair<int,int>> envelopes) {
 </aside>
 
 
-### 计数变型：先保留末位置，再合并方案
+<a id="lis-count-variant"></a>
+### （5）变型：统计最长递增子序列的个数
 
 若要求最长递增子序列的**个数**，只保留最小末值就不够了。以 `[1,3,2,4]`为例，末值2比3更容易延长，但经过3和经过2的两条最长链都应计数。
 
@@ -1745,6 +1951,9 @@ int envelopes_standard(std::vector<std::pair<int,int>> envelopes) {
 不同 j 给出不同的倒数第二个下标，所合并集合互不相交，不会重复计数。最后取所有 `len[i]`的最大值，再累加达到该长度的 `ways[i]`；末下标又一次将全体答案分成不相交集合。相同数值出现在不同下标时，仍可能形成不同方案。
 
 例如 `[1,3,5,4,7]` 中，以5和4结尾的状态都为长度3、方案数1。处理7时，先接上5得到长度4、1种，再接上4得到同样长的另一种，合计2种。
+
+<a id="lis-count-manual"></a>
+#### （a）Hcode：按末位置合并最优长度与方案数
 
 下面实现还对中间计数作饱和处理。其原因在于：题目保证最终答案可表示，却不保证每个较短状态的方案数都可表示。
 
@@ -1779,6 +1988,8 @@ i64 lis_count(const std::vector<int>& a) {
 若问题不保证最终计数可表示，就应使用大整数或明确的取模规则；饱和值只能表示“已经足够大”，不能当作精确答案。
 
 <a id="ordered-dp-frontier-engineering"></a>
+### （6）工程：容器失效与恢复结果检查
+
 在 `push_back`之前，先把边界迭代器转成下标。扩容后旧迭代器可能失效；而 `reserve`只预留容量，不产生可以下标访问的新元素，详见 <a class="knowledge-link" href="#knowledge-Q100013" data-knowledge="Q100013">vector容量、元素与失效</a>。
 
 恢复序列时，应同时检查下标递增和所需的数值关系，不能只核长度。
@@ -1791,11 +2002,17 @@ i64 lis_count(const std::vector<int>& a) {
 </aside>
 
 
-练习：[LC300 · 最长递增子序列](https://leetcode.com/problems/longest-increasing-subsequence/description/)、[LC354 · 俄罗斯套娃信封](https://leetcode.com/problems/russian-doll-envelopes/description/)、[LC673 · 最长递增子序列的个数](https://leetcode.com/problems/number-of-longest-increasing-subsequence/description/)。
+<a id="ordered-dp-frontier-practice"></a>
+### （7）练习：LIS长度、信封嵌套与方案数
+
+[LC300 · 最长递增子序列](https://leetcode.com/problems/longest-increasing-subsequence/description/)、[LC354 · 俄罗斯套娃信封](https://leetcode.com/problems/russian-doll-envelopes/description/)、[LC673 · 最长递增子序列的个数](https://leetcode.com/problems/number-of-longest-increasing-subsequence/description/)。
 
 
 <a id="weighted-predecessor"></a>
 ## 二十二、带权区间调度：查找兼容前驱
+
+<a id="weighted-predecessor-foundation"></a>
+### （1）建模：将兼容前驱前缀接入收益 DP
 
 一组任务各有开始时间、结束时间和收益，要求选择互不冲突的任务，使总收益最大。带权之后，“总选最早结束的任务”可能放弃高收益任务。例如时段[1,2]、[3,4]各获利5，[1,4]获利20；按最早结束选择前两项只能得到10。
 
@@ -1804,7 +2021,7 @@ i64 lis_count(const std::vector<int>& a) {
 二分的作用是确定这个兼容前缀有多长，而非决定应不应该选择当前任务。选与不选的比较由DP完成。
 
 <a id="weighted-predecessor-manual"></a>
-### 前驱数量直接作为 DP 下标
+### （2）Hcode：前驱数量直接作为 DP 下标
 
 ```cpp
 struct Job { i64 start,end,reward; };
@@ -1838,7 +2055,7 @@ i64 jobs_manual(std::vector<Job> jobs,bool touching=false) {
 查询只在已经处理过的结束时间中进行，以免相同结束时刻把当前任务或未来任务算入前驱。排序与全部查询共耗时 O(n log n)，空间为 O(n)。若要恢复任务集合，可保存每个状态的选择及 p，再从末状态回溯；最优值相等时采用固定选择即可。
 
 <a id="weighted-predecessor-standard"></a>
-### 原题端点决定 lower 还是 upper
+### （3）Scode：原题端点决定 lower 还是 upper
 
 ```cpp
 i64 jobs_standard(std::vector<Job> jobs,bool touching=false) {
@@ -1855,15 +2072,23 @@ i64 jobs_standard(std::vector<Job> jobs,bool touching=false) {
 代码的 `touching`参数区分这两种规则。CSES允许单日任务，而LC1235仍要求每项 `start<end`；允许端点接触并不等于允许任意零长度任务。
 
 <a id="weighted-predecessor-engineering"></a>
+### （4）工程：收益类型、排序副本与移动
+
 总收益可能超过32位，所以收益字段与DP值均使用64位。排序比较器只按结束时间建立严格弱序，相同结束时间不需要额外虚构优先级；它们能否兼容由端点条件决定。
 
 函数按值接收任务，因而在本地副本中排序。随后用 `std::move`将这份副本交给共同核心，避免为两种边界实现再复制一次；调用者保有的原始任务序列不受影响。
 
-练习：[CSES · Projects](https://cses.fi/problemset/task/1140/)、[LC1235 · 规划兼职工作](https://leetcode.com/problems/maximum-profit-in-job-scheduling/description/)。
+<a id="weighted-predecessor-practice"></a>
+### （5）练习：两种兼容端点规则的带权调度
+
+[CSES · Projects](https://cses.fi/problemset/task/1140/)、[LC1235 · 规划兼职工作](https://leetcode.com/problems/maximum-profit-in-job-scheduling/description/)。
 
 
 <a id="resource-queries"></a>
 ## 二十三、资源受限的试探：鸡蛋掉落问题
+
+<a id="resource-queries-foundation"></a>
+### （1）推导：从最坏试投次数反推覆盖楼层
 
 有 n 层楼、k 个鸡蛋。未知的最高安全楼层 f 位于0..n：从1..f层扔下不会碎，从更高楼层扔下会碎。要求无论 f 是多少，都能确定它，求最坏情况下最少的试投次数。
 
@@ -1883,7 +2108,8 @@ i64 jobs_standard(std::vector<Job> jobs,bool touching=false) {
 
 例如 d=3、k=2，下方能处理2层，上方能处理3层。第一投选第3层：碎了在1、2层继续，没碎在4、5、6层继续，合计能够处理6层。
 
-### 由覆盖递推得到组合判定
+<a id="selection-subheading-25"></a>
+### （2）推导：由覆盖递推得到组合判定
 
 用组合数可以快速计算覆盖量。约定超出 d 范围的组合数为0；将 Pascal 恒等式 `C(d,i)=C(d−1,i−1)+C(d−1,i)`代入递推，并结合两个零初值，可得：
 
@@ -1894,7 +2120,7 @@ i64 jobs_standard(std::vector<Job> jobs,bool touching=false) {
 覆盖量随 d 非降，一个鸡蛋逐层试最多需要 n 次。因此可在 `[0,n]`内寻找首个满足 `cover(d,k)≥n`的 d。
 
 <a id="resource-queries-manual"></a>
-### 组合计数作为判定器
+### （3）Hcode：组合计数作为判定器
 
 ```cpp
 // LC887合同：1<=eggs<=100，0<=floors<=10000。
@@ -1926,7 +2152,10 @@ int egg_moves_manual(int eggs,int floors) {
 这一预算依赖楼层数上界；若推广到任意64位楼层，需重新设计计算。判定只关心覆盖是否足够，无须保留超过 n 的精确数量。
 
 <a id="resource-queries-standard"></a>
-### 直接推进覆盖DP的对照
+### （4）替代解法：逐次推进覆盖 DP
+
+<a id="resource-coverage-standard"></a>
+#### （a）Scode：饱和覆盖量与倒序更新
 
 ```cpp
 int egg_moves_coverage(int eggs,int floors) {
@@ -1946,12 +2175,20 @@ int egg_moves_coverage(int eggs,int floors) {
 鸡蛋数量 e 必须倒序更新，让 `cover[e]`和 `cover[e−1]`都还代表上一轮；正序会错误地在同一轮内重复使用新状态。该路径耗时 O(k·答案)，空间为 O(k)。它直接推进覆盖DP，与“组合计数+二分次数”是同题的两种算法。
 
 <a id="resource-queries-engineering"></a>
+### （5）边界：试探资源与最坏情况目标
+
 目标条件单调，与查询是否可重复且无代价是不同问题。交互题、昂贵测量或破坏性试探都要先确定资源怎样影响后续信息能力。这里求的是最坏情况最少次数；若问期望次数并给出概率分布，需要不同的状态与目标。
 
-练习：[LC887 · 鸡蛋掉落](https://leetcode.com/problems/super-egg-drop/description/)。
+<a id="resource-queries-practice"></a>
+### （6）练习：鸡蛋资源与最坏试投次数
+
+[LC887 · 鸡蛋掉落](https://leetcode.com/problems/super-egg-drop/description/)。
 
 <a id="matrix-peak"></a>
 ## 二十四、二维矩阵中的局部峰
+
+<a id="matrix-peak-foundation"></a>
+### （1）论证：用中列最大值确定搜索方向
 
 在正值矩形网格中，寻找严格大于上、下、左、右邻居的格子。题目保证相邻值不等，网格之外视作 `-1`。
 
@@ -1960,7 +2197,7 @@ int egg_moves_coverage(int eggs,int floors) {
 若右邻更大，它不仅高于当前格子，也高于整条中列。从右邻出发不断走向更大的格子，不可能穿回这条较低的中列，最终会在右侧到达一个峰。因此可以保留右侧，左侧更新完全对称。
 
 <a id="matrix-peak-manual"></a>
-### 扫描列最大值，再决定搜索方向
+### （2）Hcode：扫描列最大值，再决定搜索方向
 
 ```cpp
 template<class ColumnMaximum>
@@ -1993,7 +2230,7 @@ matrix_peak_manual(const std::vector<std::vector<int>>& a) {
 相邻值不等使列最大值严格高于上下邻居；远处出现相等值没有影响。每次更新保留的是某个峰必定存在的一侧，不必保持同一个最大点。
 
 <a id="matrix-peak-library"></a>
-### 用库寻找当前列的最大行号
+### （3）Scode：用库寻找当前列的最大行号
 
 ```cpp
 std::optional<std::pair<std::size_t, std::size_t>>
@@ -2014,22 +2251,30 @@ matrix_peak_standard(const std::vector<std::vector<int>>& a) {
 时间仍为 `O(m log n)`；行号数组使额外空间变为 `O(m)`，因此这种写法并不比直接扫描省内存。
 
 <a id="matrix-peak-engineering"></a>
+### （4）工程：比较器状态与矩阵输入约定
+
 一次 `max_element` 调用期间，捕获的 `col` 不变，比较器也不能修改矩阵，见<a class="knowledge-link" href="#knowledge-Q100003" data-knowledge="Q100003">判定器与lambda捕获</a>和<a class="knowledge-link" href="#knowledge-Q100004" data-knowledge="Q100004">比较器与排序规则</a>。
 
 输入应满足矩形且邻项不等的条件，函数不会逐次重验。空矩阵或零列输入返回空值，不会在空行号范围上读取最大值。
 
-练习：[二维局部峰](https://leetcode.com/problems/find-a-peak-element-ii/)。
+<a id="matrix-peak-practice"></a>
+### （5）练习：二维相邻比较与局部峰
+
+[二维局部峰](https://leetcode.com/problems/find-a-peak-element-ii/)。
 
 
 <a id="string-prefix"></a>
 ## 二十五、字符串的字典序前缀与最长公共前缀
+
+<a id="string-prefix-foundation"></a>
+### （1）建模：把字典序前缀匹配转成连续区间
 
 给定按字典序排序的字符串表，寻找所有以字符串 `p` 开头的词。例如 `car、cart、cat、dog` 中，以 `car` 开头的词构成连续区间 `[car,cart]`。
 
 把每个词截取至多 `|p|` 个字符后与 `p` 比较，结果在词表中依次为负、零、正。分别找到“首次不小于”和“首次大于”两个边界，就能框出全部匹配项。这样不必构造 `p` 的字典序后继，也就无需假定字符总能安全加一。
 
 <a id="string-prefix-manual"></a>
-### 查找前缀匹配的两个边界
+### （2）Hcode：查找前缀匹配的两个边界
 
 ```cpp
 std::pair<std::size_t, std::size_t>
@@ -2055,29 +2300,8 @@ prefix_range_manual(const std::vector<std::string>& words, std::string_view pref
 
 词比 `p` 短且只匹配它的前半部分时，比较结果为负，不算完整匹配；`p` 为空时，所有词都匹配。两次搜索共作 `O(log n)` 次比较，每次最多读取 `|p|` 个字符，字符处理成本为 `O(|p|log(n+1))`。输入必须按相同的字典序排列。
 
-### 变型：二分最长公共前缀的长度
-
-给两串 `a、b`，令 `L=min(|a|,|b|)`。若前 `m` 个字符相同，任何更短的前缀也相同，因此可以在长度范围中找最后一个满足条件的值。长度 `0` 始终可行；这里搜索的是长度，已经不再是词表下标。
-
-例如 `flower` 与 `flowing` 的前4个字符相同，第5个开始不同，答案为 `4`。
-
-```cpp
-std::size_t lcp_binary(std::string_view a, std::string_view b) {
-    std::size_t lo = 0, hi = std::min(a.size(), b.size());
-    while (lo < hi) {
-        const auto width = hi - lo;
-        const auto m = lo + width / 2 + width % 2;
-        if (a.substr(0, m) == b.substr(0, m)) lo = m;
-        else hi = m - 1;
-    }
-    return lo;
-}
-```
-
-每次仍从头比较前 `m` 个字符，完全相等时最坏需 `O(L log(L+1))` 次字符操作。因此判定次数为对数，并不表示比直接线性比较更快。
-
 <a id="string-prefix-library"></a>
-### 库边界查找与搜索建议
+### （3）Scode：使用库边界查找前缀范围
 
 ```cpp
 std::pair<std::size_t, std::size_t>
@@ -2097,7 +2321,51 @@ prefix_range_standard(const std::vector<std::string>& words, std::string_view pr
 
 `lower_bound` 和 `upper_bound` 分别使用适合自身参数方向的前缀比较器，返回同一匹配区间。
 
+<a id="lcp-length-variant"></a>
+### （4）变型：二分最长公共前缀的长度
+
+给两串 `a、b`，令 `L=min(|a|,|b|)`。若前 `m` 个字符相同，任何更短的前缀也相同，因此可以在长度范围中找最后一个满足条件的值。长度 `0` 始终可行；这里搜索的是长度，已经不再是词表下标。
+
+例如 `flower` 与 `flowing` 的前4个字符相同，第5个开始不同，答案为 `4`。
+
+<a id="lcp-length-manual"></a>
+#### （a）Hcode：手写长度判定与二分
+
+```cpp
+std::size_t lcp_binary(std::string_view a, std::string_view b) {
+    std::size_t lo = 0, hi = std::min(a.size(), b.size());
+    while (lo < hi) {
+        const auto width = hi - lo;
+        const auto m = lo + width / 2 + width % 2;
+        if (a.substr(0, m) == b.substr(0, m)) lo = m;
+        else hi = m - 1;
+    }
+    return lo;
+}
+```
+
+每次仍从头比较前 `m` 个字符，完全相等时最坏需 `O(L log(L+1))` 次字符操作。因此判定次数为对数，并不表示比直接线性比较更快。
+
+<a id="lcp-length-standard"></a>
+#### （b）Scode：以 mismatch 线性扫描替代长度二分
+
+两串的最长公共前缀则更适合直接调用 `mismatch`，寻找首个不同字符，确定性成本为 `O(L)`。这是直接扫描字符的另一种算法，替代了反复判定长度的搜索路径：
+
+```cpp
+std::size_t lcp_standard(std::string_view a, std::string_view b) {
+    return static_cast<std::size_t>(std::mismatch(a.begin(), a.end(), b.begin(), b.end()).first - a.begin());
+}
+```
+
+若已预处理前缀哈希，可降低一次长度判定的代价，但哈希相等只能说明可能相等；碰撞还可能破坏判定应有的单调性。双哈希能降低风险，不能提供确定性保证。已有后缀数组也能支持模式前缀区间查询，不过构建后缀索引是另一项工作。
+
+<a id="prefix-suggestions-variant"></a>
+### （5）变型：逐前缀生成搜索建议
+
 若产品建议系统要求用户每输入一个字符，就返回字典序最小的至多3项，只需先对产品排序，再为每个输入前缀查询匹配区间，取区间开头的至多3项。区间内已有所需顺序，不必再次选择最小项。
+
+<a id="prefix-suggestions-standard"></a>
+#### （a）Scode：复用库边界查找生成建议
 
 ```cpp
 std::vector<std::vector<std::string>>
@@ -2116,33 +2384,31 @@ suggestions_standard(std::vector<std::string> products, std::string_view query) 
 
 函数返回拥有字符串内容的结果，避免局部 `products` 销毁后留下悬空视图。输入串长度为 `q` 时，各前缀长度之和为 `O(q²)`，最坏查询字符成本为 `O(q²log(n+1))`，还要加产品排序与结果复制的代价。
 
-两串的最长公共前缀则更适合直接调用 `mismatch`，寻找首个不同字符，确定性成本为 `O(L)`：
-
-```cpp
-std::size_t lcp_standard(std::string_view a, std::string_view b) {
-    return static_cast<std::size_t>(std::mismatch(a.begin(), a.end(), b.begin(), b.end()).first - a.begin());
-}
-```
-
-若已预处理前缀哈希，可降低一次长度判定的代价，但哈希相等只能说明可能相等；碰撞还可能破坏判定应有的单调性。双哈希能降低风险，不能提供确定性保证。已有后缀数组也能支持模式前缀区间查询，不过构建后缀索引是另一项工作。
-
 <a id="string-prefix-engineering"></a>
+### （6）工程：前缀比较与字符串视图的接口约定
+
 `string_view::substr` 借用字符，不复制内容，也不延长源字符串寿命。若比较规则改为忽略大小写、区域排序或编码规范化，排序与前缀匹配定义必须一起调整，见<a class="knowledge-link" href="#knowledge-Q100004" data-knowledge="Q100004">比较器与排序规则</a>和<a class="knowledge-link" href="#knowledge-Q100005" data-knowledge="Q100005">借用与视图寿命</a>。
 
 当前代码按字符单元比较，不负责自然语言层面的编码规范化。
 
-练习：[搜索建议系统](https://leetcode.com/problems/search-suggestions-system/)。
+<a id="string-prefix-practice"></a>
+### （7）练习：逐前缀生成搜索建议
+
+[搜索建议系统](https://leetcode.com/problems/search-suggestions-system/)。
 
 
 <a id="continuous-root"></a>
 ## 二十六、连续函数的零点与误差控制
+
+<a id="continuous-root-foundation"></a>
+### （1）论证：连续性与异号如何保证区间含根
 
 连续函数在区间两端取异号值时，介值定理保证区间内至少有一个零点。计算中点后，保留两端仍异号的那一半，就能不断缩小含根区间。函数不必单调，但一次夹逼只保证找到其中一个根。
 
 连续性和异号各自有作用：`x²` 在 `[-1,1]` 中有根 `0`，两端却同号，这种夹逼不能发现它；单调阶跃函数可以两端异号，却因不连续而没有零点。
 
 <a id="continuous-root-manual"></a>
-### 返回实际含根区间
+### （2）Hcode：返回实际含根区间
 
 ```cpp
 struct RootBracket { double lo, hi; };
@@ -2179,7 +2445,7 @@ bisect_root(Function f, double lo, double hi, double tolerance = 1e-10, int step
 后两种停止不一定意味着宽度合格，因此返回 `RootBracket`，由调用方检查实际区间，而不是把函数返回本身视为精度达标。理想求值下，轮数为 `O(log((hi-lo)/ε))`，还要乘以每次计算 `f` 的成本。实际求值若连符号都受到严重消去误差影响，外层夹逼也无法修复。
 
 <a id="continuous-root-library"></a>
-### 三次方程：先隔离三个根，再分别夹逼
+### （3）变型：隔离三次方程的三个实根
 
 P1024保证三次方程有三个互异实根，均位于 `[-100,100]`，两两间距至少为 `1`。要找全三个根，首先需要三个各自只含一根的区间。
 
@@ -2190,6 +2456,9 @@ P1024保证三次方程有三个互异实根，均位于 `[-100,100]`，两两�
 归一化也消除了整体缩放系数造成的残差尺度差异，`long double` 与 `fma` 用来减小Horner求值的舍入。已知根域使归一系数的绝对值分别不超过 `300、30000、10⁶`。
 
 根间距还提供了分段所需的符号余量：在任意相邻根的中点，到这两个根的距离均至少为 `1/2`，到第三个根的距离至少为 `3/2`，所以单首项三次式的绝对值至少为 `3/8`。两根之间的极值绝对值只会更大，临界点不会任意接近零。三个区间按序且不共享根，无需再用浮点容差去重。
+
+<a id="cubic-root-standard"></a>
+#### （a）Scode：导数分段、Horner 求值与逐根夹逼
 
 ```cpp
 std::vector<double> cubic_roots_by_critical_points(long double a, long double b,
@@ -2226,11 +2495,16 @@ std::vector<double> cubic_roots_by_critical_points(long double a, long double b,
 
 `sqrt` 与 `fma` 分别负责临界点计算和数值求值，根的隔离仍依赖上述三次方程结构。
 
+<a id="salary-cap-alternative"></a>
+### （4）替代解法：利用分段线性关系直接恢复工资封顶值
+
 工资封顶提供了另一个可直接求解的例子。设工资总额为 `P(c)=Σmin(salary,c)`，给定目标总额 `T`，求封顶值 `c`。`P(c)` 非降，可以二分；但排序后，相邻工资断点之间又是线性的。若低于封顶值的工资和为 `S`，其余 `r` 人都被封顶，就有 `c=(T-S)/r`。例如工资 `[20,30,50]`、目标 `90`，得到 `c=40`。
 
 多次查询可预先建立每个工资断点对应的总额，再用 `lower_bound` 找到所属区间并代公式。目标大于原总工资时无解；能直接解析恢复时，无须继续迭代。
 
 <a id="continuous-root-engineering"></a>
+### （5）工程：误差指标与停止条件
+
 位置的绝对误差、相对误差和函数残差不是同一指标，应按题目要求选择停止条件。求平方根时，若 `0<x<1`，区间 `[0,x]` 甚至不含根，不能机械沿用整数情况的边界。
 
 机器精度不等于业务容差。本例按P1024两位小数的要求预留计算余量，函数本身不负责输出格式，见<a class="knowledge-link" href="#knowledge-Q100006" data-knowledge="Q100006">浮点夹逼与误差</a>。
@@ -2244,17 +2518,24 @@ std::vector<double> cubic_roots_by_critical_points(long double a, long double b,
 </aside>
 
 
-练习：[一元三次方程求解](https://www.luogu.com.cn/problem/P1024)。
+<a id="continuous-root-practice"></a>
+### （6）练习：三次方程的分段求根
+
+[一元三次方程求解](https://www.luogu.com.cn/problem/P1024)。
 
 
 <a id="average-transform"></a>
 ## 二十七、带区间限制的平均值优化
 
+<a id="average-transform-foundation"></a>
+### （1）建模：减去候选平均值并保留原集合限制
+
 平均值不是元素之和，不能直接靠增加一个元素判断好坏。可以先试一个平均值 `λ`，把每项变成 `b[i]=a[i]-λ`。对任意非空集合，都有 `sum(a)/count>=λ` 等价于 `sum(b)>=0`，因为元素个数为正。
 
 变换消除了除法，但没有放宽原题允许选择的集合。下面两类题的差别，正体现在变换后仍须保留的区间约束。
 
-### 长度受限的最大平均值
+<a id="decision-subheading-24"></a>
+### （2）建模：长度受限的最大平均值
 
 P1419要求在长度位于 `[S,T]` 的连续段中最大化平均值，条件为 `1<=S<=T<=n<=10^5`，元素在 `[-10^4,10^4]`。
 
@@ -2262,14 +2543,15 @@ P1419要求在长度位于 `[S,T]` 的连续段中最大化平均值，条件为
 
 只有最短长度限制时，可以一直保留历史最小前缀；加入最长长度后，过早的前缀会失效，需要用单调队列维护一个会滑动的窗口。
 
-### 删除内部非空段后的最小平均值
+<a id="decision-subheading-25"></a>
+### （3）建模：删除内部非空段后的最小平均值
 
 Sabotage要求删去一个非空内部连续段，保留首尾，使剩余平均值最小。原题 `3<=N<=10^5`，每项在 `1..10000`。
 
 仍令每项减去 `λ`。记全部变换值之和为 `U`，被删段的变换和为 `V`，剩余平均不超过 `λ` 当且仅当 `U-V<=0`。所以要检查：内部非空连续段的最大和是否至少为 `U`。这可以用Kadane算法求出，但必须限定在内部，并且不能允许空段。
 
 <a id="average-transform-manual"></a>
-### 实现合法窗口与非空最大子段
+### （4）Hcode：实现长度窗口与内部非空最大子段
 
 两题的搜索方向相反：最大平均值保留可行下界，最小剩余平均值保留可行上界。下面的浮点核心根据中点结果保留对应半区，不使用整数搜索的加减 `1`；最多迭代80轮，并在中点无法区别于端点时停止。
 
@@ -2343,7 +2625,7 @@ P1419的队列保存前缀下标。新前缀进入时，从后端删去值不小
 Sabotage中的 `current` 保存“以当前内部位置结束”的非空最大子段和：前一段和为正才继续接上，否则从当前项重新开始。它从第一项内部值初始化，因此内部全为负数时仍会删除至少一项。单次判定为 `O(n)` 时间、`O(1)` 额外空间。
 
 <a id="average-transform-standard"></a>
-### 用 deque 管理窗口，用 transform 生成变换值
+### （5）Scode：用 deque 管理窗口，用 transform 生成变换值
 
 ```cpp
 long double max_average_standard(const std::vector<i64>& a, int shortest, int longest) {
@@ -2381,7 +2663,7 @@ std::vector<long double> shifted_values_standard(const std::vector<i64>& a,
 Sabotage的 `transform` 为每项减去阈值，另外存下一份 `O(n)` 的变换数组。若只要求最终数值，也可像手写版那样边扫描边变换，避免这份数组。相关容器状态与捕获方式见<a class="knowledge-link" href="#knowledge-Q100011" data-knowledge="Q100011">双端队列状态</a>和<a class="knowledge-link" href="#knowledge-Q100003" data-knowledge="Q100003">按值捕获当前阈值</a>。
 
 <a id="average-transform-engineering"></a>
-### 判定方向与数值误差
+### （6）工程：判定方向与数值误差
 
 P1419允许负数，不能用正数数组中“和超限就收缩”的滑动窗口。Sabotage则必须保留首尾，保证剩余元素个数为正；最小化剩余平均对应变换和 `<=0`，不要沿用最大平均值的 `>=0` 方向。
 
@@ -2389,11 +2671,17 @@ P1419允许负数，不能用正数数组中“和超限就收缩”的滑动窗
 
 <a class="knowledge-link" href="#knowledge-Q100006" data-knowledge="Q100006">浮点夹逼与误差</a>不能由 `setprecision(3)` 替代；代码返回数值，输出层再格式化。若要求精确有理答案或严格区分舍入中点，就需要另外设计精度处理，固定轮数本身不提供这种保证。
 
-练习：[寻找段落](https://www.luogu.com.cn/problem/P1419)；[Sabotage](https://usaco.org/index.php?page=viewproblem2&cpid=419)。前者要同时处理 S/T，后者要保留端点和非空删除。
+<a id="average-transform-practice"></a>
+### （7）练习：长度窗口与内部非空删除
+
+[寻找段落](https://www.luogu.com.cn/problem/P1419)；[Sabotage](https://usaco.org/index.php?page=viewproblem2&cpid=419)。前者要同时处理 S/T，后者要保留端点和非空删除。
 
 
 <a id="ratio-selection"></a>
 ## 二十八、固定数量选择的最大总比值
+
+<a id="ratio-selection-foundation"></a>
+### （1）建模：用变换分数优化总和之比
 
 从 `n` 项中恰好选择 `m` 项，最大化 `sum(value)/sum(cost)`，其中每项 `cost>0`。目标是总和之比，不能预先按单项 `value/cost` 排序。
 
@@ -2402,7 +2690,7 @@ P1419允许负数，不能用正数数组中“和超限就收缩”的滑动窗
 试一个总比值 `λ`，把每项分数定义为 `value-λ×cost`。某个选择的总比值不低于 `λ`，当且仅当它的分数总和非负。又因为必须恰好取 `m` 项，能得到的最大分数和就是最大的 `m` 项之和。这样便得到线性或排序即可完成的判定，且随着 `λ` 增大，可行性由真变假。
 
 <a id="ratio-selection-manual"></a>
-### 计算变换分数，再选前 m 项
+### （2）Hcode：计算变换分数，再选前 m 项
 
 ```cpp
 struct Ingredient { i64 value, cost; };
@@ -2431,7 +2719,7 @@ long double ratio_manual(const std::vector<Ingredient>& items, int choose) {
 手写版用插入排序得到降序分数，累加前 `m` 项。原题 `n<=200`，最多80轮检查，时间上界为 `O(80n²)`。原题保证最优比值不超过 `1000`，搜索时保留最后可行值。
 
 <a id="ratio-selection-standard"></a>
-### 用 nth_element 分出最大的 m 项
+### （3）Scode：用 nth_element 分出最大的 m 项
 
 ```cpp
 long double ratio_standard(const std::vector<Ingredient>& items, int choose) {
@@ -2454,7 +2742,7 @@ long double ratio_standard(const std::vector<Ingredient>& items, int choose) {
 也可以使用 `sort(...,greater<>)`，以单次 `O(n log n)` 的代价取得完整顺序，参见<a class="knowledge-link" href="#knowledge-Q100008" data-knowledge="Q100008">选择算法与重排语义</a>。
 
 <a id="ratio-selection-engineering"></a>
-### 保留数量与成本条件
+### （4）边界：保留数量与成本条件
 
 `cost>0` 保证交叉相乘不改变不等号方向；恰选 `m` 项意味着即使有些变换分数为负，也不能擅自少选。
 
@@ -2471,10 +2759,16 @@ long double ratio_standard(const std::vector<Ingredient>& items, int choose) {
 </aside>
 
 
-练习：[KC 喝咖啡](https://www.luogu.com.cn/problem/P1570)。对比 `m=1`、`m=n` 与成本极不均衡的输入，验证检查器确实优化总和之比。
+<a id="ratio-selection-practice"></a>
+### （5）练习：固定数量下的总和之比
+
+[KC 喝咖啡](https://www.luogu.com.cn/problem/P1570)。对比 `m=1`、`m=n` 与成本极不均衡的输入，验证检查器确实优化总和之比。
 
 <a id="convex-location"></a>
 ## 二十九、凸多边形中的点定位
+
+<a id="convex-location-foundation"></a>
+### （1）建模：用扇形与叉积定位查询点
 
 给定按逆时针排列的严格凸多边形顶点，多次判断查询点在内部、边上还是外部。固定顶点 `p₀`，向其余顶点连线，就把多边形分成一组按角度排列的三角形。先找到查询点所在的扇区，便只需判断一个三角形。
 
@@ -2483,7 +2777,7 @@ long double ratio_standard(const std::vector<Ingredient>& items, int choose) {
 首尾两条射线之外的点可以直接排除。在它们之间，按顶点顺序旋转射线，`cross(p₀,pᵢ,q)>=0` 会先成立、后不成立。因此能够二分寻找包围 `q` 的两条相邻射线，再检查扇区三角形的第三条边。
 
 <a id="convex-location-manual"></a>
-### 先检查边界射线，再定位所在三角形
+### （2）Hcode：先检查边界射线，再定位所在三角形
 
 ```cpp
 struct Point { std::int64_t x, y; };
@@ -2525,7 +2819,7 @@ Location convex_manual(const std::vector<Point>& p, Point q) {
 每次查询需要 `O(log n)` 时间和 `O(1)` 额外空间，不使用角度函数、开方或浮点容差。严格凸且逆时针保证了射线顺序；凹多边形、顺时针输入、共线冗余点或重复首点都需要先作相应处理。
 
 <a id="convex-location-library"></a>
-### 用 partition_point 定位角度分界
+### （3）Scode：用 partition_point 定位角度分界
 
 ```cpp
 Location convex_standard(const std::vector<Point>& p, Point q) {
@@ -2542,14 +2836,22 @@ Location convex_standard(const std::vector<Point>& p, Point q) {
 `partition_point` 返回真前缀的结束位置。前面的扇形检查保证返回值既不在首条射线之前，也不是尾后迭代器，因此可以读取 `prev(end)` 和 `*end`，取得相邻两个顶点。库函数替换的是扇区定位循环，几何判断与前面的实现相同，时间和空间也相同。
 
 <a id="convex-location-engineering"></a>
+### （4）工程：叉积中间式的整数范围
+
 ABC296G中，顶点及查询点坐标的绝对值不超过 `10⁹`。坐标差最大为 `2×10⁹`，叉积两项乘积之差的粗界为 `8×10¹⁸`，可放入 `int64_t`。`Point` 的成员从一开始就是64位，因此减法不会先在32位里溢出。
 
 若改用三个绝对面积求和，或扩大坐标范围，需要重新预算中间值；必要时使用明确支持的更宽类型，见<a class="knowledge-link" href="#knowledge-Q100002" data-knowledge="Q100002">整数运算与溢出</a>。
 
-练习：[凸多边形多次点定位](https://atcoder.jp/contests/abc296/tasks/abc296_g)。
+<a id="convex-location-practice"></a>
+### （5）练习：凸多边形内外与边界判断
+
+[凸多边形多次点定位](https://atcoder.jp/contests/abc296/tasks/abc296_g)。
 
 <a id="matching-threshold"></a>
 ## 三十、互斥选择中的最优阈值：用匹配判定
+
+<a id="matching-threshold-foundation"></a>
+### （1）建模：把第 k 大阈值转成互斥匹配
 
 从一个 `n×m` 的完整矩阵中选择 `n` 个元素，要求它们不同行、不同列，使所选数的第 `k` 大尽可能小。P4251中 `1<=k<=n<=m<=250`，元素在 `1..10^9`。
 
@@ -2561,14 +2863,15 @@ ABC296G中，顶点及查询点坐标的绝对值不超过 `10⁹`。坐标差�
 
 低值匹配为何足以完成原题？必要性来自任何合法完整选择中的低值边。反过来，已经匹配 `need` 对后，余下行可以任意配给尚未使用的列：原矩阵没有禁选格，且 `m>=n`，所以一定补得齐。补出的值即使很大，低值的数量也不会减少。若矩阵存在禁选格，这一步就需要重新证明。
 
-### 为什么增广路可以完成匹配判定
+<a id="decision-subheading-20"></a>
+### （2）论证：为什么增广路可以完成匹配判定
 
 Kuhn算法寻找一条交替经过未选边、已选边的路径，把原先占用某列的行重新安排到其他列，为新行腾出位置。找到这样一条增广路，匹配数就能增加 `1`。
 
 若存在比当前更大的匹配，两组匹配的对称差中必有一条增广路。按行逐步加入时，前面的行已经达到最大匹配；新出现的增广路只能从新加入的未匹配行开始。完整搜索所有可达的改派路径，成功就增加一对，失败则当前行前缀仍达到最大匹配。因此最后少于 `need` 可以确定拒绝，而不只是一次贪心没选好。
 
 <a id="matching-threshold-manual"></a>
-### 用增广路检查给定阈值
+### （3）Hcode：用增广路检查给定阈值
 
 ```cpp
 // 返回至多 need 条低权边组成的匹配：right_owner[c] = row 或 -1。
@@ -2621,7 +2924,7 @@ int matching_threshold_manual(const std::vector<std::vector<int>>& a, int k) {
 朴素Kuhn一次检查的上界为 `O(n²m)`。在原整数值域中二分，总时间为 `O(n²m log W)`；这一实现没有使用Hopcroft–Karp的加速。
 
 <a id="matching-threshold-standard"></a>
-### 离散化阈值，并恢复完整选择
+### （4）Scode：离散化阈值，并恢复完整选择
 
 ```cpp
 struct MatchAnswer {
@@ -2659,7 +2962,7 @@ MatchAnswer matching_standard(const std::vector<std::vector<int>>& a, int k) {
 完整时间为 `O(nm log(nm)+n²m log(nm))`，存储为 `O(nm+n+m)`，递归深度为 `O(n)`。
 
 <a id="matching-threshold-engineering"></a>
-### 匹配性能与递归状态
+### （5）工程：匹配性能与递归状态
 
 更大规模可把匹配判定换成Hopcroft–Karp等更快算法，阈值建模不变。每个阈值的 `seen` 与 `right_owner` 属于本次检查，不能直接沿用其他阈值的状态。
 
@@ -2673,15 +2976,24 @@ MatchAnswer matching_standard(const std::vector<std::vector<int>>& a, int k) {
 </aside>
 
 
-练习：[小凸玩矩阵](https://www.luogu.com.cn/problem/P4251)。重点理解为何是 `n−k+1`，以及为什么低权部分匹配足以补成完整答案。
+<a id="matching-threshold-practice"></a>
+### （6）练习：行列互斥下的最优阈值
+
+[小凸玩矩阵](https://www.luogu.com.cn/problem/P4251)。重点理解为何是 `n−k+1`，以及为什么低权部分匹配足以补成完整答案。
 
 
 <a id="fenwick-rank"></a>
 ## 三十一、动态频数的第 k 个位置：树状数组内查找
 
+<a id="fenwick-rank-foundation"></a>
+### （1）建模：用累计频数表示动态秩
+
 给 n 个位置分别保存一个非负频数，允许修改频数，并查询“累计第 k 个单位出现在哪个位置”。例如动态删除序列时，原位置不移动：存活位置记1，删除位置记0，第 k 个存活元素就是前缀和首次达到 k 的位置。
 
 这里的顺序来自累计频数，而非元素值。下面用树状数组（Fenwick tree）维护频数；代码中的 `i64`表示64位有符号整数，外部位置从0开始。
+
+<a id="fenwick-rank-blocks"></a>
+### （2）推导：从树状数组的整块频数直接定位
 
 先看树状数组保存了什么。内部采用1基编号，`tree[t]`记录最后 `lowbit(t)`个位置的频数之和，即区间 `(t−lowbit(t),t]`，其中 `lowbit(t)=t&−t`。
 
@@ -2709,7 +3021,7 @@ MatchAnswer matching_standard(const std::vector<std::vector<int>>& a, int k) {
 删除可以使用负增量，但删除后的每个实际频数仍须非负。若允许实际频数为负，累计量可能回落，上面的排除依据就不再成立。
 
 <a id="fenwick-rank-manual"></a>
-### 维护频数并按当前秩删除
+### （3）Hcode：维护频数并按当前秩删除
 
 ```cpp
 class FrequencyTree {
@@ -2764,7 +3076,10 @@ std::vector<i64> remove_by_rank(const std::vector<i64>& values,
 `remove_by_rank`反复选择并将对应频数减1。原数组只用于读取删除值，位置本身不移动，因而不必承担 `vector::erase`导致的后缀搬移。用 n 次点加初始化后，整套删除耗时 O(n log n)；单次点加或选择均为 O(log n)，空间为 O(n)。
 
 <a id="fenwick-rank-standard"></a>
-### 静态累计量与动态结构
+### （4）替代解法：频数不变时的静态累计量
+
+<a id="fenwick-static-standard"></a>
+#### （a）Scode：使用 partial_sum 与 lower_bound 查累计秩
 
 ```cpp
 int kth_with_prefix(const std::vector<i64>& frequency, i64 k) {
@@ -2781,17 +3096,23 @@ int kth_with_prefix(const std::vector<i64>& frequency, i64 k) {
 但发生修改后重建累计量需要 O(n) 时间与空间。因此，频繁修改时，树状数组的价值在于增量维护，而非仅仅把查找改写成另一个二分循环。两种方法都要求累计量非降，相关条件见 <a class="knowledge-link" href="#knowledge-Q100001" data-knowledge="Q100001">分区与迭代器合同</a>。
 
 <a id="fenwick-rank-engineering"></a>
-### 合法频数、返回值与数据所有权
+### （5）工程：合法频数、返回值与数据所有权
 
 类型预算要覆盖频数总和，而不只是单次修改量，见 <a class="knowledge-link" href="#knowledge-Q100002" data-knowledge="Q100002">整数表达式与溢出预算</a>。`add`要求原位置合法；`remove_by_rank`要求每次删除的秩有效，不能用查询的n哨兵替代输入检查。
 
 调用期间只读借用原值数组，返回向量拥有复制出的删除值，见 <a class="knowledge-link" href="#knowledge-Q100005" data-knowledge="Q100005">借用参数与结果所有权</a>。
 
-练习：[List Removals](https://cses.fi/problemset/task/1749)。输出的是删除值，而非原下标；把下标与存活秩分开才能迁用。
+<a id="fenwick-rank-practice"></a>
+### （6）练习：按存活秩删除并输出原值
+
+[List Removals](https://cses.fi/problemset/task/1749)。输出的是删除值，而非原下标；把下标与存活秩分开才能迁用。
 
 
 <a id="summary-descent"></a>
 ## 三十二、线段树内查找：从指定位置找首个达标值
+
+<a id="summary-descent-foundation"></a>
+### （1）建模：用区间摘要排除整块不可能的位置
 
 长度为 n 的数组允许点修改。给定起点 s 和阈值 V，求首个满足 `j≥s`且 `a[j]≥V`的位置；不存在则返回 n。
 
@@ -2804,7 +3125,7 @@ int kth_with_prefix(const std::vector<i64>& frequency, i64 k) {
 本题取区间最大值，令 f 表示“最大值<V”。扩展区间只会维持或增大最大值，因此条件具有所需的单调性。对数级搜索依赖的是摘要，不要求原数组有序。
 
 <a id="summary-descent-manual"></a>
-### 根据区间最大值逐层定位
+### （2）Hcode：根据区间最大值逐层定位
 
 ```cpp
 class MaxTree {
@@ -2849,7 +3170,10 @@ public:
 起点 s 只切开一条树路径，答案所在块也只需下降一条路径；中间区域按相邻整块跳过。因此单次查询为 O(log n)，不必遍历所有叶子。建树为 O(n)，点修改为 O(log n)，空间为 O(n)。补齐到二次幂的虚拟叶子不属于原数组，不能作为答案返回。
 
 <a id="summary-descent-standard"></a>
-### 线性查找与结构库的选择
+### （3）替代解法：用线性扫描替代结构内定位
+
+<a id="summary-linear-standard"></a>
+#### （a）Scode：使用 find_if 线性寻找首个达标值
 
 ```cpp
 int first_at_least_linear(const std::vector<i64>& values, int start, i64 target) {
@@ -2863,6 +3187,9 @@ int first_at_least_linear(const std::vector<i64>& values, int start, i64 target)
 
 线性版不需要区间摘要；线段树版用额外维护成本换取更快的重复查询。应按修改、查询次数选择，而不是把库函数名称看作复杂度保证。
 
+<a id="summary-acl-interface"></a>
+### （4）工程：AtCoder Library 的结构内查找接口
+
 [AtCoder Library `segtree::max_right/min_left`](https://atcoder.github.io/ac-library/production/document_en/segtree.html)提供了通用的结构内边界搜索。它是外部算法库，不是C++标准库。
 
 在这个库中，用最大值作为摘要合并运算，空区间的单位值 e 取最低整数，再令 `f(mx)=mx<V`。`max_right(s,f)`返回区间最大值仍小于 V 的最远半开右端，也就是第一个≥V的位置；无答案时返回 n。
@@ -2870,17 +3197,23 @@ int first_at_least_linear(const std::vector<i64>& values, int start, i64 target)
 库要求 `f(e())=true`，并要求同一参数的判断结果稳定、没有副作用。原题元素与V非负，最低整数作为空区间值满足这一条件；V若恰是最低整数，则不能原样使用该调用。更一般的摘要还须保持合并顺序，例如非交换运算不能随意交换左右块。`min_left`则从右端反向寻找同类边界。
 
 <a id="summary-descent-engineering"></a>
-### 更新、无解返回与资源开销
+### （5）工程：更新、无解返回与资源开销
 
 这份实现固定使用最大值，空区间 `range_max`返回最低整数。`set`要求位置合法，查询起点和区间端点也须落在接口定义范围内。改变数组大小需要重建；普通点修改通过 `set`更新摘要，直接修改建树时的原数组不会改变树内副本，见 <a class="knowledge-link" href="#knowledge-Q100005" data-knowledge="Q100005">借用与复制所有权</a>。
 
 查询返回 n 时应先判无解，再访问元素。递归只沿对数层高下降，资源区别见 <a class="knowledge-link" href="#knowledge-Q100009" data-knowledge="Q100009">递归与调用栈</a>；结点数和摘要数值的类型仍须按输入上界选择，见 <a class="knowledge-link" href="#knowledge-Q100002" data-knowledge="Q100002">类型范围</a>。
 
-练习：[AtCoder practice2 J — Segment Tree](https://atcoder.jp/contests/practice2/tasks/practice2_j)。它还包含点赋值、区间最大值；原题用1基且无解输出N+1，需在入口出口转换。
+<a id="summary-descent-practice"></a>
+### （6）练习：点修改、区间摘要与首个达标位置
+
+[AtCoder practice2 J — Segment Tree](https://atcoder.jp/contests/practice2/tasks/practice2_j)。它还包含点赋值、区间最大值；原题用1基且无解输出N+1，需在入口出口转换。
 
 
 <a id="ancestor-boundary"></a>
 ## 三十三、最近公共祖先与路径边界的倍增查找
+
+<a id="ancestor-boundary-foundation"></a>
+### （1）推导：把祖先复合转成可接受的倍增跳跃
 
 给定一棵有根树，查询两点的最近公共祖先，即共同祖先中深度最大的结点，简称LCA。可先保存倍增表：`up[b][v]`表示结点 v 向上走2^b步到达的祖先。
 
@@ -2893,7 +3226,7 @@ int first_at_least_linear(const std::vector<i64>& values, int start, i64 target)
 从大步长到小步长尝试后，两点恰停在LCA的下一层，其父结点就是答案。这是沿上行距离寻找边界，倍增表让每次试探跳过一整段。
 
 <a id="ancestor-boundary-manual"></a>
-### 先等深，再同步提升
+### （2）Hcode：先等深，再同步提升
 
 ```cpp
 class Ancestors {
@@ -2934,7 +3267,10 @@ public:
 预处理耗时 O(n log n)，每次LCA或k级祖先查询为 O(log n)，空间为 O(n log n)。根指向自身只是表内安全哨兵；`kth`先比较实际深度，超出时返回−1，不把根的自指算作真实祖先。
 
 <a id="ancestor-boundary-standard"></a>
-### 链上求交与有序路径查询
+### （3）替代解法：直接求交两条祖先链
+
+<a id="ancestor-chain-standard"></a>
+#### （a）Scode：使用 find 查找第一个共同祖先
 
 ```cpp
 int lca_with_find(const std::vector<int>& parent, int a, int b) {
@@ -2954,9 +3290,15 @@ C++标准库没有直接的LCA查询。对照实现先保存a的祖先链，再�
 
 它说明祖先链的直接求交方式，但大量查询时，应使用已预处理的结构。
 
+<a id="ancestor-threshold-variant"></a>
+### （4）变型：单调权值路径上的最浅达标祖先
+
 祖先查询还可能由结点权值产生另一种顺序。若每条边都满足父权不大于子权，根到当前结点的路径权值就非降；给定阈值，可在该路径上寻找首个权值≥阈值的结点，也就是符合条件的最浅祖先。
 
 这里搜索的是路径权值的边界，目标与LCA不同。没有这条权值条件的树，不能直接在根路径上二分。
+
+<a id="ancestor-threshold-standard"></a>
+#### （a）Scode：维护当前根路径并调用 lower_bound
 
 ```cpp
 // weights[parent[v]] <= weights[v]. Query = {node, threshold}.
@@ -2995,7 +3337,7 @@ std::vector<int> threshold_ancestor_queries(
 把查询按目标结点预先分组，到达该结点时在路径权值上调用 `std::lower_bound`。即使权值重复，首次满足仍对应最浅祖先。树遍历需要 O(n)，q次查询共需 O(q log n)，空间为 O(n+q)。显式事件栈也使长链不依赖递归调用栈容量。
 
 <a id="ancestor-boundary-engineering"></a>
-### 树查询与函数跳跃的边界
+### （5）边界：树查询与函数跳跃的边界
 
 两种树查询都要求结点合法、树非空且同根，接口采用零基编号。LCA的“会合后不再分开”推理还依赖两点已经同深。
 
@@ -3003,11 +3345,17 @@ std::vector<int> threshold_ancestor_queries(
 
 路径查询拿到边界迭代器后立即转成下标，再进行下一次 `push/pop`，避免使用失效位置，见 <a class="knowledge-link" href="#knowledge-Q100013" data-knowledge="Q100013">vector修改与失效</a>。原树与权值只读借用，见 <a class="knowledge-link" href="#knowledge-Q100005" data-knowledge="Q100005">借用与生命周期</a>；显式事件栈和递归函数栈的资源区别见 <a class="knowledge-link" href="#knowledge-Q100009" data-knowledge="Q100009">调用栈边界</a>。
 
-练习：[Company Queries II](https://cses.fi/problemset/task/1688/)、[Company Queries I](https://cses.fi/problemset/task/1687)、[Planets Queries I](https://cses.fi/problemset/task/1750)、[Cyclic Array](https://cses.fi/problemset/task/1191)。Company I核对不存在祖先，Planets核对有环精确复合；Cyclic的边界提升在下一节展开，不表示四题有同一种二分谓词。
+<a id="ancestor-boundary-practice"></a>
+### （6）练习：祖先查询、函数跳跃与环形分段
+
+[Company Queries II](https://cses.fi/problemset/task/1688/)、[Company Queries I](https://cses.fi/problemset/task/1687)、[Planets Queries I](https://cses.fi/problemset/task/1750)、[Cyclic Array](https://cses.fi/problemset/task/1191)。Company I核对不存在祖先，Planets核对有环精确复合；Cyclic的边界提升在下一节展开，不表示四题有同一种二分谓词。
 
 
 <a id="cyclic-jump"></a>
 ## 三十四、正数环形序列的最少连续分段
+
+<a id="cyclic-jump-foundation"></a>
+### （1）建模：从最远合法段构造环上的跳跃
 
 给定一个正数环，每个元素都不超过容量 C。把环切成若干连续段，每段和至多为 C，求最少段数。切点并未给定，因此需要同时考虑从哪里开始和每段延伸多远。
 
@@ -3022,7 +3370,7 @@ std::vector<int> threshold_ancestor_queries(
 再保存 next 的2^b次复合。对于起点 s，要覆盖到 s+n；从大到小尝试跳数，只接受跳后位置仍严格小于目标的跳跃，最后再加一段。这样直接定位“尚未覆盖完整环”的最后位置。
 
 <a id="cyclic-jump-manual"></a>
-### 用最远段建立跳跃表
+### （2）Hcode：用最远段建立跳跃表
 
 跳跃核心接收已经建立的 next 表，构造多次复合，并对每个起点求答案。其输入是各起点完成一段后的下一个位置：
 
@@ -3070,7 +3418,7 @@ int min_cyclic_parts(const std::vector<i64>& values, i64 capacity) {
 next在2n处自指，使复合查表始终有界；每个真实位置的单项都能放入一段，保证跳跃严格前进。预处理及全部起点查询共耗时 O(n log n)，空间为 O(n log n)。n=2×10⁵时，当前 `int`跳表约占29MB，应按实际表大小计入内存。
 
 <a id="cyclic-jump-standard"></a>
-### 用前缀和构造最远终点
+### （3）Scode：用前缀和构造最远终点
 
 ```cpp
 int min_cyclic_parts_with_bounds(const std::vector<i64>& values, i64 capacity) {
@@ -3090,17 +3438,23 @@ int min_cyclic_parts_with_bounds(const std::vector<i64>& values, i64 capacity) {
 段和恰等于容量也合法，故这里选择upper而不是lower。它与滑窗共用同一提升核心；next构造从 O(n)变为 O(n log n)，但全算法仍由 O(n log n)界定。
 
 <a id="cyclic-jump-engineering"></a>
-### 正数条件与整数范围
+### （4）边界：正数条件与整数范围
 
 实现要求环非空、所有元素为正且不超过 C。负数会同时破坏滑窗的最远段构造和前缀和顺序；若存在单项>C，则应先判无解，不能让窗口停在原地。原题已保证每个单项合法。
 
 原题 Ai≤10⁹、2n≤4×10⁵，前缀和至多4×10¹⁴；加上 C≤10¹⁸后仍可放入64位。滑窗通过 `value≤C−sum`判断是否可加入，范围分析见 <a class="knowledge-link" href="#knowledge-Q100002" data-knowledge="Q100002">整数表达式与溢出预算</a>。两版都只读借用原数组，见 <a class="knowledge-link" href="#knowledge-Q100005" data-knowledge="Q100005">借用参数</a>。
 
-练习：[Cyclic Array](https://cses.fi/problemset/task/1191)。切点不是给定，不能只对原数组从0贪心一次。
+<a id="cyclic-jump-practice"></a>
+### （5）练习：切点未知的环形连续分段
+
+[Cyclic Array](https://cses.fi/problemset/task/1191)。切点不是给定，不能只对原数组从0贪心一次。
 
 
 <a id="time-parallel-search"></a>
 ## 三十五、并行二分：批量查询最早连通时间
+
+<a id="time-parallel-search-foundation"></a>
+### （1）组合：让各查询共用一次时间前缀重放
 
 图有 n 个结点，最初没有边，此后每天加入一条无向边。给出许多点对，分别询问两点最早在哪一天连通。设一共加入 m 条边，有 q 个查询。
 
@@ -3113,7 +3467,7 @@ int min_cyclic_parts_with_bounds(const std::vector<i64>& values, i64 capacity) {
 这里的“并行”指批量安排查询，不是创建线程。共享的是状态构建成本，查询各自的真假边界仍独立变化；状态也不必能写成各条边贡献的简单求和，只要能随事件增量维护即可。
 
 <a id="time-parallel-search-manual"></a>
-### 按候选日期分桶，共享加边过程
+### （2）Hcode：按候选日期分桶，共享加边过程
 
 先给出每轮使用的并查集DSU。`std::iota`将父数组初始化为0..n−1，使各点自成一块；合并时用 `std::swap`统一小块接大块的方向。
 
@@ -3174,9 +3528,14 @@ std::vector<int> first_connection_days(int n, const std::vector<std::pair<int,in
 同一点与自身在空图中已连通，因此其答案是第0天。各轮从空图重放，重复边、自环和始终不连通的点对也按同一含义处理。
 
 <a id="time-parallel-search-standard"></a>
-### 两次查询如何逐轮分开
+### （3）Scode：用标准设施组织查询状态
 
 C++标准库提供容器与初始化算法，没有直接的并查集或并行二分接口。这里 `std::vector`保存查询桶和父数组，`std::iota`建立初值，`std::swap`调整合并方向；路径压缩、合并规则与日期边界仍由前面的算法实现。
+
+这些设施已在[前面的共享实现](#time-parallel-search-manual)中使用，查询分桶与 DSU 核心继续复用该实现，不再复制第二份求解代码。
+
+<a id="time-parallel-search-example"></a>
+### （4）推演：两次查询如何逐轮分开
 
 例如道路依次加入 `(0,1)、(1,2)、(2,3)`，查询A=(0,2)、B=(0,3)。初始两问都是 `low=-1、high=4`。
 
@@ -3184,28 +3543,40 @@ C++标准库提供容器与初始化算法，没有直接的并查集或并行�
 
 这一过程每轮只扫描一条时间线，没有为A、B各重建一次前缀。若另问(2,2)，它的真边界最终会缩到第0天。
 
+<a id="time-parallel-search-cost"></a>
+### （5）复杂度：共享重放的成本与回滚版本的区别
+
 每轮重建n个父结点需 O(n)，加边和回答查询需 O((m+q)α(n))。共进行 O(log(m+2))轮，因此总时间为 O((n+(m+q)α(n)) log(m+2))，空间为 O(n+m+q)。m=0时仍要检查第0天，轮数界中的常数项不能省掉。
 
 当前实现不撤销路径压缩。若改成递归回滚，需要另行设计可回滚并查集；仅给普通 `find`加一张撤销列表并不足以保证原有复杂度与状态恢复。
 
 <a id="time-parallel-search-engineering"></a>
-### 重置状态与只增边条件
+### （6）边界：重置状态与只增边条件
 
 并查集与查询桶都按轮重建，不能把上一轮的状态直接留给下一轮。若加入删边，两点可能连通后又断开，时间单调性就消失；更换DSU的实现也不能恢复这一数学条件。
 
 `low=-1`而所有真实日期非负，支持这里的中点计算；换成极大整数域时，应重算 <a class="knowledge-link" href="#knowledge-Q100002" data-knowledge="Q100002">差值与中点预算</a>。操作桶与查询向量时，也要避免扩容后复用失效引用，见 <a class="knowledge-link" href="#knowledge-Q100013" data-knowledge="Q100013">vector扩容与引用失效</a>。
 
-练习：[New Roads Queries](https://cses.fi/problemset/task/2101)。这是一套多问共享状态算法；只有一个钉木板前缀查询时，不必为术语而引入它。
+<a id="time-parallel-search-practice"></a>
+### （7）练习：多点对的最早连通日期
+
+[New Roads Queries](https://cses.fi/problemset/task/2101)。这是一套多问共享状态算法；只有一个钉木板前缀查询时，不必为术语而引入它。
 
 
 <a id="dynamic-range-kth"></a>
 ## 三十六、整体二分：带修改的区间第 k 小查询
+
+<a id="dynamic-range-kth-foundation"></a>
+### （1）建模：用时间事件表达赋值和区间秩
 
 长度为 n 的数组交错执行两类操作：把某个位置赋成新值，以及查询当前闭区间的第 k 小元素，重复出现的值分别计数。所有操作已知，可离线处理。
 
 对一次固定查询，统计“区间内≤v的元素个数”，随值阈值 v 单调增加。但查询发生的时刻不同，一次赋值也可能把答案变大或变小。因此，应沿**答案值域**分治，同时保留操作时间顺序。
 
 先把每个初始元素写成一次插入。位置赋值则拆为两个相邻事件：删除该位置当时的旧值，再插入新值。这样，在时间顺序上扫描时，区间内当前有哪些值可由增减计数表示。
+
+<a id="dynamic-range-kth-partition"></a>
+### （2）推导：稳定分流与回滚如何维持查询时刻
 
 进入某个值域 `[lo,hi]`的子问题时，其中更新事件的数值和查询答案都在这个域内，查询的 rank 表示该域内的剩余秩；位置树状数组从空状态开始。令mid为值域中点，只把值≤mid的更新加入树状数组。
 
@@ -3217,7 +3588,8 @@ C++标准库提供容器与初始化算法，没有直接的并查集或并行�
 
 删除事件的贡献为−1，但实际多重集中各位置的有效频数仍非负；这里不是允许任意负频数的秩查询。
 
-### 先追踪一次值域划分
+<a id="advanced-subheading-23"></a>
+### （3）推演：先追踪一次值域划分
 
 以初值 `[4,1,3]`为例，依次执行：查询全区间第2小Q1，把零基位置1赋为5，再查询全区间第2小Q2。压缩表为 `[1,3,4,5]`，顶层左半的最大值为3。
 
@@ -3226,7 +3598,10 @@ C++标准库提供容器与初始化算法，没有直接的并查集或并行�
 回滚后，左子问题在 `[1,3]`内求Q1的第2小，得到3；右子问题在 `[4,5]`内求Q2的第1小，得到4。这三个动作——按时间扫描、稳定分流、右转扣秩——分别保证修改时刻、后续重放与答案排序都保持正确。
 
 <a id="dynamic-range-kth-manual"></a>
-### 事件表示、值压缩与稳定递归
+### （4）组合：事件表示、值压缩与稳定递归
+
+<a id="dynamic-kth-model-manual"></a>
+#### （a）Hcode：表示外部操作与内部事件
 
 实现用两类记录分开外部操作与内部事件。`RangeOperation`保存原始赋值或查询；`RankEvent`中的 `delta`表示插入/删除的±1贡献，`rank`只用于查询的剩余秩。`left/right`描述位置，`value`保存压缩后的值下标。
 
@@ -3244,6 +3619,9 @@ struct RankEvent {
     int id, value;   // query output index; update compressed value
 };
 ```
+
+<a id="dynamic-range-kth-standard"></a>
+#### （b）Scode：排序去重并压缩全部可能值
 
 先收集初值和**全部未来赋值**，排序去重，得到从小到大的不同值表。`value_rank`用 `lower_bound`将真实值映到表中下标；递归只在这些下标上分治，最终再映回原值。
 
@@ -3263,6 +3641,13 @@ int value_rank(const std::vector<i64>& values, i64 value) {
     return static_cast<int>(std::lower_bound(values.begin(), values.end(), value)-values.begin());
 }
 ```
+
+`sort`排好值序，`unique`把不重复的值压到前段，并返回新的逻辑末尾；`erase`删除尾段，才真正缩短容器。随后用 `lower_bound`取得值下标。仅压缩初值会漏掉未来修改目标，所以收集阶段必须包含所有新值。
+
+标准库承担压缩和范围复制；稳定的时间流、剩余秩变化及回滚规则，仍需要由值域分治算法组织。
+
+<a id="dynamic-kth-recursion-manual"></a>
+#### （c）Hcode：稳定分流事件并回滚位置统计
 
 ```cpp
 std::vector<i64> dynamic_range_kth(const std::vector<i64>& initial,
@@ -3334,15 +3719,8 @@ std::vector<i64> dynamic_range_kth(const std::vector<i64>& initial,
 
 空间为 O(E+n+U+log(U+1))。递归深度取决于不同值数，而不是数组长度；共享缓冲区避免为每个递归结点保留整份事件副本。
 
-<a id="dynamic-range-kth-standard"></a>
-### 排序压缩与库设施的职责
-
-`sort`排好值序，`unique`把不重复的值压到前段，并返回新的逻辑末尾；`erase`删除尾段，才真正缩短容器。随后用 `lower_bound`取得值下标。仅压缩初值会漏掉未来修改目标，所以收集阶段必须包含所有新值。
-
-标准库承担压缩和范围复制；稳定的时间流、剩余秩变化及回滚规则，仍需要由值域分治算法组织。
-
 <a id="dynamic-range-kth-engineering"></a>
-### 离线条件、输入范围与借用
+### （5）边界：离线条件、输入范围与借用
 
 实现要求原数组非空、赋值位置合法，每次查询满足 `1≤k≤r−l+1`；非法秩不在该接口的定义范围内。
 
@@ -3360,11 +3738,17 @@ std::vector<i64> dynamic_range_kth(const std::vector<i64>& initial,
 </aside>
 
 
-练习：[静态区间第k小](https://www.luogu.com.cn/problem/P3834)、[Dynamic Rankings](https://www.luogu.com.cn/problem/P2617)。前者题名虽指向可持久化树，并不禁止其他正确算法；后者才核验真实赋值时序。
+<a id="dynamic-range-kth-practice"></a>
+### （6）练习：静态与带修改的区间第 k 小
+
+[静态区间第k小](https://www.luogu.com.cn/problem/P3834)、[Dynamic Rankings](https://www.luogu.com.cn/problem/P2617)。前者题名虽指向可持久化树，并不禁止其他正确算法；后者才核验真实赋值时序。
 
 
 <a id="marginal-penalty"></a>
 ## 三十七、惩罚参数搜索：递减边际收益下的资源分配
+
+<a id="marginal-penalty-foundation"></a>
+### （1）建模：把资源使用化成递减收益的全局选择
 
 有 N 个设施，第 i 个初始收益为 A_i。每使用一次，先获得当前收益，再将该设施收益减1。最多使用 K 次，求最大总收益。原题中 A_i、K可到2×10⁹，N可到10⁵。
 
@@ -3376,6 +3760,9 @@ std::vector<i64> dynamic_range_kth(const std::vector<i64>& initial,
 
 全部正收益的数量为 `T=ΣA_i`。由于允许少于K次，零收益和负收益都不必取，实际应选 `K′=min(K,T)`个正收益。若K′=0，直接返回0；以下讨论K′>0。
 
+<a id="marginal-penalty-threshold"></a>
+### （2）推导：用收益阈值补齐实际使用次数
+
 对阈值 v，设施 i 提供的不小于v的收益有 `max(A_i−v+1,0)`个。因此定义
 
 `C_ge(v)=Σmax(A_i−v+1,0)`。
@@ -3386,7 +3773,8 @@ std::vector<i64> dynamic_range_kth(const std::vector<i64>& initial,
 
 严格大于h的S项全部取，剩余K′−S项从等于h的收益中补足。大量同值时只取所需数量，而非全部取或全部舍弃。例如 A=[5,5]、K=3，先取两个5，再取一个4，答案为14。
 
-### 参数不是答案：惩罚与精确恢复
+<a id="advanced-subheading-29"></a>
+### （3）推导：由惩罚目标精确恢复原收益
 
 还可以把阈值理解成每次操作的统一惩罚。设施 i 使用 t_i次的总收益为等差和
 
@@ -3407,7 +3795,7 @@ std::vector<i64> dynamic_range_kth(const std::vector<i64>& initial,
 λ=0需单独理解：只考虑 `t_i≤A_i`的正收益域，此时最优计数为T，不应额外制造每个设施的一次零收益操作。
 
 <a id="marginal-penalty-manual"></a>
-### 搜索收益阈值，恢复最大收益
+### （4）Hcode：搜索收益阈值，恢复最大收益
 
 ```cpp
 struct MarginalResult {
@@ -3448,7 +3836,10 @@ MarginalResult maximize_fun(const std::vector<i64>& initial, i64 budget) {
 返回结果同时保存原收益、阈值、严格大于阈值的数量、同值数量、实际使用量和惩罚价值，便于核对上述恢复关系。
 
 <a id="marginal-penalty-standard"></a>
-### 逐次取堆顶的另一种解法
+### （5）替代解法：逐次选取最大收益的堆解法
+
+<a id="penalty-heap-standard"></a>
+#### （a）Scode：使用 priority_queue 维护当前收益
 
 ```cpp
 i64 fun_with_priority_queue(const std::vector<i64>& initial, i64 budget) {
@@ -3469,7 +3860,8 @@ i64 fun_with_priority_queue(const std::vector<i64>& initial, i64 budget) {
 
 堆复制并拥有收益值，不随原数组自动变化，相关机制见 <a class="knowledge-link" href="#knowledge-Q100005" data-knowledge="Q100005">借用与容器所有权</a>。
 
-### 数量单调仍不足以保证任意问题精确恢复
+<a id="advanced-subheading-33"></a>
+### （6）边界：数量单调为何不足以保证精确恢复
 
 一般情况下，令 F(k)表示恰好选择k项时的最小成本，加上惩罚后得到 `G(λ)=min_k(F(k)+λk)`。最优数量随λ增大而非增，但某些数量可能从未成为惩罚问题的最优解。
 
@@ -3482,7 +3874,7 @@ i64 fun_with_priority_queue(const std::vector<i64>& initial, i64 budget) {
 [IOI2016 Aliens官方解答](https://ioinformatics.org/files/ioi2016solutions.pdf)的满分方案还包含区间预处理、交叠成本和凸包优化（CHT）。其中的凸性结论依赖该问题结构，不能直接推广为任意参数搜索的证明。
 
 <a id="marginal-penalty-engineering"></a>
-### 只在最终阈值计算价值
+### （7）工程：只在最终阈值计算价值
 
 原题 T≤2×10¹⁴，最终答案≤K×max A_i≤4×10¹⁸，可以放入64位有符号整数。但中间的惩罚价值不一定同样小：N=10⁵、A_i=2×10⁹时，H(0)约为2×10²³，即便K=1，最终答案也仅为2×10⁹。
 
@@ -3492,4 +3884,7 @@ i64 fun_with_priority_queue(const std::vector<i64>& initial, i64 budget) {
 
 数量判定只读借用当前used与initial，捕获方式见 <a class="knowledge-link" href="#knowledge-Q100003" data-knowledge="Q100003">判定器与lambda捕获</a>。
 
-练习：[ABC216E — Amusement Park](https://atcoder.jp/contests/abc216/tasks/abc216_e)。重点核验同值补足与至多次数，而不只是while循环。
+<a id="marginal-penalty-practice"></a>
+### （8）练习：同值收益补足与使用次数上限
+
+[ABC216E — Amusement Park](https://atcoder.jp/contests/abc216/tasks/abc216_e)。重点核验同值补足与至多次数，而不只是while循环。

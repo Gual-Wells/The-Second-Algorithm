@@ -3,6 +3,9 @@
 <a id="pigeonhole-domain"></a>
 ## 在值域中寻找重复值或缺失值
 
+<a id="pigeonhole-domain-foundation"></a>
+### 用容量与计数定位唯一重复值
+
 给定 n+1 个整数，每个数都在 1..n 内，只有一个数值重复出现。要求找出它，并且不能修改数组、只能使用常数额外空间。数组本身没有顺序，二分的对象应当是**可能的重复值**，而不是元素下标。
 
 设 C(x) 为不大于 x 的元素个数。若重复值还在 x 右边，1..x 内的数各至多出现一次，所以 C(x)≤x。若重复值出现 r 次，全域只会缺少 r−2 个不同值，少于 r−1 个额外副本。因此，重复值一旦进入1..x，重复带来的增加必然超过缺失造成的减少，得到 C(x)>x。因此，条件 `C(x)>x` 从重复值开始成立，可以寻找它的首次成立位置。
@@ -27,21 +30,35 @@
 
 本题还可把数组值看作后继位置，用 Floyd 环检测在线性时间、常数额外空间内求解。那条路径利用的是函数图结构，而非值域计数。
 
+<a id="missing-domain-variant"></a>
+### 在欠满整数域中寻找任意缺失值
+
 再看缺失值问题。若记录总数少于整数域的容量，就至少有一个值没有出现。把当前域分成左右两半：左半记录数小于其容量时，左半必有缺失值；否则，由于整个域尚未填满，右半必然欠满。
 
 据此，每轮保留一个确定含缺失值的半域。下面的实现允许重复记录，目标是返回**任意一个**缺失值，不是第 k 个缺失值。
 
+<a id="missing-domain-manual"></a>
+#### 按容量保留必有缺失值的半域
+
 {{missing-domain}}
 
 <a id="pigeonhole-domain-engineering"></a>
+#### IPv4 容量与多遍输入成本
+
 IPv4 的完整地址域含 2³² 个值。因此，边界和容量用 `uint64_t`，单条地址仍可用 `uint32_t`，相关运算见 [[Q100002|整数表达式与溢出预算]]。
 
 这份实现每轮重新统计记录，约需 log₂U 遍扫描，U 是域容量。输入若只能读取一次，就不适用；能够顺序重读时，也应把多遍 I/O 的成本计入方法选择。
 
-练习：[LC287 · 寻找重复数](https://leetcode.com/problems/find-the-duplicate-number/)。重点区分值域容量与下标有序性；其线性 follow-up 需要另换环检测机制。
+<a id="pigeonhole-domain-practice"></a>
+### 唯一重复值与容量判定
+
+[LC287 · 寻找重复数](https://leetcode.com/problems/find-the-duplicate-number/)。重点区分值域容量与下标有序性；其线性 follow-up 需要另换环检测机制。
 
 <a id="weighted-inverse"></a>
 ## 按累计权重查找与随机抽样
+
+<a id="weighted-inverse-foundation"></a>
+### 把整数票号映回权重区间
 
 给每个元素一个非负整数权重 w[i]，希望第 i 项被选中的概率正比于 w[i]。先把权重变成累计量：`prefix[i]=w[0]+…+w[i]`。
 
@@ -66,16 +83,24 @@ IPv4 的完整地址域含 2³² 个值。因此，边界和容量用 `uint64_t`
 随机引擎通过引用传入，以便连续使用其状态。它应当在抽样开始前初始化一次，不在每次抽样时重新播种。[[Q100010|整数随机分布与可复现性]]说明整数分布和 `rand()%total` 的区别。
 
 <a id="weighted-inverse-engineering"></a>
+### 票号范围、总权重与映射核对
+
 定位函数要求票号在 `[1,prefix.back()]` 内，所以输入不能为空，总权重必须为正。累计总和的类型预算应当在构建时确定。
 
 可以先独立检验“票号→元素”的确定性映射：穷举所有票号，核对第 i 项恰好得到 w[i] 张票。随机抽样的频率只能检验分布表现，不能代替这层正确性推导。权重频繁变化时，重建整份前缀会变贵；后文的树状数组选择可以直接维护动态累计量。
 
 {{knowledge:Q100010}}
 
-练习：[LC528 · 按权重随机选择](https://leetcode.com/problems/random-pick-with-weight/)。
+<a id="weighted-inverse-practice"></a>
+### 离散权重的随机选择
+
+[LC528 · 按权重随机选择](https://leetcode.com/problems/random-pick-with-weight/)。
 
 <a id="matrix-rank"></a>
 ## 行列有序矩阵的第 k 小元素
+
+<a id="matrix-rank-foundation"></a>
+### 以值域计数反查第 k 小
 
 给定行、列都非降的矩阵，求按出现次数计数的第 k 小元素。行列分别有序，并不意味着逐行拼接后整体有序，因而不能直接对展平下标二分。
 
@@ -104,14 +129,22 @@ IPv4 的完整地址域含 2³² 个值。因此，边界和容量用 `uint64_t`
 `upper_bound`在每一行内使用 [[Q100001|二分库的分区与迭代器合同]]，矩阵的整体计数关系仍由各行结果相加得到。
 
 <a id="matrix-rank-engineering"></a>
+### 矩阵形状、合法秩与重复计数
+
 实现要求矩阵非空、各行等长、行列非降，且 `1≤k≤R×C`。乘积与计数的范围见 [[Q100002|整数表达式与溢出预算]]。判定借用矩阵，不需要每轮复制。
 
 “第 k 个元素”包含重复出现的元素；对输入调用 `unique`会改变问题。
 
-练习：[LC378 · 有序矩阵中第 k 小的元素](https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/description/)。
+<a id="matrix-rank-practice"></a>
+### 包含重复值的矩阵秩
+
+[LC378 · 有序矩阵中第 k 小的元素](https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/description/)。
 
 <a id="pair-distance-rank"></a>
 ## 数对距离的第 k 小值
+
+<a id="pair-distance-rank-foundation"></a>
+### 排序后用双指针累计合法数对
 
 给定整数数组，把每个下标对 i<j 的绝对差组成一个多重集，求其中第 k 小。共有 O(n²) 个数对，逐一生成距离往往太贵。可以对距离上限 D 二分，只统计距离≤D的数对数。
 
@@ -136,14 +169,22 @@ IPv4 的完整地址域含 2³² 个值。因此，边界和容量用 `uint64_t`
 逐左端查上界需要 O(n log n) 时间，比双指针判定多一层对数。小规模时，还可生成全部距离后用 [[Q100008|nth_element]]求出结果来核对，但其二次空间和时间准备成本不适合大输入。
 
 <a id="pair-distance-rank-engineering"></a>
+### 排序副本与数对计数的类型
+
 函数按值接收数组，因此排序的是副本，以 O(n) 额外空间保留调用者原顺序。允许原地修改时，可以改为引用参数。
 
 数对总数最多为 n(n−1)/2，乘法前要提升类型；大坐标的 `a[i]+D` 和两坐标之差也应先在宽类型内计算。
 
-练习：[LC719 · 找出第 k 小的数对距离](https://leetcode.com/problems/find-k-th-smallest-pair-distance/description/)。
+<a id="pair-distance-rank-practice"></a>
+### 按下标对计数的距离秩
+
+[LC719 · 找出第 k 小的数对距离](https://leetcode.com/problems/find-k-th-smallest-pair-distance/description/)。
 
 <a id="multiplication-rank"></a>
 ## 乘法表中的第 k 小数
+
+<a id="multiplication-rank-foundation"></a>
+### 不构造乘法表也能逐行计数
 
 求 m×n 乘法表中的第 k 小元素，仍按出现次数计数。表可能很大，但每一行都由简单公式给出，不必真的保存下来。
 
@@ -168,12 +209,20 @@ IPv4 的完整地址域含 2³² 个值。因此，边界和容量用 `uint64_t`
 单行贡献耗时 O(1)，求和与 `kth_value`仍沿用上面的实现。标准库没有直接查询隐式乘法表第 k 小的接口；将答案域生成成容器反而丢失了这一问题的空间优势。
 
 <a id="multiplication-rank-engineering"></a>
+### 乘积上界与每轮扫描规模
+
 原题 `m,n≤30000`，所以 mn≤9×10⁸；代码依然在乘法前用 `1LL`提升类型。推广到更大的表时，既要重算乘积与计数的范围，也要评估每轮扫描较短边的时间。改变输入类型本身并不会消除这两项限制。
 
-练习：[LC668 · 乘法表中第 k 小的数](https://leetcode.com/problems/kth-smallest-number-in-multiplication-table/description/)。
+<a id="multiplication-rank-practice"></a>
+### 隐式乘法表中的元素秩
+
+[LC668 · 乘法表中第 k 小的数](https://leetcode.com/problems/kth-smallest-number-in-multiplication-table/description/)。
 
 <a id="two-sorted-partition"></a>
 ## 两个有序数组的第 k 小与中位数
+
+<a id="two-sorted-partition-foundation"></a>
+### 把秩查询转成两数组的交叉切分
 
 两个非降数组 A、B 的长度分别为 m、n，允许重复，求合并后第 k 小。直接合并需要线性时间。若只求一个秩，可以改为寻找：前 k 个元素中，应当从 A 取多少个？
 
@@ -193,7 +242,10 @@ i 还必须让两边实际可取，因此搜索区间为 `[max(0,k−n),min(k,m)
 中位数可归为秩查询：总长为奇数，取第 `(m+n)/2+1`项；总长为偶数，取中间两项的平均。两项先转成64位后相加，避免32位加法先溢出。
 
 <a id="two-sorted-partition-standard"></a>
-### 线性合并是另一条真实路径
+### 线性合并后读取所需秩
+
+<a id="two-sorted-merge-standard"></a>
+#### 用 merge 获得完整合并结果
 
 {{two-array-standard}}
 
@@ -202,14 +254,22 @@ i 还必须让两边实际可取，因此搜索区间为 `[max(0,k−n),min(k,m)
 若只顺序推进到第 k 项就停，可以将合并时间减到 O(k)；当 k 接近总长时仍是线性的。它与上面直接定位切分位置的方法有不同的成本。
 
 <a id="two-sorted-partition-engineering"></a>
+### 合法秩、空侧与域外哨兵
+
 函数要求两数组非降、总长度非零，且 k 是合法的1基秩。当前元素类型为 `int`，用64位最小值、最大值代替不存在的边界，能够严格包住真实元素范围。
 
 若元素本身可为任意64位极值，边界应改成显式条件；不能继续把同样的两个极值看作域外哨兵。
 
-练习：[LC4 · 寻找两个正序数组的中位数](https://leetcode.com/problems/median-of-two-sorted-arrays/description/)。
+<a id="two-sorted-partition-practice"></a>
+### 两个有序数组的中位数
+
+[LC4 · 寻找两个正序数组的中位数](https://leetcode.com/problems/median-of-two-sorted-arrays/description/)。
 
 <a id="ordered-dp-frontier"></a>
 ## 最长递增子序列：维护每个长度的最小末值
+
+<a id="ordered-dp-frontier-foundation"></a>
+### 为什么只保留每种长度的最小末值
 
 给定任意序列，选出下标递增、数值也严格递增的最长子序列，通常简称 LIS。原序列没有整体顺序，二分要作用在我们维护的状态上。
 
@@ -233,15 +293,21 @@ i 还必须让两边实际可取，因此搜索区间为 `[max(0,k−n),min(k,m)
 代码先保存父链，再更新当前长度对应的末位置，使恢复关系明确指向先前处理过的输入位置。时间为 O(n log n)，空间为 O(n)。
 
 <a id="ordered-dp-frontier-standard"></a>
-### 使用库二分，并推广到信封嵌套
+### 使用库边界查找维护最小末值
 
 {{lis-standard}}
 
 严格递增时，相等值不能延长序列，所以用 `lower_bound`替换首个≥x的位置。若目标改为非降子序列，相等值可以延长，应改用 `upper_bound`替换首个>x的位置；此时 tail 只保证非降，恢复出的相邻值关系也变成≤。
 
+<a id="envelopes-variant"></a>
+### 将二维信封嵌套归约为 LIS
+
 俄罗斯套娃信封要求宽和高都严格增加。先按宽升序后，对高度求严格LIS，仍有一个障碍：相同宽度的信封不能彼此嵌套，却可能被高度LIS连续选中。
 
 解决办法是把同宽信封按高降序排列。这样同宽组中至多选一个高度进入严格LIS；不同宽度之间又保持宽递增。二维限制于是归约为排序之后的一维LIS。
+
+<a id="envelopes-standard"></a>
+#### 同宽降序排序后复用 LIS
 
 {{envelopes-standard}}
 
@@ -249,7 +315,8 @@ i 还必须让两边实际可取，因此搜索区间为 `[max(0,k−n),min(k,m)
 
 {{knowledge:Q100004}}
 
-### 计数变型：先保留末位置，再合并方案
+<a id="lis-count-variant"></a>
+### 统计最长递增子序列的个数
 
 若要求最长递增子序列的**个数**，只保留最小末值就不够了。以 `[1,3,2,4]`为例，末值2比3更容易延长，但经过3和经过2的两条最长链都应计数。
 
@@ -264,6 +331,9 @@ i 还必须让两边实际可取，因此搜索区间为 `[max(0,k−n),min(k,m)
 
 例如 `[1,3,5,4,7]` 中，以5和4结尾的状态都为长度3、方案数1。处理7时，先接上5得到长度4、1种，再接上4得到同样长的另一种，合计2种。
 
+<a id="lis-count-manual"></a>
+#### 按末位置合并最优长度与方案数
+
 下面实现还对中间计数作饱和处理。其原因在于：题目保证最终答案可表示，却不保证每个较短状态的方案数都可表示。
 
 {{lis-count}}
@@ -277,16 +347,24 @@ i 还必须让两边实际可取，因此搜索区间为 `[max(0,k−n),min(k,m)
 若问题不保证最终计数可表示，就应使用大整数或明确的取模规则；饱和值只能表示“已经足够大”，不能当作精确答案。
 
 <a id="ordered-dp-frontier-engineering"></a>
+### 容器失效与恢复结果检查
+
 在 `push_back`之前，先把边界迭代器转成下标。扩容后旧迭代器可能失效；而 `reserve`只预留容量，不产生可以下标访问的新元素，详见 [[Q100013|vector容量、元素与失效]]。
 
 恢复序列时，应同时检查下标递增和所需的数值关系，不能只核长度。
 
 {{knowledge:Q100013}}
 
-练习：[LC300 · 最长递增子序列](https://leetcode.com/problems/longest-increasing-subsequence/description/)、[LC354 · 俄罗斯套娃信封](https://leetcode.com/problems/russian-doll-envelopes/description/)、[LC673 · 最长递增子序列的个数](https://leetcode.com/problems/number-of-longest-increasing-subsequence/description/)。
+<a id="ordered-dp-frontier-practice"></a>
+### LIS长度、信封嵌套与方案数
+
+[LC300 · 最长递增子序列](https://leetcode.com/problems/longest-increasing-subsequence/description/)、[LC354 · 俄罗斯套娃信封](https://leetcode.com/problems/russian-doll-envelopes/description/)、[LC673 · 最长递增子序列的个数](https://leetcode.com/problems/number-of-longest-increasing-subsequence/description/)。
 
 <a id="weighted-predecessor"></a>
 ## 带权区间调度：查找兼容前驱
+
+<a id="weighted-predecessor-foundation"></a>
+### 将兼容前驱前缀接入收益 DP
 
 一组任务各有开始时间、结束时间和收益，要求选择互不冲突的任务，使总收益最大。带权之后，“总选最早结束的任务”可能放弃高收益任务。例如时段[1,2]、[3,4]各获利5，[1,4]获利20；按最早结束选择前两项只能得到10。
 
@@ -313,14 +391,22 @@ i 还必须让两边实际可取，因此搜索区间为 `[max(0,k−n),min(k,m)
 代码的 `touching`参数区分这两种规则。CSES允许单日任务，而LC1235仍要求每项 `start<end`；允许端点接触并不等于允许任意零长度任务。
 
 <a id="weighted-predecessor-engineering"></a>
+### 收益类型、排序副本与移动
+
 总收益可能超过32位，所以收益字段与DP值均使用64位。排序比较器只按结束时间建立严格弱序，相同结束时间不需要额外虚构优先级；它们能否兼容由端点条件决定。
 
 函数按值接收任务，因而在本地副本中排序。随后用 `std::move`将这份副本交给共同核心，避免为两种边界实现再复制一次；调用者保有的原始任务序列不受影响。
 
-练习：[CSES · Projects](https://cses.fi/problemset/task/1140/)、[LC1235 · 规划兼职工作](https://leetcode.com/problems/maximum-profit-in-job-scheduling/description/)。
+<a id="weighted-predecessor-practice"></a>
+### 两种兼容端点规则的带权调度
+
+[CSES · Projects](https://cses.fi/problemset/task/1140/)、[LC1235 · 规划兼职工作](https://leetcode.com/problems/maximum-profit-in-job-scheduling/description/)。
 
 <a id="resource-queries"></a>
 ## 资源受限的试探：鸡蛋掉落问题
+
+<a id="resource-queries-foundation"></a>
+### 从最坏试投次数反推覆盖楼层
 
 有 n 层楼、k 个鸡蛋。未知的最高安全楼层 f 位于0..n：从1..f层扔下不会碎，从更高楼层扔下会碎。要求无论 f 是多少，都能确定它，求最坏情况下最少的试投次数。
 
@@ -340,6 +426,7 @@ i 还必须让两边实际可取，因此搜索区间为 `[max(0,k−n),min(k,m)
 
 例如 d=3、k=2，下方能处理2层，上方能处理3层。第一投选第3层：碎了在1、2层继续，没碎在4、5、6层继续，合计能够处理6层。
 
+<a id="selection-subheading-25"></a>
 ### 由覆盖递推得到组合判定
 
 用组合数可以快速计算覆盖量。约定超出 d 范围的组合数为0；将 Pascal 恒等式 `C(d,i)=C(d−1,i−1)+C(d−1,i)`代入递推，并结合两个零初值，可得：
@@ -364,7 +451,10 @@ i 还必须让两边实际可取，因此搜索区间为 `[max(0,k−n),min(k,m)
 这一预算依赖楼层数上界；若推广到任意64位楼层，需重新设计计算。判定只关心覆盖是否足够，无须保留超过 n 的精确数量。
 
 <a id="resource-queries-standard"></a>
-### 直接推进覆盖DP的对照
+### 逐次推进覆盖 DP
+
+<a id="resource-coverage-standard"></a>
+#### 饱和覆盖量与倒序更新
 
 {{egg-standard}}
 
@@ -373,6 +463,11 @@ i 还必须让两边实际可取，因此搜索区间为 `[max(0,k−n),min(k,m)
 鸡蛋数量 e 必须倒序更新，让 `cover[e]`和 `cover[e−1]`都还代表上一轮；正序会错误地在同一轮内重复使用新状态。该路径耗时 O(k·答案)，空间为 O(k)。它直接推进覆盖DP，与“组合计数+二分次数”是同题的两种算法。
 
 <a id="resource-queries-engineering"></a>
+### 试探资源与最坏情况目标
+
 目标条件单调，与查询是否可重复且无代价是不同问题。交互题、昂贵测量或破坏性试探都要先确定资源怎样影响后续信息能力。这里求的是最坏情况最少次数；若问期望次数并给出概率分布，需要不同的状态与目标。
 
-练习：[LC887 · 鸡蛋掉落](https://leetcode.com/problems/super-egg-drop/description/)。
+<a id="resource-queries-practice"></a>
+### 鸡蛋资源与最坏试投次数
+
+[LC887 · 鸡蛋掉落](https://leetcode.com/problems/super-egg-drop/description/)。

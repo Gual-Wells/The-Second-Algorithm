@@ -1,0 +1,16 @@
+{
+  "scope": "Startup and chapter calendar; user has not accepted overall old reader design.",
+  "pythonChecks": 198,
+  "nodeCarrierChecks": 116,
+  "fullBrowserScenarios": 19,
+  "fullBrowserPassed": true,
+  "finalOwnerScenarios": 4,
+  "finalOwnerPassed": true,
+  "finalCalendarUiChecks": 28,
+  "finalCalendarUiPassed": true,
+  "realHttpServiceWorkerUpgradePassed": true,
+  "physicalIPhone": false,
+  "paidServicesContacted": false,
+  "productionDatabaseChangedByTests": false,
+  "notes": "Full run stopped at old empty-state wording in upgrade assertions; exact wording corrected without loosening cache/owner/data assertions. Final calendar checks add modal close-event assertions. Current source separately reverified for release."
+}

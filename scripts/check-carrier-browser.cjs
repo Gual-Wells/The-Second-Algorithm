@@ -1,712 +1,223 @@
-// Browser regression against the actual web sources with an entirely in-memory owner/API.
-// Does not enroll a passkey, contact production, or change any D1 database.
+// Actual reader sources and built publication, with an isolated in-memory auth/API.
+// SW is deliberately blocked here. check-carrier-upgrade.cjs tests an actual HTTP SW.
+// No production requests, passkey enrollment, paid service or real private data.
 const { chromium } = require('playwright');
+const esbuild = require('esbuild');
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const assert = require('node:assert/strict');
 const { createHash } = require('node:crypto');
-
-const root = path.resolve(__dirname, '..');
-const origin = 'http://localhost:9876';
-const owner = 'a'.repeat(43);
-const output = path.join(root, '.local/refinement-qa');
-const temporary = path.join(root, '.local/refinement-browser-tmp');
-const chrome = process.env.ALGORITHM_QA_CHROME;
-const qaLibrary = path.join(root, '.local/carrier-qa-library');
+const root = path.resolve(__dirname, '..'), origin = 'http://localhost:9876';
+const owner = 'a'.repeat(43), otherOwner = 'b'.repeat(43);
+const output = path.resolve(process.env.ALGORITHM_QA_OUTPUT || path.join(root, '.local/refinement-qa'));
+const temporary = path.join(output, 'browser-temp'), qaLibrary = path.join(output, 'fixture');
+const digest = text => createHash('sha256').update(text).digest('hex');
+const probe = '\nglobalThis.__refinement = { get state() { return S; }, get runtime() { return typeof runtime === "undefined" ? null : runtime; } };\n';
 let qaCatalog, makeIndex;
-
-// A current-schema UI fixture exercises multiple documents without depending on
-// retired chapters or prescribing a production chapter/document count.
+const gestures = [];
+const watchedFiles = ['web/app.js','web/reader-runtime.js','web/manual-questions.js','web/chapter-dates.js','web/auth.js','web/sw.js','web/index.html','web/styles.css','dist/index.html','dist/app.js','dist/library/catalog.json'];
+async function fingerprint() { return Object.fromEntries(await Promise.all(watchedFiles.map(async file=>[file,digest(await fs.readFile(path.join(root,file)))]))); }
 async function createCorpus() {
-  const catalog = { schemaVersion: 2, version: 'qa-course-v3', collections: [], questions: [
+  const catalog = { schemaVersion: 2, state: 'active', version: 'qa-course-v3', collections: [], questions: [
     { id: 'Q000001', title: '有效范围', prerequisites: [] },
     { id: 'Q000002', title: '删除一个重复对象', prerequisites: ['Q000001'] }
   ] };
-  for (const question of catalog.questions) {
-    const html = question.id === 'Q000001' ? '<a id="lifetime"></a><p>范围的寿命和有效性。</p><p>' + '知识正文。'.repeat(250) + '</p>'
+  async function write(url, body) { const file = path.join(qaLibrary, url.slice(1)); await fs.mkdir(path.dirname(file), { recursive: true }); await fs.writeFile(file, body); }
+  for (const q of catalog.questions) {
+    const html = q.id === 'Q000001' ? '<h2 id="lifetime">有效范围的寿命</h2><p>' + '范围的寿命和有效性。'.repeat(250) + '</p>'
       : '<p>删除一份需要保留其他重复对象。</p><p><a href="#knowledge-Q000001" data-knowledge="Q000001" data-knowledge-anchor="lifetime">范围寿命</a></p>';
-    question.revision = createHash('sha256').update(html).digest('hex');
-    question.url = `/library/knowledge/${question.id}/${question.revision.slice(0, 16)}.json`;
-    const file = path.join(qaLibrary, question.url.slice(1)); await fs.mkdir(path.dirname(file), { recursive: true });
-    await fs.writeFile(file, JSON.stringify({ ...question, html, anchors: question.id === 'Q000001' ? ['lifetime'] : [] }));
+    q.revision = digest(html); q.url = `/library/knowledge/${q.id}/${q.revision.slice(0, 16)}.json`;
+    await write(q.url, JSON.stringify({ ...q, html, anchors: q.id === 'Q000001' ? ['lifetime'] : [] }));
   }
   for (const [collectionId, ids] of [['practice-course', ['practice-entry', 'practice-composition', 'practice-alternative']], ['additional-course', ['other-method']]]) {
     const collection = { id: collectionId, kind: 'chapter', chapterNumber: catalog.collections.length + 1,
       title: collectionId === 'practice-course' ? '实战方法与实现' : '不同算法的比较', documents: [] };
     for (const id of ids) {
-      const headings = [], sections = [];
-      const canonical = 'int lower_manual(int value) { return value; }\n// ' + 'long_identifier '.repeat(20);
-      sections.push(`<div class="code-block" data-code-id="example"><div class="code-toolbar"><span>C++</span><button type="button" class="code-copy" data-copy-code="example" aria-label="复制代码">复制</button></div><pre><code>${canonical}</code></pre></div>`);
-      for (let index = 0; index < 16; index++) {
-        const heading = { depth: 2, id: 'section-' + index, text: 'lower_bound 与边界判断 ' + (index + 1) };
-        headings.push(heading);
-        sections.push(`<h2 id="${heading.id}">${heading.text}</h2><p>${'保持状态不变量，比较手写与标准设施的范围、返回值和复杂度。'.repeat(12)}</p>`);
-        if (index === 0) sections.push('<p><a href="#knowledge-Q000002" data-knowledge="Q000002">删除一个重复对象</a></p>');
+      const headings = [], sections = [], canonical = 'int lower_manual(int value) { return value; }\n// ' + 'long_identifier '.repeat(20);
+      function heading(depth, anchor, text) { headings.push({ depth, id: anchor, text }); sections.push(`<h${depth} id="${anchor}">${text}</h${depth}>`); }
+      for (let i = 0; i < 16; ++i) {
+        heading(2, `section-${i}`, `${i ? '第' + i + '节' : 'PRE'}、范围与边界判断`);
+        sections.push(`<p>${'保持状态不变量，比较手写与标准设施的范围、返回值和复杂度。'.repeat(12)}</p>`);
+        heading(3, `unit-${i}`, '（1）方法：有效范围与严格边界');
+        sections.push('<p>' + '当前单元中段仍使用同一组严格邻居。'.repeat(22) + '</p>');
+        heading(4, `code-${i}`, '（a）Hcode：手写比较与范围检查');
+        sections.push(`<div class="code-block" data-code-id="example-${i}"><div class="code-toolbar"><span>C++</span><button type="button" class="code-copy" data-copy-code="example-${i}" aria-label="复制代码">复制</button></div><pre><code>${canonical}</code></pre></div>`);
+        if (!i) sections.push('<p><a href="#knowledge-Q000002" data-knowledge="Q000002">删除一个重复对象</a></p><p><a href="#/read/practice-course/practice-entry?anchor=unit-6" data-qa-link="same">后面的边界判断</a></p><p><a href="#/read/practice-course/practice-composition?anchor=unit-2" data-qa-link="cross">另一份实现</a></p><p><a href="#/read/practice-course/practice-alternative" data-qa-link="cross-start">另一份从头阅读的实现</a></p>');
+        sections.push('<p>' + '本单元的代码与解释都应完整保留。'.repeat(15) + '</p>');
       }
       sections.push('<div class="table-wrap"><table><tr><th>操作</th><th>条件</th></tr><tr><td><code>std::vector&lt;long_long_identifier&gt;::const_iterator</code></td><td>有效范围与结束位置</td></tr></table></div>');
-      const html = sections.join('\n'), revision = createHash('sha256').update(html).digest('hex');
-      const prefix = `/library/${collectionId}/${id}/${revision.slice(0, 16)}`;
+      const html = sections.join('\n'), revision = digest(html), prefix = `/library/${collectionId}/${id}/${revision.slice(0, 16)}`;
       const meta = { id, title: id === 'practice-entry' ? '从范围到作答' : '实现与条件 ' + id,
         revision, url: prefix + '.json', sourceUrl: prefix + '.cpp', markdownUrl: prefix + '.md', headings, knowledgeIds: ['Q000001', 'Q000002'] };
-      const file = path.join(qaLibrary, meta.url.slice(1)); await fs.mkdir(path.dirname(file), { recursive: true });
-      await fs.writeFile(file, JSON.stringify({ ...meta, html }));
-      await fs.writeFile(path.join(qaLibrary, meta.sourceUrl.slice(1)), canonical);
-      await fs.writeFile(path.join(qaLibrary, meta.markdownUrl.slice(1)), '# UI fixture\n');
+      await write(meta.url, JSON.stringify({ ...meta, html })); await write(meta.sourceUrl, canonical); await write(meta.markdownUrl, '# UI fixture\n');
       collection.documents.push(meta);
     }
     catalog.collections.push(collection);
   }
-  await fs.mkdir(path.join(qaLibrary, 'library'), { recursive: true });
-  await fs.writeFile(path.join(qaLibrary, 'library/catalog.json'), JSON.stringify(catalog));
-  return catalog;
+  await write('/library/catalog.json', JSON.stringify(catalog)); return catalog;
 }
-
-async function poll(condition, message, timeout = 6000) {
-  const start = Date.now();
-  while (!condition()) {
-    if (Date.now() - start > timeout) throw new Error(message);
-    await new Promise(resolve => setTimeout(resolve, 25));
-  }
-}
-
-async function environment(browser, { catalog = qaCatalog, policyCatalog = catalog, libraryRoot = qaLibrary } = {}) {
+async function poll(condition, message, timeout = 7000) { const start = Date.now(); while (!condition()) { if (Date.now() - start > timeout) throw Error(message); await new Promise(r => setTimeout(r, 25)); } }
+async function environment(browser, { catalog = qaCatalog, policyCatalog = catalog, libraryRoot = qaLibrary, authenticated = true, initial = {} } = {}) {
   const context = await browser.newContext({ viewport: { width: 402, height: 874 }, deviceScaleFactor: 3,
-    isMobile: true, hasTouch: true, serviceWorkers: 'block' });
-  await context.addInitScript(() => { delete Navigator.prototype.serviceWorker; });
-  const mock = { catalog, state: {}, errors: [], requests: [], holdNotePage: null, heldNote: null,
-    delayDocument: null, heldDocument: null, unavailable: new Set(), rejectApis: false, signedOut: false };
-  context.on('page', page => page.on('pageerror', error => mock.errors.push(error.message)));
+    serviceWorkers: 'block', permissions: ['clipboard-read', 'clipboard-write'] });
+  context.setDefaultTimeout(8000);
+  await context.addInitScript(initial => { delete Navigator.prototype.serviceWorker; if (location.origin === 'http://localhost:9876' && !localStorage.getItem('__qaSeeded')) { for (const [k,v] of Object.entries(initial)) localStorage.setItem(k,v); localStorage.setItem('__qaSeeded','yes'); } }, initial);
+  const mock = { catalog, state: {}, errors: [], requests: [], identity: authenticated ? owner : null, unavailable: new Set(), rejectApis: false,
+    delayDocument: null, heldDocument: null, holdState: false, heldState: null };
+  const compiled = await esbuild.build({ entryPoints: [path.join(root, 'web/app.js')], bundle: true, write: false, format: 'esm', platform: 'browser',
+    target: 'es2022', logLevel: 'silent', define: { __PUBLICATION_INDEX__: JSON.stringify(makeIndex(policyCatalog)) } });
+  const app = compiled.outputFiles[0].text + probe;
+  context.on('page', p => { p.on('pageerror', e => mock.errors.push(e.message)); p.on('dialog', d => d.type()==='beforeunload' ? d.accept() : d.dismiss()); });
   await context.route('**/*', async route => {
-    const request = route.request(), url = new URL(request.url());
-    if (url.origin !== origin) return route.abort('blockedbyclient');
-    mock.requests.push({ path: url.pathname, method: request.method() });
-    const json = (value, status = 200) => route.fulfill({ status, contentType: 'application/json', body: JSON.stringify(value) });
-    if (mock.rejectApis && (url.pathname.startsWith('/api/') || url.pathname.startsWith('/auth/')))
-      return route.abort('internetdisconnected');
-    if (url.pathname === '/auth/logout') { mock.signedOut = true; return json({ ok: true }); }
-    if (url.pathname === '/auth/status') return json({ authenticated: !mock.signedOut, enrolled: true,
-      enrollmentOpen: false, ownerScope: owner });
+    const req = route.request(), url = new URL(req.url()); if (url.origin !== origin) return route.abort('blockedbyclient');
+    mock.requests.push({ path: url.pathname, method: req.method() });
+    const json = (v,status=200) => route.fulfill({ status, contentType:'application/json', body:JSON.stringify(v) });
+    if (mock.rejectApis && (url.pathname.startsWith('/api/') || url.pathname.startsWith('/auth/'))) return route.abort('internetdisconnected');
+    if (url.pathname === '/auth/status') return json({ authenticated: Boolean(mock.identity), enrolled: true, enrollmentOpen: false, ownerScope: mock.identity });
+    if (url.pathname === '/auth/logout') { mock.identity = null; return json({ok:true}); }
+    if ((url.pathname.startsWith('/api/') || url.pathname.startsWith('/library/')) && !mock.identity) return json({error:'Unauthorized'},401);
     if (url.pathname === '/api/library') return json(mock.catalog);
     if (url.pathname === '/api/state') {
-      if (request.method() === 'GET') return json({ state: mock.state });
-      const input = request.postDataJSON(), previous = mock.state[input.key];
-      if (input.key.startsWith('notes:') && input.baseRevision !== (previous?.revision || 0))
-        return json({ error: 'mock CAS conflict', current: previous || null }, 409);
-      const record = { value: input.value, revision: (previous?.revision || 0) + 1, updatedAt: Date.now() };
-      mock.state[input.key] = record;
-      if (input.key.startsWith('notes:') && mock.holdNotePage === request.frame().page()) {
-        mock.holdNotePage = null;
-        await new Promise(resolve => { mock.heldNote = resolve; });
-      }
-      return json({ ...record, record });
+      if (req.method() === 'GET') { if (mock.holdState) { mock.holdState = false; await new Promise(r => { mock.heldState = r; }); } return json({ state:mock.state }); }
+      const input = req.postDataJSON(), previous = mock.state[input.key];
+      const record = { value:input.value, revision:(previous?.revision||0)+1, updatedAt:Date.now() }; mock.state[input.key] = record; return json({...record,record});
     }
     if (mock.unavailable.has(url.pathname)) return route.abort('internetdisconnected');
-    if (mock.delayDocument === url.pathname) {
-      mock.delayDocument = null;
-      await new Promise(resolve => { mock.heldDocument = resolve; });
-    }
-    const file = path.join(url.pathname.startsWith('/library/') ? libraryRoot : path.join(root, 'web'),
-      url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname.slice(1)));
-    let bytes;
-    try { bytes = await fs.readFile(file); } catch { return route.fulfill({ status: 404, body: 'Mock asset not found' }); }
-    const types = { '.js': 'text/javascript', '.html': 'text/html', '.css': 'text/css', '.json': 'application/json',
-      '.svg': 'image/svg+xml', '.png': 'image/png', '.webmanifest': 'application/manifest+json' };
-    if (url.pathname === '/app.js') bytes = Buffer.from(bytes.toString('utf8').replaceAll('__PUBLICATION_INDEX__', JSON.stringify(makeIndex(policyCatalog)))
-      + '\nglobalThis.__refinement = { get state() { return S; }, get journal() { return journal(); } };\n');
-    return route.fulfill({ status: 200, contentType: types[path.extname(file)] || 'text/plain', body: bytes });
+    if (mock.delayDocument === url.pathname) { mock.delayDocument = null; await new Promise(r => {mock.heldDocument=r;}); }
+    if (url.pathname === '/app.js') return route.fulfill({ contentType:'text/javascript',body:app });
+    const file = path.join(url.pathname.startsWith('/library/') ? libraryRoot : path.join(root,'web'), url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname.slice(1)));
+    let bytes; try { bytes = await fs.readFile(file); } catch { return route.fulfill({status:404,body:'Mock asset not found'}); }
+    return route.fulfill({contentType:({'.js':'text/javascript','.html':'text/html','.css':'text/css','.json':'application/json','.svg':'image/svg+xml','.png':'image/png','.webmanifest':'application/manifest+json'})[path.extname(file)]||'text/plain',body:bytes});
   });
-  return { context, mock, async page(hash = '#/read/practice-course/practice-entry') {
-    const page = await context.newPage();
-    await page.goto(origin + '/' + hash);
-    if (catalog.state === 'withdrawn') await page.locator('#libraryView').waitFor({ state: 'visible' });
-    else await page.locator('#readingArticle .code-block').first().waitFor();
-    await page.waitForFunction(() => window.__refinement && !window.__refinement.state.restoring);
-    return page;
-  } };
+  return { context,mock,async page(hash='#/read/practice-course/practice-entry') { const p=await context.newPage(); await p.goto(origin+'/'+hash); if (!authenticated) await p.locator('#loginView').waitFor({state:'visible'}); else if (catalog.state==='withdrawn') await p.locator('#chapterView').waitFor({state:'visible'}); else await p.locator('#article .code-block').first().waitFor(); await p.waitForFunction(()=>globalThis.__refinement); if(authenticated) await settled(p); return p; } };
 }
-
-(async () => {
-  const boundary = await import('../tools/reader-boundary.mjs');
-  const numbering = await import('../tools/compose-chapter.mjs');
-  const physicalRoot = await fs.realpath(root);
-  if (process.platform === 'win32' && !/^D:\\/i.test(physicalRoot))
-    throw new Error('Browser QA workspace and its actual temporary data must be on D:');
-  await fs.mkdir(output, { recursive: true }); await fs.mkdir(temporary, { recursive: true });
-  const builder = await import('../scripts/build-carrier.mjs'); makeIndex = builder.publicationIndex;
-  qaCatalog = await createCorpus();
-  process.env.TEMP = process.env.TMP = process.env.TMPDIR = temporary;
-  const browser = await chromium.launch({ headless: true, executablePath: chrome,
-    env: { ...process.env, TEMP: temporary, TMP: temporary, TMPDIR: temporary },
-    args: ['--disk-cache-dir=' + path.join(temporary, 'disk-cache')] });
-  const results = [], failures = [];
-  async function check(name, action, options) {
-    if (process.env.ALGORITHM_QA_CASE && !name.includes(process.env.ALGORITHM_QA_CASE)) return;
-    let env;
-    try { env = await environment(browser, options); await action(env); assert.deepEqual(env.mock.errors, []);
-      results.push({ name, passed: true }); console.log('PASS', name);
-    } catch (error) {
-      failures.push({ name, error: error.message, stack: error.stack, pageErrors: env?.mock.errors });
-      console.error('FAIL', name, error.message);
-      for (const [index, page] of (env?.context.pages() || []).entries()) {
-        await page.screenshot({ path: path.join(output, name + '-' + index + '.png') }).catch(() => {});
-        await fs.writeFile(path.join(output, name + '-' + index + '.txt'), await page.locator('body').innerText()).catch(() => {});
-      }
-    } finally { await env?.context.close(); }
-  }
+async function settled(p,ms=140) { await p.waitForFunction(()=>!window.__refinement.runtime.state.restoring); await p.waitForTimeout(ms); }
+async function closeSheet(p) { if(await p.locator('#sheetDialog').evaluate(e=>e.open)) { await p.locator('[data-sheet-close]').click(); await p.waitForFunction(()=>!document.querySelector('#sheetDialog').open); await settled(p); } }
+async function closeToc(p) { if(await p.evaluate(()=>innerWidth>=1100&&!window.__refinement.runtime.state.tocCollapsed)) { await p.locator('#tocButton').click(); await settled(p); } }
+async function navigateHeading(p,id) {
+  await closeSheet(p); await closeToc(p); await p.locator('#tocButton').click();
+  const root=p.locator(await p.evaluate(()=>innerWidth>=1100)?'#desktopTocBody':'#sheetBody');
+  const row=root.locator(`[data-go="${id}"]`);
+  if (!await row.isVisible()) { const group=row.locator('xpath=ancestor::section[contains(@class,"toc-group")][1]'); const toggle=group.locator('[data-toggle-section]'); if(await toggle.getAttribute('aria-expanded')==='false')await toggle.click(); }
+  await row.click(); await settled(p); await closeToc(p);
+}
+async function currentAnchor(p) { return p.locator('#headingPathButton').getAttribute('data-target'); }
+async function assertTarget(p,id) { const v=await p.evaluate(id=>{const h=document.getElementById(id),pane=document.getElementById('readingPane');return {top:h?.getBoundingClientRect().top-pane.getBoundingClientRect().top,current:document.getElementById('headingPathButton').dataset.target};},id); assert.equal(v.current,id,JSON.stringify(v)); assert(Math.abs(v.top-24)<2,JSON.stringify(v)); }
+async function blankDoubleClick(p) { const point=await p.evaluate(()=>{const a=document.querySelector('#article').getBoundingClientRect(),r=document.querySelector('#readingPane').getBoundingClientRect();const x=Math.max(r.left+2,a.left+3),y=r.top+Math.min(180,r.height/2);return{x,y,hit:document.elementFromPoint(x,y)?.tagName};}); await p.mouse.dblclick(point.x,point.y,{delay:40}); await settled(p,180); gestures.push({...point,...await p.evaluate(()=>({selection:getSelection().toString(),pure:__refinement.runtime.state.pure}))}); }
+async function geometry(p) { return p.evaluate(()=>{const pane=document.querySelector('#readingPane'),paper=document.querySelector('#article');return{outer:document.documentElement.scrollWidth,viewport:innerWidth,pane:pane.clientHeight,width:pane.clientWidth,paper:paper.getBoundingClientRect().width};}); }
+function noteSeed(dirty=true) { const prefix=`second-algorithm:${owner}:`;return {
+  [prefix+'notes:practice-course']:JSON.stringify({text:'legacy local note',revision:2,dirty}),
+  [prefix+'notes-cache:practice-course']:JSON.stringify({text:'server copy',revision:3,dirty:false,updatedAt:1}),
+  [prefix+'notes-draft:practice-course:older-tab']:JSON.stringify({text:'unsent other tab',revision:1,dirty,updatedAt:2}),
+  [prefix+'notes-backup:practice-course:1:qa']:JSON.stringify({text:'conflict backup',revision:1,updatedAt:1}),
+  [prefix+'notes-confirmed:obsolete-marker']:'{"text":"confirmed snapshot","revision":0,"updatedAt":0}',
+  [prefix+'notes:retired-chapter']:dirty?'{legacy malformed original':JSON.stringify({text:'retired clean note',revision:1,dirty:false}),
+  [`second-algorithm:${otherOwner}:notes:practice-course`]:JSON.stringify({text:'different owner private note',revision:9,dirty:true})
+}; }
+async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries(keys.map(k=>[k,localStorage.getItem(k)])),keys); }
+(async()=>{
+  const boundary=await import('../tools/reader-boundary.mjs');
+  const physical=await fs.realpath(root); if(process.platform==='win32'&&!/^D:[\\/]/i.test(physical))throw Error('Browser QA workspace must physically reside on D.');
+  await fs.mkdir(temporary,{recursive:true}); process.env.TEMP=process.env.TMP=process.env.TMPDIR=temporary;
+  makeIndex=(await import('./build-carrier.mjs')).publicationIndex; qaCatalog=await createCorpus();
+  const inputStart = await fingerprint();
+  const browser=await chromium.launch({headless:true,executablePath:process.env.ALGORITHM_QA_CHROME,env:{...process.env,TEMP:temporary,TMP:temporary,TMPDIR:temporary},args:['--disk-cache-dir='+path.join(temporary,'disk-cache'),'--disable-background-networking','--no-first-run']});
+  const results=[],failures=[];
+  async function check(name,action,options) { if(process.env.ALGORITHM_QA_CASE&&!name.includes(process.env.ALGORITHM_QA_CASE))return;let env;try{env=await environment(browser,options);await action(env);assert.deepEqual(env.mock.errors,[]);results.push({name,passed:true});console.log('PASS',name);}catch(error){failures.push({name,error:error.stack});results.push({name,passed:false,error:error.message});console.error('FAIL',name,error.message);for(const [i,p]of(env?.context.pages()||[]).entries()){await p.screenshot({path:path.join(output,name+'-'+i+'.png')}).catch(()=>{});await fs.writeFile(path.join(output,name+'-'+i+'.txt'),await p.locator('body').innerText()).catch(()=>{});}}finally{await env?.context.close();}}
   try {
-    await check('viewport-matrix-preserves-paper-code-selection-and-Q-sheet', async env => {
-      const page = await env.page();
-      for (const viewport of [{ width: 402, height: 874 }, { width: 320, height: 740 }, { width: 1280, height: 800 }, { width: 874, height: 402 }]) {
-        await page.setViewportSize(viewport); await page.waitForTimeout(70);
-        const geometry = await page.evaluate(() => {
-          const pane = document.querySelector('#readingPane'), paper = document.querySelector('#readingArticle');
-          const pre = paper.querySelector('pre'), copy = paper.querySelector('.code-copy');
-          return { outer: document.documentElement.scrollWidth, viewport: innerWidth, pane: pane.clientHeight,
-            paper: paper.getBoundingClientRect().width, width: pane.clientWidth, copy: copy.getBoundingClientRect().height,
-            horizontalCode: pre.scrollWidth > pre.clientWidth };
-        });
-        assert(geometry.outer <= geometry.viewport + 1 && geometry.pane > 100, JSON.stringify({ viewport, geometry }));
-        assert(geometry.paper <= geometry.width + 1 && geometry.copy >= 44 && geometry.horizontalCode, JSON.stringify(geometry));
-        await page.locator('#readingPane').evaluate(node => node.scrollTop = 500); await page.waitForTimeout(70);
-        const before = await page.locator('#readingArticle').evaluate(node => node.getBoundingClientRect().width);
-        await page.locator('#pureButton').click();
-        assert.equal(await page.locator('#readingArticle').evaluate(node => node.getBoundingClientRect().width), before);
-        await page.keyboard.press('Escape');
-        await page.locator('#readingArticle [data-knowledge]').first().click();
-        await page.locator('.knowledge-paper').waitFor();
-        const sheet = await page.locator('#sheetBody').boundingBox(); assert(sheet.height > 80);
-        await page.screenshot({ path: path.join(output, `viewport-${viewport.width}x${viewport.height}.png`) });
-        await page.locator('[data-sheet-close]').click(); await page.waitForFunction(() => !document.querySelector('#sheetDialog').open);
-      }
+    await check('anonymous-owner-gate-does-not-request-or-render-protected-library',async env=>{const p=await env.page();assert(await p.locator('#loginButton').isVisible());assert.equal(await p.locator('#readerView').isVisible(),false);assert.equal(env.mock.requests.filter(r=>r.path.startsWith('/library/')||r.path.startsWith('/api/')).length,0);assert.equal(await p.locator('#article .code-block').count(),0);},{authenticated:false});
+    await check('reader-v3-toolbar-and-responsive-paper',async env=>{const p=await env.page();for(const viewport of[{width:402,height:874},{width:320,height:740},{width:1280,height:800},{width:874,height:402}]){await p.setViewportSize(viewport);await settled(p);assert.deepEqual((await p.locator('#headerActions > button').allTextContents()).map(s=>s.trim()),['问答','目录','设置']);assert.equal(await p.locator('#notesButton,#noteEditor,#pureButton,#returnButton,#progressLabel,#progressFill,.context-bar,#tocSearch,#librarySearch,#documentTabs').count(),0);const g=await geometry(p);assert(g.outer<=g.viewport+1&&g.pane>100&&g.paper<=g.width+1,JSON.stringify({viewport,g}));await p.screenshot({path:path.join(output,`viewport-${viewport.width}x${viewport.height}.png`)});}});
+    await check('fixed-four-neighbors-complete-path-and-native-boundaries',async env=>{const p=await env.page();for(const viewport of[{width:402,height:874},{width:320,height:740},{width:1280,height:800}]){await p.setViewportSize(viewport);await settled(p,260);await navigateHeading(p,'code-1');const before=await p.locator('#readerFooter').innerText();await p.locator('#readingPane').evaluate(e=>e.scrollTop+=70);await settled(p);assert.equal(await currentAnchor(p),'code-1');assert.equal(await p.locator('#readerFooter').innerText(),before);assert.equal(await p.locator('#headingPathButton button,#headingPathButton a').count(),0);assert.equal(await p.locator('#headingPathButton .path-item').count(),3);await p.locator('#headingPathButton').click();await settled(p);await assertTarget(p,'code-1');for(const [selector,target]of[['#previousMajor','section-0'],['#previousHeading','unit-1'],['#nextHeading','section-2'],['#nextMajor','section-2']]){await navigateHeading(p,'code-1');assert.equal(await p.locator(selector).getAttribute('data-target'),target);assert((await p.locator(selector).getAttribute('aria-label')).includes(await p.locator('#article #'+target).innerText()));await p.locator(selector).click();await settled(p);await assertTarget(p,target);}await navigateHeading(p,'section-0');assert(await p.locator('#previousMajor').isDisabled());assert(await p.locator('#previousHeading').isDisabled());await navigateHeading(p,'code-15');assert(await p.locator('#nextMajor').isDisabled());assert(await p.locator('#nextHeading').isDisabled());await assertTarget(p,'code-15');}});
+    await check('hierarchical-directory-toggle-current-and-no-search',async env=>{const p=await env.page();await navigateHeading(p,'code-5');await p.locator('#tocButton').click();assert.equal(await p.locator('#sheetBody input,#desktopToc input').count(),0);const current=p.locator('#sheetBody [data-go][aria-current="location"]:visible');assert.equal(await current.count(),1);assert.equal(await current.getAttribute('data-go'),'code-5');const group=p.locator('#sheetBody .toc-group[data-section="section-5"]');const toggle=group.locator('[data-toggle-section]');const before=await p.evaluate(()=>({hash:location.hash,top:document.querySelector('#readingPane').scrollTop}));await toggle.click();await toggle.click();assert.deepEqual(await p.evaluate(()=>({hash:location.hash,top:document.querySelector('#readingPane').scrollTop})),before);assert.equal(await toggle.getAttribute('aria-expanded'),'true');await p.screenshot({path:path.join(output,'hierarchical-directory.png')});});
+    await check('semantic-knowledge-prerequisite-history-late-response-and-focus',async env=>{const p=await env.page(),link=p.locator('#article [data-knowledge]').first();await link.scrollIntoViewIfNeeded();await link.focus();const before=await p.locator('#readingPane').evaluate(e=>e.scrollTop),hash=await p.evaluate(()=>location.hash);await link.click();await p.locator('.knowledge-paper').waitFor();assert.equal(await p.locator('#sheetTitle').innerText(),'删除一个重复对象');assert.doesNotMatch(await p.locator('.knowledge-paper').innerText(),/Q\d{6}/);await p.locator('#sheetBody [data-knowledge]').click();await p.waitForFunction(()=>document.querySelector('#sheetTitle').textContent==='有效范围');await p.locator('#sheetBack').click();assert.equal(await p.locator('#sheetTitle').innerText(),'删除一个重复对象');await p.evaluate(()=>history.back());await p.waitForFunction(()=>!document.querySelector('#sheetDialog').open);assert.equal(await p.evaluate(()=>location.hash),hash);assert(Math.abs(await p.locator('#readingPane').evaluate(e=>e.scrollTop)-before)<2);assert(await link.evaluate(e=>e===document.activeElement));const card=qaCatalog.questions[1];await p.evaluate(()=>window.__refinement.state.knowledge.clear());env.mock.unavailable.add(card.url);await link.click();await p.waitForFunction(()=>/未下载|无法|失败/.test(document.querySelector('#sheetBody').textContent));await closeSheet(p);env.mock.unavailable.delete(card.url);env.mock.delayDocument=card.url;await link.click();await poll(()=>env.mock.heldDocument,'knowledge delayed');await closeSheet(p);env.mock.heldDocument();await settled(p);assert.equal(await p.locator('#sheetDialog').evaluate(e=>e.open),false);});
+    await check('code-copy-horizontal-scroll-independent-size-and-wrap', async env => {
+      const p = await env.page(), code = p.locator('#article pre').first();
+      await code.scrollIntoViewIfNeeded();
+      const original = await code.textContent(), font = await code.locator('code').evaluate(e => parseFloat(getComputedStyle(e).fontSize));
+      assert(await code.evaluate(e => { e.scrollLeft = 120; return e.scrollLeft > 0 && e.scrollWidth > e.clientWidth; }));
+      await p.locator('#article [data-copy]').first().click();
+      // The Windows system clipboard exposes its native CRLF line convention.
+      // Normalize only that convention; every other copied character is exact.
+      assert.equal((await p.evaluate(() => navigator.clipboard.readText())).replace(/\r\n/g, '\n'), original);
+      await p.locator('#settingsButton').click();
+      await p.locator('[data-code-font="0.5"]').click(); await p.locator('#wrapCode').check(); await closeSheet(p);
+      assert.equal(await code.textContent(), original);
+      assert(await code.locator('code').evaluate(e => parseFloat(getComputedStyle(e).fontSize)) > font);
+      assert.equal(await code.locator('code').evaluate(e => getComputedStyle(e).whiteSpace), 'pre-wrap');
+      const g = await geometry(p); assert(g.outer <= g.viewport + 1 && g.paper <= g.width + 1);
     });
-
-    await check('built-current-publication-renders-content-or-explicit-empty-withdrawal', async () => {
-      const catalog = JSON.parse(await fs.readFile(path.join(root, 'dist/library/catalog.json'), 'utf8'));
-      assert.equal(catalog.schemaVersion, 2, 'build the current schema before browser QA');
-      const real = await environment(browser, { catalog, libraryRoot: path.join(root, 'dist') });
-      try {
-        if (catalog.state === 'withdrawn') {
-          assert.deepEqual(catalog.collections, []); assert.deepEqual(catalog.questions, []);
-          const page = await real.page('#/read/retired/retired');
-          await page.waitForURL('**/#/library');
-          assert.match(await page.locator('#bookList').innerText(), /暂无章节/);
-          assert.equal(await page.locator('#bookList .book-row').count(), 0);
-          assert.equal(await page.locator('#readingArticle .code-block').count(), 0);
-          assert.equal(await page.locator('#questionsButton').count(), 0);
-          await page.locator('#librarySearch').fill('retired');
-          await page.waitForFunction(() => document.querySelector('#bookList').textContent.includes('暂无可检索内容'));
-          assert.equal(real.mock.requests.filter(request => request.path.startsWith('/library/')
-            && request.path !== '/library/catalog.json').length, 0);
-          await page.screenshot({ path: path.join(output, 'current-withdrawal.png') });
-          assert.deepEqual(real.mock.errors, []);
-          return;
-        }
-        assert(catalog.questions.length > 0);
-        const collection = catalog.collections[0], meta = collection.documents[0];
-        const page = await real.page(`#/read/${collection.id}/${meta.id}`);
-        assert(await page.locator('#readingArticle .code-block').count() > 0);
-        assert.doesNotMatch(await page.locator('#readingArticle').innerText(), /Q\d{6}/);
-        for (const viewport of [{ width: 402, height: 874 }, { width: 320, height: 740 }, { width: 1280, height: 800 }, { width: 874, height: 402 }]) {
-          await page.setViewportSize(viewport); await page.waitForTimeout(70);
-          const geometry = await page.evaluate(() => {
-            const pane = document.querySelector('#readingPane'), paper = document.querySelector('#readingArticle');
-            return { outer: document.documentElement.scrollWidth, viewport: innerWidth, pane: pane.clientHeight,
-              paper: paper.getBoundingClientRect().width, width: pane.clientWidth };
-          });
-          assert(geometry.outer <= geometry.viewport + 1 && geometry.pane > 100 && geometry.paper <= geometry.width + 1,
-            JSON.stringify({ viewport, geometry }));
-          await page.screenshot({ path: path.join(output, `current-publication-${viewport.width}x${viewport.height}.png`) });
-        }
-        await page.setViewportSize({ width: 402, height: 874 });
-        // Check the actual current documents, not only the synthetic reader fixture
-        // or the first manuscript in a multi-part chapter.
-        for (const chapter of catalog.collections) for (const document of chapter.documents) {
-          await page.goto(`${origin}/#/read/${chapter.id}/${document.id}`);
-          await page.waitForFunction(id => window.__refinement.state.active?.meta.id === id
-            && !window.__refinement.state.restoring, document.id);
-          await page.locator('#readingArticle .code-block').first().waitFor();
-          const current = await page.evaluate(() => ({
-            outer: document.documentElement.scrollWidth, viewport: innerWidth,
-            headings: document.querySelectorAll('#readingArticle h2').length,
-            text: document.querySelector('#readingArticle').innerText
-          }));
-          assert(current.outer <= current.viewport + 1, document.id + ': outer overflow');
-          assert.equal(current.headings, document.headings.filter(h => h.depth === 2).length);
-          assert.doesNotMatch(current.text, /Q\d{6}/, document.id + ': exposed knowledge identity');
-          boundary.assertReaderText(current.text, document.id + ': displayed article');
-          await page.screenshot({ path: path.join(output, `current-${document.id}-402x874.png`) });
-          await page.locator('#settingsButton').click();
-          await page.locator('[data-show-source]').click();
-          await page.locator('.source-view code').waitFor();
-          const delivered = await fs.readFile(path.join(root, 'dist', document.sourceUrl.slice(1)), 'utf8');
-          const shown = await page.locator('.source-view code').textContent();
-          assert.equal(shown, delivered, document.id + ': source UI must show the delivered source view');
-          boundary.assertReaderSource(shown, document.id + ': displayed source');
-          await page.locator('[data-sheet-close]').click();
-          await page.waitForFunction(() => !document.querySelector('#sheetDialog').open);
-        }
-        const binary = catalog.collections.find(chapter => chapter.id === 'chapter-01');
-        assert.equal(binary.documents.length, 1, 'the current binary chapter has one logical reader document');
-        assert.equal(binary.documents[0].id, 'binary-search');
-        const composition = JSON.parse(await fs.readFile(path.join(root, 'content/binary/chapter.authoring.json'), 'utf8'));
-        const selections = [composition.prelude, ...composition.sections];
-        assert.equal(selections.length, 38, 'this is the current chapter scope, not a generic UI limit');
-        await page.goto(`${origin}/#/read/${binary.id}/binary-search`);
-        await page.waitForFunction(() => window.__refinement.state.active?.meta.id === 'binary-search'
-          && !window.__refinement.state.restoring);
-        assert.equal(await page.locator('#documentTabs').isVisible(), false);
-        const mainSections = await page.locator('#readingArticle').evaluate((article, anchors) => {
-          const headings = [...article.querySelectorAll('h2[id]')];
-          return anchors.map(anchor => {
-            const marker = [...article.querySelectorAll('[id]')].find(node => node.id === anchor);
-            const heading = marker && headings.find(node => marker.compareDocumentPosition(node) & Node.DOCUMENT_POSITION_FOLLOWING);
-            return { anchor, id: heading?.id, title: heading?.textContent, index: headings.indexOf(heading) };
-          });
-        }, selections.map(selection => selection.anchor));
-        assert.deepEqual(mainSections.map(section => section.index), selections.map((_, index) => index),
-          'rendered H2 order must follow the explicit composition across all four author files');
-        numbering.assertSectionNumbering(mainSections.map(section=>section.title), 'displayed chapter headings');
-        const openingGeometry = await page.locator('#readingArticle').evaluate(article => {
-          const first=article.querySelector('h2');
-          return {gap:first.getBoundingClientRect().top-article.getBoundingClientRect().top,
-            topPadding:Number.parseFloat(getComputedStyle(article).paddingTop),
-            wrap:getComputedStyle(first).textWrap};
-        });
-        assert(openingGeometry.gap <= openingGeometry.topPadding + 1,
-          'first section must begin at paper padding, without an extra heading margin: '+JSON.stringify(openingGeometry));
-        assert.equal(openingGeometry.wrap,'balance');
-        assert.equal(await page.locator('#readingArticle h2').count(), 38);
-        await page.locator('#tocButton').click();
-        assert.deepEqual(await page.locator('#tocResults .toc-row').evaluateAll(rows => rows.map(row => ({
-          id: row.dataset.anchor, title: row.textContent
-        }))), mainSections.map(section => ({ id: section.id, title: section.title })));
-        assert.equal(await page.locator('#tocResults .depth-3,#tocResults .toc-group').count(), 0,
-          'the reader directory exposes main sections without internal manuscripts or H3 subheadings');
-        await page.screenshot({ path: path.join(output, 'current-main-section-directory.png') });
-        await page.locator('[data-sheet-close]').click();
-        await page.waitForFunction(() => !document.querySelector('#sheetDialog').open);
-        const ordered = mainSections.find(section => section.anchor === 'ordered-boundaries');
-        const dynamic = mainSections.find(section => section.anchor === 'fenwick-rank');
-        assert(ordered && dynamic);
-        // Reaching an implementation H3 keeps the question type as the footer
-        // title; progress is calculated across the entire composed chapter.
-        await page.locator('#readingArticle').evaluate((article, id) => {
-          const children = [...article.children], index = children.findIndex(node => node.id === id);
-          const detail = children.slice(index + 1).find(node => node.tagName === 'H3');
-          if (!detail) throw new Error('Expected a real implementation subheading');
-          detail.scrollIntoView({ block: 'start' });
-        }, ordered.id);
-        await page.waitForFunction(title => document.querySelector('#progressLabel span').textContent === title, ordered.title);
-        const expectedProgress = await page.locator('#readingPane').evaluate(node =>
-          Math.round(100 * node.scrollTop / (node.scrollHeight - node.clientHeight)));
-        await page.waitForFunction(value => Number(document.querySelector('#progressLabel').getAttribute('aria-valuenow')) === value,
-          expectedProgress);
-        assert.equal(Number(await page.locator('#progressLabel').getAttribute('aria-valuenow')), expectedProgress);
-        for (const [query, expected] of [['有序数据 equal_range', ordered], ['动态频数 kth', dynamic]]) {
-          await page.locator('#tocButton').click();
-          await page.locator('#tocSearch').fill(query);
-          await page.locator('#tocResults .search-row').first().waitFor();
-          const hits = await page.locator('#tocResults .search-row').evaluateAll(rows => rows.map(row => ({
-            document: row.dataset.goDocument, title: row.querySelector('strong')?.textContent
-          })));
-          assert(hits.some(hit => hit.document === 'binary-search' && hit.title?.includes(expected.title)),
-            query + ': title and implementation tokens must combine within the parent question type');
-          await page.screenshot({ path: path.join(output, `current-search-${expected.anchor}.png`) });
-          assert((await page.locator('#sheetBody').evaluate(node => node.scrollTop)) < 3,
-            query + ': fresh search results must start at the top instead of keeping the old directory scroll');
-          await page.locator('#tocResults .search-row[data-go-document="binary-search"]').first().click();
-          await page.waitForFunction(() => !document.querySelector('#sheetDialog').open && !window.__refinement.state.restoring);
-          assert.equal(await page.evaluate(() => window.__refinement.state.active.meta.id), 'binary-search');
-          await page.waitForFunction(title => document.querySelector('#progressLabel span').textContent === title, expected.title);
-          assert.equal(await page.locator('#progressLabel span').innerText(), expected.title);
-        }
-        const beforeKnowledge = await page.evaluate(() => ({ top: document.querySelector('#readingPane').scrollTop,
-          hash: location.hash, progress: document.querySelector('#progressLabel').textContent }));
-        await page.locator('#tocButton').click(); await page.locator('#tocSearch').fill('严格弱序');
-        const knowledgeHit = page.locator('#tocResults .search-row[data-knowledge]').first();
-        await knowledgeHit.waitFor();
-        const knowledgeId = await knowledgeHit.getAttribute('data-knowledge');
-        const knowledge = catalog.questions.find(question => question.id === knowledgeId);
-        assert(knowledge, 'a knowledge result must resolve to an actually published knowledge card');
-        assert.equal(await knowledgeHit.locator('strong').innerText(), knowledge.title);
-        boundary.assertReaderText(await page.locator('#tocResults').innerText(), 'displayed search results');
-        assert.doesNotMatch(await knowledgeHit.innerText(), /Q\d{6}/);
-        await page.screenshot({ path: path.join(output, 'current-knowledge-search.png') });
-        assert((await page.locator('#sheetBody').evaluate(node => node.scrollTop)) < 3,
-          'knowledge results must be visible from their start before any automated click scrolls them into view');
-        await knowledgeHit.click(); await page.locator('.knowledge-paper').waitFor();
-        boundary.assertReaderText(await page.locator('.knowledge-paper').innerText(), 'displayed knowledge');
-        assert.equal(await page.locator('#sheetTitle').innerText(), knowledge.title);
-        await page.locator('[data-sheet-close]').click();
-        await page.waitForFunction(() => !document.querySelector('#sheetDialog').open);
-        const afterKnowledge = await page.evaluate(() => ({ top: document.querySelector('#readingPane').scrollTop,
-          hash: location.hash, progress: document.querySelector('#progressLabel').textContent }));
-        assert.equal(afterKnowledge.hash, beforeKnowledge.hash);
-        assert.equal(afterKnowledge.progress, beforeKnowledge.progress);
-        assert(Math.abs(afterKnowledge.top - beforeKnowledge.top) < 3,
-          JSON.stringify({ beforeKnowledge, afterKnowledge }));
-        await page.locator('#readingArticle [data-knowledge]').first().click();
-        await page.locator('.knowledge-paper').waitFor();
-        assert.doesNotMatch(await page.locator('#sheetTitle').innerText(), /Q\d{6}/);
-        await page.screenshot({ path: path.join(output, 'current-knowledge-402x874.png') });
-        await page.locator('[data-sheet-close]').click();
-        const crossLink = page.locator('#readingArticle a[href^="#/read/"]').first();
-        if (await crossLink.count()) {
-          const href = await crossLink.getAttribute('href');
-          const anchor = new URLSearchParams(href.split('?')[1]).get('anchor');
-          // The reader consumes the anchor query after positioning so reload
-          // restores the saved reading place rather than replaying this jump.
-          await crossLink.click(); await page.waitForURL(origin + '/' + href.split('?')[0]);
-          if (anchor) await page.waitForFunction(id => [...document.querySelectorAll('#readingArticle [id]')]
-            .some(node => node.id === id), anchor);
-          await page.locator('#readingArticle .code-block').first().waitFor();
-          assert.equal(await page.locator('#readingArticle .code-block').count() > 0, true);
-        }
-        assert.deepEqual(real.mock.errors, []);
-      } catch (error) {
-        for (const [index, page] of real.context.pages().entries()) {
-          await page.screenshot({ path: path.join(output, `current-publication-failure-${index}.png`) }).catch(() => {});
-          await fs.writeFile(path.join(output, `current-publication-failure-${index}.txt`), await page.locator('body').innerText()).catch(() => {});
-        }
-        throw error;
-      } finally { await real.context.close(); }
+    await check('visual-viewport-keyboard-and-pinch-zoom-sheet-bounds', async env => {
+      await env.context.addInitScript(() => { const v = new EventTarget(); Object.assign(v, {height: innerHeight, width: innerWidth, offsetTop: 0, offsetLeft: 0, scale: 1}); Object.defineProperty(window, 'visualViewport', {configurable: true, value: v}); window.__fakeViewport = v; });
+      const p = await env.page(); await p.locator('#questionsButton').click();
+      await p.evaluate(() => {Object.assign(__fakeViewport, {height: 420, offsetTop: 22, scale: 1}); __fakeViewport.dispatchEvent(new Event('resize'));}); await p.waitForTimeout(40);
+      const bounds = await p.locator('#sheetDialog').boundingBox(); assert(bounds.y >= 22 && bounds.y + bounds.height <= 443, JSON.stringify(bounds));
+      assert.equal(await p.evaluate(() => document.documentElement.style.getPropertyValue('--sheet-viewport-height')), '420px');
+      await p.evaluate(() => {Object.assign(__fakeViewport, {height: 200, scale: 2}); __fakeViewport.dispatchEvent(new Event('resize'));});
+      assert.deepEqual(await p.evaluate(() => ['--sheet-viewport-height','--sheet-offset-top','--sheet-offset-bottom'].map(n => document.documentElement.style.getPropertyValue(n))), ['', '', '']);
     });
-
-    await check('semantic-knowledge-opens-in-place-with-hidden-identity-and-restores-focus', async env => {
-      const page = await env.page();
-      assert.equal(await page.locator('#questionsButton,[data-track],#trackTabs').count(), 0);
-      assert.doesNotMatch(await page.locator('#readingArticle').innerText(), /Q[0-9]{6}/);
-      const link = page.locator('#readingArticle [data-knowledge]').first();
-      await link.scrollIntoViewIfNeeded(); await link.focus();
-      const before = await page.locator('#readingPane').evaluate(node => node.scrollTop), hash = await page.evaluate(() => location.hash);
-      await link.click(); await page.locator('.knowledge-paper').waitFor();
-      assert.equal(await page.locator('#sheetTitle').innerText(), '删除一个重复对象');
-      assert.equal(await page.evaluate(() => location.hash), hash);
-      assert.equal(await page.locator('#readingPane').evaluate(node => node.scrollTop), before);
-      await page.locator('[data-sheet-close]').click();
-      await page.waitForFunction(() => !document.querySelector('#sheetDialog').open);
-      assert.equal(await page.locator('#readingPane').evaluate(node => node.scrollTop), before);
-      assert(await link.evaluate(node => node === document.activeElement));
+    await check('safe-doubleclick-only-pure-preserves-width-text-and-native-selection',async env=>{const p=await env.page();await navigateHeading(p,'unit-4');await p.locator('#readingPane').evaluate(e=>e.scrollTop+=80);await settled(p);await p.evaluate(()=>getSelection().removeAllRanges());const before=await p.locator('#article #unit-4').evaluate(e=>({top:e.getBoundingClientRect().top,width:document.querySelector('#article').getBoundingClientRect().width}));await blankDoubleClick(p);assert(await p.locator('#app').evaluate(e=>e.classList.contains('pure')));const during=await p.locator('#article #unit-4').evaluate(e=>({top:e.getBoundingClientRect().top,width:document.querySelector('#article').getBoundingClientRect().width}));assert(Math.abs(before.width-during.width)<1&&Math.abs(before.top-during.top)<2,JSON.stringify({before,during}));await p.keyboard.press('Escape');assert(await p.locator('#app').evaluate(e=>e.classList.contains('pure')));await blankDoubleClick(p);assert.equal(await p.locator('#app').evaluate(e=>e.classList.contains('pure')),false);const code=p.locator('.code-block pre').first();await code.scrollIntoViewIfNeeded();await code.dblclick({position:{x:40,y:30}});assert.equal(await p.locator('#app').evaluate(e=>e.classList.contains('pure')),false);await p.evaluate(()=>getSelection().removeAllRanges());const paragraph=p.locator('#article p').first();await paragraph.scrollIntoViewIfNeeded();await paragraph.dblclick({position:{x:45,y:10}});assert((await p.evaluate(()=>getSelection().toString())).trim());assert.equal(await p.locator('#app').evaluate(e=>e.classList.contains('pure')),false);});
+    await check('pure-code-click-excluded-and-pointer-hold-keeps-original-controls',async env=>{const p=await env.page();await navigateHeading(p,'code-2');await blankDoubleClick(p);assert.equal(await p.locator('#app').evaluate(e=>e.classList.contains('controls-awake')),false);await p.locator('#article #code-2 + .code-block code').click({position:{x:5,y:5}});assert.equal(await p.locator('#app').evaluate(e=>e.classList.contains('controls-awake')),false);await p.locator('#readingPane').click({position:{x:3,y:100}});assert(await p.locator('#app').evaluate(e=>e.classList.contains('controls-awake')));const r=await p.locator('.app-header').boundingBox();await p.mouse.move(r.x+10,r.y+10);await p.mouse.down();await p.waitForTimeout(3100);assert(await p.locator('#app').evaluate(e=>e.classList.contains('controls-awake')));await p.mouse.up();});
+    await check('same-document-link-browser-back-forward-and-quick-reload-keep-place',async env=>{const p=await env.page();const link=p.locator('[data-qa-link="same"]');await link.scrollIntoViewIfNeeded();await link.focus();await settled(p);const before=await p.locator('#readingPane').evaluate(e=>e.scrollTop);await link.click();await settled(p);await assertTarget(p,'unit-6');const after=await p.locator('#readingPane').evaluate(e=>e.scrollTop);await p.goBack();await settled(p);assert(Math.abs(await p.locator('#readingPane').evaluate(e=>e.scrollTop)-before)<2);await p.goForward();await settled(p);assert(Math.abs(await p.locator('#readingPane').evaluate(e=>e.scrollTop)-after)<2);await p.locator('#readingPane').evaluate(e=>e.scrollTop+=130);await p.waitForTimeout(40);const quick=await p.locator('#readingPane').evaluate(e=>e.scrollTop);await p.reload();await p.locator('#article .code-block').first().waitFor();await settled(p);assert(Math.abs(await p.locator('#readingPane').evaluate(e=>e.scrollTop)-quick)<2);assert.doesNotMatch(await p.evaluate(()=>location.hash),/[?&]anchor=/);});
+    await check('slow-cross-document-preserves-paper-and-cancel-rejects-late-result',async env=>{const p=await env.page(),link=p.locator('[data-qa-link="cross"]');await link.scrollIntoViewIfNeeded();await settled(p);const before=await p.evaluate(()=>({html:document.querySelector('#article').innerHTML,scroll:document.querySelector('#readingPane').scrollTop,hash:location.hash}));env.mock.delayDocument=qaCatalog.collections[0].documents[1].url;await link.click();await poll(()=>env.mock.heldDocument,'cross-document delayed');assert.equal(await p.locator('#article').innerHTML(),before.html);assert(Math.abs(await p.locator('#readingPane').evaluate(e=>e.scrollTop)-before.scroll)<2);await p.locator('[data-cancel-route]').click();assert.equal(await p.evaluate(()=>location.hash),before.hash);env.mock.heldDocument();await settled(p);assert.equal(await p.evaluate(()=>window.__refinement.state.active.meta.id),'practice-entry');assert.equal(await p.locator('#article').innerHTML(),before.html);});
+    await check('pending-old-scroll-cannot-write-new-document-history-position', async env => {
+      const p = await env.page(), link = p.locator('[data-qa-link="cross-start"]');
+      await link.scrollIntoViewIfNeeded(); await link.focus(); await settled(p);
+      const before = await p.locator('#readingPane').evaluate(e => e.scrollTop);
+      env.mock.delayDocument = qaCatalog.collections[0].documents[2].url;
+      await link.click(); await poll(() => env.mock.heldDocument, 'anchorless document delayed');
+      await p.locator('#readingPane').evaluate(e => e.scrollTop += 100); await p.waitForTimeout(250);
+      env.mock.heldDocument(); await p.waitForFunction(() => __refinement.state.active?.meta.id === 'practice-alternative'); await settled(p);
+      await assertTarget(p, 'section-0');
+      await p.goBack(); await p.waitForFunction(() => __refinement.state.active?.meta.id === 'practice-entry'); await settled(p);
+      assert(Math.abs(await p.locator('#readingPane').evaluate(e => e.scrollTop) - before) < 2);
     });
-
-    await check('knowledge-prerequisite-navigation-and-browser-back-preserve-the-reader', async env => {
-      const page = await env.page();
-      const link = page.locator('#readingArticle [data-knowledge]').first();
-      await link.click(); await page.locator('.knowledge-paper').waitFor();
-      await page.locator('#sheetBody [data-knowledge]').click();
-      await page.waitForFunction(() => document.querySelector('#sheetTitle').textContent === '有效范围' && !!document.querySelector('.knowledge-paper'));
-      assert.equal(await page.locator('#sheetBody #lifetime').count(), 1);
-      await page.locator('#sheetBack').click();
-      assert.equal(await page.locator('#sheetTitle').innerText(), '删除一个重复对象');
-      await page.evaluate(() => history.back());
-      await page.waitForFunction(() => !document.querySelector('#sheetDialog').open);
-      assert.equal(await page.evaluate(() => window.__refinement.state.active.meta.id), 'practice-entry');
+    await check('settings-library-source-fonts-sheet-history-and-immediate-reopen',async env=>{const p=await env.page();await navigateHeading(p,'unit-3');const anchor=await currentAnchor(p);await p.locator('#settingsButton').click();assert.equal(await p.locator('#headerActions [data-action="library"],#headerActions #libraryButton').count(),0);assert.equal(await p.locator('#sheetBody [data-show-library]').count(),1);const font=await p.locator('#article').evaluate(e=>getComputedStyle(e).fontSize);await p.locator('[data-font="1"]').click();await closeSheet(p);assert.notEqual(await p.locator('#article').evaluate(e=>getComputedStyle(e).fontSize),font);assert.equal(await currentAnchor(p),anchor);assert(await p.locator('#settingsButton').evaluate(e=>e===document.activeElement));await p.locator('#settingsButton').click();await p.locator('[data-show-source]').click();await p.locator('.source-view code').waitFor();assert.equal(await p.locator('.source-view code').textContent(),await fs.readFile(path.join(qaLibrary,qaCatalog.collections[0].documents[0].sourceUrl.slice(1)),'utf8'));await p.locator('#sheetBack').click();assert.equal(await p.locator('#sheetTitle').innerText(),'阅读设置');await p.evaluate(()=>{document.querySelector('[data-sheet-close]').click();document.querySelector('#questionsButton').click();});await p.waitForFunction(()=>document.querySelector('#sheetDialog').open&&document.querySelector('.reader-question-input'));await settled(p);assert(await p.locator('.reader-question-input').isVisible());await p.evaluate(()=>history.back());await p.waitForFunction(()=>!document.querySelector('#sheetDialog').open);});
+    await check('manual-question-draft-owner-version-failure-and-short-viewport',async env=>{const p=await env.page();await p.setViewportSize({width:402,height:420});await p.locator('#questionsButton').click();const count=env.mock.requests.length;assert.equal(await p.locator('.reader-question-turn').count(),0);const text='为什么这里保留范围边界？';await p.locator('.reader-question-input').fill(text);await closeSheet(p);await p.locator('#questionsButton').click();assert.equal(await p.locator('.reader-question-input').inputValue(),text);await p.locator('.reader-question-send').click();assert.match(await p.locator('.reader-question-status').innerText(),/尚未连接.*未发送/);assert.equal(await p.locator('.reader-question-input').inputValue(),text);assert.equal(await p.locator('.reader-question-turn').count(),0);assert.equal(env.mock.requests.length,count);assert(await p.locator('#toast').evaluate(e=>e.hidden));const r=await p.locator('[data-sheet-close]').boundingBox();assert(r.y>=0&&r.y+r.height<=421);await p.screenshot({path:path.join(output,'manual-question-short-viewport.png')});await closeSheet(p);await p.reload();await p.locator('#article .code-block').first().waitFor();await settled(p);await p.locator('#questionsButton').click();assert.equal(await p.locator('.reader-question-input').inputValue(),text);await closeSheet(p);env.mock.identity=otherOwner;await p.reload();await p.locator('#article .code-block').first().waitFor();await settled(p);await p.locator('#questionsButton').click();assert.equal(await p.locator('.reader-question-input').inputValue(),'');});
+    await check('legacy-notes-byte-preservation-two-tabs-and-unsent-logout-guard',async env=>{const p=await env.page(),keys=Object.keys(noteSeed()),before=await snapshotKeys(p,keys);env.mock.state['notes:practice-course']={value:'newer remote copy',revision:99,updatedAt:Date.now()};await p.reload();await p.locator('#article .code-block').first().waitFor();await settled(p);const b=await env.page();assert.deepEqual(await snapshotKeys(p,keys),before);assert.deepEqual(await snapshotKeys(b,keys),before);await p.locator('#settingsButton').click();await p.locator('[data-logout]').click();await settled(p);assert.equal(env.mock.requests.filter(r=>r.path==='/auth/logout').length,0);assert.equal(await p.evaluate(()=>window.__refinement.state.owner),owner);assert.deepEqual(await snapshotKeys(p,keys),before);assert.match(await p.locator('#toast').innerText(),/未同步|草稿|保留|退出/);assert.equal(await p.locator('#notesButton,#noteEditor').count(),0);},{initial:noteSeed()});
+    await check('clean-logout-preserves-all-legacy-notes-and-prevents-offline-reentry',async env=>{const p=await env.page(),keys=Object.keys(noteSeed(false)),before=await snapshotKeys(p,keys);await p.locator('#settingsButton').click();await p.locator('[data-logout]').click();await p.locator('#loginView').waitFor({state:'visible'});assert.equal(env.mock.requests.filter(r=>r.path==='/auth/logout').length,1);assert.deepEqual(await snapshotKeys(p,keys),before);assert.equal(await p.evaluate(()=>localStorage.getItem('second-algorithm:last-session')),null);env.mock.rejectApis=true;await p.reload();await p.locator('#loginView').waitFor({state:'visible'});assert.equal(await p.locator('#article .code-block').count(),0);assert.deepEqual(await snapshotKeys(p,keys),before);},{initial:noteSeed(false)});
+    await check('same-page-expired-owner-and-reconnect-rebuild-the-current-route', async env => {
+      const p = await env.page(), hash = await p.evaluate(() => location.hash);
+      env.mock.identity = null; await p.evaluate(() => window.dispatchEvent(new Event('online')));
+      await p.locator('#loginView').waitFor({state:'visible'});
+      assert.equal(await p.locator('#article .code-block').count(), 0);
+      env.mock.identity = owner; await p.evaluate(() => window.dispatchEvent(new Event('online')));
+      await p.locator('#article .code-block').first().waitFor(); await settled(p);
+      assert.equal(await p.evaluate(() => location.hash), hash);
+      assert.equal(await p.evaluate(() => __refinement.state.owner), owner);
+      assert.equal(await p.evaluate(() => __refinement.state.active.meta.id), 'practice-entry');
     });
-
-    await check('knowledge-close-and-immediate-reopen-keeps-the-new-sheet', async env => {
-      const page = await env.page();
-      await page.locator('#readingArticle [data-knowledge]').first().click(); await page.locator('.knowledge-paper').waitFor();
-      await page.evaluate(() => {
-        document.querySelector('[data-sheet-close]').click();
-        document.querySelector('#readingArticle [data-knowledge]').click();
-      });
-      await page.waitForTimeout(200); await page.locator('.knowledge-paper').waitFor();
-      assert(await page.locator('#sheetDialog').evaluate(node => node.open));
-      await page.keyboard.press('Escape'); await page.waitForFunction(() => !document.querySelector('#sheetDialog').open);
+    await check('cross-owner-reconnect-never-shares-reader-private-state-or-legacy-notes',async env=>{const p=await env.page(),keys=Object.keys(noteSeed()),before=await snapshotKeys(p,keys);await navigateHeading(p,'unit-8');await p.locator('#questionsButton').click();await p.locator('.reader-question-input').fill('owner A only draft');await closeSheet(p);env.mock.identity=otherOwner;await p.reload();await p.locator('#article .code-block').first().waitFor();await settled(p);assert.equal(await p.evaluate(()=>window.__refinement.state.owner),otherOwner);assert.notEqual(await currentAnchor(p),'unit-8');await p.locator('#questionsButton').click();assert.equal(await p.locator('.reader-question-input').inputValue(),'');assert.doesNotMatch(await p.locator('body').innerText(),/legacy local note|unsent other tab|different owner private note|owner A only draft/);assert.deepEqual(await snapshotKeys(p,keys),before);},{initial:noteSeed()});
+    await check('actual-built-publication-content-source-knowledge-directory-integrity',async()=>{
+      const catalog=JSON.parse(await fs.readFile(path.join(root,'dist/library/catalog.json'),'utf8'));assert.equal(catalog.schemaVersion,2);const env=await environment(browser,{catalog,libraryRoot:path.join(root,'dist')});
+      const publicShell=(await Promise.all(['index.html','app.js'].map(f=>fs.readFile(path.join(root,'dist',f),'utf8')))).join('\n');
+      const absentFromPublic=(value,label)=>{assert(!publicShell.includes(value)&&!publicShell.includes(JSON.stringify(value).slice(1,-1)),label+' must remain in protected library responses');};
+      try{if(catalog.state==='withdrawn'){const p=await env.page('#/read/retired/retired');assert.match(await p.locator('#chapterView').innerText(),/暂无已出版章节/);assert.equal(await p.locator('#article .code-block').count(),0);return;}
+        for(const chapter of catalog.collections)for(const meta of chapter.documents){const p=await env.page(`#/read/${chapter.id}/${meta.id}`),payload=JSON.parse(await fs.readFile(path.join(root,'dist',meta.url.slice(1)),'utf8'));
+          absentFromPublic(payload.html,meta.id+' full chapter');
+          const actual=await p.locator('#article').evaluate(e=>({headings:[...e.querySelectorAll('h2[id],h3[id],h4[id]')].map(h=>({depth:Number(h.tagName.slice(1)),id:h.id,text:h.textContent})),code:[...e.querySelectorAll('pre code')].map(x=>x.textContent),text:e.innerText}));
+          assert.deepEqual(actual.headings,payload.headings);boundary.assertReaderText(actual.text,meta.id+' displayed article');assert.doesNotMatch(actual.text,/Q\d{6}/);
+          const allNavigation=await p.evaluate(async facts=>{
+            const errors=[],majors=facts.filter(h=>h.depth===2),stack=[],outline=facts.map((h,index)=>{while(stack.length&&stack.at(-1).depth>=h.depth)stack.pop();const item={...h,index,parent:h.depth===2?h.id:stack[0]?.id,number:h.depth===2?h.text.split('、')[0]:h.text.match(/^（[^）]+）/)?.[0]||''};stack.push(item);return item;});
+            for(const h of outline){__refinement.runtime.showReader(null,h.id);await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>requestAnimationFrame(r))));const majorIndex=majors.findIndex(x=>x.id===h.parent);const expected={previousMajor:majors[majorIndex-1],previousHeading:outline[h.index-1],nextHeading:outline[h.index+1],nextMajor:majors[majorIndex+1]};
+              for(const[id,target]of Object.entries(expected)){const e=document.getElementById(id),number=target?(target.depth===2?target.text.split('、')[0]:target.text.match(/^（[^）]+）/)?.[0]||''):'—';if(e.disabled!==!target||e.dataset.target!==(target?.id||'')||e.querySelector('.nav-target').textContent!==number||target&&!e.getAttribute('aria-label').includes(target.text))errors.push({current:h.id,control:id,expected:target?{id:target.id,number,title:target.text}:null,actual:e.outerHTML,runtime:__refinement.runtime.navigation});}}
+            return{headings:outline.length,controls:outline.length*4,errors,first:__refinement.runtime.headings[0]};
+          },payload.headings);
+          await fs.writeFile(path.join(output,meta.id+'-all-neighbor-targets.json'),JSON.stringify(allNavigation,null,2)+'\n');assert.deepEqual(allNavigation.errors,[],'every actual published heading has four correct strict neighbor labels');
+          await navigateHeading(p,payload.headings[0].id);
+          const expected=await p.evaluate(html=>{const d=new DOMParser().parseFromString(html,'text/html');return{code:[...d.querySelectorAll('pre code')].map(x=>x.textContent),links:[...d.querySelectorAll('a')].map(a=>[a.getAttribute('href'),a.textContent])};},payload.html);
+          assert.deepEqual(actual.code,expected.code,'every delivered code block retains its exact text');assert.deepEqual(await p.locator('#article a').evaluateAll(xs=>xs.map(a=>[a.getAttribute('href'),a.textContent])),expected.links,'all source and knowledge links remain');
+          for(const viewport of[{width:402,height:874},{width:320,height:740},{width:1280,height:800},{width:874,height:402}]){await p.setViewportSize(viewport);await settled(p);const g=await geometry(p);assert(g.outer<=g.viewport+1&&g.paper<=g.width+1&&g.pane>100,JSON.stringify({viewport,g}));await p.screenshot({path:path.join(output,`current-${meta.id}-${viewport.width}x${viewport.height}.png`)});}
+          await p.setViewportSize({width:402,height:874});await p.locator('#tocButton').click();assert.deepEqual(await p.locator('#sheetBody [data-go]').evaluateAll(xs=>xs.map(x=>({id:x.dataset.go,text:x.textContent.trim()}))),payload.headings.map(h=>({id:h.id,text:h.text})));assert.equal(await p.locator('#sheetBody input').count(),0);await closeSheet(p);
+          await p.locator('#settingsButton').click();await p.locator('[data-show-source]').click();await p.locator('.source-view code').waitFor();const shown=await p.locator('.source-view code').textContent();assert.equal(shown,await fs.readFile(path.join(root,'dist',meta.sourceUrl.slice(1)),'utf8'));absentFromPublic(shown,meta.id+' full source');boundary.assertReaderSource(shown,meta.id+' displayed source');await closeSheet(p);
+          const link=p.locator('#article [data-knowledge]').first();if(await link.count()){const id=await link.getAttribute('data-knowledge'),q=catalog.questions.find(q=>q.id===id);assert(q);await link.scrollIntoViewIfNeeded();const before=await p.locator('#readingPane').evaluate(e=>e.scrollTop);await link.click();await p.locator('.knowledge-paper').waitFor();assert.equal(await p.locator('#sheetTitle').innerText(),q.title);boundary.assertReaderText(await p.locator('.knowledge-paper').innerText(),'displayed knowledge');await closeSheet(p);assert(Math.abs(await p.locator('#readingPane').evaluate(e=>e.scrollTop)-before)<2);}
+          await p.close();}
+        for(const q of catalog.questions){const payload=JSON.parse(await fs.readFile(path.join(root,'dist',q.url.slice(1)),'utf8'));absentFromPublic(payload.html,q.id+' full knowledge');}
+        assert.deepEqual(env.mock.errors,[]);
+      }catch(error){for(const[i,p]of env.context.pages().entries()){await p.screenshot({path:path.join(output,'built-publication-failure-'+i+'.png')}).catch(()=>{});await fs.writeFile(path.join(output,'built-publication-failure-'+i+'.txt'),await p.locator('body').innerText()).catch(()=>{});}throw error;}finally{await env.context.close();}
     });
-
-    await check('knowledge-loading-failure-and-late-response-do-not-reopen-a-closed-sheet', async env => {
-      const page = await env.page(), card = qaCatalog.questions[1];
-      env.mock.unavailable.add(card.url);
-      await page.locator('#readingArticle [data-knowledge]').first().click();
-      await page.waitForFunction(() => document.querySelector('#sheetBody').textContent.includes('未下载'));
-      await page.locator('[data-sheet-close]').click(); await page.waitForFunction(() => !document.querySelector('#sheetDialog').open);
-      env.mock.unavailable.delete(card.url); env.mock.delayDocument = card.url;
-      await page.locator('#readingArticle [data-knowledge]').first().click();
-      await poll(() => env.mock.heldDocument, 'Expected delayed knowledge request');
-      await page.locator('[data-sheet-close]').click(); await page.waitForFunction(() => !document.querySelector('#sheetDialog').open);
-      env.mock.heldDocument(); await page.waitForTimeout(100);
-      assert.equal(await page.locator('#sheetDialog').evaluate(node => node.open), false);
-      assert.equal(await page.evaluate(() => window.__refinement.state.knowledge.has('Q000002')), false);
-    });
-
-    await check('same-browser-two-page-late-ACK-and-reload', async env => {
-      const a = await env.page(), b = await env.page();
-      await a.locator('#notesButton').click(); await b.locator('#notesButton').click();
-      env.mock.holdNotePage = a;
-      await a.locator('#noteEditor').fill('A: committed before delayed response');
-      await poll(() => env.mock.heldNote, 'Expected A save request');
-      await b.locator('#noteEditor').fill('B: unsent local draft must survive A ACK');
-      env.mock.heldNote();
-      await a.waitForFunction(() => document.querySelector('#noteStatus')?.textContent.includes('已同步'));
-      const beforeReload = await b.evaluate(() => window.__refinement.journal.list('practice-course'));
-      assert(beforeReload.some(note => note.text === 'B: unsent local draft must survive A ACK'));
-      await b.reload(); await b.locator('#readingArticle .code-block').first().waitFor();
-      await b.locator('#notesButton').click();
-      assert.equal(await b.locator('#noteEditor').inputValue(), 'B: unsent local draft must survive A ACK');
-    });
-
-    await check('note-edited-in-flight-is-rebased-and-saved-again-without-old-pending-slots', async env => {
-      const page = await env.page(); await page.locator('#notesButton').click();
-      env.mock.holdNotePage = page;
-      await page.locator('#noteEditor').fill('first submitted snapshot');
-      await poll(() => env.mock.heldNote, 'Expected first held note save');
-      await page.locator('#noteEditor').fill('new text while first response is pending');
-      env.mock.heldNote();
-      await poll(() => env.mock.state['notes:practice-course']?.value === 'new text while first response is pending'
-        && env.mock.state['notes:practice-course']?.revision === 2, 'Expected rebased second save');
-      await page.waitForFunction(() => document.querySelector('#noteStatus')?.textContent.includes('已同步'));
-      assert.deepEqual(await page.evaluate(() => window.__refinement.journal.list('practice-course')), []);
-      const value = await page.evaluate(() => window.__refinement.journal.load('practice-course'));
-      assert.deepEqual(value, { text: 'new text while first response is pending', revision: 2, dirty: false });
-    });
-
-    await check('same-text-older-base-other-tab-draft-is-not-invisible-in-recovery', async env => {
-      const a = await env.page(), b = await env.page();
-      await a.locator('#notesButton').click(); await b.locator('#notesButton').click();
-      await a.locator('#noteEditor').fill('same desired content');
-      await a.waitForFunction(() => document.querySelector('#noteStatus')?.textContent.includes('已同步'));
-      await b.locator('#noteEditor').fill('same desired content');
-      await a.waitForTimeout(100);
-      const pending = await a.evaluate(() => window.__refinement.journal.list('practice-course'));
-      assert(pending.some(note => note.text === 'same desired content' && note.revision === 0));
-      assert(await a.locator('#draftRecovery [data-load-draft],#draftRecovery [data-confirm-draft]').count() > 0,
-        'A clean note still has a same-text older-base pending draft, which blocks logout but is hidden from recovery');
-      const confirm = a.locator('#draftRecovery [data-confirm-draft]');
-      if (await confirm.count()) {
-        await a.locator('#draftRecovery summary').click(); await confirm.click();
-        assert(!(await a.evaluate(() => window.__refinement.journal.list('practice-course')))
-          .some(note => note.text === 'same desired content' && note.revision === 0));
-      }
-    });
-
-    await check('failed-local-backup-cannot-discard-current-note-when-adopting-cloud', async env => {
-      env.mock.state['notes:practice-course'] = { value: 'older cloud note', revision: 1, updatedAt: Date.now() };
-      const page = await env.page(); await page.locator('#notesButton').click();
-      env.mock.state['notes:practice-course'] = { value: 'other device latest cloud note', revision: 2, updatedAt: Date.now() };
-      await page.locator('#noteEditor').fill('valuable local conflicting draft');
-      await page.locator('[data-notes-cloud]').waitFor();
-      await page.evaluate(() => {
-        const original = Storage.prototype.setItem;
-        Storage.prototype.setItem = function (key, value) {
-          if (key.includes('notes-backup:')) throw new DOMException('Simulated full storage for backup', 'QuotaExceededError');
-          return original.call(this, key, value);
-        };
-      });
-      await page.locator('[data-notes-cloud]').click(); await page.locator('[data-adopt-cloud]').click();
-      assert.equal(await page.evaluate(() => window.__refinement.state.notes.get('practice-course').text), 'valuable local conflicting draft');
-      assert((await page.evaluate(() => window.__refinement.journal.list('practice-course')))
-        .some(note => note.text === 'valuable local conflicting draft'));
-    });
-
-    await check('native-anchor-offset-marks-the-reached-first-heading-current', async env => {
-      const page = await env.page();
-      const heading = page.locator('#readingArticle h2[id]').first();
-      const id = await heading.getAttribute('id');
-      await heading.evaluate(el => el.scrollIntoView({ block: 'start' }));
-      await page.locator('#tocButton').click();
-      await page.locator('#tocResults [aria-current="location"]').waitFor();
-      assert.equal(await page.locator('#tocResults [aria-current="location"]').getAttribute('data-anchor'), id);
-    });
-
-    await check('TOC-clear-keeps-input-and-keyboard-focus', async env => {
-      const page = await env.page(); await page.locator('#tocButton').click();
-      const input = page.locator('#tocSearch'); await input.fill('lower_bound');
-      await page.locator('#tocResults .search-row').first().waitFor();
-      await input.fill('');
-      assert.equal(await page.evaluate(() => document.activeElement.id), 'tocSearch');
-      assert(await page.locator('#tocResults .toc-row').count() > 2);
-    });
-
-    await check('offline-global-search-reports-unavailable-documents', async env => {
-      const page = await env.page();
-      const collection = env.mock.catalog.collections.find(item => item.id === 'practice-course');
-      for (const doc of env.mock.catalog.collections.flatMap(item => item.documents).filter(item => item.id !== 'practice-entry'))
-        env.mock.unavailable.add(new URL(doc.url, origin).pathname);
-      await page.evaluate(() => window.dispatchEvent(new Event('offline')));
-      await page.locator('#libraryButton').click(); await page.locator('#librarySearch').fill('lower_bound');
-      await page.waitForFunction(() => !document.querySelector('#bookList').textContent.includes('正在检索'));
-      await page.locator('#bookList .search-row').first().waitFor();
-      const text = await page.locator('#bookList').innerText();
-      assert.match(text, /离线|未下载|未能|不可用|部分|本机/);
-      const groups = await page.locator('#bookList .search-row').evaluateAll(rows => rows.map(row => row.dataset.goCollection));
-      assert(groups.length > 0 && groups.every(group => group === 'practice-course'));
-    });
-
-    await check('slow-cross-document-keeps-reader-and-can-cancel-without-late-replacement', async env => {
-      const page = await env.page();
-      await page.locator('#readingPane').evaluate(node => node.scrollTop = 900);
-      await page.waitForTimeout(80);
-      const before = await page.evaluate(() => ({ html: document.querySelector('#readingArticle').innerHTML,
-        scroll: document.querySelector('#readingPane').scrollTop,
-        top: document.querySelector('#readingPane').getBoundingClientRect().top,
-        title: document.querySelector('#currentTitle').textContent, hash: location.hash }));
-      const next = env.mock.catalog.collections.find(item => item.id === 'practice-course').documents.find(item => item.id === 'practice-composition');
-      env.mock.delayDocument = new URL(next.url, origin).pathname;
-      await page.locator('[data-document="practice-composition"]').click();
-      await poll(() => env.mock.heldDocument, 'Expected delayed cross-document request');
-      assert.equal(await page.locator('#readingArticle').innerHTML(), before.html);
-      assert(Math.abs((await page.locator('#readingPane').evaluate(node => node.scrollTop)) - before.scroll) < 3);
-      assert.equal(await page.locator('#currentTitle').textContent(), before.title);
-      assert.equal(await page.locator('#readingPane').evaluate(node => node.getBoundingClientRect().top), before.top);
-      await page.locator('[data-cancel-route]').click();
-      assert.equal(await page.evaluate(() => location.hash), before.hash);
-      env.mock.heldDocument(); await page.waitForTimeout(120);
-      assert.equal(await page.evaluate(() => window.__refinement.state.active.meta.id), 'practice-entry');
-      assert.equal(await page.locator('#readingArticle').innerHTML(), before.html);
-      assert.equal(await page.locator('#readingNotice').isVisible(), false);
-    });
-
-    await check('return-button-separate-from-progress-and-restores-reading-place', async env => {
-      const page = await env.page(); await page.locator('#readingPane').evaluate(node => node.scrollTop = 900);
-      await page.waitForTimeout(100);
-      const before = await page.locator('#readingPane').evaluate(node => node.scrollTop);
-      const percentage = await page.locator('#progressLabel').innerText();
-      await page.locator('#tocButton').click();
-      const targets = page.locator('[data-go-document="practice-entry"]');
-      await targets.nth(Math.min(7, await targets.count() - 1)).click();
-      await page.waitForFunction(() => !document.querySelector('#sheetDialog').open && !window.__refinement.state.restoring);
-      assert.match(await page.locator('#progressLabel').innerText(), /%/);
-      assert.doesNotMatch(await page.locator('#progressLabel').innerText(), /返回|原处/);
-      await page.locator('#returnButton').click();
-      await page.waitForFunction(() => !window.__refinement.state.restoring);
-      assert(Math.abs((await page.locator('#readingPane').evaluate(node => node.scrollTop)) - before) < 8);
-      assert.equal(await page.locator('#progressLabel').innerText(), percentage);
-    });
-
-    await check('sheet-browser-back-closes-and-source-parent-returns-to-settings', async env => {
-      const page = await env.page();
-      const hash = await page.evaluate(() => location.hash);
-      await page.locator('#settingsButton').click();
-      await page.evaluate(() => history.back());
-      await page.waitForFunction(() => !document.querySelector('#sheetDialog').open);
-      assert.equal(await page.evaluate(() => location.hash), hash);
-      await page.locator('#settingsButton').click(); await page.locator('[data-show-source]').click();
-      await page.locator('.source-view code').waitFor();
-      assert.equal(await page.locator('#sheetTitle').textContent(), 'C++源码');
-      await page.locator('#sheetBack').click();
-      assert.equal(await page.locator('#sheetTitle').textContent(), '设置');
-      assert.equal(await page.locator('[data-show-source]').isVisible(), true);
-      await page.evaluate(() => history.back()); await page.waitForFunction(() => !document.querySelector('#sheetDialog').open);
-      assert.equal(await page.evaluate(() => location.hash), hash);
-    });
-
-    await check('sheet-close-and-immediate-reopen-in-same-task-retains-new-dialog', async env => {
-      const page = await env.page(); await page.locator('#notesButton').click();
-      const hash = await page.evaluate(() => location.hash);
-      await page.evaluate(() => {
-        document.querySelector('[data-sheet-close]').click();
-        document.querySelector('#settingsButton').click();
-      });
-      await page.waitForFunction(() => document.querySelector('#sheetDialog').open
-        && document.querySelector('#sheetTitle').textContent === '设置');
-      await page.waitForTimeout(180);
-      assert.equal(await page.locator('#sheetDialog').evaluate(node => node.open), true);
-      assert.equal(await page.locator('#sheetTitle').textContent(), '设置');
-      assert.equal(await page.evaluate(() => location.hash), hash);
-      assert.equal(await page.locator('[data-check-updates]').isVisible(), true);
-      await page.evaluate(() => history.back());
-      await page.waitForFunction(() => !document.querySelector('#sheetDialog').open);
-      assert.equal(await page.evaluate(() => location.hash), hash);
-    });
-
-    await check('visual-viewport-keyboard-fits-sheet-and-pinch-zoom-removes-keyboard-overrides', async env => {
-      // Install one stable viewport object before app listener registration; change it after opening notes,
-      // as native visualViewport does when the keyboard appears (rather than replacing the event source).
-      await env.context.addInitScript(() => {
-        const viewport = new EventTarget();
-        Object.assign(viewport, { height: innerHeight, width: innerWidth, offsetTop: 0, offsetLeft: 0, scale: 1 });
-        Object.defineProperty(window, 'visualViewport', { configurable: true, value: viewport });
-        window.__fakeViewport = viewport;
-      });
-      const page = await env.page(); await page.locator('#notesButton').click();
-      await page.evaluate(() => {
-        Object.assign(window.__fakeViewport, { height: 420, offsetTop: 22, scale: 1 });
-        window.__fakeViewport.dispatchEvent(new Event('resize'));
-      });
-      await page.waitForTimeout(30);
-      const geometry = await page.evaluate(() => {
-        const sheet = document.querySelector('#sheetDialog').getBoundingClientRect();
-        const header = document.querySelector('.sheet-header').getBoundingClientRect();
-        const body = document.querySelector('#sheetBody').getBoundingClientRect();
-        return { sheet: { top: sheet.top, bottom: sheet.bottom, height: sheet.height },
-          header: { top: header.top, bottom: header.bottom, height: header.height },
-          body: { top: body.top, bottom: body.bottom, height: body.height },
-          variable: document.documentElement.style.getPropertyValue('--sheet-viewport-height') };
-      });
-      assert(geometry.sheet.top >= 22 && geometry.sheet.bottom <= 442, JSON.stringify(geometry));
-      assert(geometry.header.height >= 50 && geometry.body.height > 100, JSON.stringify(geometry));
-      assert(geometry.header.top >= 22 && geometry.header.bottom <= 442, JSON.stringify(geometry));
-      assert(geometry.body.top >= 22 && geometry.body.bottom <= 442, JSON.stringify(geometry));
-      assert.equal(geometry.variable, '420px');
-      assert.equal(await page.locator('[data-sheet-close]').isVisible(), true);
-      await page.evaluate(() => {
-        Object.assign(window.__fakeViewport, { height: 200, scale: 2 });
-        window.__fakeViewport.dispatchEvent(new Event('resize'));
-      });
-      const overrides = await page.evaluate(() => ['--sheet-viewport-height', '--sheet-offset-top', '--sheet-offset-bottom']
-        .map(name => document.documentElement.style.getPropertyValue(name)));
-      assert.deepEqual(overrides, ['', '', '']);
-    });
-
-    await check('TOC-anchor-consumed-and-later-reading-position-survives-reload', async env => {
-      const page = await env.page(); await page.locator('#tocButton').click();
-      const targets = page.locator('[data-go-document="practice-entry"]');
-      await targets.nth(Math.min(7, await targets.count() - 1)).click();
-      await page.waitForFunction(() => !document.querySelector('#sheetDialog').open && !window.__refinement.state.restoring);
-      assert.doesNotMatch(await page.evaluate(() => location.hash), /[?&]anchor=/);
-      const positions = await page.locator('#readingPane').evaluate(node => {
-        const old = node.scrollTop, maximum = node.scrollHeight - node.clientHeight;
-        const next = Math.min(maximum, old + 850);
-        node.scrollTop = Math.abs(next - old) > 300 ? next : Math.max(0, old - 850);
-        return { old, current: node.scrollTop };
-      });
-      assert(Math.abs(positions.current - positions.old) > 300);
-      await page.waitForTimeout(350);
-      await page.reload(); await page.locator('#readingArticle .code-block').first().waitFor();
-      await page.waitForFunction(() => !window.__refinement.state.restoring);
-      const restored = await page.locator('#readingPane').evaluate(node => node.scrollTop);
-      assert(Math.abs(restored - positions.current) < 8, JSON.stringify({ positions, restored }));
-      assert.doesNotMatch(await page.evaluate(() => location.hash), /[?&]anchor=/);
-    });
-
-    await check('pure-code-click-does-not-reveal-controls-and-pointer-hold-keeps-controls-visible', async env => {
-      const page = await env.page(); await page.locator('#pureButton').click();
-      assert.equal(await page.locator('body').evaluate(node => node.classList.contains('pure-controls-visible')), false);
-      await page.locator('.code-block code').first().click({ position: { x: 5, y: 5 } });
-      assert.equal(await page.locator('body').evaluate(node => node.classList.contains('pure-controls-visible')), false);
-      await page.locator('#readingPane').click({ position: { x: 3, y: 100 } });
-      assert.equal(await page.locator('body').evaluate(node => node.classList.contains('pure-controls-visible')), true);
-      const brand = await page.locator('.app-header h1').boundingBox();
-      await page.mouse.move(brand.x + brand.width / 2, brand.y + brand.height / 2);
-      await page.mouse.down(); await page.waitForTimeout(3200);
-      assert.equal(await page.locator('body').evaluate(node => node.classList.contains('pure-controls-visible')), true);
-      assert.equal(await page.locator('.app-header').getAttribute('inert'), null);
-      await page.mouse.up();
-    });
-
-    await check('library-search-in-flight-completes-after-settings-open-and-close', async env => {
-      const page = await env.page(); await page.locator('#libraryButton').click();
-      const document = env.mock.catalog.collections.find(item => item.id === 'practice-course').documents
-        .find(item => item.id === 'practice-composition');
-      env.mock.delayDocument = new URL(document.url, origin).pathname;
-      await page.locator('#librarySearch').fill('lower_bound');
-      await poll(() => env.mock.heldDocument, 'Expected search to wait for a document');
-      assert.match(await page.locator('#bookList').innerText(), /正在检索/);
-      await page.locator('#settingsButton').click();
-      await page.locator('[data-sheet-close]').click();
-      await page.waitForFunction(() => !document.querySelector('#sheetDialog').open);
-      env.mock.heldDocument();
-      await page.locator('#bookList .search-row').first().waitFor();
-      assert.doesNotMatch(await page.locator('#bookList').innerText(), /正在检索/);
-      assert.equal(await page.locator('#librarySearch').inputValue(), 'lower_bound');
-      const groups = await page.locator('#bookList .search-row').evaluateAll(rows => rows.map(row => row.dataset.goCollection));
-      assert(groups.includes('practice-course') && groups.includes('additional-course'));
-    });
-  } finally { await browser.close(); }
-  const report = { passed: failures.length === 0, results, failures, productionContacted: false,
-    realDatabaseModified: false, testedAt: new Date().toISOString() };
-  await fs.writeFile(path.join(output, 'results.json'), JSON.stringify(report, null, 2));
-  console.log(JSON.stringify(report, null, 2));
-  if (failures.length) process.exitCode = 1;
-})().catch(error => { console.error(error); process.exitCode = 1; });
+  } finally {await browser.close();}
+  const inputEnd = await fingerprint();
+  if(JSON.stringify(inputStart)!==JSON.stringify(inputEnd)) failures.push({name:'immutable-test-inputs',error:'Reader or built publication bytes changed during regression; repeat on frozen inputs.'});
+  const report={passed:failures.length===0,results,failures,gestures,inputStart,inputEnd,caseFilter:process.env.ALGORITHM_QA_CASE||null,browserSourceIntegration:true,builtPayloadIntegration:results.some(r=>r.name==='actual-built-publication-content-source-knowledge-directory-integrity'&&r.passed),serviceWorker:'blocked; actual local HTTP worker tested separately',authentication:'mocked; system passkey not exercised',productionContacted:false,realDatabaseModified:false,paidServiceContacted:false,physicalIPhone:false,testedAt:new Date().toISOString()};
+  await fs.writeFile(path.join(output,'results.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));if(failures.length)process.exitCode=1;
+})().catch(e=>{console.error(e);process.exitCode=1;});

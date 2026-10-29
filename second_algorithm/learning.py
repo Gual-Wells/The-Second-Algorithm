@@ -4,9 +4,11 @@ from __future__ import annotations
 import json
 import os
 import re
+from datetime import date as calendar_date
 from pathlib import Path
 
 from .storage import canonical_bytes, digest, read_json, safe_relative, valid_url
+from .subheadings import subheading_inputs
 
 ID = re.compile(r"[a-z][a-z0-9]*(?:-[a-z0-9]+)*\Z")
 QUESTION = re.compile(r"Q[0-9]{6,}\Z")
@@ -81,7 +83,7 @@ def composition_inputs(root: Path, document: dict) -> dict[str, str]:
             or not isinstance(plan.get("prelude"), dict)
             or not isinstance(plan.get("sections"), list) or not plan["sections"]):
         raise ValueError("Invalid chapter composition manifest")
-    names = {relative, "tools/compose-chapter.mjs"}
+    names = {relative, "tools/compose-chapter.mjs", "tools/subheadings.mjs"}
     for field, suffix in (("sourceFiles", ".source.md"), ("codeSources", ".cpp")):
         items = plan.get(field)
         if (not isinstance(items, list) or not items or any(not isinstance(x, str) for x in items)
@@ -99,6 +101,7 @@ def composition_inputs(root: Path, document: dict) -> dict[str, str]:
     if not helper.is_relative_to((root / "tools").resolve()):
         raise ValueError("Composition helper escapes tools/")
     expected = {name: digest(file_path(root, name).read_bytes()) for name in sorted(names)}
+    expected.update(subheading_inputs(root, document, plan))
     base = Path(document["path"])
     build_file = file_path(root, (base.parent / "build" / (base.name + ".json")).as_posix())
     build = read_json(build_file)
@@ -122,6 +125,24 @@ def _inspect(root: Path) -> tuple[dict, dict]:
     publication_state = publications.get("state", "active")
     if publication_state not in {"active", "withdrawn"}:
         errors.append("publications.state: expected active or withdrawn")
+    calendar_path = root / "carrier/chapter-calendar.json"
+    calendar_entries = None
+    if calendar_path.is_file():
+        calendar = read_json(calendar_path)
+        if (not isinstance(calendar, dict) or calendar.get("schemaVersion") != 1
+                or calendar.get("timeZone") != "Asia/Shanghai" or not isinstance(calendar.get("chapters"), dict)):
+            errors.append("chapter calendar: invalid schema or timezone")
+            calendar_entries = {}
+        else:
+            calendar_entries = calendar["chapters"]
+            for cid, entry in calendar_entries.items():
+                value = entry.get("date") if isinstance(entry, dict) else None
+                try:
+                    if not ID.fullmatch(cid) or not isinstance(value, str) or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", value):
+                        raise ValueError("invalid chapter date")
+                    calendar_date.fromisoformat(value)
+                except (ValueError, TypeError):
+                    errors.append(f"chapter calendar: invalid date for {cid}")
 
     def rows(parent, key, label):
         value = parent.get(key)
@@ -165,6 +186,8 @@ def _inspect(root: Path) -> tuple[dict, dict]:
         if collection.get("kind") == "draft" and (collection.get("visibility") != "hidden" or "chapterNumber" in collection):
             errors.append("collection: drafts must be hidden and have no chapter number")
         if collection.get("kind") == "chapter":
+            if calendar_entries is not None and collection.get("visibility") != "hidden" and collection.get("id") not in calendar_entries:
+                errors.append("chapter calendar: missing date for " + str(collection.get("id")))
             number = collection.get("chapterNumber")
             if type(number) is not int or number < 1 or number in chapter_numbers:
                 errors.append("collection: invalid/duplicate unified chapter number")
@@ -187,6 +210,13 @@ def _inspect(root: Path) -> tuple[dict, dict]:
                     file_path(root, base + ".cpp")
                     author_inputs = composition_inputs(root.resolve(), document)
                     documents[did] = {**document, "draft": draft, "authoringDependencies": author_inputs}
+                    if document.get("composition"):
+                        composition = read_json(file_path(root, document["composition"]))
+                        if composition.get("subheadings"):
+                            coordinated = read_json(file_path(root, composition["subheadings"]))
+                            documents[did]["subheadingTypes"] = {
+                                decision["id"]: decision["typeId"] for decision in coordinated["decisions"]
+                            }
                 except (ValueError, OSError) as error:
                     errors.append(str(error))
 
@@ -455,6 +485,8 @@ def course_snapshot(root: Path, *, include_reviews: bool = True) -> dict:
     if not checked["ok"]:
         raise ValueError("Current course invalid: " + "; ".join(checked["errors"]))
     inputs = {"catalog/learning.json", "carrier/publications.json"}
+    if (root / "carrier/chapter-calendar.json").is_file():
+        inputs.add("carrier/chapter-calendar.json")
     inputs.update(context["knowledgeDependencies"])
     inputs.update(context["chapters"]["dependencies"])
     review_paths = context["chapters"]["reviewPaths"]

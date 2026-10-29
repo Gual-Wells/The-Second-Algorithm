@@ -28,6 +28,7 @@ run(process.execPath, ['scripts/build-carrier.mjs']);
 if (!process.argv.includes('--without-browser')) {
   run(process.execPath, ['scripts/check-carrier-browser.cjs']);
   run(process.execPath, ['scripts/check-carrier-upgrade.cjs']);
+  run(process.execPath, ['scripts/check-chapter-calendar.cjs']);
 }
 const quality = spawnSync(python, ['-m', 'second_algorithm', 'course', 'quality', '--json'],
   { cwd: root, env, encoding: 'utf8', windowsHide: true });
