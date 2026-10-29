@@ -8,7 +8,12 @@ body { margin: 0; overflow: hidden; background: repeating-linear-gradient(0deg, 
 button, input, textarea { font: inherit; }
 button { color: inherit; cursor: pointer; touch-action: manipulation; }
 button:disabled { opacity: .46; cursor: default; }
-button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid #f7ad35; outline-offset: 1px; }
+/* Programmatic reader/dialog focus is semantic, not a persistent selection frame.
+   Keyboard navigation still has a visible series-blue focus indicator. */
+:focus-visible { outline: none; }
+.keyboard-navigation :focus-visible:not([tabindex="-1"]) { outline: 2px solid #4c8ec3; outline-offset: 2px; }
+input:focus, textarea:focus, select:focus { border-color: #4c8ec3; }
+
 [hidden] { display: none !important; }
 .app-shell { display: grid; grid-template-rows: auto auto minmax(0,1fr); width: min(960px, 100%); height: 100vh; height: 100dvh; min-height: 0; margin: auto; padding: max(8px, var(--safe-top)) 8px max(8px, var(--safe-bottom)); border-left: 1px solid #859bb2; border-right: 1px solid #859bb2; background: var(--shell); box-shadow: 0 0 0 1px #eef4fa inset, 0 0 14px #67819c66; overflow: hidden; position: relative; }
 .app-shell.login-mode { grid-template-rows: minmax(0, 1fr); }
@@ -111,7 +116,8 @@ textarea.text-input { resize: vertical; }
 .calendar button.has-chapter { border-color: #abc2d7; background: linear-gradient(#fff, #e5eff9); color: #164b7e; font-weight: 700; box-shadow: 0 1px 0 #fff inset; }
 .calendar button.has-chapter::after { content: "•"; display: block; margin-top: -6px; color: #d47c16; line-height: 1; }
 .calendar button.selected { border-color: #4d7cad; background: linear-gradient(#d9ebfa, #b8d4ed); }
-.calendar button.today { outline: 1px solid #bb792d; outline-offset: -2px; }
+.calendar button.today { position: relative; }
+.calendar button.today::after { content: ""; position: absolute; bottom: 3px; left: calc(50% - 2px); width: 4px; height: 4px; border-radius: 50%; background: #4c789e; pointer-events: none; }
 .chapter-list-empty { margin: 0; padding: 13px; color: #607990; font-size: 11px; }
 .chapter-book-sheet { display: grid; flex-direction: column; height: min(690px,calc(var(--sheet-viewport-height,100dvh) - max(24px,var(--safe-top)) - max(24px,var(--safe-bottom)))); overflow: hidden; }
 .chapter-book-sheet .sheet-head { flex: none; }
@@ -206,7 +212,7 @@ textarea.text-input { resize: vertical; }
 /* Algorithm reader's required roles, using the transferred paper and control scale. */
 button, input, textarea, select { font: inherit; color: inherit; }
 a { color: #174f84; text-underline-offset: 3px; }
-a:focus-visible, select:focus-visible, [tabindex]:focus-visible { outline: 2px solid #f7ad35; outline-offset: 1px; }
+
 input::placeholder, textarea::placeholder { color: #60758a; opacity: 1; }
 ::selection { background: #c7dff4; color: #142e49; }
 .muted { color: var(--muted); }
@@ -214,16 +220,20 @@ input::placeholder, textarea::placeholder { color: #60758a; opacity: 1; }
 .login-mode .app-header, .login-mode .chapter-nav, .login-mode .reader-frame { display: none; }
 .header-logo { display: flex; flex: none; align-items: center; justify-content: center; width: 76px; height: 38px; pointer-events: none; user-select: none; }
 .header-logo svg { display: block; flex: none; width: 52px; height: 52px; filter: drop-shadow(0 1px 1px #082e5870); }
-/* Closed highlight: matching segment slopes keep every join smooth, with no white hold. */
-.header-logo-reflection { opacity: 0; animation: header-reflection 4.8s linear infinite; }
-@keyframes header-reflection {
-  0% { opacity: 0; animation-timing-function: cubic-bezier(.4,0,.8,.4); }
-  25% { opacity: .08; animation-timing-function: cubic-bezier(.2,.2,.6,1); }
-  50% { opacity: .32; animation-timing-function: cubic-bezier(.4,0,.8,.8); }
-  75% { opacity: .08; animation-timing-function: cubic-bezier(.2,.6,.6,1); }
-  100% { opacity: 0; }
+/* The same registered angle drives both halves of a true sine, without a replay hold.
+   sin=0: ice blue; +1: white; -1: transparent ink reveals the real gradient. */
+@property --header-phase { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+.header-logo-ink { opacity: 1; }
+.header-logo-reflection { opacity: 0; }
+@supports (opacity: calc(sin(1rad))) {
+  .header-logo-ink, .header-logo-reflection { animation: header-cycle 4.8s linear infinite; }
+  .header-logo-ink { opacity: calc(1 + min(0, sin(var(--header-phase)))); }
+  .header-logo-reflection { opacity: max(0, sin(var(--header-phase))); }
 }
-.header-motion-paused .header-logo-reflection { animation-play-state: paused; }
+@keyframes header-cycle { from { --header-phase: 0deg; } to { --header-phase: 360deg; } }
+.header-motion-paused .header-logo-ink, .header-motion-paused .header-logo-reflection { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .header-logo-ink { animation: none; --header-phase: 0deg; opacity: 1; } .header-logo-reflection { animation: none; --header-phase: 0deg; opacity: 0; } }
+
 .day-chip { position: relative; }
 .day-chip > small { position: absolute; right: 2px; top: 1px; color: #60778e; font-size: 8px; }
 .chapter-view, .reader-view { grid-column: 1; grid-row: 1; min-width: 0; min-height: 0; }

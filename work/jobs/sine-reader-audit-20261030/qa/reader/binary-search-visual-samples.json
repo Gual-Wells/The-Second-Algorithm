@@ -1,0 +1,35 @@
+{
+  "viewport": {
+    "width": 402,
+    "height": 874
+  },
+  "samples": [
+    {
+      "category": "chapter-start",
+      "id": "二分的基本方法",
+      "title": "PRE、二分的基本方法"
+    },
+    {
+      "category": "long-derivation",
+      "id": "推导-从树状数组的整块频数直接定位",
+      "title": "（2）推导：从树状数组的整块频数直接定位"
+    },
+    {
+      "category": "long-title",
+      "id": "scode-使用-partial-sum-与-lower-bound-查累计秩",
+      "title": "（a）Scode：使用 partial_sum 与 lower_bound 查累计秩"
+    },
+    {
+      "category": "handwritten-code",
+      "id": "hcode-手写边界查找",
+      "title": "（2）Hcode：手写边界查找"
+    },
+    {
+      "category": "standard-code",
+      "id": "scode-用标准库表达同一组边界",
+      "title": "（3）Scode：用标准库表达同一组边界"
+    }
+  ],
+  "physicalIPhone": false,
+  "visualAcceptance": "requires human review"
+}

@@ -449,6 +449,19 @@ test('explicit C++ highlighting preserves raw strings, digit separators and actu
   } finally { await dispose(f.root); }
 });
 
+test('inline knowledge links close before ordinary text and the next paragraph', async () => {
+  const f = await fixture();
+  try {
+    const authority = await readAuthority(f.root, f.descriptor);
+    authority.markdown += '\n\n参见<a class="knowledge-link" href="#knowledge-Q000001" data-knowledge="Q000001">边界条件</a>，这里仍是普通说明。\n\n下段不是知识入口。\n';
+    const rendered = renderAuthority(authority, createLinkRewriter({ collection: f.collection,
+      document: authority, byPath: new Map(), gitRevision }), new Map([['Q000001', { id: 'Q000001', anchors: [] }]]));
+    assert.match(rendered.html, /data-knowledge="Q000001">边界条件<\/a>，这里仍是普通说明。<\/p>/);
+    assert.match(rendered.html, /<p>下段不是知识入口。<\/p>/);
+    assert.equal((rendered.html.match(/<a\b/g) || []).length, (rendered.html.match(/<\/a>/g) || []).length);
+  } finally { await dispose(f.root); }
+});
+
 test('immutable reader paths follow rendered bytes while authority downloads remain stable', async () => {
   const f = await fixture();
   try {

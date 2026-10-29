@@ -729,3 +729,9 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.addEventListener('controllerchange', async () => { const version = await swMessage({ type: 'VERSION' }); if (BUILD && version?.build && version.build !== BUILD) { S.updateReady = true; const button = document.querySelector('[data-reload-app]'); if (button) button.hidden = false; toast('应用有更新，可在设置重新载入。'); } });
 }
 void connect();
+
+// Pointer taps and script focus must not leave a keyboard selection frame behind.
+document.addEventListener('pointerdown', () => document.documentElement.classList.remove('keyboard-navigation'), true);
+document.addEventListener('keydown', event => {
+  if (!event.altKey && !event.ctrlKey && !event.metaKey && !['Shift', 'Control', 'Alt', 'Meta'].includes(event.key)) document.documentElement.classList.add('keyboard-navigation');
+}, true);

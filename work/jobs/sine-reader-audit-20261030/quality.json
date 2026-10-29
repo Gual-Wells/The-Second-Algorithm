@@ -1,0 +1,28 @@
+{
+  "ok": true,
+  "operation": "content-release",
+  "inputHash": "c7a38163c1a740bb81ece419177625b0b5b3f4ef72dd870af73d884ec4750d99",
+  "chapters": [
+    {
+      "id": "chapter-01",
+      "title": "二分",
+      "ok": true,
+      "errors": [],
+      "contract": "content/binary/chapter-contract.json",
+      "review": "content/binary/chapter-review.json",
+      "researchHandoff": {
+        "path": "work/jobs/first-chapter-20261028/study/handoffs/30fca997eabc41e0a39dd8eff7adaf45.json",
+        "sha256": "678a8224a593e49e10100c6befb9dd926fbb521221380cefd17cf8a40156275c",
+        "current": true,
+        "adopted": true,
+        "adoptionProof": {
+          "deployment": "work/jobs/first-chapter-20261028/deployments/1793195153435.json",
+          "packet": "work/jobs/first-chapter-20261028/releases/31f196de91894f14af75dfde16135d95.json"
+        }
+      },
+      "reviewSha256": "e970dd71218443d3108d8f2147124a8fc8ac850845c63833c780f6d3841a2ad2"
+    }
+  ],
+  "semanticCompletenessCertified": false,
+  "claim": "Current caller-written assessments and locations checked; no automatic difficulty or completeness score."
+}

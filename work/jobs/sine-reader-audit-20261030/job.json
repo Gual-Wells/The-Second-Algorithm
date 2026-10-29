@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "sine-reader-audit-20261030",
+  "goal": "直接复核与修复两系列标题正弦、焦点残留及第二算法真实阅读交互，保留教材与代码原件",
+  "createdAt": "2026-10-29T19:28:20.520767+00:00",
+  "evidence": [
+    {
+      "id": "47178ffaeea4477b83eeefa40f9be74c",
+      "kind": "research",
+      "path": "work/jobs/sine-reader-audit-20261030/research.md",
+      "summary": "直接实操源与目标全页面、真实正弦/焦点与知识闭合缺陷定位",
+      "outcome": "accepted",
+      "sha256": "7f18d54dd3bc8a3021f1c58336a7665384f5a411c57f11420ed2acf52866cc5d",
+      "inputHash": "ca01a4844b3c720ab0eae2c48ea7cd65731645748d55a7c230417bd1758f19e0",
+      "recordedAt": "2026-10-29T19:35:59.935976+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "d559a2644eba4c80bfad7418fb5bfc5a",
+      "kind": "review",
+      "path": "work/jobs/sine-reader-audit-20261030/review.md",
+      "summary": "23条实际浏览器旅程、135项载体测试、50项启动及真实SW升级，教学权威保留",
+      "outcome": "accepted",
+      "sha256": "f077083ff67e40bb19230cffc1b1a39a9ce692de847f54f0fccd72819c6480f3",
+      "inputHash": "ca01a4844b3c720ab0eae2c48ea7cd65731645748d55a7c230417bd1758f19e0",
+      "recordedAt": "2026-10-29T19:36:02.692801+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    }
+  ],
+  "lastGoodVerification": {
+    "path": "work/jobs/sine-reader-audit-20261030/verifications/b3f6db7bdbcb4b859682481bc54ca6cd.json",
+    "sha256": "7e91e973f010d1e9705cfbbc78c8332627ff2a1c0b3f1cc9c67b5ef2ec629b31",
+    "inputHash": "ca01a4844b3c720ab0eae2c48ea7cd65731645748d55a7c230417bd1758f19e0"
+  },
+  "lastPreparedRelease": {
+    "path": "work/jobs/sine-reader-audit-20261030/releases/d294a53c71504369ac3b2d37eb708f46.json",
+    "sha256": "586774bdd019e9c6b217fff1bb814ea881330f3641a836ff5f70c17c52fd670c",
+    "inputHash": "ca01a4844b3c720ab0eae2c48ea7cd65731645748d55a7c230417bd1758f19e0"
+  },
+  "lastVerificationAttempt": {
+    "path": "work/jobs/sine-reader-audit-20261030/verifications/b3f6db7bdbcb4b859682481bc54ca6cd.json",
+    "sha256": "7e91e973f010d1e9705cfbbc78c8332627ff2a1c0b3f1cc9c67b5ef2ec629b31",
+    "inputHash": "ca01a4844b3c720ab0eae2c48ea7cd65731645748d55a7c230417bd1758f19e0"
+  }
+}

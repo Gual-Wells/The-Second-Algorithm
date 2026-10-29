@@ -1,0 +1,11 @@
+{
+  "browserJourneys": 23,
+  "carrierTests": 135,
+  "startupChecks": 50,
+  "readerTargets": 278,
+  "visibleCodeBlocks": 89,
+  "serviceWorkerUpgrade": true,
+  "physicalIPhone": false,
+  "liveModelCalls": 0,
+  "newRecurringCost": 0
+}

@@ -335,7 +335,7 @@ export function renderKnowledge(record, knowledge) {
 export function renderAuthority(authority, rewriteLink, knowledge = new Map()) {
   assertMainHeadings(authority.markdown, authority.id);
   const renderer = new marked.Renderer();
-  let heading = 0, codeIndex = 0, inlineIndex = 0, firstParagraph = true, strippedH1 = false;
+  let heading = 0, codeIndex = 0, inlineIndex = 0, firstParagraph = true, strippedH1 = false, knowledgeLinkOpen = false;
   renderer.heading = function ({ tokens, depth }) {
     const inner = this.parser.parseInline(tokens);
     const text = decodeEntities(inner.replace(/<[^>]+>/g, ''));
@@ -384,10 +384,14 @@ export function renderAuthority(authority, rewriteLink, knowledge = new Map()) {
         .replace(/href="#(?!knowledge-Q[0-9])([^"]+)"/g, (_, id) => `href="#knowledge-${record.id}-${id}"`);
       return `<aside class="knowledge-introduction" id="knowledge-${record.id}" data-knowledge-introduction="${record.id}"><p class="knowledge-title">${esc(record.title)}</p>${content}</aside>`;
     }
-    const link = knowledgeLinkHTML(text.trim(), knowledge); if (link !== null) return link;
+    const link = knowledgeLinkHTML(text.trim(), knowledge);
+    if (link !== null) { knowledgeLinkOpen = !link.endsWith('</a>'); return link; }
     const anchor = text.match(/^\s*<a\s+id=(["'])([\p{L}\p{N}_.:\-]+)\1\s*>\s*(?:<\/a>\s*)?$/iu);
     if (anchor) return '<a id="' + esc(anchor[2]) + '"></a>';
-    if (/^\s*<\/a>\s*$/i.test(text)) return '';
+    // Marked emits the opening tag, label and closing tag as separate inline
+    // tokens. Only empty author anchors were already closed above; a knowledge
+    // link must end here or the browser turns following paragraphs into links.
+    if (/^\s*<\/a>\s*$/i.test(text)) { const close = knowledgeLinkOpen; knowledgeLinkOpen = false; return close ? '</a>' : ''; }
     return esc(text);
   };
   renderer.image = function () { throw new Error('Reader images require explicit carrier asset registration'); };

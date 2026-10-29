@@ -217,11 +217,11 @@ async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries
       }
     });
     await check('header-logo-shared-height-reflection-and-motion-protection',async env=>{
-      const p=await env.page(),reflection=p.locator('#headerLogo .header-logo-reflection');
+      const p=await env.page(),motion=p.locator('#headerLogo .header-logo-ink');
       const measure=()=>p.evaluate(()=>{
         const slot=document.querySelector('#headerLogo'),svg=slot.querySelector('svg'),shape=slot.querySelector('#algorithm-header-shape'),box=shape.getBBox(),m=shape.transform.baseVal.consolidate().matrix;
         const rect=e=>{const b=e.getBoundingClientRect();return{x:b.x,y:b.y,width:b.width,height:b.height};};
-        return{slot:rect(slot),svg:rect(svg),header:rect(document.querySelector('#appHeader')),shape:{width:box.width*m.a,height:box.height*m.d,top:box.y*m.d+m.f,bottom:(box.y+box.height)*m.d+m.f},wholeOpacity:getComputedStyle(svg).opacity,wholeTransform:getComputedStyle(svg).transform,base:getComputedStyle(slot.querySelector('.header-logo-base')).fill,reflection:getComputedStyle(slot.querySelector('.header-logo-reflection')).opacity,actions:slot.querySelectorAll('button,a,[tabindex]').length};
+        return{slot:rect(slot),svg:rect(svg),header:rect(document.querySelector('#appHeader')),shape:{width:box.width*m.a,height:box.height*m.d,top:box.y*m.d+m.f,bottom:(box.y+box.height)*m.d+m.f},wholeOpacity:getComputedStyle(svg).opacity,wholeTransform:getComputedStyle(svg).transform,base:getComputedStyle(slot.querySelector('.header-logo-base')).fill,ink:getComputedStyle(slot.querySelector('.header-logo-ink')).opacity,reflection:getComputedStyle(slot.querySelector('.header-logo-reflection')).opacity,actions:slot.querySelectorAll('button,a,[tabindex]').length};
       });
       const initial=await measure();
       assert.equal(initial.slot.width,76);assert.equal(initial.slot.height,38);
@@ -230,16 +230,16 @@ async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries
       assert(Math.abs(initial.shape.height-291)<.001,JSON.stringify(initial));
       assert(Math.abs(initial.shape.top-106)<.001&&Math.abs(initial.shape.bottom-397)<.001);
       assert.equal(initial.base,'rgb(207, 232, 255)');assert.equal(initial.actions,0);
-      assert.equal(await reflection.evaluate(e=>e.getAnimations()[0].effect.getTiming().duration),4800);
-      const phases=[[0,0],[1200,.08],[2400,.32],[3600,.08],[4800,0]];
-      for(const[time,opacity]of phases){
-        await reflection.evaluate((e,time)=>{const a=e.getAnimations()[0];a.pause();a.currentTime=time;},time);
+      assert.equal(await motion.evaluate(e=>e.getAnimations()[0].effect.getTiming().duration),4800);
+      const phases=Array.from({length:33},(_,i)=>{const time=4800*i/32,wave=Math.sin(time/4800*2*Math.PI);return[time,Math.max(0,wave),1+Math.min(0,wave)];});
+      for(const[time,opacity,ink]of phases){
+        await motion.evaluate((e,time)=>{for(const a of [e.getAnimations()[0],e.querySelector('.header-logo-reflection').getAnimations()[0]]){a.pause();a.currentTime=time;}},time);
         await p.evaluate(()=>new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done))));
         const state=await measure();assert(Math.abs(Number(state.reflection)-opacity)<.002,JSON.stringify({time,state}));
-        assert.equal(state.wholeOpacity,'1');assert.equal(state.wholeTransform,'none');
+        assert(Math.abs(Number(state.ink)-ink)<.0001,JSON.stringify({time,state}));assert.equal(state.wholeOpacity,'1');assert.equal(state.wholeTransform,'none');
         assert.deepEqual(state.slot,initial.slot);assert.deepEqual(state.svg,initial.svg);assert.deepEqual(state.header,initial.header);
         headerLogoMotion.push({phaseMs:time,...state,visibleHeightCssPx:state.shape.height*state.svg.height/512});
-        if(time===0||time===2400)await p.screenshot({path:path.join(output,`header-logo-${time===0?'ice':'white-reflection'}-402.png`)});
+        if(time===0||time===1200||time===3600)await p.screenshot({path:path.join(output,`header-logo-${time===0?'ice':time===1200?'white':'background'}-402.png`)});
       }
       const pixels=await p.locator('#headerLogo svg').evaluate(async svg=>{
         const copy=svg.cloneNode(true);copy.setAttribute('xmlns','http://www.w3.org/2000/svg');copy.setAttribute('width','512');copy.setAttribute('height','512');copy.querySelector('.header-logo-reflection').setAttribute('opacity','.32');
@@ -253,25 +253,37 @@ async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries
       // WAAPI play() overrides later CSS animation-play-state changes.
       await p.emulateMedia({reducedMotion:'reduce'});await p.emulateMedia({reducedMotion:'no-preference'});
       await p.evaluate(()=>{globalThis.__logoHidden=true;Object.defineProperty(document,'hidden',{configurable:true,get:()=>globalThis.__logoHidden});document.dispatchEvent(new Event('visibilitychange'));});
-      assert.equal(await reflection.evaluate(e=>getComputedStyle(e).animationPlayState),'paused');
-      await reflection.evaluate(async e=>{await e.getAnimations()[0].ready;});
-      const paused=await reflection.evaluate(e=>e.getAnimations()[0].currentTime);await p.waitForTimeout(90);
-      assert(Math.abs(await reflection.evaluate(e=>e.getAnimations()[0].currentTime)-paused)<1);
+      assert.equal(await motion.evaluate(e=>getComputedStyle(e).animationPlayState),'paused');
+      await motion.evaluate(async e=>{await e.getAnimations()[0].ready;});
+      const paused=await motion.evaluate(e=>e.getAnimations()[0].currentTime);await p.waitForTimeout(90);
+      assert(Math.abs(await motion.evaluate(e=>e.getAnimations()[0].currentTime)-paused)<1);
       await p.evaluate(()=>{globalThis.__logoHidden=false;document.dispatchEvent(new Event('visibilitychange'));});
-      assert.equal(await reflection.evaluate(e=>getComputedStyle(e).animationPlayState),'running');
-      await reflection.evaluate(async e=>{await e.getAnimations()[0].ready;});
-      await p.waitForTimeout(90);assert(await reflection.evaluate(e=>e.getAnimations()[0].currentTime)>paused);
+      assert.equal(await motion.evaluate(e=>getComputedStyle(e).animationPlayState),'running');
+      await motion.evaluate(async e=>{await e.getAnimations()[0].ready;});
+      await p.waitForFunction(time=>document.querySelector('#headerLogo .header-logo-ink').getAnimations()[0].currentTime>time,paused,{timeout:5000});
       await p.evaluate(()=>{globalThis.__logoHidden=true;document.dispatchEvent(new Event('visibilitychange'));globalThis.__logoHidden=false;window.dispatchEvent(new PageTransitionEvent('pageshow',{persisted:true}));});
-      assert.equal(await reflection.evaluate(e=>getComputedStyle(e).animationPlayState),'running');
+      assert.equal(await motion.evaluate(e=>getComputedStyle(e).animationPlayState),'running');
       await p.evaluate(()=>{document.documentElement.classList.add('header-motion-paused');window.dispatchEvent(new Event('focus'));});
-      assert.equal(await reflection.evaluate(e=>getComputedStyle(e).animationPlayState),'running');
+      assert.equal(await motion.evaluate(e=>getComputedStyle(e).animationPlayState),'running');
       await p.emulateMedia({reducedMotion:'reduce'});
-      assert.equal(await reflection.evaluate(e=>getComputedStyle(e).animationName),'none');assert.equal(await reflection.evaluate(e=>getComputedStyle(e).opacity),'0');
+      assert.equal(await motion.evaluate(e=>getComputedStyle(e).animationName),'none');assert.equal(await motion.evaluate(e=>getComputedStyle(e).opacity),'1');assert.equal((await measure()).reflection,'0');
       assert.deepEqual((await measure()).slot,initial.slot);await p.screenshot({path:path.join(output,'header-logo-reduced-motion-402.png')});
       await p.emulateMedia({reducedMotion:'no-preference'});
       const startup=await p.evaluate(()=>{const card=document.createElement('div');card.className='opening-card';card.dataset.state='loading';card.innerHTML='<span class="state-icon"></span>';document.body.append(card);const style=getComputedStyle(card.firstElementChild),result={animation:style.animationName,duration:style.animationDuration};card.remove();delete document.hidden;return result;});
       assert.deepEqual(startup,{animation:'breathe',duration:'1.8s'});
       headerLogoMotion.push({maskPixels:pixels,backgroundPaused:true,resumes:true,reducedMotion:{reflection:0,animated:false},startup});
+    });
+    await check('pointer-dialog-reader-focus-is-clean-and-keyboard-remains-visible',async env=>{
+      const p=await env.page();
+      assert.equal(await p.locator('#readingPane').evaluate(e=>getComputedStyle(e).outlineStyle),'none');
+      await p.locator('#settingsButton').click();
+      assert.equal(await p.locator('#sheetTitle').evaluate(e=>getComputedStyle(e).outlineStyle),'none');
+      await closeSheet(p);await p.keyboard.press('Tab');
+      assert(await p.evaluate(()=>document.documentElement.classList.contains('keyboard-navigation')&&getComputedStyle(document.activeElement).outlineStyle==='solid'));
+      await p.locator('#settingsButton').click();
+      assert(await p.evaluate(()=>!document.documentElement.classList.contains('keyboard-navigation')));
+      await closeSheet(p);await navigateHeading(p,'unit-4');
+      assert.equal(await p.locator('#readingPane').evaluate(e=>getComputedStyle(e).outlineStyle),'none');
     });
     await check('single-h2-neighbors-source-status-index-and-native-boundaries',async env=>{
       const p=await env.page();
@@ -446,7 +458,7 @@ async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries
       await p.screenshot({path:path.join(output,'service-balances-unknown-402x540.png')});
       await p.locator('#sheetBack').click();assert.equal(await p.locator('#sheetTitle').innerText(),'阅读器设置');
       await p.waitForFunction(top=>Math.abs(document.getElementById('sheetBody').scrollTop-top)<2,settingsScroll);
-      for(const[kind,title,ready]of[['study-goal','学习目标','[data-service-form="study-goal"]'],['study-next','下次安排','[data-service-form="study-next"]'],['study-rest','休息安排','[data-service-form="study-rest"]'],['storage','存储空间','[data-service-action="reload"]'],['reminders','提醒','[data-service-action="push-enable"]']]){
+      for(const[kind,title,ready]of[['study-goal','学习目标','[data-service-form="study-goal"]'],['study-next','下次出版','[data-service-form="study-next"]'],['study-rest','休息安排','[data-service-form="study-rest"]'],['storage','存储空间','[data-service-action="reload"]'],['reminders','提醒','[data-service-action="push-enable"]']]){
         await p.locator(`[data-service-view="${kind}"]`).click();await p.locator(ready).waitFor();assert.equal(await p.locator('#sheetTitle').innerText(),title);
         if(kind==='study-rest')assert(await p.locator('#serviceRestRequested').isChecked(),'default automation remains at rest');
         if(kind==='storage')assert.match(await p.locator('#sheetBody').innerText(),/尚无存储记录/);
@@ -510,7 +522,7 @@ async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries
         for(const chapter of catalog.collections)for(const meta of chapter.documents){const p=await env.page(`#/read/${chapter.id}/${meta.id}`),payload=JSON.parse(await fs.readFile(path.join(root,'dist',meta.url.slice(1)),'utf8'));
           absentFromPublic(payload.html,meta.id+' full chapter');
           const actual=await p.locator('#article').evaluate(e=>({headings:[...e.querySelectorAll('h2[id],h3[id],h4[id]')].map(h=>({depth:Number(h.tagName.slice(1)),id:h.id,text:h.textContent})),code:[...e.querySelectorAll('pre code')].map(x=>x.textContent),text:e.innerText}));
-          assert.deepEqual(actual.headings,payload.headings);boundary.assertReaderText(actual.text,meta.id+' displayed article');assert.doesNotMatch(actual.text,/Q\d{6}/);
+          assert.deepEqual(actual.headings,payload.headings);assert(await p.locator('#article a[data-knowledge]').evaluateAll(xs=>xs.every(a=>a.textContent.trim()&&!a.querySelector('p,aside,h2,h3,h4,pre,.code-block'))),'knowledge links stay within their inline label');assert.equal((payload.html.match(/<a\b/g)||[]).length,(payload.html.match(/<\/a>/g)||[]).length,'all authored links are explicitly closed');boundary.assertReaderText(actual.text,meta.id+' displayed article');assert.doesNotMatch(actual.text,/Q\d{6}/);
           const allNavigation=await p.evaluate(async facts=>{
             const errors=[],majors=facts.filter(h=>h.depth===2),stack=[],outline=facts.map((h,index)=>{
               while(stack.length&&stack.at(-1).depth>=h.depth)stack.pop();
