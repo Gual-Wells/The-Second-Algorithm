@@ -31,9 +31,9 @@ function sameCoordinate(actual, expected, label) {
   assert.deepEqual(coordinate(actual), coordinate(expected), label);
 }
 const hostDelay = ms => new Promise(resolve => setTimeout(resolve, ms));
-async function waitForHostState(page, predicate, label) {
+async function waitForHostState(page, predicate, label, argument) {
   const deadline = Date.now() + 3500;
-  while (!await page.evaluate(predicate)) {
+  while (!await page.evaluate(predicate, argument)) {
     if (Date.now() >= deadline) throw Error(label);
     // Intercepted browser fetch/body parsing is host I/O, not a virtual timer.
     await hostDelay(25);
@@ -78,13 +78,17 @@ async function advance(page, milliseconds) {
 async function environment(browser, compiled, fixture) {
   const context = await browser.newContext({ viewport: { width: 402, height: 874 }, serviceWorkers: 'block' });
   context.setDefaultTimeout(10_000);
-  const mock = { state: {}, requests: [], writes: [], errors: [], unexpectedApis: [], offline: false, holdNextPosition: false, held: [] };
+  const mock = { state: {}, requests: [], writes: [], errors: [], unexpectedApis: [], offline: false, holdNextPosition: false, held: [], holdDocumentPath: null, heldDocuments: [] };
   await context.addInitScript(() => {
     delete Navigator.prototype.serviceWorker;
     let hidden = false;
     Object.defineProperty(document, 'hidden', { configurable: true, get: () => hidden });
     Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => hidden ? 'hidden' : 'visible' });
     window.__setSyncVisibility = value => { hidden = value; document.dispatchEvent(new Event('visibilitychange')); };
+    window.__syncNativeScrollCount = 0;
+    document.addEventListener('scroll', event => {
+      if (event.target?.id === 'readingPane') ++window.__syncNativeScrollCount;
+    }, true);
     window.__syncRequestTrace = [];
     const nativeFetch = window.fetch.bind(window);
     window.fetch = (input, options = {}) => {
@@ -122,7 +126,13 @@ async function environment(browser, compiled, fixture) {
       // These are unrelated service snapshots, never successful sync evidence.
       return json({ settings: {}, balances: null, storage: null, notifications: [], automatic: false });
     }
-    if (fixture.bodies.has(pathname)) return route.fulfill({ contentType: typeOf(pathname), body: fixture.bodies.get(pathname) });
+    if (fixture.bodies.has(pathname)) {
+      if (mock.holdDocumentPath === pathname) {
+        mock.holdDocumentPath = null;
+        await new Promise(resolve => mock.heldDocuments.push(resolve));
+      }
+      return route.fulfill({ contentType: typeOf(pathname), body: fixture.bodies.get(pathname) });
+    }
     if (pathname === '/app.js') return route.fulfill({ contentType: 'text/javascript', body: compiled });
     const file = path.join(root, 'web', pathname === '/' ? 'index.html' : decodeURIComponent(pathname.slice(1)));
     try { return route.fulfill({ contentType: typeOf(file), body: await fs.readFile(file) }); }
@@ -138,13 +148,17 @@ async function environment(browser, compiled, fixture) {
   await advance(page, 65_000);
   mock.writes.length = 0;
   await page.evaluate(() => { __syncRequestTrace.length = 0; });
-  return { context, page, mock, release() { for (const release of mock.held.splice(0)) release(); }, async close() { this.release(); await context.close(); } };
+  return { context, page, mock,
+    release() { for (const release of mock.held.splice(0)) release(); },
+    releaseDocuments() { for (const release of mock.heldDocuments.splice(0)) release(); },
+    async close() { this.release(); this.releaseDocuments(); await context.close(); } };
 }
 
 async function point(page) {
   return page.evaluate(() => {
     const state = __syncQA.state, id = state.active.meta.id, prefix = `second-algorithm:${state.owner}:`;
     return { id, owner: state.owner, hash: location.hash, scrollTop: document.querySelector('#readingPane').scrollTop,
+      readerRestoring: __syncQA.runtime.state.restoring, readerView: __syncQA.runtime.state.view,
       position: __syncQA.runtime.position, local: JSON.parse(localStorage.getItem(prefix + 'position:' + id)),
       record: state.records['position:' + id], history: history.state?.readingPosition,
       footer: document.querySelector('#syncStatus').textContent, lampOffline: document.querySelector('#statusLamp').classList.contains('offline'),
@@ -153,11 +167,14 @@ async function point(page) {
 }
 const positions = env => env.mock.writes.filter(write => write.key.startsWith('position:'));
 async function scroll(env, amount) {
+  const count = await env.page.evaluate(() => __syncNativeScrollCount);
   await env.page.locator('#readingPane').evaluate((element, amount) => { element.scrollTop += amount; }, amount);
   // Native compositor scroll delivery uses host browser frames. Let that real
   // event enqueue its production RAF before advancing the virtual timer clock.
-  await hostDelay(30);
+  await waitForHostState(env.page, count => __syncNativeScrollCount > count, 'native reading scroll event was not delivered', count);
   await advance(env.page, 500);
+  const saved = await point(env.page);
+  sameCoordinate(saved.local, saved.position, 'native scroll must finish the original local persistence before taking a test snapshot');
 }
 async function resize(env) {
   await env.page.evaluate(() => dispatchEvent(new Event('resize')));
@@ -166,6 +183,22 @@ async function resize(env) {
 async function hidden(env, value) {
   await env.page.evaluate(value => __setSyncVisibility(value), value);
   await advance(env.page, 500);
+}
+async function chapterPersisted(env, id) {
+  // Changing active.meta is only the start of opening a chapter. Its host
+  // fetch, the reader's two RAF layout passes, and the 180ms local save are
+  // separate phases. Drive the original timers until all three are observable.
+  await waitForHostState(env.page, id => __syncQA.state.active?.meta.id === id, 'second chapter response did not activate', id);
+  for (let attempt = 0; attempt < 40; ++attempt) {
+    const ready = await env.page.evaluate(id => {
+      const state = __syncQA.state, local = JSON.parse(localStorage.getItem(`second-algorithm:${state.owner}:position:${id}`));
+      return state.active?.meta.id === id && __syncQA.runtime.state.view === 'reader' && !__syncQA.runtime.state.restoring &&
+        local?.revision === state.active.meta.revision && Boolean(local.block) && history.state?.readingDocument === id;
+    }, id);
+    if (ready) return;
+    await advance(env.page, 64);
+  }
+  throw Error('new chapter did not settle and persist its own current position');
 }
 
 (async () => {
@@ -179,6 +212,7 @@ async function hidden(env, value) {
   const browser = await chromium.launch({ headless: true, ...(process.env.ALGORITHM_QA_CHROME ? { executablePath: process.env.ALGORITHM_QA_CHROME } : {}), env: { ...process.env, TEMP: temporary, TMP: temporary, TMPDIR: temporary } });
   const results = [], failures = [];
   async function check(name, action) {
+    if (process.env.ALGORITHM_SYNC_QA_CASE && !name.includes(process.env.ALGORITHM_SYNC_QA_CASE)) return;
     let env;
     try {
       env = await environment(browser, compiled, fixture);
@@ -189,7 +223,7 @@ async function hidden(env, value) {
     } catch (error) {
       failures.push({ name, error: error.stack });
       results.push({ name, passed: false, error: error.message,
-        evidence: env ? { point: await point(env.page).catch(() => null), writes: clone(env.mock.writes), requests: clone(env.mock.requests), trace: await env.page.evaluate(() => __syncRequestTrace).catch(() => []) } : null }); console.error('FAIL', name, error.message);
+        evidence: env ? { point: await point(env.page).catch(() => null), writes: clone(env.mock.writes), requests: clone(env.mock.requests), trace: await env.page.evaluate(() => __syncRequestTrace).catch(() => []) } : null }); console.error('FAIL', name, error.stack || error.message);
       if (env) { await env.page.screenshot({ path: path.join(output, name + '.png'), scale: 'css' }).catch(() => {}); }
     } finally { await env?.close(); }
   }
@@ -256,14 +290,29 @@ async function hidden(env, value) {
     });
     await check('chapter-change-flushes-old-document-and-new-local-position-stays-separate', async env => {
       await scroll(env, 120); const old = await point(env.page);
+      // Reproduce the CI ordering deliberately: the second chapter's real
+      // fetch completes after a virtual advance. active.meta may then be new
+      // while its RAF restore and local persistence have not happened yet.
+      env.mock.holdDocumentPath = new URL(fixture.catalog.collections[1].documents[0].url, origin).pathname;
       await env.page.locator('#nextChapter').click(); await advance(env.page, 800);
+      assert.equal(env.mock.heldDocuments.length, 1, 'second chapter response is deliberately held for the readiness regression');
+      env.releaseDocuments();
+      await waitForHostState(env.page, () => __syncQA.state.active?.meta.id === 'sync-b', 'released chapter did not activate');
+      const activatedBeforePersistence = await point(env.page);
+      if (process.env.ALGORITHM_SYNC_REPRO_CHAPTER_RACE === '1') {
+        // Opt-in diagnostic only: demonstrate the former immediate dereference
+        // against this legal intermediate state. The default gate waits below.
+        console.log('CHAPTER_RACE_INTERMEDIATE', JSON.stringify(activatedBeforePersistence));
+        assert.equal(activatedBeforePersistence.local.revision, fixture.catalog.collections[1].documents[0].revision);
+      }
+      await chapterPersisted(env, 'sync-b');
       const next = await point(env.page); assert.equal(next.id, 'sync-b');
       sameCoordinate(env.mock.state['position:sync-a']?.value, old.local, 'old chapter must be checkpointed at a chapter boundary');
       assert.equal(next.local.revision, fixture.catalog.collections[1].documents[0].revision);
       assert.equal(env.mock.writes.filter(item => item.key === 'position:sync-a').length, 1, 'old document flush is coalesced');
       await hidden(env, true);
       sameCoordinate(env.mock.state['position:sync-b'].value, (await point(env.page)).local, 'new chapter checkpoint stays under its own key');
-      return { old, next, writtenKeys: env.mock.writes.map(item => item.key) };
+      return { old, activatedBeforePersistence, next, writtenKeys: env.mock.writes.map(item => item.key) };
     });
     await check('pagehide-and-user-preferences-flush-without-waiting-a-minute', async env => {
       await scroll(env, 90); const current = await point(env.page);
@@ -281,6 +330,7 @@ async function hidden(env, value) {
   const inputEnd = await fingerprint();
   if (JSON.stringify(inputStart) !== JSON.stringify(inputEnd)) failures.push({ name: 'immutable-inputs', error: 'Reader inputs changed while sync regression was running.' });
   const report = { passed: failures.length === 0, results, failures, inputStart, inputEnd, testedAt: new Date().toISOString(),
+    caseFilter: process.env.ALGORITHM_SYNC_QA_CASE || null, diagnosticOldChapterRace: process.env.ALGORITHM_SYNC_REPRO_CHAPTER_RACE === '1',
     runtime: 'actual current web app bundled with a synthetic immutable two-chapter catalog',
     time: 'Playwright virtual clock runs original production timers, including the full 60-second checkpoint; no timer duration substitution',
     network: 'actual fetch calls with isolated in-memory responses; delayed ACKs explicitly held and released',

@@ -69,21 +69,43 @@
       "inputHash": "1c76ecfcd3176d546b6cf13f598c9d5367c9e9d67ba38295488f58ef286c364d",
       "recordedAt": "2026-10-29T16:28:06.601900+00:00",
       "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "04943b2121b343de88689980ae1fe704",
+      "kind": "research",
+      "path": "work/service-settings-20261029/ci-readiness-research.md",
+      "summary": "真实Linux与OneDrive回读揭示异步测试/延迟汇总问题，受控重现并定点解决",
+      "outcome": "accepted",
+      "sha256": "288231373691b9228971172ccb7c86bebb6969feddf78fb5c0c55f06c0e1318c",
+      "inputHash": "865bf08377fd2379fad6d608798c03d0f6d1f6618f3175f11d2dc1321a6c31d3",
+      "recordedAt": "2026-10-29T16:41:59.764440+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "aa48e77806dd412c9d359174161da6cd",
+      "kind": "review",
+      "path": "work/service-settings-20261029/ci-readiness-review.md",
+      "summary": "更正仅涉及测试真实就绪与目录批量实测；不放宽判据或改教材/同步运行时",
+      "outcome": "accepted",
+      "sha256": "59b19c54bc6f8544771f788c6e90cd57b018b35244fd0685d6a20c6742b2a1c3",
+      "inputHash": "865bf08377fd2379fad6d608798c03d0f6d1f6618f3175f11d2dc1321a6c31d3",
+      "recordedAt": "2026-10-29T16:42:02.549940+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
     }
   ],
   "lastGoodVerification": {
-    "path": "work/jobs/service-settings-20261029/verifications/6534d3ae01624a7c86f09bd4bf7fb5aa.json",
-    "sha256": "9bcbee324dfce892fdb22ba3a7bfb1fcc03f1d967d28737eadb59d429ac8afb5",
-    "inputHash": "1c76ecfcd3176d546b6cf13f598c9d5367c9e9d67ba38295488f58ef286c364d"
+    "path": "work/jobs/service-settings-20261029/verifications/d905d397efcc47929a8cab2cc6ccc48b.json",
+    "sha256": "040f623a3ac01969698bdccba850578855106c59a05578749009b59e8637b442",
+    "inputHash": "865bf08377fd2379fad6d608798c03d0f6d1f6618f3175f11d2dc1321a6c31d3"
   },
   "lastPreparedRelease": {
-    "path": "work/jobs/service-settings-20261029/releases/f7ff312005544cdd8126d1a5885f1808.json",
-    "sha256": "7c8184b2ac02e8062a6b0f2e36c7d36916ab5589fc99e2e81102fb8a273e43bc",
-    "inputHash": "1c76ecfcd3176d546b6cf13f598c9d5367c9e9d67ba38295488f58ef286c364d"
+    "path": "work/jobs/service-settings-20261029/releases/cdd71a51c1cd40d299001fe422d9cee9.json",
+    "sha256": "ceb55ca45eefdfdbbed859ae345ab05a64de014e71ad934ca219c94612d48397",
+    "inputHash": "865bf08377fd2379fad6d608798c03d0f6d1f6618f3175f11d2dc1321a6c31d3"
   },
   "lastVerificationAttempt": {
-    "path": "work/jobs/service-settings-20261029/verifications/6534d3ae01624a7c86f09bd4bf7fb5aa.json",
-    "sha256": "9bcbee324dfce892fdb22ba3a7bfb1fcc03f1d967d28737eadb59d429ac8afb5",
-    "inputHash": "1c76ecfcd3176d546b6cf13f598c9d5367c9e9d67ba38295488f58ef286c364d"
+    "path": "work/jobs/service-settings-20261029/verifications/d905d397efcc47929a8cab2cc6ccc48b.json",
+    "sha256": "040f623a3ac01969698bdccba850578855106c59a05578749009b59e8637b442",
+    "inputHash": "865bf08377fd2379fad6d608798c03d0f6d1f6618f3175f11d2dc1321a6c31d3"
   }
 }

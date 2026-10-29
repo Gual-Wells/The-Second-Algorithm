@@ -1,0 +1,78 @@
+{
+  "passed": true,
+  "gitRevision": "2a45cb87e2daa23646ab798f329cd49d20721a78",
+  "build": "c24e6e579358f142d1d8c3250bb29820ea33bd3d95f46880a3ad8ea90606ffee",
+  "publicAssets": [
+    {
+      "file": "index.html",
+      "status": 200,
+      "shaMatch": true,
+      "securityHeaders": true
+    },
+    {
+      "file": "app.js",
+      "status": 200,
+      "shaMatch": true,
+      "securityHeaders": true
+    },
+    {
+      "file": "styles.css",
+      "status": 200,
+      "shaMatch": true,
+      "securityHeaders": true
+    },
+    {
+      "file": "sw.js",
+      "status": 200,
+      "shaMatch": true,
+      "securityHeaders": true
+    },
+    {
+      "file": "icons/header-logo.svg",
+      "status": 200,
+      "shaMatch": true,
+      "securityHeaders": true
+    }
+  ],
+  "anonymousPrivate": [
+    {
+      "route": "/api/library",
+      "status": 401
+    },
+    {
+      "route": "/api/state",
+      "status": 401
+    },
+    {
+      "route": "/api/settings",
+      "status": 401
+    },
+    {
+      "route": "/api/balances",
+      "status": 401
+    },
+    {
+      "route": "/api/storage/usage",
+      "status": 401
+    },
+    {
+      "route": "/api/push/status",
+      "status": 401
+    },
+    {
+      "route": "/api/push/public-key",
+      "status": 401
+    },
+    {
+      "route": "/library/catalog.json",
+      "status": 401
+    },
+    {
+      "route": "/%6cibrary/catalog.json",
+      "status": 401
+    }
+  ],
+  "existingPasskeyStillEnrolled": true,
+  "enrollmentClosed": true,
+  "checkedAt": "2026-10-29T16:34:44.486Z"
+}

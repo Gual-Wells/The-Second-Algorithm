@@ -1,0 +1,74 @@
+{
+  "originalCI": {
+    "run": 40912079914,
+    "job": 123582442582,
+    "commit": "2a45cb87e2daa23646ab798f329cd49d20721a78",
+    "at": "2026-10-29T16:32:42.9212023Z",
+    "failure": "Cannot read properties of null (reading 'revision')"
+  },
+  "diagnosis": "test sampled new active metadata before new chapter RAF restore and 180ms local persistence; no product change needed",
+  "deterministicRepro": {
+    "report": "final-repro/results.json",
+    "expectedExit": 1,
+    "failure": "Cannot read properties of null (reading 'revision')",
+    "intermediate": {
+      "id": "sync-b",
+      "owner": "sssssssssssssssssssssssssssssssssssssssssss",
+      "hash": "#/read/sync-second/sync-b",
+      "scrollTop": 0,
+      "readerRestoring": true,
+      "readerView": "reader",
+      "position": {
+        "schema": 3,
+        "anchor": "section-0",
+        "offset": 24,
+        "revision": "f6bd6b36794d2addf3d0ed6b13d98cdd51cf39927c60885797f02c5e5d4e39f0"
+      },
+      "local": null,
+      "footer": "已同步",
+      "lampOffline": false,
+      "virtualAt": 1793292142080
+    }
+  },
+  "fixedFull": {
+    "report": "final-full/results.json",
+    "passed": true,
+    "cases": 6,
+    "sourceInputsStable": true,
+    "casesSummary": [
+      {
+        "name": "unchanged-resize-never-dirties-or-uploads-position",
+        "passed": true,
+        "positionPuts": 0
+      },
+      {
+        "name": "continuous-scrolling-uses-bounded-sixty-second-checkpoint",
+        "passed": true,
+        "positionPuts": 1
+      },
+      {
+        "name": "slow-request-coalesces-new-position-without-immediate-followup-loop",
+        "passed": true,
+        "positionPuts": 2
+      },
+      {
+        "name": "offline-reading-keeps-local-history-and-recovers-one-latest-snapshot",
+        "passed": true,
+        "positionPuts": 1
+      },
+      {
+        "name": "chapter-change-flushes-old-document-and-new-local-position-stays-separate",
+        "passed": true,
+        "positionPuts": 2
+      },
+      {
+        "name": "pagehide-and-user-preferences-flush-without-waiting-a-minute",
+        "passed": true,
+        "positionPuts": 1
+      }
+    ]
+  },
+  "scriptSha256": "f040998c28d78ab371fd70073076b41360823f341f4e1d4f8c1d5bfa308c6c27",
+  "scope": "scripts/check-reading-sync.cjs only; original product sources and dist not modified",
+  "linuxAfterFix": "not yet verified; root will publish and rerun CI"
+}

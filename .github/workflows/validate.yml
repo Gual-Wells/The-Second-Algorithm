@@ -29,6 +29,7 @@ jobs:
       CXX: g++
       PYTHONDONTWRITEBYTECODE: '1'
       PLAYWRIGHT_BROWSERS_PATH: .local/playwright-browsers
+      ALGORITHM_SYNC_QA: .local/carrier-sync
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -69,6 +70,7 @@ jobs:
             .local/chapter-quality.json
             .local/refinement-qa/results.json
             .local/carrier-upgrade-qa/results.json
+            .local/carrier-sync/results.json
             work/jobs/
             .local/releases/*/carrier-build.json
           if-no-files-found: ignore
