@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "packet": "work/jobs/continuous-ice-logo-20261030/releases/86c28b4746b54d28a2803966b0327f9f.json",
+  "packetSha256": "d92f0fbdd0ea96676ec6cfd237616669b93a75489647e2f61de3f1ece6b4aab9",
+  "researchHandoffs": [
+    {
+      "chapter": "chapter-01",
+      "path": "work/jobs/first-chapter-20261028/study/handoffs/30fca997eabc41e0a39dd8eff7adaf45.json",
+      "sha256": "678a8224a593e49e10100c6befb9dd926fbb521221380cefd17cf8a40156275c",
+      "current": true,
+      "adopted": true,
+      "adoptionProof": {
+        "deployment": "work/jobs/first-chapter-20261028/deployments/1793195153435.json",
+        "packet": "work/jobs/first-chapter-20261028/releases/31f196de91894f14af75dfde16135d95.json"
+      }
+    }
+  ],
+  "inputHash": "6ee86e3d73fc348afa866a031fcb87c97d81055a76547a700c79df62caa7fc90",
+  "artifact": ".local/releases/2b9db6ad-eadf-4839-bcc0-ff4ab6563d91",
+  "origin": "https://second-algorithm.pages.dev",
+  "deployedAt": "2026-10-29T18:57:45.937Z",
+  "build": "5ef90fe1a994f38c941f883c86ccd1313c6b1da14ab1da3b343e0086e58f6395",
+  "anonymousBoundaryVerified": true,
+  "passed": true
+}

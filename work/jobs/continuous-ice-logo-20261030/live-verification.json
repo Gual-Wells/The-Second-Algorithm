@@ -1,0 +1,58 @@
+{
+  "verified": true,
+  "sourceCommit": "845c44385fc72d5ddeba39b80c8a55dad168b0eb",
+  "checkedAt": "2026-10-29T18:59:40Z",
+  "checks": [
+    {
+      "project": "algorithm",
+      "base": "https://0d3d9b13.second-algorithm.pages.dev",
+      "file": "index.html",
+      "matched": true
+    },
+    {
+      "project": "algorithm",
+      "base": "https://0d3d9b13.second-algorithm.pages.dev",
+      "file": "styles.css",
+      "matched": true
+    },
+    {
+      "project": "algorithm",
+      "base": "https://0d3d9b13.second-algorithm.pages.dev",
+      "file": "app.js",
+      "matched": true
+    },
+    {
+      "project": "algorithm",
+      "base": "https://0d3d9b13.second-algorithm.pages.dev",
+      "file": "sw.js",
+      "matched": true
+    },
+    {
+      "project": "algorithm",
+      "base": "https://second-algorithm.pages.dev",
+      "file": "index.html",
+      "matched": true
+    },
+    {
+      "project": "algorithm",
+      "base": "https://second-algorithm.pages.dev",
+      "file": "styles.css",
+      "matched": true
+    },
+    {
+      "project": "algorithm",
+      "base": "https://second-algorithm.pages.dev",
+      "file": "app.js",
+      "matched": true
+    },
+    {
+      "project": "algorithm",
+      "base": "https://second-algorithm.pages.dev",
+      "file": "sw.js",
+      "matched": true
+    }
+  ],
+  "authBoundariesVerified": true,
+  "paidCalls": 0,
+  "physicalIPhone": false
+}
