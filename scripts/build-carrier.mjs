@@ -7,7 +7,7 @@ import { marked } from 'marked';
 import hljs from 'highlight.js/lib/core';
 import cpp from 'highlight.js/lib/languages/cpp';
 import { readKnowledge, knowledgeTokens, expandKnowledgeReferences } from '../tools/knowledge.mjs';
-import { composeDocument, compositionPath } from '../tools/compose-chapter.mjs';
+import { composeDocument, compositionPath, assertSectionNumbering } from '../tools/compose-chapter.mjs';
 import { assertReaderMarkdown, assertReaderHtml, assertReaderText, assertMainHeadings, assertRenderedMainHeadings, readerSourceView, assertReaderSource } from '../tools/reader-boundary.mjs';
 
 hljs.registerLanguage('cpp', cpp);
@@ -331,6 +331,7 @@ export function renderAuthority(authority, rewriteLink, knowledge = new Map()) {
   };
   renderer.paragraph = function ({ tokens }) {
     const inner = this.parser.parseInline(tokens);
+    if (/^(?:<a id="[^"<>]+"><\/a>\s*)+$/.test(inner)) return inner + '\n';
     if (firstParagraph) {
       firstParagraph = false;
       if (/^(?:算法实战参考|第二算法实战)\s*[·・]/u.test(inner)) return '';
@@ -378,6 +379,7 @@ export function renderAuthority(authority, rewriteLink, knowledge = new Map()) {
   if (heading !== authority.manifest.headings.length || codeIndex !== authority.blocks.size)
     throw new Error('Reading content omitted a canonical heading or code block');
   html = html.replace(/<table>/g, '<div class="table-wrap"><table>').replace(/<\/table>/g, '</table></div>');
+  if (authority.composition) assertSectionNumbering(authority.manifest.headings.filter(h=>h.depth===2).map(h=>h.text), authority.id);
   assertReaderHtml(html, authority.id + ' reader HTML', { allowKnowledgeIds: !authority.manifest.knowledgeHelperSha256 });
   assertRenderedMainHeadings(html, authority.manifest.headings.filter((x,index)=>!(index===0&&x.depth===1)), authority.id + ' reader HTML');
   const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map(x => x[1]);

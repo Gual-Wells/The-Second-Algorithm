@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "book-readability-20261029",
+  "goal": "对照正规教材重编二分章的叙述与实现路径，固定PRE与中文正式节编号，改善真实阅读体验并发布",
+  "createdAt": "2026-10-29T02:21:55.152326+00:00",
+  "evidence": [
+    {
+      "id": "c9e9b2a17f30472e818c3532f79cbcc3",
+      "kind": "research",
+      "path": "work/book-readability-20261029/editorial-study.md",
+      "summary": "实际对照采用教材原版章节，诊断压缩术语/先后顺序与推理连接问题，确定并落实全章书籍式重编及标题规则",
+      "outcome": "accepted",
+      "sha256": "9bbc5916bcde14cf082bdf6a1cc330f3101fc97be4bd5e8bbfd719bdfa526911",
+      "inputHash": "d14a38267fbcc2f8a4d99bd8b5fb330b3ec52ca287d670b1d38df17b83918422",
+      "recordedAt": "2026-10-29T02:53:42.410263+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "6e7fa58cc92c4e4fa2ddee4e48b0cbea",
+      "kind": "review",
+      "path": "work/book-readability-20261029/edition-review.md",
+      "summary": "按最终章顺序回读全部叙述与代码落点，交叉读者意见闭环，13知识与标题同步并实看手机正文/目录；不把测试通过当用户已懂",
+      "outcome": "accepted",
+      "sha256": "976a6788f76d186f65085b323cd22594e4dfc155b300bdd7cf716d9a6d0eddee",
+      "inputHash": "d14a38267fbcc2f8a4d99bd8b5fb330b3ec52ca287d670b1d38df17b83918422",
+      "recordedAt": "2026-10-29T02:53:45.235004+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    }
+  ],
+  "lastGoodVerification": {
+    "path": "work/jobs/book-readability-20261029/verifications/7167fa70f90b45cfaf2fe3ac04785e2a.json",
+    "sha256": "1fb56c7a6bb5f8beb612dd425da7280eb2a893a2ab969192484351991d788b9d",
+    "inputHash": "d14a38267fbcc2f8a4d99bd8b5fb330b3ec52ca287d670b1d38df17b83918422"
+  },
+  "lastPreparedRelease": {
+    "path": "work/jobs/book-readability-20261029/releases/bb904532fa1c4f63bedd035d1c882b25.json",
+    "sha256": "5c23e41ad797a309a44e73424b4818f63fee8b0946c907dcd143ca6ca679f384",
+    "inputHash": "d14a38267fbcc2f8a4d99bd8b5fb330b3ec52ca287d670b1d38df17b83918422"
+  },
+  "lastVerificationAttempt": {
+    "path": "work/jobs/book-readability-20261029/verifications/7167fa70f90b45cfaf2fe3ac04785e2a.json",
+    "sha256": "1fb56c7a6bb5f8beb612dd425da7280eb2a893a2ab969192484351991d788b9d",
+    "inputHash": "d14a38267fbcc2f8a4d99bd8b5fb330b3ec52ca287d670b1d38df17b83918422"
+  }
+}

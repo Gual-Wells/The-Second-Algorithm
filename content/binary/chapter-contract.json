@@ -857,6 +857,34 @@
       "locator": "2026-10-29 current reader surface and delivery audit",
       "evidence": "work/reader-boundary-20261029/content-audit.md",
       "sourcePaths": []
+    },
+    {
+      "id": "book-editorial-study",
+      "kind": "countercheck",
+      "locator": "2026-10-29 textbook comparison and actual editorial reading",
+      "evidence": "work/book-readability-20261029/editorial-study.md",
+      "sourcePaths": []
+    },
+    {
+      "id": "book-author-boundary-decision",
+      "kind": "countercheck",
+      "locator": "2026-10-29 textbook comparison and actual editorial reading",
+      "evidence": "work/book-readability-20261029/boundary-decision-review.md",
+      "sourcePaths": []
+    },
+    {
+      "id": "book-author-selection-advanced",
+      "kind": "countercheck",
+      "locator": "2026-10-29 textbook comparison and actual editorial reading",
+      "evidence": "work/book-readability-20261029/selection-advanced-review.md",
+      "sourcePaths": []
+    },
+    {
+      "id": "book-independent-reader",
+      "kind": "countercheck",
+      "locator": "2026-10-29 textbook comparison and actual editorial reading",
+      "evidence": "work/book-readability-20261029/independent-reader-review.md",
+      "sourcePaths": []
     }
   ],
   "paradigm": {
@@ -1386,7 +1414,7 @@
       },
       {
         "id": "predicate-access",
-        "title": "昂贵访问与未知上界的首次满足",
+        "title": "访问受限或上界未知时的查找",
         "researchTypeIds": [
           "predicate-access"
         ],
@@ -1472,7 +1500,7 @@
       },
       {
         "id": "transformed-index",
-        "title": "值与下标关系中的固定点和缺失数",
+        "title": "固定点与缺失数：利用值和下标的关系",
         "researchTypeIds": [
           "transformed-index"
         ],
@@ -1559,7 +1587,7 @@
       },
       {
         "id": "rotated-search",
-        "title": "旋转序列中的成员与最小值",
+        "title": "旋转有序数组的查找与最小值",
         "researchTypeIds": [
           "rotated-search"
         ],
@@ -1648,7 +1676,7 @@
       },
       {
         "id": "paired-break",
-        "title": "有序配对结构中的唯一异常",
+        "title": "成对有序数组中的单次值",
         "researchTypeIds": [
           "paired-break"
         ],
@@ -1731,7 +1759,7 @@
       },
       {
         "id": "local-peak",
-        "title": "任意一维局部峰与单峰边界",
+        "title": "局部峰与单峰数组的峰值",
         "researchTypeIds": [
           "local-peak"
         ],
@@ -1814,7 +1842,7 @@
       },
       {
         "id": "matrix-membership",
-        "title": "二维有序数据中的存在性查找",
+        "title": "二维有序矩阵中的查找",
         "researchTypeIds": [
           "matrix-membership"
         ],
@@ -1901,7 +1929,7 @@
       },
       {
         "id": "integer-root",
-        "title": "不溢出的整数根与最后可行值",
+        "title": "整数平方根：查找最后一个可行值",
         "researchTypeIds": [
           "integer-root"
         ],
@@ -1984,7 +2012,7 @@
       },
       {
         "id": "capacity-partition",
-        "title": "连续容量分段：以最少段数判定最大段和",
+        "title": "最小化连续分段的最大段和",
         "researchTypeIds": [
           "capacity-partition"
         ],
@@ -2071,7 +2099,7 @@
       },
       {
         "id": "maximin-spacing",
-        "title": "最大化最小间距：以最早放置保留空间",
+        "title": "最大化所选位置的最小间距",
         "researchTypeIds": [
           "maximin-spacing"
         ],
@@ -2154,7 +2182,7 @@
       },
       {
         "id": "cumulative-production",
-        "title": "累计产能：反求达标最早时刻",
+        "title": "达到目标产量的最短时间",
         "researchTypeIds": [
           "cumulative-production"
         ],
@@ -2237,7 +2265,7 @@
       },
       {
         "id": "ordered-simulation",
-        "title": "并行台数：以事件模拟判定固定顺序队列",
+        "title": "固定顺序任务所需的最少并行台位",
         "researchTypeIds": [
           "ordered-simulation"
         ],
@@ -2320,7 +2348,7 @@
       },
       {
         "id": "graph-threshold",
-        "title": "路径瓶颈：阈值下的可达性",
+        "title": "瓶颈路径：最小化路径上的最大边权",
         "researchTypeIds": [
           "graph-threshold"
         ],
@@ -2403,7 +2431,7 @@
       },
       {
         "id": "prefix-activation",
-        "title": "事件前缀的首次成功与首次失败",
+        "title": "有序事件前缀的首次成功与首次失败",
         "researchTypeIds": [
           "prefix-activation"
         ],
@@ -2492,7 +2520,7 @@
       },
       {
         "id": "weighted-inverse",
-        "title": "累计权重的逆查询与采样",
+        "title": "按累计权重查找与随机抽样",
         "researchTypeIds": [
           "weighted-inverse"
         ],
@@ -2576,7 +2604,7 @@
       },
       {
         "id": "pigeonhole-domain",
-        "title": "值域容量异常：重复与缺失",
+        "title": "在值域中寻找重复值或缺失值",
         "researchTypeIds": [
           "pigeonhole-domain"
         ],
@@ -2659,7 +2687,7 @@
       },
       {
         "id": "matrix-rank",
-        "title": "行列有序矩阵秩：楼梯计数",
+        "title": "行列有序矩阵的第 k 小元素",
         "researchTypeIds": [
           "matrix-rank"
         ],
@@ -2742,7 +2770,7 @@
       },
       {
         "id": "multiplication-rank",
-        "title": "乘法表秩：解析计数巨大隐式集合",
+        "title": "乘法表中的第 k 小数",
         "researchTypeIds": [
           "multiplication-rank"
         ],
@@ -2827,7 +2855,7 @@
       },
       {
         "id": "pair-distance-rank",
-        "title": "数对距离秩：窗口计数反求第 k 小",
+        "title": "数对距离的第 k 小值",
         "researchTypeIds": [
           "pair-distance-rank"
         ],
@@ -2912,7 +2940,7 @@
       },
       {
         "id": "two-sorted-partition",
-        "title": "两有序数组中位：在合法分割位置二分",
+        "title": "两个有序数组的第 k 小与中位数",
         "researchTypeIds": [
           "two-sorted-partition"
         ],
@@ -2998,7 +3026,7 @@
       },
       {
         "id": "ordered-dp-frontier",
-        "title": "DP 有序前沿：最小尾值与二分替换",
+        "title": "最长递增子序列：维护每个长度的最小末值",
         "researchTypeIds": [
           "ordered-dp-frontier"
         ],
@@ -3092,7 +3120,7 @@
       },
       {
         "id": "weighted-predecessor",
-        "title": "带权兼容调度：二分定位 DP 前驱",
+        "title": "带权区间调度：查找兼容前驱",
         "researchTypeIds": [
           "weighted-predecessor"
         ],
@@ -3181,7 +3209,7 @@
       },
       {
         "id": "resource-queries",
-        "title": "查询会消耗资源：反求最少试探次数",
+        "title": "资源受限的试探：鸡蛋掉落问题",
         "researchTypeIds": [
           "resource-queries"
         ],
@@ -3266,7 +3294,7 @@
       },
       {
         "id": "matrix-peak",
-        "title": "二维局部峰的存在性搜索",
+        "title": "二维矩阵中的局部峰",
         "researchTypeIds": [
           "matrix-peak"
         ],
@@ -3351,7 +3379,7 @@
       },
       {
         "id": "string-prefix",
-        "title": "字典序前缀与比较成本",
+        "title": "字符串的字典序前缀与最长公共前缀",
         "researchTypeIds": [
           "string-prefix"
         ],
@@ -3438,7 +3466,7 @@
       },
       {
         "id": "continuous-root",
-        "title": "连续方程的异号夹逼与误差",
+        "title": "连续函数的零点与误差控制",
         "researchTypeIds": [
           "continuous-root"
         ],
@@ -3521,7 +3549,7 @@
       },
       {
         "id": "average-transform",
-        "title": "平均值优化中的合法区间判定",
+        "title": "带区间限制的平均值优化",
         "researchTypeIds": [
           "average-transform"
         ],
@@ -3612,7 +3640,7 @@
       },
       {
         "id": "ratio-selection",
-        "title": "固定数量最大比值：变换后取最大的 m 项",
+        "title": "固定数量选择的最大总比值",
         "researchTypeIds": [
           "ratio-selection"
         ],
@@ -3697,7 +3725,7 @@
       },
       {
         "id": "convex-location",
-        "title": "凸多边形中的扇区定位",
+        "title": "凸多边形中的点定位",
         "researchTypeIds": [
           "convex-location"
         ],
@@ -3780,7 +3808,7 @@
       },
       {
         "id": "matching-threshold",
-        "title": "阈值下的互斥选择与匹配",
+        "title": "互斥选择中的最优阈值：用匹配判定",
         "researchTypeIds": [
           "matching-threshold"
         ],
@@ -3863,7 +3891,7 @@
       },
       {
         "id": "fenwick-rank",
-        "title": "动态频数中的第k个位置",
+        "title": "动态频数的第 k 个位置：树状数组内查找",
         "researchTypeIds": [
           "fenwick-rank"
         ],
@@ -3948,7 +3976,7 @@
       },
       {
         "id": "summary-descent",
-        "title": "区间摘要驱动的首次失败位置",
+        "title": "线段树内查找：从指定位置找首个达标值",
         "researchTypeIds": [
           "summary-descent"
         ],
@@ -4031,7 +4059,7 @@
       },
       {
         "id": "ancestor-boundary",
-        "title": "祖先会合边界与同步提升",
+        "title": "最近公共祖先与路径边界的倍增查找",
         "researchTypeIds": [
           "ancestor-boundary"
         ],
@@ -4126,7 +4154,7 @@
       },
       {
         "id": "cyclic-jump",
-        "title": "循环正数序列的最少分段",
+        "title": "正数环形序列的最少连续分段",
         "researchTypeIds": [
           "cyclic-jump"
         ],
@@ -4212,7 +4240,7 @@
       },
       {
         "id": "time-parallel-search",
-        "title": "共享时间轴判定的并行二分",
+        "title": "并行二分：批量查询最早连通时间",
         "researchTypeIds": [
           "time-parallel-search"
         ],
@@ -4297,7 +4325,7 @@
       },
       {
         "id": "dynamic-range-kth",
-        "title": "带修改区间第k小的整体二分",
+        "title": "整体二分：带修改的区间第 k 小查询",
         "researchTypeIds": [
           "dynamic-range-kth"
         ],
@@ -4386,7 +4414,7 @@
       },
       {
         "id": "marginal-penalty",
-        "title": "递减边际资源分配的惩罚参数搜索",
+        "title": "惩罚参数搜索：递减边际收益下的资源分配",
         "researchTypeIds": [
           "marginal-penalty"
         ],

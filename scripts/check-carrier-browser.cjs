@@ -127,6 +127,7 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
 
 (async () => {
   const boundary = await import('../tools/reader-boundary.mjs');
+  const numbering = await import('../tools/compose-chapter.mjs');
   const physicalRoot = await fs.realpath(root);
   if (process.platform === 'win32' && !/^D:\\/i.test(physicalRoot))
     throw new Error('Browser QA workspace and its actual temporary data must be on D:');
@@ -264,6 +265,16 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
         }, selections.map(selection => selection.anchor));
         assert.deepEqual(mainSections.map(section => section.index), selections.map((_, index) => index),
           'rendered H2 order must follow the explicit composition across all four author files');
+        numbering.assertSectionNumbering(mainSections.map(section=>section.title), 'displayed chapter headings');
+        const openingGeometry = await page.locator('#readingArticle').evaluate(article => {
+          const first=article.querySelector('h2');
+          return {gap:first.getBoundingClientRect().top-article.getBoundingClientRect().top,
+            topPadding:Number.parseFloat(getComputedStyle(article).paddingTop),
+            wrap:getComputedStyle(first).textWrap};
+        });
+        assert(openingGeometry.gap <= openingGeometry.topPadding + 1,
+          'first section must begin at paper padding, without an extra heading margin: '+JSON.stringify(openingGeometry));
+        assert.equal(openingGeometry.wrap,'balance');
         assert.equal(await page.locator('#readingArticle h2').count(), 38);
         await page.locator('#tocButton').click();
         assert.deepEqual(await page.locator('#tocResults .toc-row').evaluateAll(rows => rows.map(row => ({

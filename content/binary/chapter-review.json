@@ -1,28 +1,26 @@
 {
   "schemaVersion": 1,
   "chapter": "chapter-01",
-  "inputHash": "1dcf91d45e982082315d47fc69cf5419a97182ef4f625dde84abfae7da2d0ea0",
+  "inputHash": "1577154735f7f218d0ab630cdc24e9d74e3420e89ea11d213e880c9460112f85",
   "verdict": "accepted",
   "comparison": {
-    "baseline": "c9c93c2的统一二分章已发布。本轮针对读者表面与下载边界打补丁，37型/九分支未变；未改算法的范围与完整链条采用依据承接前版实际审阅，不声称再做全章证明。",
-    "findings": "实际修正内部OJ/本机测试话术、制作辩护及源码界标外流；将其改为客观方法/复杂度/设施职责。增加当前readerBoundary人工审阅与正式输出检查，具体发现、保护条件和验证边界见work/reader-boundary-20261029/edition-review.md。"
+    "baseline": "b4e5066统一章已发布，但用户指出章节与内容难读。根与作者实际对照采用版教材，回查当前章；本轮返修叙述和标题，不把原版结构合规、测试通过当作已对人类可读。",
+    "findings": "完整重编PRE和37正式节、13知识解释；先问题/必要例子，再状态/因果与实现，保留条件、困难证明、变型和原题；标题按问题自然命名并由装配生成PRE/中文连续号。具体书籍比较、全章回读和修订边界见work/book-readability-20261029/editorial-study.md及edition-review.md。"
   },
   "outsideChallenge": {
     "materialIds": [
-      "editorial-content-changes",
-      "editorial-prelude-review",
-      "editorial-independent-review",
+      "book-editorial-study",
+      "book-independent-reader",
       "challenge-aliens-official-method",
-      "challenge-abc216e-official-editorial",
-      "reader-boundary-audit"
+      "challenge-abc216e-official-editorial"
     ],
-    "findings": "保留已采用研究的独立范围挑战；本轮新审读发现并修复重复旋转不能保证对半、浮点helper过早和困难结构解释缺口。非作者对生成读件另查前置/LIS/秩/根/结构与离线法，未发现阻断所查理解的缺口；具体证据和未查边界保留。 本轮另检查全部交付种类的受众边界，修掉生产自述和编纂标记，原反查记录不改写。"
+    "findings": "保留已采用研究的原范围挑战，本轮增加实际教材组织对照和未参与相应正文的读者交叉检查。n定义、分类措辞、unique、greater、父链绝对时序、动态kth入口和惩罚反例表达均已闭环；独立报告保留实际抽读边界，不用书名或代理数自证可读。"
   },
   "assessments": [
     {
       "commitment": "domain-coverage",
       "outcome": "pass",
-      "reason": "从当前37型统一正文反查九分支与原研究材料；排序未删核心范围，结构存在/连续异号不混作单调边界，跨思想的DP、匹配、结构下降和离线法保留必要推理。研究对象与读者节可多对多不是删范围授权；不主张全网穷尽。",
+      "reason": "按最终章顺序回读全部叙述与代码落点；九分支37型及原研究/练习关系保真。标题改为易辨的问题名称、源码保持唯一，不因改写删去结构、数值、DP、匹配、离线与参数机制。scope未重选，不主张全网穷尽。",
       "locations": [
         {
           "document": "binary-search",
@@ -177,7 +175,7 @@
     {
       "commitment": "hard-variants",
       "outcome": "pass",
-      "reason": "实读并修订Fenwick结点区间与对齐归纳、LIS计数状态及合并、资源覆盖反演、匹配阈值、时间重放、带修改稳定分流/剩余秩/回滚以及惩罚恢复条件。独立复读的实际结论和非阻断建议见新审阅，代码验证另有独立模型。",
+      "reason": "实际回读匹配补全/增广路、资源覆盖构造、连续三根隔离、LIS计数、Fenwick块对齐、循环贪心、并行重放、带修改稳定分流及惩罚精确恢复；困难推理改为定义和因果逐步展开，没有只保留结论或术语。交叉意见和总编修订均留真实记录。",
       "locations": [
         {
           "document": "binary-search",
@@ -212,7 +210,7 @@
     {
       "commitment": "complete-type-chain",
       "outcome": "pass",
-      "reason": "逐型回查问题本质和适用条件、特性造成的变型、注释手写及邻近解析、真实标准设施、必要知识和研究期练习。题意/变型移到代码前，helper先定义，乘法表不再复制同算法凑双版本；借用与vector失效分成单一知识权威，后续语义索引复用。",
+      "reason": "37节的目标与条件、特性/变型、手写与真实标准设施代码、邻近解析、必要C++及研究期原题均保留并逐节回读。原CPP/整合与清洁导出逐字节未变；13知识为同一身份的自然段改写，首次就近解释和后续浮窗仍有效。",
       "locations": [
         {
           "document": "binary-search",
@@ -367,7 +365,7 @@
     {
       "commitment": "reader-flow",
       "outcome": "pass",
-      "reason": "按唯一前置和37正式节连续回读并检查新接缝；没有四篇或独立地图主结构。当前真实浏览器主目录38项，全章进度、实现处所属题型、知识搜索/浮窗及返回均核验；修复深读位目录搜索继承旧滚动遮住首批结果。未冒称实机或学习效果验收。",
+      "reason": "新前置先给重复数组与容量实例，再建立方法；正式节先任务再推理，代码前明确输入与状态，代码后解释对应与代价，变型有过渡。总编按最终顺序通读全部叙述；语义标题、PRE/中文号、单章目录及进度一致，真实手机尺寸正文/目录和首节间距已目视/测量核验。可读性以实稿判断，不用字数/段数/绿色测试证明用户已懂。",
       "locations": [
         {
           "document": "binary-search",
@@ -398,7 +396,7 @@
   ],
   "readerBoundary": {
     "outcome": "pass",
-    "findings": "实际核正文、13份知识源、目录/搜索、代码注释、预览和Markdown/CPP交付。修复匹配节本机/OJ状态与多节作者辩护；清洁源码只去178条编纂界标，UI/下载一致。内部生产链接/隐藏注释/可见Q由最终投影门禁重核，DOM路由保留。真实技术条件、复杂度、库职责和功能文本未按词表泛删；扫描与本字段均不自证全部语义无污染。",
+    "findings": "本轮实读前置/全部正式叙述、13知识和代码落点，检查真实目录/搜索/正文/源码交付。新标题与自然段只承担读者教学和导航，内部生产/验证自述继续留内部；89展示与清洁源码保持，DOM机器身份不外显。手写/库职责、数值与生命周期事实保留，不将其误删为污染。",
     "locations": [
       {
         "document": "binary-search",
@@ -406,11 +404,15 @@
       },
       {
         "document": "binary-search",
-        "anchor": "predicate-access"
+        "anchor": "ordered-boundaries"
       },
       {
         "document": "binary-search",
-        "anchor": "paired-break"
+        "anchor": "ordered-dp-frontier"
+      },
+      {
+        "document": "binary-search",
+        "anchor": "continuous-root"
       },
       {
         "document": "binary-search",
@@ -418,15 +420,11 @@
       },
       {
         "document": "binary-search",
-        "anchor": "ratio-selection"
+        "anchor": "fenwick-rank"
       },
       {
         "document": "binary-search",
-        "anchor": "summary-descent"
-      },
-      {
-        "document": "binary-search",
-        "anchor": "time-parallel-search"
+        "anchor": "dynamic-range-kth"
       },
       {
         "document": "binary-search",

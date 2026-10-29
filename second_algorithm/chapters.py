@@ -21,6 +21,22 @@ DIMENSIONS = {
 IDENTITY = re.compile(r"[a-z][a-z0-9]*(?:-[a-z0-9]+)*\Z")
 ANCHOR = re.compile(r' {0,3}<a\s+id=["\']([^"\']+)["\']\s*>[ \t]*</a>[ \t]*')
 FACETS = ("problem", "fit", "variation", "manual", "manualExplanation", "standard", "standardExplanation", "engineering")
+NUMBERED_TITLE = re.compile(r"^(?:PRE[、，.：:]|[零〇一二三四五六七八九十百千万0-9]+[、，.：:]|前置节[：:])")
+
+
+def _section_numeral(value: int) -> str:
+    """Check the generated reading ordinal; this never writes author sources."""
+    if not isinstance(value, int) or not 1 <= value <= 9999:
+        raise ValueError("invalid formal section number")
+    digits, units, result, zero = "零一二三四五六七八九", ("", "十", "百", "千"), "", False
+    for power in range(3, -1, -1):
+        digit = value // (10 ** power) % 10
+        if digit:
+            result += ("零" if zero else "") + digits[digit] + units[power]
+            zero = False
+        elif result:
+            zero = True
+    return result[1:] if result.startswith("一十") else result
 
 
 def _prose_lines(draft: str):
@@ -149,6 +165,12 @@ def _paradigm_contract(contract, cid, model, documents, permitted, material_ids,
             major(reading.get(name, []), cid + ".reading." + name)
     elif prelude_state == "addressed" and len(prelude_positions) != 1:
         errors.append(cid + ": schemaVersion 3 requires one theory prelude H2")
+    if version == 3 and complete:
+        for point in prelude_locations:
+            heading = outlines.get(point.get("document"), {}).get("locations", {}).get(point.get("anchor"))
+            if heading and (not heading["title"].startswith("PRE、") or not heading["title"][4:].strip()
+                            or NUMBERED_TITLE.match(heading["title"][4:])):
+                errors.append(cid + ": theory prelude must use the generated PRE、 title")
     if complete:
         prelude_keys = {(point.get("document"), point.get("anchor")) for point in prelude_locations}
         if any((point.get("document"), point.get("anchor")) not in prelude_keys
@@ -166,7 +188,7 @@ def _paradigm_contract(contract, cid, model, documents, permitted, material_ids,
                 if isinstance(implementation.get("id"), str):
                     implementations[implementation["id"]] = (task["id"], implementation)
     preceding = set()
-    for unit in units:
+    for ordinal, unit in enumerate(units, 1):
         uid, label = unit.get("id"), cid + ".section." + str(unit.get("id"))
         locations = _rows(unit.get("locations", []), label + ".locations", errors)
         positions = major(locations, label)
@@ -176,6 +198,14 @@ def _paradigm_contract(contract, cid, model, documents, permitted, material_ids,
                 errors.append(label + ": nonempty researchTypeIds required for faithful research coverage")
             if complete and len(positions) != 1:
                 errors.append(label + ": a formal problem-type section must identify one H2")
+            if complete:
+                for point in locations:
+                    heading = outlines.get(point.get("document"), {}).get("locations", {}).get(point.get("anchor"))
+                    semantic_title = unit.get("title")
+                    if isinstance(semantic_title, str) and NUMBERED_TITLE.match(semantic_title):
+                        errors.append(label + ": contract title must remain semantic, without a handwritten ordinal")
+                    if heading and isinstance(semantic_title, str) and heading["title"] != _section_numeral(ordinal) + "、" + semantic_title:
+                        errors.append(label + ": formal H2 must use its consecutive generated Chinese ordinal and semantic title")
         if positions:
             unit_positions.append(min(positions))
             if unit_headings & set(positions):

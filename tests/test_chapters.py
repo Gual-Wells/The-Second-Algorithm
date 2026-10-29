@@ -455,14 +455,33 @@ class ChapterContractTest(ChapterHelpers, LearningFixture):
 
 
 class ParadigmContractTest(ChapterHelpers, LearningFixture):
+    def test_current_generated_prelude_and_formal_titles_are_numbered_without_metadata_drift(self):
+        self.assertTrue(validate_learning(self.root)["ok"], validate_learning(self.root))
+        original = (self.root / self.draft).read_text(encoding="utf-8")
+        for old, new, phrase in (
+            ("PRE、Thought and scope", "Thought and scope", "generated PRE、 title"),
+            ("一、Ordered boundaries", "二、Ordered boundaries", "consecutive generated Chinese ordinal"),
+            ("一、Ordered boundaries", "一、另一个语义标题", "consecutive generated Chinese ordinal"),
+        ):
+            with self.subTest(new=new):
+                self.put(self.draft, original.replace(old, new))
+                self.assertIn(phrase, " ".join(validate_learning(self.root)["errors"]))
+        self.put(self.draft, original)
+
+    def test_checked_chinese_ordinals_match_the_composer_reading_convention(self):
+        from second_algorithm.chapters import _section_numeral
+        for value, expected in ((1,"一"),(10,"十"),(11,"十一"),(20,"二十"),(37,"三十七"),
+                                (101,"一百零一"),(110,"一百一十"),(1001,"一千零一")):
+            self.assertEqual(_section_numeral(value), expected)
+
     """Synthetic fixtures exercise relationships, never certify a real chapter."""
 
     def setUp(self):
         super().setUp()
         # A complete but intentionally tiny test corpus is not a production
         # recommendation for how broadly a real binary-search chapter should be.
-        self.put(self.draft, '# Lesson\n\n<a id="prelude"></a>\n\n## Thought and scope\n\nFixture theory.\n'
-                 '\n<a id="boundary-type"></a>\n\n## Ordered boundaries\n'
+        self.put(self.draft, '# Lesson\n\n<a id="prelude"></a>\n\n## PRE、Thought and scope\n\nFixture theory.\n'
+                 '\n<a id="boundary-type"></a>\n\n## 一、Ordered boundaries\n'
                  '\n<a id="q000001"></a>\n\n{{knowledge:Q000001}}\n'
                  '\n{{manual}}\n\n{{standard}}\n\n[Boundary](https://example.com/task)\n')
         self.model["schemaVersion"] = 2
@@ -480,7 +499,7 @@ class ParadigmContractTest(ChapterHelpers, LearningFixture):
                               "sectionIds": ["boundary-unit"], "crossParadigms": []}]},
             prelude={"status": "addressed", "locations": [{"document": "lesson", "anchor": "prelude"}]})
         self.contract["reading"].update(entry=copy.deepcopy(self.contract["prelude"]["locations"]))
-        self.contract["reading"]["units"] = [{"id": "boundary-unit", "title": "Ordered boundary problems", "researchTypeIds": ["boundary-unit"], "taskIds": ["boundary"],
+        self.contract["reading"]["units"] = [{"id": "boundary-unit", "title": "Ordered boundaries", "researchTypeIds": ["boundary-unit"], "taskIds": ["boundary"],
             "locations": copy.deepcopy(loc), "facets": {key: copy.deepcopy(loc) for key in
                 ("problem", "fit", "variation", "manual", "manualExplanation", "standard", "standardExplanation", "engineering")},
             "manualImplementationIds": ["manual-boundary"], "standardImplementationIds": ["standard-boundary"],
@@ -609,7 +628,7 @@ class ParadigmContractTest(ChapterHelpers, LearningFixture):
         self.contract["reading"]["units"].append(second)
         self.contract["paradigm"]["branches"][0]["sectionIds"].append(second["id"])
         self.put(self.draft, (self.root / self.draft).read_text(encoding="utf-8") +
-                 '\n<a id="harder-type"></a>\n\n## A harder condition\n\n[Boundary](https://example.com/task)\n')
+                 '\n<a id="harder-type"></a>\n\n## 二、A harder condition\n\n[Boundary](https://example.com/task)\n')
         self.save_contract()
         self.assertTrue(validate_learning(self.root)["ok"], validate_learning(self.root))
         binding = _research_binding(self.root, "unit", self.contract)

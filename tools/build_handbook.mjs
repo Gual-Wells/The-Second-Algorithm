@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { marked } from 'marked';
 import { readKnowledge, knowledgeTokens, expandKnowledgeReferences, expandKnowledgeIntroductions } from './knowledge.mjs';
-import { composeDocument } from './compose-chapter.mjs';
+import { composeDocument, semanticSectionTitle, assertSectionNumbering } from './compose-chapter.mjs';
 import { assertReaderMarkdown, assertReaderHtml, assertReaderText, assertMainHeadings, assertRenderedMainHeadings, readerSourceView, assertReaderSource } from './reader-boundary.mjs';
 
 const REPOSITORY=path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -117,7 +117,7 @@ const decodeText=s=>s.replace(/&(amp|lt|gt|quot|#39);/g,(_,key)=>({amp:'&',lt:'<
 renderer.heading=function({tokens,depth}){
   const content=this.parser.parseInline(tokens);
   const text=decodeText(content.replace(/<[^>]+>/g,''));
-  const base=text.toLowerCase().replace(/[^\p{L}\p{N}]+/gu,'-').replace(/^-|-$/g,'');
+  const base=(depth===2?semanticSectionTitle(text):text).toLowerCase().replace(/[^\p{L}\p{N}]+/gu,'-').replace(/^-|-$/g,'');
   let id=base,i=2;while(ids.has(id))id=base+'-'+i++;
   ids.add(id);headings.push({depth,id,text});
   return `<h${depth} id="${id}">${content}</h${depth}>\n`;
@@ -129,6 +129,7 @@ renderer.link=function({href,title,tokens}){
   return '<a href="'+esc(href)+'"'+(/^https?:/.test(href)?' target="_blank" rel="noopener noreferrer"':'')+(title?' title="'+esc(title)+'"':'')+'>'+this.parser.parseInline(tokens)+'</a>';
 };
 let body=marked.parse(md,{renderer,gfm:true});
+if(descriptor?.composition)assertSectionNumbering(headings.filter(h=>h.depth===2).map(h=>h.text), 'generated chapter');
 assertReaderHtml(body, 'generated chapter HTML', {allowKnowledgeIds:learning.schemaVersion===1});
 assertRenderedMainHeadings(body, headings, 'generated chapter HTML');
 body=body.replace(/<table>/g,'<div class="table-wrap"><table>').replace(/<\/table>/g,'</table></div>');
@@ -149,7 +150,7 @@ a{color:var(--blue);text-underline-offset:3px;text-decoration-thickness:1px}a:ho
 .toc a{display:block;line-height:1.6;text-decoration:none;border-left:2px solid transparent;border-radius:0 3px 3px 0;padding:5px 8px 5px 11px;color:#445766;font-size:13px}
 .toc a.group{font-weight:600;color:#203f55;font-size:14px;margin-top:15px}.toc a.group:first-child{margin-top:0}.toc a.topic{padding-left:20px}.toc a:hover{background:#e5edf3}.toc a.active{color:#104d77;background:#e2ecf3;border-left-color:#2b688e;font-weight:600}
 main{min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:36px 42px 42px;box-shadow:0 2px 7px #1f405006}
-h1,h2,h3,h4{color:var(--heading);line-height:1.45;font-weight:600;scroll-margin-top:85px}h1{font-size:32px;margin:0 0 8px}h2{font-size:25px;margin:48px 0 21px;padding-top:30px;border-top:1px solid var(--line)}h2:first-of-type{margin-top:30px;padding-top:0;border-top:0}h3{font-size:20px;margin:34px 0 13px}h4{font-size:17px;margin:25px 0 12px;color:#253f52}
+h1,h2,h3,h4{color:var(--heading);line-height:1.45;font-weight:600;scroll-margin-top:85px}h1{font-size:32px;margin:0 0 8px}h2{font-size:25px;margin:48px 0 21px;text-wrap:balance;overflow-wrap:break-word;padding-top:30px;border-top:1px solid var(--line)}h2:first-of-type{margin-top:30px;padding-top:0;border-top:0}h3{font-size:20px;margin:34px 0 13px}h4{font-size:17px;margin:25px 0 12px;color:#253f52}
 p{margin:13px 0 17px}.subtitle{font-size:14px;color:#526878;margin:0 0 24px}strong{font-weight:600}li{margin:5px 0}main p,main li,main h2,main h3,main h4{overflow-wrap:anywhere}
 code{font-family:Consolas,'Cascadia Code','Noto Sans SC',monospace;font-size:.89em;color:#213f55;background:#eef3f6;padding:1px 4px;border-radius:3px}
 pre{background:#f6f8fa;border:1px solid #d9e2e8;border-radius:3px;padding:16px 18px;margin:17px 0 21px;overflow-x:auto;tab-size:4;font-family:Consolas,'Cascadia Code','Noto Sans SC',monospace;font-size:15px;line-height:1.6;color:#172d3c}

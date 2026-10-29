@@ -140,7 +140,9 @@ a { color: #174f84; text-underline-offset: 3px; }
 .paper h2 {
   margin: 34px 0 16px; padding: 8px 11px; border: 1px solid #9bb4ce;
   background: linear-gradient(#f8fbff, #e0ecf7); font-size: 1.15em; box-shadow: 0 1px #fff inset;
+  text-wrap: balance; overflow-wrap: break-word;
 }
+.paper > h2:first-of-type { margin-top: 0; }
 .paper h3 { margin: 28px 0 11px; font-size: 1.08em; }
 .paper h4 { margin: 22px 0 10px; font-size: 1em; }
 .paper p { margin: 10px 0 13px; }

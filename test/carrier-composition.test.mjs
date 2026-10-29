@@ -5,7 +5,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { composeDocument, chapterFragments } from '../tools/compose-chapter.mjs';
+import { composeDocument, chapterFragments, chineseSectionNumber, assertSectionNumbering } from '../tools/compose-chapter.mjs';
 import { readAuthority, validatePublications } from '../scripts/build-carrier.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -68,10 +68,11 @@ test('the current binary chapter composes its 38 real main sections into one rea
   for (const relative of composition.sourceFiles) authorBlocks.set(relative,
     chapterFragments(await fs.readFile(path.join(ROOT, relative), 'utf8'), relative));
   let cursor = result.draft.indexOf('\n\n') + 2;
-  for (const selection of selections) {
+  for (const [index, selection] of selections.entries()) {
     const block = authorBlocks.get(selection.source).get(selection.anchor);
-    assert.equal(result.draft.slice(cursor, cursor + block.length), block, selection.anchor);
-    cursor += block.length + (block.endsWith('\n') ? 0 : 1) + 1;
+    const numbered = block.replace(/^( {0,3})##[ \t]+/m, '$1## ' + (index ? chineseSectionNumber(index) : 'PRE') + '、');
+    assert.equal(result.draft.slice(cursor, cursor + numbered.length), numbered, selection.anchor);
+    cursor += numbered.length + (numbered.endsWith('\n') ? 0 : 1) + 1;
   }
   for (const relative of composition.codeSources) {
     const original = await fs.readFile(path.join(ROOT, relative));
@@ -81,13 +82,28 @@ test('the current binary chapter composes its 38 real main sections into one rea
   assert.equal(Object.keys(result.dependencies).length, 10);
 });
 
+test('section numbering is generated from chapter order and cannot be handwritten into author fragments', async () => {
+  for(const [value,label] of [[1,'一'],[9,'九'],[10,'十'],[11,'十一'],[20,'二十'],[37,'三十七'],
+    [100,'一百'],[101,'一百零一'],[110,'一百一十'],[1001,'一千零一']])assert.equal(chineseSectionNumber(value),label);
+  assert.doesNotThrow(()=>assertSectionNumbering(['PRE、思想','一、类型','二、变型']));
+  for(const headings of [['PRE、思想','二、类型'],['思想','一、类型'],['PRE、思想','一、一、类型']])
+    assert.throws(()=>assertSectionNumbering(headings),/numbering/);
+  const f=await fixture();try{
+    for(const prefix of ['一、','PRE、','前置节：']){
+      await fs.writeFile(path.join(f.root,'content/unit/two.source.md'),f.second.replace('## 第二题型','## '+prefix+'第二题型'));
+      await assert.rejects(composeDocument(f.root,f.descriptor),/semantic title without/);
+    }
+  }finally{await dispose(f.root);}
+});
+
 test('composition reorders original H2 blocks across files and preserves original C++ bytes', async () => {
   const f = await fixture();
   try {
     const result = await composeDocument(f.root, f.descriptor);
     const firstBlocks = chapterFragments(f.first), secondBlocks = chapterFragments(f.second);
-    assert.equal(result.draft, '# 二分\n\n' + firstBlocks.get('prelude') + '\n'
-      + secondBlocks.get('second') + '\n' + firstBlocks.get('first'));
+    assert.equal(result.draft, '# 二分\n\n' + firstBlocks.get('prelude').replace('## 前置','## PRE、前置') + '\n'
+      + secondBlocks.get('second').replace('## 第二题型','## 一、第二题型') + '\n'
+      + firstBlocks.get('first').replace('## 第一题型','## 二、第一题型'));
     assert.equal(result.source, f.cppOne + '\n' + f.cppTwo);
     assert.equal(result.dependencies['content/unit/one.cpp'], hash(f.cppOne));
     assert.deepEqual(Object.keys(result.dependencies), ['content/unit/chapter.authoring.json', 'content/unit/one.cpp',

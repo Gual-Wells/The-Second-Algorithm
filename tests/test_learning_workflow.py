@@ -49,7 +49,7 @@ int lower_standard(const std::vector<int>& a, int x) {
 }
 // END standard
 ''')
-        self.put(self.draft, '# Lesson\n\n<a id="prelude"></a>\n## 二分思想\n\n维护分区并折半排除候选。\n\n<a id="boundary-type"></a>\n## 定位有序范围边界\n\n<a id="q000001"></a>\n\n{{knowledge:Q000001}}\n\n{{manual}}\n\n{{standard}}\n\n[Boundary](https://example.com/task)\n')
+        self.put(self.draft, '# Lesson\n\n<a id="prelude"></a>\n## PRE、二分思想\n\n维护分区并折半排除候选。\n\n<a id="boundary-type"></a>\n## 一、定位有序范围边界\n\n<a id="q000001"></a>\n\n{{knowledge:Q000001}}\n\n{{manual}}\n\n{{standard}}\n\n[Boundary](https://example.com/task)\n')
         self.knowledge_source = "content/knowledge/boundary.md"
         self.put(self.knowledge_source, "# 边界在哪里\n\n半开范围表示未排除的候选；终点可比较，不能解引用。\n")
         self.put("tests/cpp/check.cpp", '''#include "../../content/unit/Lesson.cpp"
@@ -89,7 +89,7 @@ int main() {
                     "materialIds": ["outside"], "sectionIds": ["boundary-unit"], "crossParadigms": []}]},
             "prelude": {"status": "addressed", "locations": [{"document": "lesson", "anchor": "prelude"}]},
             "reading": {"status": "addressed", "entry": [{"document": "lesson", "anchor": "prelude"}],
-                "units": [{"id": "boundary-unit", "title": "Sorted boundary problems", "researchTypeIds": ["boundary-unit"], "taskIds": ["boundary"],
+                "units": [{"id": "boundary-unit", "title": "定位有序范围边界", "researchTypeIds": ["boundary-unit"], "taskIds": ["boundary"],
                     "locations": [{"document": "lesson", "anchor": "boundary-type"}],
                     "facets": {key: [{"document": "lesson", "anchor": "boundary-type"}] for key in
                         ("problem", "fit", "variation", "manual", "manualExplanation", "standard", "standardExplanation", "engineering")},
@@ -319,7 +319,7 @@ class IndependentKnowledgeTest(LearningFixture):
         question.pop("anchor", None)
         question["source"] = self.knowledge_source
         self.put(self.knowledge_source, '# 边界在哪里\n\n<a id="range"></a>\n\n范围含起点而不含终点；终点可比较，不能解引用。\n')
-        self.put(self.draft, '# Lesson\n\n<a id="prelude"></a>\n## 二分思想\n\n维护分区。\n\n<a id="boundary-type"></a>\n## 定位有序范围边界\n\n{{knowledge:Q000001}}\n\n[[Q000001#range|半开范围]]\n\n{{manual}}\n\n{{standard}}\n\n[Boundary](https://example.com/task)\n')
+        self.put(self.draft, '# Lesson\n\n<a id="prelude"></a>\n## PRE、二分思想\n\n维护分区。\n\n<a id="boundary-type"></a>\n## 一、定位有序范围边界\n\n{{knowledge:Q000001}}\n\n[[Q000001#range|半开范围]]\n\n{{manual}}\n\n{{standard}}\n\n[Boundary](https://example.com/task)\n')
         for promise in self.contract["commitments"]:
             promise["locations"] = [{"document": "lesson", "anchor": "boundary-type"}]
         write_json(self.root / "content/unit/chapter.contract.json", self.contract)

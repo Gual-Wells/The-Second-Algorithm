@@ -114,6 +114,8 @@ reading.units保留id/title/taskIds/locations，并声明：
 
 正文位置为`{document,anchor}`，只认真实显式锚点，排除注释/代码示例假锚点。schema3每章只有一个逻辑文档，一个前置H2，每个正式节恰有一个归属唯一的H2。前置先于正式节，entry可省略从前置派生，显式提供时也须指向前置；facets在自己题型范围内。章内主结构只有前置/正式节，selectionMap非空即拒绝，不能让四篇、作者分工、证明/支撑或章末地图抢占主目录。
 
+作者H2与`reading.units[].title`保留纯语义标题。`compose-chapter`根据prelude/sections顺序，唯一生成`PRE、`及连续中文序号；手写序号和“前置节：”制作标签拒绝进入作者H2。当前schema3的已完成正文按实际前置/正式位置检查该前缀，正式节去前缀后须与合同语义title一致。构建及载体另核真实渲染H2序列；标题ID从去序号语义派生，原显式anchor保留，UI与下载不二次编号。编号、结构与身份通过不构成语义可读性认证。
+
 结构允许诚实施工open，包括研究尚未交接；`course quality`另查研究交接、领域/前置/分支/阅读/承诺是否已addressed、审阅是否当前有效。合同paradigm.name须与交接scope.paradigm一致，采用分支与交接纳入分支对应；各分支材料应承接研究材料，合同materials.evidence须保留资料原note。每节分支关系等于所映射研究对象branchIds的联合，所需材料逐项保留，练习须来自该联合已有exerciseUrls，同时满足本节任务sourceUrls及可见链接约束。不能借多对多映射缩减重要条件/变型；实质研究新发现须返回研究，而非另搜凑数。旧schema、关键open/gap、缺/过期/不匹配的交接、缺/过期/needs-work审阅阻止内容发布。数量、位置与关系正确，不证明题型有代表性、练习真正匹配或完整链讲解充分。
 
 ## 统一出版与学习关系

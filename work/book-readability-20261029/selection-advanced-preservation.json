@@ -1,0 +1,18 @@
+{
+  "selection": {
+    "sha256": "15a129b43fc2f4448d96cbe6d639ea5810434c5e9157dfd512add84f305326b6",
+    "h2": 9,
+    "anchors": 36,
+    "codeAndIntroMarkers": 24,
+    "charactersBefore": 10117,
+    "charactersAfter": 12722
+  },
+  "advanced": {
+    "sha256": "6d3c2f2ef96f99b33aed6f4863a5b47a39c946656b1afe0f788cfbc7b8dfdd82",
+    "h2": 7,
+    "anchors": 28,
+    "codeAndIntroMarkers": 18,
+    "charactersBefore": 12847,
+    "charactersAfter": 15069
+  }
+}

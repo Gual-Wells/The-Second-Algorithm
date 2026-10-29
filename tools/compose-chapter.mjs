@@ -3,6 +3,35 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 
 const ID = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/;
+const AUTHOR_NUMBER = /^(?:PRE[、，.：:]|[零〇一二三四五六七八九十百千万0-9]+[、，.：:]|前置节[：:])/u;
+
+export function chineseSectionNumber(value) {
+  if (!Number.isSafeInteger(value) || value < 1 || value > 9999)
+    throw new Error('Invalid formal section number');
+  const digits = '零一二三四五六七八九', units = ['', '十', '百', '千'];
+  let result = '', zero = false;
+  for (let power = 3; power >= 0; power--) {
+    const digit = Math.floor(value / 10 ** power) % 10;
+    if (digit) {
+      result += (zero ? '零' : '') + digits[digit] + units[power]; zero = false;
+    } else if (result) zero = true;
+  }
+  return result.replace(/^一十/, '十');
+}
+
+export function semanticSectionTitle(title) {
+  return String(title).replace(/^(?:PRE|[零〇一二三四五六七八九十百千万]+)、/u, '');
+}
+
+export function assertSectionNumbering(headings, label = 'chapter') {
+  for (const [index, heading] of headings.entries()) {
+    const prefix = (index ? chineseSectionNumber(index) : 'PRE') + '、';
+    if (typeof heading !== 'string' || !heading.startsWith(prefix) || !heading.slice(prefix.length).trim()
+      || AUTHOR_NUMBER.test(heading.slice(prefix.length)))
+      throw new Error(label + ': main-section numbering must follow PRE、 and consecutive Chinese ordinals');
+  }
+  if (headings.length < 2) throw new Error(label + ': numbered chapter requires a prelude and formal sections');
+}
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const inside = (root, target) => {
   const relative = path.relative(root, target);
@@ -133,10 +162,13 @@ export async function composeDocument(root, descriptor) {
     const blocks = chapterFragments(await read(relative, '.source.md'), relative);
     for (const [anchor, block] of blocks) fragments.set(relative + '#' + anchor, block);
   }
-  const ordered = selections.map(entry => {
+  const ordered = selections.map((entry, index) => {
     const identity = entry.source + '#' + entry.anchor;
     if (!fragments.has(identity)) throw new Error('Unknown composition fragment: ' + identity);
-    return fragments.get(identity);
+    return fragments.get(identity).replace(/^( {0,3})##[ \t]+([^\r\n]+)(\r?\n|\r|$)/m, (_, indent, title, ending) => {
+      if (AUTHOR_NUMBER.test(title.trim())) throw new Error('Author H2 needs a semantic title without a production label or handwritten number: ' + identity);
+      return indent + '## ' + (index ? chineseSectionNumber(index) : 'PRE') + '、' + title + ending;
+    });
   });
   const omitted = [...fragments.keys()].filter(identity => !selected.has(identity));
   if (omitted.length) throw new Error('Unselected H2 composition fragments: ' + omitted.join(', '));
