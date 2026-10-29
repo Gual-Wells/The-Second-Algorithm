@@ -1,0 +1,13 @@
+{
+  "id": 40890597054,
+  "status": "completed",
+  "conclusion": "failure",
+  "head_sha": "d376d48ee1a72591d914084b12a255d59310312d",
+  "html_url": "https://github.com/Gual-Wells/The-Second-Algorithm/actions/runs/40890597054",
+  "updated_at": "2026-10-29T14:25:34Z",
+  "jobId": 123506016078,
+  "reason": "Calendar test hardcoded a local Windows Chromium path when ALGORITHM_QA_CHROME was unset on Linux. Runtime browser21 and actual HTTP/SW were already passing.",
+  "browserCasesPassed": 21,
+  "realHttpServiceWorkerPassed": true,
+  "productRuntimeChangeRequired": false
+}

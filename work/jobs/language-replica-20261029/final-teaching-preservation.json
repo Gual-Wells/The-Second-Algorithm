@@ -1,6 +1,8 @@
 {
-  "deployment": "work/jobs/language-replica-20261029/deployments/1793283885950.json",
-  "build": "6e096ba2800c5ecab5f85217772efbc621058ec79beee3f57e5a7e54fadbc4f1",
+  "checkedAt": "2026-10-29T14:34:43.651977+00:00",
+  "deployment": "work/jobs/language-replica-20261029/deployments/1793284360689.json",
+  "sourceCommit": "b6ca1ac6c591eec89dedf4d017d6ad7bef9e3282",
+  "build": "54600fba1cb10904dc10b77a68d5f75b025843f1c177c85e8d62d61df613f195",
   "teachingFilesByteIdentical": 16,
   "catalogOnlyChangedKeys": [
     "version"
@@ -10,17 +12,9 @@
   "intentionalAuthorityChange": [
     "content/binary/chapter-review.json"
   ],
-  "originalIconAssetsUnchanged": [
-    "web/icons/apple-touch-icon-series1.png",
-    "web/icons/apple-touch-icon.png",
-    "web/icons/build.json",
-    "web/icons/icon-192.png",
-    "web/icons/icon-512.png",
-    "web/icons/icon.svg"
-  ],
   "newLogo": "web/icons/header-logo.svg",
   "files": {
-    "catalog.json": "d67eb6eba07cabb085c0d4e33d00f920c88eefaa04303cbe6eb75a97202d2716",
+    "catalog.json": "512355831b1b44fab2af38d1e4ad28e0207e4dafecbbc0d8e6b45750204347da",
     "knowledge/Q100001/dc22c2384ed01152.json": "ffe135a03336ae336ede3f81ee01ee6c84054630bd99d8a6435f55f57af65708",
     "knowledge/Q100002/d3c060d83a8c4c63.json": "adb997ac2c9f6875e121a63951c4bb549390e92dba980788f105536acb1ebabd",
     "knowledge/Q100003/b72349b11959719a.json": "4d332237d0131d4b946382368df8f23373b217e709390c633d9afc2694856032",
@@ -37,5 +31,6 @@
     "chapter-01/binary-search/73fc1b514ce44d89.cpp": "979b63e50271fcb7e6a80ed55ec05ce4663754dcbe3858e300155ea7707ecb42",
     "chapter-01/binary-search/73fc1b514ce44d89.md": "201cc3138b76ab2833d392448285d1ee8809aa0de8768bb4611c39ea8e2d25e3",
     "chapter-01/binary-search/ad18abc79391a8da.json": "f9c6efbeb2ce5b8d4dc39021e9759d81c9b5c41dbb56d8397847013bf1b1079c"
-  }
+  },
+  "ci": "https://github.com/Gual-Wells/The-Second-Algorithm/actions/runs/40892014781"
 }

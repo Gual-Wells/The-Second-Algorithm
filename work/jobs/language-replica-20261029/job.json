@@ -47,21 +47,43 @@
       "inputHash": "ca1735b5f2340091b3effae3a7571be995a3a41fe495cb643fb918d9015135ec",
       "recordedAt": "2026-10-29T14:22:11.730053+00:00",
       "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "93242a917b924a549f519f438c053ead",
+      "kind": "research",
+      "path": "work/jobs/language-replica-20261029/ci-portability.md",
+      "summary": "Linux已过21浏览器及实际SW；只移除calendar/startup个人Windows路径，保测试判据与产品不变，显式Chrome31/50复验，默认分支待CI",
+      "outcome": "accepted",
+      "sha256": "73972f31113b7c051e05c22cf872f3195186649a13723e5d4c21971b39d1b129",
+      "inputHash": "21d589e7a279aef128fa38ad3d13336366d83c20fe53bd5e3337938e32380991",
+      "recordedAt": "2026-10-29T14:30:00.431988+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "756ac3ccd96746a1864b28b2a0138b17",
+      "kind": "review",
+      "path": "work/jobs/language-replica-20261029/ci-portability-review.md",
+      "summary": "独立确认两处launch配置只消除个人Windows路径；31/50本地行为及语法通过；未修改产品判据，Linux默认分支待新CI实证",
+      "outcome": "accepted",
+      "sha256": "3edc8a5e6e0544b60c668c588952b95656413ecee56d8cd1c8839d939633d846",
+      "inputHash": "21d589e7a279aef128fa38ad3d13336366d83c20fe53bd5e3337938e32380991",
+      "recordedAt": "2026-10-29T14:30:54.562996+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
     }
   ],
   "lastGoodVerification": {
-    "path": "work/jobs/language-replica-20261029/verifications/1c50d0fe47bc4c1b8e5a43db3d4afcc9.json",
-    "sha256": "124806d6f5a8fa14ce541af80b1fdf486a4bcc8ee0c6aa1228123d15b99ac0b8",
-    "inputHash": "ca1735b5f2340091b3effae3a7571be995a3a41fe495cb643fb918d9015135ec"
+    "path": "work/jobs/language-replica-20261029/verifications/367b924f908a4709a730baafeb594298.json",
+    "sha256": "48a876fd06a6cb5247cb7d88f406bbccf67b84d80afbcde2d220c3330139f2d2",
+    "inputHash": "21d589e7a279aef128fa38ad3d13336366d83c20fe53bd5e3337938e32380991"
   },
   "lastPreparedRelease": {
-    "path": "work/jobs/language-replica-20261029/releases/6ff255df0c3b4a52b857b9f79f9c1337.json",
-    "sha256": "723a40372dd61205b4a0c18bd78000d47c8e5cff0d782cae6d326841de48c591",
-    "inputHash": "ca1735b5f2340091b3effae3a7571be995a3a41fe495cb643fb918d9015135ec"
+    "path": "work/jobs/language-replica-20261029/releases/4e4ee0dbbe7a4ad5a433c3dbc2795a27.json",
+    "sha256": "ea10cd91f4c29aa9f7010c1e2a35f6d9734b20745be926429e3e93e345df3f17",
+    "inputHash": "21d589e7a279aef128fa38ad3d13336366d83c20fe53bd5e3337938e32380991"
   },
   "lastVerificationAttempt": {
-    "path": "work/jobs/language-replica-20261029/verifications/1c50d0fe47bc4c1b8e5a43db3d4afcc9.json",
-    "sha256": "124806d6f5a8fa14ce541af80b1fdf486a4bcc8ee0c6aa1228123d15b99ac0b8",
-    "inputHash": "ca1735b5f2340091b3effae3a7571be995a3a41fe495cb643fb918d9015135ec"
+    "path": "work/jobs/language-replica-20261029/verifications/367b924f908a4709a730baafeb594298.json",
+    "sha256": "48a876fd06a6cb5247cb7d88f406bbccf67b84d80afbcde2d220c3330139f2d2",
+    "inputHash": "21d589e7a279aef128fa38ad3d13336366d83c20fe53bd5e3337938e32380991"
   }
 }

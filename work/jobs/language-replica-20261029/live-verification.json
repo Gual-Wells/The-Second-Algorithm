@@ -1,23 +1,23 @@
 {
-  "checkedAt": "2026-10-29T14:25:10.660Z",
-  "deployment": "work/jobs/language-replica-20261029/deployments/1793283885950.json",
-  "sourceCommit": "d376d48ee1a72591d914084b12a255d59310312d",
-  "artifact": ".local/releases/d61d12c1-bf98-47b5-a90b-d4f9e96594e7",
+  "checkedAt": "2026-10-29T14:33:06.884Z",
+  "deployment": "work/jobs/language-replica-20261029/deployments/1793284360689.json",
+  "sourceCommit": "b6ca1ac6c591eec89dedf4d017d6ad7bef9e3282",
+  "artifact": ".local/releases/6aa8c458-4914-4672-8be8-1947d25c872f",
   "origin": "https://second-algorithm.pages.dev",
-  "buildID": "6e096ba2800c5ecab5f85217772efbc621058ec79beee3f57e5a7e54fadbc4f1",
+  "buildID": "54600fba1cb10904dc10b77a68d5f75b025843f1c177c85e8d62d61df613f195",
   "checks": [
     {
       "path": "/",
       "status": 200,
-      "liveSha256": "7f932823edf8c4b99286aaba37b6e3b0492567b9c7c1d4f25b24ad99cbda18ce",
-      "artifactSha256": "7f932823edf8c4b99286aaba37b6e3b0492567b9c7c1d4f25b24ad99cbda18ce",
+      "liveSha256": "34aa389f4b21ef22fdcda911474e8327dd47c15dea19b91538d957933222d82c",
+      "artifactSha256": "34aa389f4b21ef22fdcda911474e8327dd47c15dea19b91538d957933222d82c",
       "matches": true
     },
     {
       "path": "/app.js",
       "status": 200,
-      "liveSha256": "f29bade6d66c1f823f0c11caf0a15ef50ddbdf824961e9535873e3e200b343d4",
-      "artifactSha256": "f29bade6d66c1f823f0c11caf0a15ef50ddbdf824961e9535873e3e200b343d4",
+      "liveSha256": "d0da72184898c8da7500a3521fc0ecba5ceb073356569c70943e9d2c20599abc",
+      "artifactSha256": "d0da72184898c8da7500a3521fc0ecba5ceb073356569c70943e9d2c20599abc",
       "matches": true
     },
     {
@@ -30,8 +30,8 @@
     {
       "path": "/sw.js",
       "status": 200,
-      "liveSha256": "66be64ea4be23afc67590a57b06da087762b3f487d2293408ab41989a2eb8e15",
-      "artifactSha256": "66be64ea4be23afc67590a57b06da087762b3f487d2293408ab41989a2eb8e15",
+      "liveSha256": "e5a773da5981a99020c473f2e3b18b4a8ac1a6258d533923433a2de1a87dd8f5",
+      "artifactSha256": "e5a773da5981a99020c473f2e3b18b4a8ac1a6258d533923433a2de1a87dd8f5",
       "matches": true
     },
     {
