@@ -117,7 +117,7 @@ textarea.text-input { resize: vertical; }
 .calendar button.has-chapter::after { content: "•"; display: block; margin-top: -6px; color: #d47c16; line-height: 1; }
 .calendar button.selected { border-color: #4d7cad; background: linear-gradient(#d9ebfa, #b8d4ed); }
 .calendar button.today { position: relative; }
-.calendar button.today::after { content: ""; position: absolute; bottom: 3px; left: calc(50% - 2px); width: 4px; height: 4px; border-radius: 50%; background: #4c789e; pointer-events: none; }
+.calendar button.today::before { content: ""; position: absolute; top: 3px; right: 3px; width: 4px; height: 4px; border-radius: 50%; background: #4c789e; pointer-events: none; }
 .chapter-list-empty { margin: 0; padding: 13px; color: #607990; font-size: 11px; }
 .chapter-book-sheet { display: grid; flex-direction: column; height: min(690px,calc(var(--sheet-viewport-height,100dvh) - max(24px,var(--safe-top)) - max(24px,var(--safe-bottom)))); overflow: hidden; }
 .chapter-book-sheet .sheet-head { flex: none; }

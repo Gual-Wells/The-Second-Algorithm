@@ -25,21 +25,43 @@
       "inputHash": "ca01a4844b3c720ab0eae2c48ea7cd65731645748d55a7c230417bd1758f19e0",
       "recordedAt": "2026-10-29T19:36:02.692801+00:00",
       "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "80c155f5b9ed4d6288b359890a2165f1",
+      "kind": "research",
+      "path": "work/jobs/sine-reader-audit-20261030/followup-research.md",
+      "summary": "核对同日状态、保留两种日期标记并分析云端动画测试衔接",
+      "outcome": "accepted",
+      "sha256": "71a801011ab214eeb49d70e91570bee0ab5ec1d35ff599e2b883a2705b2e12fa",
+      "inputHash": "49eb42ee7ae3f92e84305e92f68b5a68708dca40cfc3b1954b296e16b4963d38",
+      "recordedAt": "2026-10-29T19:50:21.697292+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "689bed7efe734f81aa589c56397ecdda",
+      "kind": "review",
+      "path": "work/jobs/sine-reader-audit-20261030/followup-review.md",
+      "summary": "新日期组合专项及当前输入审阅，教材和正弦主实现保留",
+      "outcome": "accepted",
+      "sha256": "14a24ebbf585f680e3ecffab90e3dae10c09d63e3c33aa04205b35a3133531b7",
+      "inputHash": "49eb42ee7ae3f92e84305e92f68b5a68708dca40cfc3b1954b296e16b4963d38",
+      "recordedAt": "2026-10-29T19:50:25.949294+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
     }
   ],
   "lastGoodVerification": {
-    "path": "work/jobs/sine-reader-audit-20261030/verifications/b3f6db7bdbcb4b859682481bc54ca6cd.json",
-    "sha256": "7e91e973f010d1e9705cfbbc78c8332627ff2a1c0b3f1cc9c67b5ef2ec629b31",
-    "inputHash": "ca01a4844b3c720ab0eae2c48ea7cd65731645748d55a7c230417bd1758f19e0"
+    "path": "work/jobs/sine-reader-audit-20261030/verifications/9e6eaf5d57ec4a80b59934840443f11f.json",
+    "sha256": "ec21dfb0ef9d48758cc2247e749af111bc37696ee169d1f9ecd7710fdf73bb99",
+    "inputHash": "49eb42ee7ae3f92e84305e92f68b5a68708dca40cfc3b1954b296e16b4963d38"
   },
   "lastPreparedRelease": {
-    "path": "work/jobs/sine-reader-audit-20261030/releases/d294a53c71504369ac3b2d37eb708f46.json",
-    "sha256": "586774bdd019e9c6b217fff1bb814ea881330f3641a836ff5f70c17c52fd670c",
-    "inputHash": "ca01a4844b3c720ab0eae2c48ea7cd65731645748d55a7c230417bd1758f19e0"
+    "path": "work/jobs/sine-reader-audit-20261030/releases/2dbd51cd90354608b08783cdc25b28b5.json",
+    "sha256": "812afb737bb99f84c680ea74a16ba2120965a47ba9f5aad0f511e80d096a4b23",
+    "inputHash": "49eb42ee7ae3f92e84305e92f68b5a68708dca40cfc3b1954b296e16b4963d38"
   },
   "lastVerificationAttempt": {
-    "path": "work/jobs/sine-reader-audit-20261030/verifications/b3f6db7bdbcb4b859682481bc54ca6cd.json",
-    "sha256": "7e91e973f010d1e9705cfbbc78c8332627ff2a1c0b3f1cc9c67b5ef2ec629b31",
-    "inputHash": "ca01a4844b3c720ab0eae2c48ea7cd65731645748d55a7c230417bd1758f19e0"
+    "path": "work/jobs/sine-reader-audit-20261030/verifications/9e6eaf5d57ec4a80b59934840443f11f.json",
+    "sha256": "ec21dfb0ef9d48758cc2247e749af111bc37696ee169d1f9ecd7710fdf73bb99",
+    "inputHash": "49eb42ee7ae3f92e84305e92f68b5a68708dca40cfc3b1954b296e16b4963d38"
   }
 }

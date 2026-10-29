@@ -282,6 +282,7 @@ async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries
     });
     await check('pointer-dialog-reader-focus-is-clean-and-keyboard-remains-visible',async env=>{
       const p=await env.page();
+      const dateMarkers=await p.evaluate(()=>{const calendar=document.createElement('div');calendar.className='calendar';calendar.innerHTML='<button class="today has-chapter selected">30</button>';document.body.append(calendar);const n=calendar.firstElementChild,result={today:getComputedStyle(n,'::before').backgroundColor,published:getComputedStyle(n,'::after').content,outline:getComputedStyle(n).outlineStyle};calendar.remove();return result});assert.equal(dateMarkers.today,'rgb(76, 120, 158)');assert(dateMarkers.published.includes('•'));assert.equal(dateMarkers.outline,'none');
       assert.equal(await p.locator('#readingPane').evaluate(e=>getComputedStyle(e).outlineStyle),'none');
       await p.locator('#settingsButton').click();
       assert.equal(await p.locator('#sheetTitle').evaluate(e=>getComputedStyle(e).outlineStyle),'none');
