@@ -1,0 +1,117 @@
+{
+  "source": "879bbe3a6ab525b425d0ff46c27727a232cfba86",
+  "build": "c7b24b3c4247b8918eb4e863a8c166d79e5b6f37fdd0f7ee9806dcd18aaf4d42",
+  "origin": "https://second-algorithm.pages.dev",
+  "immutableOrigin": "https://62954bcc.second-algorithm.pages.dev",
+  "testedAt": "2026-10-30T14:38:24.841Z",
+  "assets": [
+    {
+      "file": "index.html",
+      "status": 200,
+      "expected": "c1ea8477d0e1b91423a141152704afadb26c817cf1d860356dfc3a1e8faa0ffd",
+      "actual": "c1ea8477d0e1b91423a141152704afadb26c817cf1d860356dfc3a1e8faa0ffd",
+      "match": true,
+      "nosniff": "nosniff",
+      "frame": "DENY"
+    },
+    {
+      "file": "app.js",
+      "status": 200,
+      "expected": "d6feecc098ceee7cd7be104824d9c46da2a568c67c99d8b35b6c8d6f307581bd",
+      "actual": "d6feecc098ceee7cd7be104824d9c46da2a568c67c99d8b35b6c8d6f307581bd",
+      "match": true,
+      "nosniff": "nosniff",
+      "frame": "DENY"
+    },
+    {
+      "file": "styles.css",
+      "status": 200,
+      "expected": "0100a872b8e60078341ba1f5375754ff640df340538a32de52c86c7c4b7891c7",
+      "actual": "0100a872b8e60078341ba1f5375754ff640df340538a32de52c86c7c4b7891c7",
+      "match": true,
+      "nosniff": "nosniff",
+      "frame": "DENY"
+    },
+    {
+      "file": "sw.js",
+      "status": 200,
+      "expected": "882068e7e2949fd99f66227da916e88d65725c1e0d9b9a29e8e2db9a730dd4f6",
+      "actual": "882068e7e2949fd99f66227da916e88d65725c1e0d9b9a29e8e2db9a730dd4f6",
+      "match": true,
+      "nosniff": "nosniff",
+      "frame": "DENY"
+    },
+    {
+      "file": "manifest.webmanifest",
+      "status": 200,
+      "expected": "7c159b2c915dd26ce30bc5a457c835c6ea23a786c6ceded66930e5443ed74caf",
+      "actual": "7c159b2c915dd26ce30bc5a457c835c6ea23a786c6ceded66930e5443ed74caf",
+      "match": true,
+      "nosniff": "nosniff",
+      "frame": "DENY"
+    },
+    {
+      "file": "icons/header-logo.svg",
+      "status": 200,
+      "expected": "6cac12ff3b1c24c0799c09a31d054bcaf3e690df9a7693f55e5fbfe4c6ebf135",
+      "actual": "6cac12ff3b1c24c0799c09a31d054bcaf3e690df9a7693f55e5fbfe4c6ebf135",
+      "match": true,
+      "nosniff": "nosniff",
+      "frame": "DENY"
+    }
+  ],
+  "boundaries": [
+    {
+      "path": "/api/library",
+      "status": 401,
+      "cacheControl": "no-store"
+    },
+    {
+      "path": "/api/state",
+      "status": 401,
+      "cacheControl": "no-store"
+    },
+    {
+      "path": "/api/settings",
+      "status": 401,
+      "cacheControl": "no-store"
+    },
+    {
+      "path": "/library/catalog.json",
+      "status": 401,
+      "cacheControl": "no-store"
+    },
+    {
+      "path": "/library/chapter-01/binary-search/bea98296c3878578.json",
+      "status": 401,
+      "cacheControl": "no-store"
+    },
+    {
+      "path": "/library/chapter-01/binary-search/76dd1a208850b564.cpp",
+      "status": 401,
+      "cacheControl": "no-store"
+    },
+    {
+      "path": "/library/chapter-01/binary-search/76dd1a208850b564.md",
+      "status": 401,
+      "cacheControl": "no-store"
+    },
+    {
+      "path": "/library/knowledge/Q100001/dc22c2384ed01152.json",
+      "status": 401,
+      "cacheControl": "no-store"
+    },
+    {
+      "path": "/%6cibrary/catalog.json",
+      "status": 401,
+      "cacheControl": "no-store"
+    }
+  ],
+  "authentication": {
+    "authenticated": false,
+    "enrolled": true,
+    "enrollmentOpen": false
+  },
+  "passed": true,
+  "limits": "Anonymous live HTTP and exact public bytes; authenticated chapter behaviour validated in isolated browser, no physical iPhone claim."
+}

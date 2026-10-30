@@ -1,0 +1,15 @@
+{
+  "archive": {
+    "configured": true,
+    "revision": "879bbe3a6ab525b425d0ff46c27727a232cfba86",
+    "bytes": 19985531,
+    "sha256": "c9cb939b6e94bb2f62e8f021051b03ee388d94d3571abd1debe7fc406f430bce",
+    "verifiedAt": 1793371069195,
+    "folder": "projects/second-algorithm/publications"
+  },
+  "serviceSnapshotUpdated": true,
+  "snapshotLibrary": "published artifact/library",
+  "openaiInferenceCalled": false,
+  "privateFinancialDataExcluded": true,
+  "newSubscription": false
+}

@@ -1,0 +1,92 @@
+{
+  "passed": true,
+  "testedAt": "2026-10-30T14:31:00.457Z",
+  "browserGroups": 11,
+  "browserPassed": 11,
+  "serverSectionTests": 3,
+  "serverSectionPassed": 3,
+  "builtDocument": {
+    "id": "binary-search",
+    "revision": "bea98296c3878578dabc5cac641ed6596c60e1b2e623747a3d94a4231eac2266",
+    "headings": 276,
+    "extensions": [
+      {
+        "sectionId": "time-parallel-search",
+        "tags": [
+          "离线批处理",
+          "并行二分"
+        ]
+      },
+      {
+        "sectionId": "dynamic-range-kth",
+        "tags": [
+          "离线值域分治",
+          "整体二分"
+        ]
+      },
+      {
+        "sectionId": "marginal-penalty",
+        "tags": [
+          "拉格朗日松弛",
+          "离散凸性"
+        ]
+      }
+    ]
+  },
+  "sourceStart": {
+    "web/app.js": "eb244d514409bb11e02cfacb2cf9da24c73c373bc404986e504fee374dc0fd23",
+    "web/reader-runtime.js": "d4c65f288024375a778768b32d7abae324825015b085609bc390de03f5464d74",
+    "web/styles.css": "0100a872b8e60078341ba1f5375754ff640df340538a32de52c86c7c4b7891c7",
+    "web/index.html": "bf9bc648b0b3b596999e6a766c694259a840e2c26c4eff6c228e5fa4c0a3a0fd",
+    "server/worker.mjs": "d77068199c94a9ec1006e0c17365c52101dc7d8209095839caa476cac4d4d1bb",
+    "dist/index.html": "ecbd8588c6773f73cd433f62d1248935d44ebcaa609a7d42b263c37efb3a8105",
+    "dist/app.js": "b9d60a7f08882ee0ba2507f02399b7e3460c4041efe2364b196703356ca2f930",
+    "dist/styles.css": "0100a872b8e60078341ba1f5375754ff640df340538a32de52c86c7c4b7891c7",
+    "dist/library/catalog.json": "d6bf3e4f7975bfa9afc1203a720e63d8de19a9e7d6aa4649abe08285853ea732"
+  },
+  "sourceEnd": {
+    "web/app.js": "eb244d514409bb11e02cfacb2cf9da24c73c373bc404986e504fee374dc0fd23",
+    "web/reader-runtime.js": "d4c65f288024375a778768b32d7abae324825015b085609bc390de03f5464d74",
+    "web/styles.css": "0100a872b8e60078341ba1f5375754ff640df340538a32de52c86c7c4b7891c7",
+    "web/index.html": "bf9bc648b0b3b596999e6a766c694259a840e2c26c4eff6c228e5fa4c0a3a0fd",
+    "server/worker.mjs": "d77068199c94a9ec1006e0c17365c52101dc7d8209095839caa476cac4d4d1bb",
+    "dist/index.html": "ecbd8588c6773f73cd433f62d1248935d44ebcaa609a7d42b263c37efb3a8105",
+    "dist/app.js": "b9d60a7f08882ee0ba2507f02399b7e3460c4041efe2364b196703356ca2f930",
+    "dist/styles.css": "0100a872b8e60078341ba1f5375754ff640df340538a32de52c86c7c4b7891c7",
+    "dist/library/catalog.json": "d6bf3e4f7975bfa9afc1203a720e63d8de19a9e7d6aa4649abe08285853ea732"
+  },
+  "detailedReport": ".local/extension-tabs-20261030/final2/results.json",
+  "detailedReportSha256": "a712c41031a747a101b8b1975019401996236129eec4f0996be9b20aca8810b2",
+  "visualReview": {
+    "screenshotsReviewed": [
+      "shared-directory-extension-402.png",
+      "extension-320.png",
+      "extension-402.png",
+      "extension-1280.png"
+    ],
+    "conclusion": "蓝银系列比例、页签/思想标签/撤回按钮协调；共享目录阴影可辨。未出现外层横向溢出。用户实机接受另行确认。"
+  },
+  "assertedCoverage": [
+    "276真实目录标题、89代码块及源码链接完整保全",
+    "主35个H2、超纲3个H2；完整38组共享目录",
+    "目录及双向正文跨层链接、两个独立精确读位、历史恢复",
+    "逐节撤回不影响其他节、原位归主与临时标记清除",
+    "本机持久化、刷新、跨设备云状态、跨owner隔离",
+    "离线与云写失败保留本机状态、恢复联网后补送；本机保存失败不移动",
+    "全撤回与无超纲出版都恢复单页，旧extension入口安全回主",
+    "两处取消Scode的旧stable/中文slug别名可达",
+    "402/320手机及1280桌面；纯净物理坐标/宽度、字号、真实剪贴板"
+  ],
+  "evidenceBoundary": {
+    "realReaderSources": true,
+    "actualBuiltProtectedChapter": true,
+    "mockedOwnerAPI": true,
+    "serviceWorker": "blocked; HTTP/SW check is separate",
+    "physicalIPhone": false,
+    "productionContacted": false,
+    "paidProviderContacted": false
+  },
+  "earlierRuns": "旧QA ID/href假设及纯净读块坐标定义已修正；Windows剪贴板只统一CRLF；构建换代中断记录保留。旧空页要求被用户最新单页要求替代。未将旧通过或未完成轮次冒称最终通过。",
+  "productionTouched": false,
+  "deployed": false
+}

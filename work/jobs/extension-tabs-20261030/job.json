@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "extension-tabs-20261030",
+  "goal": "依用户定义建设整节主线与超纲双标签、完整共享目录和独立持久撤回，实核外部评审并补齐研究出版设施后发布",
+  "createdAt": "2026-10-30T14:11:35.735080+00:00",
+  "evidence": [
+    {
+      "id": "39bc902d7a61440a916a86a27fadeb5e",
+      "kind": "research",
+      "path": "work/extension-tabs-20261030/research.md",
+      "summary": "实际逐节依赖分类、评审核实、条件双标签及按需实现研究，持久化用户补充与取舍",
+      "outcome": "accepted",
+      "sha256": "8eaa39d6886c1c933dbd3b9a02cb8faebb8c75e453ce51bbdc9ef1fb1cef5079",
+      "inputHash": "f38545f6ef5a7f75e9ac64a3da3d6223eb41dee73c23501dd2722286a1ae96ad",
+      "recordedAt": "2026-10-30T14:34:05.237849+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "2729b098d9f9482db782307810551b84",
+      "kind": "review",
+      "path": "work/extension-tabs-20261030/review.md",
+      "summary": "实际语义与当前输入复查，11组独立浏览器及3组后端、4目标C++、按需单版编译与失败边界",
+      "outcome": "accepted",
+      "sha256": "a8541aad63cbf222489d2e45bfc192b1c240724ef408f1e3845fe7dc294ba6cd",
+      "inputHash": "f38545f6ef5a7f75e9ac64a3da3d6223eb41dee73c23501dd2722286a1ae96ad",
+      "recordedAt": "2026-10-30T14:34:12.052351+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    }
+  ],
+  "lastGoodVerification": {
+    "path": "work/jobs/extension-tabs-20261030/verifications/d8a4737dd94c41c6b9198230dc2ba4d2.json",
+    "sha256": "5eceb132d0b3cf2e336c600060d5a71977044acee0e8aa3bb9d926187a445671",
+    "inputHash": "f38545f6ef5a7f75e9ac64a3da3d6223eb41dee73c23501dd2722286a1ae96ad"
+  },
+  "lastPreparedRelease": {
+    "path": "work/jobs/extension-tabs-20261030/releases/255046e63bad4b40b4f252741f922079.json",
+    "sha256": "84ab25448a97c0eea3e44d1a780119a4768979d43c9b2c85a10f6c848d8ba264",
+    "inputHash": "f38545f6ef5a7f75e9ac64a3da3d6223eb41dee73c23501dd2722286a1ae96ad"
+  },
+  "lastVerificationAttempt": {
+    "path": "work/jobs/extension-tabs-20261030/verifications/d8a4737dd94c41c6b9198230dc2ba4d2.json",
+    "sha256": "5eceb132d0b3cf2e336c600060d5a71977044acee0e8aa3bb9d926187a445671",
+    "inputHash": "f38545f6ef5a7f75e9ac64a3da3d6223eb41dee73c23501dd2722286a1ae96ad"
+  }
+}
