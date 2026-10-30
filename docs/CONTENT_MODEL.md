@@ -10,7 +10,7 @@
 
 | 文件 | 内容 |
 |---|---|
-| `study.json` | job、chapter、createdAt、active当前阶段链、history全部阶段指针、lastHandoff；指针保存path/sha256 |
+| `study.json` | job、chapter、createdAt、active当前阶段链、history全部阶段指针、lastHandoff；新open-study另有`contentDecisionsVersion:1`，指针保存path/sha256 |
 | `ledger.json` | 全部书目/来源、已有正式章及增量外部来源的entries；按阶段逐项判断相关性与读取情况 |
 | `dossier.json` | materials、findings、questions、searches，分别保存材料处置、综合发现、未决和真实检索 |
 | `scope.json` | paradigm、title、mechanism、branches、exclusions、completenessArgument；最终再有prelude和problemTypes |
@@ -25,7 +25,7 @@
 - `questions[]`：id、status为open/resolved/deferred、reason、core。核心问题未resolved阻止交接；非核心延期仍需真实理由及影响说明。
 - `searches[]`：id、query、source、result、note。保存实际检索与结果，包括无有效结果；检索计划不冒充已执行。
 - `scope.branches[]`：id、title、status为included/excluded、reason、materialIds。纳入分支须有实际分析材料与综合，排除不靠“以后再说”。
-- 最终`scope.prelude`说明理论前置计划；`problemTypes[]`包含id、title、branchIds、materialIds、exerciseUrls、problem、variation。每题型1–5个练习URL必须已存在于所指材料，纳入分支都应有题型承载。正式内容仍须落实实际需要的实现及解析、设施层次与必要C++等产品要求，Hcode/Scode不要求成对。
+- 最终`scope.prelude`说明理论前置计划；`problemTypes[]`包含id、title、branchIds、materialIds、exerciseUrls、problem、variation。每题型1–5个练习URL必须已存在于所指材料，纳入分支都应有题型承载。新研究按`contentDecisionsVersion:1`在每个最终problemType给出`learningSupport:{coreDependencies,implementationPlan}`：两项均为非空实质说明，前者说明核心依赖（可以明确只有科班基础/无额外体系），后者说明真实实现选择及取舍（可以仅Hcode或仅Scode）。这是研究题型提案，不是最终H2的超纲分类；编纂后仍须按整节实际内容复核。旧封存研究未有此字段时按历史读取，不回写或仅为补字段重跑。正式内容仍须落实实际需要的实现及解析、设施层次与必要C++等产品要求，Hcode/Scode不要求成对。
 
 全部已知书目/来源和当前已有正式章必须有台账身份。overview与独立scope前完成书目/站点/已知外部来源判断；chapter此时可以pending，仅盘点身份，不提前以旧章内容限制独立候选。alignment时完成已有章协同处置并有实际分析材料；collection开始相关来源须有提取材料。最终没有pending材料，采用材料已分析、没有孤立采用材料/分支，合并关系须可解析到实际采用材料而无环；核心问题和核心不可得依据不得悬置。原题链接及读取状态的真实性仍由研究者负责，HTTP地址存在不证明读过。
 
@@ -130,7 +130,7 @@ reading.units保留id/title/taskIds/locations，并声明：
 | `tags` | 非空且不重复的算法思想名称，供超纲节标题下显示 |
 | `reason` | 非空内部判定依据，说明为何核心理解依赖独立高阶体系；不投影给读者 |
 
-无超纲节用`[]`；历史合同缺省按空数组兼容，不据此追认已做分类审阅。新章应显式给出经实际研究/编纂审阅的分类（可空），不照搬第一章名单。校验拒绝未知/重复节、PRE、无有效唯一H2、空或重复标签及空依据；这些只核结构，不自动认证超纲语义。当前分类须符合基础科班/局部补充/困难不算超纲的用户定义。
+无超纲节用`[]`；技术结构读取兼容历史缺省为空数组，不据此追认分类已审阅。当前正式quality要求schema3的`reading.extensions`显式为数组（可空），并有当前`review.contentDecisions`；缺省兼容不构成发布旁路。旧研究交接不因此回写或重跑，新章独立研究分类，不照搬第一章名单。校验拒绝未知/重复节、PRE、无有效唯一H2、空或重复标签及空依据；这些只核结构，不自动认证超纲语义。当前分类须符合基础科班/局部补充/困难不算超纲的用户定义。
 
 构建经该unit唯一的`locations.document/anchor`定位本章真实H2，只在受保护文档payload及catalog条目的`extensions`中投影`{sectionId:<稳定显式anchor>,tags}`。内部`reason`、unit分类工作记录与依据不外显。该投影进入文档不可变revision，默认分类变化使相应读件身份变化，但不修改原正文顺序、标题号或源码/知识定义。渲染后的H2可能采用语义slug；阅读器须通过既有别名解析将稳定显式anchor映射到真实H2，不能把二者混用或手写第二份标题表。
 
@@ -200,7 +200,7 @@ Python的`learning._inspect`在核对装配依赖后，从实际章节协调决�
 
 标题父子关系由同一成品的规范heading序列按深度与出现顺序派生，不另手写第二份标题、顺序或锚点。H2起一组，H3归最近H2，H4归同H2下最近H3；当前子单元与索引筛选是交互状态，不改变内容身份。现行读者载体使用H2分组、H3/H4从属的目录索引，展开与正文跳转分离，在存在未撤回超纲节时主/超纲两个标签页共享同一目录，无超纲或全部撤回时不显示标签体系；不提供标题筛选或桌面侧栏。实际父节语境用于同名辨识，不把后台facet、管理ID或制作证据投成读者内容。前端不得丢弃受管理的H3/H4，完整原序、独立跳转、当前项定位及跨标签所属须按实际长章检查，详见`../web/DESIGN.md`。
 
-共享核心只刊印一次；没有自有代码的实现讨论单元须以`reuses`指向真实Hcode/Scode单元，并在该段正文提供可点击链接。引用可跨物理作者源，但须在同一逻辑读件内可达且无环，最终能定位实际代码。每项learning实现身份仍只在真实代码所属单元的`implementationIds`声明一次，引用者不重复登记；不能用一个空讨论单元或悬空链接代替完整实现。
+空设或重复实现栏目可按实际内容调整/归并，重新保存候选并协调当前作者源、所用管理项与引用；必要内容及稳定定位保全，不因此删改正式H2题型或原研究。共享核心只刊印一次；没有自有代码的实现讨论单元须以`reuses`指向真实Hcode/Scode单元，并在该段正文提供可点击链接。引用可跨物理作者源，但须在同一逻辑读件内可达且无环，最终能定位实际代码。每项learning实现身份仍只在真实代码所属单元的`implementationIds`声明一次，引用者不重复登记；不能用一个空讨论单元或悬空链接代替完整实现。
 
 只为未使用类型新增条目不会改变本章的used-entry指纹，也不要求旧章重做算法研究。实际修改已用管理项时，需重新审查受影响决定并更新其指纹、生成件和当前审阅，不能直接换hash追认。管理类型的增补、重命名或归并必须保留真实使用关系；管理ID、候选、理由和内部路径不投影到读者payload/目录/搜索/下载。
 
@@ -232,11 +232,13 @@ python -m second_algorithm course verify --compiler <已有编译器>
 
 内部CLI可按Q检索，不表示读者界面需要编号索引。verify实际编译所有目标，run再运行，compile只检查编译，compile-fail只接受正常编译诊断且不运行；崩溃/缺失/超时不是预期成功。采用O2、Wall/Wextra/Wpedantic及库断言，Windows隐藏subprocess窗口，TEMP/TMP/TMPDIR与输出在仓库D盘.local独立尝试目录，不自动安装编译器。
 
-输入快照覆盖登记、当前作者/源码/生成件、知识源、材料/合同/审阅依赖、实际实现/target闭包、来源池/书目、有效AGENTS/protocol/model及reader/worker/builder/验证/依赖锁/迁移等生产输入，排除node_modules/.local。系统头与宏include不能自动推导，须按实际声明与工具链判断。
+输入快照覆盖登记、当前作者/源码/生成件、知识源、材料/合同/审阅依赖、实际实现/target闭包、来源池/书目、有效AGENTS/protocol/model及reader/worker/builder/验证/依赖锁/迁移等生产输入，排除node_modules/.local。所有`protocol/*.md`及真实后台任务模板`protocol/background-prompt.txt`均入快照；模板字节变化同样使旧审阅和准备包过期。系统头与宏include不能自动推导，须按实际声明与工具链判断。
 
 `chapter-inputs`排除审阅文件自身避免自引用；最终course_snapshot/发布包仍固定其字节。修改知识、正文、代码、规则或工具使旧证据过期，不能只换hash冒充重新审过。二级标题管理项按实际使用投影固定依赖，避免无关类型扩张使老章失效；其余输入仍按当前保守快照处理，不能据此宣称已具备全项目细粒度影响分析。
 
 审阅文件仍为schemaVersion1；针对schema3章合同增加必需`readerBoundary`对象：`outcome`仅为pass/gap，`findings`为非空实际发现，`locations`为本章真实`{document,anchor}`数组。quality要求pass与至少一个有效正文定位；字段缺失、gap或无效位置都不通过。审阅须覆盖正文、知识、可见目录/搜索、代码注释和下载件；定位可指它们在本章的实际承载处，不能用work记录或虚构生成锚点充数。该字段沿用review的当前inputHash及最终字节绑定，是人工语义审阅证据，不是Python自动认定无污染。结构validate可在无review时检查施工稿，旧schema历史读取不加此要求。
+
+当前schema3的正式采用另要求`review.contentDecisions:{outcome,findings,locations}`：outcome为pass/gap，findings为非空的实际综合审阅，locations至少有一个本章真实`{document,anchor}`。审阅涵盖整节核心依赖/超纲与基础边界、实现路径取舍、空设/重复栏目处理及必要内容保全；只接受pass和有效定位。它与原review共用当前inputHash及最终字节绑定，不另外复制逐节登记表。缺/旧输入/gap/空发现/无效定位不能发布，`reading.extensions:[]`也不能跳过此审阅。工具只核结构、位置与版本，判断是否充分仍由审阅者负责。
 
 正式载体构建另检查最终读者表面的确定性边界与marked实际主标题；源码导出只移除精确BEGIN/END制作标记，保留可编译上下文和教学注释，原源码及导出字节各自核身份。门禁helper由build manifest的`readerBoundaryHelperSha256`及生产快照固定；扫描通过不代替人工语义判断，人工pass也不旁路上传前的构建检查。
 

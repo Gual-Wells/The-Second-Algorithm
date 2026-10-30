@@ -4830,7 +4830,7 @@
     {
       "id": "complete-type-chain",
       "dimension": "completeness",
-      "claim": "每型兑现问题、变型、手写、真实设施、知识与研究期原题。",
+      "claim": "每型兑现问题、变型、实际适用的实现及解析、必要知识与研究期原题；Hcode/Scode按价值选择。",
       "acceptance": "连续逐型阅读并核引用/代码/复杂度/失效合同；无核心未决或假一键库解。",
       "status": "addressed",
       "gap": "",

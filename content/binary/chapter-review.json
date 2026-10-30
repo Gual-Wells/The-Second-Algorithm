@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "chapter": "chapter-01",
-  "inputHash": "fd2ad91f8c51797032a53fe8e5013cd75d8838ab092b00c379d54dd373310c27",
+  "inputHash": "da839d398d3421a8d114cd88d5df2c264611b535324af82308a1bfa2f6b330d2",
   "verdict": "accepted",
   "comparison": {
     "baseline": "main@0d896f742ee3a677d09e8ab3f40d968f092adeff；上一成功language-replica部署1793284360689；第二语言源929d42df391f4538c906e743f146cc579e655c0f。",
-    "findings": "保留原章对教材/来源池的精确历史采用，当前仍是PRE与37完整题型节。本轮逐节回读核心机制与依赖，仅35并行二分、36整体二分、37惩罚参数搜索整节分层；树状数组、线段树、倍增与基础贪心/递归/DP不因跨领域或困难而误分。原序号、实际适用实现及练习承诺保留；没有以分层缩减研究范围或拆分H2。"
+    "findings": "保留原章对教材/来源池的精确历史采用，当前仍是PRE与37完整题型节。本轮逐节回读核心机制与依赖，仅35并行二分、36整体二分、37惩罚参数搜索整节分层；树状数组、线段树、倍增与基础贪心/递归/DP不因跨领域或困难而误分。原序号、实际适用实现及练习承诺保留；没有以分层缩减研究范围或拆分H2。 本轮将这些已实际完成的取舍显式接入contentDecisions当前审阅；新研究learningSupport不反向添加到已发布旧研究档案。正文、代码及读者载体保持原字节。"
   },
   "outsideChallenge": {
     "materialIds": [
@@ -175,7 +175,7 @@
     {
       "commitment": "hard-variants",
       "outcome": "pass",
-      "reason": "困难与跨基础思想不等于超纲；31至34完整保留主线，35至37的高阶系统机制、证明、双实现及练习整节保全。16记录数反例与28原题数值界均修到实际正文/源码，未仅改评分或通过字段。",
+      "reason": "困难与跨基础思想不等于超纲；31至34完整保留主线，35至37的高阶系统机制、证明、实际适用的实现及练习整节保全。16记录数反例与28原题数值界均修到实际正文/源码，未仅改评分或通过字段。",
       "locations": [
         {
           "document": "binary-search",
@@ -421,6 +421,36 @@
       {
         "document": "binary-search",
         "anchor": "fenwick-rank"
+      },
+      {
+        "document": "binary-search",
+        "anchor": "dynamic-range-kth"
+      },
+      {
+        "document": "binary-search",
+        "anchor": "marginal-penalty"
+      }
+    ]
+  },
+  "contentDecisions": {
+    "outcome": "pass",
+    "findings": "本轮只固化研究与出版设施，按现行整节内容复核先前的37节依赖分类及实现取舍。35并行二分、36整体二分、37惩罚参数搜索的核心分别依赖离线批处理、值域分治和惩罚参数/离散凸性体系，整节进入超纲；31树状数组、32线段树、33倍增、34贪心分段等基础DSA组合保留主线，不按难度或跨章名分类。各节仍由完整合同和真实实现身份承载；18的min辅助及35的DSU/PBS同一手写路径已取消空设Scode，其他有真实机制/设施价值的实现保留，不因最新规则机械砍成单版。36到31的普通代码定义链接可达，不联动搬迁；无超纲或全部撤回使用单页规则。判断依据及逐节核对沿work/extension-tabs-20261030/content-audit.md、classification-candidates.json及implementation-presentation-audit.md，本轮不回写旧不可变交接，不宣称新模型自动理解语义、全网覆盖或用户掌握。",
+    "locations": [
+      {
+        "document": "binary-search",
+        "anchor": "prelude"
+      },
+      {
+        "document": "binary-search",
+        "anchor": "multiplication-rank"
+      },
+      {
+        "document": "binary-search",
+        "anchor": "fenwick-rank"
+      },
+      {
+        "document": "binary-search",
+        "anchor": "time-parallel-search"
       },
       {
         "document": "binary-search",

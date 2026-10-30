@@ -865,6 +865,8 @@ def chapter_quality(root: Path, chapter_id: str | None = None) -> dict:
         else:
             if context["model"].get("schemaVersion") != 2:
                 errors.append("transparent knowledge registry requires learning schemaVersion 2; legacy visible-Q main explanations cannot qualify")
+            if not isinstance(contract["reading"].get("extensions"), list):
+                errors.append("current publication requires an explicit reading.extensions array, including [] when no section is beyond scope")
             for name in ("paradigm", "prelude"):
                 item = contract[name]
                 if item["status"] != "addressed":
@@ -888,18 +890,19 @@ def chapter_quality(root: Path, chapter_id: str | None = None) -> dict:
             if review.get("verdict") != "accepted":
                 errors.append("chapter review has not accepted this edition")
             if contract.get("schemaVersion") == 3:
-                boundary = review.get("readerBoundary")
-                if not isinstance(boundary, dict):
-                    errors.append("reader boundary review is required for schemaVersion 3")
-                else:
-                    outcome = boundary.get("outcome")
-                    if not isinstance(outcome, str) or outcome not in {"pass", "gap"}:
-                        errors.append("reader boundary outcome must be pass or gap")
-                    elif outcome == "gap":
-                        errors.append("reader boundary review records an unresolved gap")
-                    _text(boundary.get("findings"), cid + ".readerBoundary.findings", errors)
-                    _locations(boundary.get("locations"), cid + ".readerBoundary.locations", context["documents"],
-                               chapter["documents"], errors, required=outcome == "pass")
+                for field, label in (("readerBoundary", "reader boundary"), ("contentDecisions", "content decisions")):
+                    boundary = review.get(field)
+                    if not isinstance(boundary, dict):
+                        errors.append(label + " review is required for schemaVersion 3")
+                    else:
+                        outcome = boundary.get("outcome")
+                        if not isinstance(outcome, str) or outcome not in {"pass", "gap"}:
+                            errors.append(label + " outcome must be pass or gap")
+                        elif outcome == "gap":
+                            errors.append(label + " review records an unresolved gap")
+                        _text(boundary.get("findings"), cid + "." + field + ".findings", errors)
+                        _locations(boundary.get("locations"), cid + "." + field + ".locations", context["documents"],
+                                   chapter["documents"], errors, required=outcome == "pass")
             for name in ("baseline", "findings"):
                 _text(review.get("comparison", {}).get(name), cid + ".comparison." + name, errors)
             outside = review.get("outsideChallenge", {})

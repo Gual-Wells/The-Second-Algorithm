@@ -96,7 +96,7 @@ int main() {
                     "manualImplementationIds": ["manual-boundary"], "standardImplementationIds": ["standard-boundary"],
                     "standardRole": {"kind": "algorithm", "explanation": "std::lower_bound replaces the boundary search"},
                     "exercises": [{"title": "Boundary", "url": "https://example.com/task"}], "dependsOn": []}],
-                "gap": ""},
+                "gap": "", "extensions": []},
             "materials": [{"id": "outside", "kind": "countercheck", "locator": "Independent boundary task",
                            "evidence": "work/material.md", "sourcePaths": []}],
             "commitments": [{"id": dimension, "dimension": dimension, "claim": "Explain " + dimension,
@@ -135,6 +135,9 @@ int main() {
                 "outsideChallenge": {"materialIds": ["outside"], "findings": "Checked empty and absent-value task conditions"},
                 "readerBoundary": {"outcome": "pass",
                     "findings": "Synthetic fixture review of reader prose, knowledge, headings/search, visible code comments and source download; not a real chapter acceptance",
+                    "locations": [{"document": "lesson", "anchor": "boundary-type"}]},
+                "contentDecisions": {"outcome": "pass",
+                    "findings": "Synthetic boundary uses only foundational dependencies; no whole-section extension. Both implementations have a real manual/library distinction, not a required pair.",
                     "locations": [{"document": "lesson", "anchor": "boundary-type"}]},
                 "assessments": [{"commitment": promise["id"], "outcome": "pass", "reason": "Reasoned fixture assessment",
                     "locations": [{"document": "lesson", "anchor": "q000001"}]} for promise in self.contract["commitments"]]}
@@ -300,6 +303,15 @@ class LearningModelTest(LearningFixture):
                 self.assertNotEqual(first["inputHash"], after["inputHash"])
                 (self.root / filename).unlink()
                 self.assertEqual(first["inputHash"], course_snapshot(self.root)["inputHash"])
+
+    def test_actual_background_template_is_bound_but_private_run_data_is_not(self):
+        self.put("protocol/background-prompt.txt", "Read the current content rules before publication.\n")
+        first = course_snapshot(self.root)
+        self.assertIn("protocol/background-prompt.txt", first["inputs"])
+        self.put(".local/services/current-run.json", '{"runId":"private-current-run"}\n')
+        self.assertEqual(first["inputHash"], course_snapshot(self.root)["inputHash"])
+        self.put("protocol/background-prompt.txt", "Changed actual publication instructions.\n")
+        self.assertNotEqual(first["inputHash"], course_snapshot(self.root)["inputHash"])
 
     def test_path_escape_and_temporary_question_ids_fail_closed(self):
         self.model["targets"][0]["source"] = "../outside.cpp"
@@ -533,6 +545,17 @@ class ResearchWorkflowTest(LearningFixture):
         self.put("migrations/new/0002.sql", "new remote operation\n")
         with self.assertRaisesRegex(ValueError, "stale"):
             check_release(self.root, packet)
+
+    def test_changed_background_template_invalidates_the_prepared_packet(self):
+        original = "Apply the current implementation-choice and content-layer rules.\n"
+        self.put("protocol/background-prompt.txt", original)
+        self.verified_job()
+        packet = prepare_release(self.root, "lesson-job")["receipt"]["path"]
+        self.put("protocol/background-prompt.txt", "Different publication execution instructions.\n")
+        with self.assertRaisesRegex(ValueError, "stale"):
+            check_release(self.root, packet)
+        self.put("protocol/background-prompt.txt", original)
+        self.assertTrue(check_release(self.root, packet)["ok"])
 
     def test_ephemeral_note_cannot_be_smuggled_through_a_normalized_path(self):
         init_job(self.root, "lesson-job", "Goal")

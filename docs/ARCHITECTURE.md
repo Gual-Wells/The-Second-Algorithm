@@ -12,8 +12,8 @@
 
 `second_algorithm/learning.py`校验关系、Q前置/主讲、实际区域/symbol/目标并形成输入快照；`workflow.py`管理任务锁、研究状态、证据和真实编译/运行receipt及发布准备。章级采用核研究交接及其范围/材料/题型承接。来源采集/历史案例工具仍保留，但不作为新正式覆盖。
 
-`tools/build_handbook.mjs`装配阅读版，`scripts/build-course.mjs`按当前出版登记构建；`scripts/build-carrier.mjs`核对权威/链接/代码并生成受保护静态资源。阅读器统一章节入口，透明语义知识引用读取独立唯一静态知识资产并原位浮窗，代码原生选择、复制、横滚和字号保持。详见READER和web/DESIGN。
+`tools/build_handbook.mjs`装配阅读版，`scripts/build-course.mjs`按当前出版登记构建；`scripts/build-carrier.mjs`核对权威/链接/代码并生成受保护静态资源。阅读器统一章节入口，透明语义知识引用读取独立唯一静态知识资产并原位浮窗，代码原生选择、复制、横滚和字号保持。有价值的实现路径按需采用，Hcode/Scode无须成对；完整章的条件双标签、共享目录与单节持久撤回沿CONTENT_LAYERS和CONTENT_MODEL。最新要求到研究/出版/检查的唯一导航见protocol/REQUIREMENTS_TRACEABILITY.md。详见READER和web/DESIGN。
 
 Worker为已有独立凭据、会话及通用reader_state；D1只存私人状态，不存正文或研究语料。正文/源码/关系是Git资源，静态下载按发布白名单与owner隔离。无需新数据库、微服务或向量检索。
 
-job状态和不可变release receipt在work/jobs，编译临时/日志在.local；失败不覆写last-good，但最新失败阻止发布。release绑定实际输入及工具/前端/依赖，deploy另有锁及线上记录。2026-10-28已将content及旧专属验证代码清零，仅Git历史可恢复；来源模式保留为候选，原题教学归属重置，未保留任何现行内容覆盖。
+job状态和不可变release receipt在work/jobs，编译临时/日志在.local；失败不覆写last-good，但最新失败阻止发布。release绑定实际输入及工具/前端/依赖，deploy另有锁及线上记录。2026-10-28曾将当时content及旧专属验证代码清零，该批旧稿仅Git历史可恢复；该次来源模式保留为候选，原题教学归属重置，不继承旧覆盖。这是初始化历史，不表示当前仍为空；当前正式章以实际出版登记、合同、质量和部署收据为准。

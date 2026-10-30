@@ -556,6 +556,64 @@ class ParadigmContractTest(ChapterHelpers, LearningFixture):
         errors = " ".join(chapter_quality(self.root)["chapters"][0]["errors"])
         self.assertIn("review is stale", errors)
 
+    def test_current_publication_requires_explicit_layer_choice_even_when_empty(self):
+        self.accepted_fixture()
+        self.assertEqual([], self.contract["reading"]["extensions"])
+        self.assertTrue(chapter_quality(self.root)["ok"], chapter_quality(self.root))
+        self.contract["reading"].pop("extensions")
+        self.save_contract()
+        self.notes()  # A new current review cannot turn omission into a choice.
+        self.assertTrue(validate_learning(self.root)["ok"], "historical/unfinished structural reading remains available")
+        self.assertIn("explicit reading.extensions", " ".join(chapter_quality(self.root)["chapters"][0]["errors"]))
+        with patch("second_algorithm.workflow._process", side_effect=self.process_success):
+            verify_job(self.root, "lesson-job", "fixture-c++")
+        with self.assertRaisesRegex(ValueError, "chapter-quality"):
+            prepare_release(self.root, "lesson-job")
+
+    def test_content_decision_review_is_current_substantive_and_points_into_the_actual_chapter(self):
+        self.accepted_fixture()
+        accepted = self.review()
+        review = copy.deepcopy(accepted)
+        review.pop("contentDecisions")
+        self.put_review(review)
+        self.assertIn("content decisions review is required", " ".join(chapter_quality(self.root)["chapters"][0]["errors"]))
+        for decisions, phrase in (
+            ([], "content decisions review is required"),
+            ({"outcome": "gap", "findings": "Classification remains unresolved", "locations": []}, "unresolved gap"),
+            ({"outcome": "accepted", "findings": "Reviewed", "locations": []}, "outcome must be pass or gap"),
+            ({"outcome": [], "findings": "Reviewed", "locations": []}, "outcome must be pass or gap"),
+            ({"outcome": "pass", "findings": " ", "locations": [{"document": "lesson", "anchor": "boundary-type"}]}, "nonempty text"),
+            ({"outcome": "pass", "findings": "Reviewed", "locations": []}, "actual prose location"),
+            ({"outcome": "pass", "findings": "Reviewed", "locations": [{"document": "lesson", "anchor": "invented"}]}, "missing explicit prose anchor"),
+            ({"outcome": "pass", "findings": "Reviewed", "locations": [{"document": "another", "anchor": "boundary-type"}]}, "belong to this published chapter"),
+        ):
+            with self.subTest(decisions=decisions):
+                review = copy.deepcopy(accepted)
+                review["contentDecisions"] = decisions
+                self.put_review(review)
+                self.assertTrue(validate_learning(self.root)["ok"], "draft inspection does not certify the review")
+                self.assertIn(phrase, " ".join(chapter_quality(self.root)["chapters"][0]["errors"]))
+        self.put_review(accepted)
+        self.assertTrue(chapter_quality(self.root)["ok"], chapter_quality(self.root))
+
+    def test_generic_accepted_evidence_and_cpp_success_cannot_replace_content_decisions(self):
+        self.accepted_fixture()
+        review = self.review()
+        review.pop("contentDecisions")
+        self.put_review(review)
+        with patch("second_algorithm.workflow._process", side_effect=self.process_success):
+            result = verify_job(self.root, "lesson-job", "fixture-c++")
+        self.assertTrue(result["passed"], "technical verification remains a separate fact")
+        self.assertFalse(job_status(self.root, "lesson-job")["readyForReleasePreparation"])
+        with self.assertRaisesRegex(ValueError, "chapter-quality"):
+            prepare_release(self.root, "lesson-job")
+
+    def test_content_decision_review_cannot_be_reused_after_teaching_bytes_change(self):
+        self.accepted_fixture()
+        self.assertTrue(self.review()["contentDecisions"]["outcome"] == "pass")
+        self.put(self.draft, (self.root / self.draft).read_text(encoding="utf-8") + "\nA different dependency explanation.\n")
+        self.assertIn("review is stale", " ".join(chapter_quality(self.root)["chapters"][0]["errors"]))
+
     def test_legacy_review_can_still_be_inspected_without_reader_boundary(self):
         self.contract["schemaVersion"] = 2
         self.contract["reading"]["selectionMap"] = copy.deepcopy(self.contract["reading"]["units"][0]["locations"])

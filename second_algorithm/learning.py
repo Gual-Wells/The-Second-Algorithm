@@ -532,7 +532,8 @@ def course_snapshot(root: Path, *, include_reviews: bool = True) -> dict:
                 inputs.add((Path(current) / name).relative_to(root).as_posix())
     for filename in ("tools/build_handbook.mjs", "tools/knowledge.mjs", "tools/reader-boundary.mjs", "scripts/build-carrier.mjs", "package.json", "package-lock.json", "wrangler.jsonc",
                      "second_algorithm/learning.py", "second_algorithm/workflow.py", "AGENTS.md",
-                     "protocol/CONTENT_PIPELINE.md", "protocol/RESEARCH_DEPARTMENT.md", "catalog/scope.json", "docs/CONTENT_MODEL.md"):
+                     "protocol/CONTENT_PIPELINE.md", "protocol/RESEARCH_DEPARTMENT.md", "protocol/background-prompt.txt",
+                     "catalog/scope.json", "docs/CONTENT_MODEL.md"):
         if (root / filename).is_file():
             inputs.add(filename)
     # Review content binds the final publication packet, while the hash recorded

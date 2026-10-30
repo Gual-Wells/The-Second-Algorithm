@@ -78,7 +78,9 @@ def seed_study(root, job="fixture-study", chapter="unit", paradigm="Binary searc
     dossier = {"schemaVersion": 1, "materials": [{"id": material, "source": "external:fixture", "locator": "fixture task statement/solution", "readState": "analyzed", "note": note, "disposition": "included", "reason": "Documents partition invariant", "mechanism": "Discard half partition", "conditions": "Monotone predicate", "variants": "Equal boundaries differ in predicate", "crossParadigms": [], "exerciseUrls": ["https://example.com/task"]}],
                "findings": [{"id": "invariant", "materialIds": [material], "branchIds": [branch], "claim": "Maintain unexcluded boundary range", "note": note, "problem": "First true predicate", "mechanism": "Halve candidates", "conditions": "Partitioned input", "variants": "First >= / >", "crossParadigms": [], "exerciseLinks": [{"title": "Fixture", "url": "https://example.com/task"}]}],
                "questions": [], "searches": [{"id": "lookup", "query": "fixture boundary contract", "source": "external:fixture", "result": "Read original fixture constraints", "note": note}]}
-    scope = {"schemaVersion": 1, "paradigm": paradigm, "title": "Synthetic boundary fixture", "mechanism": "Halve a partitioned candidate space", "branches": [{"id": branch, "title": "Ordered boundary", "status": "included", "reason": "Fixture relevant mechanism", "materialIds": [material]}], "exclusions": [], "completenessArgument": "Structural fixture only, not real domain completeness", "prelude": "Explain invariant, partition condition and bounds", "problemTypes": [{"id": problem_type, "title": "Locate boundary", "branchIds": [branch], "materialIds": [material], "exerciseUrls": ["https://example.com/task"], "problem": "Find first valid position", "variation": "Strict and non-strict predicates"}]}
+    scope = {"schemaVersion": 1, "paradigm": paradigm, "title": "Synthetic boundary fixture", "mechanism": "Halve a partitioned candidate space", "branches": [{"id": branch, "title": "Ordered boundary", "status": "included", "reason": "Fixture relevant mechanism", "materialIds": [material]}], "exclusions": [], "completenessArgument": "Structural fixture only, not real domain completeness", "prelude": "Explain invariant, partition condition and bounds", "problemTypes": [{"id": problem_type, "title": "Locate boundary", "branchIds": [branch], "materialIds": [material], "exerciseUrls": ["https://example.com/task"], "problem": "Find first valid position", "variation": "Strict and non-strict predicates",
+        "learningSupport": {"coreDependencies": "Only ordinary ordered arrays and partition invariants; no additional systematic prerequisite",
+                            "implementationPlan": "Compare the genuinely different handwritten boundary loop and standard lower_bound; no requirement to pair implementations in other types"}}]}
     for name, value in (("ledger", ledger), ("dossier", dossier), ("scope", scope)):
         write_json(folder / (name + ".json"), value)
     coordination = chapter_coordination_fixture(root, folder, chapter, chapter_relationship)
@@ -169,6 +171,85 @@ class InquiryTest(unittest.TestCase):
         self.assertFalse((self.root / "catalog/learning.json").exists())
         self.assertTrue(any(row["path"].endswith("study.json") for row in result["inputs"]))
         self.assertFalse(result["automaticSemanticCertification"])
+
+    def test_new_research_pins_dependency_and_implementation_decisions_without_forcing_pairs(self):
+        state = read_json(self.folder / "study.json")
+        self.assertEqual(1, state["contentDecisionsVersion"])
+        self.modify("scope", lambda data: data["problemTypes"][0]["learningSupport"].update(
+            coreDependencies="Only foundational arrays and comparisons; no extra systematic prerequisites",
+            implementationPlan="Use the genuine standard facility only; a separate handwritten wrapper has no teaching value"))
+        result = self.complete()
+        self.assertTrue(result["ok"], result)
+        self.assertEqual(1, result["contentDecisionsVersion"])
+        handoff = read_json(self.root / result["path"])
+        self.assertEqual(1, handoff["base"]["contentDecisionsVersion"])
+        self.assertIn("standard facility only", handoff["scope"]["problemTypes"][0]["learningSupport"]["implementationPlan"])
+        self.assertNotIn("extensions", handoff["scope"], "a research object does not decide the final H2 layer")
+
+    def test_missing_learning_support_and_mutable_version_downgrade_cannot_seal_new_research(self):
+        self.modify("scope", lambda data: data["problemTypes"][0].pop("learningSupport"))
+        for phase in PHASES[:-1]:
+            self.step(phase)
+        state = read_json(self.folder / "study.json")
+        state.pop("contentDecisionsVersion")
+        write_json(self.folder / "study.json", state)
+        with self.assertRaisesRegex(ValueError, "learningSupport"):
+            self.step("resynthesis")
+        self.assertFalse(study_status(self.root, "fixture-study")["readyForHandoff"])
+        with self.assertRaisesRegex(ValueError, "not ready"):
+            seal_handoff(self.root, "fixture-study")
+
+    def test_actual_dependency_and_implementation_explanations_cannot_be_empty(self):
+        for phase in PHASES[:-1]:
+            self.step(phase)
+        original = read_json(self.folder / "scope.json")["problemTypes"][0]["learningSupport"]
+        for key in ("coreDependencies", "implementationPlan"):
+            for value in (None, "", " ", [], {}):
+                with self.subTest(key=key, value=value):
+                    self.modify("scope", lambda data: data["problemTypes"][0].update(
+                        learningSupport={**original, key: value}))
+                    with self.assertRaisesRegex(ValueError, "learningSupport." + key):
+                        self.step("resynthesis")
+
+    def test_direct_content_rules_are_real_research_base_inputs(self):
+        names = ("CONTENT_LAYERS", "CHAPTER_STANDARD", "IMPLEMENTATION_STANDARD", "REQUIREMENTS_TRACEABILITY")
+        for name in names:
+            filename = self.root / "protocol" / (name + ".md")
+            filename.parent.mkdir(parents=True, exist_ok=True)
+            filename.write_text("Actual fixture rule for " + name + "\n", encoding="utf-8")
+        result = self.complete()
+        handoff_bytes = (self.root / result["path"]).read_bytes()
+        for name in names:
+            with self.subTest(name=name):
+                filename = self.root / "protocol" / (name + ".md")
+                before = filename.read_bytes()
+                filename.write_bytes(before + b"Changed actual rule.\n")
+                self.assertFalse(check_handoff(self.root, result["path"])["ok"])
+                filename.write_bytes(before)
+        self.assertEqual(handoff_bytes, (self.root / result["path"]).read_bytes())
+        self.assertTrue(check_handoff(self.root, result["path"])["ok"])
+
+    def test_legacy_adopted_research_keeps_its_original_plan_and_archives(self):
+        from unittest.mock import patch
+        from second_algorithm.inquiry import _base
+        self.modify("scope", lambda data: data["problemTypes"][0].pop("learningSupport"))
+        state = read_json(self.folder / "study.json")
+        state.pop("contentDecisionsVersion")
+        write_json(self.folder / "study.json", state)
+        def historical_base(root, chapter):
+            return {key: value for key, value in _base(root, chapter).items() if key != "contentDecisionsVersion"}
+        with patch("second_algorithm.inquiry._base", side_effect=historical_base):
+            result = self.complete()
+            self.assertTrue(result["ok"], result)
+        paths = [self.root / result["path"], self.folder / "scope.json", self.folder / "study.json"]
+        before = {str(filename): filename.read_bytes() for filename in paths}
+        current = check_handoff(self.root, result["path"])
+        self.assertFalse(current["ok"], "a legacy base is not claimed as current new research")
+        adopted = check_handoff(self.root, result["path"], adopted=True)
+        self.assertTrue(adopted["ok"], adopted)
+        self.assertEqual(0, adopted["contentDecisionsVersion"])
+        self.assertNotIn("learningSupport", adopted["scope"]["problemTypes"][0])
+        self.assertEqual(before, {str(filename): filename.read_bytes() for filename in paths})
 
     def test_phase_skip_is_not_a_complete_research_receipt(self):
         with self.assertRaisesRegex(ValueError, "skipped"):

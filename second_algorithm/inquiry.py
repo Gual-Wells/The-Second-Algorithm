@@ -10,7 +10,10 @@ from .storage import canonical_bytes, digest, now, read_json, safe_relative, val
 
 PHASES = ("overview", "scope", "alignment", "collection", "synthesis", "scope-review", "resynthesis")
 MUTABLE = ("ledger.json", "dossier.json", "scope.json")
-BASE = ("catalog/books.json", "catalog/sources.json", "protocol/RESEARCH_DEPARTMENT.md", "protocol/RESEARCH_FACILITIES.md")
+BASE = ("catalog/books.json", "catalog/sources.json", "protocol/RESEARCH_DEPARTMENT.md", "protocol/RESEARCH_FACILITIES.md",
+        "protocol/CONTENT_LAYERS.md", "protocol/CHAPTER_STANDARD.md", "protocol/IMPLEMENTATION_STANDARD.md",
+        "protocol/REQUIREMENTS_TRACEABILITY.md")
+CONTENT_DECISIONS_VERSION = 1
 
 
 def _folder(root, job):
@@ -26,6 +29,8 @@ def _state(root, job):
         raise ValueError("Study schemaVersion 2 is required; preserve old research and start a current study without fabricating alignment")
     if not isinstance(state.get("active"), list) or not isinstance(state.get("history"), list):
         raise ValueError("Invalid study journal")
+    if type(state.get("contentDecisionsVersion", 0)) is not int or state.get("contentDecisionsVersion", 0) not in {0, CONTENT_DECISIONS_VERSION}:
+        raise ValueError("Unsupported research content-decisions version")
     return folder, state
 
 
@@ -181,7 +186,8 @@ def _frontier(root, chapter):
 
 
 def _base(root, chapter):
-    return {"inputs": [{"path": name, "sha256": digest((root / name).read_bytes())}
+    return {"contentDecisionsVersion": CONTENT_DECISIONS_VERSION,
+            "inputs": [{"path": name, "sha256": digest((root / name).read_bytes())}
                         for name in BASE if (root / name).is_file()],
             "publicationFrontier": _frontier(root, chapter)}
 
@@ -198,7 +204,7 @@ def _references(values, available, label, *, nonempty=False):
         raise ValueError("Invalid or missing " + label + " references")
 
 
-def _validate_data(root, folder, *, final=False, collected=False, registry_ids=None):
+def _validate_data(root, folder, *, final=False, collected=False, registry_ids=None, content_decisions_version=0):
     ledger, dossier, scope = _documents(folder)
     entries = _rows(ledger, "entries")
     materials, findings = _rows(dossier, "materials"), _rows(dossier, "findings")
@@ -316,6 +322,12 @@ def _validate_data(root, folder, *, final=False, collected=False, registry_ids=N
         for row in types:
             for key in ("title", "problem", "variation"):
                 _text(row.get(key), "problem type " + key)
+            if content_decisions_version >= 1:
+                support = row.get("learningSupport")
+                if not isinstance(support, dict):
+                    raise ValueError("Problem type learningSupport must record core dependencies and its actual implementation plan")
+                for key in ("coreDependencies", "implementationPlan"):
+                    _text(support.get(key), "problem type learningSupport." + key)
             _references(row.get("branchIds"), included, "type branches", nonempty=True)
             _references(row.get("materialIds"), mids, "type materials", nonempty=True)
             if any(next(material for material in materials if material["id"] == mid)["disposition"] != "included" for mid in row["materialIds"]):
@@ -483,8 +495,9 @@ def open_study(root: Path, job_id: str, chapter: str) -> dict:
                     "readState": "directory", "materialIds": [], "core": False} for identity in sorted(_registry(root, chapter))]
         write_json(folder / "ledger.json", {"schemaVersion": 1, "entries": entries})
         write_json(folder / "dossier.json", {"schemaVersion": 1, "materials": [], "findings": [], "questions": [], "searches": []})
-        write_json(folder / "scope.json", {"schemaVersion": 1, "paradigm": "", "title": "", "mechanism": "", "branches": [], "exclusions": [], "completenessArgument": ""})
+        write_json(folder / "scope.json", {"schemaVersion": 1, "paradigm": "", "title": "", "mechanism": "", "branches": [], "exclusions": [], "completenessArgument": "", "problemTypes": []})
         write_json(folder / "study.json", {"schemaVersion": 2, "job": job_id, "chapter": chapter,
+                   "contentDecisionsVersion": CONTENT_DECISIONS_VERSION,
                    "createdAt": now(), "active": [], "history": [], "lastHandoff": None})
     return study_status(root, job_id)
 
@@ -504,7 +517,8 @@ def checkpoint(root: Path, job_id: str, phase: str, record_path: str) -> dict:
             raise ValueError("Research base changed; refresh overview first")
         registry = _registry(root) | {"chapter:" + row["id"] for row in base["publicationFrontier"]["chapters"]}
         ledger, dossier, scope = _validate_data(root, folder, collected=index >= PHASES.index("collection"),
-                                              final=phase == "resynthesis", registry_ids=registry)
+                                              final=phase == "resynthesis", registry_ids=registry,
+                                              content_decisions_version=base.get("contentDecisionsVersion", 0))
         if phase in {"overview", "scope"} and any(row["relevance"] == "pending" and not row["id"].startswith("chapter:") for row in ledger["entries"]):
             raise ValueError("Whole-base relevance must be assessed before initial scope; pending sources remain")
         if phase == "alignment" and any(row["relevance"] == "pending" and row["id"].startswith("chapter:") for row in ledger["entries"]):
@@ -582,7 +596,8 @@ def study_status(root: Path, job_id: str, *, compare_base=True) -> dict:
         if final and not errors:
             historical_registry = None if compare_base else {
                 row["id"] for row in chain[-1]["data"]["ledger"]["entries"] if not row["id"].startswith("external:")}
-            _, dossier, _ = _validate_data(root, folder, final=True, collected=True, registry_ids=historical_registry)
+            _, dossier, _ = _validate_data(root, folder, final=True, collected=True, registry_ids=historical_registry,
+                                          content_decisions_version=chain[-1]["base"].get("contentDecisionsVersion", 0))
             review = next(stage for stage in chain if stage["phase"] == "scope-review")
             _coordination(root, review["record"], dossier, chain[-1]["base"]["publicationFrontier"])
         phase = chain[-1]["phase"] if chain else None
@@ -611,6 +626,7 @@ def study_status(root: Path, job_id: str, *, compare_base=True) -> dict:
         if unresolved:
             actions.append("Resolve core questions before handoff and justify noncore deferrals.")
         return {"ok": not errors, "job": job_id, "chapter": state["chapter"], "phase": phase,
+                "contentDecisionsVersion": chain[-1]["base"].get("contentDecisionsVersion", 0) if chain else state.get("contentDecisionsVersion", 0),
                 "nextPhase": next_phase, "changedFiles": changes, "errors": errors,
                 "readyForHandoff": final and not errors and not changes, "lastHandoff": state.get("lastHandoff"),
                 "historyCount": len(state["history"]), "studyPath": folder.relative_to(root).as_posix(),
@@ -699,6 +715,7 @@ def check_handoff(root: Path, path: str, chapter: str | None = None, *, adopted=
         paths.update(row["path"] for row in final["files"])
         inputs = [_pointer(root, _path(root, value)) if value.startswith("work/") else _pointer(root, safe_relative(root, value)) for value in sorted(paths)]
         return {"ok": True, "errors": [], "chapter": state["chapter"], "scope": handoff["scope"],
+                "contentDecisionsVersion": final["base"].get("contentDecisionsVersion", 0),
                 "dossier": handoff["dossier"], "inputs": inputs, "path": path, "sha256": digest(filename.read_bytes()),
                 "coordinationContext": _coordination_context(final["base"]["publicationFrontier"]),
                 "adopted": adopted, "baseCurrent": base_current,

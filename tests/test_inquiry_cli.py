@@ -33,9 +33,11 @@ class InquiryCliTest(unittest.TestCase):
             code, opened = invoke("open-study", "first-study", "--chapter", "future-chapter")
             self.assertEqual(code, 0, opened)
             self.assertFalse(opened["readyForHandoff"])
+            self.assertEqual(1, opened["contentDecisionsVersion"])
             code, status = invoke("study-status", "first-study")
             self.assertEqual(code, 0, status)
             self.assertEqual(status["nextPhase"], "overview")
+            self.assertEqual(1, status["contentDecisionsVersion"])
             ledger = read_json(root / "work/jobs/first-study/study/ledger.json")
             self.assertEqual({row["id"] for row in ledger["entries"]},
                              {"book:reference", "source:problem-site"})
