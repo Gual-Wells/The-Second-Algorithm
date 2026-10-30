@@ -616,6 +616,7 @@ class ParadigmContractTest(ChapterHelpers, LearningFixture):
 
     def test_legacy_review_can_still_be_inspected_without_reader_boundary(self):
         self.contract["schemaVersion"] = 2
+        self.contract["reading"].pop("extensions", None)
         self.contract["reading"]["selectionMap"] = copy.deepcopy(self.contract["reading"]["units"][0]["locations"])
         self.save_contract()
         self.accepted_fixture()
@@ -629,6 +630,7 @@ class ParadigmContractTest(ChapterHelpers, LearningFixture):
 
     def test_schema2_is_technically_readable_but_cannot_be_formally_adopted(self):
         self.contract["schemaVersion"] = 2
+        self.contract["reading"].pop("extensions", None)
         self.contract["reading"]["selectionMap"] = copy.deepcopy(self.contract["reading"]["units"][0]["locations"])
         self.save_contract()
         self.accepted_fixture()
