@@ -1,0 +1,8 @@
+{
+  "source": "294f12eca08299b03a16169270c1eba3eb87bb50",
+  "inputHash": "651aafbabb60ef7055d5f610187189eacaaaf836f7122fe63b007d5b487c8f38",
+  "checkedFiles": 325,
+  "differences": [],
+  "passed": true,
+  "meaning": "Current preparation inputs equal exact committed blob bytes; no line-ending hash relaxation."
+}

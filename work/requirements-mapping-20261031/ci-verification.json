@@ -1,0 +1,20 @@
+{
+  "verifiedAt": "2026-10-30T17:06:55Z",
+  "repository": "Gual-Wells/The-Second-Algorithm",
+  "source": "294f12eca08299b03a16169270c1eba3eb87bb50",
+  "runId": 41094853414,
+  "jobId": 124197861917,
+  "url": "https://github.com/Gual-Wells/The-Second-Algorithm/actions/runs/41094853414",
+  "status": "completed",
+  "conclusion": "success",
+  "technicalStep": "success",
+  "formalAdoptionStep": "success",
+  "pythonTests": 218,
+  "nodeTests": 164,
+  "nodeFailures": 0,
+  "realBrowserAndServiceWorkerFixture": true,
+  "physicalIPhone": false,
+  "deploymentRequested": false,
+  "deploymentStep": "skipped",
+  "evidence": "Direct GitHub run and jobs API, plus decoded completed job logs. Technical verification and current formal adoption are separate required CI steps."
+}

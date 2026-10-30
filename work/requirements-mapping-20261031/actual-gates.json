@@ -1,0 +1,8 @@
+{
+  "currentQuality": true,
+  "historicResearchAdopted": true,
+  "historicResearchSHA256": "678a8224a593e49e10100c6befb9dd926fbb521221380cefd17cf8a40156275c",
+  "oldPreparedPacket": "work/jobs/extension-tabs-20261030/releases/255046e63bad4b40b4f252741f922079.json",
+  "oldPacketRejected": true,
+  "reason": "{\n  \"ok\": false,\n  \"error\": \"Release packet is stale: current input hashes differ\"\n}"
+}

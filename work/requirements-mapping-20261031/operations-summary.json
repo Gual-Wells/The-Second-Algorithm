@@ -1,0 +1,20 @@
+{
+  "source": "294f12eca08299b03a16169270c1eba3eb87bb50",
+  "githubMainPushed": true,
+  "newChapter": false,
+  "cloudflareRedeployment": false,
+  "readerOrTeachingFilesChanged": false,
+  "archive": {
+    "configured": true,
+    "revision": "294f12eca08299b03a16169270c1eba3eb87bb50",
+    "bytes": 20044510,
+    "sha256": "73d51f05553e2777cb02a30fa866ddd7283b03f2c002a0c8959ed0213c3368df",
+    "verifiedAt": 1793379812185,
+    "readBackShaVerified": true,
+    "firstAttemptFailed": true,
+    "sameRevisionRetrySucceeded": true
+  },
+  "serviceSnapshot": "updated after verified archive; unverified resource entries retain prior known values",
+  "newRecurringCost": false,
+  "privateFinancialSnapshotsCommitted": false
+}
