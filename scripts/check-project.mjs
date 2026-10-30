@@ -18,6 +18,7 @@ function run(command, args) {
   const result = spawnSync(command, args, { cwd: root, env, stdio: 'inherit', windowsHide: true });
   if (result.status !== 0) throw Error('Check failed: ' + command + ' ' + args.join(' '));
 }
+run(process.execPath, ['--test', 'scripts/check-openai-responses.mjs']);
 run(process.execPath, ['scripts/build-course.mjs']);
 run(python, ['-m', 'second_algorithm', 'course', 'validate']);
 run(python, ['-m', 'unittest', 'discover', '-s', 'tests', '-v']);

@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "api-incident-20261030",
+  "goal": "修复真实API代理启动故障，保留问答原件与未知计费保护",
+  "createdAt": "2026-10-30T07:02:15.766817+00:00",
+  "evidence": [
+    {
+      "id": "ac0b28f078ca420c9d1f54a8a313d9ff",
+      "kind": "review",
+      "path": "work/api-incident-20261030/incident.md",
+      "summary": "真实连接故障复现，代理回归及未知费用保护；教学与已部署资产不变",
+      "outcome": "accepted",
+      "sha256": "11a1ad8e642285f8ad34d3283a7b62529e29bb402d059c70216fc86c7b948486",
+      "inputHash": "6e148fe13ade46f30755bc6efef91f82a2b9d785af0ae7fb876af891b4cbe31b",
+      "recordedAt": "2026-10-30T07:04:53.898664+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "91392fa0c30a4ef684f5c8e0bc8a7a3d",
+      "kind": "research",
+      "path": "work/api-incident-20261030/incident.md",
+      "summary": "对照Node代理官方接口与真实计划任务启动条件，复现同类连接超时并验证修复路径",
+      "outcome": "accepted",
+      "sha256": "11a1ad8e642285f8ad34d3283a7b62529e29bb402d059c70216fc86c7b948486",
+      "inputHash": "6e148fe13ade46f30755bc6efef91f82a2b9d785af0ae7fb876af891b4cbe31b",
+      "recordedAt": "2026-10-30T07:07:34.102445+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    }
+  ],
+  "lastGoodVerification": {
+    "path": "work/jobs/api-incident-20261030/verifications/f786d031f7f5488bad5354ca94ac591b.json",
+    "sha256": "e46aa5b7e5f031394fd33644ab4882cee0fd044415dd63101a996a5e7e0d2f2e",
+    "inputHash": "6e148fe13ade46f30755bc6efef91f82a2b9d785af0ae7fb876af891b4cbe31b"
+  },
+  "lastPreparedRelease": {
+    "path": "work/jobs/api-incident-20261030/releases/ee59fec3323b47fd85aa6005bffd2640.json",
+    "sha256": "54a39a521a20a41246a488f733b3614883bc4bb4b229f2f3c82694c03d251b5b",
+    "inputHash": "6e148fe13ade46f30755bc6efef91f82a2b9d785af0ae7fb876af891b4cbe31b"
+  },
+  "lastVerificationAttempt": {
+    "path": "work/jobs/api-incident-20261030/verifications/f786d031f7f5488bad5354ca94ac591b.json",
+    "sha256": "e46aa5b7e5f031394fd33644ab4882cee0fd044415dd63101a996a5e7e0d2f2e",
+    "inputHash": "6e148fe13ade46f30755bc6efef91f82a2b9d785af0ae7fb876af891b4cbe31b"
+  }
+}
