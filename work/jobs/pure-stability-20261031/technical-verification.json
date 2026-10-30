@@ -1,0 +1,21 @@
+{
+  "source": "39059cb78a61a6dc0c26f78e27e0b1f4982bbac2",
+  "browserCases": 25,
+  "browserPassed": true,
+  "extensionCases": 15,
+  "extensionPassed": true,
+  "frameCasePassed": [
+    true
+  ],
+  "qualityPassed": true,
+  "cppTargets": 4,
+  "syncCases": 6,
+  "httpServiceWorkerRetryPassed": true,
+  "firstUpgradeAttempt": "Withdrawal worker takeover did not complete within the unchanged 10 second assertion; diagnostic preserved, not counted as pass.",
+  "publishPaused": true,
+  "upgradeRetry": "Same source and unchanged original test passed; no worker or upgrade test changed. Cause of first timing failure not conclusively established.",
+  "physicalIPhone": false,
+  "dateChecks": 31,
+  "startupChecks": 50,
+  "nodeTests": 164
+}

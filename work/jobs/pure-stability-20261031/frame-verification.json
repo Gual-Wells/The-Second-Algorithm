@@ -1,0 +1,154 @@
+{
+  "baseline": {
+    "source": "e8b2d55ba09ed48f796a3d1d48023b9d4cc53434",
+    "firstRAFJumpPixels": 335.1875,
+    "sameNewRegressionFailed": true,
+    "trajectories": [
+      {
+        "name": "main-middle-gutter",
+        "entering": true,
+        "firstRAFShift": -335.1875,
+        "settledShift": -0.1875
+      },
+      {
+        "name": "main-middle-gutter",
+        "entering": false,
+        "firstRAFShift": 335.1875,
+        "settledShift": -0.8125
+      },
+      {
+        "name": "extension-middle-text",
+        "entering": true,
+        "firstRAFShift": -335.1875,
+        "settledShift": -0.1875
+      },
+      {
+        "name": "extension-middle-text",
+        "entering": false,
+        "firstRAFShift": 335.1875,
+        "settledShift": -0.8125
+      },
+      {
+        "name": "main-start-gutter",
+        "entering": true,
+        "firstRAFShift": -335.1875,
+        "settledShift": -335.1875
+      },
+      {
+        "name": "main-start-gutter",
+        "entering": false,
+        "firstRAFShift": 335.1875,
+        "settledShift": -0.8125
+      },
+      {
+        "name": "main-end-gutter",
+        "entering": true,
+        "firstRAFShift": 23.8125,
+        "settledShift": -0.1875
+      },
+      {
+        "name": "main-end-gutter",
+        "entering": false,
+        "firstRAFShift": 335.1875,
+        "settledShift": -0.8125
+      }
+    ],
+    "report": ".local/pure-stability-20261031/frame-baseline/frame-traces.json",
+    "regressionReport": ".local/pure-stability-20261031/formal-baseline/results.json"
+  },
+  "current": {
+    "passed": true,
+    "sourceFingerprintsUnchanged": true,
+    "touchToggles": 12,
+    "sameEventMicrotaskAndRAFSamples": 120,
+    "maxNativeClampedScrollErrorPixels": 0.1875,
+    "maxUnclampedAbsoluteYErrorPixels": 0.1875,
+    "maxWidthDeltaPixels": 0,
+    "controlWakeSamples": 144,
+    "maxControlWakeYDeltaPixels": 0.0,
+    "roundTrips": [
+      {
+        "name": "main-middle",
+        "verticalDelta": 0,
+        "widthDelta": 0
+      },
+      {
+        "name": "extension-middle",
+        "verticalDelta": 0,
+        "widthDelta": 0
+      },
+      {
+        "name": "chapter-start",
+        "verticalDelta": -335,
+        "widthDelta": 0
+      },
+      {
+        "name": "chapter-end",
+        "verticalDelta": 0,
+        "widthDelta": 0
+      }
+    ],
+    "eightTrajectoryProbe": [
+      {
+        "name": "main-middle-gutter",
+        "entering": true,
+        "maxAbsoluteYShift": 0.1875,
+        "finalPure": true
+      },
+      {
+        "name": "main-middle-gutter",
+        "entering": false,
+        "maxAbsoluteYShift": 0.1875,
+        "finalPure": false
+      },
+      {
+        "name": "extension-middle-text",
+        "entering": true,
+        "maxAbsoluteYShift": 0.1875,
+        "finalPure": true
+      },
+      {
+        "name": "extension-middle-text",
+        "entering": false,
+        "maxAbsoluteYShift": 0.1875,
+        "finalPure": false
+      },
+      {
+        "name": "main-start-gutter",
+        "entering": true,
+        "maxAbsoluteYShift": 335.1875,
+        "finalPure": true
+      },
+      {
+        "name": "main-start-gutter",
+        "entering": false,
+        "maxAbsoluteYShift": 0.1875,
+        "finalPure": false
+      },
+      {
+        "name": "main-end-gutter",
+        "entering": true,
+        "maxAbsoluteYShift": 0.1875,
+        "finalPure": true
+      },
+      {
+        "name": "main-end-gutter",
+        "entering": false,
+        "maxAbsoluteYShift": 0.1875,
+        "finalPure": false
+      }
+    ],
+    "report": ".local/pure-stability-20261031/formal-verified/results.json",
+    "eightTrajectoryReport": ".local/pure-stability-20261031/frame-current/frame-traces.json"
+  },
+  "sha256": {
+    "web/reader-runtime.js": "f267c488a5c007a40ad2d1a582c6e56f88ecb0bab88248a317d69f3e71cae56e",
+    "web/styles.css": "1ce8d2cab708cca430063acb17e237cd998f6b4290f4a5ea825d09257f3be4a6",
+    "scripts/check-extension-layers.cjs": "7a9fa6d8fd76925be6ba9d73246ba5083d414a732dfa229ab0c9499e25b5b25f"
+  },
+  "boundary": "For every same-event, microtask and RAF: requested=before.scrollTop+after.origin-before.origin; expectedScroll=clamp(requested,0,after.maxScroll), error<=1 CSS pixel. Native scrollTop=0 clamps chapter-start entry; its permanent layout displacement is explicitly not classified as a transient bounce. Middle main/extension four-toggle round trips and end round trip are zero-drift.",
+  "screenshots": "Twelve normal/pure/restored images remain only in .local/pure-stability-20261031/formal-verified/.",
+  "physicalIPhone": false,
+  "productionContacted": false,
+  "databaseModified": false
+}

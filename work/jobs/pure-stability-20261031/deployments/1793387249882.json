@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "packet": "work/jobs/pure-stability-20261031/releases/9477cf7cca3a4b0ebc9d61ed136a1585.json",
+  "packetSha256": "292a10a31108777c70b57a6bb443bb2c766ca64134bd4c6dae1a1d74ed9d0b1a",
+  "researchHandoffs": [
+    {
+      "chapter": "chapter-01",
+      "path": "work/jobs/first-chapter-20261028/study/handoffs/30fca997eabc41e0a39dd8eff7adaf45.json",
+      "sha256": "678a8224a593e49e10100c6befb9dd926fbb521221380cefd17cf8a40156275c",
+      "current": true,
+      "adopted": true,
+      "adoptionProof": {
+        "deployment": "work/jobs/first-chapter-20261028/deployments/1793195153435.json",
+        "packet": "work/jobs/first-chapter-20261028/releases/31f196de91894f14af75dfde16135d95.json"
+      }
+    }
+  ],
+  "inputHash": "13df4b2af81756b00431d5a059e07bda661489f106afdd802221279815cd3c8e",
+  "artifact": ".local/releases/16f4e6d0-ba47-4c2f-8bdf-95c669b2f115",
+  "origin": "https://second-algorithm.pages.dev",
+  "deployedAt": "2026-10-30T19:07:29.882Z",
+  "build": "1f0deebb96b85aaf4f9501642297fe795e82431045b6d06fd9adb5c23753fda8",
+  "anonymousBoundaryVerified": true,
+  "passed": true
+}
