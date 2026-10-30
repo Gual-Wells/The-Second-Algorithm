@@ -278,12 +278,11 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, onRestoreS
       pane.scrollTop += anchorElement(position.legacy.anchor).getBoundingClientRect().top - top + position.legacy.offset;
     } else pane.scrollTop += heading.getBoundingClientRect().top - top - (position.offset ?? NAV_LINE);
   }
-  function settle(position, mutation, after, previousPaneTop = null) {
+  function settle(position, mutation, after) {
     const token = ++layoutToken; restoring = true; mutation?.();
     requestAnimationFrame(() => requestAnimationFrame(() => {
       if (token !== layoutToken) return;
       updateTailSpace(); restoreSnapshot(position);
-      if (previousPaneTop !== null && view === 'reader') pane.scrollTop += pane.getBoundingClientRect().top - previousPaneTop;
       restoring = false;
       if (view === 'reader' && !isSheetOpen()) { cursor = readCursor(); updateStatus(); updateIndex(); if (cursor) onPosition?.(clone(cursor)); }
       after?.();
@@ -365,12 +364,30 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, onRestoreS
     // second tap. That could open the directory instead of leaving pure mode.
     wakeTapTimer = setTimeout(() => { wakeTapTimer = 0; if (view === 'reader' && pure && !isSheetOpen()) wakeControls(); }, DOUBLE_TAP_MS + 30);
   }
-  function setPure(on) {
-    if (on && view !== 'reader') return;
-    resetTapGesture();
-    const position = capture() || cursor, previous = pane.getBoundingClientRect().top;
-    if (on) app.style.setProperty('--pure-paper-width', $('reader').getBoundingClientRect().width + 'px'); pure = on;
-    settle(position, () => { app.classList.toggle('pure', on); clearTimeout(awakeTimer); app.classList.remove('controls-awake'); chromeInert(on); if (!on) app.style.removeProperty('--pure-paper-width'); }, () => { if (view === 'reader') pane.focus({ preventScroll: true }); }, previous);
+  function setPure(on, target = null) {
+    if (view !== 'reader' || on === pure) return;
+    resetTapGesture(); clearTimeout(resizeTimer);
+    const bounds = pane.getBoundingClientRect(), tools = $('articleTools');
+    const visibleTop = bounds.top + (!pure && tools?.offsetParent ? tools.getBoundingClientRect().height : 0);
+    const clicked = target?.closest?.('[data-read-block]');
+    const anchor = clicked && article.contains(clicked) && !clicked.closest('[hidden]') ? clicked
+      : visibleBlocks().find(node => { const rect = node.getBoundingClientRect(); return rect.bottom > visibleTop && rect.top < bounds.bottom; }) || article;
+    const y = anchor.getBoundingClientRect().top;
+    // The Second Language's pure-reader toggle keeps this entire transaction
+    // synchronous. A generic two-frame position restore would expose one paint
+    // with the header removed but the old scrollTop still in use.
+    layoutToken++; restoring = true;
+    if (on) app.style.setProperty('--pure-paper-width', $('reader').getBoundingClientRect().width + 'px');
+    pure = on; app.classList.toggle('pure', on); clearTimeout(awakeTimer);
+    app.classList.remove('controls-awake'); chromeInert(on);
+    if (!on) app.style.removeProperty('--pure-paper-width');
+    updateTailSpace();
+    // Preserve the same physical text coordinate. Only native scroll bounds
+    // may limit compensation; do not clamp an anchor to a new reading inset.
+    pane.scrollTop += anchor.getBoundingClientRect().top - y;
+    pane.focus({ preventScroll: true }); restoring = false;
+    cursor = readCursor(); updateStatus(); updateIndex();
+    if (cursor && !isSheetOpen()) onPosition?.(clone(cursor));
   }
   function clear() {
     resetTapGesture(); lastTouchUp = null; consumedTouchClick = null;
@@ -427,7 +444,7 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, onRestoreS
     // Existing selections and doubleclicks whose actual target is prose keep
     // the system's native selection behavior.
     if (blank ? gestureSelection : Boolean(getSelection()?.toString().trim())) return;
-    event.preventDefault(); if (blank) getSelection()?.removeAllRanges(); setPure(!pure);
+    event.preventDefault(); if (blank) getSelection()?.removeAllRanges(); setPure(!pure, event.target);
   });
   window.addEventListener('pointerdown', event => {
     consumedTouchClick = null;
@@ -454,7 +471,7 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, onRestoreS
       if (!valid) { resetTapGesture(); sleepControls(); return; }
       if (previousTap && event.timeStamp - previousTap.timeStamp <= DOUBLE_TAP_MS && distance(previousTap, event) <= TAP_DISTANCE) {
         consumedTouchClick = lastTouchUp;
-        setPure(!pure); return;
+        setPure(!pure, event.target); return;
       }
       previousTap = { timeStamp: event.timeStamp, clientX: event.clientX, clientY: event.clientY };
       if (pure) deferControls();

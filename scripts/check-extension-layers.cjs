@@ -103,6 +103,54 @@ function samePaper(before, after) {
   assert(Math.abs(before.top - after.top) < 2 && Math.abs(before.width - after.width) < 1,
     'gesture preserves physical text coordinate and paper width: ' + JSON.stringify({ before, after }));
 }
+async function frameCheckedTouchToggle(page, mode, label) {
+  const location = mode === 'text' ? await textPoint(page) : await blankPoint(page);
+  await page.touchscreen.tap(location.x, location.y); await page.waitForTimeout(75);
+  await page.evaluate(({ location, label }) => {
+    const pane = document.getElementById('readingPane'), article = document.getElementById('article'), tools = document.getElementById('articleTools');
+    const state = __extensionQA.runtime.state, bounds = pane.getBoundingClientRect();
+    const visibleTop = bounds.top + (!state.pure && tools.offsetParent ? tools.getBoundingClientRect().height : 0);
+    const clicked = document.elementFromPoint(location.x, location.y)?.closest('[data-read-block]');
+    const node = clicked && article.contains(clicked) && !clicked.closest('[hidden]') ? clicked
+      : [...article.querySelectorAll('[data-read-block]')].find(node => {
+        const rect = node.getBoundingClientRect(); return !node.closest('[hidden]') && rect.bottom > visibleTop && rect.top < bounds.bottom;
+      }) || article;
+    const snapshot = phase => {
+      const rect = node.getBoundingClientRect();
+      return { phase, top: rect.top, origin: rect.top + pane.scrollTop, scrollTop: pane.scrollTop,
+        maxScroll: Math.max(0, pane.scrollHeight - pane.clientHeight), width: article.getBoundingClientRect().width,
+        pure: __extensionQA.runtime.state.pure, restoring: __extensionQA.runtime.state.restoring };
+    };
+    const trace = { label, location, expectedPure: !state.pure, block: node.dataset.readBlock, before: snapshot('before'), rows: [] };
+    window.__pureFrameTrace = trace;
+    const sample = phase => {
+      const row = snapshot(phase), requested = trace.before.scrollTop + row.origin - trace.before.origin;
+      row.requestedScroll = requested; row.expectedScroll = Math.max(0, Math.min(row.maxScroll, requested));
+      row.scrollError = row.scrollTop - row.expectedScroll; row.clamped = row.expectedScroll !== requested;
+      trace.rows.push(row);
+    };
+    // Registered after runtime: this listener observes the very same physical
+    // pointerup after its toggle, then every following paint opportunity.
+    window.addEventListener('pointerup', () => {
+      sample('same-pointerup'); queueMicrotask(() => sample('microtask'));
+      let index = 0;
+      const frame = () => { sample('raf-' + (++index)); if (index < 8) requestAnimationFrame(frame); else trace.done = true; };
+      requestAnimationFrame(frame);
+    }, { once: true });
+  }, { location, label });
+  await page.touchscreen.tap(location.x, location.y);
+  await page.waitForFunction(() => window.__pureFrameTrace?.done);
+  const trace = await page.evaluate(() => window.__pureFrameTrace);
+  geometry.push({ scenario: 'pure-touch-paint-frames', ...trace });
+  await fs.writeFile(path.join(output, label + '-frames.json'), JSON.stringify(trace, null, 2) + '\n');
+  for (const row of trace.rows) {
+    assert.equal(row.pure, trace.expectedPure, label + ' changes mode in the same physical event');
+    assert(Math.abs(row.scrollError) <= 1, label + ' compensates before any paint: ' + JSON.stringify(row));
+    assert(Math.abs(row.width - trace.before.width) < 1, label + ' preserves paper width in every frame');
+    if (!row.clamped) assert(Math.abs(row.top - trace.before.top) <= 1, label + ' keeps absolute text Y before every paint');
+  }
+  return trace;
+}
 async function touchSequence(page, kind) {
   const session = await page.context().newCDPSession(page), location = await blankPoint(page);
   const finger = (x, y, id = 0) => ({ x, y, id, radiusX: 1, radiusY: 1, force: .5 });
@@ -387,6 +435,56 @@ async function check(browser, name, body, options = {}) {
       assert.equal(await page.locator('#partHeading').isVisible(), false);
       assert.equal((await visibleH2(page)).length, 38);
     }, { omitExtensions: true });
+    await check(browser, 'touch-pure-switch-is-stable-before-every-paint', async ({ page }) => {
+      for (const scenario of [
+        { name: 'main-middle', destination: 'ordered-dp-frontier', mode: 'gutter', scroll: 190 },
+        { name: 'extension-middle', destination: 'dynamic-range-kth-manual', mode: 'text', scroll: 240 },
+        { name: 'chapter-start', start: true, mode: 'gutter' },
+        { name: 'chapter-end', end: true, mode: 'gutter' }
+      ]) {
+        if (scenario.start || scenario.end) { await page.evaluate(() => __extensionQA.runtime.showReader(null, null, true)); await wait(page); }
+        else await jump(page, scenario.destination);
+        if (scenario.end) { await page.locator('#readingPane').evaluate(node => { node.scrollTop = node.scrollHeight - node.clientHeight; }); await wait(page); }
+        if (scenario.scroll) await scrollBy(page, scenario.scroll);
+        await clearSelection(page);
+        const before = await paperPosition(page), layer = await page.evaluate(() => __extensionQA.runtime.state.layer);
+        await page.screenshot({ path: path.join(output, scenario.name + '-normal.png') });
+        const iterations = scenario.scroll ? 4 : 2;
+        for (let i = 0; i < iterations; i++) {
+          await frameCheckedTouchToggle(page, scenario.mode, scenario.name + '-toggle-' + (i + 1));
+          assert.equal(await page.evaluate(() => __extensionQA.runtime.state.layer), layer);
+          if (!i) {
+            await page.screenshot({ path: path.join(output, scenario.name + '-pure.png') });
+            const atRest = await paperPosition(page, before.block), location = await blankPoint(page);
+            await page.evaluate(block => {
+              const pane = document.getElementById('readingPane'), article = document.getElementById('article');
+              const node = document.querySelector(`[data-read-block="${block}"]`);
+              const snap = () => ({ top: node.getBoundingClientRect().top, width: article.getBoundingClientRect().width, scrollTop: pane.scrollTop });
+              const trace = window.__controlFrameTrace = { before: snap(), rows: [], done: false };
+              let index = 0;
+              const frame = () => { trace.rows.push({ frame: ++index, ...snap() }); if (index < 36) requestAnimationFrame(frame); else trace.done = true; };
+              requestAnimationFrame(frame);
+            }, before.block);
+            await page.touchscreen.tap(location.x, location.y);
+            await page.waitForFunction(() => document.getElementById('app').classList.contains('controls-awake'));
+            await page.waitForFunction(() => window.__controlFrameTrace?.done);
+            const wake = await page.evaluate(() => window.__controlFrameTrace);
+            geometry.push({ scenario: 'pure-control-wake-paint-frames', name: scenario.name, ...wake });
+            for (const row of wake.rows) {
+              assert(Math.abs(row.top - wake.before.top) <= 1 && Math.abs(row.scrollTop - wake.before.scrollTop) <= 1,
+                'waking overlay controls never moves text in any frame: ' + JSON.stringify({ scenario, row, before: wake.before }));
+              assert(Math.abs(row.width - wake.before.width) < 1, 'waking controls preserves paper width in every frame');
+            }
+            samePaper(atRest, await paperPosition(page, before.block));
+            await page.evaluate(() => document.getElementById('readingPane').focus({ preventScroll: true }));
+          }
+        }
+        const after = await paperPosition(page, before.block);
+        if (scenario.scroll) assert(Math.abs(after.top - before.top) <= 1, 'repeated middle transitions do not accumulate drift: ' + JSON.stringify({ scenario, before, after }));
+        geometry.push({ scenario: 'pure-frame-round-trip', name: scenario.name, before, after, verticalDelta: after.top - before.top, widthDelta: after.width - before.width });
+        await page.screenshot({ path: path.join(output, scenario.name + '-restored.png') });
+      }
+    }, { touch: true });
     await check(browser, 'touch-double-tap-keeps-layer-and-paper', async ({ page }) => {
       for (const [layer, destination] of [['main', 'ordered-dp-frontier'], ['extension', 'dynamic-range-kth-manual']]) {
         await jump(page, destination); await scrollBy(page, 190); await clearSelection(page);

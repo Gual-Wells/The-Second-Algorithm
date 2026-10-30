@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "pure-stability-20261031",
+  "goal": "对照第二语言既有同步锚点纯净切换方案，消除双击切换的中间绘制跳动；以逐帧真实读面验收后发布",
+  "createdAt": "2026-10-30T18:52:23.587247+00:00",
+  "evidence": [
+    {
+      "id": "d00f68584dfd4e3a99720857620a11a4",
+      "kind": "research",
+      "path": "work/jobs/pure-stability-20261031/source-audit.md",
+      "summary": "固定第二语言既有同步锚点纯净方案与v28原生边界修复，独立重现本项目335px首帧回跳",
+      "outcome": "accepted",
+      "sha256": "01a8bc3268ebcf267931930faf9c7c9fa8948ff23e28aaa0db80b9d7f85b4f55",
+      "inputHash": "13df4b2af81756b00431d5a059e07bda661489f106afdd802221279815cd3c8e",
+      "recordedAt": "2026-10-30T18:57:42.797489+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "52f808f085e24c459c5b5f0eff2c3c18",
+      "kind": "review",
+      "path": "work/jobs/pure-stability-20261031/review.md",
+      "summary": "采用同事件同步几何事务，保留算法读面与异步导航；新增逐帧和原生clamp验收",
+      "outcome": "accepted",
+      "sha256": "5803d676282f98e68ddc082c04ac0004a08c732eea367f98080092bfe02b9393",
+      "inputHash": "13df4b2af81756b00431d5a059e07bda661489f106afdd802221279815cd3c8e",
+      "recordedAt": "2026-10-30T18:57:46.879381+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    }
+  ],
+  "lastGoodVerification": null,
+  "lastPreparedRelease": null
+}

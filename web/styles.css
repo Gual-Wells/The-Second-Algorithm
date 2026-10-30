@@ -254,7 +254,7 @@ input::placeholder, textarea::placeholder { color: #60758a; opacity: 1; }
 .reader-view { grid-template-rows: auto minmax(0,1fr); }
 .reader-view > .reading-layout { grid-row: 2; }
 .reading-layout, .reading-pane { min-width: 0; min-height: 0; }
-.reading-pane { overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; scrollbar-width: thin; overflow-anchor: none; touch-action: pan-x pan-y pinch-zoom; }
+.reading-pane { overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; scrollbar-width: thin; overflow-anchor: none; scroll-behavior: auto; touch-action: pan-x pan-y pinch-zoom; }
 .chapter-inner { max-width: 860px; min-height: 100%; margin: 0 auto; padding: 0 16px 24px; }
 .chapter-load-status[data-tone="loading"] .status-lamp { border-color: #b97c2e; background: #e5aa5a; }
 .chapter-load-status[data-tone="error"] .status-lamp { border-color: #a35b47; background: #d88e72; }

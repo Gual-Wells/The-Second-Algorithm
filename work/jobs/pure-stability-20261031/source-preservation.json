@@ -1,0 +1,12 @@
+{
+  "baseline": "e8b2d55ba09ed48f796a3d1d48023b9d4cc53434",
+  "checkedFiles": 64,
+  "unexpectedChanges": [],
+  "preserved": true,
+  "allowedChanges": [
+    "content/binary/chapter-review.json",
+    "web/DESIGN.md",
+    "web/reader-runtime.js",
+    "web/styles.css"
+  ]
+}
