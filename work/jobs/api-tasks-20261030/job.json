@@ -47,21 +47,43 @@
       "inputHash": "bdd5629f82a0af09f1e63af70d7272b76139a8d31cf43754509369eb22ebe101",
       "recordedAt": "2026-10-30T05:55:05.224756+00:00",
       "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "ac56f8df91434a3b997a919e57de1f15",
+      "kind": "research",
+      "path": "work/jobs/api-tasks-20261030/research.md",
+      "summary": "Research still applies; runtime process-exit behavior checked against official Node documentation and actual empty queue",
+      "outcome": "accepted",
+      "sha256": "6ce4d8914f8ae78259091232e472e01084e1963d876a93047e90cc0685b8eb0e",
+      "inputHash": "0ad7721947ae464551a600c5501173092e2c790a3575638e9f82ff9b8df6ab50",
+      "recordedAt": "2026-10-30T06:11:59.950581+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "db8aa67f12f64f0cb89d9da0d0f11a7c",
+      "kind": "review",
+      "path": "work/jobs/api-tasks-20261030/runtime-ci-review.md",
+      "summary": "Actual successful background exits and bounded upgrade-fixture hold with unchanged production SW",
+      "outcome": "accepted",
+      "sha256": "4e15f952f0abec3b60623672028277370847a3273f22bfa21e481929c874da60",
+      "inputHash": "0ad7721947ae464551a600c5501173092e2c790a3575638e9f82ff9b8df6ab50",
+      "recordedAt": "2026-10-30T06:12:02.786768+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
     }
   ],
   "lastGoodVerification": {
-    "path": "work/jobs/api-tasks-20261030/verifications/14ae1d1d233f4cd59d9a7978bc3813e4.json",
-    "sha256": "a60884730045874e194c1830dfeeaa4e64c4af484dda6017ed99964e6166a0a0",
-    "inputHash": "bdd5629f82a0af09f1e63af70d7272b76139a8d31cf43754509369eb22ebe101"
+    "path": "work/jobs/api-tasks-20261030/verifications/e21621a6a74b4cd2aa7d0862879db6a3.json",
+    "sha256": "bb9adcb2f4cfd3b59ca64eca2c39de5749fff1662bbcc362f588ae243e9a017a",
+    "inputHash": "0ad7721947ae464551a600c5501173092e2c790a3575638e9f82ff9b8df6ab50"
   },
   "lastPreparedRelease": {
-    "path": "work/jobs/api-tasks-20261030/releases/22c66a643e964c3e9fa120ecf28b3972.json",
-    "sha256": "27f448f05ed6bc405f691cc2b6a67aee49336f8ee418b9762004fc866207953a",
-    "inputHash": "bdd5629f82a0af09f1e63af70d7272b76139a8d31cf43754509369eb22ebe101"
+    "path": "work/jobs/api-tasks-20261030/releases/fb46b3c02bd94300ad1ea15ac80074e4.json",
+    "sha256": "add5c17e3295ab4e9811e05b514c8d79b752f813907571378ed09453c6489e34",
+    "inputHash": "0ad7721947ae464551a600c5501173092e2c790a3575638e9f82ff9b8df6ab50"
   },
   "lastVerificationAttempt": {
-    "path": "work/jobs/api-tasks-20261030/verifications/14ae1d1d233f4cd59d9a7978bc3813e4.json",
-    "sha256": "a60884730045874e194c1830dfeeaa4e64c4af484dda6017ed99964e6166a0a0",
-    "inputHash": "bdd5629f82a0af09f1e63af70d7272b76139a8d31cf43754509369eb22ebe101"
+    "path": "work/jobs/api-tasks-20261030/verifications/e21621a6a74b4cd2aa7d0862879db6a3.json",
+    "sha256": "bb9adcb2f4cfd3b59ca64eca2c39de5749fff1662bbcc362f588ae243e9a017a",
+    "inputHash": "0ad7721947ae464551a600c5501173092e2c790a3575638e9f82ff9b8df6ab50"
   }
 }

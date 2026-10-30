@@ -42,7 +42,7 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
   const withdrawnApp = withdrawnBundle.outputFiles[0].text + '\nglobalThis.__carrierUpgrade = { get state() { return S; } };\n';
   const sw = await fs.readFile(path.join(root, 'web/sw.js'), 'utf8');
   const manifest = await fs.readFile(path.join(root, 'web/manifest.webmanifest'));
-  let published = false, withdrawn = false, networkOffline = false, documentRequests = 0, sessionIdentity = owner;
+  let published = false, withdrawn = false, networkOffline = false, documentRequests = 0, sessionIdentity = owner, holdNewManifest = true;
   const currentBuild = () => withdrawn ? withdrawnBuild : published ? newBuild : oldBuild;
   const held = new Set(), errors = [], requests = [];
   const server = http.createServer(async (request, response) => {
@@ -65,7 +65,7 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
           .replaceAll('__LIBRARY_PATHS__', JSON.stringify(published && !withdrawn
             ? ['/library/catalog.json', documentURL, meta.sourceUrl, meta.markdownUrl, knowledge.url] : ['/library/catalog.json']))); return;
       }
-      if (url.pathname === '/manifest.webmanifest' && url.searchParams.get('v') === newBuild) {
+      if (url.pathname === '/manifest.webmanifest' && url.searchParams.get('v') === newBuild && holdNewManifest) {
         // Keep the replacement installing while the new app is already running.
         held.add(response); response.on('close', () => held.delete(response)); return;
       }
@@ -123,6 +123,7 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
       navigator.serviceWorker.controller.postMessage({ type: 'VERSION' }, [c.port2]);
     }));
     assert.equal(build, oldBuild);
+    holdNewManifest = false;
     for (const response of held) { response.writeHead(200, { 'Content-Type': 'application/manifest+json' }); response.end(manifest); }
     held.clear();
     await page.locator('#article .code-block').first().waitFor();
@@ -165,7 +166,7 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
     assert.equal(await page.locator('#readerView').isVisible(), false);
     assert.match(await page.evaluate(owner => localStorage.getItem('second-algorithm:' + owner + ':notes:formal-first'), owner), /unsent lesson note/);
     await context.close();
-    networkOffline = false; published = false; documentRequests = 0; sessionIdentity = owner;
+    networkOffline = false; published = false; documentRequests = 0; sessionIdentity = owner; holdNewManifest = true;
     const updateContext = await browser.newContext();
     const updatePage = await updateContext.newPage(); updatePage.on('pageerror', error => errors.push(error.message)); updatePage.on('dialog', dialog => dialog.type() === 'beforeunload' ? dialog.accept() : dialog.dismiss());
     await updatePage.goto(origin + '/setup'); await updatePage.waitForFunction(() => document.body.dataset.ready === 'true');
@@ -184,6 +185,7 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
     await updatePage.waitForTimeout(100);
     assert.equal(await updatePage.locator('[data-reload-app]').isVisible(), false,
       'a resolved update request must not enable reload while the old policy still controls the page');
+    holdNewManifest = false;
     for (const response of held) { response.writeHead(200, { 'Content-Type': 'application/manifest+json' }); response.end(manifest); }
     held.clear();
     await updatePage.locator('[data-reload-app]').waitFor({ state: 'visible' });
