@@ -402,3 +402,6 @@ input::placeholder, textarea::placeholder { color: #60758a; opacity: 1; }
   .article pre { overflow: visible; }
   .article pre code { min-width: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
 }
+/* Same quiet unread signal as the series reader; no layout shift. */
+#questionsButton { position: relative; }
+#questionsButton.has-unread::after { content: ''; position: absolute; top: 5px; right: 6px; width: 6px; height: 6px; border-radius: 50%; background: #c34239; box-shadow: 0 0 0 1px #eef5fb; pointer-events: none; }

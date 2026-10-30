@@ -1,5 +1,6 @@
 import { authRoute, sessionFor } from './auth.mjs';
 import { servicesRoute, publisherServiceRoute, publisherPaths } from './services.mjs';
+import {questionsRoute,questionPublisherRoute} from './questions.mjs';
 
 const MAX_BODY = 65_536;
 const encoder = new TextEncoder();
@@ -15,8 +16,8 @@ class InputError extends Error {
   constructor(message, status = 400) { super(message); this.status = status; }
 }
 
-async function inputJson(request) {
-  if (Number(request.headers.get('content-length') || 0) > MAX_BODY) throw new InputError('请求过大', 413);
+async function inputJson(request, limit = MAX_BODY) {
+  if (Number(request.headers.get('content-length') || 0) > limit) throw new InputError('请求过大', 413);
   const reader = request.body?.getReader();
   if (!reader) return {};
   const chunks = []; let total = 0;
@@ -24,7 +25,7 @@ async function inputJson(request) {
     const { value, done } = await reader.read();
     if (done) break;
     total += value.byteLength;
-    if (total > MAX_BODY) { await reader.cancel(); throw new InputError('请求过大', 413); }
+    if (total > limit) { await reader.cancel(); throw new InputError('请求过大', 413); }
     chunks.push(value);
   }
   const bytes = new Uint8Array(total); let offset = 0;
@@ -136,6 +137,7 @@ async function stateRoute(request, env, session) {
 async function route(request, env) {
   const path = normalizedPath(request);
   if (path.startsWith('/auth/')) return authRoute(request, env, request.method === 'POST' ? await inputJson(request) : {});
+  if (path.startsWith('/api/questions/jobs/')) return questionPublisherRoute(request,env,r=>inputJson(r,400_000));
   if (publisherPaths.has(path)) return publisherServiceRoute(request, env, inputJson);
   if (publicPath(path)) {
     if (!['GET', 'HEAD'].includes(request.method)) return json({ error: '不支持此操作' }, 405);
@@ -145,7 +147,7 @@ async function route(request, env) {
   const session = await sessionFor(request, env);
   if (!session) return json({ error: '请先登录' }, 401);
   let response;
-  const service=path.startsWith('/api/')?await servicesRoute(request,env,session,inputJson,path):null;
+  const service=path.startsWith('/api/questions')?await questionsRoute(request,env,session,inputJson):path.startsWith('/api/')?await servicesRoute(request,env,session,inputJson,path):null;
   if(service) response=service;
   else if (path === '/api/library' && request.method === 'GET') {
     response = await env.ASSETS.fetch(new Request(new URL('/library/catalog.json', request.url)));

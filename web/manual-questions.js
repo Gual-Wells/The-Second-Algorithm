@@ -5,7 +5,7 @@ const global = globalThis;
 
   // A transport is optional and must explicitly confirm receipt with {ok:true}.
   // This module has no network client, polling, gesture submission or seeded history.
-export function createReaderQuestions({getContext, toast = () => {}, transport = null} = {}) {
+export function createReaderQuestions({getContext, toast = () => {}, transport = null, history = null, retry = null, onRead = () => {}} = {}) {
     if (typeof getContext !== 'function') throw new TypeError('getContext is required');
     if (transport !== null && typeof transport !== 'function') throw new TypeError('transport must be a function or null');
 
@@ -121,6 +121,15 @@ export function createReaderQuestions({getContext, toast = () => {}, transport =
           const answer = element(document, 'div', 'question-answer reader-question-message reader-question-assistant');
           answer.append(element(document, 'strong', '', '答疑'), element(document, 'p', 'reader-question-content', turn.answer));
           group.append(answer);
+        } else if (turn.status === 'failed') {
+          group.append(element(document, 'p', 'question-status', turn.error === 'outcome_unknown' ? '本次结果待核对，暂不重复生成。' : '答疑未完成，问题已保留。'));
+          if (retry && turn.error !== 'outcome_unknown') {
+            const button=element(document,'button','action-button','重新处理');button.type='button';
+            button.addEventListener('click',async()=>{button.disabled=true;try{await retry({id:turn.id});await refresh();}catch(error){showStatus(state,error.message,true);}finally{button.disabled=false;}});
+            group.append(button);
+          }
+        } else {
+          group.append(element(document, 'p', 'question-status', turn.status === 'running' ? '正在答疑…' : '等待答疑…'));
         }
         messages.append(group);
       }
@@ -174,10 +183,11 @@ export function createReaderQuestions({getContext, toast = () => {}, transport =
         if (state.pending.get(question)?.id === pending.id) state.pending.delete(question);
         save(state, {...pending, raw});
         if (!state.messages.some(turn => turn.id === pending.id)) {
-          state.messages.push({id:pending.id, question, answer:typeof result.answer === 'string' ? result.answer : ''});
+          state.messages.push({id:pending.id, question, answer:typeof result.answer === 'string' ? result.answer : '',status:result.status||'pending'});
         }
         if (mounted?.state === state) displayMessages(mounted);
         showStatus(state, '问题已发送。');
+        if(history)void refresh();
       } catch (error) {
         showStatus(state, typeof error?.message === 'string' && error.message ? error.message : '发送暂未确认，请重试。问题草稿已保留。', true);
       } finally {
@@ -191,6 +201,22 @@ export function createReaderQuestions({getContext, toast = () => {}, transport =
       mounted.input.removeEventListener('input', mounted.onInput);
       mounted.form.removeEventListener('submit', mounted.onSubmit);
       mounted = null;
+    }
+
+    async function refresh() {
+      if(!history||destroyed||!mounted||global.document?.hidden)return;
+      const view=mounted,state=view.state;
+      try{
+        const result=await history({chapterId:state.context.chapterId,revision:state.context.revision,markRead:true});
+        if(destroyed||mounted!==view||currentContext().owner!==state.context.owner)return;
+        if(!Array.isArray(result?.turns))throw Error('问答记录暂不可用');
+        if(JSON.stringify(state.messages)!==JSON.stringify(result.turns)){
+          const scrollTop=view.messages.scrollTop,atBottom=view.messages.scrollHeight-view.messages.clientHeight-scrollTop<32;
+          state.messages=result.turns;displayMessages(view);
+          view.messages.scrollTop=atBottom?view.messages.scrollHeight:scrollTop;
+        }
+        onRead();
+      }catch(error){if(mounted===view)showStatus(state,'问答记录暂不可用，问题草稿已保留。');}
     }
 
     function render(host) {
@@ -239,6 +265,7 @@ export function createReaderQuestions({getContext, toast = () => {}, transport =
       host.replaceChildren(root);
       displayMessages(view);
       updateSending(state);
+      if(history)void refresh();
       return root;
     }
 
@@ -247,8 +274,10 @@ export function createReaderQuestions({getContext, toast = () => {}, transport =
       captureDraft();
       unmount();
       destroyed = true;
+      if(refreshTimer)global.clearInterval(refreshTimer);
     }
-
-    return Object.freeze({render, captureDraft, destroy});
+    const refreshTimer=history&&typeof global.setInterval==='function'?global.setInterval(()=>void refresh(),15000):null;
+    refreshTimer?.unref?.();
+    return Object.freeze({render, captureDraft, destroy, refresh});
 }
 

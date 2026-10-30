@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "id": "api-tasks-20261030",
+  "goal": "Connect project-scoped API chapter questions with immutable context, private history, safe retry and existing publication gates",
+  "createdAt": "2026-10-30T05:30:22.266788+00:00",
+  "evidence": [
+    {
+      "id": "5e50e6f2d0454658b1cc721607678d50",
+      "kind": "research",
+      "path": "work/jobs/api-tasks-20261030/research.md",
+      "summary": "Actual queues and runtime ownership, official Responses contract, project-specific schemas and unknown paid result protection",
+      "outcome": "accepted",
+      "sha256": "6ce4d8914f8ae78259091232e472e01084e1963d876a93047e90cc0685b8eb0e",
+      "inputHash": "10cad5969329c889533b8aa8b88e62f5b01109097282b8b39ce3aab09aa71941",
+      "recordedAt": "2026-10-30T05:45:31.172037+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "0ecec31b80cd45f1bd1fc87d549620ef",
+      "kind": "review",
+      "path": "work/jobs/api-tasks-20261030/review.md",
+      "summary": "Private fixed-version question flow, owner epoch, idempotency, lease, unread snapshot and actual browser/API checks",
+      "outcome": "accepted",
+      "sha256": "9025629e4cc95ff4e3eae547e79ba8121f7256858d1da5d467e1edfe51bcf863",
+      "inputHash": "10cad5969329c889533b8aa8b88e62f5b01109097282b8b39ce3aab09aa71941",
+      "recordedAt": "2026-10-30T05:45:37.761393+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "9042de2119994c3289140946d4c7121a",
+      "kind": "research",
+      "path": "work/jobs/api-tasks-20261030/research.md",
+      "summary": "Original API and deployment research remains applicable to the current bounded UI/index follow-up",
+      "outcome": "accepted",
+      "sha256": "6ce4d8914f8ae78259091232e472e01084e1963d876a93047e90cc0685b8eb0e",
+      "inputHash": "bdd5629f82a0af09f1e63af70d7272b76139a8d31cf43754509369eb22ebe101",
+      "recordedAt": "2026-10-30T05:55:01.526775+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "3af3981a49c14099a792efb6366493a7",
+      "kind": "review",
+      "path": "work/jobs/api-tasks-20261030/followup-review.md",
+      "summary": "Rechecked queue, request safety, retained original service review, stable selection DOM and indexed unread lookups at current inputs",
+      "outcome": "accepted",
+      "sha256": "b7f8ffb821ec9f0e6e2a59b4dfb2b540309443d7b8809eb70b173cfb1e714809",
+      "inputHash": "bdd5629f82a0af09f1e63af70d7272b76139a8d31cf43754509369eb22ebe101",
+      "recordedAt": "2026-10-30T05:55:05.224756+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    }
+  ],
+  "lastGoodVerification": {
+    "path": "work/jobs/api-tasks-20261030/verifications/14ae1d1d233f4cd59d9a7978bc3813e4.json",
+    "sha256": "a60884730045874e194c1830dfeeaa4e64c4af484dda6017ed99964e6166a0a0",
+    "inputHash": "bdd5629f82a0af09f1e63af70d7272b76139a8d31cf43754509369eb22ebe101"
+  },
+  "lastPreparedRelease": {
+    "path": "work/jobs/api-tasks-20261030/releases/22c66a643e964c3e9fa120ecf28b3972.json",
+    "sha256": "27f448f05ed6bc405f691cc2b6a67aee49336f8ee418b9762004fc866207953a",
+    "inputHash": "bdd5629f82a0af09f1e63af70d7272b76139a8d31cf43754509369eb22ebe101"
+  },
+  "lastVerificationAttempt": {
+    "path": "work/jobs/api-tasks-20261030/verifications/14ae1d1d233f4cd59d9a7978bc3813e4.json",
+    "sha256": "a60884730045874e194c1830dfeeaa4e64c4af484dda6017ed99964e6166a0a0",
+    "inputHash": "bdd5629f82a0af09f1e63af70d7272b76139a8d31cf43754509369eb22ebe101"
+  }
+}

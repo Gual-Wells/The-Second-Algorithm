@@ -78,6 +78,9 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
     if (url.pathname === '/auth/logout') { mock.identity = null; return json({ok:true}); }
     if ((url.pathname.startsWith('/api/') || url.pathname.startsWith('/library/')) && !mock.identity) return json({error:'Unauthorized'},401);
     if (url.pathname === '/api/library') return json(mock.catalog);
+    if(url.pathname==='/api/questions/status')return json({unread:0});
+    if(url.pathname==='/api/questions/thread')return json({turns:mock.questionTurns||[]});
+    if(url.pathname==='/api/questions'){if(mock.rejectQuestion)return json({error:'发送未确认，草稿已保留'},503);const input=req.postDataJSON();mock.questionTurns||=[];if(!mock.questionTurns.some(t=>t.id===input.id))mock.questionTurns.push({id:input.id,question:input.question,answer:'',status:'pending'});return json({ok:true,id:input.id,status:'pending'});}
     if (url.pathname === '/api/state') {
       if (req.method() === 'GET') { if(mock.failStateRead)return json({error:'Isolated state read temporarily unavailable'},503);if (mock.holdState) { mock.holdState = false; await new Promise(r => { mock.heldState = r; }); } return json({ state:mock.state }); }
       const input = req.postDataJSON(), previous = mock.state[input.key];
@@ -480,19 +483,17 @@ async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries
       await p.waitForFunction(()=>document.querySelector('#sheetDialog').open&&document.querySelector('.reader-question-input'));await settled(p);assert(await p.locator('.reader-question-input').isVisible());
       await p.evaluate(()=>history.back());await p.waitForFunction(()=>!document.querySelector('#sheetDialog').open);
     });
-    await check('manual-question-service-warning-draft-reload-owner-isolation-and-short-viewport',async env=>{
-      const p=await env.page();await p.setViewportSize({width:402,height:420});await p.locator('#questionsButton').click();const count=env.mock.requests.length;
-      assert.equal(await p.locator('.reader-question-turn').count(),0);assert.match(await p.locator('.reader-question-service-status').innerText(),/尚未连接.*不会发送.*草稿/);
-      assert(await p.locator('.reader-question-send').isDisabled());
-      const text='为什么这里保留范围边界？';await p.locator('.reader-question-input').fill(text);await closeSheet(p);await p.locator('#questionsButton').click();
-      assert.equal(await p.locator('.reader-question-input').inputValue(),text);assert(await p.locator('.reader-question-send').isDisabled());
-      await p.locator('.reader-question-compose').evaluate(form=>form.requestSubmit());
-      assert.match(await p.locator('.reader-question-status').innerText(),/尚未连接.*未发送/);
-      assert.equal(await p.locator('.reader-question-input').inputValue(),text);assert.equal(await p.locator('.reader-question-turn').count(),0);assert.equal(env.mock.requests.length,count);
-      assert(await p.locator('#toast').evaluate(e=>e.hidden));const r=await p.locator('[data-sheet-close]').boundingBox();assert(r.y>=0&&r.y+r.height<=421);
-      await p.screenshot({path:path.join(output,'manual-question-short-viewport.png')});await closeSheet(p);await p.reload();await p.locator('#article .code-block').first().waitFor();await settled(p);
-      await p.locator('#questionsButton').click();assert.equal(await p.locator('.reader-question-input').inputValue(),text);await closeSheet(p);env.mock.identity=otherOwner;
-      await p.reload();await p.locator('#article .code-block').first().waitFor();await settled(p);await p.locator('#questionsButton').click();assert.equal(await p.locator('.reader-question-input').inputValue(),'');
+    await check('api-question-acknowledgement-failure-draft-reload-owner-isolation-and-short-viewport',async env=>{
+      const p=await env.page();await p.setViewportSize({width:402,height:420});await p.locator('#questionsButton').click();
+      assert.equal(await p.locator('.reader-question-turn').count(),0);assert(await p.locator('.reader-question-service-status').isHidden());assert(await p.locator('.reader-question-send').isEnabled());
+      const text='为什么这里保留范围边界？';await p.locator('.reader-question-input').fill(text);await closeSheet(p);await p.locator('#questionsButton').click();assert.equal(await p.locator('.reader-question-input').inputValue(),text);
+      env.mock.rejectQuestion=true;await p.locator('.reader-question-send').click();await p.waitForFunction(()=>document.querySelector('.reader-question-status').textContent.includes('未确认'));
+      assert.equal(await p.locator('.reader-question-input').inputValue(),text);assert.equal(await p.locator('.reader-question-turn').count(),0);
+      const r=await p.locator('[data-sheet-close]').boundingBox();assert(r.y>=0&&r.y+r.height<=421);await p.screenshot({path:path.join(output,'api-question-short-viewport.png')});
+      await closeSheet(p);await p.reload();await p.locator('#article .code-block').first().waitFor();await settled(p);await p.locator('#questionsButton').click();assert.equal(await p.locator('.reader-question-input').inputValue(),text);
+      env.mock.rejectQuestion=false;await p.locator('.reader-question-send').click();await p.waitForFunction(()=>document.querySelectorAll('.reader-question-turn').length===1);assert.equal(await p.locator('.reader-question-input').inputValue(),'');assert.match(await p.locator('.reader-question-turn').innerText(),/等待答疑/);
+      env.mock.questionTurns[0].answer='保留不变量才能安全排除范围。';env.mock.questionTurns[0].status='answered';await closeSheet(p);await p.locator('#questionsButton').click();await p.waitForFunction(()=>document.querySelector('.reader-question-assistant')?.textContent.includes('不变量'));
+      await p.locator('.reader-question-input').fill('未发送的新草稿');await closeSheet(p);env.mock.identity=otherOwner;env.mock.questionTurns=[];await p.reload();await p.locator('#article .code-block').first().waitFor();await settled(p);await p.locator('#questionsButton').click();assert.equal(await p.locator('.reader-question-input').inputValue(),'');assert.equal(await p.locator('.reader-question-turn').count(),0);
     });
     await check('legacy-notes-byte-preservation-two-tabs-and-unsent-logout-guard',async env=>{const p=await env.page(),keys=Object.keys(noteSeed()),before=await snapshotKeys(p,keys);env.mock.state['notes:practice-course']={value:'newer remote copy',revision:99,updatedAt:Date.now()};await p.reload();await p.locator('#article .code-block').first().waitFor();await settled(p);const b=await env.page();assert.deepEqual(await snapshotKeys(p,keys),before);assert.deepEqual(await snapshotKeys(b,keys),before);await p.locator('#settingsButton').click();await p.locator('[data-show-device-settings]').click();await p.locator('[data-logout]').click();await settled(p);assert.equal(env.mock.requests.filter(r=>r.path==='/auth/logout').length,0);assert.equal(await p.evaluate(()=>window.__refinement.state.owner),owner);assert.deepEqual(await snapshotKeys(p,keys),before);assert.match(await p.locator('#toast').innerText(),/未同步|草稿|保留|退出/);assert.equal(await p.locator('#notesButton,#noteEditor').count(),0);},{initial:noteSeed()});
     await check('clean-logout-preserves-all-legacy-notes-and-prevents-offline-reentry',async env=>{const p=await env.page(),keys=Object.keys(noteSeed(false)),before=await snapshotKeys(p,keys);await p.locator('#settingsButton').click();await p.locator('[data-show-device-settings]').click();await p.locator('[data-logout]').click();await p.locator('#loginView').waitFor({state:'visible'});assert.equal(env.mock.requests.filter(r=>r.path==='/auth/logout').length,1);assert.deepEqual(await snapshotKeys(p,keys),before);assert.equal(await p.evaluate(()=>localStorage.getItem('second-algorithm:last-session')),null);env.mock.rejectApis=true;await p.reload();await p.locator('#loginView').waitFor({state:'visible'});assert.equal(await p.locator('#article .code-block').count(),0);assert.deepEqual(await snapshotKeys(p,keys),before);},{initial:noteSeed(false)});

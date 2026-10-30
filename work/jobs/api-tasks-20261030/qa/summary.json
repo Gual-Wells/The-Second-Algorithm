@@ -1,0 +1,124 @@
+{
+  "nodeTestsPassed": 137,
+  "browserPassed": true,
+  "browserJourneys": [
+    {
+      "name": "anonymous-owner-gate-and-install-instructions-without-protected-requests",
+      "passed": true
+    },
+    {
+      "name": "guided-reader-compact-toolbar-and-responsive-paper",
+      "passed": true
+    },
+    {
+      "name": "header-logo-shared-height-reflection-and-motion-protection",
+      "passed": true
+    },
+    {
+      "name": "pointer-dialog-reader-focus-is-clean-and-keyboard-remains-visible",
+      "passed": true
+    },
+    {
+      "name": "single-h2-neighbors-source-status-index-and-native-boundaries",
+      "passed": true
+    },
+    {
+      "name": "hierarchical-directory-index-expand-is-not-jump-and-preserves-original-order",
+      "passed": true
+    },
+    {
+      "name": "semantic-knowledge-prerequisite-history-late-response-and-focus",
+      "passed": true
+    },
+    {
+      "name": "code-copy-horizontal-scroll-independent-size-and-wrap",
+      "passed": true
+    },
+    {
+      "name": "visual-viewport-keyboard-and-pinch-zoom-sheet-bounds",
+      "passed": true
+    },
+    {
+      "name": "safe-doubleclick-only-pure-preserves-width-text-and-native-selection",
+      "passed": true
+    },
+    {
+      "name": "pure-code-click-excluded-source-controls-only-and-pointer-hold",
+      "passed": true
+    },
+    {
+      "name": "same-document-link-browser-back-forward-and-quick-reload-keep-place",
+      "passed": true
+    },
+    {
+      "name": "slow-cross-document-preserves-paper-and-cancel-rejects-late-result",
+      "passed": true
+    },
+    {
+      "name": "invalid-explicit-route-preserves-paper-and-reports-unavailable-target",
+      "passed": true
+    },
+    {
+      "name": "same-document-invalid-route-return-before-position-debounce-preserves-live-paper",
+      "passed": true
+    },
+    {
+      "name": "pending-old-scroll-cannot-write-new-document-history-position",
+      "passed": true
+    },
+    {
+      "name": "grouped-service-settings-reading-defaults-sheet-history-and-immediate-reopen",
+      "passed": true
+    },
+    {
+      "name": "api-question-acknowledgement-failure-draft-reload-owner-isolation-and-short-viewport",
+      "passed": true
+    },
+    {
+      "name": "legacy-notes-byte-preservation-two-tabs-and-unsent-logout-guard",
+      "passed": true
+    },
+    {
+      "name": "clean-logout-preserves-all-legacy-notes-and-prevents-offline-reentry",
+      "passed": true
+    },
+    {
+      "name": "same-page-expired-owner-and-reconnect-rebuild-the-current-route",
+      "passed": true
+    },
+    {
+      "name": "cross-owner-reconnect-never-shares-reader-private-state-or-legacy-notes",
+      "passed": true
+    },
+    {
+      "name": "actual-built-publication-content-source-knowledge-index-integrity",
+      "passed": true
+    }
+  ],
+  "browserSources": {
+    "web/app.js": "e11af806a6e0fbdef274e9584568dae400c7c72f2e4bab91c0a64ab49fc02e36",
+    "web/reader-runtime.js": "b8d69bae6d2fadaa48bf9135a96a0fef6aaa8ac98784ca9a7a3ec765334f5045",
+    "web/manual-questions.js": "c283fe2d183dc9a0057547a5b274690052ec39a1538f2d76a0627ddb3220cf36",
+    "web/service-settings.js": "97701e76d8b949d4d21603638c6e58680e17c25abd16b9e54d3b7485cd735624",
+    "web/chapter-dates.js": "6f0d0e526780f6a4f0929b9c2a0083d59aa5ba00650bde64c77c864949f1794c",
+    "web/auth.js": "9f8db119e19cc7ac887e96aa6cefe8bc153759c316bb611472b91a2507b2fd87",
+    "web/worker-release.js": "f79451187b86d84e0bc5260e82f02ae6759cd4fda8a62576309abad39234c776",
+    "web/sw.js": "8fdfc4fb4391983f4a7126685f58e6d3f4ca68098deeb8827ac624a594355459",
+    "web/index.html": "2c8daade6541438912573b64748a7835da2e542a948ca4c2ac36fc47718a029e",
+    "web/styles.css": "929813919542fb0a8c1d4e466235c937e9bb811a7177969648b4780595b5b6f4",
+    "dist/index.html": "f78b362ffb354a74c3a62d826158e54754fc855485c8a7821a8f4b167b8b12f6",
+    "dist/app.js": "e023410414a2d61f9f1d5f39b99a93a26076e443786919956ed826fde129e943",
+    "dist/library/catalog.json": "7f87d20ebf00401827abac04d7c0154be9dc75707c5ee3ea510ba39171b43da8"
+  },
+  "startupChecksPassed": 50,
+  "actualHttpServiceWorkerUpgradePassed": true,
+  "cppVerification": "work/jobs/api-tasks-20261030/verifications/36e0be52bea34d58b887e528ec8f0f2d.json",
+  "liveApiSamplesCompleted": [
+    "second-language",
+    "second-algorithm",
+    "second-schedule"
+  ],
+  "privateApiResponsesKeptOutOfGit": true,
+  "realOwnerDatabaseUsedForTests": false,
+  "physicalIPhoneTested": false
+}

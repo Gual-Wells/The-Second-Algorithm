@@ -173,7 +173,11 @@ async function enter(owner, offline, connection) {
   S.settings = { ...READING_DEFAULTS, preload: true, ...(S.records.preferences?.value || readLocal('preferences', {})) };
   S.settings.fontSize = Math.max(14, Math.min(24, Number(S.settings.fontSize) || 15));
   S.settings.codeSize = Math.max(10, Math.min(20, Number(S.settings.codeSize) || 12)); applySettings();
-  questions ||= createReaderQuestions({ getContext: () => ({ owner: S.owner, chapterId: S.active?.collection.id, title: S.active?.collection.title, revision: S.active?.meta.revision }), toast, transport: null });
+  questions ||= createReaderQuestions({ getContext: () => ({ owner: S.owner, chapterId: S.active?.collection.id, title: S.active?.collection.title, revision: S.active?.meta.revision }), toast,
+    transport: payload => api('/api/questions', {method:'POST',body:payload}),
+    history: payload => api('/api/questions/thread', {method:'POST',body:payload}),
+    retry: payload => api('/api/questions/retry', {method:'POST',body:payload}),onRead:refreshQuestionBadge });
+  void refreshQuestionBadge();
   let verifiedAt = Date.now(); if (offline) { try { verifiedAt = JSON.parse(localStorage.getItem(SESSION_KEY)).verifiedAt; } catch {} }
   await swMessage({ type: 'OWNER', owner, verifiedAt }); if (connection !== S.connectionSequence || S.owner !== owner) return;
   if (!location.hash || location.hash === '#/' || location.hash === '#/library') {
@@ -420,6 +424,11 @@ function showIndex() {
   requestAnimationFrame(() => runtime.scrollCurrentIndex($('indexList')));
 }
 function showQuestions() { if (waitForSheetClose(showQuestions) || !S.active) return; showSheet('章节答疑', '', 'questions'); questions.render($('sheetBody')); }
+async function refreshQuestionBadge(){
+  if(!S.owner||S.offline||document.hidden)return;const owner=S.owner;
+  try{const result=await api('/api/questions/status');if(S.owner===owner)$('questionsButton').classList.toggle('has-unread',result.unread>0);}catch{}
+}
+setInterval(()=>void refreshQuestionBadge(),60000);
 function chapterTitle(collection) { return `第 ${collection.chapterNumber} 章 · ${collection.title}`; }
 function renderChapterNavigation() {
   const rows = orderedChapters(S.library?.collections), current = S.active?.collection;

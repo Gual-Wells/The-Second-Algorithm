@@ -12,7 +12,7 @@ OneDrive沿用已有个人Microsoft应用的`Files.ReadWrite.AppFolder offline_a
 
 `GET /api/balances`与`GET /api/storage/usage`均读取D1中仅一行当前私人服务快照；页面打开不查询厂商管理接口，不轮询，不在Git和公开壳存金额。publisher收尾`POST /api/services/report`按字段合并，核对时间防旧报告回退，失败保留上次已核值并标注本次未成功；null表示未知，不能替换成0。
 
-OpenAI只登记ChatGPT附赠API credits：issuedAmount是发放额，remainingAmount是核实剩余；不能由发放额推出余额。到期日只有日期就只存日期；source记录核实来源类型，claim表示领取状态。它不是Codex五小时/周限额，不承担Codex自动化执行，不新增API请求或每任务估算、充值阈值提醒。
+OpenAI只登记ChatGPT附赠API credits：issuedAmount是发放额，remainingAmount是核实剩余；不能由发放额推出余额。到期日只有日期就只存日期；source记录核实来源类型，claim表示领取状态。它不是Codex五小时/周限额；2026-10-30起章节答疑采用独立Responses API运行器，出版继续Codex。用量记录与官方剩余分开，不由估算伪造余额或告警。
 
 `collect-service-snapshot.mjs`在任务末尾读取D1管理大小、正式静态库实际字节、OneDrive账户quota及本项目目录大小。静态库无可独占的总容量，limit保持null；OneDrive账户总用量与projectBytes分开。D1 used来自实际database_size。Free单库发布上限为500MB；Cloudflare在同一官方表将2MB标为2,000,000字节，当前按十进制500,000,000显示计划上限，不冒称管理API返回的额度。账户全部D1和Workers/读写额度未在本页独立量测，不能因此声称其他项目无消耗。[官方D1限制](https://developers.cloudflare.com/d1/platform/limits/)
 
@@ -45,3 +45,11 @@ node scripts/archive-publication.mjs
 第一次安装先以Windows PowerShell运行`./scripts/install-background-task.ps1`检查方案，明确本机配置和服务端默认休息后再用`-Apply`注册；安装只建05:00检查，不运行Codex。每次正式发布收尾运行快照更新与归档，失败保留已发布资产并报告；不为辅助快照失败倒退正式出版身份。没有配置就显示尚未配置，不能用静态按钮承诺并不存在的runner。
 
 迁移`0002_services.sql`不修改原auth/reader_state，新增控制表仅此业务所需。部署必须应用迁移并配置独立PUBLISH_TOKEN与VAPID；源第二语言的publisher密钥不能混用。公共壳只用构建器精确实际文件路径排除Worker，private library、API、未知和编码路径继续过owner边界；content-only构建始终全部走fail-closed Worker。[Pages路由](https://developers.cloudflare.com/pages/functions/routing/)
+
+## 章节答疑 API（2026-10-30）
+
+问答按当前账户epoch、章节和不可变revision隔离。服务器从受保护静态库取完整章节Markdown，客户端不能上传替代正文；运行器拿到原文摘要后复核，以gpt-6.1-sol／max回答，并保留完整问题/回答上下文。原文静态资产不可用时失败保留，不能换用新版冒充原版。D1仅保存私人问答文字与领取/未读状态，正文仍在静态基座；本机原始API返回和用量单独保留。未引入共享数据网关、跨项目登录或内容访问权限。
+
+本机独立任务每分钟读自有队列；空队列不调用模型。领取、续租、完成、已读按当前owner+epoch核对；同ID重发幂等，追问等待前问处理。生成成功先本机保存再回推，结果未知不自动重新POST。用户显式重试只允许已确认拒绝或可重用结果，未知费用保持核对状态。前端显示真实等待、处理、失败与回答；草稿在本机、历史在账户，未读红点在入口，打开时确认已读快照，晚到回复仍未读。
+
+API配置位于已忽略的.local/services/openai.json，仅保存共用credentialFile路径、模型/档位、用量目录和可选本机代理；不在本项目复制密钥。问答运行器与出版任务分开，电脑需开机并登录。共用客户端scripts/lib/openai-responses.mjs采用同系列同一受检wire版本，本项目独立持有业务发布凭据。新的0004_questions迁移只新增问答表及索引，不修改原登录、读位或出版许可。
