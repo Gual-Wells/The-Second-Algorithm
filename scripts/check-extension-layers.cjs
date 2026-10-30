@@ -53,10 +53,60 @@ async function scrollBy(page, distance) {
   await page.locator('#readingPane').evaluate((node, distance) => { node.scrollTop += distance; }, distance);
   await page.waitForTimeout(260);
 }
+async function clearSelection(page) { await page.evaluate(() => getSelection()?.removeAllRanges()); }
+async function pure(page) { return page.evaluate(() => __extensionQA.runtime.state.pure); }
+async function blankPoint(page, edge = 'middle') {
+  const result = await page.evaluate(edge => {
+    const paper = document.getElementById('article').getBoundingClientRect(), pane = document.getElementById('readingPane').getBoundingClientRect();
+    const x = paper.left + 3, y = edge === 'top' ? pane.top + 12 : edge === 'bottom' ? pane.bottom - 16 : pane.top + Math.min(180, pane.height / 2);
+    return { x, y, hit: document.elementFromPoint(x, y)?.id };
+  }, edge);
+  assert(['article', 'readingPane'].includes(result.hit), 'gesture starts on real reading padding: ' + JSON.stringify(result));
+  return result;
+}
+async function doubleTap(page, edge = 'middle', afterFirst = null) {
+  const location = await blankPoint(page, edge);
+  await page.touchscreen.tap(location.x, location.y); await page.waitForTimeout(75);
+  await afterFirst?.(location);
+  await page.touchscreen.tap(location.x, location.y); await wait(page); await page.waitForTimeout(300);
+}
+async function paperPosition(page, block = null) {
+  return page.evaluate(block => {
+    const current = block ?? __extensionQA.runtime.position.block.index;
+    const node = document.querySelector(`[data-read-block="${current}"]`);
+    return { block: current, top: node.getBoundingClientRect().top, width: document.getElementById('article').getBoundingClientRect().width };
+  }, block);
+}
+function samePaper(before, after) {
+  assert(Math.abs(before.top - after.top) < 2 && Math.abs(before.width - after.width) < 1,
+    'gesture preserves physical text coordinate and paper width: ' + JSON.stringify({ before, after }));
+}
+async function touchSequence(page, kind) {
+  const session = await page.context().newCDPSession(page), location = await blankPoint(page);
+  const finger = (x, y, id = 0) => ({ x, y, id, radiusX: 1, radiusY: 1, force: .5 });
+  const start = (points) => session.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: points });
+  const end = () => session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  try {
+    await page.touchscreen.tap(location.x, location.y); await page.waitForTimeout(75);
+    if (kind === 'multiple') {
+      await start([finger(location.x, location.y), finger(location.x + 45, location.y + 25, 1)]);
+      await page.waitForTimeout(60); await end();
+    } else {
+      await start([finger(location.x, location.y)]);
+      if (kind === 'hold') await page.waitForTimeout(700);
+      else {
+        await session.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [finger(location.x, location.y + 32)] });
+        await page.waitForTimeout(80);
+      }
+      await end();
+    }
+    await page.waitForTimeout(450);
+  } finally { await session.detach(); }
+}
 
-async function environment(browser, { initial = {}, states = new Map(), identity = owner, omitExtensions = false } = {}) {
+async function environment(browser, { initial = {}, states = new Map(), identity = owner, omitExtensions = false, touch = false } = {}) {
   const context = await browser.newContext({ viewport: { width: 402, height: 874 }, deviceScaleFactor: 3,
-    serviceWorkers: 'block', permissions: ['clipboard-read', 'clipboard-write'] });
+    hasTouch: touch, isMobile: touch, serviceWorkers: 'block', permissions: ['clipboard-read', 'clipboard-write'] });
   context.setDefaultTimeout(10_000);
   const servedCatalog = clone(catalog);
   let noExtensionPayload, noExtensionURL, application = compiled;
@@ -315,6 +365,114 @@ async function check(browser, name, body, options = {}) {
       assert.equal(await page.locator('#partHeading').isVisible(), false);
       assert.equal((await visibleH2(page)).length, 38);
     }, { omitExtensions: true });
+    await check(browser, 'touch-double-tap-keeps-layer-and-paper', async ({ page }) => {
+      for (const [layer, destination] of [['main', 'ordered-dp-frontier'], ['extension', 'dynamic-range-kth-manual']]) {
+        await jump(page, destination); await scrollBy(page, 190); await clearSelection(page);
+        const before = await paperPosition(page);
+        await doubleTap(page); assert.equal(await pure(page), true, 'two real touch taps enter pure mode exactly once');
+        assert.equal(await page.evaluate(() => __extensionQA.runtime.state.layer), layer);
+        assert.equal(await page.locator('#partHeading').isVisible(), false);
+        samePaper(before, await paperPosition(page, before.block));
+        await doubleTap(page); assert.equal(await pure(page), false, 'two real touch taps exit pure mode exactly once');
+        assert.equal(await page.evaluate(() => __extensionQA.runtime.state.layer), layer);
+        assert.equal(await page.locator('#partHeading').isVisible(), true);
+        samePaper(before, await paperPosition(page, before.block));
+      }
+    }, { touch: true });
+    await check(browser, 'touch-pure-controls-never-intercept-double-tap', async ({ page }) => {
+      await jump(page, 'dynamic-range-kth-manual'); await scrollBy(page, 240); await clearSelection(page);
+      for (const edge of ['top', 'bottom']) {
+        await doubleTap(page); assert.equal(await pure(page), true);
+        await page.waitForFunction(() => !document.getElementById('app').classList.contains('controls-awake'));
+        await doubleTap(page, edge, async location => {
+          assert.equal(await page.locator('#sheetDialog').evaluate(node => node.open), false, 'first tap must not accidentally open the directory');
+          const hit = await page.evaluate(({ x, y }) => document.elementFromPoint(x, y)?.id, location);
+          assert(['article', 'readingPane'].includes(hit), 'first tap must not reveal a control under the second tap: ' + hit);
+        });
+        assert.equal(await pure(page), false, edge + ' padding can exit pure mode');
+        assert.equal(await page.locator('#sheetDialog').evaluate(node => node.open), false);
+        assert.equal(await page.evaluate(() => __extensionQA.runtime.state.layer), 'extension');
+      }
+      // On exit the header itself returns under the finger. Use an actual
+      // paragraph gap at the future question-button centre, not the gutter.
+      const headerTarget = await page.locator('#questionsButton').evaluate(node => {
+        const rect = node.getBoundingClientRect(); return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+      });
+      await doubleTap(page); assert.equal(await pure(page), true);
+      await page.evaluate(target => {
+        const pane = document.getElementById('readingPane'), top = pane.getBoundingClientRect().top;
+        const paragraphs = [...document.querySelectorAll('#article > p')].filter(node => !node.hidden);
+        const paragraph = paragraphs.find(node => {
+          const rect = node.getBoundingClientRect(), next = node.nextElementSibling?.getBoundingClientRect();
+          return rect.bottom > top + 100 && rect.bottom < top + pane.clientHeight && next && next.top - rect.bottom > 6;
+        });
+        if (!paragraph) throw Error('actual chapter needs a visible paragraph gap for the header retarget regression');
+        const rect = paragraph.getBoundingClientRect(), next = paragraph.nextElementSibling.getBoundingClientRect();
+        pane.scrollTop += rect.bottom + Math.min(5, (next.top - rect.bottom) / 2) - target.y;
+      }, headerTarget);
+      await page.waitForTimeout(250);
+      assert.equal(await page.evaluate(({ x, y }) => document.elementFromPoint(x, y)?.id, headerTarget), 'article');
+      await page.touchscreen.tap(headerTarget.x, headerTarget.y); await page.waitForTimeout(75);
+      await page.touchscreen.tap(headerTarget.x, headerTarget.y); await wait(page); await page.waitForTimeout(300);
+      assert.equal(await pure(page), false);
+      assert.equal(await page.locator('#sheetDialog').evaluate(node => node.open), false, 'exit compatibility click must not open the newly exposed question button');
+      await page.locator('#settingsButton').tap(); await page.locator('#sheetDialog[open]').waitFor(); await closeSheet(page);
+      await doubleTap(page); const location = await blankPoint(page);
+      await page.touchscreen.tap(location.x, location.y);
+      await page.waitForFunction(() => document.getElementById('app').classList.contains('controls-awake'));
+      assert.equal(await pure(page), true, 'a single tap only wakes controls');
+      await page.locator('#sectionIndexButton').tap(); await page.locator('#indexList').waitFor(); await closeSheet(page);
+    }, { touch: true });
+    await check(browser, 'touch-pure-without-native-dblclick-and-native-operations', async ({ page }) => {
+      assert.equal(await page.locator('#partHeading').isVisible(), false);
+      await jump(page, 'ordered-dp-frontier'); await scrollBy(page, 190); await clearSelection(page);
+      // A real touch sequence must work even where the browser does not emit
+      // dblclick. This listener does not manufacture pointer events or prevent
+      // native selection; it only stops the compatibility event reaching runtime.
+      await page.evaluate(() => document.addEventListener('dblclick', event => event.stopImmediatePropagation(), true));
+      await doubleTap(page); assert.equal(await pure(page), true);
+      await doubleTap(page); assert.equal(await pure(page), false);
+      for (const kind of ['hold', 'drag', 'multiple']) {
+        await clearSelection(page); await touchSequence(page, kind);
+        assert.equal(await pure(page), false, kind + ' is not a double tap');
+      }
+      await page.evaluate(() => {
+        const paragraph = [...document.querySelectorAll('#article p')].find(node => !node.closest('[hidden]'));
+        const range = document.createRange(); range.selectNodeContents(paragraph);
+        getSelection().removeAllRanges(); getSelection().addRange(range);
+      });
+      await doubleTap(page); assert.equal(await pure(page), false, 'an existing selection is not a pure-mode command');
+      await clearSelection(page);
+      const paragraph = page.locator('#article p').filter({ visible: true }).first(); await paragraph.scrollIntoViewIfNeeded();
+      await paragraph.dblclick({ position: { x: 42, y: 12 } });
+      assert((await page.evaluate(() => getSelection().toString())).trim(), 'native mouse text selection remains available');
+      assert.equal(await pure(page), false); await clearSelection(page);
+      const knowledge = page.locator('#article a[data-knowledge]').filter({ visible: true }).first();
+      await knowledge.scrollIntoViewIfNeeded(); await knowledge.tap(); await page.locator('.knowledge-paper').waitFor(); await closeSheet(page);
+      assert.equal(await pure(page), false, 'knowledge links open their own window');
+      const code = page.locator('#article pre').filter({ visible: true }).first(); await code.scrollIntoViewIfNeeded();
+      const rect = await code.boundingBox();
+      await page.touchscreen.tap(rect.x + 35, rect.y + 20); await page.waitForTimeout(75);
+      await page.touchscreen.tap(rect.x + 35, rect.y + 20); await page.waitForTimeout(450);
+      assert.equal(await pure(page), false, 'code taps preserve code operations');
+      await clearSelection(page);
+      const horizontal = await page.locator('#article pre').evaluateAll(nodes => {
+        const node = nodes.find(node => !node.closest('[hidden]') && node.scrollWidth > node.clientWidth + 20);
+        if (!node) return null; node.scrollIntoView({ block: 'center' }); return node.dataset.readBlock;
+      });
+      assert.notEqual(horizontal, null, 'actual chapter has a horizontally scrollable C++ example');
+      const pre = page.locator(`[data-read-block="${horizontal}"]`); const bounds = await pre.boundingBox();
+      const session = await page.context().newCDPSession(page);
+      try {
+        const y = bounds.y + Math.min(35, bounds.height / 2), x = bounds.x + Math.min(230, bounds.width - 20);
+        await session.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y, id: 0 }] });
+        await session.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: x - 80, y, id: 0 }] });
+        await page.waitForTimeout(60); await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+      } finally { await session.detach(); }
+      await page.waitForFunction(block => document.querySelector(`[data-read-block="${block}"]`).scrollLeft > 0, horizontal);
+      assert.equal(await pure(page), false, 'horizontal code gestures do not toggle pure mode');
+      assert.equal(await page.locator('#partHeading').isVisible(), false);
+    }, { touch: true, omitExtensions: true });
     await check(browser, 'mobile-desktop-pure-font-and-copy', async ({ page }) => {
       for (const size of [{ width: 402, height: 874 }, { width: 320, height: 740 }, { width: 1280, height: 800 }]) {
         await page.setViewportSize(size); await wait(page); await jump(page, 'time-parallel-search');

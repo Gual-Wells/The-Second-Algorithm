@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "id": "pure-gesture-20261031",
+  "goal": "修复双击纯净触摸失效与首点击穿新唤出工具栏；保留原生选择、缩放、代码操作和整章分层，验证发布当前读者修复",
+  "createdAt": "2026-10-30T17:54:41.670880+00:00",
+  "evidence": [],
+  "lastGoodVerification": null,
+  "lastPreparedRelease": null
+}

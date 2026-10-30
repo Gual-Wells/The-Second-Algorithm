@@ -1,0 +1,9 @@
+{
+  "baseline": "f1de8d0fe44a35374215e83868b85071ed6b511f",
+  "checkedFiles": 65,
+  "unexpectedChanges": [],
+  "preserved": true,
+  "allowedRuntimeChange": "web/reader-runtime.js",
+  "readerDesignUpdated": "web/DESIGN.md",
+  "adoptionMetadata": "content/binary/chapter-review.json"
+}

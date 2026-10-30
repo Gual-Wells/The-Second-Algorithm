@@ -390,7 +390,7 @@ async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries
       const hiddenChrome=()=>p.locator('#appHeader,#chapterNav,#readerHead,.part-heading').evaluateAll(xs=>xs.every(e=>{const s=getComputedStyle(e);return e.inert&&(s.display==='none'||s.visibility==='hidden'||Number(s.opacity)===0);}));
       assert(await hiddenChrome());assert(await p.locator('#articleTools,#readerStatusbar').evaluateAll(xs=>xs.every(e=>e.inert&&getComputedStyle(e).opacity==='0')));
       await p.locator('#article #code-2 + .code-block code').click({position:{x:5,y:5}});assert.equal(await p.locator('#app').evaluate(e=>e.classList.contains('controls-awake')),false);
-      await p.locator('#readingPane').click({position:{x:3,y:100}});assert(await p.locator('#app').evaluate(e=>e.classList.contains('controls-awake')));assert(await hiddenChrome());
+      await p.locator('#readingPane').click({position:{x:3,y:100}});await p.waitForFunction(()=>document.getElementById('app').classList.contains('controls-awake'));assert(await hiddenChrome());
       assert(await p.locator('#articleTools,#readerStatusbar').evaluateAll(xs=>xs.every(e=>!e.inert&&getComputedStyle(e).opacity!=='0')));
       assert.equal(await p.locator('#sectionIndexButton,#readerStatusbar').count(),2);
       const r=await p.locator('#sectionIndexButton').boundingBox();await p.mouse.move(r.x+r.width/2,r.y+r.height/2);await p.mouse.down();await p.waitForTimeout(3100);assert(await p.locator('#app').evaluate(e=>e.classList.contains('controls-awake')));assert(await hiddenChrome());await p.mouse.up();

@@ -6,6 +6,9 @@ const clone = value => value && JSON.parse(JSON.stringify(value));
 // destinations use the visible source-style index bar plus its reveal gap.
 const NAV_LINE = 24;
 const REVEAL_GAP = 12;
+const DOUBLE_TAP_MS = 350;
+const TAP_MOVE = 12;
+const TAP_DISTANCE = 28;
 
 // The book surface has no authority over identity, transport or publication.
 // Its caller supplies the one authenticated, revision-checked chapter.
@@ -17,6 +20,7 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, onRestoreS
   let rendered = [], blocks = [], cursor = null, view = 'chapter', restoring = false, pure = false;
   let layoutToken = 0, frame = 0, resizeTimer = 0, awakeTimer = 0, pointerHeld = false;
   let gestureSelection = false, gestureStarted = -Infinity;
+  let touchPress = null, previousTap = null, wakeTapTimer = 0, lastTouchUp = null, consumedTouchClick = null;
   const revision = () => chapter?.meta.revision;
   const sectionFor = id => byId.get(byId.get(id)?.sectionId);
   const indexExpanded = new Map();
@@ -86,6 +90,7 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, onRestoreS
     }
   }
   function setChapter(value, position = null, restored = []) {
+    resetTapGesture();
     layoutToken++; restoring = false; view = 'chapter'; pure = false; clearTimeout(awakeTimer);
     app.classList.remove('pure', 'controls-awake'); app.style.removeProperty('--pure-paper-width'); chromeInert(false);
     chapter = value; headings = []; sections = []; byId = new Map(); aliases = new Map(); indexExpanded.clear();
@@ -304,6 +309,7 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, onRestoreS
     $('sectionIndexButton').disabled = !chapter;
   }
   function showReader(position, anchor = null, fromStart = false, requestedLayer = null) {
+    resetTapGesture();
     if (view === 'reader' && !restoring) {
       const previous = capture(); if (previous) layerPositions[layer] = previous;
     }
@@ -350,13 +356,24 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, onRestoreS
     }, 3000);
   }
   function wakeControls() { if (!pure) return; chromeInert(false); app.classList.add('controls-awake'); sleepControls(); }
+  function resetTapGesture() {
+    clearTimeout(wakeTapTimer); wakeTapTimer = 0; touchPress = null; previousTap = null;
+  }
+  function deferControls() {
+    clearTimeout(wakeTapTimer);
+    // Do not put a toolbar under the finger before its compatibility click or
+    // second tap. That could open the directory instead of leaving pure mode.
+    wakeTapTimer = setTimeout(() => { wakeTapTimer = 0; if (view === 'reader' && pure && !isSheetOpen()) wakeControls(); }, DOUBLE_TAP_MS + 30);
+  }
   function setPure(on) {
     if (on && view !== 'reader') return;
+    resetTapGesture();
     const position = capture() || cursor, previous = pane.getBoundingClientRect().top;
     if (on) app.style.setProperty('--pure-paper-width', $('reader').getBoundingClientRect().width + 'px'); pure = on;
     settle(position, () => { app.classList.toggle('pure', on); clearTimeout(awakeTimer); app.classList.remove('controls-awake'); chromeInert(on); if (!on) app.style.removeProperty('--pure-paper-width'); }, () => { if (view === 'reader') pane.focus({ preventScroll: true }); }, previous);
   }
   function clear() {
+    resetTapGesture(); lastTouchUp = null; consumedTouchClick = null;
     layoutToken++; restoring = false; clearTimeout(awakeTimer); pure = false; view = 'chapter'; chapter = null; cursor = null;
     app.classList.remove('pure', 'controls-awake'); app.style.removeProperty('--pure-paper-width'); chromeInert(false);
     article.replaceChildren(); $('chapterView').replaceChildren(); $('readingPosition').textContent = '';
@@ -375,18 +392,36 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, onRestoreS
     if (button?.dataset.go) { go(button.dataset.go); return; }
     if (button?.hasAttribute('data-reader-resume')) { onNavigate?.(null, clone(cursor)); return; }
   });
-  pane.addEventListener('scroll', () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(() => capture(true)); }, { passive: true });
+  pane.addEventListener('scroll', () => { if (!restoring) resetTapGesture(); cancelAnimationFrame(frame); frame = requestAnimationFrame(() => capture(true)); }, { passive: true });
   $('partHeading').addEventListener('keydown', event => {
     if (!event.target.matches('[data-reading-layer]') || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
     event.preventDefault(); const next = event.key === 'Home' ? 'main' : event.key === 'End' ? 'extension' : layer === 'main' ? 'extension' : 'main';
     switchLayer(next); $(next === 'main' ? 'mainReadingTab' : 'extensionReadingTab').focus({ preventScroll: true });
   });
   const excluded = 'button,a,input,textarea,select,label,summary,pre,code,table';
+  const hasSelection = () => Boolean(getSelection()?.toString().trim());
+  const blankTarget = target => target === article || target === pane;
+  const readingTarget = target => pane.contains(target) && !target.closest(excluded) && !target.isContentEditable;
+  const distance = (a, b) => Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
   pane.addEventListener('pointerdown', event => {
+    if (event.pointerType === 'mouse') lastTouchUp = null;
     if (event.timeStamp - gestureStarted > 500 || event.detail === 1) gestureSelection = Boolean(getSelection()?.toString().trim());
     gestureStarted = event.timeStamp;
+    if (event.pointerType !== 'touch' || !event.isPrimary) return;
+    clearTimeout(wakeTapTimer);
+    touchPress = { pointerId: event.pointerId, clientX: event.clientX, clientY: event.clientY, started: event.timeStamp,
+      scrollTop: pane.scrollTop, scale: window.visualViewport?.scale, layoutToken, layer, pure,
+      blank: blankTarget(event.target),
+      eligible: view === 'reader' && !restoring && !isSheetOpen() && readingTarget(event.target) && !hasSelection() };
   });
+  pane.addEventListener('pointermove', event => {
+    if (touchPress?.pointerId === event.pointerId && distance(touchPress, event) > TAP_MOVE) resetTapGesture();
+  }, { passive: true });
+  pane.addEventListener('contextmenu', resetTapGesture);
   pane.addEventListener('dblclick', event => {
+    // Some touch engines also synthesize dblclick. The physical touch sequence
+    // has already been handled (or reserved for native selection), exactly once.
+    if (lastTouchUp && event.timeStamp - lastTouchUp.timeStamp < 800 && distance(lastTouchUp, event) <= TAP_DISTANCE) return;
     if (event.target.closest(excluded)) return;
     const blank = event.target === article || event.target === pane;
     // Chromium can select a neighboring word even when both real pointer hits
@@ -396,12 +431,49 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, onRestoreS
     if (blank ? gestureSelection : Boolean(getSelection()?.toString().trim())) return;
     event.preventDefault(); if (blank) getSelection()?.removeAllRanges(); setPure(!pure);
   });
+  window.addEventListener('pointerdown', event => {
+    consumedTouchClick = null;
+    if (event.pointerType === 'mouse') { resetTapGesture(); lastTouchUp = null; }
+    else if (event.pointerType === 'touch' && !event.isPrimary) resetTapGesture();
+  }, { passive: true });
+  window.addEventListener('click', event => {
+    if (!event.detail || !consumedTouchClick || event.timeStamp - consumedTouchClick.timeStamp >= 800 || distance(consumedTouchClick, event) > TAP_DISTANCE) return;
+    // Exiting pure mode can expose normal header buttons before the second
+    // tap's compatibility click. Consume only that already-handled tap.
+    consumedTouchClick = null; event.preventDefault(); event.stopImmediatePropagation();
+  }, true);
   app.addEventListener('pointerdown', event => { pointerHeld = true; if (pure && chrome.some(node => node.contains(event.target))) wakeControls(); });
-  window.addEventListener('pointerup', event => { pointerHeld = false; if (pure && !event.target.closest(excluded) && !getSelection()?.toString().trim()) wakeControls(); else sleepControls(); });
-  window.addEventListener('pointercancel', () => { pointerHeld = false; sleepControls(); });
-  app.addEventListener('focusin', wakeControls);
+  window.addEventListener('pointerup', event => {
+    pointerHeld = false;
+    if (event.pointerType === 'touch') {
+      lastTouchUp = { timeStamp: event.timeStamp, clientX: event.clientX, clientY: event.clientY };
+      const press = touchPress; touchPress = null;
+      const valid = press?.pointerId === event.pointerId && press.eligible && event.timeStamp - press.started <= DOUBLE_TAP_MS
+        && distance(press, event) <= TAP_MOVE && Math.abs(press.scrollTop - pane.scrollTop) < 3
+        && press.layoutToken === layoutToken && press.layer === layer && press.pure === pure
+        && press.scale === window.visualViewport?.scale && !isSheetOpen() && !hasSelection()
+        && readingTarget(document.elementFromPoint(event.clientX, event.clientY));
+      if (!valid) { resetTapGesture(); sleepControls(); return; }
+      if (!press.blank || !blankTarget(document.elementFromPoint(event.clientX, event.clientY))) {
+        previousTap = null; if (pure) deferControls(); return;
+      }
+      if (previousTap && event.timeStamp - previousTap.timeStamp <= DOUBLE_TAP_MS && distance(previousTap, event) <= TAP_DISTANCE) {
+        consumedTouchClick = lastTouchUp;
+        setPure(!pure); return;
+      }
+      previousTap = { timeStamp: event.timeStamp, clientX: event.clientX, clientY: event.clientY };
+      if (pure) deferControls();
+      return;
+    }
+    if (pure && pane.contains(event.target) && !event.target.closest(excluded) && !hasSelection()) deferControls();
+    else sleepControls();
+  });
+  window.addEventListener('pointercancel', () => { pointerHeld = false; resetTapGesture(); sleepControls(); });
+  window.addEventListener('blur', resetTapGesture);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) resetTapGesture(); });
+  app.addEventListener('focusin', event => { if (chrome.some(node => node.contains(event.target))) wakeControls(); });
   document.addEventListener('keydown', () => { if (pure) wakeControls(); });
-  window.addEventListener('resize', () => { clearTimeout(resizeTimer); const position = capture() || cursor; resizeTimer = setTimeout(() => { if (chapter) settle(position); }, 100); });
+  window.addEventListener('resize', () => { resetTapGesture(); clearTimeout(resizeTimer); const position = capture() || cursor; resizeTimer = setTimeout(() => { if (chapter) settle(position); }, 100); });
   return Object.freeze({ setChapter, clear, capture, settle, showReader, showChapter, go, indexHTML, scrollCurrentIndex,
     enhanceCodes, resolveAnchor, normalizePosition, updateIndex, toggleIndexSection, wakeControls, setPure, setRestoredSections, switchLayer,
     get position() { return clone(cursor); }, get state() { return { view, pure, restoring, layer, cursor: clone(cursor) }; },
