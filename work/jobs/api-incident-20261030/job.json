@@ -25,21 +25,43 @@
       "inputHash": "6e148fe13ade46f30755bc6efef91f82a2b9d785af0ae7fb876af891b4cbe31b",
       "recordedAt": "2026-10-30T07:07:34.102445+00:00",
       "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "a5050b4338834bc598030aca38bf5fde",
+      "kind": "research",
+      "path": "work/api-incident-20261030/streaming.md",
+      "summary": "核查官方SSE方案、约60秒链路关闭证据和成熟MIT解析器；不改变模型语义",
+      "outcome": "accepted",
+      "sha256": "fa52c6e3ba20376c74da4f24f13e17c24f3ddf7e779dec17af60353b1f6b88b7",
+      "inputHash": "72efee8ee9ef26223300f52cba74d5a1ed876afa6e022f4ac2b56b1cb3ad15a1",
+      "recordedAt": "2026-10-30T07:27:18.333828+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "23004a5e4f154371866fcc90dd52e7fd",
+      "kind": "review",
+      "path": "work/api-incident-20261030/streaming.md",
+      "summary": "9项真实代理与流式完整性回归，断流不回推与收费保护，正文及已部署载体原字节保持",
+      "outcome": "accepted",
+      "sha256": "fa52c6e3ba20376c74da4f24f13e17c24f3ddf7e779dec17af60353b1f6b88b7",
+      "inputHash": "72efee8ee9ef26223300f52cba74d5a1ed876afa6e022f4ac2b56b1cb3ad15a1",
+      "recordedAt": "2026-10-30T07:27:21.166767+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
     }
   ],
   "lastGoodVerification": {
-    "path": "work/jobs/api-incident-20261030/verifications/f786d031f7f5488bad5354ca94ac591b.json",
-    "sha256": "e46aa5b7e5f031394fd33644ab4882cee0fd044415dd63101a996a5e7e0d2f2e",
-    "inputHash": "6e148fe13ade46f30755bc6efef91f82a2b9d785af0ae7fb876af891b4cbe31b"
+    "path": "work/jobs/api-incident-20261030/verifications/56776ddbb52e43e98229b9636f90896a.json",
+    "sha256": "4cafd6cca31e4f7c78e4bf777ee686ec09d882e111d1c1f46691ed811065597b",
+    "inputHash": "72efee8ee9ef26223300f52cba74d5a1ed876afa6e022f4ac2b56b1cb3ad15a1"
   },
   "lastPreparedRelease": {
-    "path": "work/jobs/api-incident-20261030/releases/ee59fec3323b47fd85aa6005bffd2640.json",
-    "sha256": "54a39a521a20a41246a488f733b3614883bc4bb4b229f2f3c82694c03d251b5b",
-    "inputHash": "6e148fe13ade46f30755bc6efef91f82a2b9d785af0ae7fb876af891b4cbe31b"
+    "path": "work/jobs/api-incident-20261030/releases/04f7b494af58476284e2db0f514dc4c4.json",
+    "sha256": "fd8c09e72190683c5e002051f3d8e66a36a413b4389069060c70b10512fbfe6f",
+    "inputHash": "72efee8ee9ef26223300f52cba74d5a1ed876afa6e022f4ac2b56b1cb3ad15a1"
   },
   "lastVerificationAttempt": {
-    "path": "work/jobs/api-incident-20261030/verifications/f786d031f7f5488bad5354ca94ac591b.json",
-    "sha256": "e46aa5b7e5f031394fd33644ab4882cee0fd044415dd63101a996a5e7e0d2f2e",
-    "inputHash": "6e148fe13ade46f30755bc6efef91f82a2b9d785af0ae7fb876af891b4cbe31b"
+    "path": "work/jobs/api-incident-20261030/verifications/56776ddbb52e43e98229b9636f90896a.json",
+    "sha256": "4cafd6cca31e4f7c78e4bf777ee686ec09d882e111d1c1f46691ed811065597b",
+    "inputHash": "72efee8ee9ef26223300f52cba74d5a1ed876afa6e022f4ac2b56b1cb3ad15a1"
   }
 }
