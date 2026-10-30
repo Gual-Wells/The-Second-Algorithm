@@ -1,20 +1,20 @@
 {
   "readerBoundaryHelperSha256": "74ea33a6e5bd6152b116889823390664c458c863215abb5f9d7b11d81b7fdc95",
-  "readerSourceSha256": "979b63e50271fcb7e6a80ed55ec05ce4663754dcbe3858e300155ea7707ecb42",
+  "readerSourceSha256": "597a72cfd654852aa4834a0bc525de01a42d358739b4ea8471b07a8be3fabd94",
   "authoringDependencies": {
     "content/binary/advanced.cpp": "6bd17b582f1ac1eea42dd360b73ee10e870a7e01cf4334168fb5c7c05b546988",
-    "content/binary/advanced.source.md": "dc695964fae49478b069dbf5c16fa1e4c3ad919b950690a144fda84025acc75e",
+    "content/binary/advanced.source.md": "c6648646958fc2657d14f11808f239e61cd736032c0dfd09cfb4b217d2f4db25",
     "content/binary/boundary.cpp": "d33ebf32477c6fc0ce93a39269866c97c762b7c339e755b828923feb5b0a3475",
     "content/binary/boundary.source.md": "453be6c7b0c9775aa128e5f380a8a784ef97d6213b18a9c375e9625a5dd72150",
     "content/binary/chapter.authoring.json": "d8863b57143b9bc238e7bc8690cd3385bcc0bf8b22b98ee64a0e26aa467de24d",
-    "content/binary/chapter.subheadings.json": "60567214298a5ce6b1ab7d808a6520bf24711c4b5ef44a0355bbcee6db1c06a6",
-    "content/binary/decision.cpp": "576fd6fd6c0b2b22be12562debe1728c026f814522a6871b11ac5e5e947767fd",
-    "content/binary/decision.source.md": "7473d5f80aea7e477e0fdbc41ebde651775edee17659cf29c7ff5e2c4ed1d850",
-    "content/binary/selection.cpp": "ff819911911e1ef6666f6597d3b8ea9ada0e4f6126bfee5116537a2cea3aa37f",
-    "content/binary/selection.source.md": "8f93b764d675c965366b676afe9ed4ffc512aa188d41ae6db3c01002e36d5359",
+    "content/binary/chapter.subheadings.json": "7f296df23d6e4a874699e70a3b6016210be5422e02128124fa91816957df1959",
+    "content/binary/decision.cpp": "884cea5472249983e779a965cfab912f7bb5dd274ae4d5efe8057f113072b773",
+    "content/binary/decision.source.md": "7b89e3e2c760df5c13210f7b74a8505b59a5655a9205c685cef0eb6f23fdbaf5",
+    "content/binary/selection.cpp": "c57ebf513d97ae4cb3c4b7bafc9c60d260de68d0ef039dd1d0361b42c8538bd7",
+    "content/binary/selection.source.md": "1755707429612baad0deebe7b5bc2a9c70ea1063dd2b46be212d238bd368ffba",
     "tools/compose-chapter.mjs": "378380c9db8fe314707dad568971039535651db919f524d9b6a64b3df3dca417",
     "tools/subheadings.mjs": "095886e1b264571ac6cdad3f795c5568561dd55566b1288bbd14066decff064d",
-    "work/chapter-navigation-20261029/candidates/structured.json": "b4ea7bbc19290517c58e6cf505fc178d79423d510973e4056f6b98d28c632256"
+    "work/extension-tabs-20261030/candidates/implementation-presentation.json": "80e6c8e54a90283153235499e2e8a3b88e0c030eec1da8206c44a706f050bdd0"
   },
   "codeBlocks": [
     "boundary-ordered-manual",
@@ -846,18 +846,13 @@
     },
     {
       "depth": 3,
-      "id": "scode-用min截断每行计数",
-      "text": "（3）Scode：用min截断每行计数"
-    },
-    {
-      "depth": 3,
       "id": "工程-乘积上界与每轮扫描规模",
-      "text": "（4）工程：乘积上界与每轮扫描规模"
+      "text": "（3）工程：乘积上界与每轮扫描规模"
     },
     {
       "depth": 3,
       "id": "练习-隐式乘法表中的元素秩",
-      "text": "（5）练习：隐式乘法表中的元素秩"
+      "text": "（4）练习：隐式乘法表中的元素秩"
     },
     {
       "depth": 2,
@@ -1476,28 +1471,23 @@
     },
     {
       "depth": 3,
-      "id": "scode-用标准设施组织查询状态",
-      "text": "（3）Scode：用标准设施组织查询状态"
-    },
-    {
-      "depth": 3,
       "id": "推演-两次查询如何逐轮分开",
-      "text": "（4）推演：两次查询如何逐轮分开"
+      "text": "（3）推演：两次查询如何逐轮分开"
     },
     {
       "depth": 3,
       "id": "复杂度-共享重放的成本与回滚版本的区别",
-      "text": "（5）复杂度：共享重放的成本与回滚版本的区别"
+      "text": "（4）复杂度：共享重放的成本与回滚版本的区别"
     },
     {
       "depth": 3,
       "id": "边界-重置状态与只增边条件",
-      "text": "（6）边界：重置状态与只增边条件"
+      "text": "（5）边界：重置状态与只增边条件"
     },
     {
       "depth": 3,
       "id": "练习-多点对的最早连通日期",
-      "text": "（7）练习：多点对的最早连通日期"
+      "text": "（6）练习：多点对的最早连通日期"
     },
     {
       "depth": 2,
@@ -1600,13 +1590,13 @@
       "text": "（8）练习：同值收益补足与使用次数上限"
     }
   ],
-  "sourceSha256": "d6cf4a5d6543ec3cb42e7d5e495bf23dd233183c01e946b31aed27c10d7f17f4",
-  "codeSha256": "75fff25f5192947b4b0cd10b184eb82fd1dc20d57268ce1d70909e952b367d5f",
-  "markdownSha256": "201cc3138b76ab2833d392448285d1ee8809aa0de8768bb4611c39ea8e2d25e3",
-  "htmlSha256": "7633f8f5c1bd465cc7dfb8960028112428a882edff69b74b1578332a0afe30d0",
+  "sourceSha256": "f9fd4b968482ce357be34abd4454bc780305e56f0c8b6c5afca9976a4cfe8dd9",
+  "codeSha256": "e7b14e7450798c1ce0d8ec3b20942ff86e3b9d739cdde36ead78739b3ed43aab",
+  "markdownSha256": "5f53d2ca5da6db2dccff90b1796aef5c79c2e3c356c261cac3549ff183f77faa",
+  "htmlSha256": "41123fc561c2b8a752b84d2827c3598ad9aaae3f286537567749f8d662115f79",
   "builderSha256": "ba1d3de971483a7b0a0e83c68a29b4f2b8ee22cceb30134d8b7f5a5da5f20de9",
-  "learningSha256": "dba241f5b72f5cff90badcb776678896db08c99f8a5b9e007767aa4a2dfae62f",
+  "learningSha256": "8ac38744d061a25d1970f2dde5fd2d747da976ea8648ddd9a4d64bfd52529bec",
   "publicationsSha256": "7a0f9e012fcbe71228443287536ea4e8af7a0544acba697adf70cf159cf9ce5b",
-  "markdownBytes": 234760,
-  "htmlBytes": 451562
+  "markdownBytes": 235713,
+  "htmlBytes": 452190
 }

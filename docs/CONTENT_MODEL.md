@@ -25,7 +25,7 @@
 - `questions[]`：id、status为open/resolved/deferred、reason、core。核心问题未resolved阻止交接；非核心延期仍需真实理由及影响说明。
 - `searches[]`：id、query、source、result、note。保存实际检索与结果，包括无有效结果；检索计划不冒充已执行。
 - `scope.branches[]`：id、title、status为included/excluded、reason、materialIds。纳入分支须有实际分析材料与综合，排除不靠“以后再说”。
-- 最终`scope.prelude`说明理论前置计划；`problemTypes[]`包含id、title、branchIds、materialIds、exerciseUrls、problem、variation。每题型1–5个练习URL必须已存在于所指材料，纳入分支都应有题型承载。正式内容仍须额外落实手写/标准设施/C++等产品要求。
+- 最终`scope.prelude`说明理论前置计划；`problemTypes[]`包含id、title、branchIds、materialIds、exerciseUrls、problem、variation。每题型1–5个练习URL必须已存在于所指材料，纳入分支都应有题型承载。正式内容仍须落实实际需要的实现及解析、设施层次与必要C++等产品要求，Hcode/Scode不要求成对。
 
 全部已知书目/来源和当前已有正式章必须有台账身份。overview与独立scope前完成书目/站点/已知外部来源判断；chapter此时可以pending，仅盘点身份，不提前以旧章内容限制独立候选。alignment时完成已有章协同处置并有实际分析材料；collection开始相关来源须有提取材料。最终没有pending材料，采用材料已分析、没有孤立采用材料/分支，合并关系须可解析到实际采用材料而无环；核心问题和核心不可得依据不得悬置。原题链接及读取状态的真实性仍由研究者负责，HTTP地址存在不证明读过。
 
@@ -107,9 +107,9 @@ reading.units保留id/title/taskIds/locations，并声明：
 
 - `researchTypeIds`：非空、无重复的研究对象身份，引用交接`scope.problemTypes`。全部研究对象必须有节承接；允许多个对象归一节或一对象分多节，不要求研究与读者节身份/数量相等。
 - `dependsOn`：本章更早的正式节身份，按实际作者顺序形成依赖。
-- `facets`：problem、fit、variation、manual、manualExplanation、standard、standardExplanation、engineering八项正文位置。它们是语义落点，不强迫八个固定小标题，可自然共享明确位置。
-- `manualImplementationIds/standardImplementationIds`：属于本节任务的真实实现。manual引用手写；设施角色为algorithm/structure时引用standard实现，support/shared-core允许复用核心但必须解释设施实际承担的层次。
-- `standardRole`：kind为algorithm/structure/support/shared-core，explanation说明真实替代职责，不虚构整题库解。
+- `facets`：problem、fit、variation、engineering为必要正文位置；manual路径有实际实现时才要求manual/manualExplanation，standard路径有实际实现时才要求standard/standardExplanation。未采用路径的位置可省略或为`[]`，不以占位段落满足旧八项。它们是语义落点，不强迫固定小标题，可自然共享明确位置。
+- `manualImplementationIds/standardImplementationIds`：属于本节任务的真实实现，两数组任一可省略或为`[]`，正式节不能同时为空。manual引用手写；设施角色为algorithm/structure时引用standard实现，support/shared-core可复用真实核心并解释设施承担的层次。Hcode/Scode不要求成对，没有真实Scode不造设施代码，统一Scode且Hcode无额外价值不强行手造；两者有区分价值时均完整解析。
+- `standardRole`：采用standard路径时必须给kind（algorithm/structure/support/shared-core）及真实explanation；无Scode时可省略或为`{}`，不造`none`占位角色。有实质字段时仍按真实角色核验。共享实现沿合法shared-core及实际reuses/链接定位，不重复刊印源码。
 - `exercises`：1–5项title/url，来自本节task.sourceUrls并在所属正文中有实际可见链接；同节不能重复URL。
 
 正文位置为`{document,anchor}`，只认真实显式锚点，排除注释/代码示例假锚点。schema3每章只有一个逻辑文档，一个前置H2，每个正式节恰有一个归属唯一的H2。前置先于正式节，entry可省略从前置派生，显式提供时也须指向前置；facets在自己题型范围内。章内主结构只有前置/正式节，selectionMap非空即拒绝，不能让四篇、作者分工、证明/支撑或章末地图抢占H2一级目录；真实节内H3/H4仍必须进入从属目录。
@@ -117,6 +117,26 @@ reading.units保留id/title/taskIds/locations，并声明：
 作者H2与`reading.units[].title`保留纯语义标题。`compose-chapter`根据prelude/sections顺序，唯一生成`PRE、`及连续中文序号；手写序号和“前置节：”制作标签拒绝进入作者H2。当前schema3的已完成正文按实际前置/正式位置检查该前缀，正式节去前缀后须与合同语义title一致。构建及载体另核真实渲染H2序列；标题ID从去序号语义派生，原显式anchor保留，UI与下载不二次编号。编号、结构与身份通过不构成语义可读性认证。
 
 结构允许诚实施工open，包括研究尚未交接；`course quality`另查研究交接、领域/前置/分支/阅读/承诺是否已addressed、审阅是否当前有效。合同paradigm.name须与交接scope.paradigm一致，采用分支与交接纳入分支对应；各分支材料应承接研究材料，合同materials.evidence须保留资料原note。每节分支关系等于所映射研究对象branchIds的联合，所需材料逐项保留，练习须来自该联合已有exerciseUrls，同时满足本节任务sourceUrls及可见链接约束。不能借多对多映射缩减重要条件/变型；实质研究新发现须返回研究，而非另搜凑数。旧schema、关键open/gap、缺/过期/不匹配的交接、缺/过期/needs-work审阅阻止内容发布。数量、位置与关系正确，不证明题型有代表性、练习真正匹配或完整链讲解充分。
+
+## 主标签页与超纲节的出版投影
+
+语义规则与完整流程见`protocol/CONTENT_LAYERS.md`。分层是同一完整章的呈现归属，不改变研究对象、`reading.units`、分支覆盖、前置/正式节结构、原序号或正文唯一权威。
+
+章合同的`reading.extensions`保存默认超纲节数组，每项为：
+
+| 字段 | 实际职责 |
+|---|---|
+| `sectionId` | 引用本章`reading.units[].id`，不是另写标题、序号或材料分支 |
+| `tags` | 非空且不重复的算法思想名称，供超纲节标题下显示 |
+| `reason` | 非空内部判定依据，说明为何核心理解依赖独立高阶体系；不投影给读者 |
+
+无超纲节用`[]`；历史合同缺省按空数组兼容，不据此追认已做分类审阅。新章应显式给出经实际研究/编纂审阅的分类（可空），不照搬第一章名单。校验拒绝未知/重复节、PRE、无有效唯一H2、空或重复标签及空依据；这些只核结构，不自动认证超纲语义。当前分类须符合基础科班/局部补充/困难不算超纲的用户定义。
+
+构建经该unit唯一的`locations.document/anchor`定位本章真实H2，只在受保护文档payload及catalog条目的`extensions`中投影`{sectionId:<稳定显式anchor>,tags}`。内部`reason`、unit分类工作记录与依据不外显。该投影进入文档不可变revision，默认分类变化使相应读件身份变化，但不修改原正文顺序、标题号或源码/知识定义。渲染后的H2可能采用语义slug；阅读器须通过既有别名解析将稳定显式anchor映射到真实H2，不能把二者混用或手写第二份标题表。
+
+撤回是独立owner的小状态：记录键`section:<SHA256(documentId + NUL + sectionAnchor)>`，值为`{document,section,restored:true}`；`section`是出版投影的稳定显式anchor。它按稳定文档与节身份保存，不随正常正文revision变化丢失；不同owner不得互用。它不改合同默认分类，不联动依赖节，也不复制整章正文。只有已撤回的当前节回主标签页原位，并清除该节临时标签/按钮及目录阴影。同步、离线和失败保全沿现有owner状态机制，不另加内容数据库或后台分类服务。
+
+尚有未撤回超纲节时才显示双标签页；无超纲或全部撤回时不显示标签体系，完整目录与单一读面保留。共享目录继续消费同一完整H2/H3/H4序列。超纲从属项沿其整节归属着阴影，撤回后恢复原样；目录、正文引用及节导航跨页时自动切到真实归属。显示集合、可达链接、节选择持久化与用户定义的语义分类分别核验，节点/测试通过不证明学习效果。
 
 ## 统一出版与学习关系
 
@@ -178,7 +198,7 @@ composition新增`subheadings`，指向`content/<unit>/chapter.subheadings.json`
 
 Python的`learning._inspect`在核对装配依赖后，从实际章节协调决定派生内部`subheadingTypes`上下文，供章合同检查按真实类型与锚点定位练习范围。它不是新增手写登记或第二份类型权威；来源仍是已绑定的协调文件，且该内部上下文不投影到读者payload或目录。
 
-标题父子关系由同一成品的规范heading序列按深度与出现顺序派生，不另手写第二份标题、顺序或锚点。H2起一组，H3归最近H2，H4归同H2下最近H3；当前子单元与索引筛选是交互状态，不改变内容身份。现行读者载体按2026-10-29最新要求取消本章TOC和展开侧栏，以源词条索引式篇节索引完整呈现各级标题；实际父节语境用于同名辨识及过滤，不把后台facet、管理ID或制作证据投成读者内容。前端不得丢弃受管理的H3/H4，完整原序、筛选、独立跳转和当前项定位须按实际长章检查，详见`../web/DESIGN.md`。
+标题父子关系由同一成品的规范heading序列按深度与出现顺序派生，不另手写第二份标题、顺序或锚点。H2起一组，H3归最近H2，H4归同H2下最近H3；当前子单元与索引筛选是交互状态，不改变内容身份。现行读者载体使用H2分组、H3/H4从属的目录索引，展开与正文跳转分离，在存在未撤回超纲节时主/超纲两个标签页共享同一目录，无超纲或全部撤回时不显示标签体系；不提供标题筛选或桌面侧栏。实际父节语境用于同名辨识，不把后台facet、管理ID或制作证据投成读者内容。前端不得丢弃受管理的H3/H4，完整原序、独立跳转、当前项定位及跨标签所属须按实际长章检查，详见`../web/DESIGN.md`。
 
 共享核心只刊印一次；没有自有代码的实现讨论单元须以`reuses`指向真实Hcode/Scode单元，并在该段正文提供可点击链接。引用可跨物理作者源，但须在同一逻辑读件内可达且无环，最终能定位实际代码。每项learning实现身份仍只在真实代码所属单元的`implementationIds`声明一次，引用者不重复登记；不能用一个空讨论单元或悬空链接代替完整实现。
 

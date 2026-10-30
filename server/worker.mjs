@@ -57,7 +57,12 @@ function safeObject(value, limit) {
 
 export function validStateInput(data) {
   if (!data || typeof data !== 'object' || typeof data.key !== 'string') return false;
-  if (!/^(preferences|(?:position|notes):[A-Za-z0-9][A-Za-z0-9._:-]{0,119})$/.test(data.key)) return false;
+  if (!/^(preferences|section:[a-f0-9]{64}|(?:position|notes):[A-Za-z0-9][A-Za-z0-9._:-]{0,119})$/.test(data.key)) return false;
+  if (data.key.startsWith('section:')) return safeObject(data.value, 2048)
+    && Object.keys(data.value).length === 3 && typeof data.value.document === 'string'
+    && /^[A-Za-z0-9][A-Za-z0-9._:-]{0,119}$/.test(data.value.document)
+    && typeof data.value.section === 'string' && data.value.section.length > 0 && data.value.section.length <= 256
+    && !/[\u0000-\u001f\u007f]/.test(data.value.section) && data.value.restored === true;
   if (data.key.startsWith('notes:')) return typeof data.value === 'string' && data.value.length <= 20_000
     && Number.isSafeInteger(data.baseRevision) && data.baseRevision >= 0 && data.baseRevision < Number.MAX_SAFE_INTEGER;
   if (data.baseRevision !== undefined && (!Number.isSafeInteger(data.baseRevision) || data.baseRevision < 0)) return false;

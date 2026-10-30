@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "document": "binary-search",
   "candidateSnapshot": {
-    "path": "work/chapter-navigation-20261029/candidates/structured.json",
-    "sha256": "b4ea7bbc19290517c58e6cf505fc178d79423d510973e4056f6b98d28c632256"
+    "path": "work/extension-tabs-20261030/candidates/implementation-presentation.json",
+    "sha256": "80e6c8e54a90283153235499e2e8a3b88e0c030eec1da8206c44a706f050bdd0"
   },
   "registryEntries": {
     "alternative": "d9866c6029631f20fd674a7716614d250427e0837bafa9d5391ffb1a6f544b69",
@@ -1570,19 +1570,9 @@
       "typeId": "hcode",
       "subject": "解析计数",
       "depth": 3,
-      "reason": "不用存表而手工累计各行min(n,floor(x/i))，利用隐式公式生成秩判定。",
+      "reason": "同一解析计数与值域二分实现；std::min单行贡献辅助只展示局部写法，不再制造独立Scode路径，历史辅助ID与真实代码保持。",
       "implementationIds": [
-        "selection-multiply-manual"
-      ],
-      "action": "reuse"
-    },
-    {
-      "id": "multiplication-rank-standard",
-      "typeId": "scode",
-      "subject": "用min截断每行计数",
-      "depth": 3,
-      "reason": "swap收紧扫描维度，min只截断单行贡献，求和与kth搜索仍复用原核心，属于小范围支持设施。",
-      "implementationIds": [
+        "selection-multiply-manual",
         "selection-multiply-standard"
       ],
       "action": "reuse"
@@ -2144,24 +2134,12 @@
       "typeId": "hcode",
       "subject": "按候选日期分桶，共享加边过程",
       "depth": 3,
-      "reason": "手造DSU与查询中点分桶共享每轮加边重放，advanced-pbs-standard虽旧名standard仍是手造DSU核心。",
+      "reason": "手造DSU与按查询中点分桶属于同一PBS实现，完整刊印两个实际代码区域；不因容器或iota/swap另造Scode路径。",
       "implementationIds": [
         "advanced-time-pbs",
         "advanced-dsu-support"
       ],
       "action": "reuse"
-    },
-    {
-      "id": "time-parallel-search-standard",
-      "typeId": "scode",
-      "subject": "用标准设施组织查询状态",
-      "depth": 3,
-      "reason": "vector/iota/swap提供查询状态容器与初始化，显式链接共享手造核心，不虚构标准DSU或重复印求解代码。",
-      "implementationIds": [],
-      "action": "reuse",
-      "reuses": [
-        "time-parallel-search-manual"
-      ]
     },
     {
       "id": "time-parallel-search-example",
@@ -2186,7 +2164,7 @@
       "typeId": "boundary",
       "subject": "重置状态与只增边条件",
       "depth": 3,
-      "reason": "只增边保证时间单调，按轮重建保证判定看到正确事件前缀，主要是批处理方法成立条件而非一般容器技巧。",
+      "reason": "批处理成立条件、按轮状态重建与容器/初始化设施职责归于同一边界说明；合并原空Scode的有用说明并承接其稳定旧链接。",
       "implementationIds": [],
       "action": "reuse"
     },

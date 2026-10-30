@@ -28,6 +28,7 @@ run(process.execPath, ['--test', ...readdirSync(path.join(root, 'test'))
 run(process.execPath, ['scripts/build-carrier.mjs']);
 if (!process.argv.includes('--without-browser')) {
   run(process.execPath, ['scripts/check-carrier-browser.cjs']);
+  run(process.execPath, ['scripts/check-extension-layers.cjs']);
   run(process.execPath, ['scripts/check-reading-sync.cjs']);
   run(process.execPath, ['scripts/check-carrier-upgrade.cjs']);
   run(process.execPath, ['scripts/check-chapter-calendar.cjs']);

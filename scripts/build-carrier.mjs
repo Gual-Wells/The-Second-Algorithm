@@ -10,6 +10,7 @@ import { readKnowledge, knowledgeTokens, expandKnowledgeReferences } from '../to
 import { composeDocument, compositionPath, assertSectionNumbering } from '../tools/compose-chapter.mjs';
 import { assertReaderMarkdown, assertReaderHtml, assertReaderText, assertMainHeadings, assertRenderedMainHeadings, readerSourceView, assertReaderSource } from '../tools/reader-boundary.mjs';
 import { isChapterDate } from '../web/chapter-dates.js';
+import { readExtensionContracts, projectExtensions } from './lib/chapter-extensions.mjs';
 
 hljs.registerLanguage('cpp', cpp);
 
@@ -417,6 +418,7 @@ export async function buildLibrary(root, output, publications, gitRevision, lear
   learning ??= JSON.parse(await fs.readFile(path.join(root, 'catalog/learning.json'), 'utf8'));
   validateLearning(learning, publications);
   const knowledge = await readKnowledge(root, learning);
+  const extensionContracts = await readExtensionContracts(root, publications);
   const rows = [], byPath = new Map();
   for (const collection of publications.collections) {
     if (collection.visibility === 'hidden') continue;
@@ -443,6 +445,7 @@ export async function buildLibrary(root, output, publications, gitRevision, lear
       assertReaderText(authority.title, 'document title');
       assertReaderMarkdown(authority.markdown, authority.id + ' downloadable Markdown', {allowKnowledgeIds:learning.schemaVersion===1});
       const rendered = renderAuthority(authority, createLinkRewriter({ collection, document: authority, byPath, gitRevision }), knowledge);
+      const extensions = projectExtensions(extensionContracts.get(collection.id), authority.id, rendered);
       const tokens = knowledgeTokens(authority.draft);
       const knowledgeIds = new Set([...tokens.introductions, ...tokens.references.map(item => item.id)]);
       function include(id) {
@@ -460,11 +463,11 @@ export async function buildLibrary(root, output, publications, gitRevision, lear
       // A source-only revision would overwrite an immutable URL whenever the
       // renderer/highlighter changes. Fingerprint the actual reader payload too.
       const payload = { id: authority.id, title: authority.title, html: rendered.html,
-        sourceUrl: entry.sourceUrl, headings: rendered.headings, knowledgeIds: [...knowledgeIds].sort() };
+        sourceUrl: entry.sourceUrl, headings: rendered.headings, knowledgeIds: [...knowledgeIds].sort(), extensions };
       const revision = hash(JSON.stringify({ authorityRevision: authority.revision, ...payload }));
       const url = `/library/${collection.id}/${authority.id}/${revision.slice(0, 16)}.json`;
       const document = { id: payload.id, title: payload.title, revision, html: payload.html,
-        sourceUrl: payload.sourceUrl, headings: payload.headings, knowledgeIds: payload.knowledgeIds };
+        sourceUrl: payload.sourceUrl, headings: payload.headings, knowledgeIds: payload.knowledgeIds, extensions: payload.extensions };
       renderedDocuments.set(collection.id + '/' + authority.id, document);
       const filename = path.join(output, url.slice(1));
       await fs.mkdir(path.dirname(filename), { recursive: true });
@@ -472,7 +475,7 @@ export async function buildLibrary(root, output, publications, gitRevision, lear
       await fs.writeFile(path.join(output, entry.sourceUrl.slice(1)), authority.readerSource, 'utf8');
       await fs.writeFile(path.join(output, entry.markdownUrl.slice(1)), authority.markdownBytes);
       item.documents.push({ id: authority.id, title: authority.title, revision, url,
-        sourceUrl: entry.sourceUrl, markdownUrl: entry.markdownUrl, headings: rendered.headings, knowledgeIds: payload.knowledgeIds });
+        sourceUrl: entry.sourceUrl, markdownUrl: entry.markdownUrl, headings: rendered.headings, knowledgeIds: payload.knowledgeIds, extensions: payload.extensions });
       codeBlocks += authority.blocks.size;
     }
     catalog.collections.push(item);

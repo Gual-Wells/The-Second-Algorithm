@@ -197,6 +197,31 @@ test('shared code permits multiple registered implementations without duplicate 
   }finally{await dispose(f.root);}
 });
 
+for (const chosen of ['hcode', 'scode']) test('a real ' + chosen + '-only section composes without an artificial paired unit', async () => {
+  const f = await fixture(); try {
+    const manual = chosen === 'hcode', absent = manual ? 'library' : 'hand';
+    let source = f.source.replace(new RegExp('<a id="' + absent + '"></a>\\n[\\s\\S]*?(?=<a id="' + (manual ? 'exercises' : 'library') + '"></a>)'), '');
+    if (!manual) source = source.replace('{{standard}}', '{{core}}\n\n{{standard}}');
+    const code = f.code.replace(new RegExp('// BEGIN ' + (manual ? 'standard' : 'manual') + '\\n[\\s\\S]*?// END ' + (manual ? 'standard' : 'manual') + '\\n'), '');
+    await f.setSource(source); await fs.writeFile(path.join(f.root, f.composition.codeSources[0]), code);
+    f.learning.tasks[0].methods[0].implementations = f.learning.tasks[0].methods[0].implementations.filter(item => item.kind === (manual ? 'manual' : 'standard'));
+    f.plan.decisions = f.plan.decisions.filter(item => item.id !== absent);
+    delete f.plan.registryEntries[manual ? 'scode' : 'hcode'];
+    await f.save(); await refreshCandidates(f, chosen + '-only');
+    const composed = await composeDocument(f.root, f.descriptor);
+    assert.match(composed.draft, new RegExp(chosen === 'hcode' ? 'Hcode' : 'Scode'));
+    assert.doesNotMatch(composed.draft, new RegExp(chosen === 'hcode' ? 'Scode' : 'Hcode'));
+    assert.equal(composed.source, code);
+    const decision = f.plan.decisions.find(item => item.typeId === chosen);
+    decision.typeId = manual ? 'scode' : 'hcode';
+    delete f.plan.registryEntries[chosen];
+    f.plan.registryEntries[decision.typeId] = entryFingerprint(f.registry.entries.find(item => item.id === decision.typeId));
+    await f.save();
+    await assert.rejects(composeDocument(f.root, f.descriptor), /wrong Hcode\/Scode direction/,
+      'single paths do not excuse role labels that contradict actual registered code');
+  } finally { await dispose(f.root); }
+});
+
 test('alternate algorithms choose implementation direction explicitly and H4 requires a real H3 parent',async()=>{
   const f=await fixture();try{
     f.learning.tasks[0].methods[0].implementations[1].kind='alternative';f.plan.decisions[2].typeId='hcode';delete f.plan.registryEntries.scode;await f.save();

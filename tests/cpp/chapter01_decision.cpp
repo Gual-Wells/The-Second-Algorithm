@@ -272,6 +272,10 @@ int main() {
     const std::vector<Ingredient> counterexample={{100,1},{900,100},{8,1}};
     close(ratio_manual(counterexample,2),54,"individual ratios invalid greedy manual");
     close(ratio_standard(counterexample,2),54,"individual ratios invalid greedy standard");
+    close(ratio_manual({{10000,10},{10000,10}},2),1000,"ratio original upper bound manual");
+    close(ratio_standard({{10000,10},{10000,10}},2),1000,"ratio original upper bound standard");
+    close(ratio_manual({{1,10000}},1),0.0001L,"ratio positive lower endpoint manual");
+    close(ratio_standard({{1,10000}},1),0.0001L,"ratio positive lower endpoint standard");
     require(matching_threshold_manual({{1,1},{1,9}},1)==1,"augmenting reroute required");
     require(first_nails_manual({1},{1},{2})==-1,"nail impossible sentinel");
     require(first_nails_standard({1},{1},{1})==1,"nail endpoint");

@@ -59,6 +59,9 @@ int main() {
         assert(missing<universe && std::find(values.begin(),values.end(),missing)==values.end());++checks;
     }
     assert(missing_domain({},1ULL<<32)==0);
+    // 左半有两条记录却仍缺1；计数足容不能证明不同值已经填满。
+    // 总域计数不足，算法保留右半并返回其缺失值3。
+    assert(missing_domain({0,0,2},4)==3); ++checks;
     std::mt19937_64 engine(20261028);
     for (int trial=0;trial<400;++trial) {
         std::vector<int> weights(1+rnd(9));

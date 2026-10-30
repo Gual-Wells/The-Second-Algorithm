@@ -27,11 +27,12 @@ const positionCheckpoints = new Map();
 const POSITION_CHECKPOINT_MS = 60_000;
 const book = { tab: 'list', month: shanghaiDate().slice(0, 7), query: '' };
 let contentController = null, contentReleaseJob = null;
-const runtime = createReaderRuntime({ onPosition: queuePosition, onNavigate: (anchor, position) => {
+const runtime = createReaderRuntime({ onPosition: queuePosition, onNavigate: (anchor, position, layer) => {
   if (!S.active) return;
   const route = `#/read/${S.active.collection.id}/${S.active.meta.id}`;
-  navigate(anchor ? route + '?anchor=' + encodeURIComponent(anchor) : route, { position });
-}, onCopy: copyText, isSheetOpen: () => $('sheetDialog').open || sheetHistory, toast });
+  const query = new URLSearchParams(); if (anchor) query.set('anchor', anchor); if (layer === 'extension') query.set('layer', layer);
+  navigate(route + (query.size ? '?' + query : ''), { position });
+}, onRestoreSection: restoreSectionToMain, onCopy: copyText, isSheetOpen: () => $('sheetDialog').open || sheetHistory, toast });
 const serviceSettings = createServiceSettings({ api, getOwner: () => S.owner, showSheet, rememberSheet, showSettings, toast, getSheetView: () => sheetView });
 
 function publishedLibrary(catalog) {
@@ -309,8 +310,10 @@ async function route() {
     $('chapterView').classList.remove('is-opening'); $('chapterView').removeAttribute('aria-busy');
     $('readerStatusbar').classList.remove('chapter-load-status'); delete $('readerStatusbar').dataset.tone;
     showReaderShell();
-    if (!same) position = runtime.setChapter(S.active, position);
-    applySettings(); runtime.showReader(position, new URLSearchParams(query).get('anchor'), fromStart);
+    if (!same) position = runtime.setChapter(S.active, position, restoredSectionsFor(meta.id));
+    else runtime.setRestoredSections(restoredSectionsFor(meta.id));
+    const parameters = new URLSearchParams(query);
+    applySettings(); runtime.showReader(position, parameters.get('anchor'), fromStart, parameters.get('layer') === 'extension' ? 'extension' : null);
     initialRoute = false; $('readingNotice').hidden = true; writeLocal(`last-document:${collection.id}`, meta.id); writeLocal('lastRoute', canonical);
     writeLocal('resume', { collection: collection.id, document: meta.id, route: canonical });
     if (raw !== canonical) { history.replaceState({ ...history.state, readingPosition: runtime.position, readingOwner: S.owner, readingDocument: meta.id }, '', canonical); observedLocation = canonical; }
@@ -329,6 +332,23 @@ function cancelPendingRoute() {
 function positionFor(id) {
   const record = S.records[`position:${id}`], local = readLocal(`position:${id}`);
   return local?.capturedAt > (record?.value?.capturedAt || record?.updatedAt || 0) ? local : record?.value || local;
+}
+function restoredSectionsFor(documentId) {
+  return Object.entries(S.records).filter(([key, record]) => /^section:[a-f0-9]{64}$/.test(key)
+    && record.value?.document === documentId && record.value?.restored === true && typeof record.value.section === 'string')
+    .map(([, record]) => record.value.section);
+}
+async function restoreSectionToMain(section) {
+  const owner = S.owner, active = S.active;
+  if (!owner || !active || !(active.content.extensions || active.meta.extensions || []).some(item => item.sectionId === section)) return false;
+  const hash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(active.meta.id + '\0' + section));
+  if (S.owner !== owner || S.active !== active) return false;
+  const key = 'section:' + [...new Uint8Array(hash)].map(value => value.toString(16).padStart(2, '0')).join('');
+  const value = { document: active.meta.id, section, restored: true };
+  const next = { ...S.records, [key]: { ...S.records[key], value, dirty: true } };
+  // Save before moving; quota failures must never look like a durable choice.
+  if (!writeLocal('records', next)) return false;
+  S.records = next; updateConnection(); void syncRecord(key); return true;
 }
 function queuePosition(value) {
   clearTimeout(positionSaveTimer); const owner = S.owner, id = S.active?.meta.id;

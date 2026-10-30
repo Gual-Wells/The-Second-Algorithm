@@ -120,7 +120,7 @@ async function assertTarget(p,id) {
     const h=document.getElementById(id),pane=document.getElementById('readingPane'),tools=document.getElementById('articleTools');
     const b=h.getBoundingClientRect(),r=pane.getBoundingClientRect(),t=tools.getBoundingClientRect(),style=getComputedStyle(tools);
     const toolsVisible=!tools.inert&&style.display!=='none'&&style.visibility!=='hidden'&&Number(style.opacity)>0;
-    const firstHeading=__refinement.runtime.headings[0]?.id===id,articlePadding=parseFloat(getComputedStyle(document.getElementById('article')).paddingTop);
+    const firstHeading=__refinement.runtime.headings.find(item=>!document.getElementById(item.id).hidden)?.id===id,articlePadding=parseFloat(getComputedStyle(document.getElementById('article')).paddingTop);
     // In the source's mobile paper the first H2 naturally follows the tools by
     // 7px. Revealing it at tools-height + 12px leaves the not-yet-stuck tools
     // 5px below the scrollport; demanding tools-bottom + 12px would invent a
@@ -564,7 +564,8 @@ async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries
             for(const h of outline){
               __refinement.runtime.showReader(null,h.id);await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>requestAnimationFrame(r))));
               const majorIndex=majors.findIndex(x=>x.id===h.parent),current=majors[majorIndex];
-              for(const[id,target]of Object.entries({previousMajor:majors[majorIndex-1],nextMajor:majors[majorIndex+1]})){
+              const sameLayer=majors.filter(x=>!document.getElementById(x.id).hidden),layerIndex=sameLayer.findIndex(x=>x.id===h.parent);
+              for(const[id,target]of Object.entries({previousMajor:sameLayer[layerIndex-1],nextMajor:sameLayer[layerIndex+1]})){
                 const e=document.getElementById(id);
                 if(e.disabled!==!target||e.dataset.target!==(target?.id||'')||target&&!e.getAttribute('aria-label').includes(target.text))
                   errors.push({current:h.id,control:id,expected:target?{id:target.id,title:target.text}:null,actual:e.outerHTML});
@@ -573,7 +574,7 @@ async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries
               if(status.textContent!==expectedLabel||status.title!==expectedLabel||__refinement.runtime.position?.anchor!==h.id)
                 errors.push({current:h.id,control:'current-section-status',expected:{section:current.id,title:current.text,label:expectedLabel,directHeading:h.id},actual:status.outerHTML,position:__refinement.runtime.position});
               const node=document.getElementById(h.id),b=node.getBoundingClientRect(),pane=document.getElementById('readingPane').getBoundingClientRect(),tools=document.getElementById('articleTools').getBoundingClientRect();
-              const firstNaturalCase=h.id===facts[0].id,safeTop=firstNaturalCase?pane.top+tools.height+12:Math.max(pane.top,tools.bottom)+12;
+              const firstNaturalCase=h.id===sameLayer[0]?.id,safeTop=firstNaturalCase?pane.top+tools.height+12:Math.max(pane.top,tools.bottom)+12;
               const expectedClearance=firstNaturalCase?Math.min(12,parseFloat(getComputedStyle(document.getElementById('article')).paddingTop)):12;
               const hit=document.elementFromPoint(Math.min(b.right-2,Math.max(b.left+2,pane.left+pane.width/2)),Math.min(b.bottom-2,b.top+5));
               if(firstNaturalCase)firstNaturalGeometry={id:h.id,firstNaturalCase,headingTop:b.top,paneTop:pane.top,toolsTop:tools.top,toolsHeight:tools.height,toolsBottom:tools.bottom,expectedTop:safeTop,expectedClearance,actualClearance:b.top-tools.bottom,uncovered:node===hit||node.contains(hit)};

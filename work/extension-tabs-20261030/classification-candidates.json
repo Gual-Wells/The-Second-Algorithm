@@ -1,0 +1,415 @@
+{
+  "schemaVersion": 1,
+  "chapter": "chapter-01",
+  "baselineCommit": "907463efbe3a4d730a07e53d8e856b15441ff467",
+  "criterion": "整节的核心理解依赖明显超出科班数据结构算法基础的系统性内容；困难、交叉基础思想或局部补充本身不构成超纲。",
+  "status": "root-accepted-classification",
+  "extensionSections": [
+    "time-parallel-search",
+    "dynamic-range-kth",
+    "marginal-penalty"
+  ],
+  "sections": [
+    {
+      "sectionId": "ordered-boundaries",
+      "number": 1,
+      "title": "有序数据的边界、计数与前驱",
+      "source": "content/binary/boundary.source.md",
+      "anchor": "ordered-boundaries",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "有序边界、计数与前驱，是基础二分机制。"
+    },
+    {
+      "sectionId": "predicate-access",
+      "number": 2,
+      "title": "访问受限或上界未知时的查找",
+      "source": "content/binary/boundary.source.md",
+      "anchor": "predicate-access",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "接口判定与倍增找上界，错误处理是局部实现条件。"
+    },
+    {
+      "sectionId": "transformed-index",
+      "number": 3,
+      "title": "固定点与缺失数：利用值和下标的关系",
+      "source": "content/binary/boundary.source.md",
+      "anchor": "transformed-index",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "值和下标的关系及重复值递归剪枝。"
+    },
+    {
+      "sectionId": "rotated-search",
+      "number": 4,
+      "title": "旋转有序数组的查找与最小值",
+      "source": "content/binary/boundary.source.md",
+      "anchor": "rotated-search",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "有序半区与重复值退化。"
+    },
+    {
+      "sectionId": "paired-break",
+      "number": 5,
+      "title": "成对有序数组中的单次值",
+      "source": "content/binary/boundary.source.md",
+      "anchor": "paired-break",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "配对下标结构，异或另解仅为对照。"
+    },
+    {
+      "sectionId": "local-peak",
+      "number": 6,
+      "title": "局部峰与单峰数组的峰值",
+      "source": "content/binary/boundary.source.md",
+      "anchor": "local-peak",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "结构存在性与单峰条件。"
+    },
+    {
+      "sectionId": "matrix-membership",
+      "number": 7,
+      "title": "二维有序矩阵中的查找",
+      "source": "content/binary/boundary.source.md",
+      "anchor": "matrix-membership",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "展平有序与行列有序的基础查找。"
+    },
+    {
+      "sectionId": "integer-root",
+      "number": 8,
+      "title": "整数平方根：查找最后一个可行值",
+      "source": "content/binary/boundary.source.md",
+      "anchor": "integer-root",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "整数不等式与数值表示。"
+    },
+    {
+      "sectionId": "capacity-partition",
+      "number": 9,
+      "title": "最小化连续分段的最大段和",
+      "source": "content/binary/decision.source.md",
+      "anchor": "capacity-partition",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "贪心判定与非负条件必须在主线完整保留。"
+    },
+    {
+      "sectionId": "maximin-spacing",
+      "number": 10,
+      "title": "最大化所选位置的最小间距",
+      "source": "content/binary/decision.source.md",
+      "anchor": "maximin-spacing",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "排序、贪心领先性和答案二分。"
+    },
+    {
+      "sectionId": "cumulative-production",
+      "number": 11,
+      "title": "达到目标产量的最短时间",
+      "source": "content/binary/decision.source.md",
+      "anchor": "cumulative-production",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "整数产量计数与时间边界。"
+    },
+    {
+      "sectionId": "ordered-simulation",
+      "number": 12,
+      "title": "固定顺序任务所需的最少并行台位",
+      "source": "content/binary/decision.source.md",
+      "anchor": "ordered-simulation",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "堆模拟、台位数单调，堆是基础结构。"
+    },
+    {
+      "sectionId": "graph-threshold",
+      "number": 13,
+      "title": "瓶颈路径：最小化路径上的最大边权",
+      "source": "content/binary/decision.source.md",
+      "anchor": "graph-threshold",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "阈值后图连通性判定。"
+    },
+    {
+      "sectionId": "prefix-activation",
+      "number": 14,
+      "title": "有序事件前缀的首次成功与首次失败",
+      "source": "content/binary/decision.source.md",
+      "anchor": "prefix-activation",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "事件前缀、差分与前缀和。"
+    },
+    {
+      "sectionId": "weighted-inverse",
+      "number": 15,
+      "title": "按累计权重查找与随机抽样",
+      "source": "content/binary/selection.source.md",
+      "anchor": "weighted-inverse",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "累计权重、整数票号与有限概率补充。"
+    },
+    {
+      "sectionId": "pigeonhole-domain",
+      "number": 16,
+      "title": "在值域中寻找重复值或缺失值",
+      "source": "content/binary/selection.source.md",
+      "anchor": "pigeonhole-domain",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "容量、计数与缺失存在性。"
+    },
+    {
+      "sectionId": "matrix-rank",
+      "number": 17,
+      "title": "行列有序矩阵的第 k 小元素",
+      "source": "content/binary/selection.source.md",
+      "anchor": "matrix-rank",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "累计秩计数与矩阵扫描。"
+    },
+    {
+      "sectionId": "multiplication-rank",
+      "number": 18,
+      "title": "乘法表中的第 k 小数",
+      "source": "content/binary/selection.source.md",
+      "anchor": "multiplication-rank",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "隐式表的解析计数。"
+    },
+    {
+      "sectionId": "pair-distance-rank",
+      "number": 19,
+      "title": "数对距离的第 k 小值",
+      "source": "content/binary/selection.source.md",
+      "anchor": "pair-distance-rank",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "排序与双指针计数。"
+    },
+    {
+      "sectionId": "two-sorted-partition",
+      "number": 20,
+      "title": "两个有序数组的第 k 小与中位数",
+      "source": "content/binary/selection.source.md",
+      "anchor": "two-sorted-partition",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "交叉切分与秩。"
+    },
+    {
+      "sectionId": "ordered-dp-frontier",
+      "number": 21,
+      "title": "最长递增子序列：维护每个长度的最小末值",
+      "source": "content/binary/selection.source.md",
+      "anchor": "ordered-dp-frontier",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "LIS状态、恢复与计数DP属于基础思想组合。"
+    },
+    {
+      "sectionId": "weighted-predecessor",
+      "number": 22,
+      "title": "带权区间调度：查找兼容前驱",
+      "source": "content/binary/selection.source.md",
+      "anchor": "weighted-predecessor",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "兼容前驱与收益DP。"
+    },
+    {
+      "sectionId": "resource-queries",
+      "number": 23,
+      "title": "资源受限的试探：鸡蛋掉落问题",
+      "source": "content/binary/selection.source.md",
+      "anchor": "resource-queries",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "资源受限覆盖递推与组合计数。"
+    },
+    {
+      "sectionId": "matrix-peak",
+      "number": 24,
+      "title": "二维矩阵中的局部峰",
+      "source": "content/binary/boundary.source.md",
+      "anchor": "matrix-peak",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "列最大值和结构存在性。"
+    },
+    {
+      "sectionId": "string-prefix",
+      "number": 25,
+      "title": "字符串的字典序前缀与最长公共前缀",
+      "source": "content/binary/boundary.source.md",
+      "anchor": "string-prefix",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "字典序边界与LCP；没有引入高级后缀体系。"
+    },
+    {
+      "sectionId": "continuous-root",
+      "number": 26,
+      "title": "连续函数的零点与误差控制",
+      "source": "content/binary/boundary.source.md",
+      "anchor": "continuous-root",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "连续夹逼与有限导数分段补充，没有系统引入数值分析。"
+    },
+    {
+      "sectionId": "average-transform",
+      "number": 27,
+      "title": "带区间限制的平均值优化",
+      "source": "content/binary/decision.source.md",
+      "anchor": "average-transform",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "分数变换、前缀和与基础队列/DP。"
+    },
+    {
+      "sectionId": "ratio-selection",
+      "number": 28,
+      "title": "固定数量选择的最大总比值",
+      "source": "content/binary/decision.source.md",
+      "anchor": "ratio-selection",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "分数变换与前m大，未引入对偶体系。"
+    },
+    {
+      "sectionId": "convex-location",
+      "number": 29,
+      "title": "凸多边形中的点定位",
+      "source": "content/binary/boundary.source.md",
+      "anchor": "convex-location",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "只需叉积方向、凸性和扇区排序，不引入整套计算几何。"
+    },
+    {
+      "sectionId": "matching-threshold",
+      "number": 30,
+      "title": "互斥选择中的最优阈值：用匹配判定",
+      "source": "content/binary/decision.source.md",
+      "anchor": "matching-threshold",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "二分图增广匹配属于科班图算法。"
+    },
+    {
+      "sectionId": "fenwick-rank",
+      "number": 31,
+      "title": "动态频数的第 k 个位置：树状数组内查找",
+      "source": "content/binary/advanced.source.md",
+      "anchor": "fenwick-rank",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "基础数据结构块摘要内定位。"
+    },
+    {
+      "sectionId": "summary-descent",
+      "number": 32,
+      "title": "线段树内查找：从指定位置找首个达标值",
+      "source": "content/binary/advanced.source.md",
+      "anchor": "summary-descent",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "线段树区间摘要与边界搜索。"
+    },
+    {
+      "sectionId": "ancestor-boundary",
+      "number": 33,
+      "title": "最近公共祖先与路径边界的倍增查找",
+      "source": "content/binary/advanced.source.md",
+      "anchor": "ancestor-boundary",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "树祖先、倍增与函数复合。"
+    },
+    {
+      "sectionId": "cyclic-jump",
+      "number": 34,
+      "title": "正数环形序列的最少连续分段",
+      "source": "content/binary/advanced.source.md",
+      "anchor": "cyclic-jump",
+      "defaultTab": "main",
+      "tags": [],
+      "reason": "贪心、滑窗与倍增的基础思想组合。"
+    },
+    {
+      "sectionId": "time-parallel-search",
+      "number": 35,
+      "title": "并行二分：批量查询最早连通时间",
+      "source": "content/binary/advanced.source.md",
+      "anchor": "time-parallel-search",
+      "defaultTab": "extension",
+      "tags": [
+        "离线批处理",
+        "并行二分"
+      ],
+      "reason": "全节核心是离线多查询分桶与状态共享重放。"
+    },
+    {
+      "sectionId": "dynamic-range-kth",
+      "number": 36,
+      "title": "整体二分：带修改的区间第 k 小查询",
+      "source": "content/binary/advanced.source.md",
+      "anchor": "dynamic-range-kth",
+      "defaultTab": "extension",
+      "tags": [
+        "离线值域分治",
+        "整体二分"
+      ],
+      "reason": "全节核心是离线值域分治、稳定时间流、剩余秩与回滚。"
+    },
+    {
+      "sectionId": "marginal-penalty",
+      "number": 37,
+      "title": "惩罚参数搜索：递减边际收益下的资源分配",
+      "source": "content/binary/advanced.source.md",
+      "anchor": "marginal-penalty",
+      "defaultTab": "extension",
+      "tags": [
+        "拉格朗日松弛",
+        "离散凸性"
+      ],
+      "reason": "整节完整核心包含拉格朗日松弛、数量跳跃、离散凸性及精确恢复。"
+    }
+  ],
+  "reviewBoundaries": [
+    "未运行本轮C++目标，验证由根任务完成",
+    "原节号、锚点、正文保全；撤回逐节独立",
+    "没有定义局部块分层、依赖联动或额外说明面板"
+  ],
+  "sources": [
+    {
+      "url": "https://www.luogu.com.cn/problem/P1570",
+      "checkedAt": "2026-10-30",
+      "use": "核对代码固定搜索区间依赖的原题正输入与答案上界"
+    },
+    {
+      "url": "https://cp-algorithms.com/geometry/point-in-convex-polygon.html",
+      "checkedAt": "2026-10-30",
+      "use": "确认凸多边形扇区二分只需要有限几何知识"
+    },
+    {
+      "url": "https://ioinformatics.org/files/ioi2016solutions.pdf",
+      "checkedAt": "2026-10-30",
+      "use": "核对Aliens含专门凸性与参数优化结构，不能泛化数量单调结论"
+    }
+  ]
+}

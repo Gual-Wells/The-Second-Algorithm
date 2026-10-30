@@ -9,7 +9,7 @@ const REVEAL_GAP = 12;
 
 // The book surface has no authority over identity, transport or publication.
 // Its caller supplies the one authenticated, revision-checked chapter.
-export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpen = () => false, toast = () => {} }) {
+export function createReaderRuntime({ onPosition, onNavigate, onCopy, onRestoreSection, isSheetOpen = () => false, toast = () => {} }) {
   const app = $('app'), pane = $('readingPane'), article = $('article');
   const hiddenChrome = [$('appHeader'), $('chapterNav'), $('readerHead'), $('partHeading')].filter(Boolean);
   const chrome = [$('articleTools'), $('readerStatusbar')].filter(Boolean);
@@ -20,6 +20,15 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
   const revision = () => chapter?.meta.revision;
   const sectionFor = id => byId.get(byId.get(id)?.sectionId);
   const indexExpanded = new Map();
+  let layer = 'main', extensions = new Map(), restoredSections = new Set(), sectionNodes = new Map(), layerPositions = {};
+  const layerOf = id => {
+    const section = sectionFor(resolveAnchor(id));
+    const definition = extensions.get(section?.id);
+    return definition && !restoredSections.has(definition.sectionId) ? 'extension' : 'main';
+  };
+  const visibleSections = () => sections.filter(item => layerOf(item.id) === layer);
+  const visibleHeadings = () => headings.filter(item => layerOf(item.id) === layer);
+  const visibleBlocks = () => blocks.filter(node => !node.closest('[hidden]'));
 
   function revealLine() {
     // Pure controls are a temporary overlay: waking them must not change the
@@ -50,6 +59,7 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
   }
   function normalizePosition(position) {
     if (!position) return null;
+    if (position.schema === 3 && !position.anchor && position.layer === 'extension') return { schema: 3, anchor: null, layer: 'extension', revision: revision() };
     if (position.schema === 3 && resolveAnchor(position.anchor)) {
       return position.revision === revision() ? { ...clone(position), anchor: resolveAnchor(position.anchor) }
         : { schema: 3, anchor: resolveAnchor(position.anchor), offset: NAV_LINE, revision: revision() };
@@ -75,10 +85,11 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
       bar.innerHTML = '<span>C++</span><button type="button" data-copy>复制</button>'; pre.before(bar);
     }
   }
-  function setChapter(value, position = null) {
+  function setChapter(value, position = null, restored = []) {
     layoutToken++; restoring = false; view = 'chapter'; pure = false; clearTimeout(awakeTimer);
     app.classList.remove('pure', 'controls-awake'); app.style.removeProperty('--pure-paper-width'); chromeInert(false);
     chapter = value; headings = []; sections = []; byId = new Map(); aliases = new Map(); indexExpanded.clear();
+    layer = 'main'; extensions = new Map(); sectionNodes = new Map(); layerPositions = {}; restoredSections = new Set(restored);
     article.style.removeProperty('padding-bottom'); article.innerHTML = value.content.html;
     // Preserve the previous reader's exact block numbering for safe migration.
     let legacyIndex = 0;
@@ -109,6 +120,21 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
     rendered = headings.map(item => anchorElement(item.id));
     blocks = all('h2,h3,h4,p,pre,table,blockquote,li', article).filter(node => !node.closest('.code-toolbar'));
     blocks.forEach((node, index) => { node.dataset.readBlock = String(index); });
+    // One DOM, one global block numbering. Layer membership never clones,
+    // reparses or renumbers the publication or its persisted coordinates.
+    let currentSection = null;
+    for (const node of [...article.children]) {
+      if (node.matches('h2[id]') && byId.has(node.id)) currentSection = node.id;
+      if (currentSection) { if (!sectionNodes.has(currentSection)) sectionNodes.set(currentSection, []); sectionNodes.get(currentSection).push(node); }
+    }
+    for (const definition of value.content.extensions || value.meta.extensions || []) {
+      const id = resolveAnchor(definition.sectionId);
+      if (!id || byId.get(id)?.depth !== 2) throw Error('章节分层与正文不一致。');
+      extensions.set(id, definition);
+      const panel = document.createElement('div'); panel.className = 'extension-meta';
+      panel.innerHTML = `<div class="extension-tags">${definition.tags.map(tag => `<span>${esc(tag)}</span>`).join('')}</div><button class="bevel-button" type="button" data-restore-section="${esc(definition.sectionId)}">撤回超纲</button>`;
+      anchorElement(id).after(panel); sectionNodes.get(id).splice(1, 0, panel);
+    }
     cursor = normalizePosition(position);
     setChapterIdentity(); updateStatus();
     return clone(cursor);
@@ -120,9 +146,54 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
     $('readerChapterNumber').textContent = collection.kind === 'chapter' ? `第 ${collection.chapterNumber} 章` : '阅读材料';
     $('readerChapterTitle').textContent = collection.title;
     $('readerChapterSubtitle').textContent = meta.title && meta.title !== collection.title ? meta.title : '';
-    $('readerPartNumber').textContent = collection.kind === 'chapter' ? 'CHAPTER ' + String(collection.chapterNumber).padStart(2, '0') : 'READING';
-    $('readerPartTitle').textContent = '算法思想与题型';
-    $('readerPartSummary').textContent = '按篇节阅读';
+  }
+  function setRestoredSections(values) { restoredSections = new Set(values); }
+  function applyLayer(next) {
+    const hasExtensions = [...extensions.values()].some(item => !restoredSections.has(item.sectionId));
+    $('partHeading').hidden = !hasExtensions;
+    layer = hasExtensions && next === 'extension' ? 'extension' : 'main';
+    for (const section of sections) {
+      const belongs = layerOf(section.id), nodes = sectionNodes.get(section.id) || [];
+      for (const node of nodes) node.hidden = belongs !== layer || node.classList.contains('extension-meta') && belongs !== 'extension';
+      if (belongs !== 'extension') for (const node of nodes) if (node.classList.contains('extension-meta')) node.remove();
+      anchorElement(section.id).classList.remove('layer-first');
+    }
+    const first = visibleSections()[0]; if (first) anchorElement(first.id).classList.add('layer-first');
+    rendered = visibleHeadings().map(item => anchorElement(item.id));
+    article.setAttribute('role', hasExtensions ? 'tabpanel' : 'article');
+    if (hasExtensions) article.setAttribute('aria-labelledby', layer === 'extension' ? 'extensionReadingTab' : 'mainReadingTab');
+    else article.removeAttribute('aria-labelledby');
+    for (const tab of all('[data-reading-layer]')) {
+      const selected = tab.dataset.readingLayer === layer;
+      tab.setAttribute('aria-selected', String(selected)); tab.tabIndex = selected ? 0 : -1;
+    }
+    article.dataset.layer = layer;
+  }
+  function switchLayer(next) {
+    if (!chapter || next === layer || restoring) return;
+    if (![...extensions.values()].some(item => !restoredSections.has(item.sectionId))) return;
+    const position = capture(true); if (position) layerPositions[layer] = position;
+    const saved = layerPositions[next], first = sections.find(item => layerOf(item.id) === next);
+    const target = saved?.anchor && layerOf(saved.anchor) === next ? saved : first ? { schema: 3, anchor: first.id, offset: revealLine(), revision: revision() } : { schema: 3, anchor: null, layer: next, revision: revision() };
+    // A tab is a resume action, not an explicit heading jump. Passing an
+    // anchor would intentionally discard the saved paragraph/code offset.
+    onNavigate?.(null, target, next);
+  }
+  async function restoreSection(stableId, button) {
+    if (!onRestoreSection || restoring || button.disabled) return;
+    const identity = chapter;
+    const pair = [...extensions].find(([,definition]) => definition.sectionId === stableId);
+    if (!pair || restoredSections.has(stableId)) return;
+    button.disabled = true;
+    try {
+      const stored = await onRestoreSection(stableId);
+      if (chapter !== identity) return;
+      if (!stored) return;
+      restoredSections.add(stableId);
+      // Follow the chosen section to its original place, without cascading.
+      onNavigate?.(pair[0], null, 'main');
+    } catch { toast('本机保存失败，该节仍保留在超纲。'); }
+    finally { if (button.isConnected) button.disabled = false; }
   }
   function indexHTML(filter = '') {
     const query = String(filter).trim().toLocaleLowerCase(), current = cursor?.anchor, parent = sectionFor(current)?.id;
@@ -131,7 +202,7 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
     return groups.length ? groups.map(section => {
       const active = parent === section.id, open = query ? true : indexExpanded.has(section.id) ? indexExpanded.get(section.id) : active;
       const childrenId = `directory-section-${section.index}`;
-      return `<section class="directory-group${active ? ' is-current-parent' : ''}" data-directory-section="${esc(section.id)}"><div class="directory-parent"><button type="button" class="directory-toggle" data-toggle-index-section="${esc(section.id)}" aria-expanded="${open}" aria-controls="${childrenId}" aria-label="${open ? '收起' : '展开'}${esc(section.title)}">${open ? '−' : '＋'}</button><button type="button" class="directory-section-link${current === section.id ? ' is-current' : ''}" data-index-go="${esc(section.id)}"${current === section.id ? ' aria-current="location"' : ''}>${esc(section.title)}</button></div><div class="directory-children" id="${childrenId}"${open ? '' : ' hidden'}>${section.units.filter(matches).map(item => {
+      return `<section class="directory-group${active ? ' is-current-parent' : ''}${layerOf(section.id) === 'extension' ? ' is-extension' : ''}" data-directory-section="${esc(section.id)}"><div class="directory-parent"><button type="button" class="directory-toggle" data-toggle-index-section="${esc(section.id)}" aria-expanded="${open}" aria-controls="${childrenId}" aria-label="${open ? '收起' : '展开'}${esc(section.title)}">${open ? '−' : '＋'}</button><button type="button" class="directory-section-link${current === section.id ? ' is-current' : ''}" data-index-go="${esc(section.id)}"${current === section.id ? ' aria-current="location"' : ''}>${esc(section.title)}</button></div><div class="directory-children" id="${childrenId}"${open ? '' : ' hidden'}>${section.units.filter(matches).map(item => {
         const context = item.ancestors.map(id => byId.get(id)?.title).filter(Boolean).join(' · ');
         return `<button type="button" class="directory-item depth-${item.depth}${current === item.id ? ' is-current' : ''}" data-index-go="${esc(item.id)}"${current === item.id ? ' aria-current="location"' : ''} aria-label="${esc(context ? context + ' · ' + item.title : item.title)}">${esc(item.title)}</button>`;
       }).join('')}</div></section>`;
@@ -154,6 +225,7 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
     const changed = root.dataset.currentParent !== parent;
     for (const group of all('[data-directory-section]', root)) {
       const active = group.dataset.directorySection === parent; group.classList.toggle('is-current-parent', active);
+      group.classList.toggle('is-extension', layerOf(group.dataset.directorySection) === 'extension');
       if (active && changed) { indexExpanded.set(parent, true); setIndexSectionOpen(group, true); }
     }
     root.dataset.currentParent = parent || '';
@@ -165,19 +237,21 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
     indexExpanded.set(id, open); setIndexSectionOpen(group, open);
   }
   function updateTailSpace() {
-    if (view !== 'reader' || !rendered.length || !pane.clientHeight) return;
     article.style.removeProperty('padding-bottom');
+    if (view !== 'reader' || !rendered.length || !pane.clientHeight) return;
     const base = parseFloat(getComputedStyle(article).paddingBottom) || 0;
     const contentAfter = article.getBoundingClientRect().bottom - base - rendered.at(-1).getBoundingClientRect().top;
     article.style.paddingBottom = Math.max(base, pane.clientHeight - revealLine() - contentAfter) + 'px';
   }
   function readCursor() {
-    if (view !== 'reader' || !rendered.length || !pane.clientHeight) return cursor;
-    const top = pane.getBoundingClientRect().top, line = revealLine(); let heading = rendered[0], block = blocks[0];
+    if (view !== 'reader' || !pane.clientHeight) return cursor;
+    if (!rendered.length) return { schema: 3, anchor: null, layer, revision: revision(), capturedAt: Date.now() };
+    const activeBlocks = visibleBlocks();
+    const top = pane.getBoundingClientRect().top, line = revealLine(); let heading = rendered[0], block = activeBlocks[0];
     for (const node of rendered) { if (node.getBoundingClientRect().top <= top + line + 1) heading = node; else break; }
-    for (const node of blocks) { if (node.getBoundingClientRect().top <= top + line + 1) block = node; else break; }
+    for (const node of activeBlocks) { if (node.getBoundingClientRect().top <= top + line + 1) block = node; else break; }
     const bounds = block.getBoundingClientRect();
-    return { schema: 3, anchor: heading.id, offset: heading.getBoundingClientRect().top - top, revision: revision(), capturedAt: Date.now(),
+    return { schema: 3, anchor: heading.id, layer, offset: heading.getBoundingClientRect().top - top, revision: revision(), capturedAt: Date.now(),
       block: { index: Number(block.dataset.readBlock), ratio: bounds.top <= top && bounds.bottom > top ? (top - bounds.top) / Math.max(1, bounds.height) : 0,
         offset: bounds.top - top, ...(top > bounds.bottom ? { afterGap: top - bounds.bottom } : {}) } };
   }
@@ -187,9 +261,10 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
   }
   function restoreSnapshot(position) {
     if (!position || view !== 'reader') return;
-    const heading = anchorElement(position.anchor); if (!heading) return;
+    const heading = anchorElement(position.anchor); if (!heading || heading.hidden) return;
     const top = pane.getBoundingClientRect().top;
-    const block = position.revision === revision() && position.block && blocks[position.block.index];
+    const candidate = position.revision === revision() && position.block && blocks[position.block.index];
+    const block = candidate && !candidate.closest('[hidden]') ? candidate : null;
     if (block) {
       const bounds = block.getBoundingClientRect(), coord = position.block.afterGap !== undefined ? bounds.bottom + position.block.afterGap
         : position.block.ratio ? bounds.top + position.block.ratio * bounds.height : bounds.top - position.block.offset;
@@ -211,9 +286,9 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
   }
   function navigationTargets() {
     const item = byId.get(cursor?.anchor) || headings[0]; if (!item) return {};
-    const section = sectionFor(item.id);
-    return { previousSection: sections[section?.sectionIndex - 1] || null,
-      nextSection: sections[section?.sectionIndex + 1] || null, current: item, currentSection: section };
+    const section = sectionFor(item.id), active = visibleSections(), index = active.indexOf(section);
+    return { previousSection: index >= 0 ? active[index - 1] || null : null,
+      nextSection: index >= 0 ? active[index + 1] || null : null, current: item, currentSection: section };
   }
   function updateStatus() {
     const targets = navigationTargets();
@@ -223,20 +298,29 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
       const description = target ? `${label}：${target.title}` : `${label}：已是本章${key.startsWith('previous') ? '首' : '末'}节`;
       button.setAttribute('aria-label', description); button.title = description;
     }
-    const section = targets.currentSection;
-    const label = chapter && section && (view === 'reader' || cursor) ? `${section.sectionIndex + 1} / ${sections.length} · ${section.title}` : chapter ? `${sections.length} 节` : '';
+    const section = rendered.length ? targets.currentSection : null;
+    const label = chapter && section && (view === 'reader' || cursor) ? `${section.sectionIndex + 1} / ${sections.length} · ${section.title}` : chapter ? layer === 'extension' ? '超纲' : `${sections.length} 节` : '';
     $('readingPosition').textContent = label; $('readingPosition').title = label;
     $('sectionIndexButton').disabled = !chapter;
   }
-  function showReader(position, anchor = null, fromStart = false) {
+  function showReader(position, anchor = null, fromStart = false, requestedLayer = null) {
+    if (view === 'reader' && !restoring) {
+      const previous = capture(); if (previous) layerPositions[layer] = previous;
+    }
     view = 'reader'; $('chapterView').hidden = true; $('readerView').hidden = false;
-    const saved = normalizePosition(position), atStart = fromStart || !anchor && !saved;
-    cursor = atStart ? { schema: 3, anchor: headings[0]?.id, offset: NAV_LINE, revision: revision() }
+    let saved = normalizePosition(position);
+    const destination = anchor ? resolveAnchor(anchor) : saved?.anchor;
+    const nextLayer = fromStart ? 'main' : anchor && destination ? layerOf(destination) : requestedLayer || (destination ? layerOf(destination) : saved?.layer) || 'main';
+    if (!anchor && requestedLayer && saved?.anchor && layerOf(saved.anchor) !== requestedLayer) saved = null;
+    applyLayer(nextLayer);
+    if (layer === 'main' && saved && !saved.anchor) saved = null;
+    const first = visibleHeadings()[0]?.id, atStart = fromStart || !anchor && !saved;
+    cursor = atStart ? { schema: 3, anchor: first || null, layer, offset: NAV_LINE, revision: revision() }
       : anchor ? { schema: 3, anchor: resolveAnchor(anchor) || headings[0]?.id, offset: revealLine(), revision: revision() }
-      : saved || { schema: 3, anchor: headings[0]?.id, offset: NAV_LINE, revision: revision() };
+      : saved || { schema: 3, anchor: first || null, layer, offset: NAV_LINE, revision: revision() };
     updateStatus(); settle(atStart ? null : cursor, () => {
-      if (atStart) pane.scrollTop = 0;
-      pane.focus({ preventScroll: true });
+      if (atStart || !rendered.length) pane.scrollTop = 0;
+      if ($('partHeading').hidden || !document.activeElement?.matches('[data-reading-layer]')) pane.focus({ preventScroll: true });
       // A pure-mode index jump reveals its destination on clean paper. The
       // temporary tools can still be awakened by the next deliberate tap.
       if (anchor && pure) { clearTimeout(awakeTimer); app.classList.remove('controls-awake'); chromeInert(true); }
@@ -278,10 +362,13 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
     article.replaceChildren(); $('chapterView').replaceChildren(); $('readingPosition').textContent = '';
     for (const id of ['readerChapterDate', 'readerChapterNumber', 'readerChapterTitle', 'readerChapterSubtitle']) $(id).textContent = '';
     headings = []; sections = []; rendered = []; blocks = []; byId.clear(); aliases.clear(); indexExpanded.clear();
+    extensions.clear(); restoredSections.clear(); sectionNodes.clear(); layerPositions = {}; layer = 'main';
   }
   document.addEventListener('click', event => {
     if (!chapter) return;
     const button = event.target.closest('button');
+    if (button?.dataset.readingLayer) { switchLayer(button.dataset.readingLayer); return; }
+    if (button?.dataset.restoreSection) { void restoreSection(button.dataset.restoreSection, button); return; }
     if (button?.dataset.toggleIndexSection) { toggleIndexSection(button.dataset.toggleIndexSection); return; }
     if (button?.hasAttribute('data-copy')) { void onCopy?.(button.closest('.code-block').querySelector('pre').textContent, button); return; }
     if (button?.dataset.nav) { if (button.dataset.target) go(button.dataset.target); return; }
@@ -289,6 +376,11 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
     if (button?.hasAttribute('data-reader-resume')) { onNavigate?.(null, clone(cursor)); return; }
   });
   pane.addEventListener('scroll', () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(() => capture(true)); }, { passive: true });
+  $('partHeading').addEventListener('keydown', event => {
+    if (!event.target.matches('[data-reading-layer]') || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    event.preventDefault(); const next = event.key === 'Home' ? 'main' : event.key === 'End' ? 'extension' : layer === 'main' ? 'extension' : 'main';
+    switchLayer(next); $(next === 'main' ? 'mainReadingTab' : 'extensionReadingTab').focus({ preventScroll: true });
+  });
   const excluded = 'button,a,input,textarea,select,label,summary,pre,code,table';
   pane.addEventListener('pointerdown', event => {
     if (event.timeStamp - gestureStarted > 500 || event.detail === 1) gestureSelection = Boolean(getSelection()?.toString().trim());
@@ -311,7 +403,7 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, isSheetOpe
   document.addEventListener('keydown', () => { if (pure) wakeControls(); });
   window.addEventListener('resize', () => { clearTimeout(resizeTimer); const position = capture() || cursor; resizeTimer = setTimeout(() => { if (chapter) settle(position); }, 100); });
   return Object.freeze({ setChapter, clear, capture, settle, showReader, showChapter, go, indexHTML, scrollCurrentIndex,
-    enhanceCodes, resolveAnchor, normalizePosition, updateIndex, toggleIndexSection, wakeControls, setPure,
-    get position() { return clone(cursor); }, get state() { return { view, pure, restoring, cursor: clone(cursor) }; },
+    enhanceCodes, resolveAnchor, normalizePosition, updateIndex, toggleIndexSection, wakeControls, setPure, setRestoredSections, switchLayer,
+    get position() { return clone(cursor); }, get state() { return { view, pure, restoring, layer, cursor: clone(cursor) }; },
     get headings() { return clone(headings); }, get sections() { return clone(sections); }, get navigation() { return clone(navigationTargets()); } });
 }

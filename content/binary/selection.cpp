@@ -49,7 +49,7 @@ std::uint64_t missing_domain(const std::vector<std::uint32_t>& values,
         std::uint64_t left_count = 0;
         for (auto v : values) if (lo <= v && v < mid) ++left_count;
         if (left_count < mid-lo) hi = mid;
-        else lo = mid; // 左半满，欠满性必留在右半
+        else lo = mid; // 左半记录数不少于容量；当前域欠满，故右半必欠满。
     }
     return lo;
 }

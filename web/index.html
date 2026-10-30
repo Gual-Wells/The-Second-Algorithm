@@ -37,11 +37,12 @@
   </section>
   <section id="readerFrame" class="reader-frame" aria-label="算法章节读书器" hidden>
     <section id="chapterView" class="chapter-view" aria-label="章节首页" hidden></section>
-    <section id="readerView" class="reader-view" hidden><div id="readingLayout" class="reading-layout"><div id="readingPane" class="reading-pane reading-scroll" tabindex="0" aria-label="正文"><section id="reader" class="reader">
+    <section id="readerView" class="reader-view" hidden>
+      <div class="part-heading reading-tabs" id="partHeading" role="tablist" aria-label="章节内容"><button id="mainReadingTab" type="button" role="tab" data-reading-layer="main" aria-selected="true" aria-controls="article">正文</button><button id="extensionReadingTab" type="button" role="tab" data-reading-layer="extension" aria-selected="false" aria-controls="article" tabindex="-1">超纲</button></div>
+      <div id="readingLayout" class="reading-layout"><div id="readingPane" class="reading-pane reading-scroll" tabindex="0" aria-label="正文"><section id="reader" class="reader">
       <div class="reader-head" id="readerHead"><div class="chapter-label"><span id="readerChapterDate"></span><span class="label-separator">/</span><span id="readerChapterNumber"></span></div><div class="chapter-title-row"><h2 id="readerChapterTitle"></h2></div><p id="readerChapterSubtitle"></p></div>
-      <div class="part-heading" id="partHeading"><span id="readerPartNumber"></span><strong id="readerPartTitle"></strong><span id="readerPartSummary"></span></div>
       <div class="article-tools" id="articleTools"><button class="bevel-button" id="sectionIndexButton" type="button" aria-haspopup="dialog">目录索引</button><span id="articleToolsHint">按目录定位本章内容</span></div>
-      <article id="article" class="paper article"></article>
+      <article id="article" class="paper article" role="tabpanel" aria-labelledby="mainReadingTab"></article>
     </section></div></div></section>
     <div id="readerStatusbar" class="reader-statusbar" role="status"><span id="statusLamp" class="status-lamp"></span><span id="syncStatus">正在连接章节…</span><span id="readingPosition"></span></div>
   </section>

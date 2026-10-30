@@ -2817,18 +2817,6 @@
               "anchor": "multiplication-rank-manual"
             }
           ],
-          "standard": [
-            {
-              "document": "binary-search",
-              "anchor": "multiplication-rank-standard"
-            }
-          ],
-          "standardExplanation": [
-            {
-              "document": "binary-search",
-              "anchor": "multiplication-rank-standard"
-            }
-          ],
           "engineering": [
             {
               "document": "binary-search",
@@ -2837,15 +2825,10 @@
           ]
         },
         "manualImplementationIds": [
-          "selection-multiply-manual"
-        ],
-        "standardImplementationIds": [
+          "selection-multiply-manual",
           "selection-multiply-standard"
         ],
-        "standardRole": {
-          "kind": "support",
-          "explanation": "std::min只替换单行解析贡献，std::swap选短边；整题复用唯一值域搜索和计数主体，不复制整份wrapper。"
-        },
+        "standardImplementationIds": [],
         "exercises": [
           {
             "title": "LC668 · 乘法表中第 k 小的数",
@@ -4287,18 +4270,6 @@
               "anchor": "time-parallel-search-manual"
             }
           ],
-          "standard": [
-            {
-              "document": "binary-search",
-              "anchor": "time-parallel-search-standard"
-            }
-          ],
-          "standardExplanation": [
-            {
-              "document": "binary-search",
-              "anchor": "time-parallel-search-standard"
-            }
-          ],
           "engineering": [
             {
               "document": "binary-search",
@@ -4307,15 +4278,10 @@
           ]
         },
         "manualImplementationIds": [
-          "advanced-time-pbs"
-        ],
-        "standardImplementationIds": [
+          "advanced-time-pbs",
           "advanced-dsu-support"
         ],
-        "standardRole": {
-          "kind": "support",
-          "explanation": "vector提供查询桶与DSU数组、iota初始化父结点、swap支持按规模合并；DSU与PBS均非std一键算法。"
-        },
+        "standardImplementationIds": [],
         "exercises": [
           {
             "title": "New Roads Queries",
@@ -4497,6 +4463,32 @@
             "url": "https://atcoder.jp/contests/abc216/tasks/abc216_e"
           }
         ]
+      }
+    ],
+    "extensions": [
+      {
+        "sectionId": "time-parallel-search",
+        "tags": [
+          "离线批处理",
+          "并行二分"
+        ],
+        "reason": "本节核心是将许多不同答案的查询合并到一轮轮中点批次，以离线重放与状态共享代替独立判定；理解与实现依赖整套并行二分调度机制，不能仅视为基础二分中借用并查集。"
+      },
+      {
+        "sectionId": "dynamic-range-kth",
+        "tags": [
+          "离线值域分治",
+          "整体二分"
+        ],
+        "reason": "本节核心是按值域联合分治带修改的事件与查询，维持时间顺序、剩余秩、稳定分流和可回滚状态；该系统性离线方法超出基础数据结构与算法的直接组合。"
+      },
+      {
+        "sectionId": "marginal-penalty",
+        "tags": [
+          "拉格朗日松弛",
+          "离散凸性"
+        ],
+        "reason": "本节核心不是普通单调判定，而是用惩罚参数转换带资源数量约束的优化，并借助递减边际收益证明数量单调及精确恢复；理解依赖拉格朗日松弛与离散凸性条件。"
       }
     ]
   },

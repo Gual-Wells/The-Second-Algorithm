@@ -71,6 +71,7 @@ jobs:
             .local/refinement-qa/results.json
             .local/carrier-upgrade-qa/results.json
             .local/carrier-sync/results.json
+            .local/carrier-extension/results.json
             work/jobs/
             .local/releases/*/carrier-build.json
           if-no-files-found: ignore

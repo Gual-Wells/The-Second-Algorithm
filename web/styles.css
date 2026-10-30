@@ -62,6 +62,15 @@ input:focus, textarea:focus, select:focus { border-color: #4c8ec3; }
 .reader-head p:empty { display: none; }
 .part-heading, .section-band { display: flex; justify-content: space-between; align-items: center; gap: 7px; border: 1px solid #8daac5; background: linear-gradient(#f8fbff, #d7e6f5); color: #214e79; box-shadow: 0 1px 0 #fff inset; }
 .part-heading { margin: 11px 0 0; padding: 8px 10px; }
+.part-heading.reading-tabs { margin: 0; padding: 0; gap: 0; border: 0; border-bottom: 1px solid #829fba; }
+.reading-tabs button { flex: 1; min-width: 0; min-height: 36px; border: 0; border-right: 1px solid #a2b8cc; padding: 7px 12px; color: #4b6c87; background: linear-gradient(#fff,#e2edf7); font-size: 12px; font-weight: 700; box-shadow: 0 1px #fff inset; }
+.reading-tabs button:last-child { border-right: 0; }
+.reading-tabs button[aria-selected="true"] { color: #fff; background: linear-gradient(#6d92b3,#3a658c); box-shadow: 0 1px 3px #25476866 inset; text-shadow: 0 1px #254768; }
+.reading-tabs button:active { background: #bdd2e5; color: #214e79; }
+.extension-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin: -3px 0 15px; padding-bottom: 9px; border-bottom: 1px solid #d5e0ea; }
+.extension-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.extension-tags span { border: 1px solid #afc2d3; border-radius: 2px; padding: 3px 6px; background: linear-gradient(#f8fbfd,#e4edf5); color: #46647c; font-size: 11px; line-height: 1.5; }
+.extension-meta button { flex: none; min-height: 31px; font-size: 11px; }
 .part-heading #readerPartNumber { color: #5f7e9c; font-size: 9px; font-weight: 700; }
 .part-heading strong { flex: 1; font-size: 13px; }
 .part-heading #readerPartSummary { color: #637f98; font-size: 9px; }
@@ -141,6 +150,9 @@ textarea.text-input { resize: vertical; }
 /* Chapter navigation retains the full heading hierarchy instead of word-index tiles. */
 .directory-list { display: block; min-width: 0; min-height: 0; max-height: min(70dvh,660px); overflow-y: auto; overscroll-behavior: contain; background: #fff; }
 .directory-group { border-bottom: 1px solid #c4d3e1; }
+.directory-group.is-extension { background: #e6edf3; box-shadow: 0 2px 6px #34557224 inset; }
+.directory-group.is-extension > .directory-parent { background: linear-gradient(#dbe5ee,#eaf0f5); }
+.directory-group.is-extension.is-current-parent > .directory-parent { background: linear-gradient(#cbdce9,#dce8f2); }
 .directory-parent { display: flex; align-items: stretch; min-width: 0; }
 .directory-parent button { border: 0; border-radius: 0; background: transparent; box-shadow: none; color: #254b6d; font-weight: 600; }
 .directory-toggle { width: 40px; min-width: 40px; padding: 4px; color: #4b7295 !important; font-size: 18px; line-height: 1; }
@@ -239,6 +251,8 @@ input::placeholder, textarea::placeholder { color: #60758a; opacity: 1; }
 .chapter-view, .reader-view { grid-column: 1; grid-row: 1; min-width: 0; min-height: 0; }
 .chapter-view { overflow: auto; overscroll-behavior: contain; }
 .reader-view, .reading-layout { display: grid; grid-template-columns: minmax(0,1fr); grid-template-rows: minmax(0,1fr); overflow: hidden; }
+.reader-view { grid-template-rows: auto minmax(0,1fr); }
+.reader-view > .reading-layout { grid-row: 2; }
 .reading-layout, .reading-pane { min-width: 0; min-height: 0; }
 .reading-pane { overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; scrollbar-width: thin; overflow-anchor: none; touch-action: pan-x pan-y pinch-zoom; }
 .chapter-inner { max-width: 860px; min-height: 100%; margin: 0 auto; padding: 0 16px 24px; }
@@ -274,6 +288,7 @@ input::placeholder, textarea::placeholder { color: #60758a; opacity: 1; }
 .article h2, .article h3, .article h4, .knowledge-prose h2, .knowledge-prose h3, .knowledge-prose h4 { color: #174f84; line-height: 1.55; scroll-margin-top: 52px; font-weight: 700; }
 .article h2, .knowledge-prose h2 { margin: 24px 0 12px; border-top: 1px solid #c2d3e1; padding-top: 16px; font-size: calc(var(--reading-size) + 2px); }
 .article > h2:first-of-type, .knowledge-prose > h2:first-of-type { margin-top: 0; padding-top: 0; border-top: 0; }
+.article > h2.layer-first { margin-top: 0; padding-top: 0; border-top: 0; }
 .article h3, .knowledge-prose h3 { margin: 20px 0 9px; font-size: calc(var(--reading-size) + 1px); }
 .article h4, .knowledge-prose h4 { margin: 16px 0 7px; font-size: var(--reading-size); }
 .article h5, .knowledge-prose h5 { margin: 14px 0 6px; color: #365d7c; font-size: var(--reading-size); }

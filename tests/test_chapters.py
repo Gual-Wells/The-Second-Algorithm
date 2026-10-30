@@ -4,14 +4,15 @@ import contextlib
 import copy
 import io
 import json
+import re
 from unittest.mock import patch
 
-from test_learning_workflow import LearningFixture
+from test_learning_workflow import LearningFixture, COMPILER
 from second_algorithm.chapters import _research_binding, chapter_inputs, chapter_quality, render_chapters
 from second_algorithm.cli import main
 from second_algorithm.learning import course_snapshot, validate_learning
 from second_algorithm.storage import digest, read_json, write_json
-from second_algorithm.workflow import add_evidence, check_release, init_job, job_status, prepare_release, verify_job
+from second_algorithm.workflow import add_evidence, check_release, init_job, job_status, prepare_release, verify_job, verify_course
 
 
 class ChapterHelpers:
@@ -851,6 +852,84 @@ class ParadigmContractTest(ChapterHelpers, LearningFixture):
         unit["standardRole"] = {"kind": "shared-core", "explanation": "The handwritten core already uses the actual standard facility"}
         self.save_contract()
         self.assertTrue(validate_learning(self.root)["ok"], validate_learning(self.root))
+
+    def single_actual_implementation(self, kind):
+        """Remove the absent implementation, not merely its claimed role tags."""
+        other = "standard" if kind == "manual" else "manual"
+        unit = self.contract["reading"]["units"][0]
+        unit[other + "ImplementationIds"] = []
+        unit["facets"].pop(other)
+        unit["facets"].pop(other + "Explanation")
+        if kind == "manual":
+            unit.pop("standardRole")
+        implementations = self.model["tasks"][0]["methods"][0]["implementations"]
+        implementations[:] = [item for item in implementations if item["kind"] == kind]
+        source = (self.root / self.source).read_text(encoding="utf-8")
+        source = re.sub(r"(?m)^// BEGIN " + other + r"\n[\s\S]*?^// END " + other + r"\n", "", source)
+        self.put(self.source, source)
+        draft = (self.root / self.draft).read_text(encoding="utf-8").replace("{{" + other + "}}", "")
+        self.put(self.draft, draft)
+        symbol = "lower_" + kind
+        self.put("tests/cpp/check.cpp", '#include "../../content/unit/Lesson.cpp"\n#include <cassert>\n'
+                 'int main(){ assert(' + symbol + '({}, 1)==0); assert(' + symbol + '({1,1,3}, 1)==0); '
+                 'assert(' + symbol + '({1,1,3}, 2)==2); assert(' + symbol + '({1,1,3}, 4)==3); }\n')
+        self.save()
+        self.save_contract()
+
+    def test_only_hcode_requires_its_real_explanation_but_no_fake_scode(self):
+        self.single_actual_implementation("manual")
+        self.assertTrue(validate_learning(self.root)["ok"], validate_learning(self.root))
+        if COMPILER:
+            self.assertTrue(verify_course(self.root, COMPILER)["passed"])
+        unit = self.contract["reading"]["units"][0]
+        unit.pop("standardImplementationIds")
+        self.save_contract()
+        self.assertTrue(validate_learning(self.root)["ok"], validate_learning(self.root))
+        unit["facets"].pop("manualExplanation")
+        self.save_contract()
+        self.assertIn("manualExplanation", " ".join(validate_learning(self.root)["errors"]))
+
+    def test_only_scode_requires_its_real_explanation_but_no_fake_hcode(self):
+        self.single_actual_implementation("standard")
+        self.assertTrue(validate_learning(self.root)["ok"], validate_learning(self.root))
+        if COMPILER:
+            self.assertTrue(verify_course(self.root, COMPILER)["passed"])
+        unit = self.contract["reading"]["units"][0]
+        unit.pop("manualImplementationIds")
+        self.save_contract()
+        self.assertTrue(validate_learning(self.root)["ok"], validate_learning(self.root))
+        unit["facets"].pop("standardExplanation")
+        self.save_contract()
+        self.assertIn("standardExplanation", " ".join(validate_learning(self.root)["errors"]))
+
+    def test_implementation_free_sections_and_forged_single_path_still_fail(self):
+        self.single_actual_implementation("manual")
+        unit = self.contract["reading"]["units"][0]
+        unit["manualImplementationIds"] = []
+        self.save_contract()
+        self.assertIn("at least one actual", " ".join(validate_learning(self.root)["errors"]))
+        unit["manualImplementationIds"] = ["invented-implementation"]
+        self.save_contract()
+        self.assertIn("actual tasks", " ".join(validate_learning(self.root)["errors"]))
+        unit["manualImplementationIds"] = []
+        unit["standardImplementationIds"] = ["manual-boundary"]
+        unit["standardRole"] = {"kind": "algorithm", "explanation": "A label cannot change the implementation kind"}
+        unit["facets"]["standard"] = copy.deepcopy(unit["locations"])
+        unit["facets"]["standardExplanation"] = copy.deepcopy(unit["locations"])
+        self.save_contract()
+        self.assertIn("standard algorithm/structure", " ".join(validate_learning(self.root)["errors"]))
+
+    def test_single_path_still_checks_canonical_symbols_and_verification_dependencies(self):
+        self.single_actual_implementation("standard")
+        implementation = self.model["tasks"][0]["methods"][0]["implementations"][0]
+        implementation["symbol"] = "not_in_source"
+        self.save()
+        self.assertIn("symbol absent", " ".join(validate_learning(self.root)["errors"]))
+        implementation["symbol"] = "lower_standard"
+        self.put("tests/cpp/unrelated.cpp", "int main(){}\n")
+        self.model["targets"][0]["source"] = "tests/cpp/unrelated.cpp"
+        self.save()
+        self.assertIn("does not depend", " ".join(validate_learning(self.root)["errors"]))
 
     def test_known_corpus_changes_invalidate_the_bound_review(self):
         self.put("catalog/sources.json", '{"sources": []}')

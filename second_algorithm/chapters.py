@@ -137,6 +137,51 @@ def _practice_prose(document, outline, start, end, label, errors):
     return "\n".join(parts)
 
 
+def _extension_contract(contract, cid, units, outlines, permitted, errors):
+    """Check whole-section routing evidence without claiming semantic judgement."""
+    reading = contract.get("reading", {})
+    if not isinstance(reading, dict) or "extensions" not in reading:
+        return  # Historical contracts remain readable without a new field.
+    if contract.get("schemaVersion") != 3:
+        errors.append(cid + ": extensions require schemaVersion 3")
+    entries = _rows(reading.get("extensions"), cid + ".reading.extensions", errors)
+    by_id = {unit.get("id"): unit for unit in units if isinstance(unit.get("id"), str)}
+    seen, owned = set(), set()
+    for entry in entries:
+        section = entry.get("sectionId")
+        label = cid + ".extension." + str(section)
+        if not isinstance(section, str) or section not in by_id:
+            errors.append(label + ": extension must identify a formal section, never PRE or a subheading")
+            continue
+        if section in seen:
+            errors.append(label + ": duplicate extension section")
+        seen.add(section)
+        tags = _strings(entry.get("tags"), label + ".tags", errors)
+        if not tags:
+            errors.append(label + ": nonempty algorithm tags required")
+        normalized = [tag.strip() for tag in tags]
+        if len(set(normalized)) != len(normalized):
+            errors.append(label + ": duplicate extension tag")
+        if any(re.search(r"[\x00-\x1f\x7f<>]", tag) for tag in tags):
+            errors.append(label + ": extension tags must be plain text")
+        _text(entry.get("reason"), label + ".reason", errors)
+        locations = _rows(by_id[section].get("locations", []), label + ".locations", errors)
+        if len(locations) != 1:
+            errors.append(label + ": extension must own exactly one complete H2 section")
+        for point in locations:
+            document, anchor = point.get("document"), point.get("anchor")
+            outline = outlines.get(document, {}) if isinstance(document, str) else {}
+            heading = outline.get("locations", {}).get(anchor) if isinstance(anchor, str) else None
+            if (not isinstance(document, str) or document not in permitted or not heading or heading["level"] != 2
+                    or heading["title"].startswith("PRE、")):
+                errors.append(label + ": extension location must immediately identify a formal H2")
+                continue
+            identity = (document, heading["line"])
+            if identity in owned:
+                errors.append(label + ": several extensions cannot alias the same H2")
+            owned.add(identity)
+
+
 def _paradigm_contract(contract, cid, model, documents, permitted, material_ids, errors):
     """Deterministic editorial relationships; no automatic taxonomy judgement."""
     version = contract.get("schemaVersion")
@@ -168,6 +213,7 @@ def _paradigm_contract(contract, cid, model, documents, permitted, material_ids,
     units = _rows(reading.get("units", []), cid + ".reading.units", errors)
     unit_ids = {unit.get("id") for unit in units if isinstance(unit.get("id"), str)}
     outlines = {did: _prose_outline(documents[did].get("draft", "")) for did in permitted if did in documents}
+    _extension_contract(contract, cid, units, outlines, permitted, errors)
     document_order = {did: i for i, did in enumerate(documents) if did in permitted}
     h2_owners, unit_positions, unit_headings = {}, [], set()
 
@@ -242,12 +288,20 @@ def _paradigm_contract(contract, cid, model, documents, permitted, material_ids,
             errors.append(label + ": dependencies must be earlier problem-type sections")
         if isinstance(uid, str):
             preceding.add(uid)
+        manual = _strings(unit.get("manualImplementationIds", []), label + ".manualImplementationIds", errors)
+        standard = _strings(unit.get("standardImplementationIds", []), label + ".standardImplementationIds", errors)
+        required_facets = {"problem", "fit", "variation", "engineering"}
+        if manual:
+            required_facets.update(("manual", "manualExplanation"))
+        if standard:
+            required_facets.update(("standard", "standardExplanation"))
         facets = unit.get("facets", {})
         if not isinstance(facets, dict):
             errors.append(label + ".facets: expected an object")
             facets = {}
         for facet in FACETS:
-            actual = _locations(facets.get(facet, []), label + ".facets." + facet, documents, permitted, errors, required=complete)
+            actual = _locations(facets.get(facet, []), label + ".facets." + facet, documents, permitted, errors,
+                                required=complete and facet in required_facets)
             for location in actual:
                 did, anchor = location.get("document"), location.get("anchor")
                 line = outlines.get(did, {}).get("anchorLines", {}).get(anchor)
@@ -265,14 +319,13 @@ def _paradigm_contract(contract, cid, model, documents, permitted, material_ids,
                     valid_span |= anchor in start["anchors"] or start["line"] < line < end
                 if not valid_span:
                     errors.append(label + ": facet must lie within its own problem-type section: " + facet)
-        manual = _strings(unit.get("manualImplementationIds", []), label + ".manualImplementationIds", errors)
-        standard = _strings(unit.get("standardImplementationIds", []), label + ".standardImplementationIds", errors)
         role = unit.get("standardRole", {})
         if not isinstance(role, dict):
+            errors.append(label + ".standardRole: expected an object")
             role = {}
-        if complete and (not manual or not standard):
-            errors.append(label + ": both manual and standard-facility implementation paths are required")
-        if complete or role:
+        if complete and not (manual or standard):
+            errors.append(label + ": at least one actual applicable implementation path is required")
+        if standard or role:
             if role.get("kind") not in {"algorithm", "structure", "support", "shared-core"}:
                 errors.append(label + ": unknown standard-facility role")
             _text(role.get("explanation"), label + ".standardRole.explanation", errors)

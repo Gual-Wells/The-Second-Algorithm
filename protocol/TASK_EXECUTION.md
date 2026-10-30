@@ -73,7 +73,7 @@ node scripts/manage-subheadings.mjs check content/<unit>/chapter.authoring.json
 
 check与正式构建核完整对应和规范生成；通过不代替语义匹配、实现归属及连续阅读审阅。管理表无关扩充不重做旧章研究，修改已用类型或作者候选后须更新受影响协调与审阅。管理表、候选和协调文件不随读件公开；Hcode/Scode及其他规范前缀由同一构建路径生成，不能在PWA里另建一份名称表。
 
-先按CHAPTER_STANDARD/QUALITY_WORKFLOW在 `catalog/chapters.json` 登记每章合同与审阅路径。当前正式合同schema3保存思想机制与主要分支、真实材料归并证据、理论前置和正式题型节，并由`researchTypeIds`承接研究对象；每节有完整链条位置、真实双实现层次、依赖及1–5份在研究阶段取得且正文可见的练习。前置/题型须对应实际H2，机制/证明从属于题型。已有承诺用真实显式锚点定位，未完保留open/gap。结构可以有效而质量未通过；旧schema只供恢复，不得删除登记或追认旧通过来关闭门禁。
+先按CHAPTER_STANDARD/QUALITY_WORKFLOW在 `catalog/chapters.json` 登记每章合同与审阅路径。当前正式合同schema3保存思想机制与主要分支、真实材料归并证据、理论前置和正式题型节，并由`researchTypeIds`承接研究对象；每节有完整链条位置、必要真实实现的选择和设施层次（不要求Hcode/Scode成对）、依赖及1–5份在研究阶段取得且正文可见的练习。前置/题型须对应实际H2，机制/证明从属于题型。已有承诺用真实显式锚点定位，未完保留open/gap。结构可以有效而质量未通过；旧schema只供恢复，不得删除登记或追认旧通过来关闭门禁。
 
 ```sh
 npm run build:content
@@ -83,6 +83,12 @@ npm run check
 ```
 
 CXX可指向已有编译器，ALGORITHM_PYTHON可指向已有Python；本机TEMP/TMP与所有输出D盘，脚本不自动安装编译器。check默认包含Python、登记C++目标、carrier、完整构建、浏览器和SW检查。只有调试确定性部分时可 `node scripts/check-project.mjs --without-browser`，不能把它冒称完整验收。
+
+## 章节分层的编纂与验收
+
+按CONTENT_LAYERS在研究档案及当前审阅记录题型核心依赖和最终整节分类理由，受保护出版输入只保留实际路由所需的稳定节身份与思想标签。存在尚未撤回的超纲节时两标签页共享完整章及目录，无超纲或全部撤回时不显示标签体系；用户撤回是独立持久阅读选择，不改范围、默认分类或其他节。新章、分层调整及更正分别核实际影响，不重写不可变旧交接。
+
+发布前真实检查不漏节/重节、全部层级目录、跨标签链接、独立撤回和重新打开、全部撤回/无超纲时标签体系消失，以及读位与鉴权/离线。通用函数有解责任、参数范围、计数证明和代码替代层次按IMPLEMENTATION_STANDARD核实。具体实际字段见CONTENT_MODEL；不得仅改协议或手填通过即宣称已实现。
 
 ## 章级采用、留证与准备
 

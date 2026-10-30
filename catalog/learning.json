@@ -1438,7 +1438,7 @@
             },
             {
               "id": "selection-multiply-standard",
-              "kind": "standard",
+              "kind": "manual",
               "symbol": "multiplication_row_standard",
               "regions": [
                 "multiplication-standard"

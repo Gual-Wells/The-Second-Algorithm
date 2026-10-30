@@ -1079,6 +1079,7 @@ std::vector<long double> shifted_values_standard(const std::vector<i64>& a,
 // BEGIN decision-ratio-manual
 struct Ingredient { i64 value, cost; };
 
+// P1570：1<=choose<=n<=200，1<=value,cost<=10000，最优总比值<=1000。
 long double ratio_manual(const std::vector<Ingredient>& items, int choose) {
     auto feasible = [&](long double guess) {
         std::vector<long double> score;
@@ -1101,6 +1102,7 @@ long double ratio_manual(const std::vector<Ingredient>& items, int choose) {
 // END decision-ratio-manual
 
 // BEGIN decision-ratio-standard
+// 输入范围与手写版相同；[0,1000] 依赖正收益及原题的答案上界。
 long double ratio_standard(const std::vector<Ingredient>& items, int choose) {
     auto feasible = [&](long double guess) {
         std::vector<long double> score;
@@ -1169,7 +1171,7 @@ std::uint64_t missing_domain(const std::vector<std::uint32_t>& values,
         std::uint64_t left_count = 0;
         for (auto v : values) if (lo <= v && v < mid) ++left_count;
         if (left_count < mid-lo) hi = mid;
-        else lo = mid; // 左半满，欠满性必留在右半
+        else lo = mid; // 左半记录数不少于容量；当前域欠满，故右半必欠满。
     }
     return lo;
 }

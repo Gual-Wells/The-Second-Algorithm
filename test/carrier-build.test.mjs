@@ -96,6 +96,44 @@ test('calendar metadata is independent of teaching content identity', async () =
   } finally { await dispose(data.root); }
 });
 
+test('whole-section classifications bind immutable reader revision without copying prose or leaking internal reasons', async () => {
+  const f = await fixture();
+  try {
+    await fs.writeFile(path.join(f.root, 'catalog/chapters.json'), JSON.stringify({ schemaVersion: 1,
+      chapters: [{ id: 'fixture-course', collection: 'fixture-course', contract: 'content/unit/contract.json' }] }));
+    const contract = { schemaVersion: 3, chapter: 'fixture-course', reading: {
+      units: [{ id: 'offline', locations: [{ document: f.descriptor.id, anchor: 'manual' }] }], extensions: [] } };
+    const save = () => fs.writeFile(path.join(f.root, 'content/unit/contract.json'), JSON.stringify(contract));
+    const build = async name => {
+      const output = path.join(f.root, '.local', name);
+      const { catalog } = await buildLibrary(f.root, output, { schemaVersion: 2, collections: [f.collection] }, gitRevision);
+      const entry = catalog.collections[0].documents[0];
+      return { entry, document: JSON.parse(await fs.readFile(path.join(output, entry.url.slice(1)), 'utf8')) };
+    };
+    await save(); const main = await build('main');
+    contract.reading.extensions = [{ sectionId: 'offline', tags: ['离线分治'], reason: 'Private editorial reason.' }];
+    await save(); const classified = await build('classified');
+    const expected = [{ sectionId: 'manual', tags: ['离线分治'] }];
+    assert.deepEqual(classified.entry.extensions, expected);
+    assert.deepEqual(classified.document.extensions, expected);
+    assert.equal(classified.entry.revision, classified.document.revision);
+    assert.notEqual(classified.entry.revision, main.entry.revision);
+    assert.equal(classified.document.html, main.document.html);
+    assert.equal(classified.document.sourceUrl, main.document.sourceUrl);
+    assert.equal(classified.entry.markdownUrl, main.entry.markdownUrl);
+    assert.deepEqual(classified.document.headings, main.document.headings);
+    assert.ok(!JSON.stringify(classified).includes('Private editorial reason'));
+    contract.reading.extensions[0].tags = ['批量离线']; await save();
+    const retagged = await build('retagged');
+    assert.notEqual(retagged.entry.revision, classified.entry.revision);
+    contract.reading.extensions[0].reason = 'Changed internal assessment.'; await save();
+    const rereviewed = await build('rereviewed');
+    assert.deepEqual(rereviewed, retagged, 'editorial explanation is bound by production inputs, never reader payload');
+    contract.reading.units[0].locations[0].anchor = 'q000001'; await save();
+    await assert.rejects(build('bad-subheading'), /formal H2/);
+  } finally { await dispose(f.root); }
+});
+
 test('the current publication schema has one course sequence and no track or trial compatibility', () => {
   validatePublications(publications);
   assert.equal(publications.schemaVersion, 2);

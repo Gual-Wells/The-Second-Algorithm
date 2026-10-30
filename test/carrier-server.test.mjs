@@ -263,3 +263,57 @@ test('state type guards distinguish notes and structured preferences', () => {
   assert.ok(!validStateInput({ key: 'position:doc-1', value: { offset: Infinity } }));
   assert.ok(!validStateInput({ key: 'notes:collection-1', value: {}, baseRevision: 0 }));
 });
+
+test('restored sections are independent records and remain isolated across replacement owners', async () => {
+  const env = environment(), oldCookie = await authenticate(env);
+  const firstKey = 'section:' + '1'.repeat(64), secondKey = 'section:' + '2'.repeat(64);
+  const first = { document: 'binary-search', section: 'dynamic-range-kth', restored: true };
+  const second = { document: 'binary-search', section: 'time-parallel-search', restored: true };
+  try {
+    assert.equal((await put(env, oldCookie, firstKey, first)).status, 200);
+    assert.equal((await put(env, oldCookie, secondKey, second)).status, 200);
+    let state = (await (await call(env, '/api/state', oldCookie)).json()).state;
+    assert.deepEqual(state[firstKey].value, first); assert.deepEqual(state[secondKey].value, second);
+    assert.equal(Object.keys(state).length, 2, 'restoring one section does not overwrite an entire chapter list');
+    assert.equal((await put(env, oldCookie, firstKey, first)).status, 200);
+    state = (await (await call(env, '/api/state', oldCookie)).json()).state;
+    assert.equal(state[firstKey].revision, 2); assert.equal(state[secondKey].revision, 1);
+    env.sql.prepare('UPDATE auth_credential SET credential_id=? WHERE id=1').run('layer-replacement');
+    assert.equal((await call(env, '/api/state', oldCookie)).status, 401);
+    const nextCookie = await authenticate(env, 'b', 'layer-replacement');
+    assert.deepEqual(await (await call(env, '/api/state', nextCookie)).json(), { state: {} });
+    assert.equal((await put(env, nextCookie, firstKey, first)).status, 200);
+    assert.equal(env.sql.prepare('SELECT count(*) AS n FROM reader_state').get().n, 3, 'new owner does not mutate former owner records');
+  } finally { env.sql.close(); }
+});
+
+test('section state rejects malformed identities, non-restoration values and extra content', async () => {
+  const env = environment(), cookie = await authenticate(env), key = 'section:' + 'a'.repeat(64);
+  const good = { document: 'binary-search', section: 'dynamic-range-kth', restored: true };
+  try {
+    assert.equal((await put(env, cookie, key, good, undefined, 'https://other.example')).status, 403);
+    for (const [badKey, value] of [
+      ['section:short', good], ['section:' + 'A'.repeat(64), good],
+      [key, { ...good, document: '../private' }], [key, { ...good, section: '' }],
+      [key, { ...good, section: 'x'.repeat(257) }], [key, { ...good, section: 'line\nbreak' }],
+      [key, { ...good, restored: false }], [key, { ...good, restored: 'true' }],
+      [key, { ...good, tags: ['not user state'] }], [key, [good]], [key, null],
+      [key, JSON.parse('{"document":"binary-search","section":"dynamic-range-kth","restored":true,"__proto__":{}}')]
+    ]) assert.equal((await put(env, cookie, badKey, value)).status, 400, JSON.stringify([badKey, value]));
+    assert.deepEqual(await (await call(env, '/api/state', cookie)).json(), { state: {} });
+  } finally { env.sql.close(); }
+});
+
+test('a new auth epoch cannot inherit or update former section choices', async () => {
+  const env = environment(), oldCookie = await authenticate(env), key = 'section:' + 'c'.repeat(64);
+  const value = { document: 'binary-search', section: 'marginal-penalty', restored: true };
+  try {
+    assert.equal((await put(env, oldCookie, key, value)).status, 200);
+    env.sql.exec('UPDATE auth_control SET epoch=epoch+1');
+    assert.equal((await put(env, oldCookie, key, value)).status, 401);
+    const nextCookie = await authenticate(env, 'b');
+    assert.deepEqual(await (await call(env, '/api/state', nextCookie)).json(), { state: {} });
+    assert.equal((await put(env, nextCookie, key, value)).status, 200);
+    assert.equal(env.sql.prepare('SELECT count(*) AS n FROM reader_state').get().n, 2);
+  } finally { env.sql.close(); }
+});

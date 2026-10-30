@@ -1,0 +1,1684 @@
+{
+  "schemaVersion": 1,
+  "id": "2bae78a3-4e03-481a-af3c-4b14d5b9718e",
+  "document": "binary-search",
+  "composition": "content/binary/chapter.authoring.json",
+  "createdAt": "2026-10-30T14:25:56.678Z",
+  "sourceInputs": {
+    "content/binary/chapter.authoring.json": "d8863b57143b9bc238e7bc8690cd3385bcc0bf8b22b98ee64a0e26aa467de24d",
+    "content/binary/boundary.source.md": "453be6c7b0c9775aa128e5f380a8a784ef97d6213b18a9c375e9625a5dd72150",
+    "content/binary/decision.source.md": "7b89e3e2c760df5c13210f7b74a8505b59a5655a9205c685cef0eb6f23fdbaf5",
+    "content/binary/selection.source.md": "1755707429612baad0deebe7b5bc2a9c70ea1063dd2b46be212d238bd368ffba",
+    "content/binary/advanced.source.md": "c6648646958fc2657d14f11808f239e61cd736032c0dfd09cfb4b217d2f4db25"
+  },
+  "headings": [
+    {
+      "id": "prelude-foundation",
+      "source": "content/binary/boundary.source.md",
+      "owner": "prelude",
+      "depth": 3,
+      "text": "从重复值查找认识二分"
+    },
+    {
+      "id": "boundary-subheading-01",
+      "source": "content/binary/boundary.source.md",
+      "owner": "prelude",
+      "depth": 3,
+      "text": "从一次查找建立边界"
+    },
+    {
+      "id": "boundary-subheading-02",
+      "source": "content/binary/boundary.source.md",
+      "owner": "prelude",
+      "depth": 3,
+      "text": "将优化目标转成可行性边界"
+    },
+    {
+      "id": "boundary-subheading-03",
+      "source": "content/binary/boundary.source.md",
+      "owner": "prelude",
+      "depth": 3,
+      "text": "区分单调分界、结构存在性与异号夹逼"
+    },
+    {
+      "id": "prelude-search-contract",
+      "source": "content/binary/boundary.source.md",
+      "owner": "prelude",
+      "depth": 3,
+      "text": "实现前确定搜索范围与终止方式"
+    },
+    {
+      "id": "boundary-subheading-04",
+      "source": "content/binary/boundary.source.md",
+      "owner": "prelude",
+      "depth": 3,
+      "text": "搜索代价与判定代价"
+    },
+    {
+      "id": "prelude-numeric-choices",
+      "source": "content/binary/boundary.source.md",
+      "owner": "prelude",
+      "depth": 3,
+      "text": "整数与浮点搜索的表示限制"
+    },
+    {
+      "id": "boundary-subheading-05",
+      "source": "content/binary/boundary.source.md",
+      "owner": "prelude",
+      "depth": 3,
+      "text": "本章的问题版图与学习线索"
+    },
+    {
+      "id": "ordered-boundaries-foundation",
+      "source": "content/binary/boundary.source.md",
+      "owner": "ordered-boundaries",
+      "depth": 3,
+      "text": "用左右边界表达计数与前驱"
+    },
+    {
+      "id": "ordered-boundaries-manual",
+      "source": "content/binary/boundary.source.md",
+      "owner": "ordered-boundaries",
+      "depth": 3,
+      "text": "手写边界查找"
+    },
+    {
+      "id": "ordered-boundaries-library",
+      "source": "content/binary/boundary.source.md",
+      "owner": "ordered-boundaries",
+      "depth": 3,
+      "text": "用标准库表达同一组边界"
+    },
+    {
+      "id": "ordered-time-variant",
+      "source": "content/binary/boundary.source.md",
+      "owner": "ordered-boundaries",
+      "depth": 3,
+      "text": "查询指定时刻之前的最后一条记录"
+    },
+    {
+      "id": "ordered-time-manual",
+      "source": "content/binary/boundary.source.md",
+      "owner": "ordered-boundaries",
+      "depth": 4,
+      "text": "手写时间前驱查找"
+    },
+    {
+      "id": "ordered-time-standard",
+      "source": "content/binary/boundary.source.md",
+      "owner": "ordered-boundaries",
+      "depth": 4,
+      "text": "使用 upper_bound 查找时间前驱"
+    },
+    {
+      "id": "ordered-boundaries-engineering",
+      "source": "content/binary/boundary.source.md",
+      "owner": "ordered-boundaries",
+      "depth": 3,
+      "text": "返回值所有权与比较规则"
+    },
+    {
+      "id": "ordered-boundaries-practice",
+      "source": "content/binary/boundary.source.md",
+      "owner": "ordered-boundaries",
+      "depth": 3,
+      "text": "有序边界与时间记录"
+    },
+    {
+      "id": "predicate-access-foundation",
+      "source": "content/binary/boundary.source.md",
+      "owner": "predicate-access",
+      "depth": 3,
+      "text": "把接口返回值转成可搜索的分界"
+    },
+    {
+      "id": "predicate-access-manual",
+      "source": "content/binary/boundary.source.md",
+      "owner": "predicate-access",
+      "depth": 3,
+      "text": "倍增建立上界，再收缩区间"
+    },
+    {
+      "id": "predicate-access-library",
+      "source": "content/binary/boundary.source.md",
+      "owner": "predicate-access",
+      "depth": 3,
+      "text": "用访问器表示越界"
+    },
+    {
+      "id": "predicate-access-engineering",
+      "source": "content/binary/boundary.source.md",
+      "owner": "predicate-access",
+      "depth": 3,
+      "text": "域结束、接口错误与查询状态"
+    },
+    {
+      "id": "predicate-access-practice",
+      "source": "content/binary/boundary.source.md",
+      "owner": "predicate-access",
+      "depth": 3,
+      "text": "查询接口中的首次满足位置"
+    },
+    {
+      "id": "transformed-index-foundation",
+      "source": "content/binary/boundary.source.md",
+      "owner": "transformed-index",
+      "depth": 3,
+      "text": "由值与下标的差得到固定点边界"
+    },
+    {
+      "id": "transformed-index-manual",
+      "source": "content/binary/boundary.source.md",
+      "owner": "transformed-index",
+      "depth": 3,
+      "text": "严格递增时查找差值边界"
+    },
+    {
+      "id": "fixed-duplicates-variant",
+      "source": "content/binary/boundary.source.md",
+      "owner": "transformed-index",
+      "depth": 3,
+      "text": "允许重复值时的固定点查找"
+    },
+    {
+      "id": "fixed-duplicates-manual",
+      "source": "content/binary/boundary.source.md",
+      "owner": "transformed-index",
+      "depth": 4,
+      "text": "按中点值剪枝并搜索两侧"
+    },
+    {
+      "id": "missing-positive-variant",
+      "source": "content/binary/boundary.source.md",
+      "owner": "transformed-index",
+      "depth": 3,
+      "text": "第 k 个缺失正整数"
+    },
+    {
+      "id": "missing-positive-manual",
+      "source": "content/binary/boundary.source.md",
+      "owner": "transformed-index",
+      "depth": 4,
+      "text": "按缺失数量寻找边界"
+    },
+    {
+      "id": "transformed-index-library",
+      "source": "content/binary/boundary.source.md",
+      "owner": "transformed-index",
+      "depth": 4,
+      "text": "预先构造缺失数量表，再用库查找"
+    },
+    {
+      "id": "transformed-index-engineering",
+      "source": "content/binary/boundary.source.md",
+      "owner": "transformed-index",
+      "depth": 3,
+      "text": "固定点与缺失查询的类型及返回约定"
+    },
+    {
+      "id": "transformed-index-practice",
+      "source": "content/binary/boundary.source.md",
+      "owner": "transformed-index",
+      "depth": 3,
+      "text": "固定点机制与缺失数查询"
+    },
+    {
+      "id": "rotated-search-foundation",
+      "source": "content/binary/boundary.source.md",
+      "owner": "rotated-search",
+      "depth": 3,
+      "text": "从有序半区与下降切点定位答案"
+    },
+    {
+      "id": "rotated-search-manual",
+      "source": "content/binary/boundary.source.md",
+      "owner": "rotated-search",
+      "depth": 3,
+      "text": "依据有序半区更新范围"
+    },
+    {
+      "id": "rotated-search-library",
+      "source": "content/binary/boundary.source.md",
+      "owner": "rotated-search",
+      "depth": 3,
+      "text": "先找出有序分段，再调用库查找"
+    },
+    {
+      "id": "rotated-search-engineering",
+      "source": "content/binary/boundary.source.md",
+      "owner": "rotated-search",
+      "depth": 3,
+      "text": "返回含义与重复下标的约定"
+    },
+    {
+      "id": "rotated-search-practice",
+      "source": "content/binary/boundary.source.md",
+      "owner": "rotated-search",
+      "depth": 3,
+      "text": "旋转数组的成员和最小值"
+    },
+    {
+      "id": "paired-break-foundation",
+      "source": "content/binary/boundary.source.md",
+      "owner": "paired-break",
+      "depth": 3,
+      "text": "单次值怎样改变配对位置"
+    },
+    {
+      "id": "paired-break-manual",
+      "source": "content/binary/boundary.source.md",
+      "owner": "paired-break",
+      "depth": 3,
+      "text": "对齐中点，或按位运算取得配偶"
+    },
+    {
+      "id": "paired-break-library",
+      "source": "content/binary/boundary.source.md",
+      "owner": "paired-break",
+      "depth": 3,
+      "text": "异或归约的线性解"
+    },
+    {
+      "id": "paired-break-xor-standard",
+      "source": "content/binary/boundary.source.md",
+      "owner": "paired-break",
+      "depth": 4,
+      "text": "用 accumulate 合并异或结果"
+    },
+    {
+      "id": "paired-break-engineering",
+      "source": "content/binary/boundary.source.md",
+      "owner": "paired-break",
+      "depth": 3,
+      "text": "配对规律依赖哪些输入条件"
+    },
+    {
+      "id": "paired-break-practice",
+      "source": "content/binary/boundary.source.md",
+      "owner": "paired-break",
+      "depth": 3,
+      "text": "配对位置中的单次值"
+    },
+    {
+      "id": "local-peak-foundation",
+      "source": "content/binary/boundary.source.md",
+      "owner": "local-peak",
+      "depth": 3,
+      "text": "保留的一侧为什么仍然有峰"
+    },
+    {
+      "id": "local-peak-manual",
+      "source": "content/binary/boundary.source.md",
+      "owner": "local-peak",
+      "depth": 3,
+      "text": "保持两端朝向区间内部上升"
+    },
+    {
+      "id": "local-peak-library",
+      "source": "content/binary/boundary.source.md",
+      "owner": "local-peak",
+      "depth": 3,
+      "text": "扫描全局最大值寻找局部峰"
+    },
+    {
+      "id": "local-peak-maximum-standard",
+      "source": "content/binary/boundary.source.md",
+      "owner": "local-peak",
+      "depth": 4,
+      "text": "用 max_element 取得全局最大值"
+    },
+    {
+      "id": "local-peak-engineering",
+      "source": "content/binary/boundary.source.md",
+      "owner": "local-peak",
+      "depth": 3,
+      "text": "空输入、严格峰与借用结果"
+    },
+    {
+      "id": "local-peak-practice",
+      "source": "content/binary/boundary.source.md",
+      "owner": "local-peak",
+      "depth": 3,
+      "text": "满足局部峰条件的位置"
+    },
+    {
+      "id": "matrix-peak-foundation",
+      "source": "content/binary/boundary.source.md",
+      "owner": "matrix-peak",
+      "depth": 3,
+      "text": "用中列最大值确定搜索方向"
+    },
+    {
+      "id": "matrix-peak-manual",
+      "source": "content/binary/boundary.source.md",
+      "owner": "matrix-peak",
+      "depth": 3,
+      "text": "扫描列最大值，再决定搜索方向"
+    },
+    {
+      "id": "matrix-peak-library",
+      "source": "content/binary/boundary.source.md",
+      "owner": "matrix-peak",
+      "depth": 3,
+      "text": "用库寻找当前列的最大行号"
+    },
+    {
+      "id": "matrix-peak-engineering",
+      "source": "content/binary/boundary.source.md",
+      "owner": "matrix-peak",
+      "depth": 3,
+      "text": "比较器状态与矩阵输入约定"
+    },
+    {
+      "id": "matrix-peak-practice",
+      "source": "content/binary/boundary.source.md",
+      "owner": "matrix-peak",
+      "depth": 3,
+      "text": "二维相邻比较与局部峰"
+    },
+    {
+      "id": "matrix-membership-foundation",
+      "source": "content/binary/boundary.source.md",
+      "owner": "matrix-membership",
+      "depth": 3,
+      "text": "区分全局有序与行列分别有序"
+    },
+    {
+      "id": "matrix-membership-manual",
+      "source": "content/binary/boundary.source.md",
+      "owner": "matrix-membership",
+      "depth": 3,
+      "text": "展平二分与阶梯搜索的两种实现"
+    },
+    {
+      "id": "matrix-membership-library",
+      "source": "content/binary/boundary.source.md",
+      "owner": "matrix-membership",
+      "depth": 3,
+      "text": "对每一行独立调用二分查找"
+    },
+    {
+      "id": "matrix-membership-engineering",
+      "source": "content/binary/boundary.source.md",
+      "owner": "matrix-membership",
+      "depth": 3,
+      "text": "展平索引与尾后位置的预算"
+    },
+    {
+      "id": "matrix-membership-practice",
+      "source": "content/binary/boundary.source.md",
+      "owner": "matrix-membership",
+      "depth": 3,
+      "text": "两类有序矩阵的成员查询"
+    },
+    {
+      "id": "integer-root-foundation",
+      "source": "content/binary/boundary.source.md",
+      "owner": "integer-root",
+      "depth": 3,
+      "text": "把平方根转成最后可行整数"
+    },
+    {
+      "id": "integer-root-manual",
+      "source": "content/binary/boundary.source.md",
+      "owner": "integer-root",
+      "depth": 3,
+      "text": "用上中点寻找最后一个可行整数"
+    },
+    {
+      "id": "integer-root-library",
+      "source": "content/binary/boundary.source.md",
+      "owner": "integer-root",
+      "depth": 3,
+      "text": "浮点估计后作整数修正"
+    },
+    {
+      "id": "integer-root-estimate-standard",
+      "source": "content/binary/boundary.source.md",
+      "owner": "integer-root",
+      "depth": 4,
+      "text": "用 sqrt 估计并检查整数边界"
+    },
+    {
+      "id": "integer-root-engineering",
+      "source": "content/binary/boundary.source.md",
+      "owner": "integer-root",
+      "depth": 3,
+      "text": "宽类型运算与中点表达式"
+    },
+    {
+      "id": "integer-root-practice",
+      "source": "content/binary/boundary.source.md",
+      "owner": "integer-root",
+      "depth": 3,
+      "text": "整数平方根的精确边界"
+    },
+    {
+      "id": "continuous-root-foundation",
+      "source": "content/binary/boundary.source.md",
+      "owner": "continuous-root",
+      "depth": 3,
+      "text": "连续性与异号如何保证区间含根"
+    },
+    {
+      "id": "continuous-root-manual",
+      "source": "content/binary/boundary.source.md",
+      "owner": "continuous-root",
+      "depth": 3,
+      "text": "返回实际含根区间"
+    },
+    {
+      "id": "continuous-root-library",
+      "source": "content/binary/boundary.source.md",
+      "owner": "continuous-root",
+      "depth": 3,
+      "text": "隔离三次方程的三个实根"
+    },
+    {
+      "id": "cubic-root-standard",
+      "source": "content/binary/boundary.source.md",
+      "owner": "continuous-root",
+      "depth": 4,
+      "text": "导数分段、Horner 求值与逐根夹逼"
+    },
+    {
+      "id": "salary-cap-alternative",
+      "source": "content/binary/boundary.source.md",
+      "owner": "continuous-root",
+      "depth": 3,
+      "text": "利用分段线性关系直接恢复工资封顶值"
+    },
+    {
+      "id": "continuous-root-engineering",
+      "source": "content/binary/boundary.source.md",
+      "owner": "continuous-root",
+      "depth": 3,
+      "text": "误差指标与停止条件"
+    },
+    {
+      "id": "continuous-root-practice",
+      "source": "content/binary/boundary.source.md",
+      "owner": "continuous-root",
+      "depth": 3,
+      "text": "三次方程的分段求根"
+    },
+    {
+      "id": "string-prefix-foundation",
+      "source": "content/binary/boundary.source.md",
+      "owner": "string-prefix",
+      "depth": 3,
+      "text": "把字典序前缀匹配转成连续区间"
+    },
+    {
+      "id": "string-prefix-manual",
+      "source": "content/binary/boundary.source.md",
+      "owner": "string-prefix",
+      "depth": 3,
+      "text": "查找前缀匹配的两个边界"
+    },
+    {
+      "id": "string-prefix-library",
+      "source": "content/binary/boundary.source.md",
+      "owner": "string-prefix",
+      "depth": 3,
+      "text": "使用库边界查找前缀范围"
+    },
+    {
+      "id": "lcp-length-variant",
+      "source": "content/binary/boundary.source.md",
+      "owner": "string-prefix",
+      "depth": 3,
+      "text": "二分最长公共前缀的长度"
+    },
+    {
+      "id": "lcp-length-manual",
+      "source": "content/binary/boundary.source.md",
+      "owner": "string-prefix",
+      "depth": 4,
+      "text": "手写长度判定与二分"
+    },
+    {
+      "id": "lcp-length-standard",
+      "source": "content/binary/boundary.source.md",
+      "owner": "string-prefix",
+      "depth": 4,
+      "text": "以 mismatch 线性扫描替代长度二分"
+    },
+    {
+      "id": "prefix-suggestions-variant",
+      "source": "content/binary/boundary.source.md",
+      "owner": "string-prefix",
+      "depth": 3,
+      "text": "逐前缀生成搜索建议"
+    },
+    {
+      "id": "prefix-suggestions-standard",
+      "source": "content/binary/boundary.source.md",
+      "owner": "string-prefix",
+      "depth": 4,
+      "text": "复用库边界查找生成建议"
+    },
+    {
+      "id": "string-prefix-engineering",
+      "source": "content/binary/boundary.source.md",
+      "owner": "string-prefix",
+      "depth": 3,
+      "text": "前缀比较与字符串视图的接口约定"
+    },
+    {
+      "id": "string-prefix-practice",
+      "source": "content/binary/boundary.source.md",
+      "owner": "string-prefix",
+      "depth": 3,
+      "text": "逐前缀生成搜索建议"
+    },
+    {
+      "id": "convex-location-foundation",
+      "source": "content/binary/boundary.source.md",
+      "owner": "convex-location",
+      "depth": 3,
+      "text": "用扇形与叉积定位查询点"
+    },
+    {
+      "id": "convex-location-manual",
+      "source": "content/binary/boundary.source.md",
+      "owner": "convex-location",
+      "depth": 3,
+      "text": "先检查边界射线，再定位所在三角形"
+    },
+    {
+      "id": "convex-location-library",
+      "source": "content/binary/boundary.source.md",
+      "owner": "convex-location",
+      "depth": 3,
+      "text": "用 partition_point 定位角度分界"
+    },
+    {
+      "id": "convex-location-engineering",
+      "source": "content/binary/boundary.source.md",
+      "owner": "convex-location",
+      "depth": 3,
+      "text": "叉积中间式的整数范围"
+    },
+    {
+      "id": "convex-location-practice",
+      "source": "content/binary/boundary.source.md",
+      "owner": "convex-location",
+      "depth": 3,
+      "text": "凸多边形内外与边界判断"
+    },
+    {
+      "id": "capacity-partition-foundation",
+      "source": "content/binary/decision.source.md",
+      "owner": "capacity-partition",
+      "depth": 3,
+      "text": "试定容量后怎样判断最少分段数"
+    },
+    {
+      "id": "capacity-partition-manual",
+      "source": "content/binary/decision.source.md",
+      "owner": "capacity-partition",
+      "depth": 3,
+      "text": "手写容量判定与二分"
+    },
+    {
+      "id": "capacity-partition-standard",
+      "source": "content/binary/decision.source.md",
+      "owner": "capacity-partition",
+      "depth": 3,
+      "text": "用标准库计算上下界"
+    },
+    {
+      "id": "capacity-partition-engineering",
+      "source": "content/binary/decision.source.md",
+      "owner": "capacity-partition",
+      "depth": 3,
+      "text": "累加类型与方案恢复"
+    },
+    {
+      "id": "capacity-partition-practice",
+      "source": "content/binary/decision.source.md",
+      "owner": "capacity-partition",
+      "depth": 3,
+      "text": "允许零值与大规模分段"
+    },
+    {
+      "id": "maximin-spacing-foundation",
+      "source": "content/binary/decision.source.md",
+      "owner": "maximin-spacing",
+      "depth": 3,
+      "text": "固定间距后怎样选择最多位置"
+    },
+    {
+      "id": "maximin-spacing-manual",
+      "source": "content/binary/decision.source.md",
+      "owner": "maximin-spacing",
+      "depth": 3,
+      "text": "在有序位置上贪心检查"
+    },
+    {
+      "id": "maximin-spacing-standard",
+      "source": "content/binary/decision.source.md",
+      "owner": "maximin-spacing",
+      "depth": 3,
+      "text": "排序后复用检查函数"
+    },
+    {
+      "id": "maximin-spacing-engineering",
+      "source": "content/binary/decision.source.md",
+      "owner": "maximin-spacing",
+      "depth": 3,
+      "text": "位置约束改变时重新检查贪心"
+    },
+    {
+      "id": "maximin-spacing-practice",
+      "source": "content/binary/decision.source.md",
+      "owner": "maximin-spacing",
+      "depth": 3,
+      "text": "给定位置中的最大最小间距"
+    },
+    {
+      "id": "cumulative-production-foundation",
+      "source": "content/binary/decision.source.md",
+      "owner": "cumulative-production",
+      "depth": 3,
+      "text": "按完成时间统计产量而非逐件模拟"
+    },
+    {
+      "id": "cumulative-production-manual",
+      "source": "content/binary/decision.source.md",
+      "owner": "cumulative-production",
+      "depth": 3,
+      "text": "累计产量达到目标就停止"
+    },
+    {
+      "id": "cumulative-production-standard",
+      "source": "content/binary/decision.source.md",
+      "owner": "cumulative-production",
+      "depth": 3,
+      "text": "用 min_element 构造上界"
+    },
+    {
+      "id": "cumulative-production-engineering",
+      "source": "content/binary/decision.source.md",
+      "owner": "cumulative-production",
+      "depth": 3,
+      "text": "整数完成时刻与计数范围"
+    },
+    {
+      "id": "cumulative-production-practice",
+      "source": "content/binary/decision.source.md",
+      "owner": "cumulative-production",
+      "depth": 3,
+      "text": "大量目标产品的完成时间"
+    },
+    {
+      "id": "ordered-simulation-foundation",
+      "source": "content/binary/decision.source.md",
+      "owner": "ordered-simulation",
+      "depth": 3,
+      "text": "固定台位数后如何模拟完成时间"
+    },
+    {
+      "id": "ordered-simulation-manual",
+      "source": "content/binary/decision.source.md",
+      "owner": "ordered-simulation",
+      "depth": 3,
+      "text": "用最小堆模拟台位释放"
+    },
+    {
+      "id": "ordered-simulation-standard",
+      "source": "content/binary/decision.source.md",
+      "owner": "ordered-simulation",
+      "depth": 3,
+      "text": "用 priority_queue 管理结束时间"
+    },
+    {
+      "id": "ordered-simulation-engineering",
+      "source": "content/binary/decision.source.md",
+      "owner": "ordered-simulation",
+      "depth": 3,
+      "text": "堆元素寿命与台位身份"
+    },
+    {
+      "id": "ordered-simulation-practice",
+      "source": "content/binary/decision.source.md",
+      "owner": "ordered-simulation",
+      "depth": 3,
+      "text": "固定演出顺序与最少台位"
+    },
+    {
+      "id": "graph-threshold-foundation",
+      "source": "content/binary/decision.source.md",
+      "owner": "graph-threshold",
+      "depth": 3,
+      "text": "阈值删边把瓶颈路径转成可达性"
+    },
+    {
+      "id": "graph-threshold-manual",
+      "source": "content/binary/decision.source.md",
+      "owner": "graph-threshold",
+      "depth": 3,
+      "text": "用数组队列检查可达性"
+    },
+    {
+      "id": "graph-threshold-standard",
+      "source": "content/binary/decision.source.md",
+      "owner": "graph-threshold",
+      "depth": 3,
+      "text": "用 queue 保存待处理格子"
+    },
+    {
+      "id": "graph-threshold-engineering",
+      "source": "content/binary/decision.source.md",
+      "owner": "graph-threshold",
+      "depth": 3,
+      "text": "高度差计算与访问状态"
+    },
+    {
+      "id": "graph-threshold-alternative",
+      "source": "content/binary/decision.source.md",
+      "owner": "graph-threshold",
+      "depth": 3,
+      "text": "DSU 与瓶颈 Dijkstra 的对照"
+    },
+    {
+      "id": "graph-threshold-practice",
+      "source": "content/binary/decision.source.md",
+      "owner": "graph-threshold",
+      "depth": 3,
+      "text": "最大边权最小的网格路径"
+    },
+    {
+      "id": "prefix-activation-foundation",
+      "source": "content/binary/decision.source.md",
+      "owner": "prefix-activation",
+      "depth": 3,
+      "text": "完整事件前缀怎样形成单调判定"
+    },
+    {
+      "id": "prefix-activation-manual",
+      "source": "content/binary/decision.source.md",
+      "owner": "prefix-activation",
+      "depth": 3,
+      "text": "查找钉子前缀与首个失败订单"
+    },
+    {
+      "id": "prefix-activation-standard",
+      "source": "content/binary/decision.source.md",
+      "owner": "prefix-activation",
+      "depth": 3,
+      "text": "用 partial_sum 恢复前缀"
+    },
+    {
+      "id": "prefix-activation-engineering",
+      "source": "content/binary/decision.source.md",
+      "owner": "prefix-activation",
+      "depth": 3,
+      "text": "保持事件方向与检查状态一致"
+    },
+    {
+      "id": "prefix-activation-practice",
+      "source": "content/binary/decision.source.md",
+      "owner": "prefix-activation",
+      "depth": 3,
+      "text": "首次成功与首次失败的事件前缀"
+    },
+    {
+      "id": "matching-threshold-foundation",
+      "source": "content/binary/decision.source.md",
+      "owner": "matching-threshold",
+      "depth": 3,
+      "text": "把第 k 大阈值转成互斥匹配"
+    },
+    {
+      "id": "decision-subheading-20",
+      "source": "content/binary/decision.source.md",
+      "owner": "matching-threshold",
+      "depth": 3,
+      "text": "为什么增广路可以完成匹配判定"
+    },
+    {
+      "id": "matching-threshold-manual",
+      "source": "content/binary/decision.source.md",
+      "owner": "matching-threshold",
+      "depth": 3,
+      "text": "用增广路检查给定阈值"
+    },
+    {
+      "id": "matching-threshold-standard",
+      "source": "content/binary/decision.source.md",
+      "owner": "matching-threshold",
+      "depth": 3,
+      "text": "离散化阈值，并恢复完整选择"
+    },
+    {
+      "id": "matching-threshold-engineering",
+      "source": "content/binary/decision.source.md",
+      "owner": "matching-threshold",
+      "depth": 3,
+      "text": "匹配性能与递归状态"
+    },
+    {
+      "id": "matching-threshold-practice",
+      "source": "content/binary/decision.source.md",
+      "owner": "matching-threshold",
+      "depth": 3,
+      "text": "行列互斥下的最优阈值"
+    },
+    {
+      "id": "average-transform-foundation",
+      "source": "content/binary/decision.source.md",
+      "owner": "average-transform",
+      "depth": 3,
+      "text": "减去候选平均值并保留原集合限制"
+    },
+    {
+      "id": "decision-subheading-24",
+      "source": "content/binary/decision.source.md",
+      "owner": "average-transform",
+      "depth": 3,
+      "text": "长度受限的最大平均值"
+    },
+    {
+      "id": "decision-subheading-25",
+      "source": "content/binary/decision.source.md",
+      "owner": "average-transform",
+      "depth": 3,
+      "text": "删除内部非空段后的最小平均值"
+    },
+    {
+      "id": "average-transform-manual",
+      "source": "content/binary/decision.source.md",
+      "owner": "average-transform",
+      "depth": 3,
+      "text": "实现长度窗口与内部非空最大子段"
+    },
+    {
+      "id": "average-transform-standard",
+      "source": "content/binary/decision.source.md",
+      "owner": "average-transform",
+      "depth": 3,
+      "text": "用 deque 管理窗口，用 transform 生成变换值"
+    },
+    {
+      "id": "average-transform-engineering",
+      "source": "content/binary/decision.source.md",
+      "owner": "average-transform",
+      "depth": 3,
+      "text": "判定方向与数值误差"
+    },
+    {
+      "id": "average-transform-practice",
+      "source": "content/binary/decision.source.md",
+      "owner": "average-transform",
+      "depth": 3,
+      "text": "长度窗口与内部非空删除"
+    },
+    {
+      "id": "ratio-selection-foundation",
+      "source": "content/binary/decision.source.md",
+      "owner": "ratio-selection",
+      "depth": 3,
+      "text": "用变换分数优化总和之比"
+    },
+    {
+      "id": "ratio-selection-manual",
+      "source": "content/binary/decision.source.md",
+      "owner": "ratio-selection",
+      "depth": 3,
+      "text": "计算变换分数，再选前 m 项"
+    },
+    {
+      "id": "ratio-selection-standard",
+      "source": "content/binary/decision.source.md",
+      "owner": "ratio-selection",
+      "depth": 3,
+      "text": "用 nth_element 分出最大的 m 项"
+    },
+    {
+      "id": "ratio-selection-engineering",
+      "source": "content/binary/decision.source.md",
+      "owner": "ratio-selection",
+      "depth": 3,
+      "text": "保留数量与成本条件"
+    },
+    {
+      "id": "ratio-selection-practice",
+      "source": "content/binary/decision.source.md",
+      "owner": "ratio-selection",
+      "depth": 3,
+      "text": "固定数量下的总和之比"
+    },
+    {
+      "id": "pigeonhole-domain-foundation",
+      "source": "content/binary/selection.source.md",
+      "owner": "pigeonhole-domain",
+      "depth": 3,
+      "text": "用容量与计数定位唯一重复值"
+    },
+    {
+      "id": "pigeonhole-domain-manual",
+      "source": "content/binary/selection.source.md",
+      "owner": "pigeonhole-domain",
+      "depth": 3,
+      "text": "计数驱动的值域收缩"
+    },
+    {
+      "id": "pigeonhole-domain-standard",
+      "source": "content/binary/selection.source.md",
+      "owner": "pigeonhole-domain",
+      "depth": 3,
+      "text": "用标准算法表达计数"
+    },
+    {
+      "id": "missing-domain-variant",
+      "source": "content/binary/selection.source.md",
+      "owner": "pigeonhole-domain",
+      "depth": 3,
+      "text": "在欠满整数域中寻找任意缺失值"
+    },
+    {
+      "id": "missing-domain-manual",
+      "source": "content/binary/selection.source.md",
+      "owner": "pigeonhole-domain",
+      "depth": 4,
+      "text": "按容量保留必有缺失值的半域"
+    },
+    {
+      "id": "pigeonhole-domain-engineering",
+      "source": "content/binary/selection.source.md",
+      "owner": "pigeonhole-domain",
+      "depth": 4,
+      "text": "IPv4 容量与多遍输入成本"
+    },
+    {
+      "id": "pigeonhole-domain-practice",
+      "source": "content/binary/selection.source.md",
+      "owner": "pigeonhole-domain",
+      "depth": 3,
+      "text": "唯一重复值与容量判定"
+    },
+    {
+      "id": "weighted-inverse-foundation",
+      "source": "content/binary/selection.source.md",
+      "owner": "weighted-inverse",
+      "depth": 3,
+      "text": "把整数票号映回权重区间"
+    },
+    {
+      "id": "weighted-inverse-manual",
+      "source": "content/binary/selection.source.md",
+      "owner": "weighted-inverse",
+      "depth": 3,
+      "text": "构建累计量并查位置"
+    },
+    {
+      "id": "weighted-inverse-standard",
+      "source": "content/binary/selection.source.md",
+      "owner": "weighted-inverse",
+      "depth": 3,
+      "text": "前缀算法、边界算法与整数分布"
+    },
+    {
+      "id": "weighted-inverse-engineering",
+      "source": "content/binary/selection.source.md",
+      "owner": "weighted-inverse",
+      "depth": 3,
+      "text": "票号范围、总权重与映射核对"
+    },
+    {
+      "id": "weighted-inverse-practice",
+      "source": "content/binary/selection.source.md",
+      "owner": "weighted-inverse",
+      "depth": 3,
+      "text": "离散权重的随机选择"
+    },
+    {
+      "id": "matrix-rank-foundation",
+      "source": "content/binary/selection.source.md",
+      "owner": "matrix-rank",
+      "depth": 3,
+      "text": "以值域计数反查第 k 小"
+    },
+    {
+      "id": "matrix-rank-manual",
+      "source": "content/binary/selection.source.md",
+      "owner": "matrix-rank",
+      "depth": 3,
+      "text": "值域边界与楼梯判定"
+    },
+    {
+      "id": "matrix-rank-standard",
+      "source": "content/binary/selection.source.md",
+      "owner": "matrix-rank",
+      "depth": 3,
+      "text": "每行用上界计数"
+    },
+    {
+      "id": "matrix-rank-engineering",
+      "source": "content/binary/selection.source.md",
+      "owner": "matrix-rank",
+      "depth": 3,
+      "text": "矩阵形状、合法秩与重复计数"
+    },
+    {
+      "id": "matrix-rank-practice",
+      "source": "content/binary/selection.source.md",
+      "owner": "matrix-rank",
+      "depth": 3,
+      "text": "包含重复值的矩阵秩"
+    },
+    {
+      "id": "pair-distance-rank-foundation",
+      "source": "content/binary/selection.source.md",
+      "owner": "pair-distance-rank",
+      "depth": 3,
+      "text": "排序后用双指针累计合法数对"
+    },
+    {
+      "id": "pair-distance-rank-manual",
+      "source": "content/binary/selection.source.md",
+      "owner": "pair-distance-rank",
+      "depth": 3,
+      "text": "双指针判定"
+    },
+    {
+      "id": "pair-distance-rank-standard",
+      "source": "content/binary/selection.source.md",
+      "owner": "pair-distance-rank",
+      "depth": 3,
+      "text": "每个左端查一个上界"
+    },
+    {
+      "id": "pair-distance-rank-engineering",
+      "source": "content/binary/selection.source.md",
+      "owner": "pair-distance-rank",
+      "depth": 3,
+      "text": "排序副本与数对计数的类型"
+    },
+    {
+      "id": "pair-distance-rank-practice",
+      "source": "content/binary/selection.source.md",
+      "owner": "pair-distance-rank",
+      "depth": 3,
+      "text": "按下标对计数的距离秩"
+    },
+    {
+      "id": "multiplication-rank-foundation",
+      "source": "content/binary/selection.source.md",
+      "owner": "multiplication-rank",
+      "depth": 3,
+      "text": "不构造乘法表也能逐行计数"
+    },
+    {
+      "id": "multiplication-rank-manual",
+      "source": "content/binary/selection.source.md",
+      "owner": "multiplication-rank",
+      "depth": 3,
+      "text": "解析计数"
+    },
+    {
+      "id": "multiplication-rank-engineering",
+      "source": "content/binary/selection.source.md",
+      "owner": "multiplication-rank",
+      "depth": 3,
+      "text": "乘积上界与每轮扫描规模"
+    },
+    {
+      "id": "multiplication-rank-practice",
+      "source": "content/binary/selection.source.md",
+      "owner": "multiplication-rank",
+      "depth": 3,
+      "text": "隐式乘法表中的元素秩"
+    },
+    {
+      "id": "two-sorted-partition-foundation",
+      "source": "content/binary/selection.source.md",
+      "owner": "two-sorted-partition",
+      "depth": 3,
+      "text": "把秩查询转成两数组的交叉切分"
+    },
+    {
+      "id": "two-sorted-partition-manual",
+      "source": "content/binary/selection.source.md",
+      "owner": "two-sorted-partition",
+      "depth": 3,
+      "text": "交叉边界驱动切分"
+    },
+    {
+      "id": "two-sorted-partition-standard",
+      "source": "content/binary/selection.source.md",
+      "owner": "two-sorted-partition",
+      "depth": 3,
+      "text": "线性合并后读取所需秩"
+    },
+    {
+      "id": "two-sorted-merge-standard",
+      "source": "content/binary/selection.source.md",
+      "owner": "two-sorted-partition",
+      "depth": 4,
+      "text": "用 merge 获得完整合并结果"
+    },
+    {
+      "id": "two-sorted-partition-engineering",
+      "source": "content/binary/selection.source.md",
+      "owner": "two-sorted-partition",
+      "depth": 3,
+      "text": "合法秩、空侧与域外哨兵"
+    },
+    {
+      "id": "two-sorted-partition-practice",
+      "source": "content/binary/selection.source.md",
+      "owner": "two-sorted-partition",
+      "depth": 3,
+      "text": "两个有序数组的中位数"
+    },
+    {
+      "id": "ordered-dp-frontier-foundation",
+      "source": "content/binary/selection.source.md",
+      "owner": "ordered-dp-frontier",
+      "depth": 3,
+      "text": "为什么只保留每种长度的最小末值"
+    },
+    {
+      "id": "ordered-dp-frontier-manual",
+      "source": "content/binary/selection.source.md",
+      "owner": "ordered-dp-frontier",
+      "depth": 3,
+      "text": "保存真实前驱，恢复可行序列"
+    },
+    {
+      "id": "ordered-dp-frontier-standard",
+      "source": "content/binary/selection.source.md",
+      "owner": "ordered-dp-frontier",
+      "depth": 3,
+      "text": "使用库边界查找维护最小末值"
+    },
+    {
+      "id": "envelopes-variant",
+      "source": "content/binary/selection.source.md",
+      "owner": "ordered-dp-frontier",
+      "depth": 3,
+      "text": "将二维信封嵌套归约为 LIS"
+    },
+    {
+      "id": "envelopes-standard",
+      "source": "content/binary/selection.source.md",
+      "owner": "ordered-dp-frontier",
+      "depth": 4,
+      "text": "同宽降序排序后复用 LIS"
+    },
+    {
+      "id": "lis-count-variant",
+      "source": "content/binary/selection.source.md",
+      "owner": "ordered-dp-frontier",
+      "depth": 3,
+      "text": "统计最长递增子序列的个数"
+    },
+    {
+      "id": "lis-count-manual",
+      "source": "content/binary/selection.source.md",
+      "owner": "ordered-dp-frontier",
+      "depth": 4,
+      "text": "按末位置合并最优长度与方案数"
+    },
+    {
+      "id": "ordered-dp-frontier-engineering",
+      "source": "content/binary/selection.source.md",
+      "owner": "ordered-dp-frontier",
+      "depth": 3,
+      "text": "容器失效与恢复结果检查"
+    },
+    {
+      "id": "ordered-dp-frontier-practice",
+      "source": "content/binary/selection.source.md",
+      "owner": "ordered-dp-frontier",
+      "depth": 3,
+      "text": "LIS长度、信封嵌套与方案数"
+    },
+    {
+      "id": "weighted-predecessor-foundation",
+      "source": "content/binary/selection.source.md",
+      "owner": "weighted-predecessor",
+      "depth": 3,
+      "text": "将兼容前驱前缀接入收益 DP"
+    },
+    {
+      "id": "weighted-predecessor-manual",
+      "source": "content/binary/selection.source.md",
+      "owner": "weighted-predecessor",
+      "depth": 3,
+      "text": "前驱数量直接作为 DP 下标"
+    },
+    {
+      "id": "weighted-predecessor-standard",
+      "source": "content/binary/selection.source.md",
+      "owner": "weighted-predecessor",
+      "depth": 3,
+      "text": "原题端点决定 lower 还是 upper"
+    },
+    {
+      "id": "weighted-predecessor-engineering",
+      "source": "content/binary/selection.source.md",
+      "owner": "weighted-predecessor",
+      "depth": 3,
+      "text": "收益类型、排序副本与移动"
+    },
+    {
+      "id": "weighted-predecessor-practice",
+      "source": "content/binary/selection.source.md",
+      "owner": "weighted-predecessor",
+      "depth": 3,
+      "text": "两种兼容端点规则的带权调度"
+    },
+    {
+      "id": "resource-queries-foundation",
+      "source": "content/binary/selection.source.md",
+      "owner": "resource-queries",
+      "depth": 3,
+      "text": "从最坏试投次数反推覆盖楼层"
+    },
+    {
+      "id": "selection-subheading-25",
+      "source": "content/binary/selection.source.md",
+      "owner": "resource-queries",
+      "depth": 3,
+      "text": "由覆盖递推得到组合判定"
+    },
+    {
+      "id": "resource-queries-manual",
+      "source": "content/binary/selection.source.md",
+      "owner": "resource-queries",
+      "depth": 3,
+      "text": "组合计数作为判定器"
+    },
+    {
+      "id": "resource-queries-standard",
+      "source": "content/binary/selection.source.md",
+      "owner": "resource-queries",
+      "depth": 3,
+      "text": "逐次推进覆盖 DP"
+    },
+    {
+      "id": "resource-coverage-standard",
+      "source": "content/binary/selection.source.md",
+      "owner": "resource-queries",
+      "depth": 4,
+      "text": "饱和覆盖量与倒序更新"
+    },
+    {
+      "id": "resource-queries-engineering",
+      "source": "content/binary/selection.source.md",
+      "owner": "resource-queries",
+      "depth": 3,
+      "text": "试探资源与最坏情况目标"
+    },
+    {
+      "id": "resource-queries-practice",
+      "source": "content/binary/selection.source.md",
+      "owner": "resource-queries",
+      "depth": 3,
+      "text": "鸡蛋资源与最坏试投次数"
+    },
+    {
+      "id": "fenwick-rank-foundation",
+      "source": "content/binary/advanced.source.md",
+      "owner": "fenwick-rank",
+      "depth": 3,
+      "text": "用累计频数表示动态秩"
+    },
+    {
+      "id": "fenwick-rank-blocks",
+      "source": "content/binary/advanced.source.md",
+      "owner": "fenwick-rank",
+      "depth": 3,
+      "text": "从树状数组的整块频数直接定位"
+    },
+    {
+      "id": "fenwick-rank-manual",
+      "source": "content/binary/advanced.source.md",
+      "owner": "fenwick-rank",
+      "depth": 3,
+      "text": "维护频数并按当前秩删除"
+    },
+    {
+      "id": "fenwick-rank-standard",
+      "source": "content/binary/advanced.source.md",
+      "owner": "fenwick-rank",
+      "depth": 3,
+      "text": "频数不变时的静态累计量"
+    },
+    {
+      "id": "fenwick-static-standard",
+      "source": "content/binary/advanced.source.md",
+      "owner": "fenwick-rank",
+      "depth": 4,
+      "text": "使用 partial_sum 与 lower_bound 查累计秩"
+    },
+    {
+      "id": "fenwick-rank-engineering",
+      "source": "content/binary/advanced.source.md",
+      "owner": "fenwick-rank",
+      "depth": 3,
+      "text": "合法频数、返回值与数据所有权"
+    },
+    {
+      "id": "fenwick-rank-practice",
+      "source": "content/binary/advanced.source.md",
+      "owner": "fenwick-rank",
+      "depth": 3,
+      "text": "按存活秩删除并输出原值"
+    },
+    {
+      "id": "summary-descent-foundation",
+      "source": "content/binary/advanced.source.md",
+      "owner": "summary-descent",
+      "depth": 3,
+      "text": "用区间摘要排除整块不可能的位置"
+    },
+    {
+      "id": "summary-descent-manual",
+      "source": "content/binary/advanced.source.md",
+      "owner": "summary-descent",
+      "depth": 3,
+      "text": "根据区间最大值逐层定位"
+    },
+    {
+      "id": "summary-descent-standard",
+      "source": "content/binary/advanced.source.md",
+      "owner": "summary-descent",
+      "depth": 3,
+      "text": "线性查找与结构库的选择"
+    },
+    {
+      "id": "summary-linear-standard",
+      "source": "content/binary/advanced.source.md",
+      "owner": "summary-descent",
+      "depth": 4,
+      "text": "使用 find_if 线性寻找首个达标值"
+    },
+    {
+      "id": "summary-acl-interface",
+      "source": "content/binary/advanced.source.md",
+      "owner": "summary-descent",
+      "depth": 3,
+      "text": "AtCoder Library 的结构内查找接口"
+    },
+    {
+      "id": "summary-descent-engineering",
+      "source": "content/binary/advanced.source.md",
+      "owner": "summary-descent",
+      "depth": 3,
+      "text": "更新、无解返回与资源开销"
+    },
+    {
+      "id": "summary-descent-practice",
+      "source": "content/binary/advanced.source.md",
+      "owner": "summary-descent",
+      "depth": 3,
+      "text": "点修改、区间摘要与首个达标位置"
+    },
+    {
+      "id": "ancestor-boundary-foundation",
+      "source": "content/binary/advanced.source.md",
+      "owner": "ancestor-boundary",
+      "depth": 3,
+      "text": "把祖先复合转成可接受的倍增跳跃"
+    },
+    {
+      "id": "ancestor-boundary-manual",
+      "source": "content/binary/advanced.source.md",
+      "owner": "ancestor-boundary",
+      "depth": 3,
+      "text": "先等深，再同步提升"
+    },
+    {
+      "id": "ancestor-boundary-standard",
+      "source": "content/binary/advanced.source.md",
+      "owner": "ancestor-boundary",
+      "depth": 3,
+      "text": "直接求交两条祖先链"
+    },
+    {
+      "id": "ancestor-chain-standard",
+      "source": "content/binary/advanced.source.md",
+      "owner": "ancestor-boundary",
+      "depth": 4,
+      "text": "使用 find 查找第一个共同祖先"
+    },
+    {
+      "id": "ancestor-threshold-variant",
+      "source": "content/binary/advanced.source.md",
+      "owner": "ancestor-boundary",
+      "depth": 3,
+      "text": "单调权值路径上的最浅达标祖先"
+    },
+    {
+      "id": "ancestor-threshold-standard",
+      "source": "content/binary/advanced.source.md",
+      "owner": "ancestor-boundary",
+      "depth": 4,
+      "text": "维护当前根路径并调用 lower_bound"
+    },
+    {
+      "id": "ancestor-boundary-engineering",
+      "source": "content/binary/advanced.source.md",
+      "owner": "ancestor-boundary",
+      "depth": 3,
+      "text": "树查询与函数跳跃的边界"
+    },
+    {
+      "id": "ancestor-boundary-practice",
+      "source": "content/binary/advanced.source.md",
+      "owner": "ancestor-boundary",
+      "depth": 3,
+      "text": "祖先查询、函数跳跃与环形分段"
+    },
+    {
+      "id": "cyclic-jump-foundation",
+      "source": "content/binary/advanced.source.md",
+      "owner": "cyclic-jump",
+      "depth": 3,
+      "text": "从最远合法段构造环上的跳跃"
+    },
+    {
+      "id": "cyclic-jump-manual",
+      "source": "content/binary/advanced.source.md",
+      "owner": "cyclic-jump",
+      "depth": 3,
+      "text": "用最远段建立跳跃表"
+    },
+    {
+      "id": "cyclic-jump-standard",
+      "source": "content/binary/advanced.source.md",
+      "owner": "cyclic-jump",
+      "depth": 3,
+      "text": "用前缀和构造最远终点"
+    },
+    {
+      "id": "cyclic-jump-engineering",
+      "source": "content/binary/advanced.source.md",
+      "owner": "cyclic-jump",
+      "depth": 3,
+      "text": "正数条件与整数范围"
+    },
+    {
+      "id": "cyclic-jump-practice",
+      "source": "content/binary/advanced.source.md",
+      "owner": "cyclic-jump",
+      "depth": 3,
+      "text": "切点未知的环形连续分段"
+    },
+    {
+      "id": "time-parallel-search-foundation",
+      "source": "content/binary/advanced.source.md",
+      "owner": "time-parallel-search",
+      "depth": 3,
+      "text": "让各查询共用一次时间前缀重放"
+    },
+    {
+      "id": "time-parallel-search-manual",
+      "source": "content/binary/advanced.source.md",
+      "owner": "time-parallel-search",
+      "depth": 3,
+      "text": "按候选日期分桶，共享加边过程"
+    },
+    {
+      "id": "time-parallel-search-example",
+      "source": "content/binary/advanced.source.md",
+      "owner": "time-parallel-search",
+      "depth": 3,
+      "text": "两次查询如何逐轮分开"
+    },
+    {
+      "id": "time-parallel-search-cost",
+      "source": "content/binary/advanced.source.md",
+      "owner": "time-parallel-search",
+      "depth": 3,
+      "text": "共享重放的成本与回滚版本的区别"
+    },
+    {
+      "id": "time-parallel-search-engineering",
+      "source": "content/binary/advanced.source.md",
+      "owner": "time-parallel-search",
+      "depth": 3,
+      "text": "重置状态与只增边条件"
+    },
+    {
+      "id": "time-parallel-search-practice",
+      "source": "content/binary/advanced.source.md",
+      "owner": "time-parallel-search",
+      "depth": 3,
+      "text": "多点对的最早连通日期"
+    },
+    {
+      "id": "dynamic-range-kth-foundation",
+      "source": "content/binary/advanced.source.md",
+      "owner": "dynamic-range-kth",
+      "depth": 3,
+      "text": "用时间事件表达赋值和区间秩"
+    },
+    {
+      "id": "dynamic-range-kth-partition",
+      "source": "content/binary/advanced.source.md",
+      "owner": "dynamic-range-kth",
+      "depth": 3,
+      "text": "稳定分流与回滚如何维持查询时刻"
+    },
+    {
+      "id": "advanced-subheading-23",
+      "source": "content/binary/advanced.source.md",
+      "owner": "dynamic-range-kth",
+      "depth": 3,
+      "text": "先追踪一次值域划分"
+    },
+    {
+      "id": "dynamic-range-kth-manual",
+      "source": "content/binary/advanced.source.md",
+      "owner": "dynamic-range-kth",
+      "depth": 3,
+      "text": "事件表示、值压缩与稳定递归"
+    },
+    {
+      "id": "dynamic-kth-model-manual",
+      "source": "content/binary/advanced.source.md",
+      "owner": "dynamic-range-kth",
+      "depth": 4,
+      "text": "表示外部操作与内部事件"
+    },
+    {
+      "id": "dynamic-range-kth-standard",
+      "source": "content/binary/advanced.source.md",
+      "owner": "dynamic-range-kth",
+      "depth": 4,
+      "text": "排序去重并压缩全部可能值"
+    },
+    {
+      "id": "dynamic-kth-recursion-manual",
+      "source": "content/binary/advanced.source.md",
+      "owner": "dynamic-range-kth",
+      "depth": 4,
+      "text": "稳定分流事件并回滚位置统计"
+    },
+    {
+      "id": "dynamic-range-kth-engineering",
+      "source": "content/binary/advanced.source.md",
+      "owner": "dynamic-range-kth",
+      "depth": 3,
+      "text": "离线条件、输入范围与借用"
+    },
+    {
+      "id": "dynamic-range-kth-practice",
+      "source": "content/binary/advanced.source.md",
+      "owner": "dynamic-range-kth",
+      "depth": 3,
+      "text": "静态与带修改的区间第 k 小"
+    },
+    {
+      "id": "marginal-penalty-foundation",
+      "source": "content/binary/advanced.source.md",
+      "owner": "marginal-penalty",
+      "depth": 3,
+      "text": "把资源使用化成递减收益的全局选择"
+    },
+    {
+      "id": "marginal-penalty-threshold",
+      "source": "content/binary/advanced.source.md",
+      "owner": "marginal-penalty",
+      "depth": 3,
+      "text": "用收益阈值补齐实际使用次数"
+    },
+    {
+      "id": "advanced-subheading-29",
+      "source": "content/binary/advanced.source.md",
+      "owner": "marginal-penalty",
+      "depth": 3,
+      "text": "由惩罚目标精确恢复原收益"
+    },
+    {
+      "id": "marginal-penalty-manual",
+      "source": "content/binary/advanced.source.md",
+      "owner": "marginal-penalty",
+      "depth": 3,
+      "text": "搜索收益阈值，恢复最大收益"
+    },
+    {
+      "id": "marginal-penalty-standard",
+      "source": "content/binary/advanced.source.md",
+      "owner": "marginal-penalty",
+      "depth": 3,
+      "text": "逐次选取最大收益的堆解法"
+    },
+    {
+      "id": "penalty-heap-standard",
+      "source": "content/binary/advanced.source.md",
+      "owner": "marginal-penalty",
+      "depth": 4,
+      "text": "使用 priority_queue 维护当前收益"
+    },
+    {
+      "id": "advanced-subheading-33",
+      "source": "content/binary/advanced.source.md",
+      "owner": "marginal-penalty",
+      "depth": 3,
+      "text": "数量单调为何不足以保证精确恢复"
+    },
+    {
+      "id": "marginal-penalty-engineering",
+      "source": "content/binary/advanced.source.md",
+      "owner": "marginal-penalty",
+      "depth": 3,
+      "text": "只在最终阈值计算价值"
+    },
+    {
+      "id": "marginal-penalty-practice",
+      "source": "content/binary/advanced.source.md",
+      "owner": "marginal-penalty",
+      "depth": 3,
+      "text": "同值收益补足与使用次数上限"
+    }
+  ],
+  "registryRead": false,
+  "automaticSemanticCertification": false
+}
