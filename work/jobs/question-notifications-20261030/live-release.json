@@ -1,0 +1,109 @@
+{
+  "project": "second-algorithm",
+  "verifiedAt": "2026-10-30T08:48:24Z",
+  "passed": true,
+  "files": [
+    {
+      "origin": "https://second-algorithm.pages.dev",
+      "file": "index.html",
+      "status": 200,
+      "sha256": "984fbbb3da61c286d0f8ee7d711db534af0ceaa62432501f02fb2244551aa583",
+      "matches": true
+    },
+    {
+      "origin": "https://second-algorithm.pages.dev",
+      "file": "styles.css",
+      "status": 200,
+      "sha256": "a9db7b379144b2d1982d36cc165d1aa2da7bdb23446bd4a6b52af8af6bd708bc",
+      "matches": true
+    },
+    {
+      "origin": "https://second-algorithm.pages.dev",
+      "file": "app.js",
+      "status": 200,
+      "sha256": "c8784bc75ee38e5610936a005d2377c50534ba14d24a1a53537a66e0684461fc",
+      "matches": true
+    },
+    {
+      "origin": "https://second-algorithm.pages.dev",
+      "file": "sw.js",
+      "status": 200,
+      "sha256": "e5ce6ab6b22679bdf5b39fe5dc186a87a66ab5dc60123befdd2be3e1f526158a",
+      "matches": true
+    },
+    {
+      "origin": "https://844f1554.second-algorithm.pages.dev",
+      "file": "index.html",
+      "status": 200,
+      "sha256": "984fbbb3da61c286d0f8ee7d711db534af0ceaa62432501f02fb2244551aa583",
+      "matches": true
+    },
+    {
+      "origin": "https://844f1554.second-algorithm.pages.dev",
+      "file": "styles.css",
+      "status": 200,
+      "sha256": "a9db7b379144b2d1982d36cc165d1aa2da7bdb23446bd4a6b52af8af6bd708bc",
+      "matches": true
+    },
+    {
+      "origin": "https://844f1554.second-algorithm.pages.dev",
+      "file": "app.js",
+      "status": 200,
+      "sha256": "c8784bc75ee38e5610936a005d2377c50534ba14d24a1a53537a66e0684461fc",
+      "matches": true
+    },
+    {
+      "origin": "https://844f1554.second-algorithm.pages.dev",
+      "file": "sw.js",
+      "status": 200,
+      "sha256": "e5ce6ab6b22679bdf5b39fe5dc186a87a66ab5dc60123befdd2be3e1f526158a",
+      "matches": true
+    }
+  ],
+  "anonymousBoundaries": [
+    {
+      "origin": "https://second-algorithm.pages.dev",
+      "route": "/auth/status",
+      "status": 200
+    },
+    {
+      "origin": "https://second-algorithm.pages.dev",
+      "route": "/api/library",
+      "status": 401
+    },
+    {
+      "origin": "https://second-algorithm.pages.dev",
+      "route": "/api/questions/summary",
+      "status": 401
+    },
+    {
+      "origin": "https://second-algorithm.pages.dev",
+      "route": "/api/questions/status",
+      "status": 401
+    },
+    {
+      "origin": "https://844f1554.second-algorithm.pages.dev",
+      "route": "/auth/status",
+      "status": 200
+    },
+    {
+      "origin": "https://844f1554.second-algorithm.pages.dev",
+      "route": "/api/library",
+      "status": 401
+    },
+    {
+      "origin": "https://844f1554.second-algorithm.pages.dev",
+      "route": "/api/questions/summary",
+      "status": 401
+    },
+    {
+      "origin": "https://844f1554.second-algorithm.pages.dev",
+      "route": "/api/questions/status",
+      "status": 401
+    }
+  ],
+  "physicalIPhone": false,
+  "paidCalls": 0,
+  "sourceCommit": "83ffef03e30e7499d628e725f8652e854da59400",
+  "immutable": "https://844f1554.second-algorithm.pages.dev"
+}

@@ -487,6 +487,8 @@ async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries
     });
     await check('api-question-acknowledgement-failure-draft-reload-owner-isolation-and-short-viewport',async env=>{
       const p=await env.page();await p.setViewportSize({width:402,height:420});await p.locator('#questionsButton').click();
+      // Opening resolves the fixed conversation and its permission before sending is enabled.
+      await p.waitForFunction(()=>document.querySelector('.reader-question-send')?.disabled===false);
       assert.equal(await p.locator('.reader-question-turn').count(),0);assert(await p.locator('.reader-question-service-status').isHidden());assert(await p.locator('.reader-question-send').isEnabled());
       const text='为什么这里保留范围边界？';await p.locator('.reader-question-input').fill(text);await closeSheet(p);await p.locator('#questionsButton').click();assert.equal(await p.locator('.reader-question-input').inputValue(),text);
       env.mock.rejectQuestion=true;await p.locator('.reader-question-send').click();await p.waitForFunction(()=>document.querySelector('.reader-question-status').textContent.includes('未确认'));

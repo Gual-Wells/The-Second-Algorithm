@@ -25,21 +25,65 @@
       "inputHash": "94f351b1f8422c6e992fcdb9b699ff6e478908d5bd35955eb8462203b58d039d",
       "recordedAt": "2026-10-30T08:42:05.637410+00:00",
       "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "a3665517b2f64268a382a6228fc002b2",
+      "kind": "research",
+      "path": "work/question-notifications-20261030/ci-followup.md",
+      "summary": "读取真实Linux CI日志并核对固定会话打开与按钮权限的异步边界，限定测试竞态修复",
+      "outcome": "accepted",
+      "sha256": "97a0b05500031aa2ae75c49937375ce60a5580032a5abb75b49acc66cf2320ea",
+      "inputHash": "f190fb87fc7163aaa7478aa37e2774f98c44b21522f4a1fc7a262246e8acad43",
+      "recordedAt": "2026-10-30T09:03:44.040431+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "96f930a211d94cfaba75afc11a34858a",
+      "kind": "review",
+      "path": "work/question-notifications-20261030/ci-followup.md",
+      "summary": "只等实际打开完成保留原断言，三条问答真实浏览器通过，生产资源与已发布版本字节不变",
+      "outcome": "accepted",
+      "sha256": "97a0b05500031aa2ae75c49937375ce60a5580032a5abb75b49acc66cf2320ea",
+      "inputHash": "f190fb87fc7163aaa7478aa37e2774f98c44b21522f4a1fc7a262246e8acad43",
+      "recordedAt": "2026-10-30T09:03:49.696370+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "669d12b211d544f8badc2afc85ed92a2",
+      "kind": "research",
+      "path": "work/question-notifications-20261030/ci-followup.md",
+      "summary": "真实Linux日志定位固定会话打开竞态；最终LF元数据绑定，产品源码与已发布版本未变",
+      "outcome": "accepted",
+      "sha256": "97a0b05500031aa2ae75c49937375ce60a5580032a5abb75b49acc66cf2320ea",
+      "inputHash": "231d25a49f415bbc7a8e664d197d807a01d1dfb72be8e396bee36e49971cf2f9",
+      "recordedAt": "2026-10-30T09:06:45.980763+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "f13e756d10ee44a089bb89402cb9e1e7",
+      "kind": "review",
+      "path": "work/question-notifications-20261030/ci-followup.md",
+      "summary": "保留原断言等待真实可问资格，3条问答浏览器通过，最终LF审阅字节绑定",
+      "outcome": "accepted",
+      "sha256": "97a0b05500031aa2ae75c49937375ce60a5580032a5abb75b49acc66cf2320ea",
+      "inputHash": "231d25a49f415bbc7a8e664d197d807a01d1dfb72be8e396bee36e49971cf2f9",
+      "recordedAt": "2026-10-30T09:06:49.793264+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
     }
   ],
   "lastGoodVerification": {
-    "path": "work/jobs/question-notifications-20261030/verifications/ec2cbf4ddaf643e5881aff05287b442e.json",
-    "sha256": "1105d656aa9b0638d331f268d935ece55064326def566290f340b2a1f9ee6f8a",
-    "inputHash": "94f351b1f8422c6e992fcdb9b699ff6e478908d5bd35955eb8462203b58d039d"
+    "path": "work/jobs/question-notifications-20261030/verifications/c452c7eac6c842bf81927b0fbbec89af.json",
+    "sha256": "b70018db1a7d7b2893632ea67993321221c9c2b41d90c2d37b0c0aca213f00a3",
+    "inputHash": "231d25a49f415bbc7a8e664d197d807a01d1dfb72be8e396bee36e49971cf2f9"
   },
   "lastPreparedRelease": {
-    "path": "work/jobs/question-notifications-20261030/releases/92009df3a1eb47e3b2191bf7e1863713.json",
-    "sha256": "13111641590d28f0df918c76e8681da6302042b1abe892c469e49a574f4d9bde",
-    "inputHash": "94f351b1f8422c6e992fcdb9b699ff6e478908d5bd35955eb8462203b58d039d"
+    "path": "work/jobs/question-notifications-20261030/releases/f9748f6672ab4309b19c7307bdd6d405.json",
+    "sha256": "b5eadbfb6a194acfaa98cdbf6b5644ceae9f5eda41a0692ea4650764c37291dc",
+    "inputHash": "231d25a49f415bbc7a8e664d197d807a01d1dfb72be8e396bee36e49971cf2f9"
   },
   "lastVerificationAttempt": {
-    "path": "work/jobs/question-notifications-20261030/verifications/ec2cbf4ddaf643e5881aff05287b442e.json",
-    "sha256": "1105d656aa9b0638d331f268d935ece55064326def566290f340b2a1f9ee6f8a",
-    "inputHash": "94f351b1f8422c6e992fcdb9b699ff6e478908d5bd35955eb8462203b58d039d"
+    "path": "work/jobs/question-notifications-20261030/verifications/c452c7eac6c842bf81927b0fbbec89af.json",
+    "sha256": "b70018db1a7d7b2893632ea67993321221c9c2b41d90c2d37b0c0aca213f00a3",
+    "inputHash": "231d25a49f415bbc7a8e664d197d807a01d1dfb72be8e396bee36e49971cf2f9"
   }
 }
