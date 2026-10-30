@@ -94,6 +94,10 @@ CXX可指向已有编译器，ALGORITHM_PYTHON可指向已有Python；本机TEMP
 
 完成正文、代码、构建、合同、材料和规则修订后，先查看人可读合同和当前输入：
 
+绑定前确认实际生产源文件与仓库规范checkout字节一致，可用`git ls-files --eol`排查`i/lf w/crlf`的源文本；否则本机Git看似clean仍可能把CRLF哈希写入审阅，在Linux checkout后过期。只规范尚未绑定的当前源文件；不得为此改写work中的不可变快照、候选或旧交接。
+
+技术检查与内容采用分别报告。CI在技术检查之后独立执行`course quality --json`并要求成功；`check-project`的技术通过提示、准备包存在或整个job的旧绿灯不能代替这个正式采用检查。
+
 ```sh
 python -m second_algorithm course chapters
 python -m second_algorithm course chapter-inputs chapter-id

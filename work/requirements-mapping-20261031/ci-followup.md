@@ -7,3 +7,11 @@
 修复仅在这两个旧格式测试中显式移除`reading.extensions`，还原历史合同真实格式；全部原断言保留。生产校验、历史读入边界、当前采用门禁、正文与前端没有放宽或改变。本机直接重现这两个精确案例后验证修复，日志留`.local/requirements-mapping-20261031/legacy-fixture-final.log`。
 
 测试文件是正式输入，当前人工审阅按该实际test-only影响重新绑定；没有借用失败CI充当成功。最终完整CI及对应source commit另写交付记录。
+
+## 第二轮：技术成功不等于正式采用成功
+
+`8a8cb56b58bd084d5c97e86ab4846b6dead4b7f7`的run `41093283298`执行218项Python、164项Node、完整reader/分层/同步/HTTP-SW/日期/启动技术检查均通过，但末尾仍报告editorial review stale。原`check-project`有意分离技术与采用，只打印该提示并退出0；若把整个旧CI绿灯当正式完成，就掩盖了出版阻塞。
+
+已下载该run的16MB检查产物到D盘私有临时目录，比较真实C++verification里的完整input哈希表。唯一差异是`test/carrier-question-ui.test.mjs`：本机原始SHA为`3f370c7e0cc837fe5b38b8b607e3c8605dbaae9e3b47f07ef0126748923c0e3f`，Git/Linux为`2326399f14f4aabf92c7ff0679ad83bfa77cab283adcfdccfe81688c7dc7cdfa`。其唯一CRLF按仓库LF规范转换后，与HEAD原文件精确相等，Git源码无差异；未放宽哈希、改语义或改旧work证据。
+
+CI现把`course quality --json`作为技术检查后的独立必要步骤。技术工具继续保留其独立职责，正式采用失败则整个CI失败；TASK_EXECUTION记录精确输入换行排查。当前审阅按已核实的源字节及这个CI编排变化重绑定，后续完整结果仍以最终run记录为准。

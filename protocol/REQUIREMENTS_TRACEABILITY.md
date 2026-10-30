@@ -32,3 +32,5 @@
 上述新研究learningSupport、实现选择条件facets、当前出版contentDecisions、整节超纲结构/投影、条件标签与独立撤回分别对应实际字段/校验或回归入口；“选择是否有价值”“分类是否符合用户定义”“推理是否教清楚”由实际研究及当前人工审阅判断，不能伪装成程序已理解。结构门禁能阻止缺证据、空数组之外的缺省旁路或过期审阅，不认证字符串的语义真实。
 
 本文件及所有`protocol/*.md`由`course_snapshot`纳入当前生产输入。后台真实任务模板`protocol/background-prompt.txt`由`run-background.mjs`加载，并已作为精确文件进入生产输入；模板变化会使审阅/准备包过期。对应回归在`tests/test_learning_workflow.py`的模板输入与`test_changed_background_template_invalidates_the_prepared_packet`，不能只改文字却复用旧包。发布仍需真实研究、当前采用、权威代码及载体验收、有效准备包和独立成功部署收据。
+
+CI把技术检查与正式采用作为两个独立步骤：技术通过后仍须`course quality --json`成功，不能用技术命令只打印的出版阻塞提示冒充总体完成。当前源按仓库规范字节绑定，跨平台换行差异按TASK_EXECUTION定位，不放宽精确哈希或改写旧研究档案。

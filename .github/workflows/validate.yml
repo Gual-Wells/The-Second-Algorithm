@@ -43,6 +43,8 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - name: Build and verify actual registered content, reader and service worker
         run: npm run check
+      - name: Require current formal chapter adoption
+        run: python -m second_algorithm course quality --json
       - name: Verify and prepare the requested research job
         if: github.event_name == 'workflow_dispatch' && inputs.research_job != ''
         env:
