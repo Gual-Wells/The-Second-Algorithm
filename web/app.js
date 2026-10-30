@@ -2,7 +2,7 @@ import { passkey } from './auth.js';
 import { NotesJournal } from './notes-journal.js';
 import { waitForWorkerRelease } from './worker-release.js';
 import { createReaderRuntime } from './reader-runtime.js';
-import { createReaderQuestions } from './manual-questions.js';
+import { createReaderQuestions, parseQuestionRoute } from './manual-questions.js';
 import { createServiceSettings } from './service-settings.js';
 import { isChapterDate, shanghaiDate, formatChapterDate, shiftMonth, weekDates, orderedChapters, chaptersByDate } from './chapter-dates.js';
 
@@ -176,7 +176,10 @@ async function enter(owner, offline, connection) {
   questions ||= createReaderQuestions({ getContext: () => ({ owner: S.owner, chapterId: S.active?.collection.id, title: S.active?.collection.title, revision: S.active?.meta.revision }), toast,
     transport: payload => api('/api/questions', {method:'POST',body:payload}),
     history: payload => api('/api/questions/thread', {method:'POST',body:payload}),
-    retry: payload => api('/api/questions/retry', {method:'POST',body:payload}),onRead:refreshQuestionBadge });
+    retry: payload => api('/api/questions/retry', {method:'POST',body:payload}),
+    openThread: payload => api('/api/questions/open', {method:'POST',body:payload}),
+    summary: () => api('/api/questions/summary'),seen: payload => api('/api/questions/seen', {method:'POST',body:payload}),
+    isVisible: () => $('sheetDialog').open&&sheetView==='questions',onRead:refreshQuestionBadge });
   void refreshQuestionBadge();
   let verifiedAt = Date.now(); if (offline) { try { verifiedAt = JSON.parse(localStorage.getItem(SESSION_KEY)).verifiedAt; } catch {} }
   await swMessage({ type: 'OWNER', owner, verifiedAt }); if (connection !== S.connectionSequence || S.owner !== owner) return;
@@ -241,10 +244,34 @@ function routeUnavailable(message) {
   renderChapterNavigation(); updateConnection();
 }
 async function route() {
-  if (!S.owner || !S.library || sheetHistory) return;
-  const raw = location.hash || '#/library'; if (raw === observedLocation) return; observedLocation = raw;
+  if (!S.owner || !S.library) return;
+  const raw = location.hash || '#/library';
+  if(sheetHistory){
+    if(!raw.startsWith('#/questions/'))return;
+    // Notification navigation can arrive while a sheet is still open. Close
+    // that layer without history.back(), which would consume the target URL.
+    questions?.close();sheetHistory=false;sheetClosing=false;sheetSequence++;sheetView=null;sheetParent=null;
+    afterSheetClose=null;sheetPosition=null;sheetOpener=null;
+    if($('sheetDialog').open)$('sheetDialog').close();
+    $('sheetDialog').removeAttribute('data-view');$('sheetFrame').removeAttribute('data-view');
+    history.replaceState(null,'',raw);
+  }
+  if (raw === observedLocation) return; observedLocation = raw;
   const sequence = ++S.sequence, [pathname, query = ''] = raw.slice(1).split('?'), [, section, collectionId, documentId] = pathname.split('/');
   const rows = S.library.collections;
+  if(section==='questions'){
+    const target=parseQuestionRoute(raw);if(!target){routeUnavailable('这份答疑地址无效。');return;}
+    const owner=S.owner,current=rows.find(item=>item.id===S.active?.collection.id);
+    const active=current?.documents.find(item=>item.id===S.active?.meta.id&&item.revision===S.active.meta.revision);
+    const matching=rows.find(item=>item.id===target.chapterId&&item.documents.some(doc=>doc.revision===target.revision));
+    const chapter=active?current:matching||orderedChapters(rows).at(-1)||rows[0],document=active||chapter?.documents.find(item=>item.revision===target.revision)||chapter?.documents[0];
+    const background=chapter&&document?`#/read/${chapter.id}/${document.id}`:'#/library';
+    // A historical answer opens as its own fixed conversation. The backdrop
+    // remains an actual current publication; retired text is never fabricated.
+    history.replaceState(history.state,'',background);observedLocation='';const expectedSequence=S.sequence+1;
+    await route();if(S.owner!==owner||S.sequence!==expectedSequence||location.hash!==background||sheetHistory)return;
+    showQuestions(target);return;
+  }
   const libraryRoute = pathname === '/library' || pathname === '/';
   const collection = libraryRoute ? S.active?.collection || rows[0] : rows.find(item => item.id === collectionId);
   if (!rows.length) {
@@ -396,7 +423,7 @@ function applySettings() {
 }
 function saveSettings() { writeLocal('preferences', S.settings); S.records.preferences = { value: { ...S.settings }, dirty: true }; writeLocal('records', S.records); updateConnection(); void syncRecord('preferences'); }
 function showSheet(title, html, view, parent = null) {
-  cancelPendingRoute(); questions?.captureDraft(); sheetSequence++; sheetView = view; sheetParent = parent;
+  cancelPendingRoute(); questions?.close(); sheetSequence++; sheetView = view; sheetParent = parent;
   $('sheetDialog').dataset.view = view; $('sheetFrame').dataset.view = view;
   const serviceViews = ['study-goal', 'study-next', 'study-rest', 'balances', 'storage', 'reminders'];
   const kind = view === 'index' ? 'index-sheet' : view === 'questions' ? 'questions-sheet' : ['library', 'calendar-day'].includes(view) ? 'chapter-book-sheet' : ['settings', 'reading-settings', 'device-settings', 'files', 'source', ...serviceViews].includes(view) ? 'settings-sheet' : 'help-sheet';
@@ -411,7 +438,7 @@ function showSheet(title, html, view, parent = null) {
   $('sheetBody').scrollTop = 0; $('sheetTitle').focus({ preventScroll: true }); runtime.wakeControls();
 }
 function dismissSheet(after = null) {
-  questions?.captureDraft(); sheetSequence++; if (after) afterSheetClose = after; if ($('sheetDialog').open) $('sheetDialog').close();
+  questions?.close(); sheetSequence++; if (after) afterSheetClose = after; if ($('sheetDialog').open) $('sheetDialog').close();
   if (sheetHistory && !sheetClosing) { sheetClosing = true; history.back(); } else if (!sheetHistory) { const action = afterSheetClose; afterSheetClose = null; action?.(); }
 }
 function waitForSheetClose(action) {
@@ -423,12 +450,18 @@ function showIndex() {
   showSheet('目录索引', `<div class="directory-list" id="indexList">${runtime.indexHTML()}</div>`, 'index');
   requestAnimationFrame(() => runtime.scrollCurrentIndex($('indexList')));
 }
-function showQuestions() { if (waitForSheetClose(showQuestions) || !S.active) return; showSheet('章节答疑', '', 'questions'); questions.render($('sheetBody')); }
+function showQuestions(target=null) {
+  const selected=target&&typeof target.chapterId==='string'&&typeof target.revision==='string'?target:null;
+  if(waitForSheetClose(()=>showQuestions(selected))||!questions||!S.active&&!selected)return;
+  showSheet('章节答疑','','questions');questions.render($('sheetBody'),selected?{context:{...selected,title:'章节答疑'},questionId:selected.questionId}:{});
+}
 async function refreshQuestionBadge(){
   if(!S.owner||S.offline||document.hidden)return;const owner=S.owner;
-  try{const result=await api('/api/questions/status');if(S.owner===owner)$('questionsButton').classList.toggle('has-unread',result.unread>0);}catch{}
+  try{const result=await api('/api/questions/status');if(S.owner===owner){$('questionsButton').classList.toggle('has-unread',result.unread>0);$('questionsButton').setAttribute('aria-label',result.unread>0?'章节答疑，有新回复':'章节答疑');}}catch{}
 }
 setInterval(()=>void refreshQuestionBadge(),60000);
+for(const name of ['focus','online'])window.addEventListener(name,()=>{void refreshQuestionBadge();void questions?.refresh();});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){void refreshQuestionBadge();void questions?.refresh();}});
 function chapterTitle(collection) { return `第 ${collection.chapterNumber} 章 · ${collection.title}`; }
 function renderChapterNavigation() {
   const rows = orderedChapters(S.library?.collections), current = S.active?.collection;
@@ -696,7 +729,7 @@ $('enrollForm').addEventListener('submit', async event => {
 $('retryButton').addEventListener('click', () => { void connect(); });
 $('settingsButton').addEventListener('click', showSettings); $('sectionIndexButton').addEventListener('click', showIndex); $('questionsButton').addEventListener('click', showQuestions);
 $('sheetBack').addEventListener('click', () => { sheetParent?.(); });
-$('sheetDialog').addEventListener('close', () => { if ($('sheetDialog').open) return; questions?.captureDraft(); sheetSequence++; runtime.wakeControls(); if (sheetHistory && !sheetClosing) { sheetClosing = true; history.back(); } });
+$('sheetDialog').addEventListener('close', () => { if ($('sheetDialog').open) return; questions?.close(); sheetSequence++; runtime.wakeControls(); if (sheetHistory && !sheetClosing) { sheetClosing = true; history.back(); } });
 $('sheetDialog').addEventListener('click', event => { if (event.target !== $('sheetDialog')) return; const bounds = event.target.getBoundingClientRect(); if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) dismissSheet(); });
 window.addEventListener('popstate', () => {
   if (sheetHistory) {

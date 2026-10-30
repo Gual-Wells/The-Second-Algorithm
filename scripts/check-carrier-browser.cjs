@@ -79,7 +79,9 @@ async function environment(browser, { catalog = qaCatalog, policyCatalog = catal
     if ((url.pathname.startsWith('/api/') || url.pathname.startsWith('/library/')) && !mock.identity) return json({error:'Unauthorized'},401);
     if (url.pathname === '/api/library') return json(mock.catalog);
     if(url.pathname==='/api/questions/status')return json({unread:0});
-    if(url.pathname==='/api/questions/thread')return json({turns:mock.questionTurns||[]});
+    if(url.pathname==='/api/questions/summary')return json({threads:[]});
+    if(url.pathname==='/api/questions/open'||url.pathname==='/api/questions/thread'){const input=req.postDataJSON();if(input.questionId&&!mock.questionTurns?.some(turn=>turn.id===input.questionId))return json({error:'这份答疑不存在或当前账户无法访问'},404);return json({threads:[],chapterId:input.chapterId,revision:input.revision,title:'测试章节',canAsk:true,turns:mock.questionTurns||[]});}
+    if(url.pathname==='/api/questions/seen')return json({ok:true});
     if(url.pathname==='/api/questions'){if(mock.rejectQuestion)return json({error:'发送未确认，草稿已保留'},503);const input=req.postDataJSON();mock.questionTurns||=[];if(!mock.questionTurns.some(t=>t.id===input.id))mock.questionTurns.push({id:input.id,question:input.question,answer:'',status:'pending'});return json({ok:true,id:input.id,status:'pending'});}
     if (url.pathname === '/api/state') {
       if (req.method() === 'GET') { if(mock.failStateRead)return json({error:'Isolated state read temporarily unavailable'},503);if (mock.holdState) { mock.holdState = false; await new Promise(r => { mock.heldState = r; }); } return json({ state:mock.state }); }
@@ -495,6 +497,25 @@ async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries
       env.mock.questionTurns[0].answer='保留不变量才能安全排除范围。';env.mock.questionTurns[0].status='answered';await closeSheet(p);await p.locator('#questionsButton').click();await p.waitForFunction(()=>document.querySelector('.reader-question-assistant')?.textContent.includes('不变量'));
       await p.locator('.reader-question-input').fill('未发送的新草稿');await closeSheet(p);env.mock.identity=otherOwner;env.mock.questionTurns=[];await p.reload();await p.locator('#article .code-block').first().waitFor();await settled(p);await p.locator('#questionsButton').click();assert.equal(await p.locator('.reader-question-input').inputValue(),'');assert.equal(await p.locator('.reader-question-turn').count(),0);
     });
+    await check('question-notification-exact-route-after-login-and-open-settings',async env=>{
+      const chapter=env.mock.catalog.collections[0],meta=chapter.documents[0],id='00000000-0000-4000-8000-000000000777';
+      env.mock.questionTurns=[{id,question:'通知定位的问题',answer:'这是对应问题的完整回复。',status:'answered',readAt:null,seq:1}];
+      const target='#/questions/'+chapter.id+'/'+meta.revision+'/'+id;
+      const p=await env.page(target);await p.locator('.reader-question-assistant').waitFor();
+      assert.equal(await p.locator('#sheetDialog').getAttribute('data-view'),'questions');assert.equal(await p.locator('[data-question-id="'+id+'"]').count(),1);assert.match(await p.locator('.reader-question-assistant').innerText(),/对应问题/);
+      await p.screenshot({path:path.join(output,'question-notification-402.png')});
+      await closeSheet(p);await p.locator('#settingsButton').click();await p.locator('#sheetDialog[data-view="settings"]').waitFor();
+      await p.evaluate(target=>{location.hash=target;},target);await p.locator('#sheetDialog[data-view="questions"]').waitFor();await p.locator('.reader-question-assistant').waitFor();assert.equal(await p.locator('[data-question-id="'+id+'"]').count(),1);
+      await closeSheet(p);await p.evaluate(()=>{location.hash='#/questions/practice-course/bad/not-a-question';});await p.getByText('这份答疑地址无效。',{exact:true}).waitFor();assert.equal(await p.locator('#sheetDialog').evaluate(e=>e.open),false);
+      await p.screenshot({path:path.join(output,'question-notification-invalid-route-402.png')});
+    });
+    await check('question-notification-login-boundary-keeps-the-target-private',async env=>{
+      const chapter=env.mock.catalog.collections[0],meta=chapter.documents[0],id='00000000-0000-4000-8000-000000000778';
+      env.mock.questionTurns=[{id,question:'登录后定位',answer:'受保护的对应答复',status:'answered',readAt:null,seq:1}];
+      const p=await env.page('#/questions/'+chapter.id+'/'+meta.revision+'/'+id);assert.equal(await p.locator('.reader-question-assistant').count(),0);assert(await p.locator('#loginView').isVisible());
+      env.mock.identity=owner;await p.evaluate(()=>window.dispatchEvent(new Event('online')));await p.locator('.reader-question-assistant').waitFor();
+      assert.equal(await p.locator('[data-question-id="'+id+'"]').count(),1);assert.match(await p.locator('.reader-question-assistant').innerText(),/对应答复/);
+    },{authenticated:false});
     await check('legacy-notes-byte-preservation-two-tabs-and-unsent-logout-guard',async env=>{const p=await env.page(),keys=Object.keys(noteSeed()),before=await snapshotKeys(p,keys);env.mock.state['notes:practice-course']={value:'newer remote copy',revision:99,updatedAt:Date.now()};await p.reload();await p.locator('#article .code-block').first().waitFor();await settled(p);const b=await env.page();assert.deepEqual(await snapshotKeys(p,keys),before);assert.deepEqual(await snapshotKeys(b,keys),before);await p.locator('#settingsButton').click();await p.locator('[data-show-device-settings]').click();await p.locator('[data-logout]').click();await settled(p);assert.equal(env.mock.requests.filter(r=>r.path==='/auth/logout').length,0);assert.equal(await p.evaluate(()=>window.__refinement.state.owner),owner);assert.deepEqual(await snapshotKeys(p,keys),before);assert.match(await p.locator('#toast').innerText(),/未同步|草稿|保留|退出/);assert.equal(await p.locator('#notesButton,#noteEditor').count(),0);},{initial:noteSeed()});
     await check('clean-logout-preserves-all-legacy-notes-and-prevents-offline-reentry',async env=>{const p=await env.page(),keys=Object.keys(noteSeed(false)),before=await snapshotKeys(p,keys);await p.locator('#settingsButton').click();await p.locator('[data-show-device-settings]').click();await p.locator('[data-logout]').click();await p.locator('#loginView').waitFor({state:'visible'});assert.equal(env.mock.requests.filter(r=>r.path==='/auth/logout').length,1);assert.deepEqual(await snapshotKeys(p,keys),before);assert.equal(await p.evaluate(()=>localStorage.getItem('second-algorithm:last-session')),null);env.mock.rejectApis=true;await p.reload();await p.locator('#loginView').waitFor({state:'visible'});assert.equal(await p.locator('#article .code-block').count(),0);assert.deepEqual(await snapshotKeys(p,keys),before);},{initial:noteSeed(false)});
     await check('same-page-expired-owner-and-reconnect-rebuild-the-current-route', async env => {

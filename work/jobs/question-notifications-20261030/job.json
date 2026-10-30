@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "question-notifications-20261030",
+  "goal": "核对真实问答实测，补齐会话/未读/草稿并接系统提醒，保留教材和私人状态",
+  "createdAt": "2026-10-30T08:29:50.290933+00:00",
+  "evidence": [
+    {
+      "id": "3c845a47df6146d8a4f5073b7c485531",
+      "kind": "research",
+      "path": "work/question-notifications-20261030/review.md",
+      "summary": "真实耗时/token对照与问答差距研究，复用既有Push和固定版本边界",
+      "outcome": "accepted",
+      "sha256": "ab4e7e5073e6df2009723142bb619567c7d5282f3631543819811c8adc8c0292",
+      "inputHash": "94f351b1f8422c6e992fcdb9b699ff6e478908d5bd35955eb8462203b58d039d",
+      "recordedAt": "2026-10-30T08:42:02.736600+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "ee9f8a384ca94aa29f020088062bf167",
+      "kind": "review",
+      "path": "work/question-notifications-20261030/review.md",
+      "summary": "完成事务与通知故障回滚、153专项、25浏览器、HTTP升级及教材原件保全",
+      "outcome": "accepted",
+      "sha256": "ab4e7e5073e6df2009723142bb619567c7d5282f3631543819811c8adc8c0292",
+      "inputHash": "94f351b1f8422c6e992fcdb9b699ff6e478908d5bd35955eb8462203b58d039d",
+      "recordedAt": "2026-10-30T08:42:05.637410+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    }
+  ],
+  "lastGoodVerification": {
+    "path": "work/jobs/question-notifications-20261030/verifications/ec2cbf4ddaf643e5881aff05287b442e.json",
+    "sha256": "1105d656aa9b0638d331f268d935ece55064326def566290f340b2a1f9ee6f8a",
+    "inputHash": "94f351b1f8422c6e992fcdb9b699ff6e478908d5bd35955eb8462203b58d039d"
+  },
+  "lastPreparedRelease": {
+    "path": "work/jobs/question-notifications-20261030/releases/92009df3a1eb47e3b2191bf7e1863713.json",
+    "sha256": "13111641590d28f0df918c76e8681da6302042b1abe892c469e49a574f4d9bde",
+    "inputHash": "94f351b1f8422c6e992fcdb9b699ff6e478908d5bd35955eb8462203b58d039d"
+  },
+  "lastVerificationAttempt": {
+    "path": "work/jobs/question-notifications-20261030/verifications/ec2cbf4ddaf643e5881aff05287b442e.json",
+    "sha256": "1105d656aa9b0638d331f268d935ece55064326def566290f340b2a1f9ee6f8a",
+    "inputHash": "94f351b1f8422c6e992fcdb9b699ff6e478908d5bd35955eb8462203b58d039d"
+  }
+}

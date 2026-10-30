@@ -1,5 +1,5 @@
 import { authRoute, sessionFor } from './auth.mjs';
-import { servicesRoute, publisherServiceRoute, publisherPaths } from './services.mjs';
+import { servicesRoute, publisherServiceRoute, publisherPaths, flushQuestionReplies } from './services.mjs';
 import {questionsRoute,questionPublisherRoute} from './questions.mjs';
 
 const MAX_BODY = 65_536;
@@ -134,10 +134,16 @@ async function stateRoute(request, env, session) {
   return json({ ok: true, key: data.key, ...record, record });
 }
 
-async function route(request, env) {
+async function route(request, env, context) {
   const path = normalizedPath(request);
   if (path.startsWith('/auth/')) return authRoute(request, env, request.method === 'POST' ? await inputJson(request) : {});
-  if (path.startsWith('/api/questions/jobs/')) return questionPublisherRoute(request,env,r=>inputJson(r,400_000));
+  if (path.startsWith('/api/questions/jobs/')) {
+    const response=await questionPublisherRoute(request,env,r=>inputJson(r,400_000));
+    if(response.ok&&(path.endsWith('/claim')||path.endsWith('/complete'))){
+      const delivery=flushQuestionReplies(env).catch(()=>{});if(context?.waitUntil)context.waitUntil(delivery);else await delivery;
+    }
+    return response;
+  }
   if (publisherPaths.has(path)) return publisherServiceRoute(request, env, inputJson);
   if (publicPath(path)) {
     if (!['GET', 'HEAD'].includes(request.method)) return json({ error: '不支持此操作' }, 405);
@@ -162,9 +168,9 @@ async function route(request, env) {
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, context) {
     let response;
-    try { response = await route(request, env); }
+    try { response = await route(request, env, context); }
     catch (error) {
       if (error instanceof InputError) response = json({ error: error.message }, error.status);
       else { console.error('Second Algorithm request failed:', error?.name || 'Error');

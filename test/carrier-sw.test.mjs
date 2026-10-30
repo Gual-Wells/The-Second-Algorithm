@@ -102,6 +102,13 @@ test('push displays a bounded same-origin notice without creating offline author
  assert.equal(sw.opened[0],origin+'/#/read/chapter-01/binary-search');
 });
 
+test('question reminders use per-question tags and retain exact historical deep links',async()=>{
+ const sw=worker(),id=crypto.randomUUID(),revision='c'.repeat(64),url='/#/questions/chapter-01/'+revision+'/'+id;
+ await sw.event('push',{data:{json:()=>({title:'答疑已回复',body:'打开查看',url,tag:'second-algorithm-question-'+id})}});
+ assert.equal(sw.pushes[0].options.tag,'second-algorithm-question-'+id);assert.equal(sw.pushes[0].options.data.url,url);
+ await sw.event('notificationclick',{notification:{close(){},data:{url}}});assert.equal(sw.opened[0],origin+url);
+});
+
 test('upgrade removes unregistered content revisions and catalog without deleting owner or unrelated records', async () => {
   const sw = worker();
   await sw.message({ type: 'OWNER', owner: alice });

@@ -238,7 +238,7 @@ self.addEventListener('push', event => {
     if(!value||typeof value.title!=='string'||typeof value.body!=='string')return;
     const url=typeof value.url==='string'&&value.url.startsWith('/#/')?value.url:'/#/';
     await self.registration.showNotification(value.title.slice(0,80),{body:value.body.slice(0,200),
-      icon:'/icons/icon-192.png',badge:'/icons/icon-192.png',data:{url},tag:'second-algorithm-publication'});
+      icon:'/icons/icon-192.png',badge:'/icons/icon-192.png',data:{url},tag:typeof value.tag==='string'&&/^second-algorithm-question-[a-f0-9-]{36}$/.test(value.tag)?value.tag:'second-algorithm-publication'});
   })());
 });
 self.addEventListener('notificationclick', event=>{

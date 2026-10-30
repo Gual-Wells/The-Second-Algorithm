@@ -102,17 +102,33 @@ export function subscriptionValid(v){
     /^[A-Za-z0-9_-]{80,200}$/.test(v.keys?.p256dh||'')&&/^[A-Za-z0-9_-]{12,50}$/.test(v.keys?.auth||'');
 }
 const pushConfigured=env=>Boolean(env.VAPID_PUBLIC_KEY&&env.VAPID_PRIVATE_KEY&&env.VAPID_SUBJECT);
-async function sendQueued(env,s){
+const questionNoticeEligible=`(d.event_id NOT LIKE 'question:%' OR EXISTS(SELECT 1 FROM question_turns q WHERE d.event_id='question:'||q.id AND q.status='answered' AND q.read_at IS NULL AND q.owner_scope=s.owner_scope AND q.epoch=s.epoch))`;
+export function questionReplyStatement(env,row,s,now){
+  const payload=JSON.stringify({title:'第二算法 · 答疑已回复',body:'打开章节答疑，查看完整回复。',
+    url:'/#/questions/'+encodeURIComponent(row.chapter_id)+'/'+row.revision+'/'+row.id,tag:'second-algorithm-question-'+row.id});
+  return env.DB.prepare(`INSERT OR IGNORE INTO service_push_delivery(event_id,subscription_id,payload_json,created_at)
+    SELECT 'question:'||q.id,p.id,?,? FROM question_turns q JOIN service_push p ON p.owner_scope=q.owner_scope AND p.epoch=q.epoch
+    WHERE q.id=? AND q.status='answered' AND q.answered_at=? AND q.read_at IS NULL AND q.owner_scope=? AND q.epoch=? AND ${rowGuard}`)
+    .bind(payload,now,row.id,now,s.ownerScope,s.epoch,s.epoch,s.credentialId);
+}
+export async function flushQuestionReplies(env,options={}){
+  const s=await currentOwner(env);return s?sendQueued(env,s,{...options,questionsOnly:true}):{configured:false,sent:0};
+}
+async function sendQueued(env,s,{questionsOnly=false,deliver}={}){
   if(!pushConfigured(env))return {sent:0,configured:false};
-  const rows=await env.DB.prepare(`SELECT d.*,s.endpoint,s.p256dh,s.auth FROM service_push_delivery d JOIN service_push s ON s.id=d.subscription_id WHERE s.owner_scope=? AND s.epoch=? AND d.sent_at IS NULL AND d.attempts<4 AND (d.claim_at IS NULL OR d.claim_at<?) ORDER BY d.created_at LIMIT 12`).bind(s.ownerScope,s.epoch,Date.now()-120_000).all();
+  await env.DB.prepare(`DELETE FROM service_push_delivery AS d WHERE d.event_id LIKE 'question:%' AND NOT EXISTS(
+    SELECT 1 FROM question_turns q JOIN service_push p ON p.id=d.subscription_id AND p.owner_scope=q.owner_scope AND p.epoch=q.epoch
+    WHERE d.event_id='question:'||q.id AND q.status='answered' AND q.read_at IS NULL AND q.owner_scope=? AND q.epoch=?
+    AND EXISTS(SELECT 1 FROM auth_control WHERE id=1 AND epoch=q.epoch))`).bind(s.ownerScope,s.epoch).run();
+  const rows=await env.DB.prepare(`SELECT d.*,s.endpoint,s.p256dh,s.auth FROM service_push_delivery d JOIN service_push s ON s.id=d.subscription_id WHERE s.owner_scope=? AND s.epoch=? AND ${rowGuard} AND d.sent_at IS NULL AND d.attempts<4 AND (?=0 OR d.event_id LIKE 'question:%') AND ${questionNoticeEligible} AND (d.claim_at IS NULL OR d.claim_at<?) ORDER BY d.created_at LIMIT 12`).bind(s.ownerScope,s.epoch,s.epoch,s.credentialId,questionsOnly?1:0,Date.now()-120_000).all();
   let sent=0;
   // Source project's mature Web Push implementation; loaded only for actual deliveries.
-  const {rawPayload,sendPushNotification}=rows.results.length?await import('@mmmike/web-push/send'):{};
+  const {rawPayload,sendPushNotification}=rows.results.length&&!deliver?await import('@mmmike/web-push/send'):{};
   for(const row of rows.results){
-    const claimed=await env.DB.prepare('UPDATE service_push_delivery SET attempts=attempts+1,claim_at=? WHERE event_id=? AND subscription_id=? AND sent_at IS NULL AND (claim_at IS NULL OR claim_at<?)').bind(Date.now(),row.event_id,row.subscription_id,Date.now()-120_000).run();
+    const claimed=await env.DB.prepare(`UPDATE service_push_delivery AS d SET attempts=attempts+1,claim_at=? WHERE event_id=? AND subscription_id=? AND sent_at IS NULL AND attempts<4 AND (claim_at IS NULL OR claim_at<?) AND EXISTS(SELECT 1 FROM service_push s WHERE s.id=d.subscription_id AND s.owner_scope=? AND s.epoch=? AND ${questionNoticeEligible}) AND ${rowGuard}`).bind(Date.now(),row.event_id,row.subscription_id,Date.now()-120_000,s.ownerScope,s.epoch,s.epoch,s.credentialId).run();
     if(!claimed.meta.changes)continue;
     try{
-      const ok=await sendPushNotification({endpoint:row.endpoint,keys:{p256dh:row.p256dh,auth:row.auth}},rawPayload(row.payload_json),{publicKey:env.VAPID_PUBLIC_KEY,privateKey:env.VAPID_PRIVATE_KEY,subject:env.VAPID_SUBJECT},{ttl:3600,urgency:'normal',timeoutMs:10000});
+      const ok=deliver?await deliver(row,JSON.parse(row.payload_json)):await sendPushNotification({endpoint:row.endpoint,keys:{p256dh:row.p256dh,auth:row.auth}},rawPayload(row.payload_json),{publicKey:env.VAPID_PUBLIC_KEY,privateKey:env.VAPID_PRIVATE_KEY,subject:env.VAPID_SUBJECT},{ttl:3600,urgency:'normal',timeoutMs:10000});
       if(ok){await env.DB.prepare('UPDATE service_push_delivery SET sent_at=?,claim_at=NULL WHERE event_id=? AND subscription_id=?').bind(Date.now(),row.event_id,row.subscription_id).run();sent++;}
       else await env.DB.batch([env.DB.prepare('DELETE FROM service_push_delivery WHERE subscription_id=?').bind(row.subscription_id),env.DB.prepare('DELETE FROM service_push WHERE id=?').bind(row.subscription_id)]);
     }catch{await env.DB.prepare('UPDATE service_push_delivery SET claim_at=NULL WHERE event_id=? AND subscription_id=?').bind(row.event_id,row.subscription_id).run();}
