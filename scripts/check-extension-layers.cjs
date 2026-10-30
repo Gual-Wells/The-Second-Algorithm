@@ -64,11 +64,33 @@ async function blankPoint(page, edge = 'middle') {
   assert(['article', 'readingPane'].includes(result.hit), 'gesture starts on real reading padding: ' + JSON.stringify(result));
   return result;
 }
-async function doubleTap(page, edge = 'middle', afterFirst = null) {
-  const location = await blankPoint(page, edge);
+async function doubleTapAt(page, location, afterFirst = null) {
   await page.touchscreen.tap(location.x, location.y); await page.waitForTimeout(75);
   await afterFirst?.(location);
   await page.touchscreen.tap(location.x, location.y); await wait(page); await page.waitForTimeout(300);
+}
+async function doubleTap(page, edge = 'middle', afterFirst = null) {
+  return doubleTapAt(page, await blankPoint(page, edge), afterFirst);
+}
+async function textPoint(page) {
+  return page.evaluate(() => {
+    const pane = document.getElementById('readingPane').getBoundingClientRect();
+    for (const paragraph of document.querySelectorAll('#article p')) {
+      if (paragraph.closest('[hidden]')) continue;
+      const walker = document.createTreeWalker(paragraph, NodeFilter.SHOW_TEXT);
+      for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+        if (!node.textContent.trim() || node.parentElement.closest('a,pre,code,table,button')) continue;
+        const range = document.createRange(); range.selectNodeContents(node);
+        for (const rect of range.getClientRects()) {
+          if (rect.width < 40 || rect.top <= pane.top + 70 || rect.bottom >= pane.bottom - 30) continue;
+          const x = rect.left + Math.min(25, rect.width / 2), y = rect.top + rect.height / 2;
+          const hit = document.elementFromPoint(x, y);
+          if (hit?.closest('p') === paragraph && !hit.closest('a,pre,code,table,button')) return { x, y, hit: hit.tagName };
+        }
+      }
+    }
+    throw Error('actual chapter needs visible ordinary paragraph text for the touch reading gesture');
+  });
 }
 async function paperPosition(page, block = null) {
   return page.evaluate(block => {
@@ -377,6 +399,39 @@ async function check(browser, name, body, options = {}) {
         assert.equal(await page.evaluate(() => __extensionQA.runtime.state.layer), layer);
         assert.equal(await page.locator('#partHeading').isVisible(), true);
         samePaper(before, await paperPosition(page, before.block));
+        await clearSelection(page);
+        const textBefore = await paperPosition(page);
+        await doubleTapAt(page, await textPoint(page));
+        assert.equal(await pure(page), true, 'double tap on actual paragraph text enters pure mode');
+        samePaper(textBefore, await paperPosition(page, textBefore.block));
+        const textDuring = await paperPosition(page);
+        await doubleTapAt(page, await textPoint(page));
+        assert.equal(await pure(page), false, 'double tap on actual paragraph text exits pure mode');
+        samePaper(textDuring, await paperPosition(page, textDuring.block));
+        assert.equal(await page.evaluate(() => __extensionQA.runtime.state.layer), layer);
+        const repeated = await paperPosition(page, before.block);
+        geometry.push({ scenario: 'four-touch-mode-transitions', layer, before, after: repeated,
+          verticalDelta: repeated.top - before.top, widthDelta: repeated.width - before.width });
+        const hold = await textPoint(page), session = await page.context().newCDPSession(page);
+        await page.evaluate(() => {
+          window.__textHoldMenus = 0;
+          window.__textHoldMenu = event => { window.__textHoldMenus++; event.preventDefault(); };
+          document.addEventListener('contextmenu', window.__textHoldMenu, true);
+        });
+        let selectedDuringHold;
+        try {
+          await session.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: hold.x, y: hold.y, id: 0 }] });
+          await page.waitForTimeout(750);
+          selectedDuringHold = await page.evaluate(() => getSelection().toString());
+          await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+          await page.waitForTimeout(400);
+          if (selectedDuringHold.trim()) assert.equal(await page.evaluate(() => getSelection().toString()), selectedDuringHold, 'native long-press text selection is retained');
+          geometry.push({ scenario: 'native-text-long-press', layer, selectedText: Boolean(selectedDuringHold.trim()), contextmenus: await page.evaluate(() => window.__textHoldMenus) });
+          assert.equal(await pure(page), false, 'long press on ordinary text never toggles pure mode');
+        } finally {
+          await page.evaluate(() => document.removeEventListener('contextmenu', window.__textHoldMenu, true));
+          await session.detach(); await clearSelection(page);
+        }
       }
     }, { touch: true });
     await check(browser, 'touch-pure-controls-never-intercept-double-tap', async ({ page }) => {

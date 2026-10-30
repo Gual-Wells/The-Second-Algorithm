@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "chapter": "chapter-01",
-  "inputHash": "b34966d9b813bc6803a3a6364122ca5336cf84f4ae6f456fd08e0c5481903f51",
+  "inputHash": "bdd48fadd2c5c9d0664fa866cea6f4b9514f3dd9e1685c73333886d7180ae7bd",
   "verdict": "accepted",
   "comparison": {
     "baseline": "main@0d896f742ee3a677d09e8ab3f40d968f092adeff；上一成功language-replica部署1793284360689；第二语言源929d42df391f4538c906e743f146cc579e655c0f。",

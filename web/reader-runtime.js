@@ -400,7 +400,6 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, onRestoreS
   });
   const excluded = 'button,a,input,textarea,select,label,summary,pre,code,table';
   const hasSelection = () => Boolean(getSelection()?.toString().trim());
-  const blankTarget = target => target === article || target === pane;
   const readingTarget = target => pane.contains(target) && !target.closest(excluded) && !target.isContentEditable;
   const distance = (a, b) => Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
   pane.addEventListener('pointerdown', event => {
@@ -411,7 +410,6 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, onRestoreS
     clearTimeout(wakeTapTimer);
     touchPress = { pointerId: event.pointerId, clientX: event.clientX, clientY: event.clientY, started: event.timeStamp,
       scrollTop: pane.scrollTop, scale: window.visualViewport?.scale, layoutToken, layer, pure,
-      blank: blankTarget(event.target),
       eligible: view === 'reader' && !restoring && !isSheetOpen() && readingTarget(event.target) && !hasSelection() };
   });
   pane.addEventListener('pointermove', event => {
@@ -454,9 +452,6 @@ export function createReaderRuntime({ onPosition, onNavigate, onCopy, onRestoreS
         && press.scale === window.visualViewport?.scale && !isSheetOpen() && !hasSelection()
         && readingTarget(document.elementFromPoint(event.clientX, event.clientY));
       if (!valid) { resetTapGesture(); sleepControls(); return; }
-      if (!press.blank || !blankTarget(document.elementFromPoint(event.clientX, event.clientY))) {
-        previousTap = null; if (pure) deferControls(); return;
-      }
       if (previousTap && event.timeStamp - previousTap.timeStamp <= DOUBLE_TAP_MS && distance(previousTap, event) <= TAP_DISTANCE) {
         consumedTouchClick = lastTouchUp;
         setPure(!pure); return;
