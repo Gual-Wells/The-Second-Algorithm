@@ -46,4 +46,4 @@ npm run deploy -- --release work/jobs/task-id/releases/<id>.json
 
 来源池、书目和材料约定：`catalog/sources.json`、`catalog/books.json`、`docs/LOCAL_MATERIALS.md`。已登记、取得、实际读过、分析、编纂和验证分开，旧cases/patterns不计算现行覆盖。商业原件、私人手册和凭据不上传。
 
-Node24、Python3.11+、已有支持目标版本的C++编译器；依赖按锁文件。所有本机新增数据、缓存、TEMP/TMP、日志、教材和构建实际存D，不安装/删除共享node_modules联接目标。正文、源码和知识是Git/静态资源，D1只存身份、读位与小型服务控制面；正文不入D1、不新增KV。设置含默认休息的单次出版安排，Windows纯Node检查不在休息时唤醒Codex；服务额度只登记ChatGPT赠送API资源，不计算任务费用。永久归档放现有OneDrive应用目录的本项目子目录，配置和真实运行边界见[服务协议](protocol/SERVICES_STORAGE.md)。不新增订阅或付费API调用。
+Node24、Python3.11+、已有支持目标版本的C++编译器；依赖按锁文件。所有本机新增数据、缓存、TEMP/TMP、日志、教材和构建实际存D，不安装/删除共享node_modules联接目标。正文、源码和知识是Git/静态资源，D1只存身份、读位与小型服务控制面；正文不入D1、不新增KV。设置含默认休息的单次出版安排，Windows纯Node检查不在休息时唤醒Codex；服务额度登记ChatGPT赠送API资源，章节答疑已接独立OpenAI Responses运行器；发放记录、已核剩余与实际token分开。永久归档放现有OneDrive应用目录的本项目子目录，配置和真实运行边界见[服务协议](protocol/SERVICES_STORAGE.md)。未新增持续订阅；问答按实际API调用消耗已有额度，章节出版仍使用Codex。

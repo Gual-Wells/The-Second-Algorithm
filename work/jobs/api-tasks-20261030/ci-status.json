@@ -1,0 +1,12 @@
+{
+  "initialRun": 41011305170,
+  "initialConclusion": "failure",
+  "initialFailure": "bounded HTTP/SW withdrawal fixture",
+  "final": {
+    "id": 41012712347,
+    "status": "completed",
+    "conclusion": "success",
+    "head_sha": "c5453882ccfa1705135d38a6a8faed8498f6db20",
+    "html_url": "https://github.com/Gual-Wells/The-Second-Algorithm/actions/runs/41012712347"
+  }
+}
