@@ -1,0 +1,112 @@
+{
+  "source": "c9b7f7932a0b2ef0425f1fbce6e18ad446678a3c",
+  "origin": "https://second-algorithm.pages.dev",
+  "immutableOrigin": "https://0d8c1712.second-algorithm.pages.dev",
+  "deployment": "work/jobs/pure-gesture-20261031/deployments/1793384318585.json",
+  "build": "1872043c2f93c1f2ec4ecb15977f168d62a06f7529f7450331fa2b2cd7ed7cb9",
+  "assets": [
+    {
+      "path": "/index.html",
+      "status": 200,
+      "sha256": "5faaa637534b9bc0b012403dec0bec7119324459b303a68baf5629cb47605b2c",
+      "matches": true,
+      "cacheControl": "public, max-age=0, must-revalidate"
+    },
+    {
+      "path": "/app.js",
+      "status": 200,
+      "sha256": "2e6d02e36fa45787de5074c693972d75d53882702080deb72be30210fb5b8035",
+      "matches": true,
+      "cacheControl": "public, max-age=0, must-revalidate"
+    },
+    {
+      "path": "/styles.css",
+      "status": 200,
+      "sha256": "0100a872b8e60078341ba1f5375754ff640df340538a32de52c86c7c4b7891c7",
+      "matches": true,
+      "cacheControl": "public, max-age=0, must-revalidate"
+    },
+    {
+      "path": "/sw.js",
+      "status": 200,
+      "sha256": "fb599f44db635476a4cc9e3c1c51d8f1e3794a3966a928877fff5aff28f9d85c",
+      "matches": true,
+      "cacheControl": "public, max-age=0, must-revalidate"
+    },
+    {
+      "path": "/icons/icon.svg",
+      "status": 200,
+      "sha256": "497c4629840c349d1a23d27cb4a2bf9330c7f097974be9ab906a2253a6638ed3",
+      "matches": true,
+      "cacheControl": "public, max-age=0, must-revalidate"
+    },
+    {
+      "path": "/manifest.webmanifest",
+      "status": 200,
+      "sha256": "7c159b2c915dd26ce30bc5a457c835c6ea23a786c6ceded66930e5443ed74caf",
+      "matches": true,
+      "cacheControl": "public, max-age=0, must-revalidate"
+    }
+  ],
+  "boundaries": [
+    {
+      "path": "/api/library",
+      "status": 401,
+      "passed": true
+    },
+    {
+      "path": "/api/state",
+      "status": 401,
+      "passed": true
+    },
+    {
+      "path": "/api/settings",
+      "status": 401,
+      "passed": true
+    },
+    {
+      "path": "/api/questions/status",
+      "status": 401,
+      "passed": true
+    },
+    {
+      "path": "/library/catalog.json",
+      "status": 401,
+      "passed": true
+    },
+    {
+      "path": "/%6cibrary/catalog.json",
+      "status": 401,
+      "passed": true
+    },
+    {
+      "path": "/library/chapter-01/binary-search/bea98296c3878578.json",
+      "status": 401,
+      "passed": true
+    },
+    {
+      "path": "/library/chapter-01/binary-search/76dd1a208850b564.cpp",
+      "status": 401,
+      "passed": true
+    },
+    {
+      "path": "/library/chapter-01/binary-search/76dd1a208850b564.md",
+      "status": 401,
+      "passed": true
+    },
+    {
+      "path": "/library/knowledge/Q100001/dc22c2384ed01152.json",
+      "status": 401,
+      "passed": true
+    }
+  ],
+  "identity": {
+    "status": 200,
+    "enrolled": true,
+    "enrollmentOpen": false,
+    "authenticated": false
+  },
+  "passed": true,
+  "checkedAt": "2026-10-30T18:19:18.548Z",
+  "physicalIPhone": false
+}

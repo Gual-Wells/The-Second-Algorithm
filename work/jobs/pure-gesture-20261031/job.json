@@ -3,7 +3,65 @@
   "id": "pure-gesture-20261031",
   "goal": "修复双击纯净触摸失效与首点击穿新唤出工具栏；保留原生选择、缩放、代码操作和整章分层，验证发布当前读者修复",
   "createdAt": "2026-10-30T17:54:41.670880+00:00",
-  "evidence": [],
-  "lastGoodVerification": null,
-  "lastPreparedRelease": null
+  "evidence": [
+    {
+      "id": "32546a949e2a442f9a48e2bc65782d8d",
+      "kind": "research",
+      "path": "work/jobs/pure-gesture-20261031/research.md",
+      "summary": "真实触摸序列复现覆盖栏重命中及退出click穿透；限定修复与原生操作边界",
+      "outcome": "accepted",
+      "sha256": "a91636b759a6b2b49485350282a4b901439ab75ac3c3348dd9f87a688129ec08",
+      "inputHash": "6c859c20f13ab6335b710dcb0d3c33d562c01461133209fefb0024b6ad50bff9",
+      "recordedAt": "2026-10-30T18:03:01.129400+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "6e0ccf7367dc4db28c6e6892298872de",
+      "kind": "review",
+      "path": "work/jobs/pure-gesture-20261031/review.md",
+      "summary": "审阅当前最小手势修复和触摸回归；教学源与原研究保留，最终发布另过实际验证",
+      "outcome": "accepted",
+      "sha256": "2664c9532efd357fb989de6f2d4e0e8445a3c7644ca648e5281083f1ba5dddb3",
+      "inputHash": "6c859c20f13ab6335b710dcb0d3c33d562c01461133209fefb0024b6ad50bff9",
+      "recordedAt": "2026-10-30T18:03:06.018275+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "6f8ae3f6c78c44ecb6483e84c275cdca",
+      "kind": "research",
+      "path": "work/jobs/pure-gesture-20261031/research-v2.md",
+      "summary": "回查手机整个正文双击目标，采用非交互正文文字触摸识别与原生操作优先",
+      "outcome": "accepted",
+      "sha256": "2a3ecea86125fac260d3d841cbf2f1b75216b724b311a5febd695b44add21486",
+      "inputHash": "d92d95d74099733b6646a47c1a93e66869dd6f0128eeba134573903768b92799",
+      "recordedAt": "2026-10-30T18:11:25.604751+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "498c74c1a19346859113bf1648635d56",
+      "kind": "review",
+      "path": "work/jobs/pure-gesture-20261031/review-v2.md",
+      "summary": "采用最终正文触摸范围、事件消费和实际专项回归；新输入重新验证发布",
+      "outcome": "accepted",
+      "sha256": "59e249a0af999c80edcc3891d700a41414dd87d8ae2b0ccaf1903df18800b04e",
+      "inputHash": "d92d95d74099733b6646a47c1a93e66869dd6f0128eeba134573903768b92799",
+      "recordedAt": "2026-10-30T18:11:44.185246+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    }
+  ],
+  "lastGoodVerification": {
+    "path": "work/jobs/pure-gesture-20261031/verifications/48508ef898ce426b8511084a843c6ece.json",
+    "sha256": "f6bd7b5eef03b8ba8aff92d2933ea9839c283476b9d31242fbb78539aef11e05",
+    "inputHash": "d92d95d74099733b6646a47c1a93e66869dd6f0128eeba134573903768b92799"
+  },
+  "lastPreparedRelease": {
+    "path": "work/jobs/pure-gesture-20261031/releases/a0354dd20bcd4c62a26445fd599c0972.json",
+    "sha256": "6fac3bf4113c9f80aa84d60d08fb83e388c9f5d84780a84f1d07771fabc9edc1",
+    "inputHash": "d92d95d74099733b6646a47c1a93e66869dd6f0128eeba134573903768b92799"
+  },
+  "lastVerificationAttempt": {
+    "path": "work/jobs/pure-gesture-20261031/verifications/48508ef898ce426b8511084a843c6ece.json",
+    "sha256": "f6bd7b5eef03b8ba8aff92d2933ea9839c283476b9d31242fbb78539aef11e05",
+    "inputHash": "d92d95d74099733b6646a47c1a93e66869dd6f0128eeba134573903768b92799"
+  }
 }

@@ -1,0 +1,16 @@
+{
+  "source": "c9b7f7932a0b2ef0425f1fbce6e18ad446678a3c",
+  "browserPassed": true,
+  "browserCases": 25,
+  "extensionPassed": true,
+  "extensionCases": 14,
+  "qualityPassed": true,
+  "syncCases": 6,
+  "realHTTPServiceWorkerPassed": true,
+  "dateChecks": 31,
+  "startupChecks": 50,
+  "cppTargets": 4,
+  "physicalIPhone": false,
+  "localPythonRun": "Stopped own redundant general Python run while refining frontend scope; not counted as a full pass. Final exact-source CI independently passed all 218 Python cases.",
+  "longPressEvidence": "Chromium real text long-press did not toggle; no native range/contextmenu was produced in that fixture. Existing range and native mouse selection protection separately passed."
+}
