@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-31T09:48:59.268Z",
+  "kind": "project-api-cloud-activation",
+  "sourceCommit": "448f52d",
+  "packet": "work/jobs/cloud-api-runtime-20261031/releases/bec166d6f14f4f0db31ecadf55c8a4ab.json",
+  "packetSha256": "b49e0f4f403b294adc0489bcea5d5fb25ef32dd33ebee04d200c73e86e741b8a",
+  "inputHash": "ff80a85c5095a215927a68ea2d77352d8f60269a9d3f45702aca6fdb8a026291",
+  "sharedSha256": "2ec43589c9e76028b66c4a0d62259db4b68bdf881db2045d0d9cccd555df418a",
+  "pages": {
+    "origin": "https://second-algorithm.pages.dev",
+    "deploymentId": "8cc0d358",
+    "receipt": "work/jobs/cloud-api-runtime-20261031/deployments/1793439818200.json",
+    "version": "8dc8441c8427ec4a83e9ae3cd928573820d2d384ba2b0e2c154c51b9b7e9c9b5",
+    "build": "ed67140204f7326647f4691a51fc528a8be649845e1faff65fdd2f6f9ba59e51",
+    "publicFileCount": 11,
+    "publicBytesMatch": true,
+    "privatePathsChecked": 6,
+    "allAnonymous401": true,
+    "cloudWakeGetStatus": 405,
+    "serviceWorkerSha256": "ee7c907773fd2fbca7955f6c44ae8332b026bfcb5061c97b9a481fde74b3e6cd"
+  },
+  "apiExecutor": {
+    "service": "second-algorithm-api",
+    "entrypoint": "AlgorithmAPIExecutor",
+    "deploymentId": "0cf5e41b-b411-45bc-a1c6-a42b5755dff7",
+    "versionId": "9fb3c830-5faa-478d-a44f-c1434a21cd78",
+    "percentage": 100,
+    "workersDev": false,
+    "cronConfigured": false,
+    "cloudEnabled": true,
+    "ownDatabase": "second-algorithm",
+    "secretBinding": "SECOND_SERIES_OPENAI_KEY",
+    "usageBinding": "the-second-language-api#AlgorithmUsage"
+  },
+  "content": {
+    "artifactMarkdowns": [
+      {
+        "path": "chapter-01/binary-search/76dd1a208850b564.md",
+        "sha256": "5f53d2ca5da6db2dccff90b1796aef5c79c2e3c356c261cac3549ff183f77faa"
+      }
+    ],
+    "onlineProtectedMarkdownDirectRead": false,
+    "anonymousMarkdownStatus": 401,
+    "teachingAuthorityChanged": false
+  },
+  "history": {
+    "migration0005Present": true,
+    "legacyAnsweredHistoryPresent": true,
+    "inspection": "aggregate-only; no private question or answer text read",
+    "dataModifiedByInspection": false
+  },
+  "provider": {
+    "calledByThisAgent": false,
+    "firstProbeCoordinator": "root/accounting agent",
+    "realProviderOutcomeNotAsserted": true
+  },
+  "credentials": {
+    "agentReadPlaintext": false,
+    "agentUploadedPlaintext": false,
+    "newKeyCreatedByAgent": false
+  },
+  "scope": "Activation and deployment verified; provider end-to-end validation remains separately coordinated."
+}
