@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-10-31T10:02:54.166Z",
+  "scope": "runtime redirect compatibility only",
+  "sharedSha256": "1c8e69b439903689772fdd4d95422508eac366eab93b2f67996ecb88d61929de",
+  "chapterSha256": "5f53d2ca5da6db2dccff90b1796aef5c79c2e3c356c261cac3549ff183f77faa",
+  "verification": {
+    "path": "work/jobs/cloud-api-runtime-20261031/verifications/1d68c3e7f76c47babab13c874a81d324.json",
+    "sha256": "28fc9d7fc883c59a57500d488f8a5a5bff006c6377558460b1d05cb5cba39227",
+    "inputHash": "ce55b99cb2d4d2f8259289d4ed13e4df583372758d06f2763951e51280aa8580"
+  },
+  "packet": {
+    "path": "work/jobs/cloud-api-runtime-20261031/releases/fb892485c39248c6bb2bfa750dd8e728.json",
+    "sha256": "6d820325b9497d7afec8cd2048c7d08a58096227350e6b023313da586fe65fb3",
+    "inputHash": "ce55b99cb2d4d2f8259289d4ed13e4df583372758d06f2763951e51280aa8580"
+  },
+  "projectMocks": {
+    "passed": 45,
+    "failed": 0,
+    "paidCalls": 0
+  },
+  "sharedMocks": {
+    "passed": 17,
+    "failed": 0,
+    "paidCalls": 0
+  },
+  "workerDryRun": {
+    "passed": true,
+    "uploadKiB": 42.78
+  },
+  "pagesDeploymentRequired": false,
+  "paidCallsByThisAgent": 0
+}

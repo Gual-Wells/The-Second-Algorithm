@@ -47,21 +47,43 @@
       "inputHash": "ff80a85c5095a215927a68ea2d77352d8f60269a9d3f45702aca6fdb8a026291",
       "recordedAt": "2026-10-31T09:39:34.054687+00:00",
       "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "6bc45460f6df46a3b17d27806d176a2f",
+      "kind": "research",
+      "path": "work/jobs/cloud-api-runtime-20261031/redirect-research.md",
+      "summary": "Cloudflare manual-redirect transport repair and fixed nonce callback compatibility, with unchanged adopted teaching bytes and no paid call by this subtask.",
+      "outcome": "accepted",
+      "sha256": "ebaa51b7cb3242a6283391b64c273efb603186b37e6f1612f9a1a1e41534f434",
+      "inputHash": "ce55b99cb2d4d2f8259289d4ed13e4df583372758d06f2763951e51280aa8580",
+      "recordedAt": "2026-10-31T10:02:10.362588+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "71cf9bf50c4c493fbf7c3e2c900ecd22",
+      "kind": "review",
+      "path": "work/jobs/cloud-api-runtime-20261031/redirect-review.md",
+      "summary": "Fresh engineering impact review of fixed endpoint manual redirects, non2xx refusal and preserved unknown/outbox boundaries; 45 project and 17 shared checks passed.",
+      "outcome": "accepted",
+      "sha256": "5a11a758d4d4ace37ab3f3450854b3aef8eee8608f26ce2b43f1dbb1a7c7cbd1",
+      "inputHash": "ce55b99cb2d4d2f8259289d4ed13e4df583372758d06f2763951e51280aa8580",
+      "recordedAt": "2026-10-31T10:02:13.222364+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
     }
   ],
   "lastGoodVerification": {
-    "path": "work/jobs/cloud-api-runtime-20261031/verifications/1821083bd8744f7eaa620883ca317f76.json",
-    "sha256": "1f008d8bcc66bfb5313a1a03f2742e2f4d03aef60ca86d7e01c1da1e029d74ab",
-    "inputHash": "ff80a85c5095a215927a68ea2d77352d8f60269a9d3f45702aca6fdb8a026291"
+    "path": "work/jobs/cloud-api-runtime-20261031/verifications/1d68c3e7f76c47babab13c874a81d324.json",
+    "sha256": "28fc9d7fc883c59a57500d488f8a5a5bff006c6377558460b1d05cb5cba39227",
+    "inputHash": "ce55b99cb2d4d2f8259289d4ed13e4df583372758d06f2763951e51280aa8580"
   },
   "lastPreparedRelease": {
-    "path": "work/jobs/cloud-api-runtime-20261031/releases/bec166d6f14f4f0db31ecadf55c8a4ab.json",
-    "sha256": "b49e0f4f403b294adc0489bcea5d5fb25ef32dd33ebee04d200c73e86e741b8a",
-    "inputHash": "ff80a85c5095a215927a68ea2d77352d8f60269a9d3f45702aca6fdb8a026291"
+    "path": "work/jobs/cloud-api-runtime-20261031/releases/fb892485c39248c6bb2bfa750dd8e728.json",
+    "sha256": "6d820325b9497d7afec8cd2048c7d08a58096227350e6b023313da586fe65fb3",
+    "inputHash": "ce55b99cb2d4d2f8259289d4ed13e4df583372758d06f2763951e51280aa8580"
   },
   "lastVerificationAttempt": {
-    "path": "work/jobs/cloud-api-runtime-20261031/verifications/1821083bd8744f7eaa620883ca317f76.json",
-    "sha256": "1f008d8bcc66bfb5313a1a03f2742e2f4d03aef60ca86d7e01c1da1e029d74ab",
-    "inputHash": "ff80a85c5095a215927a68ea2d77352d8f60269a9d3f45702aca6fdb8a026291"
+    "path": "work/jobs/cloud-api-runtime-20261031/verifications/1d68c3e7f76c47babab13c874a81d324.json",
+    "sha256": "28fc9d7fc883c59a57500d488f8a5a5bff006c6377558460b1d05cb5cba39227",
+    "inputHash": "ce55b99cb2d4d2f8259289d4ed13e4df583372758d06f2763951e51280aa8580"
   }
 }

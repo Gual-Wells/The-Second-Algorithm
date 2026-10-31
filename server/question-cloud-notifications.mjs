@@ -21,7 +21,7 @@ export async function requestCloudQuestionDelivery(env, { fetchImpl = fetch } = 
   const written = await env.DB.prepare(`INSERT INTO question_cloud_wakes(nonce_hash,owner_scope,epoch,expires_at)
     SELECT ?,?,?,? WHERE ${guard}`).bind(await hash(nonce), s.ownerScope, s.epoch, now + 120000, s.epoch, s.credentialId).run();
   if (!written.meta.changes) return false;
-  const response = await fetchImpl(origin + endpoint, { method: 'POST', redirect: 'error',
+  const response = await fetchImpl(origin + endpoint, { method: 'POST', redirect: 'manual',
     headers: { 'content-type': 'application/json' }, body: JSON.stringify({ nonce }), signal: AbortSignal.timeout(20000) });
   return response.ok;
 }

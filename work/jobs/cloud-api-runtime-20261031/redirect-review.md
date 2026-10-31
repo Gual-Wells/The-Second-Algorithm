@@ -1,0 +1,9 @@
+# 当前运行时修复影响审阅
+
+已独立核对两个实际出站位置。shared仅将固定provider请求改manual，原非2xx拒绝和sending/completed/rejected/unknown持久化次序保留；算法nonce通知仅将固定同站POST改manual，原response.ok负责拒绝307。没有创建公开run入口、动态目标地址或可重放授权，也没有对旧unknown放开retry。
+
+当前相关45项实际测试全部通过，包含原生Chrome下的答疑页面回归、新的通知307不跟随/不标送达、nonce过期/重放/并发/owner替换、paid-attempt和显式retry CAS等。首次新回归误把答案完成结果假定为包含deliveryPending，已按真实业务合同修正为检查completed及未送达outbox，后续全部通过。共享权威17项mock也实际复跑通过，包含provider307拒绝，paidCalls=0。Worker dry-run通过42.78KiB，显示原DB、Secrets Store、AlgorithmUsage及true/xhigh配置；没有读取密钥值。
+
+原教材精确SHA与原采用证据保留，章review只补本次工程影响和当前inputHash。未改写原研究档案、四项教学承诺或旧激活收据，不以更换hash追认教材新审阅。当前协议同步说明manual和非2xx规则；已有180项carrier证据只为未变载体行为保留，不声称本轮重跑全部180。
+
+发布前按实际当前输入生成新的真实四目标C++17验证与prepare packet；发布后读取平台最新version及100%部署身份，并核既有Pages公开壳/SW字节与匿名401。仅私有API Worker需要新代码；真实provider复测由整合者已执行的v2隔离证据及后续业务验证另外记录，本子任务绝不重复调用。上传、空队列、provider成功和通知送达分别报告。

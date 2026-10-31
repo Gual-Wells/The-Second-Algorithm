@@ -1,0 +1,11 @@
+# Cloudflare 运行时传输兼容修复
+
+同一工程任务继续，基线为已推送的166415c；不沿用激活准备包批准新字节。整合者实测Cloudflare fetch不支持redirect:error，请求构造在网络发送前抛TypeError，旧四次初测不能当作provider网络回执。整合者已将第二语言权威shared改为manual并在真实隔离v2探针完成四份200/completed验证；这些付费探针由整合者统一安排，本算法子任务不读取key、不另行调用provider。
+
+实际对照第二语言worker/src/shared/cloud-responses.mjs与算法旧副本：变化限固定OpenAI POST的redirect参数及解释注释。现已逐字节同步，SHA256=1c8e69b439903689772fdd4d95422508eac366eab93b2f67996ecb88d61929de。非2xx仍在原回执持久化后停止，3xx不跟随，bearer不转交其它地址；DDL、请求digest、attempt唯一性、原始SSE、usage、锁、owner隔离与未知结果保护不变。旧unknown没有自动迁移或重试。
+
+进一步定点检索发现算法自己的单次nonce通知POST也使用redirect:error，同样会在Worker运行时失败。server/question-cloud-notifications.mjs改为manual，沿原response.ok拒绝3xx；固定Pages端点、nonce只放body、SHA入DB、短TTL、原子消费、owner/epoch及只flush既有outbox的权限均未变化。新回归以307异域Location验证一次请求、不跟随、已完成答案保留且outbox仍未送达，没有把通知失败改成重复付费。
+
+本轮没有改变教材、知识、C++、章分类/标题/日期、UI、Logo、云开关、模型档位、绑定或本机出版安排。正式Markdown仍为5f53d2ca5da6db2dccff90b1796aef5c79c2e3c356c261cac3549ff183f77faa。原精确adoption proof和内容审阅只为这些逐字节未变的教材继续保留；当前审阅仅覆盖本次工程影响，不声称新的教材研究或学习收益。
+
+私有执行器按新的当前研究、章工程影响审阅、真实compiler verification及prepare packet门禁部署。Pages既有匿名401、固定正文与SW身份单独复核；若无Pages执行路径变化，无需为了私有provider传输修复发布新的读者壳。真实业务调用仍由整合者协调，配置、mock和空队列都不代替其付费端到端证据。

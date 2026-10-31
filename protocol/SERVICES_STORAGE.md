@@ -58,7 +58,7 @@ cloud-v1提交时，Pages从当前受保护固定revision资产取得全文，�
 
 重试的预读与上下文准备之间存在异步间隔，因此最终更新须同时CAS原api_attempt、execution_route、revision、context_digest、error及owner/epoch，且明确排除outcome_unknown；只有实际变更一行才算成功，状态已变则409。api_attempt也作为legacy显式重试的版本护栏；不得让另一个旧重试把新unknown重新置pending。
 
-云端共用wire模块为`server/shared/cloud-responses.mjs`，与第二语言`worker/src/shared/cloud-responses.mjs`保持同字节，字段以其`CLOUD_API_SCHEMA`及实际实现为准。`0005_cloud_questions.sql`安装项目路由、传输上下文、短期通知nonce与`api_cloud_runs/api_cloud_streams/api_cloud_locks`；不改登录、读位、出版许可或旧问答身份。Secrets Store通过`SECOND_SERIES_OPENAI_KEY`保护绑定，仅部署后Worker调用`.get()`；兼容已配置的Worker secret `OPENAI_API_KEY`，不从本地读取/复制明文，不以empty store或绑定存在冒称密钥可用。无绑定时不发送API，将本次未发送问题留pending。平台绑定、部署和真实任务验证分别留证。
+云端共用wire模块为`server/shared/cloud-responses.mjs`，与第二语言`worker/src/shared/cloud-responses.mjs`保持同字节，字段以其`CLOUD_API_SCHEMA`及实际实现为准。固定OpenAI请求及Pages单次nonce唤醒均使用Worker支持的`redirect:manual`，不跟随重定向；非2xx不能报告成功，旧未知attempt不因传输修复自动重发。`0005_cloud_questions.sql`安装项目路由、传输上下文、短期通知nonce与`api_cloud_runs/api_cloud_streams/api_cloud_locks`；不改登录、读位、出版许可或旧问答身份。Secrets Store通过`SECOND_SERIES_OPENAI_KEY`保护绑定，仅部署后Worker调用`.get()`；兼容已配置的Worker secret `OPENAI_API_KEY`，不从本地读取/复制明文，不以empty store或绑定存在冒称密钥可用。无绑定时不发送API，将本次未发送问题留pending。平台绑定、部署和真实任务验证分别留证。
 
 Responses保持store=false、stream=true、完整上下文、结构化answer及工具隔离，单次超时600秒。发送前先持久化唯一(project,task,attempt)及请求digest，响应头、原始SSE、完成返回及usage先落DB，再原子提交业务回答和通知。只有完整completed可成为答复；断流、无终态、5xx或保存不完整均保持unknown，不自动POST第二次。已完成API返回而业务投递失败时，保留running及同attempt；租约过期后的下一轮优先readCloudResult复用已保存答案，不需要旧密钥、旧模型配置或新付费。sending/unknown即便更换模型或输入也不能借新attempt绕过，需维护核对；原始回执不含API凭据，日志不输出私密问题、答案或网络异常原文。
 

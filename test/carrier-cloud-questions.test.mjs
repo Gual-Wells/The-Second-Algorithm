@@ -346,6 +346,7 @@ test('cloud answers wake the existing Pages outbox using a one-use nonce, withou
     };
     const notificationFetch = async (url, request) => {
       wakes++; assert.equal(url, origin + '/api/questions/cloud-wake');
+      assert.equal(request.redirect, 'manual');
       assert.equal(request.headers.authorization, undefined);
       const body = JSON.parse(request.body); assert.deepEqual(Object.keys(body), ['nonce']); nonce = body.nonce;
       assert.equal(e.sql.prepare('SELECT nonce_hash FROM question_cloud_wakes').get().nonce_hash, createHash('sha256').update(nonce).digest('hex'));
@@ -357,6 +358,24 @@ test('cloud answers wake the existing Pages outbox using a one-use nonce, withou
     assert.equal((await wake(e, 'f'.repeat(64), deliver)).status, 401);
     assert.equal(await requestCloudQuestionDelivery(e, { fetchImpl: notificationFetch }), false);
     assert.equal(sent, 1); assert.equal(e.sql.prepare('SELECT attempts FROM service_push_delivery').get().attempts, 1);
+  } finally { e.sql.close(); }
+});
+
+test('a redirected wake never follows the nonce or marks the committed outbox delivered', async () => {
+  const e = fixture(); try {
+    const id = crypto.randomUUID(); await submit(e, id); pushDevice(e, id);
+    let requests = 0;
+    const notificationFetch = async (url, request) => {
+      requests++; assert.equal(url, origin + '/api/questions/cloud-wake');
+      assert.equal(request.redirect, 'manual');
+      return new Response('', { status: 307, headers: { location: 'https://other.invalid/wake' } });
+    };
+    const result = await runCloudQuestions(e, { fetchImpl: async () => stream(completed()), notificationFetch });
+    assert.equal(result.completed, true);
+    assert.equal(requests, 1);
+    assert.equal(e.sql.prepare('SELECT sent_at FROM service_push_delivery').get().sent_at, null);
+    assert.equal(count(e, 'question_cloud_wakes'), 1);
+    assert.equal(count(e, 'api_cloud_runs'), 1);
   } finally { e.sql.close(); }
 });
 
