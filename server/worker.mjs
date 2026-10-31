@@ -1,6 +1,7 @@
 import { authRoute, sessionFor } from './auth.mjs';
 import { servicesRoute, publisherServiceRoute, publisherPaths, flushQuestionReplies } from './services.mjs';
 import {questionsRoute,questionPublisherRoute} from './questions.mjs';
+import {questionCloudWakeRoute} from './question-cloud-notifications.mjs';
 
 const MAX_BODY = 65_536;
 const encoder = new TextEncoder();
@@ -142,6 +143,7 @@ async function stateRoute(request, env, session) {
 async function route(request, env, context) {
   const path = normalizedPath(request);
   if (path.startsWith('/auth/')) return authRoute(request, env, request.method === 'POST' ? await inputJson(request) : {});
+  if (path === '/api/questions/cloud-wake') return questionCloudWakeRoute(request, env, r => inputJson(r, 1024), context);
   if (path.startsWith('/api/questions/jobs/')) {
     const response=await questionPublisherRoute(request,env,r=>inputJson(r,400_000));
     if(response.ok&&(path.endsWith('/claim')||path.endsWith('/complete'))){

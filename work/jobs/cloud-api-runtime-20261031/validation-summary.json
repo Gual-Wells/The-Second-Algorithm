@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "job": "cloud-api-runtime-20261031",
+  "scope": "engineering-only; preserve exact previously adopted chapter bytes",
+  "createdAt": "2026-10-31T07:35:57.137Z",
+  "inputHash": "7e087570dbbdad885d3c47445eeba4e5930311c0bda124e60706ebe9070d1abe",
+  "sharedSha256": "2ec43589c9e76028b66c4a0d62259db4b68bdf881db2045d0d9cccd555df418a",
+  "bodySha256": "5f53d2ca5da6db2dccff90b1796aef5c79c2e3c356c261cac3549ff183f77faa",
+  "localBaseline": "fd79966ab6a2493477b23aef1b79dee927bd9808",
+  "observedProductionSource": "39059cb78a61a6dc0c26f78e27e0b1f4982bbac2",
+  "observedProductionDeployment": "4c099cef-5cbc-4be6-8366-4c942def3b5a",
+  "libraryComparison": {
+    "files": 17,
+    "identicalTeachingAssets": 16,
+    "difference": "catalog.json.version only"
+  },
+  "validation": {
+    "carrier": {
+      "passed": 180,
+      "total": 180,
+      "logSha256": "308e56a30657eb7f99658776440ef0383b2fa2bf538416af113e0a737a67fcb3"
+    },
+    "apiMocks": {
+      "passed": 46,
+      "total": 46,
+      "realPaidRequests": 0
+    },
+    "cloudConfigurationDriftRegression": {
+      "passed": 1,
+      "total": 1
+    },
+    "cpp": {
+      "compiler": "GCC 16.2.0",
+      "passed": 4,
+      "total": 4,
+      "receipt": {
+        "path": "work/jobs/cloud-api-runtime-20261031/verifications/10581cf4cf9440cc99c2b8c8a163b01e.json",
+        "sha256": "4f5faf7b5e175a85946818907d5c6d696c61d248b47196e3fb1413609d2fca77",
+        "inputHash": "7e087570dbbdad885d3c47445eeba4e5930311c0bda124e60706ebe9070d1abe"
+      }
+    },
+    "workerDryRun": {
+      "passed": true,
+      "uploadKiB": 42.78
+    },
+    "pagesFullBuild": {
+      "passed": true,
+      "version": "7e323aae009d36e44a1bc70428620a2d838a1ab53481c5396d4bc0b42f49d03b",
+      "buildID": "b2bf5cc77b33a20cbd786440a0aaeae52b56e422e00f912a57eea3d5d3fb0c1c"
+    },
+    "diffCheck": "passed",
+    "productionSourceLineEndings": "LF"
+  },
+  "releaseState": {
+    "pagesCloudEnabled": false,
+    "executorCloudEnabled": false,
+    "migrationApplied": false,
+    "deployedByThisTask": false,
+    "secretValueReadByAgent": false,
+    "secretValueUploadedByAgent": false,
+    "realCloudTaskVerified": false
+  },
+  "limits": [
+    "No new teaching research or learner-mastery claim",
+    "Existing chapter adoption and per-promise content review retained only for unchanged exact bytes",
+    "Secret Store metadata does not prove its value is populated or usable",
+    "Prepared release is not production deployment"
+  ]
+}

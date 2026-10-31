@@ -2,7 +2,7 @@
 
 ## 实际分工
 
-正式章原件、代码、释读及研究证据保存在Git；受保护静态library供阅读，不把正文复制进D1/KV。D1仅身份、当前读位、偏好、小型学习安排、当前服务快照、运行领取与设备订阅。没有本项目KV或额外业务库；Cloudflare免费额度是账户共享约束，不能把多个项目的相同免费数字相加。
+正式章原件、代码、释读及研究证据保存在Git；受保护静态library供阅读，不将D1/KV作为正文权威。D1保存身份、当前读位、偏好、小型学习安排、当前服务快照、运行领取与设备订阅。2026-10-31已明确授权的云端答疑另使用同一D1中的有界临时正文传输上下文及API原始回执，职责与回收见下文。没有本项目KV或额外业务库；Cloudflare免费额度是账户共享约束，不能把多个项目的相同免费数字相加。
 
 OneDrive沿用已有个人Microsoft应用的`Files.ReadWrite.AppFolder offline_access`授权，归档目录为同一AppFolder下`projects/second-algorithm/publications`。它是项目目录隔离，不是另一Microsoft应用或安全边界。目标通过本机配置引入原credential-owner helper；不复制refresh token，不让浏览器取得Graph凭据与预授权链接。各项目不得同时建立互相覆盖的独立刷新凭据副本。官方权限与AppFolder规则见[Microsoft文档](https://learn.microsoft.com/en-us/graph/onedrive-sharepoint-appfolder)。
 
@@ -46,21 +46,35 @@ node scripts/archive-publication.mjs
 
 迁移`0002_services.sql`不修改原auth/reader_state，新增控制表仅此业务所需。部署必须应用迁移并配置独立PUBLISH_TOKEN与VAPID；源第二语言的publisher密钥不能混用。公共壳只用构建器精确实际文件路径排除Worker，private library、API、未知和编码路径继续过owner边界；content-only构建始终全部走fail-closed Worker。[Pages路由](https://developers.cloudflare.com/pages/functions/routing/)
 
-## 章节答疑 API（2026-10-30）
+## 章节答疑 API与项目云端执行（2026-10-31）
 
-问答按当前账户epoch、章节和不可变revision隔离。服务器从受保护静态库取完整章节Markdown，客户端不能上传替代正文；运行器拿到原文摘要后复核，以gpt-6.1-sol／xhigh回答，并保留完整问题/回答上下文。原文静态资产不可用时失败保留，不能换用新版冒充原版。D1仅保存私人问答文字与领取/未读状态，正文仍在静态基座；本机原始API返回和用量单独保留。未引入共享数据网关、跨项目登录或内容访问权限。
+问答按当前账户epoch、章节和不可变revision隔离。服务器从受保护静态库取完整章节Markdown，客户端不能上传替代正文；运行器核对摘要，以gpt-6.1-sol／xhigh回答，并保留完整问题/回答上下文。原件不可用或超出传输上限时诚实失败，不能截断或换用新版。无附件上传、工具、跨项目网关或跨项目登录；云端化仅改变执行位置，不扩展教材或账户权限。
 
-本机独立任务每分钟读自有队列；空队列不调用模型。领取、续租、完成、已读按当前owner+epoch核对；同ID重发幂等，追问等待前问处理。生成成功先本机保存再回推，结果未知不自动重新POST。用户显式重试只允许已确认拒绝或可重用结果，未知费用保持核对状态。前端显示真实等待、处理、失败与回答；草稿在本机、历史在账户，未读红点在入口，打开时确认已读快照，晚到回复仍未读。
+`question_turns.execution_route`只能为legacy或cloud-v1，旧行默认legacy。Pages及独立Worker的`API_CLOUD_ENABLED`均默认false；仅明确开启后的新问题登记为cloud-v1，本机publisher领取接口只取legacy。旧任务、已知结果和未知费用不因切换自动搬移或重发；旧legacy已知失败由用户明确retry且云已开启时，先取得固定原文上下文，再以新attempt转cloud-v1，不再永久等待停用的本机执行器。云未开启时仍由legacy重试；旧unknown始终拒绝，不能借迁移绕过。领取、续租、完成、已读仍按当前owner+epoch核对；同ID重发幂等，同章节revision的追问等待前问处理。任何未解决failed也阻止后续追问越过。api_attempt仅在用户这次显式重试递增，定时调度不增attempt。草稿、历史、已读快照及晚到回复规则不变。
 
-API配置位于已忽略的.local/services/openai.json，仅保存共用credentialFile路径、模型/档位、用量目录和可选本机代理；不在本项目复制密钥。问答运行器与出版任务分开，电脑需开机并登录。共用客户端scripts/lib/openai-responses.mjs采用同系列同一受检wire版本，本项目独立持有业务发布凭据。新的0004_questions迁移只新增问答表及索引，不修改原登录、读位或出版许可。
+Pages无法自身配置Cron。`wrangler.cloud.jsonc`声明独立`second-algorithm-api` Worker及本项目DB；`server/cloud-worker.mjs`导出`AlgorithmAPIExecutor.run()`，仅供原生service binding调用，HTTP一律404。统一`series-api-clock`每分钟通过该RPC唤醒，时钟不持有数据、DB或模型key；每个项目保持独立执行invocation与D1预算。项目Worker不另设Cron，避免重复触发；原各站提醒Cron不承载模型长任务。执行器不调用publisher接口、不持有publisher或VAPID凭据、不调用Codex或出版claim。`withCloudLock`为项目提供14分钟D1 CAS互斥，每轮至多领取一个答疑；空队列不调用模型。原`SecondAlgorithm-DailyCodex`及05:00出版、默认休息与许可消费完全独立。旧`SecondAlgorithm-APIQuestions`在legacy队列清空及云端验证后才停用，不能删除未知调用原件；仅云端答疑不再依赖本机开机。
 
-2026-10-30故障修复：本机API运行器使用Node 24.14或以上。代理配置在任何请求之前调用Node官方setGlobalProxyFromEnv，重新配置fetch及HTTP/HTTPS代理；仅在进程启动后修改环境变量不足以更新已经初始化的请求分派器。失败只保存安全错误码、阶段和耗时，不记录凭据或原始网络异常。网络结果未知仍停止自动重发；更换档位不绕过发送标记。
+cloud-v1提交时，Pages从当前受保护固定revision资产取得全文，在`question_cloud_contexts`按owner+epoch+chapter+revision去重，保存正文摘要并与问题同事务绑定。每份UTF-8正文上限512KiB，单owner/epoch最多32份传输上下文，超限拒绝提交并给出可理解错误，不默默降级或截断。当前本地正式章核查235,713字节，不据此放松未来章节检查。Cron领取从该临时上下文取得完整正文并复核摘要，不需要复制静态库或公开取原件。全部相关问题明确完成时可立即删除传输上下文；48小时TTL仅回收无pending/running/failed引用的孤立或已完成上下文，unknown的唯一输入不能过期盲删。私人问题/回答及API回执不随正文传输缓存回收而删除。
 
-长分析使用Responses官方SSE流式传输（stream=true），保留store=false、完整上下文及原结构化输出。只采用response.completed的完整结果，先持久化响应头和原始事件；连接中断或缺终态即使HTTP200也作为未知结果停止，不自动重发。SSE分帧复用固定MIT eventsource-parser 4.1.3，不自行实现通用协议、不引入其重连行为。仅stream开关变化时可复用已有完整响应，其他语义输入变化仍拒绝；旧未知请求仍须授权处理。
+重试的预读与上下文准备之间存在异步间隔，因此最终更新须同时CAS原api_attempt、execution_route、revision、context_digest、error及owner/epoch，且明确排除outcome_unknown；只有实际变更一行才算成功，状态已变则409。api_attempt也作为legacy显式重试的版本护栏；不得让另一个旧重试把新unknown重新置pending。
+
+云端共用wire模块为`server/shared/cloud-responses.mjs`，与第二语言`worker/src/shared/cloud-responses.mjs`保持同字节，字段以其`CLOUD_API_SCHEMA`及实际实现为准。`0005_cloud_questions.sql`安装项目路由、传输上下文、短期通知nonce与`api_cloud_runs/api_cloud_streams/api_cloud_locks`；不改登录、读位、出版许可或旧问答身份。Secrets Store通过`SECOND_SERIES_OPENAI_KEY`保护绑定，仅部署后Worker调用`.get()`；兼容已配置的Worker secret `OPENAI_API_KEY`，不从本地读取/复制明文，不以empty store或绑定存在冒称密钥可用。无绑定时不发送API，将本次未发送问题留pending。平台绑定、部署和真实任务验证分别留证。
+
+Responses保持store=false、stream=true、完整上下文、结构化answer及工具隔离，单次超时600秒。发送前先持久化唯一(project,task,attempt)及请求digest，响应头、原始SSE、完成返回及usage先落DB，再原子提交业务回答和通知。只有完整completed可成为答复；断流、无终态、5xx或保存不完整均保持unknown，不自动POST第二次。已完成API返回而业务投递失败时，保留running及同attempt；租约过期后的下一轮优先readCloudResult复用已保存答案，不需要旧密钥、旧模型配置或新付费。sending/unknown即便更换模型或输入也不能借新attempt绕过，需维护核对；原始回执不含API凭据，日志不输出私密问题、答案或网络异常原文。
+
+完整usage首次保存时，shared schema的触发器在本项目DB按project累计input/output/cached tokens、response数及revision，结果复用不重复累计。实际任务收尾读取`readCloudUsage`，只通过`SERIES_USAGE`→`the-second-language-api`的专用`AlgorithmUsage` RPC入口发送八项累计metadata（含unknown/in-progress计数及核对时间）；不发送正文、回答、附件、key或本项目DB权限。空队列/互斥忙/缺配置不每分钟汇报；RPC失败不重跑模型、不回滚已完成回答，之后有任务可重新发送完整累计值。计数和API官方剩余余额是不同事实，不能互推。
+
+legacy的`.local/services/openai.json`及原始request/headers/stream/response/usage继续原位保全，仅存共用credentialFile路径、模型/档位、用量目录和可选本机代理，不在本项目复制密钥。本机仍用Node24.14以上，在请求前调用官方setGlobalProxyFromEnv；旧固定MIT eventsource-parser 4.1.3及非流式兼容原件不改写。云端与legacy执行回执独立，不能将旧未知请求登记成新cloud任务。API用量不是官方剩余额度，不由usage推算余额。
 
 
 ## 问答对标与答复提醒（2026-10-30）
 
 问答会话按章节和固定revision选择；普通打开以同一事务取得全会话未读边界并确认当时旧回复，当前章有未读优先、再其他未读、最后当前章。通知使用精确问题身份，打开对应历史问答并定位。封存历史只读，真实目录暂时故障不能伪装成退役。关闭或切换弹窗即卸载问答视图，后台/迟到refresh不能标读；新回复保留用户阅读锚点。草稿及持久请求身份继续保留，不复制英语教学专用手势或破坏代码操作。
 
-完整答复与service_push_delivery通知在同一事务提交，沿用已有owner/epoch设备订阅及VAPID。完成后立即异步发送，既有本机队列检查顺带恢复待发通知，无新增CF定时轮询/模型调用；每问题每设备幂等、有界重投，已读/旧owner/旧epoch抑制。通知锁屏无问答正文，深链接只开精确受保护会话。临时断送不修改答案或触发重新生成；API租约过期同样保留未知计费状态。
+完整答复与service_push_delivery通知在同一事务提交，沿用已有owner/epoch设备订阅及Pages内VAPID。cloud-v1在完成后及每轮开始仅对已存在的未发送问答outbox请求唤醒：随机nonce仅SHA-256入同DB，绑定当前owner/epoch、120秒TTL；POST固定Pages`/api/questions/cloud-wake`端点，nonce放body不放URL。Pages以DELETE RETURNING原子消费，严格拒绝错误、过期、旧owner、并发重放及额外字段，仅唤醒既有问答通知队列，不能传任意owner/正文/claim、创建或完成任务。响应只给通用ok，Cron不复制publisher或VAPID secret。通知发送失败保留原outbox，下轮可以新nonce恢复，原通知仍每问题每设备幂等、有界重投，已读/旧owner/旧epoch抑制。legacy仍通过原publisher路径唤醒。锁屏无问答正文，深链接只开精确受保护会话，通知失败不触发重新生成。
+
+## 云端启用与验证边界
+
+当前配置默认关闭，不因代码或模拟测试通过宣称已部署或真实可运行。启用前先应用0005迁移，核共享模块字节、独立Worker绑定的是本项目DB、Secrets Store真实可用以及原Pages保护边界；分别部署Pages业务路由、项目API Worker与统一时钟RPC绑定，再明确开启两端API_CLOUD_ENABLED。该步骤不放行休息、不触发出版、不改旧任务路由。统一时钟每分钟Cron为UTC表达式，新增/变更传播可能需15分钟；scheduled最长15分钟wall time，CPU/请求/读写和Secret Store额度以账户当前套餐核实，不自动购买或升级。[Cron](https://developers.cloudflare.com/workers/configuration/cron-triggers/)、[运行上限](https://developers.cloudflare.com/workers/platform/limits/)。
+
+本地验证先运行`node --test test/carrier-cloud-questions.test.mjs test/carrier-questions.test.mjs test/carrier-question-notifications.test.mjs test/carrier-services.test.mjs scripts/check-openai-responses.mjs`，全为mock及内存SQLite。另核独立Worker dry-run和Pages受保护构建；有当前发布门禁才进行真实发布。云端真实任务未验证、secret尚未填写或发布尚未执行时，必须逐项如实报告。

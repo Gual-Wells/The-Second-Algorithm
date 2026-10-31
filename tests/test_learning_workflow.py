@@ -477,6 +477,19 @@ class ResearchWorkflowTest(LearningFixture):
             prepare_release(self.root, "lesson-job")
         self.assertEqual(before, read_json(path))
 
+    def test_cloud_worker_configuration_is_pinned_and_drift_invalidates_the_release(self):
+        self.put("wrangler.cloud.jsonc", '{"name":"fixture-api","vars":{"API_CLOUD_ENABLED":"false"}}\n')
+        self.verified_job()
+        before = course_snapshot(self.root)
+        self.assertIn("wrangler.cloud.jsonc", before["inputs"])
+        prepared = prepare_release(self.root, "lesson-job")
+        check_release(self.root, prepared["receipt"]["path"])
+        self.put("wrangler.cloud.jsonc", '{"name":"fixture-api","vars":{"API_CLOUD_ENABLED":"true"}}\n')
+        self.assertNotEqual(before["inputHash"], course_snapshot(self.root)["inputHash"])
+        with self.assertRaisesRegex(ValueError, "stale"):
+            check_release(self.root, prepared["receipt"]["path"])
+        self.assertEqual(job_status(self.root, "lesson-job")["evidence"]["review"]["reason"], "stale-inputs")
+
     def test_changed_semantic_note_and_new_needs_work_review_block_release(self):
         self.verified_job()
         self.put("work/review.md", "Changed since this review was registered.\n")

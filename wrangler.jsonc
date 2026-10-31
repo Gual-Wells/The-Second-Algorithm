@@ -2,7 +2,7 @@
   "name": "second-algorithm",
   "pages_build_output_dir": "./dist",
   "compatibility_date": "2026-09-30",
-  "vars": { "APP_ORIGIN": "https://second-algorithm.pages.dev" },
+  "vars": { "APP_ORIGIN": "https://second-algorithm.pages.dev", "API_CLOUD_ENABLED": "false" },
   "d1_databases": [{
     "binding": "DB",
     "database_name": "second-algorithm",
