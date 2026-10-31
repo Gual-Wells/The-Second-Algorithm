@@ -1,0 +1,173 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-31T10:04:45.346Z",
+  "kind": "cloud-runtime-redirect-repair",
+  "sourceCommit": "cd5e67f",
+  "packet": "work/jobs/cloud-api-runtime-20261031/releases/fb892485c39248c6bb2bfa750dd8e728.json",
+  "packetSha256": "6d820325b9497d7afec8cd2048c7d08a58096227350e6b023313da586fe65fb3",
+  "inputHash": "ce55b99cb2d4d2f8259289d4ed13e4df583372758d06f2763951e51280aa8580",
+  "sharedSha256": "1c8e69b439903689772fdd4d95422508eac366eab93b2f67996ecb88d61929de",
+  "apiExecutor": {
+    "service": "second-algorithm-api",
+    "entrypoint": "AlgorithmAPIExecutor",
+    "deploymentId": "2fc2931f-897b-40c7-a2bd-122a784195e6",
+    "deployedAt": "2026-10-31T10:03:46.624354Z",
+    "versionId": "e644cf8d-3c11-48ae-a688-117849524fb8",
+    "percentage": 100,
+    "workersDev": false,
+    "cronCount": 0,
+    "bindings": [
+      {
+        "name": "API_CLOUD_ENABLED",
+        "type": "plain_text",
+        "value": "true"
+      },
+      {
+        "name": "API_CLOUD_MODEL",
+        "type": "plain_text"
+      },
+      {
+        "name": "API_CLOUD_REASONING",
+        "type": "plain_text"
+      },
+      {
+        "name": "DB",
+        "type": "d1",
+        "databaseId": "c396b1ca-43fb-4a77-b9b2-c90c7f436b41"
+      },
+      {
+        "name": "SECOND_SERIES_OPENAI_KEY",
+        "type": "secrets_store_secret",
+        "storeId": "390f0d98fd864ed7be7b3360d7a50816",
+        "secretName": "SECOND_SERIES_OPENAI_KEY"
+      },
+      {
+        "name": "SERIES_USAGE",
+        "type": "service",
+        "service": "the-second-language-api",
+        "entrypoint": "AlgorithmUsage"
+      }
+    ]
+  },
+  "pages": {
+    "deployedByThisRepair": false,
+    "existingDeploymentId": "8cc0d358",
+    "existingBuild": "ed67140204f7326647f4691a51fc528a8be649845e1faff65fdd2f6f9ba59e51",
+    "publicFiles": [
+      {
+        "file": "index.html",
+        "status": 200,
+        "sha256": "5d55c12a670c673b560c12c450e71ae7028a8c88c19aeb59f15408b70f934329",
+        "byteMatch": true
+      },
+      {
+        "file": "manifest.webmanifest",
+        "status": 200,
+        "sha256": "7c159b2c915dd26ce30bc5a457c835c6ea23a786c6ceded66930e5443ed74caf",
+        "byteMatch": true
+      },
+      {
+        "file": "robots.txt",
+        "status": 200,
+        "sha256": "331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1",
+        "byteMatch": true
+      },
+      {
+        "file": "sw.js",
+        "status": 200,
+        "sha256": "ee7c907773fd2fbca7955f6c44ae8332b026bfcb5061c97b9a481fde74b3e6cd",
+        "byteMatch": true
+      },
+      {
+        "file": "icons/apple-touch-icon-series1.png",
+        "status": 200,
+        "sha256": "dc478907d0c2866312e8f6cc2db15824c7badff3c6d4f4882438092a00e6e664",
+        "byteMatch": true
+      },
+      {
+        "file": "icons/apple-touch-icon.png",
+        "status": 200,
+        "sha256": "dc478907d0c2866312e8f6cc2db15824c7badff3c6d4f4882438092a00e6e664",
+        "byteMatch": true
+      },
+      {
+        "file": "icons/build.json",
+        "status": 200,
+        "sha256": "36aae61c67a67af97f2377eb4125663cea2ca0d8950aa646b8644b0cb3e813c9",
+        "byteMatch": true
+      },
+      {
+        "file": "icons/header-logo.svg",
+        "status": 200,
+        "sha256": "6cac12ff3b1c24c0799c09a31d054bcaf3e690df9a7693f55e5fbfe4c6ebf135",
+        "byteMatch": true
+      },
+      {
+        "file": "icons/icon-192.png",
+        "status": 200,
+        "sha256": "7dc931fd40e3513017a6e3a8f6cce7cbd156f43bfe1ac273858a5e80a1b545aa",
+        "byteMatch": true
+      },
+      {
+        "file": "icons/icon-512.png",
+        "status": 200,
+        "sha256": "6e2c002fc0cbe0cd97f560a808be06e24898260b550098848aaeee5fc1240353",
+        "byteMatch": true
+      },
+      {
+        "file": "icons/icon.svg",
+        "status": 200,
+        "sha256": "497c4629840c349d1a23d27cb4a2bf9330c7f097974be9ab906a2253a6638ed3",
+        "byteMatch": true
+      }
+    ],
+    "anonymousBoundary": [
+      {
+        "route": "/api/library",
+        "status": 401
+      },
+      {
+        "route": "/api/state",
+        "status": 401
+      },
+      {
+        "route": "/api/questions/status",
+        "status": 401
+      },
+      {
+        "route": "/library/catalog.json",
+        "status": 401
+      },
+      {
+        "route": "/library/chapter-01/binary-search/76dd1a208850b564.md",
+        "status": 401
+      },
+      {
+        "route": "/%6cibrary/catalog.json",
+        "status": 401
+      }
+    ],
+    "cloudWakeGetStatus": 405
+  },
+  "content": {
+    "artifactMarkdownSha256": "5f53d2ca5da6db2dccff90b1796aef5c79c2e3c356c261cac3549ff183f77faa",
+    "onlineProtectedMarkdownDirectRead": false,
+    "teachingAuthorityChanged": false
+  },
+  "history": {
+    "legacyAnsweredHistoryPresent": true,
+    "inspection": "aggregate only; no private question or answer text read",
+    "dataModifiedByInspection": false
+  },
+  "provider": {
+    "calledByThisAgent": false,
+    "coordinator": "root/accounting agent",
+    "oldUnknownAttemptsNotRetried": true
+  },
+  "credentials": {
+    "agentReadPlaintext": false,
+    "agentUploadedPlaintext": false,
+    "newKeyCreatedByAgent": false
+  },
+  "passed": true
+}
