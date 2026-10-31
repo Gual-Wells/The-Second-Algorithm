@@ -136,6 +136,6 @@ npm run deploy -- --release work/jobs/task-id/releases/<id>.json
 
 任何步骤失败停止；若源码/协议/页面改变，回到受影响研究和审阅后重验，不能禁掉门禁。异常退出先查部署是否实际发生与锁所属进程，未知结果不能伪称成功。
 
-实际发布成功后，按SERVICES_STORAGE更新私人服务快照、把已验证提交分组归档到本项目OneDrive目录，并向已主动订阅设备发送真实完成提醒；未知余额/容量不编造。后台任务另保存`.local/services/publication-result.json`，包含runId、published:true及本次真实deployment回执的repo相对receiptPath；只供runner核验，不进入Git。
+实际发布成功后，按SERVICES_STORAGE更新私人服务快照、把已验证提交归档到本项目已配置的HF专属CAS池（旧OneDrive档案保留可读，不新增整包堆积），并向已主动订阅设备发送真实完成提醒；未知余额/容量不编造，HF字节不计入OneDrive项目目录。后台任务另保存`.local/services/publication-result.json`，包含runId、published:true及本次真实deployment回执的repo相对receiptPath；只供runner核验，不进入Git。
 
 CI在push/PR验证当前目标并保存检查产物；workflow_dispatch可指定已有研究job运行验证/发布准备。生产发布仅main、显式publish输入、已有CF secrets及相同门禁，concurrency防同一生产项目重叠。不自动创造研究证据，不提交教材原件/凭据。无云授权时仍保留可复现本地流程并如实报告。

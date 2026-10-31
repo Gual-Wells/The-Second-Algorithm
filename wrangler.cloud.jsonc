@@ -8,7 +8,11 @@
     "API_CLOUD_MODEL": "gpt-6.1-sol",
     "API_CLOUD_REASONING": "xhigh"
   },
-  "services": [{ "binding": "SERIES_USAGE", "service": "the-second-language-api", "entrypoint": "AlgorithmUsage" }],
+  "services": [
+    { "binding": "SERIES_USAGE", "service": "the-second-language-api", "entrypoint": "AlgorithmUsage" },
+    { "binding": "SERIES_STORAGE", "service": "the-second-language-api", "entrypoint": "AlgorithmStorage" },
+    { "binding": "FILES", "service": "second-series-files", "entrypoint": "AlgorithmFiles" }
+  ],
   "secrets_store_secrets": [{
     "binding": "SECOND_SERIES_OPENAI_KEY",
     "store_id": "390f0d98fd864ed7be7b3360d7a50816",

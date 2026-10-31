@@ -28,7 +28,7 @@
 
 2026-10-31用户明确授权系列API任务转为项目各自云端执行。第二算法仅章节答疑新增独立API Worker及同DB的cloud-v1路由，由无数据/密钥的统一云端时钟通过原生RPC每分钟唤醒，出版仍由原本机Codex承担。云开关默认关闭，代码、绑定、已部署和真实可运行分开记录；旧任务不自动改路由，已知失败由用户明确重试且云已开启时才以新attempt转cloud-v1，未知费用始终不重发。密钥只由部署后Worker读取Secrets Store保护绑定，不让Agent读取或复制publisher/OpenAI/VAPID明文；通知沿Pages原有VAPID，以同DB短期单次nonce唤醒已提交问答outbox。固定正文仍为受保护静态与归档权威，D1仅为待处理答疑保留有界去重传输上下文及API原始回执；未决和未知结果引用不能按TTL盲删。详见`protocol/SERVICES_STORAGE.md`。
 
-ChatGPT每月赠送的OpenAI API资源与Codex订阅额度分开，只登记发放、核验过的剩余量、到期与记录时刻，不核算单次任务、不据估算报警、不调用未公开余额接口。API不替代Codex出版；章节答疑由独立question-api-worker负责，已部署与可运行状态分别以真实发布和任务验证为准。私人财务快照不进Git。正文/源码/知识留Git和受保护Pages静态文件，D1仅小控制面/读位/当前快照/推送，归档复用现有OneDrive凭据服务下项目子目录，不复制刷新凭据或新增KV。
+ChatGPT每月赠送的OpenAI API资源与Codex订阅额度分开，只登记发放、核验过的剩余量、到期与记录时刻，不核算单次任务、不据估算报警、不调用未公开余额接口。API不替代Codex出版；章节答疑由独立question-api-worker负责，已部署与可运行状态分别以真实发布和任务验证为准。私人财务快照不进Git。正文/源码/知识留Git和受保护Pages静态文件，D1仅小控制面/读位/当前快照/推送；2026-10-31本机已配置新出版包走系列管理员HF专属CAS池second-algorithm-assets，旧OneDrive项目档案保留原定位读取，二者在私有archive-ledger分别记provider与摘要。按SERVICES_STORAGE核固定池、分配和完整回读；不复制刷新凭据或新增KV，不把HF字节报成OneDrive目录用量。
 
 ## 用户确定的硬要求
 

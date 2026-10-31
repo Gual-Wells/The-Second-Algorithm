@@ -4,9 +4,17 @@
 
 正式章原件、代码、释读及研究证据保存在Git；受保护静态library供阅读，不将D1/KV作为正文权威。D1保存身份、当前读位、偏好、小型学习安排、当前服务快照、运行领取与设备订阅。2026-10-31已明确授权的云端答疑另使用同一D1中的有界临时正文传输上下文及API原始回执，职责与回收见下文。没有本项目KV或额外业务库；Cloudflare免费额度是账户共享约束，不能把多个项目的相同免费数字相加。
 
-OneDrive沿用已有个人Microsoft应用的`Files.ReadWrite.AppFolder offline_access`授权，归档目录为同一AppFolder下`projects/second-algorithm/publications`。它是项目目录隔离，不是另一Microsoft应用或安全边界。目标通过本机配置引入原credential-owner helper；不复制refresh token，不让浏览器取得Graph凭据与预授权链接。各项目不得同时建立互相覆盖的独立刷新凭据副本。官方权限与AppFolder规则见[Microsoft文档](https://learn.microsoft.com/en-us/graph/onedrive-sharepoint-appfolder)。
+旧OneDrive出版档案保留在原AppFolder的`projects/second-algorithm/publications`，不删除、不搬名、不重新生成。仍通过原credential-owner helper读取历史文件，不复制refresh token，不让浏览器取得Graph凭据与预授权链接。该目录是项目分类，不是另一Microsoft应用或安全边界。[Microsoft AppFolder规则](https://learn.microsoft.com/en-us/graph/onedrive-sharepoint-appfolder)。
 
-`archive-publication.mjs`仅在已验证提交后生成一次Git tar/gzip，以commit作文件名上传；下载核SHA-256后才记成功。不包含`.local`凭据、书籍原件或未提交研究。它是出版资产归档，不冒称D1私人状态的完整容灾；私人状态仍由Cloudflare D1与其Time Travel保护，尚无跨平台完整恢复演练。
+2026-10-31起，本机配置`publicationArchiveProvider:"huggingface-s3"`启用新出版档案写入HF私有专属桶`Gual-Wells/second-algorithm-assets`。脚本从既有credential-owner导出的root定位系列文件helper和正式分配策略，使用`localSeriesFiles('algorithm')`；只有HF资源active、算法分配current、固定池身份匹配才允许新写。凭据仍由管理员本机保护文件读取，不复制到算法项目。停写不阻断旧档案恢复。
+
+`archive-publication.mjs`默认仍要求已验证、工作区干净的提交；`--revision <完整40位commit>`仅供明确手工封存已有不可变提交，不发布教材、不采用工作区未提交内容。Git tar先流入D盘文件，再流式gzip并做完整压缩往返摘要检查。新HF包不超过16MiB时沿用v2单对象回执；更大时按固定16MiB顺序分卷，各卷分别以SHA存入同一项目CAS，v3回执保存index、offset、卷长、卷SHA、typed locator以及整体gzip SHA/大小、原tar SHA/大小与Git commit。单个存储对象始终小于HF接口24MiB上限，不以整包大小阻止正常长期增长，不自动转写OneDrive。
+
+`restorePublicationArchive(receipt,absoluteDestination)`按回执逐卷下载到D盘新文件，先核每卷及顺序，再核重组整体SHA/长度、解压tar SHA/长度和`git get-tar-commit-id`；完整回读成功才在私有`archive-ledger.json`登记。恢复失败清理本次不完整文件，不覆盖已有文件。超过24MiB的整包禁止用返回Buffer的便捷reader，使用该文件恢复入口，内存只承载当前分卷。同提交已验证档案只回读复用。旧v2 HF单对象（含已存在16–24MiB包）、旧`archive-receipt.json`和原OneDrive定位继续读取，不重分卷、不删除、不改远端原件。`.local`凭据、书籍原件和未提交研究不进入Git档案。该包是出版资产归档，不冒称D1私人状态完整容灾或全项目恢复验证。
+
+真实能力验证见`research/series-storage-archive-2026-10-31.json`：已有提交197f966的20,267,753字节v2项目包已上传HF并在独立进程完整回读、解压核tar摘要与原Git提交身份；旧OneDrive提交fd79966的20,138,754字节原包也独立回读且摘要未变。v3分卷另以本地真实Git提交的25MiB随机非敏感fixture验证，含跨24MiB整包恢复、顺序/逐卷/整体/原tar/提交错配拒绝和旧v2/OneDrive兼容；这是本地完整链路测试，不冒称云端多卷实传。没有重复上传上述历史包、新教材出版、研究重跑或页面部署。
+
+2026-10-31系列存储增量：第二语言管理版本化分配与账户容量元数据，本项目仍只绑定自身D1。云端答疑实际处理后，`project-storage-client.mjs`先经`SERIES_STORAGE`→`the-second-language-api/AlgorithmStorage`核本项目分配，再以`SELECT 1`返回的`meta.size_after`报告数据库字节数；缺测记未知，失败不回滚答复、不调用模型或空闲轮询。`FILES`固定绑定`second-series-files/AlgorithmFiles`的本项目文件能力，不能选择其他项目作用域、数据库、任意URL或账户；内容身份与原阅读授权仍由本项目负责。本机新出版包按上述独立HF流程写入，旧OneDrive历史未迁移；云端绑定是否已部署与可运行，仍以正式部署及真实调用核验为准。
 
 ## 服务快照
 
@@ -14,7 +22,7 @@ OneDrive沿用已有个人Microsoft应用的`Files.ReadWrite.AppFolder offline_a
 
 OpenAI只登记ChatGPT附赠API credits：issuedAmount是发放额，remainingAmount是核实剩余；不能由发放额推出余额。到期日只有日期就只存日期；source记录核实来源类型，claim表示领取状态。它不是Codex五小时/周限额；2026-10-30起章节答疑采用独立Responses API运行器，出版继续Codex。用量记录与官方剩余分开，不由估算伪造余额或告警。
 
-`collect-service-snapshot.mjs`在任务末尾读取D1管理大小、正式静态库实际字节、OneDrive账户quota及本项目目录大小。静态库无可独占的总容量，limit保持null；OneDrive账户总用量与projectBytes分开。D1 used来自实际database_size。Free单库发布上限为500MB；Cloudflare在同一官方表将2MB标为2,000,000字节，当前按十进制500,000,000显示计划上限，不冒称管理API返回的额度。账户全部D1和Workers/读写额度未在本页独立量测，不能因此声称其他项目无消耗。[官方D1限制](https://developers.cloudflare.com/d1/platform/limits/)
+`collect-service-snapshot.mjs`在任务末尾读取D1管理大小、正式静态库实际字节、OneDrive账户quota及本项目旧目录大小。静态库无可独占的总容量，limit保持null；OneDrive账户总用量与projectBytes分开，绝不把HF新包算成OneDrive目录用量；HF归属在第二语言系列HF池盘点中表示，不为此硬改本项目旧容量界面。D1 used来自实际database_size。Free单库发布上限为500MB；Cloudflare在同一官方表将2MB标为2,000,000字节，当前按十进制500,000,000显示计划上限，不冒称管理API返回的额度。账户全部D1和Workers/读写额度未在本页独立量测，不能因此声称其他项目无消耗。[官方D1限制](https://developers.cloudflare.com/d1/platform/limits/)
 
 ## 默认关闭的后台出版
 
@@ -34,7 +42,7 @@ CLI退出0不证明发布。`background-prompt.txt`要求真实部署后登记�
 
 ## 本机配置与操作
 
-所有实际私有文件在D盘`.local/services/`（已忽略），config.json仅保存绝对路径：publisherCredentialFile、onedriveOwnerModule、可选onedriveOwnerSha256、openaiCreditFile、可选codexExecutable。publisher文件只属于本项目，含PUBLISH_TOKEN；VAPID私钥仅Workers secret及本机私有恢复文件。OpenAI输入只存已核记录，不混入邮件全文、邮箱、账号标识或任何key。不得把私人快照作为测试fixture提交。
+所有实际私有文件在D盘`.local/services/`（已忽略），config.json保存路径配置publisherCredentialFile、onedriveOwnerModule、可选onedriveOwnerSha256、openaiCreditFile、可选codexExecutable，以及归档提供方publicationArchiveProvider；路径必须绝对，提供方仅onedrive或huggingface-s3，现行本机已设为后者。publisher文件只属于本项目，含PUBLISH_TOKEN；VAPID私钥仅Workers secret及本机私有恢复文件。OpenAI输入只存已核记录，不混入邮件全文、邮箱、账号标识或任何key。不得把私人快照作为测试fixture提交。
 
 ```sh
 node scripts/collect-service-snapshot.mjs --collect-only

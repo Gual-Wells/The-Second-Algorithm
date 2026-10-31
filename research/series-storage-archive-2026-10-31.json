@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-31T15:56:05.263Z",
+  "status": "verified-existing-commit-archive",
+  "scope": "Publication Git assets only; no textbook publication, research rerun, private D1 snapshot or PWA deployment",
+  "newProvider": "huggingface-s3",
+  "project": "algorithm",
+  "resource": {
+    "namespace": "Gual-Wells",
+    "bucket": "second-algorithm-assets"
+  },
+  "existingCommit": "197f96611c09a7448182ab83d3bcb59ab6eaddba",
+  "current": {
+    "digest": "de948b13d00ccc1104444e5af42a53d896f73c7f924ba587b58fdf7584b9d759",
+    "bytes": 20267753,
+    "tarBytes": 39352320,
+    "tarDigest": "0015ec6c105bd1d122de65f47a081e03404e3d1c0dd099b019d2f54ce75d4b10",
+    "commitIdentityVerified": true,
+    "independentReadback": true
+  },
+  "legacy": {
+    "provider": "onedrive",
+    "revision": "fd79966ab6a2493477b23aef1b79dee927bd9808",
+    "digest": "1a39d8b3045decaad3a84eeea951259f331f0d0385c6630a01aabcc2357eec44",
+    "bytes": 20138754,
+    "independentReadback": true,
+    "originalPreserved": true
+  },
+  "workflow": {
+    "gitArchiveToDFile": true,
+    "streamedGzipRoundtrip": true,
+    "newObjectPartLimitBytes": 16777216,
+    "legacySingleObjectReadLimitBytes": 25165824,
+    "wholeArchiveMayExceedObjectLimit": true,
+    "privateMultiProviderLedger": true,
+    "existingOneDriveQuotaAccountingUnchanged": true,
+    "policyCheckedBeforeNewHFWrite": true
+  },
+  "checks": {
+    "publicationArchiveAndServiceTests": 14,
+    "paidModelCalls": 0,
+    "newSubscriptions": 0,
+    "newChapterPublications": 0,
+    "frontendDeployments": 0
+  },
+  "multipart": {
+    "status": "local-real-git-fixture-verified",
+    "sourceBytes": 26214400,
+    "compressedAboveBytes": 25165824,
+    "partBytes": 16777216,
+    "partCount": 2,
+    "receiptSchemaVersion": 3,
+    "restoreToNewDFile": true,
+    "partOrderAndDigestsVerified": true,
+    "wholeGzipAndTarDigestsVerified": true,
+    "restoredGitCommitVerified": true,
+    "legacyV2AndOneDriveRestorationVerified": true,
+    "tamperedPartOrderDigestTarAndCommitRejected": true,
+    "cloudMultipartUpload": false,
+    "existingCloudArchiveReuploaded": false
+  },
+  "files": [
+    "scripts/archive-publication.mjs",
+    "test/publication-archive.test.mjs",
+    "protocol/SERVICES_STORAGE.md",
+    "protocol/TASK_EXECUTION.md",
+    "AGENTS.md"
+  ]
+}

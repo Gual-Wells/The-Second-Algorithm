@@ -8,6 +8,7 @@ import { runCloudQuestions } from '../server/question-cloud-adapter.mjs';
 import { cloudQuestionAction } from '../server/questions.mjs';
 import { collectCloudQuestionContexts, MAX_CLOUD_CHAPTER_BYTES } from '../server/question-cloud-context.mjs';
 import { CLOUD_API_SCHEMA } from '../server/shared/cloud-responses.mjs';
+import {archiveCloudEvidenceFile,readCloudEvidenceFile} from '../server/shared/cloud-evidence.mjs';
 import { requestCloudQuestionDelivery, questionCloudWakeRoute } from '../server/question-cloud-notifications.mjs';
 
 const origin = 'https://second-algorithm.pages.dev', revision = 'c'.repeat(64);
@@ -15,23 +16,27 @@ function fixture() {
   const sql = new DatabaseSync(':memory:');
   for (const name of readdirSync('migrations').filter(n => n.endsWith('.sql')).sort()) sql.exec(readFileSync('migrations/' + name, 'utf8'));
   const e = { sql, markdown: '固定原文：二分每次排除不可能包含答案的区间。', fetches: 0, keyReads: 0,
-    APP_ORIGIN: origin, API_CLOUD_ENABLED: 'true', PUBLISH_TOKEN: 'fixture-publisher-token-not-real', failCompletion: false };
+    APP_ORIGIN: origin, API_CLOUD_ENABLED: 'true', PUBLISH_TOKEN: 'fixture-publisher-token-not-real', failCompletion: false,
+    storageSize:229376,queries:[] };
+  let archivalBatch=false;const noteQuery=text=>{if(!archivalBatch)e.queries.push(text);};
   e.DB = {
     prepare(text) {
       let values = [];
       return { text, bind(...args) { values = args; return this; },
         async first() {
+          noteQuery(text);
           const value = sql.prepare(text).get(...values) || null;
           if (text.includes('SELECT * FROM question_cloud_contexts') && e.onContextRead) {
             const hook = e.onContextRead; e.onContextRead = null; await hook();
           }
           return value;
         },
-        async all() { return { results: sql.prepare(text).all(...values) }; },
-        async run() { return { meta: { changes: Number(sql.prepare(text).run(...values).changes) } }; }
+        async all() { noteQuery(text);return { results: sql.prepare(text).all(...values),...(text==='SELECT 1'?{meta:{size_after:e.storageSize}}:{}) }; },
+        async run() { noteQuery(text);return { meta: { changes: Number(sql.prepare(text).run(...values).changes) } }; }
       };
     },
     async batch(items) {
+      archivalBatch=items[0]?.text?.startsWith('UPDATE api_cloud_runs SET response_json=?');if(archivalBatch)e.queries.push('BATCH API EVIDENCE');
       sql.exec('BEGIN');
       try {
         const values = [];
@@ -40,7 +45,7 @@ function fixture() {
           values.push(await item.run());
         }
         sql.exec('COMMIT'); return values;
-      } catch (error) { sql.exec('ROLLBACK'); throw error; }
+      } catch (error) { sql.exec('ROLLBACK'); throw error; }finally{archivalBatch=false;}
     }
   };
   e.ASSETS = { async fetch(request) {
@@ -70,6 +75,69 @@ const completed = (answer = '不变量保证被排除的区间不含答案。') 
   usage: { input_tokens: 20, output_tokens: 10, total_tokens: 30 } });
 const stream = value => new Response('data: ' + JSON.stringify({ type: 'response.completed', response: value }) + '\n\n', {
   headers: { 'content-type': 'text/event-stream', 'x-request-id': 'request-fixture' } });
+const storageBinding=reports=>({policy(){return{schemaVersion:1,policyRevision:1,projectId:'algorithm',allocations:[{resourceId:'d1-algorithm',mode:'current',resource:{id:'d1-algorithm',scope:'project',owner:'algorithm',state:'active'}}]};},report(value){reports.push(value);return{ok:true};}});
+function evidenceFiles(){const objects=new Map();const api={unavailable:false,objects,async put(bytes){await api.beforePut?.();const digest=createHash('sha256').update(bytes).digest('hex');objects.set(digest,new Uint8Array(bytes));return{digest,bytes:bytes.byteLength};},async get(digest){if(api.unavailable)throw Error('fixture file outage');const bytes=objects.get(digest);return bytes?{digest,bytes:new Uint8Array(bytes)}:null;}};api.archiveEvidence=request=>archiveCloudEvidenceFile({filesBinding:api,request});api.readEvidence=request=>readCloudEvidenceFile({filesBinding:api,request});return api;}
+
+test('slow archival cannot bypass the business lease and a durable paid success recovers the same attempt',async()=>{
+ const e=fixture();try{
+  e.FILES=evidenceFiles();const id=crypto.randomUUID();await submit(e,id);let paid=0;
+  e.FILES.beforePut=()=>e.sql.prepare('UPDATE question_turns SET lease_until=? WHERE id=?').run(Date.now()-1,id);
+  const fetchImpl=async()=>{paid++;return stream(completed());};const waiting=await runCloudQuestions(e,{fetchImpl});assert.equal(waiting.deliveryPending,true);assert.equal(e.sql.prepare('SELECT status FROM question_turns').get().status,'running');
+  delete e.FILES.beforePut;const recovered=await runCloudQuestions(e,{fetchImpl});assert.equal(recovered.completed,true);assert.equal(recovered.reused,true);assert.equal(paid,1);assert.equal(e.sql.prepare('SELECT api_attempt FROM question_turns').get().api_attempt,0);
+ }finally{e.sql.close();}
+});
+
+test('private archived replies remain pending for the same attempt through file outages and recover without paid regeneration',async()=>{
+ const e=fixture();try{
+  e.FILES=evidenceFiles();const id=crypto.randomUUID();await submit(e,id);e.failCompletion=true;let paid=0;const fetchImpl=async()=>{paid++;return stream(completed());};
+  assert.equal((await runCloudQuestions(e,{fetchImpl})).deliveryPending,true);assert.equal(JSON.parse(e.sql.prepare('SELECT response_json FROM api_cloud_runs').get().response_json).archiveFormat,'second-series-api-evidence-v1');assert.equal(count(e,'api_cloud_streams'),0);
+  e.failCompletion=false;e.FILES.unavailable=true;delete e.SECOND_SERIES_OPENAI_KEY;e.sql.prepare('UPDATE question_turns SET lease_until=? WHERE id=?').run(Date.now()-1,id);
+  const waiting=await runCloudQuestions(e,{fetchImpl});assert.equal(waiting.protectedUnavailable,true);assert.equal(waiting.deliveryPending,true);assert.equal(e.sql.prepare('SELECT status,api_attempt FROM question_turns').get().status,'running');assert.equal(e.sql.prepare('SELECT api_attempt FROM question_turns').get().api_attempt,0);
+  assert.equal((await call(e,'/api/questions/retry',{id})).status,200);assert.equal(e.sql.prepare('SELECT status,api_attempt FROM question_turns').get().status,'running');assert.equal(e.sql.prepare('SELECT api_attempt FROM question_turns').get().api_attempt,0);assert.equal(paid,1);
+  e.FILES.unavailable=false;e.sql.prepare('UPDATE question_turns SET lease_until=? WHERE id=?').run(Date.now()-1,id);
+  const recovered=await runCloudQuestions(e,{fetchImpl});assert.equal(recovered.completed,true);assert.equal(recovered.reused,true);assert.equal(paid,1);assert.equal(e.sql.prepare('SELECT api_attempt FROM question_turns').get().api_attempt,0);
+ }finally{e.sql.close();}
+});
+
+test('storage capabilities are fixed to this project and metadata reports follow handled work only',async()=>{
+ const e=fixture();try{
+  const reports=[];e.SERIES_STORAGE=storageBinding(reports);e.FILES=new Proxy({}, {get(){throw Error('file capability is not part of question inference');}});
+  assert.equal((await runCloudQuestions(e)).empty,true);assert.equal(reports.length,0);
+  await submit(e);let paid=0;const result=await runCloudQuestions(e,{fetchImpl:async()=>{paid++;return stream(completed());}});
+  assert.equal(result.completed,true);assert.equal(result.handled,true);assert.equal(reports.length,1);assert.equal(paid,1);
+  assert.deepEqual(reports[0].reports[0],{resourceId:'d1-algorithm',revision:reports[0].reports[0].observedAt,observedAt:reports[0].reports[0].observedAt,verified:true,measurement:'database-size',complete:true,usedBytes:229376,limitBytes:null,remainingBytes:null});
+  assert(!JSON.stringify(reports).includes(e.markdown));assert(!JSON.stringify(reports).includes('answer'));
+  await runCloudQuestions(e);assert.equal(reports.length,1);
+  const config=JSON.parse(readFileSync('wrangler.cloud.jsonc','utf8'));
+  assert.deepEqual(config.services.find(service=>service.binding==='SERIES_STORAGE'),{binding:'SERIES_STORAGE',service:'the-second-language-api',entrypoint:'AlgorithmStorage'});
+  assert.deepEqual(config.services.find(service=>service.binding==='FILES'),{binding:'FILES',service:'second-series-files',entrypoint:'AlgorithmFiles'});
+  assert.equal(config.d1_databases.length,1);assert.equal(config.d1_databases[0].database_id,'c396b1ca-43fb-4a77-b9b2-c90c7f436b41');
+ }finally{e.sql.close();}
+});
+
+test('missing size or failed storage RPC cannot change an answered question or repeat model work',async()=>{
+ for(const mode of['missing-size','rpc-failure','wrong-project']){
+  const e=fixture();try{
+   const reports=[];e.SERIES_STORAGE=storageBinding(reports);if(mode==='missing-size')e.storageSize=undefined;
+   if(mode==='rpc-failure')e.SERIES_STORAGE.report=value=>{reports.push(value);throw Error('private metadata delivery diagnostic');};
+   if(mode==='wrong-project')e.SERIES_STORAGE.policy=()=>({schemaVersion:1,policyRevision:1,projectId:'schedule',allocations:[]});
+   await submit(e);let paid=0;const fetchImpl=async()=>{paid++;return stream(completed());};assert.equal((await runCloudQuestions(e,{fetchImpl})).completed,true);
+   assert.equal(e.sql.prepare('SELECT status FROM question_turns').get().status,'answered');await runCloudQuestions(e,{fetchImpl});assert.equal(paid,1);
+   if(mode==='missing-size'){assert.equal(reports.length,1);assert.equal(reports[0].reports[0].verified,false);assert(!Object.hasOwn(reports[0].reports[0],'usedBytes'));}
+   if(mode==='wrong-project'){assert.equal(reports.length,0);assert(!e.queries.includes('SELECT 1'));}
+  }finally{e.sql.close();}
+ }
+});
+
+test('near-limit receipt plus project size metadata reserves nine timed heartbeats within the 50-query budget',async()=>{
+ const e=fixture();try{
+  const reports=[];e.SERIES_USAGE={report(){return{ok:true};}};e.SERIES_STORAGE=storageBinding(reports);e.FILES=evidenceFiles();await submit(e);e.queries.length=0;
+  const raw=(': '+'x'.repeat(65500)+'\n\n').repeat(31)+'data: '+JSON.stringify({type:'response.completed',response:completed()})+'\n\n';
+  const result=await runCloudQuestions(e,{fetchImpl:async()=>new Response(raw,{headers:{'content-type':'text/event-stream'}})});
+  assert.equal(result.completed,true);assert.equal(reports.length,1);assert.equal(count(e,'api_cloud_streams'),0);assert.equal(JSON.parse(e.sql.prepare('SELECT response_json FROM api_cloud_runs').get().response_json).archiveFormat,'second-series-api-evidence-v1');assert(e.queries.length+9<=50,'receipt, archive batch, metadata, and nine later renewals exceed independent Free D1 invocation budget: '+e.queries.length);
+  console.log('Algorithm Free D1 query check:',e.queries.length,'+ 9 timed renewals <= 50');
+ }finally{e.sql.close();}
+});
 
 test('cloud is opt-in; cron does nothing while off and newly queued legacy tasks remain on the local runner', async () => {
   const e = fixture(); try {
