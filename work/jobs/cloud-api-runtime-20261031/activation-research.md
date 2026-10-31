@@ -1,0 +1,11 @@
+# 同一工程任务：答疑云端配置激活
+
+本轮是已完成工程实现的配置激活，不产生新教材，也不复写先前关闭配置的研究、验证或准备包。开始核实本地HEAD与origin/main均为676333d741f3676ebfaf25fde8e42acd42bbb78e，已跟踪工作树干净；共享wire仍为2ec43589c9e76028b66c4a0d62259db4b68bdf881db2045d0d9cccd555df418a。既有AGENTS、服务分工和发布门禁已重新核对。
+
+用户已明确要求各服务实际跑通，并由整合者负责将既有共用key安全配置到Cloudflare；本项目子任务不读取、上传任何key，不创建新key，也不调用provider。唯一运行配置变更是wrangler.jsonc与wrangler.cloud.jsonc的API_CLOUD_ENABLED由false改为true；Secrets Store metadata、服务binding、DB、模型/档位、HTTP关闭及无独立Cron全部保持原字节。
+
+激活后新问题才取cloud-v1；旧legacy不会自动被迁移，已知失败只在用户明确retry后进入新cloud attempt，unknown仍不可重发。原publication/Codex默认休息与单次许可完全不受影响。正文原文依旧由Pages受保护固定revision取得，临时上下文、paid-attempt回执、owner/epoch边界和通知outbox仍用原已验证业务实现。
+
+发布依赖由整合者明确协调：先确认Language AlgorithmUsage接收端及共用Secrets Store实际就绪，再使用本激活输入的新research/review/verification/prepare packet部署Pages与AlgorithmAPIExecutor；首次真实provider调用由整合者统一安排，本子任务不能自行发起或重复测试。现有全180 carrier、46 API/mock及云开关true路径均可作为相同实现的证据，仍对当前配置重新构建并按正式门禁生成当前验证收据。
+
+当前章的原研究交接及原四项内容审阅仅在教学权威逐字节未变的范围继续保留。激活仅续签配置影响审阅，不重新研究领域，不改作者源/知识/C++/标题/分层/Logo/UI，不以启用配置证明provider已经可运行。

@@ -25,21 +25,43 @@
       "inputHash": "7e087570dbbdad885d3c47445eeba4e5930311c0bda124e60706ebe9070d1abe",
       "recordedAt": "2026-10-31T07:36:05.028499+00:00",
       "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "02e509056cbb4797a196d740f175f173",
+      "kind": "research",
+      "path": "work/jobs/cloud-api-runtime-20261031/activation-research.md",
+      "summary": "Explicit activation of the two API cloud flags only, under existing key reuse authorization and fixed unchanged teaching bytes; no provider call by this subtask.",
+      "outcome": "accepted",
+      "sha256": "a3a274ce3343ff002617aa44b7dba36956d179e39b77d61a6d73426228f29344",
+      "inputHash": "ff80a85c5095a215927a68ea2d77352d8f60269a9d3f45702aca6fdb8a026291",
+      "recordedAt": "2026-10-31T09:39:31.207315+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "0667f27fada2477b801dbfe18e36cf75",
+      "kind": "review",
+      "path": "work/jobs/cloud-api-runtime-20261031/activation-review.md",
+      "summary": "Current configuration activation impact review: immutable bindings and implementation, current true-path mocks/builds and four real C++ targets; rollout awaits orchestrated dependency readiness.",
+      "outcome": "accepted",
+      "sha256": "18820f6875e8bf903186fa397393207f5ddd8d2dc26c3a4b3b776a7503143311",
+      "inputHash": "ff80a85c5095a215927a68ea2d77352d8f60269a9d3f45702aca6fdb8a026291",
+      "recordedAt": "2026-10-31T09:39:34.054687+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
     }
   ],
   "lastGoodVerification": {
-    "path": "work/jobs/cloud-api-runtime-20261031/verifications/10581cf4cf9440cc99c2b8c8a163b01e.json",
-    "sha256": "4f5faf7b5e175a85946818907d5c6d696c61d248b47196e3fb1413609d2fca77",
-    "inputHash": "7e087570dbbdad885d3c47445eeba4e5930311c0bda124e60706ebe9070d1abe"
+    "path": "work/jobs/cloud-api-runtime-20261031/verifications/1821083bd8744f7eaa620883ca317f76.json",
+    "sha256": "1f008d8bcc66bfb5313a1a03f2742e2f4d03aef60ca86d7e01c1da1e029d74ab",
+    "inputHash": "ff80a85c5095a215927a68ea2d77352d8f60269a9d3f45702aca6fdb8a026291"
   },
   "lastPreparedRelease": {
-    "path": "work/jobs/cloud-api-runtime-20261031/releases/d966bd176e4b4050809a64af6253bd55.json",
-    "sha256": "dce4bf1d55e7bb8358015f061b359eb84047dbf117a6c97e3a10b83e59c269ef",
-    "inputHash": "7e087570dbbdad885d3c47445eeba4e5930311c0bda124e60706ebe9070d1abe"
+    "path": "work/jobs/cloud-api-runtime-20261031/releases/bec166d6f14f4f0db31ecadf55c8a4ab.json",
+    "sha256": "b49e0f4f403b294adc0489bcea5d5fb25ef32dd33ebee04d200c73e86e741b8a",
+    "inputHash": "ff80a85c5095a215927a68ea2d77352d8f60269a9d3f45702aca6fdb8a026291"
   },
   "lastVerificationAttempt": {
-    "path": "work/jobs/cloud-api-runtime-20261031/verifications/10581cf4cf9440cc99c2b8c8a163b01e.json",
-    "sha256": "4f5faf7b5e175a85946818907d5c6d696c61d248b47196e3fb1413609d2fca77",
-    "inputHash": "7e087570dbbdad885d3c47445eeba4e5930311c0bda124e60706ebe9070d1abe"
+    "path": "work/jobs/cloud-api-runtime-20261031/verifications/1821083bd8744f7eaa620883ca317f76.json",
+    "sha256": "1f008d8bcc66bfb5313a1a03f2742e2f4d03aef60ca86d7e01c1da1e029d74ab",
+    "inputHash": "ff80a85c5095a215927a68ea2d77352d8f60269a9d3f45702aca6fdb8a026291"
   }
 }
