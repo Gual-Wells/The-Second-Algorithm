@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-11-01T09:42:50.050Z",
+  "worker": "second-algorithm-api",
+  "gitCodeCommit": "6f09ee0ca6e47a43cdcf30ec2f0772b05c623823",
+  "migration": {
+    "database": "second-algorithm",
+    "name": "0006_question_codex_fallback.sql",
+    "applied": true
+  },
+  "version": "b3754987-d822-4d95-9ddb-a950c590fe57",
+  "deployment": {
+    "id": "8da657a4-af15-4405-84a1-a04de36567a9",
+    "source": "wrangler",
+    "strategy": "percentage",
+    "versions": [
+      {
+        "version_id": "b3754987-d822-4d95-9ddb-a950c590fe57",
+        "percentage": 100
+      }
+    ],
+    "created_on": "2026-11-01T09:33:27.341636Z"
+  },
+  "modelInvoked": false
+}

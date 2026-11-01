@@ -56,5 +56,10 @@
     "status": "completed",
     "conclusion": "success",
     "verifiedBy": "read-only GitHub workflow run query by sibling agent"
+  },
+  "localAggregate": {
+    "outcome": "stopped-after-complete-linux-ci",
+    "passed": false,
+    "reason": "The duplicate local aggregate was intentionally stopped while its unaffected Python suite was running, after the exact production code passed full Linux CI. No local aggregate pass is claimed. Dedicated local Node, six browser groups and formal C++ verification completed successfully."
   }
 }

@@ -1,0 +1,69 @@
+{
+  "passed": true,
+  "origin": "https://second-algorithm.pages.dev",
+  "checkedAt": "2026-11-01T09:43:59.648Z",
+  "deploymentReceipt": "work/jobs/codex-fallback-20261101/deployments/1793526181292.json",
+  "checks": [
+    {
+      "file": "index.html",
+      "status": 200,
+      "sha256": "6a6e8872a7251fabc2b709b1e8e38ca05a01755404e4d6860283f5de1ddc084c",
+      "cacheControl": "public, max-age=0, must-revalidate"
+    },
+    {
+      "file": "app.js",
+      "status": 200,
+      "sha256": "8be19587dc2407e566a3319ffc540a6abe290aead52e58fc41f2d981666dfe28",
+      "cacheControl": "public, max-age=0, must-revalidate"
+    },
+    {
+      "file": "styles.css",
+      "status": 200,
+      "sha256": "a83dcf0d62a6875dfed4f22e51b440d3daa4b4293a4ee3f21105ee54859a1542",
+      "cacheControl": "public, max-age=0, must-revalidate"
+    },
+    {
+      "file": "sw.js",
+      "status": 200,
+      "sha256": "b24743ea1b9540b609fc7f1555fc82a54fca392828f2ef183eb1e9d3782bb3bc",
+      "cacheControl": "public, max-age=0, must-revalidate"
+    },
+    {
+      "route": "/api/library",
+      "status": 401
+    },
+    {
+      "route": "/api/state",
+      "status": 401
+    },
+    {
+      "route": "/library/catalog.json",
+      "status": 401
+    },
+    {
+      "route": "/%6cibrary/catalog.json",
+      "status": 401
+    },
+    {
+      "route": "/manual-questions.js",
+      "status": 401
+    },
+    {
+      "route": "/api/questions/jobs/status",
+      "authentication": "anonymous",
+      "status": 401
+    },
+    {
+      "route": "/api/questions/jobs/status",
+      "authentication": "project-publisher",
+      "status": 200,
+      "fields": [
+        "count",
+        "pending"
+      ],
+      "pending": false,
+      "count": 0
+    }
+  ],
+  "noModelInvoked": true
+}
