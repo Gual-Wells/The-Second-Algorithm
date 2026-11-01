@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "baseline": "e20095d97fa2a740fa81c4184c107fe767ba80f7",
+  "priorPreparedPacket": "work/jobs/cloud-api-runtime-20261031/releases/fb892485c39248c6bb2bfa750dd8e728.json",
+  "priorPreparedPacketSha256": "6d820325b9497d7afec8cd2048c7d08a58096227350e6b023313da586fe65fb3",
+  "priorReviewSha256": "9a1941f790cdd662a0cdeb5447b1b087eece47417533bb45ca143a959674a6f0",
+  "priorEditorialInputHash": "98c5eaef3824ee6a52e1aa8461da1bc1ed9cd7cfa02dafb4625465cff5317cf9",
+  "currentEditorialInputHash": "f55af69d08077c5d703036de83c02b0cb8dce1760c4ec892f96a0ae957df7db8",
+  "changedInputs": [
+    "AGENTS.md",
+    "protocol/SERVICES_STORAGE.md",
+    "protocol/TASK_EXECUTION.md",
+    "scripts/archive-publication.mjs",
+    "scripts/check-carrier-browser.cjs",
+    "server/question-cloud-adapter.mjs",
+    "server/shared/cloud-evidence.mjs",
+    "server/shared/cloud-responses.mjs",
+    "server/shared/project-storage-client.mjs",
+    "test/carrier-cloud-questions.test.mjs",
+    "test/publication-archive.test.mjs",
+    "web/DESIGN.md",
+    "web/app.js",
+    "web/index.html",
+    "web/styles.css",
+    "wrangler.cloud.jsonc"
+  ],
+  "teachingInputsChanged": false,
+  "preExistingReviewMismatchAtBaseline": true,
+  "claim": "Compared the last prepared publication to current production inputs. Existing multi-provider storage integration and this Home Screen UI change are the only editorial-binding deltas; all teaching/content/catalog/carrier inputs remain byte-identical. Engineering impact review retains original chapter adoption and makes no new textbook review claim."
+}

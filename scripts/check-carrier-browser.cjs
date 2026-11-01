@@ -199,7 +199,7 @@ async function snapshotKeys(p,keys) { return p.evaluate(keys=>Object.fromEntries
       const p=await env.page();await p.locator('.login-card[data-state="login"]').waitFor({state:'visible'});assert(await p.locator('#loginButton').isVisible());assert.equal(await p.locator('#readerView').isVisible(),false);
       assert.equal(env.mock.requests.filter(r=>r.path.startsWith('/library/')||r.path.startsWith('/api/')).length,0);assert.equal(await p.locator('#article .code-block').count(),0);
       await p.locator('.login-install[data-install-info]').click();await p.locator('#sheetDialog').waitFor({state:'visible'});
-      assert.equal(await p.locator('#sheetTitle').innerText(),'加入主屏幕');assert.match(await p.locator('#sheetBody').innerText(),/Safari[\s\S]*分享/);
+      assert.equal(await p.locator('#sheetTitle').innerText(),'主屏幕');assert.match(await p.locator('#sheetBody').innerText(),/当前在浏览器中打开[\s\S]*浏览器菜单/);
       assert.equal(await p.locator('#sheetBack').isVisible(),false);await closeSheet(p);assert(await p.locator('#loginView').isVisible());
       assert.equal(env.mock.requests.filter(r=>r.path.startsWith('/library/')||r.path.startsWith('/api/')).length,0);
     },{authenticated:false});

@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "id": "home-screen-guide-20261101",
+  "goal": "修复主屏幕说明的状态语义与原生紧凑呈现，不修改正文与教学",
+  "createdAt": "2026-11-01T03:55:06.033414+00:00",
+  "evidence": [
+    {
+      "id": "16d9dcf07fcb47878571ceb3f69737e6",
+      "kind": "research",
+      "path": "work/jobs/home-screen-guide-20261101/research.md",
+      "summary": "核对Apple手册与三个生产源，设计真实状态的原生主屏幕说明",
+      "outcome": "accepted",
+      "sha256": "d350934f8487ac2fa8d9c18de452021e3c7c54eb293c1a816513858508064af0",
+      "inputHash": "5a01bf706a9e2e7d0a1af5b04dcbcd4cf99ddfb29babb37f425206686e59b81b",
+      "recordedAt": "2026-11-01T03:59:13.443108+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "6de8690fb48a47bc99380a428e9ddafd",
+      "kind": "review",
+      "path": "work/jobs/home-screen-guide-20261101/review.md",
+      "summary": "审阅主屏幕说明与原身份、导航和正文边界",
+      "outcome": "accepted",
+      "sha256": "c44dc02fbadf7b4a4c8c635201430cc6d527ca712f83bfda6ef0f8b35ba4fc88",
+      "inputHash": "5a01bf706a9e2e7d0a1af5b04dcbcd4cf99ddfb29babb37f425206686e59b81b",
+      "recordedAt": "2026-11-01T03:59:17.825916+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "d06ee536c1d24a1e94e3fc899d5da670",
+      "kind": "research",
+      "path": "work/jobs/home-screen-guide-20261101/research.md",
+      "summary": "核对Apple手册与三个生产源，设计真实状态的原生主屏幕说明",
+      "outcome": "accepted",
+      "sha256": "d350934f8487ac2fa8d9c18de452021e3c7c54eb293c1a816513858508064af0",
+      "inputHash": "5a01bf706a9e2e7d0a1af5b04dcbcd4cf99ddfb29babb37f425206686e59b81b",
+      "recordedAt": "2026-11-01T04:03:22.434573+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "6c4bd21aa332436294472332c277cde2",
+      "kind": "review",
+      "path": "work/jobs/home-screen-guide-20261101/review.md",
+      "summary": "实际输入差异证明教学保持原件，仅审阅本轮主屏幕工程影响",
+      "outcome": "accepted",
+      "sha256": "c44dc02fbadf7b4a4c8c635201430cc6d527ca712f83bfda6ef0f8b35ba4fc88",
+      "inputHash": "5a01bf706a9e2e7d0a1af5b04dcbcd4cf99ddfb29babb37f425206686e59b81b",
+      "recordedAt": "2026-11-01T04:03:26.488006+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "b53d895d1c814c47bd6f05e4054ccc43",
+      "kind": "research",
+      "path": "work/jobs/home-screen-guide-20261101/research.md",
+      "summary": "核对原生安装路径并查明基准存储更新的审阅失配，保持教材原件",
+      "outcome": "accepted",
+      "sha256": "2f7757b72eae50b24039faa553ee047fc57729d2e17d4f96fe350ba0e3640960",
+      "inputHash": "075ee98896a7e34b33355eb88bd0af8f651deba46bd31694c796e7a9b6598649",
+      "recordedAt": "2026-11-01T04:05:51.301377+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "010c6d4c46644eb68757d1fdf3aed184",
+      "kind": "review",
+      "path": "work/jobs/home-screen-guide-20261101/review.md",
+      "summary": "实际16项输入差异与25项云端/归档回归支撑限定工程影响续签",
+      "outcome": "accepted",
+      "sha256": "c5fbbd19b872dc82b3a6f1895d92a21f5ef2e15a840427c42b2efbfb99b1dfe1",
+      "inputHash": "075ee98896a7e34b33355eb88bd0af8f651deba46bd31694c796e7a9b6598649",
+      "recordedAt": "2026-11-01T04:05:58.907771+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    }
+  ],
+  "lastGoodVerification": {
+    "path": "work/jobs/home-screen-guide-20261101/verifications/16a9c97858584b039ab360974ef322a5.json",
+    "sha256": "5a6717d8606f121b9323f0e06e247d72f95c57bdb12bcfccf415940c53e4c257",
+    "inputHash": "075ee98896a7e34b33355eb88bd0af8f651deba46bd31694c796e7a9b6598649"
+  },
+  "lastPreparedRelease": {
+    "path": "work/jobs/home-screen-guide-20261101/releases/095b3067f263448c805ea3a8117fcdfb.json",
+    "sha256": "f04b4256970c574289b6b3372f9976f66d24c37e650eb0c1a09cb37fb32424ee",
+    "inputHash": "075ee98896a7e34b33355eb88bd0af8f651deba46bd31694c796e7a9b6598649"
+  },
+  "lastVerificationAttempt": {
+    "path": "work/jobs/home-screen-guide-20261101/verifications/16a9c97858584b039ab360974ef322a5.json",
+    "sha256": "5a6717d8606f121b9323f0e06e247d72f95c57bdb12bcfccf415940c53e4c257",
+    "inputHash": "075ee98896a7e34b33355eb88bd0af8f651deba46bd31694c796e7a9b6598649"
+  }
+}

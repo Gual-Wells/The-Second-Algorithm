@@ -1,0 +1,12 @@
+{
+  "subscriptions": 0,
+  "fullProjectSuite": "Not claimed: unrelated whole-project run was stopped after scoped carrier, compiler, guide and storage checks completed.",
+  "generatedAt": "2026-11-01T04:05:48.3418896Z",
+  "physicalIPhone": false,
+  "carrierPassed": true,
+  "storageImpactTests": 25,
+  "storageImpactPassed": true,
+  "guideCases": 24,
+  "carrierCases": 25,
+  "paidModelCalls": 0
+}

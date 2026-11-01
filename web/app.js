@@ -558,12 +558,21 @@ function showReadingSettings() {
 function showDeviceSettings() {
   if (waitForSheetClose(showDeviceSettings)) return;
   const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
-  showSheet('主屏幕与账户', `<section class="settings-section"><div class="section-band"><strong>本机应用</strong><span>THIS DEVICE</span></div><div class="settings-body"><p id="installStatus">${standalone ? '已从主屏幕打开。' : '可将第二算法加入主屏幕。'}</p><div class="button-row"><button class="bevel-button" type="button" data-install-info>加入主屏幕</button><button class="bevel-button" type="button" data-logout>退出登录</button></div></div></section><section class="settings-section"><div class="section-band"><strong>应用更新</strong><span>UPDATES</span></div><div class="settings-body"><div class="button-row"><button class="bevel-button" type="button" data-check-updates>检查内容更新</button><button class="bevel-button" type="button" data-reload-app${S.updateReady ? '' : ' hidden'}>重新载入应用</button></div><p id="updateStatus" role="status">${S.updateReady ? '应用有新版本，可重新载入。' : '已发布内容可在联网后更新。'}</p></div></section>`, 'device-settings', rememberSheet(showSettings));
+  showSheet('主屏幕与账户', `<section class="settings-section"><div class="section-band"><strong>本机应用</strong><span>THIS DEVICE</span></div><div class="settings-body"><p id="installStatus">${standalone ? '已从主屏幕打开。' : '当前在浏览器中打开。'}</p><div class="button-row"><button class="bevel-button" type="button" data-install-info>主屏幕</button><button class="bevel-button" type="button" data-logout>退出登录</button></div></div></section><section class="settings-section"><div class="section-band"><strong>应用更新</strong><span>UPDATES</span></div><div class="settings-body"><div class="button-row"><button class="bevel-button" type="button" data-check-updates>检查内容更新</button><button class="bevel-button" type="button" data-reload-app${S.updateReady ? '' : ' hidden'}>重新载入应用</button></div><p id="updateStatus" role="status">${S.updateReady ? '应用有新版本，可重新载入。' : '已发布内容可在联网后更新。'}</p></div></section>`, 'device-settings', rememberSheet(showSettings));
+}
+function homeScreenContent() {
+  const installed = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  const ios = /iPhone|iPad|iPod/.test(navigator.userAgent);
+  const safari = ios && /Safari/.test(navigator.userAgent) && !/CriOS|FxiOS|EdgiOS|OPiOS/.test(navigator.userAgent);
+  const method = installed ? '' : ios
+    ? `<section class="install-method"><h3>${safari ? '在 Safari 中添加' : '在 Safari 中打开本站后添加'}</h3><p class="install-steps"><span>浏览器菜单</span><span class="install-arrow" aria-hidden="true">›</span><span>分享</span><span class="install-arrow" aria-hidden="true">›</span><span>添加到主屏幕</span></p><p class="install-note">若出现“作为网页 App 打开”，保持开启后添加。以后从主屏幕的图标打开。</p></section>`
+    : `<section class="install-method"><h3>安装到设备</h3><p class="install-steps"><span>浏览器菜单</span><span class="install-arrow" aria-hidden="true">›</span><span>安装应用或添加到主屏幕</span></p><p class="install-note">可用名称随浏览器而异；若没有此选项，可继续在浏览器中使用。</p></section>`;
+  return `<div class="install-guide"><div class="install-heading"><img src="/icons/icon-192.png" alt="" width="32" height="32"><div><strong>第二算法</strong><p class="install-state">${installed ? '已从主屏幕打开' : '当前在浏览器中打开'}</p></div></div>${method}</div>`;
 }
 function showInstall() {
   if (waitForSheetClose(showInstall)) return;
   const parent = S.owner && sheetView === 'device-settings' ? rememberSheet(showDeviceSettings) : null;
-  showSheet('加入主屏幕', '<div class="install-guide"><img src="/icons/icon-192.png" alt="第二算法图标"><div><strong>在 iPhone 的 Safari 中</strong><ol><li>打开本站并点按分享按钮（也可能位于浏览器菜单中）。</li><li>选择“添加到主屏幕”。</li><li>从主屏幕启动“第二算法”。</li></ol></div></div>', 'install', parent);
+  showSheet('主屏幕', homeScreenContent(), 'install', parent);
 }
 function showFiles(parent = null) {
   if (waitForSheetClose(() => showFiles(parent)) || !S.active) return;
