@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "origin": "https://second-algorithm.pages.dev",
+  "checkedAt": "2026-11-01T04:10:40.632Z",
+  "checks": [
+    {
+      "file": "index.html",
+      "sha256": "1bbbafe1fef06831ab272707c95de2ac451909494122378de5396271caf63704"
+    },
+    {
+      "file": "app.js",
+      "sha256": "088f6d08a8bb649ddb2c51b923559fad18d22e81bedc1a8a8423f0ba539f9cca"
+    },
+    {
+      "file": "styles.css",
+      "sha256": "a83dcf0d62a6875dfed4f22e51b440d3daa4b4293a4ee3f21105ee54859a1542"
+    },
+    {
+      "file": "sw.js",
+      "sha256": "187243860132f4399406ae7cfd6b7fe879455a934867c92f25272e1c3c6548fc"
+    },
+    {
+      "route": "/api/library",
+      "status": 401
+    },
+    {
+      "route": "/api/state",
+      "status": 401
+    },
+    {
+      "route": "/library/catalog.json",
+      "status": 401
+    },
+    {
+      "route": "/%6cibrary/catalog.json",
+      "status": 401
+    }
+  ]
+}
