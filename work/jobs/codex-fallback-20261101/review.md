@@ -1,0 +1,11 @@
+# 本次技术复核
+
+已完成真实SQLite与合成浏览器检查：全carrier194项通过；其中包含同身份自动接手、API未知原件保留、不第二次调API、原通知事务、故障回执恢复、旧claim/owner拒绝、45秒仅headers计时与正常body继续、轻量publisher状态接口、Codex单次runner固定输入和CLI档位，以及问答窗口实际接手状态。没有实际调用模型，没有更改生产数据，也未部署。
+
+公共codex-data-runner最终由主任务同步为language同字节版本；主任务还须在最终Git输入上运行research verify、prepare-release与现行发布门禁。现有用户work未跟踪材料全部保留。
+
+最终发布接手复核：共用runner当前SHA256为6978b97375ac60bc649252da998adf0a22b7ad968d29b6c505ca37ac17e24170。逐项核对订阅认证、high、原生schema及图片参数、最小环境、独占started与结果摘要复用；最后增加project_doc_max_bytes=0以排除纯数据工作目录的父级AGENTS。主任务已用安装CLI的strict-config验证配置，并在该最后单项之前完成一次Sol/high合成文本及一次Terra/high原生合成图片会员调用；本项目发布接手未再次调用模型，也不将该烟测冒称上游tools报文验证或真实算法答疑验收。
+
+发布门禁实际报告既有chapter-01审阅因工程输入过期，已对照上一成功095b3067准备包逐字节核对当前输入。maintenance-impact.json保存精确差异、旧review摘要及当前共享runner摘要；所有教学、来源登记、C++、知识、标题、日期与研究原件保持原字节。当前review只追加这次API故障接手、后台档位、通知事务和原件保护的维护影响，并保留全部原assessments及adoption proof；不重做教材研究，不以换摘要掩盖教学变更。
+
+已知边界：合成测试不代表真实Codex模型质量、实体iPhone或生产推送到达；电脑关闭时接手只能排队；未知本机发送保持不自动重复。API完整原件已有但暂时不能读取时先保原件，不把存储故障当新模型生成请求。

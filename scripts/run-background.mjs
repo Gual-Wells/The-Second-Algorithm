@@ -32,7 +32,7 @@ export async function runBackground(){
   const executable=local.codexExecutable||'codex';
   // CLI subscription authentication stays with Codex. Never route this job through API credits.
   const code=await new Promise((resolve,reject)=>{
-   const child=spawn(executable,['--search','-a','never','exec','-C',root,'--enable','multi_agent','-s','danger-full-access','-'],{cwd:root,windowsHide:true,stdio:['pipe','inherit','inherit'],env:{...process.env,TEMP:privateRoot,TMP:privateRoot,TMPDIR:privateRoot}});
+   const child=spawn(executable,['--search','-a','never','exec','--model','gpt-6.1-sol','-c','model_reasoning_effort="high"','-C',root,'--enable','multi_agent','-s','danger-full-access','-'],{cwd:root,windowsHide:true,stdio:['pipe','inherit','inherit'],env:{...process.env,TEMP:privateRoot,TMP:privateRoot,TMPDIR:privateRoot}});
    child.once('error',()=>reject(Error('Codex CLI未能启动')));child.once('exit',code=>resolve(code));child.stdin.on('error',()=>{});child.stdin.end(prompt);
   });
   outcome=code===0&&await publicationSucceeded(runId,claim.claimedAt)?'published':'failed';

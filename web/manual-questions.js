@@ -164,7 +164,7 @@ export function createReaderQuestions({getContext, toast = () => {}, transport =
             const button=element(document,'button','action-button','重新处理');button.type='button';
             button.addEventListener('click',async()=>{button.disabled=true;try{await retry({id:turn.id});await refresh();}catch(error){showStatus(state,error.message,true);}finally{button.disabled=false;}});group.append(button);
           }
-        } else group.append(element(document, 'p', 'question-status', turn.status === 'running' ? '正在答疑…' : '等待答疑…'));
+        } else group.append(element(document, 'p', 'question-status', turn.processingBy==='codex'?(turn.status==='running'?'本机正在接手答疑…':'等待本机接手答疑…'):turn.status === 'running' ? '正在答疑…' : '等待答疑…'));
         messages.append(group);
       }
       if(view.positionPending){

@@ -83,7 +83,7 @@ export async function readCloudQuestionContext(env, row) {
 
 const unfinishedReference = `EXISTS(SELECT 1 FROM question_turns q WHERE q.owner_scope=question_cloud_contexts.owner_scope
   AND q.epoch=question_cloud_contexts.epoch AND q.chapter_id=question_cloud_contexts.chapter_id
-  AND q.revision=question_cloud_contexts.revision AND q.execution_route='cloud-v1' AND q.status IN ('pending','running','failed'))`;
+  AND q.revision=question_cloud_contexts.revision AND ((q.execution_route='cloud-v1' AND q.status IN ('pending','running','failed')) OR (q.codex_fallback_json IS NOT NULL AND (q.status IN ('pending','running','failed') OR json_extract(q.codex_fallback_json,'$.apiOutcomeUnknown')=1))))`;
 export function completedCloudContextStatement(env, row) {
   return env.DB.prepare(`DELETE FROM question_cloud_contexts WHERE owner_scope=? AND epoch=? AND chapter_id=? AND revision=?
     AND NOT ${unfinishedReference}`).bind(row.owner_scope, row.epoch, row.chapter_id, row.revision);

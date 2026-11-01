@@ -86,3 +86,18 @@ legacy的`.local/services/openai.json`及原始request/headers/stream/response/u
 当前配置默认关闭，不因代码或模拟测试通过宣称已部署或真实可运行。启用前先应用0005迁移，核共享模块字节、独立Worker绑定的是本项目DB、Secrets Store真实可用以及原Pages保护边界；分别部署Pages业务路由、项目API Worker与统一时钟RPC绑定，再明确开启两端API_CLOUD_ENABLED。该步骤不放行休息、不触发出版、不改旧任务路由。统一时钟每分钟Cron为UTC表达式，新增/变更传播可能需15分钟；scheduled最长15分钟wall time，CPU/请求/读写和Secret Store额度以账户当前套餐核实，不自动购买或升级。[Cron](https://developers.cloudflare.com/workers/configuration/cron-triggers/)、[运行上限](https://developers.cloudflare.com/workers/platform/limits/)。
 
 本地验证先运行`node --test test/carrier-cloud-questions.test.mjs test/carrier-questions.test.mjs test/carrier-question-notifications.test.mjs test/carrier-services.test.mjs scripts/check-openai-responses.mjs`，全为mock及内存SQLite。另核独立Worker dry-run和Pages受保护构建；有当前发布门禁才进行真实发布。云端真实任务未验证、secret尚未填写或发布尚未执行时，必须逐项如实报告。
+
+
+## ChatGPT API 失败后的 Codex 接手（2026-11-01 用户更新）
+
+此节取代上文“API 失败只等待用户重试”对新接手流程的限制；不授权再次发送结果未知的 API。优先由现有 cloud-v1 执行 ChatGPT API。明确失败、响应不完整、未知结果或密钥不可用时，原问题在同 owner/epoch、同 ID、同固定章节摘要与会话下转为 legacy 的 Codex 接手队列；`codex_fallback_json` 冻结原 API attempt、是否未知、时刻与原因，原 API 收据与未知输入继续保留。转换作废云端 claim/lease，迟到 API 完成不能覆盖接手答复。完整 API 答案已经保存而仅业务提交或通知失败时，先补交原答案，不另起模型。
+
+`0006_question_codex_fallback.sql` 仅增接手元数据，并将已有 cloud 失败移交；已有完整 API 收据先回到同 attempt 的恢复路径。运行中旧版本迟到的 failed 也只能恢复原件或转 Codex，不能由该失败标记开启新 API。Codex 失败后的显式 retry 保持 legacy，不改回 API。原失败、已读、owner、章节版本与通知事务保护继续生效。
+
+原隐藏监督器的 `scripts/question-api-worker.mjs` 现为兼容入口，只调用 `scripts/question-codex-worker.mjs`；它不再读取 API key，也不调用 OpenAI API。文字接手用 `gpt-6.1-sol/high`，共用 `scripts/lib/codex-data-runner.mjs`，固定输出 schema 与输入/身份摘要、原件复用、独占发送标记、无工具/子 agent、无 publisher/API 凭据传入模型环境，所有任务文件在 D 盘。新答案仍从受保护 complete 动作提交原问题及原通知 outbox。
+
+API 仅等待响应头的时限为45秒；收到响应头即清除此短计时器，正常流式正文仍保留原600秒处理窗口。超时转交仍保原API未知结果，不重复调用。
+
+同系列统一隐藏 Node 监督器按约 15 秒查询 `POST /api/questions/jobs/status`；本项目 publisher token 必须通过，接口仅返回 pending/count，不提供问题或答案。单次本机 runner 一次只领一问；无任务不唤醒模型，不新建本项目独立轮询或 PowerShell 窗口。电脑关闭时诚实留队列，不能宣称已接手或实时返回。
+
+日章出版继续使用 Codex 订阅与原休息授权，后台主/文字任务固定 `gpt-6.1-sol/high`，确需视觉子任务固定 `gpt-6.1-terra/high`；调用参数和任务提示限定该次后台，不修改用户交互 profile。此改动不触发出版。云端 API 的模型档位仍以实际云配置为准，不能把 Codex high 混称 API 设置。

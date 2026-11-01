@@ -22,6 +22,9 @@
 
 ## 服务、同步与后台安排（2026-10-30）
 
+2026-11-01用户更新：ChatGPT API失败自动由本机Codex接手，详见SERVICES_STORAGE末节。原问题ID/owner/epoch/章节摘要/API原件不变，codex_fallback_json记原attempt与unknown，route转legacy并作废原claim；API未知不再次调用API，晚到不能覆写。完整API结果只补业务不重做。原question-api-worker已转真正Codex单次入口，文字Sol6.1/high；后台出版主/文字Sol6.1/high、必要视觉Terra6.1/high，不改交互profile。统一隐藏15秒监督器只读publisher保护pending/count，无任务0模型；不要恢复本地API或新增PowerShell轮询。
+
+
 最新要求以`protocol/SERVICES_STORAGE.md`和`web/DESIGN.md`为准：阅读偏好恢复默认只复位正文15px、代码12px与不折行，不改离线下载或私人原件。设置取消章节文件导航，增加学习安排与服务与账户。2026-10-30最新用户决定：标题Logo采用4.8秒完整正弦，正负半周各2.4秒；0为冰蓝#cfe8ff，+A为白色，-A为实际标题渐变背景。使用同相注册角度的sin()驱动白层与主体透明度，两层各自读取同相角度，不依赖跨层继承刷新；负半周透出真实背景，不用近似纯色覆盖。尺寸、轮廓不动，后台暂停，pageshow/focus按真实可见性恢复且不重置相位；减少动态时静态冰蓝。此决定取代旧.32白反光方案，启动页1.8秒原动画与主屏幕图标不变。
 
 读位本机快存；排除capturedAt后等值位置不标脏，跨端采用60秒最大等待检查点，离开/换章尽力补存；在途位置请求只发一个快照，不while追发。底栏区分本机保存和真实联网同步，不能每次滚动闪同步。默认休息，用户只授权下次出版，仅实际获准出版的claim原子消费；休息检查不清除补充要求或改变学习安排revision。继续完整研究/编纂/采用/发布门禁；出版的本机调度只做纯Node检查，休息不唤醒Codex，不新增Cloudflare出版轮询。

@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "id": "codex-fallback-20261101",
+  "goal": "仅修复ChatGPT API失败后的本机Codex接手和后台模型档位，保持已出版内容、章节身份与研究交接不变",
+  "createdAt": "2026-11-01T09:16:13.951032+00:00",
+  "evidence": [
+    {
+      "id": "8d491c45a8544b06ba07f802817c875b",
+      "kind": "research",
+      "path": "work/jobs/codex-fallback-20261101/investigation.md",
+      "summary": "实际现役API/legacy路径调查及同身份Codex接手设计，无教学内容变更",
+      "outcome": "accepted",
+      "sha256": "de946163f76c0c6f8bb72496eb700c1a9fddc1084c867352978a629de23d7748",
+      "inputHash": "0a80f79107f3891b4aa4b1ba0be4dccffd8c170cd5ff7f3d4d93d65f41c5a846",
+      "recordedAt": "2026-11-01T09:16:17.153679+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "1ff87aeba7874ad0b87ee722cc814e72",
+      "kind": "review",
+      "path": "work/jobs/codex-fallback-20261101/review.md",
+      "summary": "SQLite与浏览器194项真实技术复核、身份/原件/通知/高档后台边界",
+      "outcome": "accepted",
+      "sha256": "702c6a313faa7b3e7a4ce3e379235f45cfad56408fcf486960984259ffac8cef",
+      "inputHash": "0a80f79107f3891b4aa4b1ba0be4dccffd8c170cd5ff7f3d4d93d65f41c5a846",
+      "recordedAt": "2026-11-01T09:16:20.053681+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "8a229d8e66fd4846acf81e834067b269",
+      "kind": "research",
+      "path": "work/jobs/codex-fallback-20261101/investigation.md",
+      "summary": "现役API失败自动接手及最终697共享runner实查，教学输入逐字节保持原版",
+      "outcome": "accepted",
+      "sha256": "de946163f76c0c6f8bb72496eb700c1a9fddc1084c867352978a629de23d7748",
+      "inputHash": "a14b9c3f54fcc58efa67b72c343009d2aaca3b2f93f57a7b7954da535092b64b",
+      "recordedAt": "2026-11-01T09:28:39.776002+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "3ded63538df44e75b5e19ef589f4b5de",
+      "kind": "review",
+      "path": "work/jobs/codex-fallback-20261101/review.md",
+      "summary": "当前工程影响与最终runner审阅；194项载体含浏览器专项通过，保原教材采用与计费保护",
+      "outcome": "accepted",
+      "sha256": "cb4e2cd9b9304dd632f55d79ab1ad1ed5e34e75700426ca923c3e6e7171b689d",
+      "inputHash": "a14b9c3f54fcc58efa67b72c343009d2aaca3b2f93f57a7b7954da535092b64b",
+      "recordedAt": "2026-11-01T09:28:51.900994+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    }
+  ],
+  "lastGoodVerification": {
+    "path": "work/jobs/codex-fallback-20261101/verifications/ad9a13b4086048aaabbf6676b5b6d9a5.json",
+    "sha256": "bb4b16c665a21793f3a5fa102d07b155b25d8655620d641953ed798914d7c901",
+    "inputHash": "a14b9c3f54fcc58efa67b72c343009d2aaca3b2f93f57a7b7954da535092b64b"
+  },
+  "lastPreparedRelease": {
+    "path": "work/jobs/codex-fallback-20261101/releases/0c66c9d44a3b41728a60870bb7ba60bf.json",
+    "sha256": "0f39522dd63df7646e58081340596de2998ba8d13d6d72c3396d9ad5f33d6329",
+    "inputHash": "a14b9c3f54fcc58efa67b72c343009d2aaca3b2f93f57a7b7954da535092b64b"
+  },
+  "lastVerificationAttempt": {
+    "path": "work/jobs/codex-fallback-20261101/verifications/ad9a13b4086048aaabbf6676b5b6d9a5.json",
+    "sha256": "bb4b16c665a21793f3a5fa102d07b155b25d8655620d641953ed798914d7c901",
+    "inputHash": "a14b9c3f54fcc58efa67b72c343009d2aaca3b2f93f57a7b7954da535092b64b"
+  }
+}

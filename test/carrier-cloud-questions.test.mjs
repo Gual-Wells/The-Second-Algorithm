@@ -4,7 +4,7 @@ import { DatabaseSync } from 'node:sqlite';
 import { readFileSync, readdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import worker from '../server/worker.mjs';
-import { runCloudQuestions } from '../server/question-cloud-adapter.mjs';
+import {runCloudQuestions,cloudQuestionFetch} from '../server/question-cloud-adapter.mjs';
 import { cloudQuestionAction } from '../server/questions.mjs';
 import { collectCloudQuestionContexts, MAX_CLOUD_CHAPTER_BYTES } from '../server/question-cloud-context.mjs';
 import { CLOUD_API_SCHEMA } from '../server/shared/cloud-responses.mjs';
@@ -233,7 +233,7 @@ test('project usage reports contain only cumulative metadata, and a failed RPC n
   } finally { e.sql.close(); }
 });
 
-test('unknown network or incomplete streaming outcomes keep their input and cannot be retried or passed by a follow-up', async () => {
+test('unknown API outcomes preserve their evidence and automatically wait for Codex without a second API call', async () => {
   for (const mode of ['network', 'stream']) {
     const e = fixture(); try {
       const id = crypto.randomUUID(); await submit(e, id); await submit(e);
@@ -241,8 +241,7 @@ test('unknown network or incomplete streaming outcomes keep their input and cann
       const fetchImpl = async () => { paid++; if (mode === 'network') throw Error('fixture transport failure');
         return new Response('data: {"type":"response.created"}\n\n', { headers: { 'content-type': 'text/event-stream' } }); };
       assert.equal((await runCloudQuestions(e, { fetchImpl })).outcomeUnknown, true);
-      assert.equal(e.sql.prepare('SELECT error FROM question_turns WHERE id=?').get(id).error, 'outcome_unknown');
-      assert.equal((await call(e, '/api/questions/retry', { id })).status, 409);
+      const row=e.sql.prepare('SELECT status,error,execution_route,codex_fallback_json,api_attempt FROM question_turns WHERE id=?').get(id);assert.equal(row.status,'pending');assert.equal(row.execution_route,'legacy');assert.equal(row.api_attempt,0);assert.equal(JSON.parse(row.codex_fallback_json).apiOutcomeUnknown,true);assert.equal((await call(e,'/api/questions/retry',{id})).status,200);assert.equal(e.sql.prepare('SELECT api_attempt FROM question_turns WHERE id=?').get(id).api_attempt,0);
       e.sql.prepare('UPDATE question_cloud_contexts SET expires_at=1').run();
       await collectCloudQuestionContexts(e);
       assert.equal(count(e, 'question_cloud_contexts'), 1);
@@ -251,31 +250,29 @@ test('unknown network or incomplete streaming outcomes keep their input and cann
   }
 });
 
-test('only an explicit retry after a confirmed rejection advances the cloud attempt', async () => {
-  const e = fixture(); try {
-    const id = crypto.randomUUID(); await submit(e, id); let paid = 0;
-    const fetchImpl = async () => { paid++; return paid === 1 ? Response.json({ error: { code: 'fixture_rejected' } }, { status: 400 }) : stream(completed()); };
-    assert.equal((await runCloudQuestions(e, { fetchImpl })).outcomeUnknown, false);
-    assert.equal((await runCloudQuestions(e, { fetchImpl })).empty, true); assert.equal(paid, 1);
-    assert.equal((await call(e, '/api/questions/retry', { id })).status, 200);
-    assert.equal(e.sql.prepare('SELECT api_attempt FROM question_turns WHERE id=?').get(id).api_attempt, 1);
-    assert.equal((await runCloudQuestions(e, { fetchImpl })).completed, true); assert.equal(paid, 2);
-    assert.deepEqual(e.sql.prepare('SELECT attempt,outcome FROM api_cloud_runs ORDER BY attempt').all().map(r => [r.attempt, r.outcome]), [['0', 'rejected'], ['1', 'completed']]);
-  } finally { e.sql.close(); }
+test('a confirmed API rejection moves once to the Codex queue using the same identity and fixed chapter',async()=>{
+ const e=fixture();try{const id=crypto.randomUUID();await submit(e,id);let paid=0;const fetchImpl=async()=>{paid++;return Response.json({error:{code:'fixture_rejected'}},{status:400});};
+  const failed=await runCloudQuestions(e,{fetchImpl});assert.equal(failed.codexFallback,true);assert.equal(failed.outcomeUnknown,false);const row=e.sql.prepare('SELECT * FROM question_turns WHERE id=?').get(id);assert.equal(row.execution_route,'legacy');assert.equal(row.status,'pending');assert.equal(row.api_attempt,0);assert.equal(JSON.parse(row.codex_fallback_json).apiAttempt,'0');
+  assert.equal((await runCloudQuestions(e,{fetchImpl})).empty,true);assert.equal(paid,1);const status=await(await call(e,'/api/questions/jobs/status',{},true)).json();assert.deepEqual(status,{pending:true,count:1});
+  const claim='a'.repeat(64),job=(await(await call(e,'/api/questions/jobs/claim',{claim},true)).json()).job;assert.equal(job.id,id);assert.equal(job.chapter.markdown,e.markdown);assert.equal(job.chapter.digest,row.context_digest);assert(job.ownerScope);assert.equal(job.attempt,'0');
+  assert.equal((await cloudQuestionAction(e,id+'/complete',{claim,answer:'迟到API不能覆盖'})).status,404);assert.equal((await call(e,'/api/questions/jobs/'+id+'/complete',{claim,answer:'本机固定原文答复'},true)).status,200);
+  assert.equal(e.sql.prepare('SELECT answer FROM question_turns WHERE id=?').get(id).answer,'本机固定原文答复');assert.equal(paid,1);assert.deepEqual(e.sql.prepare('SELECT attempt,outcome FROM api_cloud_runs').all().map(value=>[value.attempt,value.outcome]),[['0','rejected']]);
+  assert.deepEqual(await(await call(e,'/api/questions/jobs/status',{},true)).json(),{pending:false,count:0});assert.equal((await call(e,'/api/questions/jobs/status',{})).status,401);
+ }finally{e.sql.close();}
 });
 
 test('a stale retry cannot turn another device\'s newer unknown attempt back into pending', async () => {
   const e = fixture(); try {
     const id = crypto.randomUUID(); await submit(e, id); let paid = 0;
     await runCloudQuestions(e, { fetchImpl: async () => { paid++; return Response.json({ error: { code: 'fixture_rejection' } }, { status: 400 }); } });
+    e.sql.prepare("UPDATE question_turns SET status='failed',error='failed',execution_route='cloud-v1',codex_fallback_json=NULL WHERE id=?").run(id);
     e.onContextRead = async () => {
       assert.equal((await call(e, '/api/questions/retry', { id })).status, 200);
       assert.equal((await runCloudQuestions(e, { fetchImpl: async () => { paid++; throw Error('fixture interrupted newer attempt'); } })).outcomeUnknown, true);
     };
     const stale = await call(e, '/api/questions/retry', { id });
     assert.equal(stale.status, 409);
-    const row = e.sql.prepare('SELECT status,error,api_attempt FROM question_turns WHERE id=?').get(id);
-    assert.equal(row.status, 'failed'); assert.equal(row.error, 'outcome_unknown'); assert.equal(row.api_attempt, 1);
+    const row=e.sql.prepare('SELECT status,error,api_attempt,execution_route,codex_fallback_json FROM question_turns WHERE id=?').get(id);assert.equal(row.status,'pending');assert.equal(row.error,null);assert.equal(row.execution_route,'legacy');assert.equal(JSON.parse(row.codex_fallback_json).apiOutcomeUnknown,true);assert.equal(row.api_attempt,1);
     assert.equal((await runCloudQuestions(e, { fetchImpl() { throw Error('must never pay again'); } })).empty, true);
     assert.equal(paid, 2); assert.equal(count(e, 'api_cloud_runs'), 2);
   } finally { e.sql.close(); }
@@ -375,8 +372,8 @@ test('a stale sending marker remains unknown even if runtime configuration chang
     e.sql.prepare("INSERT INTO api_cloud_runs(project,task,attempt,request_digest,model,outcome,started_at) VALUES('second-algorithm',?,'0','different-input','gpt-fixture','sending',1)").run(id);
     const result = await runCloudQuestions(e, { fetchImpl() { throw Error('must not pay'); } });
     assert.equal(result.outcomeUnknown, true);
-    assert.equal((await call(e, '/api/questions/retry', { id })).status, 409);
-    assert.equal(e.sql.prepare('SELECT api_attempt FROM question_turns WHERE id=?').get(id).api_attempt, 0);
+    assert.equal((await call(e,'/api/questions/retry',{id})).status,200);assert.equal(JSON.parse(e.sql.prepare('SELECT codex_fallback_json FROM question_turns WHERE id=?').get(id).codex_fallback_json).apiOutcomeUnknown,true);
+    assert.equal(e.sql.prepare('SELECT api_attempt FROM question_turns WHERE id=?').get(id).api_attempt,0);
   } finally { e.sql.close(); }
 });
 
@@ -473,4 +470,24 @@ test('wake nonce expiration, additional capabilities, parallel replay, and owner
       assert.equal(count(e, 'api_cloud_runs'), 1);
     } finally { e.sql.close(); }
   }
+});
+
+
+test('the fallback migration preserves old API receipts, prefers complete results and does not forge a new attempt',()=>{
+ const db=new DatabaseSync(':memory:');try{for(const name of readdirSync('migrations').filter(name=>name.endsWith('.sql')&&name<'0006_question_codex_fallback.sql').sort())db.exec(readFileSync('migrations/'+name,'utf8'));
+  const ids=[crypto.randomUUID(),crypto.randomUUID()];for(const [index,id]of ids.entries()){db.prepare(`INSERT INTO question_turns(id,owner_scope,epoch,chapter_id,revision,document_url,markdown_url,question,status,error,created_at,execution_route,api_attempt,context_digest) VALUES(?,'old-owner',1,'old-chapter',?,'/library/old.json','/library/old.md',?,'failed','outcome_unknown',1,'cloud-v1',3,?)`).run(id,revision,'原问题-'+index,'d'.repeat(64));db.prepare(`INSERT INTO api_cloud_runs(project,task,attempt,request_digest,model,outcome,started_at,response_json) VALUES('second-algorithm',?,'3','original-request','gpt-fixture',?,1,?)`).run(id,index?'unknown':'completed',index?'partial-original':'complete-original');}
+  db.exec(readFileSync('migrations/0006_question_codex_fallback.sql','utf8'));const rows=db.prepare('SELECT * FROM question_turns ORDER BY seq').all();assert.equal(rows[0].execution_route,'cloud-v1');assert.equal(rows[0].status,'pending');assert.equal(rows[0].codex_fallback_json,null);assert.equal(rows[1].execution_route,'legacy');assert.equal(rows[1].status,'pending');const metadata=JSON.parse(rows[1].codex_fallback_json);assert.equal(metadata.apiAttempt,'3');assert.equal(metadata.apiOutcomeUnknown,true);assert.equal(rows[1].api_attempt,3);assert.equal(rows[1].question,'原问题-1');assert.equal(rows[1].context_digest,'d'.repeat(64));assert.deepEqual(db.prepare('SELECT response_json FROM api_cloud_runs ORDER BY rowid').all().map(row=>row.response_json),['complete-original','partial-original']);
+ }finally{db.close();}
+});
+
+test('a failed cloud row written by an overlapping old worker is recovered or handed over without another API request',async()=>{
+ const e=fixture();try{const id=crypto.randomUUID();await submit(e,id);e.sql.prepare("UPDATE question_turns SET status='failed',error='outcome_unknown' WHERE id=?").run(id);let calls=0;const outcome=await runCloudQuestions(e,{fetchImpl(){calls++;throw Error('must not generate');}});assert.equal(outcome.codexFallback,true);assert.equal(calls,0);assert.equal(e.sql.prepare('SELECT execution_route FROM question_turns WHERE id=?').get(id).execution_route,'legacy');assert.equal(count(e,'api_cloud_runs'),0);
+ }finally{e.sql.close();}
+});
+
+
+test('only the API header wait is bounded; a healthy response body retains its original full duration',async()=>{
+ const waiting=cloudQuestionFetch(async(_url,{signal})=>new Promise((_resolve,reject)=>signal.addEventListener('abort',()=>reject(Error('headers timeout')),{once:true})),10);await assert.rejects(()=>waiting('https://fixture.invalid'),/headers timeout/);
+ let responseSignal;const ready=cloudQuestionFetch(async(_url,{signal})=>{responseSignal=signal;return new Response('body remains readable');},10);const response=await ready('https://fixture.invalid');await new Promise(resolve=>setTimeout(resolve,25));assert.equal(responseSignal.aborted,false);assert.equal(await response.text(),'body remains readable');
+ const outer=new AbortController();const linked=await cloudQuestionFetch(async(_url,{signal})=>{responseSignal=signal;return new Response('ok');},10)('https://fixture.invalid',{signal:outer.signal});outer.abort();assert.equal(responseSignal.aborted,true);assert.equal(await linked.text(),'ok');
 });

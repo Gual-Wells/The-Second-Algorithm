@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "baseline": "9df920d543d9b55795b10eeb924b9843958bd967",
+  "priorPreparedPacket": "work/jobs/home-screen-guide-20261101/releases/095b3067f263448c805ea3a8117fcdfb.json",
+  "priorPreparedPacketSha256": "f04b4256970c574289b6b3372f9976f66d24c37e650eb0c1a09cb37fb32424ee",
+  "priorReviewSha256": "27987632ce742edc63ace596f81f09017597d39dfc2e0c05b0fde9cb105c68c8",
+  "priorEditorialInputHash": "f55af69d08077c5d703036de83c02b0cb8dce1760c4ec892f96a0ae957df7db8",
+  "currentEditorialInputHash": "0cef037897bf3eec679c17c17bdf8ae12cdd3ab80e93a769632765dc7b4591f9",
+  "changedInputs": [
+    "AGENTS.md",
+    "migrations/0006_question_codex_fallback.sql",
+    "protocol/SERVICES_STORAGE.md",
+    "protocol/background-prompt.txt",
+    "scripts/lib/codex-data-runner.mjs",
+    "scripts/question-api-worker.mjs",
+    "scripts/question-codex-worker.mjs",
+    "scripts/run-background.mjs",
+    "server/question-cloud-adapter.mjs",
+    "server/question-cloud-context.mjs",
+    "server/questions.mjs",
+    "test/carrier-cloud-questions.test.mjs",
+    "test/carrier-codex-fallback.test.mjs",
+    "test/carrier-question-ui.test.mjs",
+    "test/carrier-questions.test.mjs",
+    "web/manual-questions.js"
+  ],
+  "teachingInputsChanged": false,
+  "sharedCodexRunnerSha256": "6978b97375ac60bc649252da998adf0a22b7ad968d29b6c505ca37ac17e24170",
+  "claim": "Current production snapshot compared with the last successfully deployed prepared packet. Only API fallback execution, background model defaults, their protocol text and matching tests differ. All teaching/content/catalog/carrier bytes other than the review itself are unchanged. This bounded maintenance review preserves original content adoption; it does not claim a new textbook or semantic review."
+}
