@@ -47,21 +47,43 @@
       "inputHash": "a14b9c3f54fcc58efa67b72c343009d2aaca3b2f93f57a7b7954da535092b64b",
       "recordedAt": "2026-11-01T09:28:51.900994+00:00",
       "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "d49edf837ec44871b7ab3dba0fc37803",
+      "kind": "research",
+      "path": "work/jobs/codex-fallback-20261101/investigation.md",
+      "summary": "最终生产字节与Git提交一致后的API接手调查绑定",
+      "outcome": "accepted",
+      "sha256": "de946163f76c0c6f8bb72496eb700c1a9fddc1084c867352978a629de23d7748",
+      "inputHash": "57d4fe268d9e7a9bdd0cf3a262aff8b931e9acc5faec38e65b690ddcb9bd1c66",
+      "recordedAt": "2026-11-01T09:36:05.852014+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
+    },
+    {
+      "id": "bd24a15b4bbb4d588bc2f3e9a6519f62",
+      "kind": "review",
+      "path": "work/jobs/codex-fallback-20261101/review.md",
+      "summary": "实际工程影响、697共享runner及Windows到Git精确LF复核，保留旧包不改写",
+      "outcome": "accepted",
+      "sha256": "dfe7ef28ca38ee134dcc2f2fda90e0b8087c800b3c6572c0f400461f61e6669e",
+      "inputHash": "57d4fe268d9e7a9bdd0cf3a262aff8b931e9acc5faec38e65b690ddcb9bd1c66",
+      "recordedAt": "2026-11-01T09:36:16.903071+00:00",
+      "claim": "Caller-recorded actual semantic work; structural binding is not independent semantic certification."
     }
   ],
   "lastGoodVerification": {
-    "path": "work/jobs/codex-fallback-20261101/verifications/ad9a13b4086048aaabbf6676b5b6d9a5.json",
-    "sha256": "bb4b16c665a21793f3a5fa102d07b155b25d8655620d641953ed798914d7c901",
-    "inputHash": "a14b9c3f54fcc58efa67b72c343009d2aaca3b2f93f57a7b7954da535092b64b"
+    "path": "work/jobs/codex-fallback-20261101/verifications/61188767741444f99373f9a4cd367167.json",
+    "sha256": "c4d781b7f43381e73a82f99110b7991bff531b5a29334fa2bb73d659d8ed9d11",
+    "inputHash": "57d4fe268d9e7a9bdd0cf3a262aff8b931e9acc5faec38e65b690ddcb9bd1c66"
   },
   "lastPreparedRelease": {
-    "path": "work/jobs/codex-fallback-20261101/releases/0c66c9d44a3b41728a60870bb7ba60bf.json",
-    "sha256": "0f39522dd63df7646e58081340596de2998ba8d13d6d72c3396d9ad5f33d6329",
-    "inputHash": "a14b9c3f54fcc58efa67b72c343009d2aaca3b2f93f57a7b7954da535092b64b"
+    "path": "work/jobs/codex-fallback-20261101/releases/8adb31a3e607405fbb3a33ed0e8ffddd.json",
+    "sha256": "eba86a94f4ab06c5cc079b3fe74b7ad90902f822ec7137b21f354f4e0f159933",
+    "inputHash": "57d4fe268d9e7a9bdd0cf3a262aff8b931e9acc5faec38e65b690ddcb9bd1c66"
   },
   "lastVerificationAttempt": {
-    "path": "work/jobs/codex-fallback-20261101/verifications/ad9a13b4086048aaabbf6676b5b6d9a5.json",
-    "sha256": "bb4b16c665a21793f3a5fa102d07b155b25d8655620d641953ed798914d7c901",
-    "inputHash": "a14b9c3f54fcc58efa67b72c343009d2aaca3b2f93f57a7b7954da535092b64b"
+    "path": "work/jobs/codex-fallback-20261101/verifications/61188767741444f99373f9a4cd367167.json",
+    "sha256": "c4d781b7f43381e73a82f99110b7991bff531b5a29334fa2bb73d659d8ed9d11",
+    "inputHash": "57d4fe268d9e7a9bdd0cf3a262aff8b931e9acc5faec38e65b690ddcb9bd1c66"
   }
 }

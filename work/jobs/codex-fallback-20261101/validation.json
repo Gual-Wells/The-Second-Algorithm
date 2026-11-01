@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-11-01T09:36:41.110Z",
+  "carrierTests": {
+    "total": 194,
+    "passed": 194,
+    "failed": 0
+  },
+  "browserReports": [
+    {
+      "path": ".local/refinement-qa/results.json",
+      "sha256": "2f6e5a957e4c0600efeed9b7b463d113a43acb9d25e593dac92bc34d8e568c91",
+      "passed": true,
+      "cases": 25
+    },
+    {
+      "path": ".local/carrier-extension/results.json",
+      "sha256": "a35efd7c6a3481c0b2acf56aea3a2621ff674812c0f317c38a50c54d6aa98c76",
+      "passed": true,
+      "cases": 15
+    },
+    {
+      "path": ".local/service-settings-20261029/sync-after/results.json",
+      "sha256": "2274c9472ad2fc2a016c813859b2c1dbcb5b778bbaf0aa4fa38fd712004a77ab",
+      "passed": true,
+      "cases": 6
+    },
+    {
+      "path": ".local/carrier-upgrade-qa/results.json",
+      "sha256": "ff0bb0ed9ae7eeb25c986b4d3d8d24f25863136d58b1e1bff211f1efd7cc6e9e",
+      "passed": true,
+      "cases": null
+    },
+    {
+      "path": ".local/startup-calendar-20261029/qa/results.json",
+      "sha256": "5e8aecf3753d27225f3a23f32e8a06a2b6c9a0642b4d0a5c0560c72ef743145e",
+      "passed": true,
+      "cases": 31
+    },
+    {
+      "path": ".local/startup-fidelity/qa/results.json",
+      "sha256": "32ee93a5dc7826134bae7aa94ae616b06362bae1972070ac34868e636e18ddd8",
+      "passed": true,
+      "cases": 50
+    }
+  ],
+  "carrierLogSha256": "3915f9a3508554426c7ec97666efbe3e87c6d76d3c6243e7f270446ff41f1c09",
+  "workerDryRun": true,
+  "physicalIPhone": false,
+  "modelInvoked": false,
+  "claim": "Actual isolated Node/SQLite/Chromium checks and immutable C++ receipts; full Linux CI on the exact production code commit succeeded. No model or real business task was invoked for release verification.",
+  "ci": {
+    "commit": "6f09ee0ca6e47a43cdcf30ec2f0772b05c623823",
+    "runId": 41293571190,
+    "url": "https://github.com/Gual-Wells/The-Second-Algorithm/actions/runs/41293571190",
+    "status": "completed",
+    "conclusion": "success",
+    "verifiedBy": "read-only GitHub workflow run query by sibling agent"
+  }
+}
